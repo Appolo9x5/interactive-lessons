@@ -1,0 +1,1085 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>تحدي المحفوظات - أنشودة قَسَمًا</title>
+  
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #4A90E2;
+      --secondary: #F39C12;
+      --success: #2ECC71;
+      --warning: #F1C40F;
+      --danger: #E74C3C;
+      --orange-alert: #FF9800;
+      --bg: #F4F7FC;
+      --card-bg: #FFFFFF;
+      --text: #2C3E50;
+      --text-muted: #7F8C8D;
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 16px 14px 100px 14px;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: #2C3E50;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 22px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+      border: 2px solid transparent;
+      transition: all 0.4s ease;
+      position: relative;
+    }
+
+    .section-card.active {
+      border-color: var(--primary);
+      box-shadow: 0 10px 28px rgba(74, 144, 226, 0.15);
+    }
+
+    .section-card.locked {
+      opacity: 0.55;
+      pointer-events: none;
+      filter: grayscale(0.5);
+    }
+
+    .section-card.completed {
+      border-color: var(--success);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px dashed #ECEFF1;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .badge-primary { background: #EBF3FD; color: var(--primary); }
+
+    .poem-box {
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 2.3;
+    }
+
+    .poem-line {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid #F5F7FA;
+    }
+
+    .audio-player-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 15px 0;
+      padding: 12px;
+      background: #F8FAFC;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .audio-player-bar.disabled {
+      background: #EDF2F7;
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .btn-circle {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: none;
+      background: var(--primary);
+      color: #FFF;
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-circle:disabled {
+      background: #A0AEC0;
+      cursor: not-allowed;
+    }
+
+    .btn-main {
+      width: 100%;
+      padding: 15px;
+      border-radius: 14px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-size: 1.15rem;
+      font-weight: 900;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(74, 144, 226, 0.35);
+      transition: all 0.2s ease;
+      margin-top: 14px;
+    }
+
+    .btn-main:active {
+      transform: scale(0.97);
+    }
+
+    .stage-report {
+      margin-top: 14px;
+      padding: 10px;
+      background: #FAFAFA;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid #ECEFF1;
+    }
+
+    .stat-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+    }
+
+    .mic-control-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .mic-btn {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-size: 2.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .mic-btn.listening {
+      background: var(--danger);
+      animation: pulse-mic 1.2s infinite;
+    }
+
+    @keyframes pulse-mic {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.6); }
+      70% { box-shadow: 0 0 0 16px rgba(231, 76, 60, 0); }
+    }
+
+    .voice-error-box {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background-color: #FFF3E0;
+      border: 2px solid var(--orange-alert);
+      color: #E65100;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+      animation: slideInDown 0.3s ease;
+    }
+
+    .voice-error-box.visible {
+      display: inline-flex;
+    }
+
+    .voice-error-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      background-color: var(--orange-alert);
+      color: #FFF;
+      border-radius: 50%;
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+
+    @keyframes slideInDown {
+      from { transform: translateY(-8px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .live-transcript-box {
+      min-height: 140px;
+      width: 100%;
+      background: #FAFAFA;
+      border: 2px dashed #CBD5E0;
+      border-radius: 14px;
+      padding: 16px;
+      text-align: right;
+      font-size: 1.2rem;
+      line-height: 2.3;
+      font-weight: 700;
+    }
+
+    .spoken-word {
+      display: inline-block;
+      margin: 0 4px;
+      padding: 2px 8px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .spoken-word.verified-first {
+      color: #1E824C;
+      background: #E8F8F5;
+      border: 1px solid #A3E4D7;
+    }
+
+    .spoken-word.verified-assisted {
+      color: #B7791F;
+      background: #FEF9E7;
+      border: 1px solid #F9E79F;
+    }
+
+    .help-prompt-box {
+      display: none;
+      background: #FFF8E1;
+      border: 2px solid var(--warning);
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .help-prompt-box.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-small {
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .final-score-card {
+      text-align: center;
+      padding: 26px 18px;
+    }
+
+    .circle-progress-wrapper {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 16px;
+    }
+
+    .circle-progress-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .circle-bg {
+      fill: none;
+      stroke: #EDF2F7;
+      stroke-width: 12;
+    }
+
+    .circle-val {
+      fill: none;
+      stroke: var(--success);
+      stroke-width: 12;
+      stroke-linecap: round;
+      stroke-dasharray: 440;
+      stroke-dashoffset: 440;
+      transition: stroke-dashoffset 1.5s ease-out;
+    }
+
+    .circle-text-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    .score-feedback {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .browser-btn {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 9999;
+      background: var(--secondary);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-family: inherit;
+      font-size: 0.85rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+
+    .ios-warning {
+      display: none;
+      background: #FFF3E0;
+      border: 2px solid var(--orange-alert);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 12px 0;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #E65100;
+      text-align: center;
+    }
+
+    /* زر العودة إلى البوت */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="browser-btn" onclick="forceOpenInBrowser()">🌐 افتح في المتصفح</button>
+
+  <div class="ios-warning" id="iosWarning">
+    ⚠️ إذا كُنْتَ تَسْتَعْمِلُ iPhone وَوَجَدْتَ مُشْكِلَةً فِي الْمِيكْرُوفُون، يُمْكِنُكَ تَشْغِيلُ التَّطْبِيقِ عَلَى هَاتِفِ Android أَوْ حَاسُوب.
+  </div>
+
+  <header>
+    <h1>🇩🇿 أُنْشُودَةُ قَسَمًا 🇩🇿</h1>
+    <p class="subtitle">السَّنَةُ الْأُولَى ابْتِدَائِي - تَحَدِّي الْحِفْظِ الصَّوْتِي</p>
+  </header>
+
+  <!-- مرحلة التدريب والاستماع -->
+  <section class="section-card active" id="sec-stage-0">
+    <div class="card-header">
+      <span class="card-title">📖 مَرْحَلَةُ التَّدْرِيبِ وَالِاسْتِمَاعِ</span>
+      <span class="badge badge-primary" id="audio-lock-badge">مُتَاحٌ لِلِاسْتِمَاعِ</span>
+    </div>
+
+    <div class="audio-player-bar" id="audioBar">
+      <button class="btn-circle" id="playAudioBtn" onclick="toggleMainAudio()">▶</button>
+      <span id="audioLabelText" style="font-weight: 700; font-size: 0.95rem;">اسْتَمِعْ لِتَرْتِيلِ النَّشِيدِ</span>
+      <audio id="mainAudio" src="nashid.mp3" preload="auto"></audio>
+    </div>
+
+    <div class="poem-box" id="fullPoemText">
+      <div class="poem-line">« قَسَمًا بِالنَّازِلَاتِ الْمَاحِقَاتْ ... وَالدِّمَاءِ الزَّاكِيَاتِ الطَّاهِرَاتْ »</div>
+      <div class="poem-line">« وَالْبُنُودِ اللَّامِعَاتِ الْخَافِقَاتْ ... فِي الْجِبَالِ الشَّامِخَاتِ الشَّاهِقَاتْ »</div>
+      <div class="poem-line">« نَحْنُ ثُرْنَا فَحَيَاةٌ أَوْ مَمَاتْ ... وَعَقَدْنَا الْعَزْمَ أَنْ تَحْيَا الْجَزَائِرْ »</div>
+      <div class="poem-line" style="justify-content: center; font-size: 1.35rem; color: #C0392B;">« فَاشْهَدُوا ... فَاشْهَدُوا ... فَاشْهَدُوا »</div>
+      <div style="font-size: 0.85rem; color: #95A5A6; margin-top: 10px;">شَاعِرُ الثَّوْرَةِ: مُفْدِي زَكَرِيَّاء</div>
+    </div>
+
+    <button class="btn-main" onclick="startVoiceChallenge()">
+      هَلْ حَفِظْتَ النَّشِيدَ؟ ابْدَأِ التَّسْمِيعَ الصَّوْتِي! 🎙️🚀
+    </button>
+  </section>
+
+  <!-- مرحلة الاختبار الصوتي الوحيدة المباشرة -->
+  <section class="section-card locked" id="sec-stage-voice">
+    <div class="card-header">
+      <span class="card-title">🎙️ الِاخْتِبَارُ الصَّوْتِي (تَسْمِيعُ الأَبْطَالِ)</span>
+      <span class="badge badge-primary">تسميع صوتي</span>
+    </div>
+    
+    <div class="mic-control-center">
+      <button class="mic-btn" id="micBtn" onclick="toggleVoiceRecognition()">🎤</button>
+      <span id="voiceStatusText" style="font-size: 1rem; font-weight: 700; color: #4A5568; text-align: center;">
+        اضْغَطِ الْمِيكْرُوفُونَ وَابْدَأْ فِي إِنْشَادِ «قَسَمًا» 🇩🇿
+      </span>
+      
+      <div class="voice-error-box" id="voiceErrorBadge">
+        <span class="voice-error-icon">✕</span>
+        <span>تَذَكَّرِ الْكَلِمَةَ وَوَاصِلْ يَا بَطَل...</span>
+      </div>
+
+      <p id="liveHeardWords" style="font-size:0.85rem; color:#718096; min-height: 20px;"></p>
+    </div>
+
+    <div class="live-transcript-box" id="voiceLiveBox"></div>
+
+    <div class="help-prompt-box" id="helpPromptBox">
+      <p style="font-weight: 800; color: #B7791F;">هَلْ نَسِيتَ كَلِمَةً؟ أَتُرِيدُ مُسَاعَدَةً؟ 🤔</p>
+      <div class="btn-group">
+        <button class="btn-small" style="background:var(--success); color:#fff;" onclick="acceptVoiceHelp(true)">نَعَمْ، سَاعِدْنِي</button>
+        <button class="btn-small" style="background:#E2E8F0; color:#4A5568;" onclick="acceptVoiceHelp(false)">لَا، سَأُحَاوِلُ وَحْدِي</button>
+      </div>
+    </div>
+
+    <div class="stage-report">
+      <span class="stat-badge" style="color: var(--success); font-size: 1.05rem;">الْكَلِمَاتُ الصَّحِيحَةُ: <b id="voice-words">0/18</b></span>
+      <span class="stat-badge" style="color: #D4AC0D; font-size: 1.05rem;">طَلَبُ مُسَاعَدَةٍ: <b id="voice-helps">0</b></span>
+    </div>
+
+    <button class="btn-main" id="btnFinishAll" style="display:none; background: var(--success);" onclick="showFinalEvaluation()">
+      عَرْضُ النَّتِيجَةِ وَالتَّقْيِيمِ الْكُلِّي 🏆
+    </button>
+  </section>
+
+  <!-- نتيجة التقييم الكلي -->
+  <section class="section-card final-score-card locked" id="sec-final-score" style="display:none;">
+    <h2 style="font-size: 1.45rem; color: var(--text); margin-bottom: 14px;">🎓 التَّقْيِيمُ الشَّامِلُ لِحِفْظِ نَشِيدِ قَسَمًا</h2>
+    
+    <div class="circle-progress-wrapper">
+      <svg class="circle-progress-svg" viewBox="0 0 160 160">
+        <circle class="circle-bg" cx="80" cy="80" r="70"></circle>
+        <circle class="circle-val" id="scoreCirclePath" cx="80" cy="80" r="70"></circle>
+      </svg>
+      <div class="circle-text-center" id="scorePercentLabel">0%</div>
+    </div>
+
+    <div class="score-feedback" id="scoreFeedbackText">بَطَلُ الْجَزَائِرِ! 🌟</div>
+    <p style="font-size: 0.95rem; color: var(--text-muted); margin-bottom: 18px;" id="scoreSummaryDetailed"></p>
+
+    <div class="btn-group" style="margin-top: 14px;">
+      <button class="btn-main" style="background: var(--primary); margin-top:0;" onclick="restartChallenge()">
+        إِعَادَةُ التَّسْمِيعِ 🔄
+      </button>
+      <button class="btn-main" style="background: var(--danger); margin-top:0;" onclick="exitApp()">
+        الْخُرُوجُ مِنَ التَّطْبِيقِ 🚪
+      </button>
+    </div>
+    <a href="https://t.me/ListOfLessons3an_bot" class="btn-back-home" target="_blank">← الْعَوْدَةُ إِلَى الْبُوتِ</a>
+  </section>
+
+  <script>
+    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    if (tg) {
+      tg.expand();
+      tg.enableClosingConfirmation();
+    }
+
+    /* -------------------------------------------------------------
+       1. التفاعل الصوتي والتنبيهات
+    ------------------------------------------------------------- */
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) audioCtx = new AudioCtx();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function triggerVibration(pattern) {
+      if (tg && tg.HapticFeedback) {
+        if (pattern === 'error') tg.HapticFeedback.notificationOccurred('error');
+        else if (pattern === 'success') tg.HapticFeedback.notificationOccurred('success');
+        else tg.HapticFeedback.impactOccurred('medium');
+      } else if (navigator.vibrate) {
+        navigator.vibrate(pattern === 'error' ? [100, 50, 100] : 40);
+      }
+    }
+
+    function playTone(type) {
+      initAudio();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      const now = audioCtx.currentTime;
+
+      if (type === 'correct') {
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.18);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+        osc.start(now);
+        osc.stop(now + 0.25);
+        triggerVibration('success');
+      } else if (type === 'win') {
+        const notes = [440, 554, 659, 880];
+        notes.forEach((freq, idx) => {
+          const o = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          o.connect(g);
+          g.connect(audioCtx.destination);
+          o.frequency.value = freq;
+          g.gain.setValueAtTime(0.15, now + idx * 0.1);
+          g.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.1 + 0.2);
+          o.start(now + idx * 0.1);
+          o.stop(now + idx * 0.1 + 0.2);
+        });
+        triggerVibration('success');
+      }
+    }
+
+    /* -------------------------------------------------------------
+       2. بيانات النشيد الوطني (قسماً) - المقطع الأول
+    ------------------------------------------------------------- */
+    const POEM_DATA = [
+      { id: 1, first: "قَسَمًا بِالنَّازِلَاتِ الْمَاحِقَاتْ", second: "وَالدِّمَاءِ الزَّاكِيَاتِ الطَّاهِرَاتْ" },
+      { id: 2, first: "وَالْبُنُودِ اللَّامِعَاتِ الْخَافِقَاتْ", second: "فِي الْجِبَالِ الشَّامِخَاتِ الشَّاهِقَاتْ" },
+      { id: 3, first: "نَحْنُ ثُرْنَا فَحَيَاةٌ أَوْ مَمَاتْ", second: "وَعَقَدْنَا الْعَزْمَ أَنْ تَحْيَا الْجَزَائِرْ" },
+      { id: 4, first: "فَاشْهَدُوا", second: "فَاشْهَدُوا فَاشْهَدُوا" }
+    ];
+
+    function cleanArabic(str) {
+      if (!str) return "";
+      return str
+        .replace(/[ًٌٍَُِّْـ]/g, '')
+        .replace(/[إأآء]/g, 'ا')
+        .replace(/ة/g, 'ه')
+        .replace(/ى/g, 'ي')
+        .replace(/ؤ/g, 'و')
+        .replace(/ئ/g, 'ي')
+        .replace(/[«»\.\,\:\-\_\؟\؛]/g, '')
+        .trim();
+    }
+
+    function isPhoneticallySimilar(s1, s2) {
+      if (!s1 || !s2) return false;
+      if (s1 === s2) return true;
+
+      const simplifyWord = (w) => {
+        let res = w;
+        if (res.startsWith('و')) res = res.substring(1);
+        if (res.startsWith('ف')) res = res.substring(1);
+        if (res.startsWith('ال')) res = res.substring(2);
+        if (res.startsWith('بال')) res = res.substring(3);
+        return res;
+      };
+
+      const w1 = simplifyWord(s1);
+      const w2 = simplifyWord(s2);
+
+      if (w1.length > 2 && w2.length > 2 && (w1 === w2 || w1.includes(w2) || w2.includes(w1))) {
+        return true;
+      }
+
+      const harmonize = (w) => w
+        .replace(/[ثص]/g, 'س')
+        .replace(/[ط]/g, 'ت')
+        .replace(/[ضظذز]/g, 'د')
+        .replace(/[قغ]/g, 'ك')
+        .replace(/[ح]/g, 'ه')
+        .replace(/[ر]/g, 'ل')
+        .replace(/[ة]/g, 'ه');
+
+      const h1 = harmonize(w1);
+      const h2 = harmonize(w2);
+      if (h1 === h2) return true;
+
+      const longer = h1.length > h2.length ? h1 : h2;
+      const shorter = h1.length > h2.length ? h2 : h1;
+      if (longer.length >= 3 && shorter.length >= 2 && longer.includes(shorter)) {
+        return true;
+      }
+
+      return false;
+    }
+
+    const scoreState = {
+      correctWords: 0,
+      helps: 0,
+      totalWords: 0
+    };
+
+    function toggleMainAudio() {
+      const audio = document.getElementById('mainAudio');
+      const btn = document.getElementById('playAudioBtn');
+      if (btn.disabled) return;
+
+      if (audio.paused) {
+        audio.play().then(() => {
+          btn.textContent = '⏸';
+        }).catch(() => {
+          alert('تَأَكَّدْ مِنْ وَضْعِ مِلَفِّ الصَّوْتِ باسم nashid.mp3 فِي نَفْسِ الْمُجَلَّدِ.');
+        });
+      } else {
+        audio.pause();
+        btn.textContent = '▶';
+      }
+    }
+
+    function lockMainAudio() {
+      const audio = document.getElementById('mainAudio');
+      const btn = document.getElementById('playAudioBtn');
+      const bar = document.getElementById('audioBar');
+      const label = document.getElementById('audioLabelText');
+      const badge = document.getElementById('audio-lock-badge');
+
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = '🔒';
+      }
+      if (bar) bar.classList.add('disabled');
+      if (label) label.textContent = 'تَمَّ قَفْلُ الصَّوْتِ (بَدَأَ الِاخْتِبَارُ) 🔒';
+      if (badge) {
+        badge.textContent = 'مُغْلَقٌ';
+        badge.className = 'badge';
+        badge.style.background = '#FED7D7';
+        badge.style.color = '#C53030';
+      }
+    }
+
+    function scrollToElement(id) {
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 150);
+    }
+
+    function maskCardText(containerId) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      el.querySelectorAll('.poem-line').forEach(line => {
+        line.innerText = "************************************";
+        line.style.color = "#A0AEC0";
+        line.style.letterSpacing = "4px";
+      });
+    }
+
+    /* -------------------------------------------------------------
+       3. محرك الصوت والتسميع
+    ------------------------------------------------------------- */
+    let recognition = null;
+    let isListening = false;
+    let voiceSilenceTimer = null;
+    let expectedPoemWords = [];
+    let currentWordIndex = 0;
+
+    POEM_DATA.forEach(d => {
+      const lineWords = (d.first + " " + d.second).split(/\s+/).filter(Boolean);
+      lineWords.forEach(w => {
+        expectedPoemWords.push({
+          original: w,
+          normalized: cleanArabic(w),
+          status: 'pending'
+        });
+      });
+    });
+    scoreState.totalWords = expectedPoemWords.length;
+
+    async function initSpeechEngine() {
+      if (window.location.protocol === 'file:') {
+        alert("⚠️ تَنْبِيه:\nالتَّعَرُّفُ الصَّوْتِيُّ يَحْتَاجُ إِلَى فَتْحِ التَّطْبِيقِ عَبْرَ رَابِطِ GitHub أَوْ سَيْرْفَر وَلَيْسَ مَحَلِّيًّا (file://).");
+        return null;
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        showFallbackMode("مُحَرِّكُ الصَّوْتِ يَحْتَاجُ مُتَصَفِّحَ Google Chrome أَوْ Safari.");
+        return null;
+      }
+
+      try {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          stream.getTracks().forEach(track => track.stop());
+        }
+      } catch (err) {
+        alert("يُرْجَى السَّمَاحُ بِاسْتِخْدَامِ الْمِيكْرُوفُونِ فِي الْمُتَصَفِّحِ.");
+        return null;
+      }
+
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const rec = new SpeechRecognition();
+      rec.lang = 'ar-DZ';
+      rec.continuous = !isIOS;
+      rec.interimResults = true;
+      rec.maxAlternatives = 5;
+
+      rec.onstart = () => {
+        isListening = true;
+        const micBtn = document.getElementById('micBtn');
+        micBtn.classList.add('listening');
+        document.getElementById('voiceStatusText').innerText = "أَنَا أَسْتَمِعُ إِلَيْكَ الآنَ يَا بَطَل... أَنْشِدْ 🇩🇿";
+        resetSilenceTimer();
+      };
+
+      rec.onresult = (event) => {
+        resetSilenceTimer();
+        hideHelpBox();
+
+        let liveText = "";
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          const transcriptChunk = event.results[i][0].transcript;
+          liveText += " " + transcriptChunk;
+          processSpokenChunk(transcriptChunk);
+        }
+        document.getElementById('liveHeardWords').innerText = "الْمَسْمُوعُ: " + liveText;
+      };
+
+      rec.onerror = (e) => {
+        console.warn("Speech error:", e.error);
+        if (e.error === 'not-allowed') {
+          alert("تَمَّ رَفْضُ إِذْنِ الْمِيكْرُوفُون. تَأَكَّدْ مِنْ إِعْدَادَاتِ الْمُتَصَفِّح.");
+          stopVoice();
+        } else if (e.error === 'service-not-allowed' || e.error === 'network') {
+          showFallbackMode("خِدْمَةُ الصَّوْتِ تَحْتَاجُ فَتْحَ الرَّابِطِ فِي الْمُتَصَفِّحِ الْخَارِجِيِّ.");
+          stopVoice();
+        }
+      };
+
+      rec.onend = () => {
+        if (isListening && currentWordIndex < expectedPoemWords.length) {
+          const delay = isIOS ? 500 : 100;
+          setTimeout(() => {
+            try { rec.start(); } catch(e) {}
+          }, delay);
+        }
+      };
+
+      return rec;
+    }
+
+    function showFallbackMode(msg) {
+      const status = document.getElementById('voiceStatusText');
+      status.innerHTML = `<span style="color:var(--danger); font-size:0.9rem;">${msg}</span><br>
+      <button class="btn-small" style="margin-top:8px; background:var(--primary); color:#fff;" onclick="window.open(window.location.href, '_blank')">🌐 فَتْحٌ فِي الْمُتَصَفِّحِ الْخَارِجِيِّ</button>`;
+    }
+
+    function startVoiceChallenge() {
+      lockMainAudio();
+      maskCardText('fullPoemText');
+
+      document.getElementById('sec-stage-0').classList.remove('active');
+      document.getElementById('sec-stage-0').classList.add('completed');
+
+      const sVoice = document.getElementById('sec-stage-voice');
+      sVoice.classList.remove('locked');
+      sVoice.classList.add('active');
+
+      document.getElementById('voice-words').innerText = `0/${scoreState.totalWords}`;
+      scrollToElement('sec-stage-voice');
+    }
+
+    async function toggleVoiceRecognition() {
+      initAudio();
+      if (audioCtx && audioCtx.state === 'suspended') {
+        try { await audioCtx.resume(); } catch(e) {}
+      }
+
+      if (isListening) {
+        stopVoice();
+        return;
+      }
+
+      if (!recognition) {
+        recognition = await initSpeechEngine();
+        if (!recognition) return;
+      }
+
+      let attempts = 0;
+      const maxAttempts = 3;
+
+      const tryStart = () => {
+        attempts++;
+        try {
+          recognition.start();
+        } catch(e) {
+          if (attempts < maxAttempts) {
+            setTimeout(tryStart, 300);
+          } else {
+            document.getElementById('voiceStatusText').innerHTML = 
+              '<span style="color:#c62828;">اضْغَطِ الزِّرَّ مَرَّةً أُخْرَى لِتَشْغِيلِ الْمِيكْرُوفُون.</span>';
+          }
+        }
+      };
+
+      tryStart();
+    }
+
+    function stopVoice() {
+      isListening = false;
+      if (recognition) recognition.stop();
+      const micBtn = document.getElementById('micBtn');
+      micBtn.classList.remove('listening');
+      document.getElementById('voiceStatusText').innerText = "اضْغَطِ الْمِيكْرُوفُونَ لِمُوَاصَلَةِ التَّسْمِيعِ";
+      clearTimeout(voiceSilenceTimer);
+    }
+
+    function resetSilenceTimer() {
+      clearTimeout(voiceSilenceTimer);
+      voiceSilenceTimer = setTimeout(() => {
+        if (isListening && currentWordIndex < expectedPoemWords.length) {
+          showHelpBox();
+        }
+      }, 7000);
+    }
+
+    function showHelpBox() {
+      document.getElementById('helpPromptBox').classList.add('active');
+    }
+
+    function hideHelpBox() {
+      document.getElementById('helpPromptBox').classList.remove('active');
+    }
+
+    function showVoiceErrorBadge() {
+      const badge = document.getElementById('voiceErrorBadge');
+      badge.classList.add('visible');
+    }
+
+    function hideVoiceErrorBadge() {
+      const badge = document.getElementById('voiceErrorBadge');
+      badge.classList.remove('visible');
+    }
+
+    function acceptVoiceHelp(wantsHelp) {
+      hideHelpBox();
+      if (wantsHelp) {
+        scoreState.helps++;
+        if (currentWordIndex < expectedPoemWords.length) {
+          expectedPoemWords[currentWordIndex].status = 'yellow';
+          appendWordToLiveBox(expectedPoemWords[currentWordIndex]);
+          currentWordIndex++;
+          updateVoiceCounters();
+          hideVoiceErrorBadge();
+
+          if (currentWordIndex >= expectedPoemWords.length) {
+            finishVoiceLevel();
+          }
+        }
+      }
+      resetSilenceTimer();
+    }
+
+    function processSpokenChunk(text) {
+      const rawWords = text.trim().split(/\s+/);
+
+      rawWords.forEach(rw => {
+        if (currentWordIndex >= expectedPoemWords.length) return;
+
+        const normalizedSpoken = cleanArabic(rw);
+        if (!normalizedSpoken || normalizedSpoken.length < 2) return;
+
+        const target = expectedPoemWords[currentWordIndex];
+
+        if (isPhoneticallySimilar(normalizedSpoken, target.normalized)) {
+          playTone('correct');
+          target.status = (target.status === 'pending') ? 'green' : target.status;
+          appendWordToLiveBox(target);
+          currentWordIndex++;
+          scoreState.correctWords++;
+
+          hideVoiceErrorBadge();
+
+          if (currentWordIndex >= expectedPoemWords.length) {
+            finishVoiceLevel();
+          }
+        } else {
+          showVoiceErrorBadge();
+        }
+      });
+
+      updateVoiceCounters();
+    }
+
+    function appendWordToLiveBox(wordObj) {
+      const box = document.getElementById('voiceLiveBox');
+      const span = document.createElement('span');
+      span.className = 'spoken-word ' + (wordObj.status === 'green' ? 'verified-first' : 'verified-assisted');
+      span.innerText = wordObj.original;
+      box.appendChild(span);
+    }
+
+    function updateVoiceCounters() {
+      document.getElementById('voice-words').innerText = `${scoreState.correctWords}/${scoreState.totalWords}`;
+      document.getElementById('voice-helps').innerText = scoreState.helps;
+    }
+
+    function finishVoiceLevel() {
+      stopVoice();
+      hideVoiceErrorBadge();
+      playTone('win');
+      document.getElementById('btnFinishAll').style.display = 'block';
+      document.getElementById('voiceStatusText').innerText = "مَا شَاءَ اللَّه! أَنْتَ بَطَلٌ حَقِيقِيٌّ 🎉🇩🇿";
+    }
+
+    /* -------------------------------------------------------------
+       4. نظام التقييم الكلي والمباشر
+    ------------------------------------------------------------- */
+    function showFinalEvaluation() {
+      document.getElementById('sec-stage-voice').classList.remove('active');
+      document.getElementById('sec-stage-voice').classList.add('completed');
+
+      const secFinal = document.getElementById('sec-final-score');
+      secFinal.style.display = 'block';
+      secFinal.classList.remove('locked');
+
+      const total = scoreState.totalWords || 18;
+      const earned = (scoreState.correctWords * 1) + (scoreState.helps * 0.7);
+      const finalPercent = Math.min(100, Math.max(10, Math.round((earned / total) * 100)));
+
+      const circlePath = document.getElementById('scoreCirclePath');
+      const circumference = 2 * Math.PI * 70;
+      const offset = circumference - (finalPercent / 100) * circumference;
+      
+      setTimeout(() => {
+        circlePath.style.strokeDashoffset = offset;
+      }, 200);
+
+      document.getElementById('scorePercentLabel').innerText = `${finalPercent}%`;
+
+      const feedback = document.getElementById('scoreFeedbackText');
+      const detailed = document.getElementById('scoreSummaryDetailed');
+
+      if (finalPercent >= 85) {
+        feedback.innerText = "مُمْتَازٌ جِدًّا! حِفْظٌ رَائِعٌ لِنَشِيدِ الْوَطَنِ 🇩🇿🌟";
+        feedback.style.color = "var(--success)";
+      } else if (finalPercent >= 65) {
+        feedback.innerText = "جَيِّدٌ جِدًّا! أَنْتَ تِلْمِيذٌ مُجْتَهِدٌ وَشُجَاعٌ 👏";
+        feedback.style.color = "var(--primary)";
+      } else {
+        feedback.innerText = "مُحَاوَلَةٌ جَيِّدَةٌ! اسْتَمِعْ لِلنَّشِيدِ مَرَّةً أُخْرَى وَكَرِّرْ مَعَنَا 🔄";
+        feedback.style.color = "var(--warning)";
+      }
+
+      detailed.innerText = `حَفِظْتَ (${scoreState.correctWords}) كَلِمَةً مِنْ أَصْلِ (${total}) كَلِمَةً | طَلَبْتَ مُسَاعَدَةً (${scoreState.helps}) مَرَّةً.`;
+
+      scrollToElement('sec-final-score');
+    }
+
+    function restartChallenge() {
+      location.reload();
+    }
+
+    function exitApp() {
+      // إذا كان داخل تيليجرام، أغلق التطبيق
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
+        try {
+          window.Telegram.WebApp.close();
+          return;
+        } catch(e) {}
+      }
+
+      // إذا كان في المتصفح الخارجي، افتح البوت
+      try {
+        window.location.href = "https://t.me/ListOfLessons3an_bot";
+      } catch(e) {
+        window.close();
+      }
+    }
+
+    function forceOpenInBrowser() {
+      const url = window.location.href;
+      if (tg && tg.openLink) {
+        tg.openLink(url, { try_instant_view: false });
+      } else {
+        window.open(url, '_blank');
+      }
+    }
+
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      document.addEventListener('DOMContentLoaded', () => {
+        const w = document.getElementById('iosWarning');
+        if (w) w.style.display = 'block';
+      });
+    }
+  </script>
+</body>
+</html>
