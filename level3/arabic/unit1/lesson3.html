@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الوحدة الثالثة: الفراشة والنملة</title>
+    
+    <!-- مكتبة Telegram WebApp -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0288d1;
+            --primary-dark: #01579b;
+            --success: #2e7d32;
+            --error: #c62828;
+            --bg: #f4f9fd;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --text-muted: #546e7a;
+            --accent: #ff9800;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 12px;
+            padding-bottom: 70px;
+        }
+
+        /* نافذة القفل والاشتراك الإجباري */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+
+        .lock-icon {
+            font-size: 50px;
+            margin-bottom: 12px;
+        }
+
+        .lock-title {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .lock-desc {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: var(--primary);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: var(--success);
+            border: 2px solid var(--success);
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+        }
+
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* واجهة الدرس */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: #ffffff;
+            padding: 8px 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .app-title-mini {
+            font-weight: 800;
+            color: var(--primary-dark);
+            font-size: 1.05rem;
+        }
+        .audio-btn {
+            background: #e1f5fe;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            font-size: 19px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .page-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .lesson-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-top: 6px solid var(--primary);
+        }
+
+        .lesson-title {
+            color: var(--primary-dark);
+            font-weight: 900;
+            font-size: 1.3rem;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #b3e5fc;
+            padding-bottom: 10px;
+        }
+
+        .lesson-text-box {
+            background: #fdfbf7;
+            border: 1px solid #ffe0b2;
+            border-right: 5px solid var(--accent);
+            border-radius: 10px;
+            padding: 14px;
+            line-height: 1.9;
+            font-size: 1.05rem;
+            margin-bottom: 18px;
+            color: #37474f;
+            text-align: justify;
+        }
+        .lesson-text-title {
+            font-weight: bold;
+            color: #e65100;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .instruction {
+            font-weight: 800;
+            color: #37474f;
+            margin: 15px 0 10px 0;
+            font-size: 1.05rem;
+        }
+
+        .audio-wrapper {
+            background: #e3f2fd;
+            padding: 14px;
+            border-radius: 12px;
+            margin: 10px 0 15px 0;
+            border: 1px solid #90caf9;
+            text-align: center;
+        }
+        .media-player {
+            width: 100%;
+            max-width: 400px;
+            margin-top: 6px;
+        }
+
+        .img-lesson {
+            display: block;
+            width: 100%;
+            max-width: 250px;
+            height: auto;
+            margin: 10px auto;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .img-grid-responsive {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin: 14px 0;
+            align-items: end;
+        }
+        .img-grid-responsive div {
+            text-align: center;
+        }
+        .img-grid-responsive img {
+            width: 100%;
+            max-width: 140px;
+            height: 110px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1.5px solid #cfd8dc;
+            background: #fff;
+            padding: 4px;
+        }
+
+        .tf-btn, .drag-word, .color-btn {
+            background: #ffffff;
+            border: 2px solid #b0bec5;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+        .drag-word.selected {
+            border-color: var(--primary);
+            background: #e1f5fe;
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(2, 136, 209, 0.2);
+        }
+
+        .locked {
+            pointer-events: none !important;
+            cursor: not-allowed;
+            opacity: 0.85;
+        }
+
+        .correct {
+            background-color: #e8f5e9 !important;
+            border-color: var(--success) !important;
+            color: var(--success) !important;
+            font-weight: bold;
+        }
+
+        .wrong {
+            background-color: #ffebee !important;
+            border-color: var(--error) !important;
+            color: var(--error) !important;
+            font-weight: bold;
+        }
+
+        .drop-zone {
+            display: inline-block;
+            min-width: 75px;
+            min-height: 32px;
+            border-bottom: 2px dashed #0288d1;
+            margin: 0 4px;
+            vertical-align: middle;
+            text-align: center;
+            color: var(--primary-dark);
+            font-weight: bold;
+            background: #e1f5fe;
+            border-radius: 6px;
+            padding: 2px 6px;
+            line-height: 28px;
+        }
+
+        .drop-zone.drop-tool {
+            min-width: 50px;
+            background: #fff8e1;
+            border-color: #ffb300;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            border: 1.5px solid #cfd8dc;
+            padding: 8px;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+        th {
+            background: #eceff1;
+            color: #37474f;
+            font-weight: 800;
+        }
+
+        .eval-badge {
+            background: #f1f8e9;
+            border: 1px solid #dcedc8;
+            padding: 8px 14px;
+            border-radius: 10px;
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-around;
+            font-weight: 800;
+            font-size: 0.95rem;
+        }
+        .text-success { color: var(--success); }
+        .text-error { color: var(--error); }
+
+        .word-pool {
+            background: #f8fafc;
+            border: 1.5px dashed #b0bec5;
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+
+        #final-report {
+            text-align: center;
+            background: #ffffff;
+            border: 3px solid var(--primary);
+            border-radius: 18px;
+            padding: 25px 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            margin-top: 30px;
+        }
+        .final-score {
+            font-size: 3.2rem;
+            font-weight: 900;
+            color: var(--primary-dark);
+            margin: 12px 0;
+        }
+        .final-remark {
+            font-size: 1.25rem;
+            font-weight: 800;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .btn-restart {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1.15rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .btn-exit {
+            background: #546e7a;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1.15rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        /* زر العودة إلى الفهرس */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            background: #01579b;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1.15rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- نافذة قفل الاشتراك الإجباري -->
+    <div id="sub-lock-screen">
+        <div class="lock-box">
+            <div class="lock-icon">🔒</div>
+            <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+            <div class="lock-desc">
+                لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الْأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الِانْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الِاشْتِرَاكِ.
+            </div>
+            <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">📢 الِانْضِمَامُ إِلَى الْقَنَاةِ</a>
+            <button class="btn-check-sub" onclick="verifySubscription()">✅ تَأْكِيدُ الِاشْتِرَاكِ</button>
+            <div id="sub-status-msg" class="sub-status-msg"></div>
+        </div>
+    </div>
+
+    <div class="top-bar">
+        <span class="app-title-mini">اللغة العربية • السنة الثالثة ابتدائي • الْفَرَاشَةُ وَالنَّمْلَةُ (الدرس 3)</span>
+        <button class="audio-btn" id="audio-toggle" onclick="toggleAudio()" title="كتم/تشغيل الصوت">🔊</button>
+    </div>
+
+    <!-- ========================================================
+         الجزء 1: كتاب التلميذ - صفحة 17
+         ======================================================== -->
+    <div class="lesson-card">
+        <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 17</span>
+        <h2 class="lesson-title">الدِّيكُ الْمَغْرُورُ • أُشَاهِدُ وَأَتَحَدَّثُ</h2>
+        
+        <p class="instruction">🎧 اسْتَمِعْ إِلَى النَّصِّ الْمَنْطُوقِ :</p>
+        <div class="audio-wrapper">
+            <audio controls class="media-player" preload="auto">
+                <source src="maghroor.mp3" type="audio/mpeg">
+                متصفحك لا يدعم مشغل الصوت.
+            </audio>
+        </div>
+
+        <p class="instruction">أَسْتَعْمِلُ الصِّيَغَ ( لَكِنْ ) :</p>
+        <div style="background: #e8f5e9; padding: 10px; border-radius: 8px; font-weight: bold; margin-bottom: 12px;">
+            قَالَ الثَّعْلَبُ : « أَنَا لَا أَطْلُبُ شَيْئًا لِنَفْسِي ، <span style="color:#e65100;">لَكِنِّي</span> سَمِعْتُ أَنَّ جَمَاعَةً مِنَ الدَّجَاجِ تَبْحَثُ عَنْ دِيكٍ شُجَاعٍ ... »<br>
+            • اذْكُرْ جُمَلًا عَلَى الْمِنْوَالِ : « اسْتَعْمَلَ الثَّعْلَبُ الْحِيلَةَ ، <span style="color:#e65100;">لَكِنَّ</span> الدِّيكَ صَدَّقَهُ »
+        </div>
+
+        <p class="instruction">أَكْمِلِ التَّعْبِيرَ عَنِ الصُّوَرِ مُوَظِّفًا ( لَكِنْ ) :</p>
+        <div class="word-pool" id="pool-p17-lakin"></div>
+
+        <div style="display:flex; flex-direction:column; gap:16px;">
+            <div style="text-align:center;">
+                <img src="q1_wolf_sheep.png" class="img-lesson" alt="الذئب والخراف">
+                <p>أَرَادَ الذِّئْبُ إِمْسَاكَ الْخَرُوفِ <span class="drop-zone drop-tool" data-ans="لَكِنَّ"></span> <span class="drop-zone" data-ans="الْخِرَافَ هَرَبَتْ سَرِيعًا"></span></p>
+            </div>
+            <div style="text-align:center;">
+                <img src="q1_old_car.png" class="img-lesson" alt="سيارة خالي">
+                <p>سَيَّارَةُ خَالِي قَدِيمَةٌ <span class="drop-zone drop-tool" data-ans="لَكِنَّهَا"></span> <span class="drop-zone" data-ans="تَسِيرُ بِسُرْعَةٍ وَنَشَاطٍ"></span></p>
+            </div>
+            <div style="text-align:center;">
+                <img src="q1_sick_boy.png" class="img-lesson" alt="الخروج">
+                <p>كُنْتُ أُرِيدُ الْخُرُوجَ مَعَكَ <span class="drop-zone drop-tool" data-ans="لَكِنَّنِي"></span> <span class="drop-zone" data-ans="مَرِيضٌ فِي الْفِرَاشِ"></span></p>
+            </div>
+        </div>
+
+        <div class="eval-badge">
+            <span class="text-success">صحيحة: <span id="ex-p17-c">0</span></span>
+            <span class="text-error">خاطئة: <span id="ex-p17-w">0</span></span>
+        </div>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">أُنْتِجُ شَفَهِيًّا :</p>
+        <div id="ex-p17-oral-mcq"></div>
+
+        <hr style="margin:16px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">تَخَيَّلْ نِهَايَةً أُخْرَى لِلْقِصَّةِ مُسْتَعِينًا بِالصُّوَرِ (طَابِقْ كُلَّ صُورَةٍ بِالْجُمْلَةِ الْمُنَاسِبَةِ) :</p>
+        <div class="word-pool" id="pool-p17-endings"></div>
+
+        <div style="display:flex; flex-direction:column; gap:16px;">
+            <div style="text-align:center;">
+                <img src="end_rooster_tree.png" class="img-lesson" alt="الديك فوق الشجرة">
+                <p>الصورة 1 (الديك فوق الشجرة آمناً) :</p>
+                <span class="drop-zone" data-ans="صَعِدَ الدِّيكُ فَوْقَ الشَّجَرَةِ فَلَمْ يَسْتَطِعِ الثَّعْلَبُ الْوُصُولَ إِلَيْهِ" style="width:90%;"></span>
+            </div>
+            <div style="text-align:center;">
+                <img src="end_dog_chase.png" class="img-lesson" alt="الكلب يطارد الثعلب">
+                <p>الصورة 2 (الكلب يخرج ويفاجئ الثعلب) :</p>
+                <span class="drop-zone" data-ans="خَرَجَ كَلْبُ الْحِرَاسَةِ وَنَبَحَ عَلَى الثَّعْلَبِ فَهَرَبَ خَائِفًا" style="width:90%;"></span>
+            </div>
+            <div style="text-align:center;">
+                <img src="end_hunter_chase.png" class="img-lesson" alt="الصياد والكلب يطاردان الثعلب">
+                <p>الصورة 3 (الصياد يطارد الثعلب الهارب) :</p>
+                <span class="drop-zone" data-ans="طَارَدَ الصَّيَّادُ وَكَلْبُهُ الثَّعْلَبَ الْمَاكِرَ فَنَجَا الدِّيكُ مِنَ الْهَلَاكِ" style="width:90%;"></span>
+            </div>
+        </div>
+
+        <div class="eval-badge">
+            <span class="text-success">صحيحة: <span id="ex-p17-oral-c">0</span></span>
+            <span class="text-error">خاطئة: <span id="ex-p17-oral-w">0</span></span>
+        </div>
+    </div>
+
+    <!-- ========================================================
+         الجزء 2: كتاب التلميذ - صفحة 18
+         ======================================================== -->
+    <div class="lesson-card">
+        <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 18</span>
+        <h2 class="lesson-title">نَصُّ الْقِرَاءَةِ : الْفَرَاشَةُ وَالنَّمْلَةُ</h2>
+        
+        <div class="lesson-text-box">
+            <span class="lesson-text-title">📖 اِقْرَأِ النَّصَّ :</span>
+            كَانَتِ السَّمَاءُ صَافِيَةً وَالشَّمْسُ الدَّافِئَةُ تُلْقِي أَضْوَاءَهَا الذَّهَبِيَّةَ عَلَى الْأَرْضِ ، وَالْحُقُولُ مُرْتَدِيَةً أَجْمَلَ أَثْوَابِهَا الْمُلَوَّنَةِ ، وَإِذَا بِفَرَاشَةٍ بَدِيعَةٍ تَنْتَقِلُ بِرَشَاقَةٍ مِنْ مَكَانٍ إِلَى مَكَانٍ . نَزَلَتْ عَلَى حَافَةِ وَرْدَةٍ حَمْرَاءَ فَرَأَتْ تَحْتَهَا نَمْلَةً سَوْدَاءَ خَاطَبَتْهَا قَائِلَةً : « مَاذَا تَفْعَلِينَ أَيَّتُهَا النَّمْلَةُ ؟ حَقًّا لَا يَلِيقُ بِمِثْلِكِ أَنْ يَقِفَ بِجَانِبِ الْوُرُودِ » .<br><br>
+            فَقَالَتِ النَّمْلَةُ : « وَلِمَ ؟ »<br>
+            قَالَتِ الْفَرَاشَةُ : « أَلَا تَرَيْنَ مَا أَنْتِ عَلَيْهِ مِنْ قُبْحِ الْمَنْظَرِ ؟ فَثَوْبُكِ ثَوْبُ حُزْنٍ لَا تَخْلَعِينَهُ » .<br><br>
+            عِنْدَ ذَلِكَ ، انْتَفَضَتِ النَّمْلَةُ غَاضِبَةً وَأَجَابَتْهَا : « إِنَّ الْجَمَالَ جَمَالُ الْعُقُولِ وَالْأَعْمَالِ ، لَا حُسْنُ الثَّوْبِ وَالْجَسَدِ ! » .<br><br>
+            فَرَدَّتِ الْفَرَاشَةُ قَائِلَةً : « أَنَا فَاتِنَةٌ ، انْظُرِي إِلَى كُلِّ هَذِهِ الْأَنَاقَةِ الْكُلُّ مُعْجَبٌ بِي ، هَا هُمُ الْأَطْفَالُ يَتْبَعُونَنِي مِنْ مَكَانٍ إِلَى مَكَانٍ ، إِعْجَابًا بِجَمَالِي » .<br><br>
+            قَاطَعَتْهَا النَّمْلَةُ قَائِلَةً : « نَعَمْ حَتَّى يَقْبِضُوا عَلَيْكِ أَوْ تَمُوتِي تَعَبًا ، هُرُوبًا مِنْ مُلَاحَقَتِهِمْ ، فَهَلْ تَرَيْنَ أَيَّتُهَا الْمَغْرُورَةُ فَائِدَةَ الْجَمَالِ إِذَا لَمْ يَكُنْ مَصْحُوبًا بِسَلَامَةِ الْعَقْلِ وَحُسْنِ التَّدْبِيرِ ؟ » [عن كتاب السنة السادسة أساسي - شوقي الكيلاني بتصرف]
+        </div>
+    </div>
+
+    <!-- ========================================================
+         الجزء 3: كتاب التلميذ - صفحة 19
+         ======================================================== -->
+    <div class="lesson-card">
+        <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 19</span>
+        <h2 class="lesson-title">كَلِمَاتِي الْجَدِيدَةُ • أَقْرَأُ وَأَفْهَمُ</h2>
+        
+        <p class="instruction">1. جِدْ لِكُلِّ كَلِمَةٍ مَعْنَاهَا (حَسَبَ النَّصِّ) :</p>
+        <div class="word-pool" id="pool-p19-meanings"></div>
+        <table>
+            <tr>
+                <th>الْكَلِمَةُ</th>
+                <th>مَعْنَاهَا</th>
+            </tr>
+            <tr>
+                <td>لَا يَلِيقُ</td>
+                <td><span class="drop-zone" data-ans="لَا يُنَاسِبُ"></span></td>
+            </tr>
+            <tr>
+                <td>انْتَفَضَتْ</td>
+                <td><span class="drop-zone" data-ans="ثَارَتْ وَهَاجَتْ"></span></td>
+            </tr>
+            <tr>
+                <td>فَاتِنَةٌ</td>
+                <td><span class="drop-zone" data-ans="شَدِيدَةُ الْجَمَالِ"></span></td>
+            </tr>
+            <tr>
+                <td>مَغْرُورَةٌ</td>
+                <td><span class="drop-zone" data-ans="مُعْجَبَةٌ بِنَفْسِهَا"></span></td>
+            </tr>
+            <tr>
+                <td>التَّدْبِيرُ</td>
+                <td><span class="drop-zone" data-ans="التَّفْكِيرُ وَالتَّخْطِيطُ"></span></td>
+            </tr>
+        </table>
+        <div class="eval-badge">
+            <span class="text-success">صحيحة: <span id="ex-p19-mean-c">0</span></span>
+            <span class="text-error">خاطئة: <span id="ex-p19-mean-w">0</span></span>
+        </div>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">2. جِدْ لِكُلِّ كَلِمَةٍ ضِدَّهَا فِي النَّصِّ :</p>
+        <div class="word-pool" id="pool-p19-opposites"></div>
+        <table>
+            <tr>
+                <th>الْكَلِمَةُ</th>
+                <th>ضِدُّهَا مِنَ النَّصِّ</th>
+            </tr>
+            <tr>
+                <td>قُبْحٌ</td>
+                <td><span class="drop-zone" data-ans="جَمَالٌ"></span></td>
+            </tr>
+            <tr>
+                <td>فَسَادٌ</td>
+                <td><span class="drop-zone" data-ans="تَدْبِيرٌ / صَلَاحٌ"></span></td>
+            </tr>
+            <tr>
+                <td>تَلْبَسِينَهُ</td>
+                <td><span class="drop-zone" data-ans="تَخْلَعِينَهُ"></span></td>
+            </tr>
+        </table>
+        <div class="eval-badge">
+            <span class="text-success">صحيحة: <span id="ex-p19-opp-c">0</span></span>
+            <span class="text-error">خاطئة: <span id="ex-p19-opp-w">0</span></span>
+        </div>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">أَقْرَأُ وَأَفْهَمُ (اخْتَرِ الْإِجَابَةَ الصَّحِيحَةَ) :</p>
+        <div id="ex-p19-mcq"></div>
+        <div class="eval-badge">
+            <span class="text-success">صحيحة: <span id="ex-p19-mcq-c">0</span></span>
+            <span class="text-error">خاطئة: <span id="ex-p19-mcq-w">0</span></span>
+        </div>
+    </div>
+
+    <!-- ========================================================
+         الجزء 4: كتاب التلميذ - صفحة 20
+         ======================================================== -->
+    <div class="lesson-card">
+        <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 20</span>
+        <h2 class="lesson-title">أَتَعَرَّفُ عَلَى الْحَرْفِ • التَّاءُ الْمَرْبُوطَةُ • أُثْرِي لُغَتِي</h2>
+        
+        <p class="instruction">أُلاحِظُ وَأُمَيِّزُ :</p>
+        <div style="background:#fff3e0; border-right:4px solid #ff9800; padding:12px; border-radius:8px; line-height:2.2; font-size:1.05rem; margin-bottom:12px;">
+            « وَإِذَا بِفَرَاشَةٍ بَدِيعَةٍ تَنْتَقِلُ بِرَشَاقَةٍ <span style="color:#d32f2f; font-weight:bold;">مِنْ</span> مَكَانٍ <span style="color:#d32f2f; font-weight:bold;">إِلَى</span> مَكَانٍ ، فَنَزَلَتْ <span style="color:#d32f2f; font-weight:bold;">عَلَى</span> حَافَةِ وَرْدَةٍ حَمْرَاءَ فَرَأَتْ تَحْتَهَا نَمْلَةً سَوْدَاءَ خَاطَبَتْهَا قَائِلَةً لَهَا : حَقًّا <span style="color:#d32f2f; font-weight:bold;">لَا</span> يَلِيقُ بِمِثْلِكِ <span style="color:#d32f2f; font-weight:bold;">أَنْ</span> يَقِفَ بِجَانِبِ الْوُرُودِ »
+        </div>
+
+        <p class="instruction">الْكَلِمَاتُ الْمُلَوَّنَةُ بِالْأَحْمَرِ تَدُلُّ عَلَى :</p>
+        <div id="ex-p20-letter-mcq"></div>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">أَكْتَشِفُ وَأَسْتَعْمِلُ التَّاءَ الْمَرْبُوطَةَ :</p>
+        <div style="background:#e8f5e9; border-right:4px solid #2e7d32; padding:12px; border-radius:8px; line-height:2.2; font-size:1.05rem; margin-bottom:12px;">
+            « كَانَتِ السَّمَاءُ <span style="color:#2e7d32; font-weight:bold;">صَافِيَةً</span> وَالشَّمْسُ <span style="color:#2e7d32; font-weight:bold;">الدَّافِئَةُ</span> تُلْقِي أَضْوَاءَهَا الذَّهَبِيَّةَ عَلَى الْأَرْضِ وَالْحُقُولُ مُرْتَدِيَةً أَجْمَلَ أَثْوَابِهَا <span style="color:#2e7d32; font-weight:bold;">الْمُلَوَّنَةِ</span> »
+        </div>
+        <div id="ex-p20-ta-mcq"></div>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">أُثْرِي لُغَتِي : تَعَرَّفْ عَلَى اسْمِ كُلِّ حَشَرَةٍ (طَابِقِ الِاسْمَ بِالصُّورَةِ) :</p>
+        <div class="word-pool" id="pool-p20-insects"></div>
+
+        <div class="img-grid-responsive">
+            <div>
+                <img src="insect_ladybug.png" alt="دعسوقة">
+                <p><span class="drop-zone" data-ans="دَعْسُوقَةٌ"></span></p>
+            </div>
+            <div>
+                <img src="insect_dragonfly.png" alt="يعسوب">
+                <p><span class="drop-zone" data-ans="يَعْسُوبٌ"></span></p>
+            </div>
+            <div>
+                <img src="insect_bee.png" alt="نحلة">
+                <p><span class="drop-zone" data-ans="نَحْلَةٌ"></span></p>
+            </div>
+            <div>
+                <img src="insect_ant.png" alt="نملة">
+                <p><span class="drop-zone" data-ans="نَمْلَةٌ"></span></p>
+            </div>
+            <div>
+                <img src="insect_wasp.png" alt="دبور">
+                <p><span class="drop-zone" data-ans="دَبُّورٌ"></span></p>
+            </div>
+            <div>
+                <img src="insect_grasshopper.png" alt="جرادة">
+                <p><span class="drop-zone" data-ans="جَرَادَةٌ"></span></p>
+            </div>
+        </div>
+
+        <div class="eval-badge">
+            <span class="text-success">صحيحة: <span id="ex-p20-c">0</span></span>
+            <span class="text-error">خاطئة: <span id="ex-p20-w">0</span></span>
+        </div>
+    </div>
+
+    <!-- ========================================================
+         الجزء 5: كراس الأنشطة - صفحة 12
+         ======================================================== -->
+    <div class="lesson-card">
+        <span class="page-badge">كُرَّاسُ الأَنْشِطَةِ - صَفْحَةُ 12</span>
+        <h2 class="lesson-title">أَتَذَكَّرُ وَأُجِيبُ • أَسْتَعْمِلُ الصِّيغَةَ</h2>
+        
+        <p class="instruction">1. ارْبِطِ الشَّخْصِيَّةَ بِالْقَوْلِ الصَّادِرِ عَنْهَا :</p>
+        <div class="word-pool" id="pool-act12-speech"></div>
+        <table>
+            <tr>
+                <th style="width:50%;">الثَّعْلَبُ</th>
+                <th style="width:50%;">الدِّيكُ</th>
+            </tr>
+            <tr>
+                <td id="td-fox-speech" class="drop-target" data-type="fox" style="min-height:90px; vertical-align:top;"></td>
+                <td id="td-rooster-speech" class="drop-target" data-type="rooster" style="min-height:90px; vertical-align:top;"></td>
+            </tr>
+        </table>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">2. اخْتَرِ الصِّفَاتِ الْمُنَاسِبَةَ لِكُلِّ شَخْصِيَّةٍ وَلَوِّنْهَا (اضْغَطْ عَلَى الصِّفَةِ الْمُنَاسِبَةِ لِتَلْوِينِهَا) :</p>
+        
+        <p style="font-weight:bold; color:var(--primary-dark); margin-bottom:4px;">• صِفَاتُ الدِّيكِ :</p>
+        <div id="box-rooster-traits" style="margin-bottom:14px;"></div>
+
+        <p style="font-weight:bold; color:var(--primary-dark); margin-bottom:4px;">• صِفَاتُ الثَّعْلَبِ :</p>
+        <div id="box-fox-traits" style="margin-bottom:14px;"></div>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">3. وَظِّفْ ( لَكِنْ ) فِي جُمْلَةٍ مُفِيدَةٍ وَعَبِّرْ عَنِ الْمَوَاقِفِ التَّالِيَةِ :</p>
+        <div class="word-pool" id="pool-act12-lakin-cases"></div>
+        <p style="line-height: 2.8; font-size: 1.05rem;">
+            • أَرَدْتُ الْخُرُوجَ <span class="drop-zone drop-tool" data-ans="لَكِنَّ"></span> <span class="drop-zone" data-ans="الْوَقْتَ مُتَأَخِّرٌ"></span><br>
+            • رَغِبْتُ فِي مُشَاهَدَةِ الْمُبَارَاةِ <span class="drop-zone drop-tool" data-ans="لَكِنَّ"></span> <span class="drop-zone" data-ans="التِّلْفَازَ مُعَطَّلٌ"></span><br>
+            • أُعْجِبْتُ بِالْمِعْطَفِ <span class="drop-zone drop-tool" data-ans="لَكِنَّهُ"></span> <span class="drop-zone" data-ans="غَالِي الثَّمَنِ"></span>
+        </p>
+
+        <div class="eval-badge">
+            <span class="text-success">صحيحة: <span id="ex-act12-c">0</span></span>
+            <span class="text-error">خاطئة: <span id="ex-act12-w">0</span></span>
+        </div>
+    </div>
+
+    <!-- ========================================================
+         الجزء 6: كراس الأنشطة - صفحة 13
+         ======================================================== -->
+    <div class="lesson-card">
+        <span class="page-badge">كُرَّاسُ الأَنْشِطَةِ - صَفْحَةُ 13</span>
+        <h2 class="lesson-title">أَفْهَمُ النَّصَّ • أُوَظِّفُ الْحَرْفَ • إِمْلَاءُ التَّاءِ</h2>
+        
+        <p class="instruction">أَفْهَمُ النَّصَّ : ضَعْ صَحِيحًا أَوْ خَاطِئًا (التَّرْتِيبُ مُوَحَّدٌ: صَحِيحٌ ثُمَّ خَاطِئٌ) :</p>
+        <div id="ex-act13-tf"></div>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">أُوَظِّفُ الْحَرْفَ : ضَعِ الْحَرْفَ الْمُنَاسِبَ فِي الْفَرَاغِ :</p>
+        <div class="word-pool" id="pool-act13-harf-fill"></div>
+        <p style="line-height: 2.8; font-size: 1.05rem;">
+            • عَامِلِ النَّاسَ <span class="drop-zone drop-tool" data-ans="بِـ"></span> مَا تُحِبُّ أَنْ يُعَامِلُوكَ بِهِ .<br>
+            • زَحَفَتِ الْحَيَّةُ <span class="drop-zone drop-tool" data-ans="فَـ"></span> أَفْزَعَتْ فَرِيسَتَهَا <span class="drop-zone drop-tool" data-ans="ثُمَّ"></span> أَفْرَغَتْ <span class="drop-zone drop-tool" data-ans="فِي"></span> هَا سُمَّهَا .<br>
+            • تَرَاكَمَتِ الثُّلُوجُ فَوْقَ قِمَمِ الْجِبَالِ <span class="drop-zone drop-tool" data-ans="فَـ"></span> بَدَتْ <span class="drop-zone drop-tool" data-ans="وَ"></span> كَـ <span class="drop-zone drop-tool" data-ans="أَنَّهَا"></span> أَكْوَامٌ <span class="drop-zone drop-tool" data-ans="مِنَ"></span> الْقُطْنِ .
+        </p>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">أَكْمِلِ الْجُمْلَةَ الَّتِي تُعَبِّرُ عَنِ الصُّورَةِ مُسْتَعْمِلًا حَرْفَ الْجَرِّ الْمُنَاسِبَ :</p>
+        <div class="word-pool" id="pool-act13-prep-imgs"></div>
+        <div class="img-grid-responsive">
+            <div>
+                <img src="q2_shopping_mall.png" alt="مراكز التسوق">
+                <p>يَذْهَبُ النَّاسُ <span class="drop-zone drop-tool" data-ans="إِلَى"></span> مَرَاكِزِ التَّسَوُّقِ <span class="drop-zone drop-tool" data-ans="لِـ"></span> شِرَاءِ مَا يَحْتَاجُونَهُ .</p>
+            </div>
+            <div>
+                <img src="q2_frog_pond.png" alt="الضفدع">
+                <p>يَنُطُّ الضَّفْدَعُ <span class="drop-zone drop-tool" data-ans="مِنْ"></span> مَكَانٍ <span class="drop-zone drop-tool" data-ans="إِلَى"></span> آخَرَ .</p>
+            </div>
+            <div>
+                <img src="q2_chick_egg.png" alt="الصوص">
+                <p>خَرَجَ صُوصٌ جَمِيلٌ <span class="drop-zone drop-tool" data-ans="مِنَ"></span> الْبَيْضَةِ .</p>
+            </div>
+            <div>
+                <img src="q2_luggage.png" alt="حقيبة السفر">
+                <p>وَضَعَتْ أُمِّي الْمَلَابِسَ <span class="drop-zone drop-tool" data-ans="فِي"></span> حَقِيبَةِ السَّفَرِ .</p>
+            </div>
+        </div>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">إِمْلَاءٌ : اكْتُبِ الِاسْمَ الْمُنَاسِبَ تَحْتَ كُلِّ صُورَةٍ كِتَابَةً صَحِيحَةً بِالتَّاءِ الْمَرْبُوطَةِ :</p>
+        <div class="word-pool" id="pool-act13-dictation"></div>
+        <div class="img-grid-responsive">
+            <div>
+                <img src="q3_garden.png" alt="حديقة">
+                <p><span class="drop-zone" data-ans="حَدِيقَةٌ"></span></p>
+            </div>
+            <div>
+                <img src="q3_flower.png" alt="زهرة">
+                <p><span class="drop-zone" data-ans="زَهْرَةٌ"></span></p>
+            </div>
+            <div>
+                <img src="q3_palm.png" alt="نخلة">
+                <p><span class="drop-zone" data-ans="نَخْلَةٌ"></span></p>
+            </div>
+            <div>
+                <img src="q3_fish.png" alt="سمكة">
+                <p><span class="drop-zone" data-ans="سَمَكَةٌ"></span></p>
+            </div>
+        </div>
+
+        <div class="eval-badge">
+            <span class="text-success">صحيحة: <span id="ex-act13-c">0</span></span>
+            <span class="text-error">خاطئة: <span id="ex-act13-w">0</span></span>
+        </div>
+    </div>
+
+    <!-- ========================================================
+         الجزء 7: كراس الأنشطة - صفحة 14
+         ======================================================== -->
+    <div class="lesson-card">
+        <span class="page-badge">كُرَّاسُ الأَنْشِطَةِ - صَفْحَةُ 14</span>
+        <h2 class="lesson-title">أُقَيِّمُ تَعَلُّمَاتِي</h2>
+        
+        <p class="instruction">1. أَكْمِلْ خَرِيطَةَ الْكَلِمَةِ « الْغُرُورُ » :</p>
+        <div class="word-pool" id="pool-act14-map"></div>
+        <table>
+            <tr>
+                <th>نَوْعُ الْكَلِمَةِ</th>
+                <th>مُرَادِفُهَا</th>
+                <th>ضِدُّهَا</th>
+            </tr>
+            <tr>
+                <td><span class="drop-zone" data-ans="اسْمٌ"></span></td>
+                <td><span class="drop-zone" data-ans="التَّكَبُّرُ / الْإِعْجَابُ بِالنَّفْسِ"></span></td>
+                <td><span class="drop-zone" data-ans="التَّوَاضُعُ"></span></td>
+            </tr>
+        </table>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">2. أَكْمِلْ عَلَى الْمِنْوَالِ : ( الشَّمْسُ سَاطِعَةٌ لَكِنَّ الْجَوَّ بَارِدٌ ) :</p>
+        <div class="word-pool" id="pool-act14-pattern"></div>
+        <p style="line-height: 2.8; font-size: 1.05rem;">
+            • النَّمْلَةُ صَغِيرَةُ الْحَجْمِ <span class="drop-zone drop-tool" data-ans="لَكِنَّهَا"></span> <span class="drop-zone" data-ans="قَوِيَّةٌ وَنَشِيطَةٌ"></span><br>
+            • الْفَرَاشَةُ جَمِيلَةٌ <span class="drop-zone drop-tool" data-ans="لَكِنَّهَا"></span> <span class="drop-zone" data-ans="مَغْرُورَةٌ بِجَمَالِهَا"></span>
+        </p>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">3. أَكْمِلِ الْفَرَاغَ بِمَا يُنَاسِبُ ( حَكِيمَةٌ - الْحِيلَةِ - مَغْرُورَةٌ - صَوْتِهِ ) :</p>
+        <div class="word-pool" id="pool-act14-fill-words"></div>
+        <p style="line-height: 2.8; font-size: 1.05rem;">
+            • الْفَرَاشَةُ <span class="drop-zone" data-ans="مَغْرُورَةٌ"></span> بِجَمَالِهَا وَسِحْرِ أَلْوَانِهَا .<br>
+            • النَّمْلَةُ <span class="drop-zone" data-ans="حَكِيمَةٌ"></span> بِحُسْنِ تَدْبِيرِهَا وَرَجَاحَةِ عَقْلِهَا .<br>
+            • يَبْحَثُ الثَّعْلَبُ عَنْ فَرِيسَةٍ يَصْطَادُهَا بِاسْتِعْمَالِ <span class="drop-zone" data-ans="الْحِيلَةِ"></span> .<br>
+            • الدِّيكُ مُعْجَبٌ بِعُرْفِهِ الطَّوِيلِ وَ <span class="drop-zone" data-ans="صَوْتِهِ"></span> الْحَسَنِ .
+        </p>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">4. أَكْمِلِ الْفَرَاغَ بِالْحَرْفِ الْمُنَاسِبِ ( فَـ ، بِـ ، مِنْ ، أَنَّ ، وَ ، لَا ، إِلَى ، عَلَى ) :</p>
+        <div class="word-pool" id="pool-act14-letters"></div>
+        <p style="line-height: 2.8; font-size: 1.05rem;">
+            • الْتَقَى ثَعْلَبٌ مُخَادِعٌ <span class="drop-zone drop-tool" data-ans="بِـ"></span> دِيكٍ مَغْرُورٍ <span class="drop-zone drop-tool" data-ans="فَـ"></span> احْتَالَ <span class="drop-zone drop-tool" data-ans="عَلَى"></span> هِ .<br>
+            • كَانَتِ الْفَرَاشَةُ الْجَمِيلَةُ تَتَنَقَّلُ <span class="drop-zone drop-tool" data-ans="مِنْ"></span> زَهْرَةٍ <span class="drop-zone drop-tool" data-ans="إِلَى"></span> زَهْرَةٍ .<br>
+            • أَخْبَرَتِ النَّمْلَةُ الْفَرَاشَةَ بِـ <span class="drop-zone drop-tool" data-ans="أَنَّ"></span> جَمَالَ الْمَظْهَرِ وَحْدَهُ <span class="drop-zone drop-tool" data-ans="لَا"></span> يَكْفِي ، لَا بُدَّ <span class="drop-zone drop-tool" data-ans="مِنَ"></span> الْعَقْلِ <span class="drop-zone drop-tool" data-ans="وَ"></span> حُسْنِ التَّدْبِيرِ .
+        </p>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">5. أَكْمِلْ بِتَاءٍ مُنَاسِبَةٍ ( ـة / ة / ت ) :</p>
+        <div class="word-pool" id="pool-act14-ta-letters"></div>
+        <p style="line-height: 2.8; font-size: 1.05rem;">
+            رَأَتْ حَمَامَ<span class="drop-zone drop-tool" data-ans="ةٌ"></span> نَمْلَ<span class="drop-zone drop-tool" data-ans="ةً"></span> تَكَادُ تَغْرَقُ فِي النَّهْرِ ، فَأَشْفَقَتِ الْحَمَامَ<span class="drop-zone drop-tool" data-ans="ةُ"></span> عَلَى النَّمْلَ<span class="drop-zone drop-tool" data-ans="ةِ"></span> وَرَمَ<span class="drop-zone drop-tool" data-ans="تْ"></span> لَهَا قَشَّ<span class="drop-zone drop-tool" data-ans="ةً"></span> صَغِيرَ<span class="drop-zone drop-tool" data-ans="ةً"></span> ، صَعِدَتِ النَّمْلَ<span class="drop-zone drop-tool" data-ans="ةُ"></span> فَوْقَ الْقَشَّ<span class="drop-zone drop-tool" data-ans="ةِ"></span> ثُمَّ شَكَرَتِ الْحَمَامَ<span class="drop-zone drop-tool" data-ans="ةَ"></span> .
+        </p>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">6. ضَعِ الْكَلِمَاتِ فِي الْفَرَاغِ لِتَتَحَصَّلَ عَلَى وَصْفٍ لِلْفَرَاشَةِ :</p>
+        <div class="word-pool" id="pool-act14-butterfly-desc"></div>
+        <p style="line-height: 2.8; font-size: 1.05rem;">
+            فَرَاشَةٌ <span class="drop-zone" data-ans="حُلْوَةٌ"></span> ، <span class="drop-zone" data-ans="مُلَوَّنَةٌ"></span> تَطِيرُ فِي <span class="drop-zone" data-ans="رَشَاقَةٍ"></span> ، تَدْهَشُ الْإِنْسَانَ ، تَحُومُ فِي <span class="drop-zone" data-ans="الْبُسْتَانِ"></span> لِتَمْتَصَّ <span class="drop-zone" data-ans="رَحِيقَ"></span> الْأَزْهَارِ ، فَدَوْرُهَا <span class="drop-zone" data-ans="كَبِيرٌ"></span> جِدًّا رُغْمَ جِسْمِهَا <span class="drop-zone" data-ans="الصَّغِيرِ"></span> ، فَسُبْحَانَ مَنْ أَعْطَاهَا أَلْوَانَهَا <span class="drop-zone" data-ans="الْفَرِيدَةَ"></span> !
+        </p>
+
+        <div class="eval-badge">
+            <span class="text-success">صحيحة: <span id="ex-act14-c">0</span></span>
+            <span class="text-error">خاطئة: <span id="ex-act14-w">0</span></span>
+        </div>
+    </div>
+
+    <!-- ========================================================
+         الجزء 8: كراس الأنشطة - صفحة 15
+         ======================================================== -->
+    <div class="lesson-card">
+        <span class="page-badge">كُرَّاسُ الأَنْشِطَةِ - صَفْحَةُ 15</span>
+        <h2 class="lesson-title">أَتَدَرَّبُ عَلَى التَّعْبِيرِ الْكِتَابِيِّ</h2>
+        
+        <div class="lesson-text-box">
+            <span class="lesson-text-title">📖 اِقْرَأِ النَّصَّ جَيِّدًا ثُمَّ قُمْ بِمَلْءِ الْجَدْوَلِ :</span>
+            فِي ضَيْعَةٍ جَمِيلَةٍ تَعِيشُ طُيُورٌ وَحَيَوَانَاتٌ كَثِيرَةٌ ، غَيْرَ أَنَّ الطَّاوُوسَ دَائِمُ الِافْتِخَارِ بِجَمَالِ أَلْوَانِهِ وَيَتَبَاهَى عَلَى بَقِيَّةِ الطُّيُورِ ، يَمْشِي مُخْتَالًا مُعْجَبًا بِجَمَالِ رِيشِهِ ، فَغَضِبَتْ مِنْهُ بَقِيَّةُ الطُّيُورِ وَقَاطَعَتْهُ . ذَاتَ لَيْلَةٍ خَرَجَ الطَّاوُوسُ وَحِيدًا فَرَآهُ الثَّعْلَبُ فَهَاجَمَهُ وَانْتَزَعَ رِيشَ ذَنَبِهِ ، أَفْلَتَ مِنْهُ الطَّاوُوسُ بِأُعْجُوبَةٍ وَلَكِنَّهُ صَارَ بِلَا ذَنَبٍ فَوَاسَتْهُ بَقِيَّةُ الطُّيُورِ وَحِينَهَا أَحَسَّ الطَّاوُوسُ بِالنَّدَمِ عَلَى مَا صَدَرَ مِنْهُ .
+        </div>
+
+        <p class="instruction">1. حَدِّدْ عَنَاصِرَ الْقِصَّةِ فِي الْجَدْوَلِ :</p>
+        <div class="word-pool" id="pool-act15-table"></div>
+        <table>
+            <tr>
+                <th>الْعُنْصُرُ</th>
+                <th>تَحْدِيدُهُ مِنَ النَّصِّ</th>
+            </tr>
+            <tr>
+                <td>شَخْصِيَّاتُ الْقِصَّةِ</td>
+                <td><span class="drop-zone" data-ans="الطَّاوُوسُ ، الثَّعْلَبُ ، بَقِيَّةُ الطُّيُورِ"></span></td>
+            </tr>
+            <tr>
+                <td>الشَّخْصِيَّةُ الرَّئِيسِيَّةُ</td>
+                <td><span class="drop-zone" data-ans="الطَّاوُوسُ"></span></td>
+            </tr>
+            <tr>
+                <td>الشَّخْصِيَّةُ الْمُعْتَدِيَةُ</td>
+                <td><span class="drop-zone" data-ans="الثَّعْلَبُ"></span></td>
+            </tr>
+            <tr>
+                <td>الشَّخْصِيَّةُ الَّتِي وَقَعَ عَلَيْهَا الِاعْتِدَاءُ</td>
+                <td><span class="drop-zone" data-ans="الطَّاوُوسُ"></span></td>
+            </tr>
+            <tr>
+                <td>الشَّخْصِيَّةُ الْمُسَاعِدَةُ (الْمُوَاسِيَةُ)</td>
+                <td><span class="drop-zone" data-ans="بَقِيَّةُ الطُّيُورِ"></span></td>
+            </tr>
+            <tr>
+                <td>الْمَكَانُ الَّذِي دَارَتْ فِيهِ الْأَحْدَاثُ</td>
+                <td><span class="drop-zone" data-ans="ضَيْعَةٌ جَمِيلَةٌ"></span></td>
+            </tr>
+            <tr>
+                <td>زَمَنُ وُقُوعِ الْحَادِثَةِ</td>
+                <td><span class="drop-zone" data-ans="ذَاتَ لَيْلَةٍ"></span></td>
+            </tr>
+        </table>
+
+        <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+        <p class="instruction">2. ارْبِطِ الْفِكْرَةَ بِمَوْقِعِهَا فِي الْقِصَّةِ (حَسَبَ تَرْتِيبِ الْمِنْهَاجِ) :</p>
+        <div class="word-pool" id="pool-act15-positions"></div>
+        <table>
+            <tr>
+                <th>الْفِكْرَةُ</th>
+                <th>مَوْقِعُهَا فِي الْقِصَّةِ</th>
+            </tr>
+            <tr>
+                <td>افْتِخَارُ الطَّاوُوسِ بِجَمَالِ رِيشِهِ .</td>
+                <td><span class="drop-zone" data-ans="بِدَايَةُ الْقِصَّةِ"></span></td>
+            </tr>
+            <tr>
+                <td>الثَّعْلَبُ يُهَدِّدُ حَيَاةَ الطَّاوُوسِ .</td>
+                <td><span class="drop-zone" data-ans="وَسَطُ الْقِصَّةِ"></span></td>
+            </tr>
+            <tr>
+                <td>نَدِمَ الطَّاوُوسُ عَلَى فِعْلَتِهِ .</td>
+                <td><span class="drop-zone" data-ans="نِهَايَةُ الْقِصَّةِ"></span></td>
+            </tr>
+        </table>
+
+        <div class="eval-badge">
+            <span class="text-success">صحيحة: <span id="ex-act15-c">0</span></span>
+            <span class="text-error">خاطئة: <span id="ex-act15-w">0</span></span>
+        </div>
+    </div>
+
+    <!-- ========================================================
+         التقرير النهائي الشامل
+         ======================================================== -->
+    <div id="final-report">
+        <h2 style="color: var(--primary-dark); margin-top: 0;">📊 التَّقْرِيرُ النِّهَائِيُّ لِلْوَحْدَةِ</h2>
+        <p style="color: var(--text-muted); font-size:1.1rem; margin-bottom:15px;">حصيلة إجابات التمارين التفاعلية لكامل الوحدة :</p>
+        
+        <div style="display:flex; justify-content: space-around; margin: 15px 0;">
+            <div style="color: var(--success); font-weight:800; font-size:1.25rem;">
+                إجابات صحيحة<br><span id="total-c" style="font-size:1.8rem;">0</span>
+            </div>
+            <div style="color: var(--error); font-weight:800; font-size:1.25rem;">
+                إجابات خاطئة<br><span id="total-w" style="font-size:1.8rem;">0</span>
+            </div>
+        </div>
+
+        <div class="final-score" id="total-percent">0%</div>
+        <div class="final-remark" id="total-remark">جارٍ الإنجاز...</div>
+        
+        <button class="btn-restart" onclick="restartEntireLesson()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنَ الْبِدَايَةِ</button>
+        <button class="btn-exit" onclick="exitTelegramApp()">🚪 الْخُرُوجُ مِنَ التَّطْبِيقِ</button>
+        <a href="../../../index.html" class="btn-back-home">← الْعَوْدَةُ إِلَى الْفِهْرِسِ</a>
+    </div>
+
+<script>
+    // ⚠️ تم حذف BOT_TOKEN من هنا (لأسباب أمنية)
+    // التوكن الآن محفوظ بأمان في Vercel
+    const CHANNEL_ID = "-1003910412986";
+
+    // تهيئة Telegram WebApp
+    const tg = window.Telegram?.WebApp;
+    if(tg) {
+        tg.ready();
+        tg.expand();
+    }
+
+    // التحقق من الاشتراك الإجباري (عبر الوسيط على Vercel)
+    async function verifySubscription() {
+        const statusMsg = document.getElementById('sub-status-msg');
+        statusMsg.style.color = "#0288d1";
+        statusMsg.textContent = "جَارٍ التَّحَقُّقُ مِنَ الِاشْتِرَاكِ...";
+
+        let userId = null;
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            userId = tg.initDataUnsafe.user.id;
+        }
+
+        if (!userId) {
+            statusMsg.style.color = "#e65100";
+            statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+            return;
+        }
+
+        try {
+            // ⬇️ استدعاء الوسيط على Vercel (بدلاً من Telegram API مباشرة)
+            const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.isSubscribed) {
+                statusMsg.style.color = "#2e7d32";
+                statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارٍ فَتْحُ الدَّرْسِ...";
+                setTimeout(() => {
+                    document.getElementById('sub-lock-screen').style.display = 'none';
+                }, 600);
+            } else {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الِانْضِمَامُ أَوَّلًا.";
+            }
+        } catch (error) {
+            statusMsg.style.color = "#c62828";
+            statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الِاتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+        }
+    }
+
+    // إدارة الصوت بتقنية Web Audio API
+    let audioEnabled = true;
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let actx = null;
+
+    function getAudioContext() {
+        if (!actx) actx = new AudioContext();
+        if (actx.state === 'suspended') actx.resume();
+        return actx;
+    }
+
+    function toggleAudio() {
+        audioEnabled = !audioEnabled;
+        document.getElementById('audio-toggle').textContent = audioEnabled ? '🔊' : '🔇';
+    }
+
+    function playTone(freq, type, duration) {
+        if(!audioEnabled) return;
+        try {
+            const ctx = getAudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, ctx.currentTime);
+            gain.gain.setValueAtTime(0.12, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + duration);
+        } catch(e) {}
+    }
+
+    function playSuccess() {
+        if(tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+        playTone(523.25, 'sine', 0.12);
+        setTimeout(() => playTone(659.25, 'sine', 0.12), 110);
+        setTimeout(() => playTone(783.99, 'sine', 0.22), 220);
+    }
+
+    function playError() {
+        if(tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+        playTone(180, 'sawtooth', 0.35);
+    }
+
+    function playTap() {
+        if(tg && tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+        playTone(600, 'triangle', 0.04);
+    }
+
+    function playClaps() {
+        if(!audioEnabled) return;
+        let count = 3;
+        let intv = setInterval(() => {
+            playTone(850, 'square', 0.08);
+            if(--count === 0) clearInterval(intv);
+        }, 220);
+    }
+
+    function shuffleArray(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+    }
+
+    // عداد الدرجات الشامل المباشر
+    let totalCorrectAnswers = 0;
+    let totalWrongAnswers = 0;
+    const TOTAL_QUESTIONS_COUNT = 82; 
+
+    function registerScore(badgePrefix, isCorrect) {
+        if (isCorrect) {
+            totalCorrectAnswers++;
+            const el = document.getElementById(`${badgePrefix}-c`);
+            if (el) el.textContent = parseInt(el.textContent) + 1;
+        } else {
+            totalWrongAnswers++;
+            const el = document.getElementById(`${badgePrefix}-w`);
+            if (el) el.textContent = parseInt(el.textContent) + 1;
+        }
+
+        updateLiveReport();
+    }
+
+    function updateLiveReport() {
+        document.getElementById('total-c').textContent = totalCorrectAnswers;
+        document.getElementById('total-w').textContent = totalWrongAnswers;
+
+        const answeredCount = totalCorrectAnswers + totalWrongAnswers;
+        const percent = answeredCount === 0 ? 0 : Math.round((totalCorrectAnswers / answeredCount) * 100);
+        document.getElementById('total-percent').textContent = percent + '%';
+
+        const remarkEl = document.getElementById('total-remark');
+        if (answeredCount < 10) {
+            remarkEl.textContent = 'واصِل الإجابة على بقية التمارين...';
+            remarkEl.style.backgroundColor = '#eceff1';
+            remarkEl.style.color = '#37474f';
+        } else if (percent >= 90) {
+            remarkEl.textContent = 'ممتاز! عمل رائع وإجابات متميزة.';
+            remarkEl.style.backgroundColor = '#c8e6c9';
+            remarkEl.style.color = '#1b5e20';
+        } else if (percent >= 70) {
+            remarkEl.textContent = 'جيد جداً! استيعابك للنص والدروس ممتاز.';
+            remarkEl.style.backgroundColor = '#bbdefb';
+            remarkEl.style.color = '#0d47a1';
+        } else if (percent >= 50) {
+            remarkEl.textContent = 'أحسنت، وراجع النص لتقديم نتيجة أفضل.';
+            remarkEl.style.backgroundColor = '#ffe0b2';
+            remarkEl.style.color = '#e65100';
+        } else {
+            remarkEl.textContent = 'حاول مجدداً وركز أكثر في قراءة النص والأسئلة.';
+            remarkEl.style.backgroundColor = '#ffcdd2';
+            remarkEl.style.color = '#b71c1c';
+        }
+
+        if (answeredCount >= TOTAL_QUESTIONS_COUNT && percent >= 70) {
+            playClaps();
+        }
+    }
+
+    // بناء أسئلة (صحيح / خطأ) موحدة الترتيب: صحيح أولاً ثم خطأ
+    function buildFixedTrueFalse(containerId, badgeId, questions) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+
+        questions.forEach(q => {
+            const wrap = document.createElement('div');
+            wrap.style.marginBottom = "14px";
+            wrap.innerHTML = `<span style="font-size:1.02rem; font-weight:700; display:block; margin-bottom:6px;">• ${q.text}</span>`;
+            
+            const btnGroup = document.createElement('div');
+            const fixedOptions = [
+                { label: "صحيح", isUserChoosingTrue: true },
+                { label: "خاطئ", isUserChoosingTrue: false }
+            ];
+
+            fixedOptions.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'tf-btn';
+                btn.textContent = opt.label;
+
+                btn.onclick = () => {
+                    playTap();
+                    Array.from(btnGroup.querySelectorAll('.tf-btn')).forEach(b => b.classList.add('locked'));
+
+                    const isCorrect = (opt.isUserChoosingTrue === q.isCorrectAnswer);
+                    if (isCorrect) {
+                        btn.classList.add('correct');
+                        playSuccess();
+                        registerScore(badgeId, true);
+                    } else {
+                        btn.classList.add('wrong');
+                        playError();
+                        registerScore(badgeId, false);
+                    }
+                };
+                btnGroup.appendChild(btn);
+            });
+
+            wrap.appendChild(btnGroup);
+            container.appendChild(wrap);
+        });
+    }
+
+    // بناء الأسئلة المتعددة بتبعثر عشوائي (3 خيارات متقاربة)
+    function buildRandomizedMCQ(containerId, badgeId, questions) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+
+        questions.forEach(q => {
+            const wrap = document.createElement('div');
+            wrap.style.marginBottom = "14px";
+            wrap.innerHTML = `<span style="font-size:1.02rem; font-weight:700; display:block; margin-bottom:6px;">• ${q.text}</span>`;
+            
+            const btnGroup = document.createElement('div');
+            const shuffledOptions = shuffleArray(q.options);
+
+            shuffledOptions.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'tf-btn';
+                btn.textContent = opt.label;
+
+                btn.onclick = () => {
+                    playTap();
+                    Array.from(btnGroup.querySelectorAll('.tf-btn')).forEach(b => b.classList.add('locked'));
+
+                    if (opt.correct) {
+                        btn.classList.add('correct');
+                        playSuccess();
+                        registerScore(badgeId, true);
+                    } else {
+                        btn.classList.add('wrong');
+                        playError();
+                        registerScore(badgeId, false);
+                    }
+                };
+                btnGroup.appendChild(btn);
+            });
+
+            wrap.appendChild(btnGroup);
+            container.appendChild(wrap);
+        });
+    }
+
+    // نظام النقر والمطابقة بالفراغات (Tap to Fill)
+    let activeSelectedWord = null;
+
+    function setupTapToFill(poolId, zonesSelector, badgeId, wordsList) {
+        const pool = document.getElementById(poolId);
+        pool.innerHTML = '';
+        const shuffledWords = shuffleArray(wordsList);
+
+        shuffledWords.forEach(wObj => {
+            const span = document.createElement('span');
+            span.className = 'drag-word';
+            span.textContent = wObj.label;
+            span.setAttribute('data-val', wObj.val);
+
+            span.onclick = () => {
+                if (span.classList.contains('locked')) return;
+                playTap();
+                document.querySelectorAll('.drag-word.selected').forEach(el => el.classList.remove('selected'));
+                span.classList.add('selected');
+                activeSelectedWord = span;
+            };
+
+            pool.appendChild(span);
+        });
+
+        const zones = document.querySelectorAll(zonesSelector);
+        zones.forEach(zone => {
+            zone.onclick = () => {
+                if (zone.classList.contains('locked') || !activeSelectedWord) return;
+
+                const expected = zone.getAttribute('data-ans');
+                const actual = activeSelectedWord.getAttribute('data-val');
+
+                activeSelectedWord.classList.remove('selected');
+                activeSelectedWord.classList.add('locked');
+                zone.classList.add('locked');
+
+                zone.textContent = activeSelectedWord.textContent;
+                activeSelectedWord.style.visibility = 'hidden';
+
+                if (expected === actual) {
+                    playSuccess();
+                    zone.classList.add('correct');
+                    registerScore(badgeId, true);
+                } else {
+                    playError();
+                    zone.classList.add('wrong');
+                    registerScore(badgeId, false);
+                }
+
+                activeSelectedWord = null;
+            };
+        });
+    }
+
+    // نظام تصنيف الجداول المزدوجة
+    function setupDualCategoryTable(poolId, targetSelector1, targetSelector2, badgeId, items) {
+        const pool = document.getElementById(poolId);
+        pool.innerHTML = '';
+        const td1 = document.querySelector(targetSelector1);
+        const td2 = document.querySelector(targetSelector2);
+        td1.innerHTML = '';
+        td2.innerHTML = '';
+
+        const shuffled = shuffleArray(items);
+
+        shuffled.forEach(item => {
+            const span = document.createElement('span');
+            span.className = 'drag-word';
+            span.textContent = item.label;
+            span.setAttribute('data-val', item.val);
+
+            span.onclick = () => {
+                if (span.classList.contains('locked')) return;
+                playTap();
+                pool.querySelectorAll('.drag-word.selected').forEach(el => el.classList.remove('selected'));
+                span.classList.add('selected');
+                activeSelectedWord = span;
+            };
+
+            pool.appendChild(span);
+        });
+
+        [td1, td2].forEach(td => {
+            td.onclick = () => {
+                if (!activeSelectedWord || activeSelectedWord.classList.contains('locked')) return;
+
+                const targetType = td.getAttribute('data-type');
+                const wordType = activeSelectedWord.getAttribute('data-val');
+
+                activeSelectedWord.classList.remove('selected');
+                activeSelectedWord.classList.add('locked');
+                activeSelectedWord.style.display = 'block';
+                activeSelectedWord.style.margin = '4px auto';
+
+                if (targetType === wordType) {
+                    playSuccess();
+                    activeSelectedWord.classList.add('correct');
+                    td.appendChild(activeSelectedWord);
+                    registerScore(badgeId, true);
+                } else {
+                    playError();
+                    activeSelectedWord.classList.add('wrong');
+                    td.appendChild(activeSelectedWord);
+                    registerScore(badgeId, false);
+                }
+
+                activeSelectedWord = null;
+            };
+        });
+    }
+
+    // نظام تلوين الصفات واختيارها
+    function setupColorTraits(containerId, traits, badgeId) {
+        const container = document.getElementById(containerId);
+        container.innerHTML = '';
+
+        traits.forEach(t => {
+            const btn = document.createElement('button');
+            btn.className = 'color-btn';
+            btn.textContent = t.label;
+
+            btn.onclick = () => {
+                if (btn.classList.contains('locked')) return;
+                btn.classList.add('locked');
+                playTap();
+
+                if (t.isCorrect) {
+                    btn.classList.add('correct');
+                    playSuccess();
+                    registerScore(badgeId, true);
+                } else {
+                    btn.classList.add('wrong');
+                    playError();
+                    registerScore(badgeId, false);
+                }
+            };
+
+            container.appendChild(btn);
+        });
+    }
+
+    // التهيئة الشاملة لجميع التمارين
+    function initAllActivities() {
+        totalCorrectAnswers = 0;
+        totalWrongAnswers = 0;
+        updateLiveReport();
+
+        // فحص تلقائي للاشتراك عند التشغيل
+        verifySubscription();
+
+        // 1. كتاب التلميذ - صفحة 17
+        setupTapToFill('pool-p17-lakin', '#pool-p17-lakin ~ div p .drop-zone', 'ex-p17', [
+            { label: "لَكِنَّ", val: "لَكِنَّ" },
+            { label: "الْخِرَافَ هَرَبَتْ سَرِيعًا", val: "الْخِرَافَ هَرَبَتْ سَرِيعًا" },
+            { label: "لَكِنَّهَا", val: "لَكِنَّهَا" },
+            { label: "تَسِيرُ بِسُرْعَةٍ وَنَشَاطٍ", val: "تَسِيرُ بِسُرْعَةٍ وَنَشَاطٍ" },
+            { label: "لَكِنَّنِي", val: "لَكِنَّنِي" },
+            { label: "مَرِيضٌ فِي الْفِرَاشِ", val: "مَرِيضٌ فِي الْفِرَاشِ" }
+        ]);
+
+        buildRandomizedMCQ('ex-p17-oral-mcq', 'ex-p17-oral', [
+            {
+                text: "كَيْفَ احْتَالَ الثَّعْلَبُ عَلَى الدِّيكِ ؟",
+                options: [
+                    { label: "أَوْهَمَهُ بِأَنَّ الدَّجَاجَ يَبْحَثُ عَنْهُ لِيُتَوِّجَهُ مَلِكًا عَلَيْهَا لِشَجَاعَتِهِ وَجَمَالِ عُرْفِهِ", correct: true },
+                    { label: "دَعَاهُ لِتَنَاوُلِ الْحُبُوبِ اللَّذِيذَةِ فِي الْحَقْلِ الْمُجَاوِرِ", correct: false },
+                    { label: "تَسَلَّقَ الْحَائِطَ الْمُرْتَفِعَ وَهَجَمَ عَلَيْهِ مُبَاشَرَةً دُونَ حَدِيثٍ", correct: false }
+                ]
+            },
+            {
+                text: "كَيْفَ كَانَتْ نِهَايَةُ قِصَّةِ الدِّيكِ الْمَغْرُورِ ؟",
+                options: [
+                    { label: "هَجَمَ عَلَيْهِ الثَّعْلَبُ فِي الطَّرِيقِ وَدَقَّ عُنُقَهُ وَأَكَلَهُ جَزَاءً لِغُرُورِهِ", correct: true },
+                    { label: "وَصَلَ إِلَى الْمَمْلَكَةِ وَتُوِّجَ مَلِكًا عَلَى الدَّجَاجِ بِفَرَحٍ", correct: false },
+                    { label: "طَارَ الدِّيكُ فَوْقَ الشَّجَرَةِ عِنْدَمَا شَعَرَ بِخِيَانَةِ الثَّعْلَبِ", correct: false }
+                ]
+            }
+        ]);
+
+        setupTapToFill('pool-p17-endings', '#pool-p17-endings ~ div div .drop-zone', 'ex-p17-oral', [
+            { label: "صَعِدَ الدِّيكُ فَوْقَ الشَّجَرَةِ فَلَمْ يَسْتَطِعِ الثَّعْلَبُ الْوُصُولَ إِلَيْهِ", val: "صَعِدَ الدِّيكُ فَوْقَ الشَّجَرَةِ فَلَمْ يَسْتَطِعِ الثَّعْلَبُ الْوُصُولَ إِلَيْهِ" },
+            { label: "خَرَجَ كَلْبُ الْحِرَاسَةِ وَنَبَحَ عَلَى الثَّعْلَبِ فَهَرَبَ خَائِفًا", val: "خَرَجَ كَلْبُ الْحِرَاسَةِ وَنَبَحَ عَلَى الثَّعْلَبِ فَهَرَبَ خَائِفًا" },
+            { label: "طَارَدَ الصَّيَّادُ وَكَلْبُهُ الثَّعْلَبَ الْمَاكِرَ فَنَجَا الدِّيكُ مِنَ الْهَلَاكِ", val: "طَارَدَ الصَّيَّادُ وَكَلْبُهُ الثَّعْلَبَ الْمَاكِرَ فَنَجَا الدِّيكُ مِنَ الْهَلَاكِ" }
+        ]);
+
+        // 2. كتاب التلميذ - صفحة 19
+        setupTapToFill('pool-p19-meanings', '#pool-p19-meanings ~ table .drop-zone', 'ex-p19-mean', [
+            { label: "لَا يُنَاسِبُ", val: "لَا يُنَاسِبُ" },
+            { label: "ثَارَتْ وَهَاجَتْ", val: "ثَارَتْ وَهَاجَتْ" },
+            { label: "شَدِيدَةُ الْجَمَالِ", val: "شَدِيدَةُ الْجَمَالِ" },
+            { label: "مُعْجَبَةٌ بِنَفْسِهَا", val: "مُعْجَبَةٌ بِنَفْسِهَا" },
+            { label: "التَّفْكِيرُ وَالتَّخْطِيطُ", val: "التَّفْكِيرُ وَالتَّخْطِيطُ" }
+        ]);
+
+        setupTapToFill('pool-p19-opposites', '#pool-p19-opposites ~ table .drop-zone', 'ex-p19-opp', [
+            { label: "جَمَالٌ", val: "جَمَالٌ" },
+            { label: "تَدْبِيرٌ / صَلَاحٌ", val: "تَدْبِيرٌ / صَلَاحٌ" },
+            { label: "تَخْلَعِينَهُ", val: "تَخْلَعِينَهُ" }
+        ]);
+
+        buildRandomizedMCQ('ex-p19-mcq', 'ex-p19-mcq', [
+            {
+                text: "شَخْصِيَّاتُ هَذِهِ الْقِصَّةِ هِيَ :",
+                options: [
+                    { label: "شَخْصِيَّاتٌ حَيَوَانِيَّةٌ (حَشَرَاتٌ)", correct: true },
+                    { label: "شَخْصِيَّاتٌ بَشَرِيَّةٌ", correct: false },
+                    { label: "شَخْصِيَّاتٌ جَمَادِيَّةٌ خَيَالِيَّةٌ", correct: false }
+                ]
+            },
+            {
+                text: "هَذِهِ الْقِصَّةُ تُعْتَبَرُ :",
+                options: [
+                    { label: "قِصَّةً خَيَالِيَّةً رَمْزِيَّةً تَهْدِفُ لِلْعِبْرَةِ", correct: true },
+                    { label: "قِصَّةً حَقِيقِيَّةً وَاقِعِيَّةً جَرَتْ فِعْلًا", correct: false },
+                    { label: "قِصَّةً تَارِيخِيَّةً قَدِيمَةً", correct: false }
+                ]
+            },
+            {
+                text: "أَيْنَ حَدَثَتْ هَذِهِ الْقِصَّةُ ؟ وَكَيْفَ كَانَتِ الْأَجْوَاءُ ؟",
+                options: [
+                    { label: "فِي الْحُقُولِ وَالْبَسَاتِينِ ، وَكَانَتِ السَّمَاءُ صَافِيَةً وَالشَّمْسُ دَافِئَةً", correct: true },
+                    { label: "فِي الْغَابَةِ الْمُظْلِمَةِ فِي يَوْمٍ شَاتٍ مَاطِرٍ", correct: false },
+                    { label: "فِي فِنَاءِ الْمَدْرَسَةِ أَمَامَ التَّلَامِيذِ", correct: false }
+                ]
+            },
+            {
+                text: "مَاذَا كَانَتْ تَفْعَلُ الْفَرَاشَةُ ؟ وَبِمَنِ الْتَقَتْ ؟",
+                options: [
+                    { label: "تَنْتَقِلُ بِرَشَاقَةٍ بَيْنَ الْأَزْهَارِ ، وَالْتَقَتْ بِنَمْلَةٍ سَوْدَاءَ تَحْتَ وَرْدَةٍ حَمْرَاءَ", correct: true },
+                    { label: "تَجْمَعُ الْحُبُوبَ لِفَصْلِ الشِّتَاءِ ، وَالْتَقَتْ بِحَمَامَةٍ بَيْضَاءَ", correct: false },
+                    { label: "كَانَتْ نَائِمَةً فَوْقَ غُصْنِ شَجَرَةٍ عَالِيَةٍ", correct: false }
+                ]
+            },
+            {
+                text: "مَنْ بَدَأَ بِالْخِصَامِ وَالسُّخْرِيَةِ ؟ وَهَلْ كَانَتْ مُحِقَّةً ؟",
+                options: [
+                    { label: "الْفَرَاشَةُ سَخِرَتْ مِنْ سَوَادِ النَّمْلَةِ ، وَلَمْ تَكُنْ مُحِقَّةً لِأَنَّ السُّخْرِيَةَ خُلُقٌ مَذْمُومٌ", correct: true },
+                    { label: "النَّمْلَةُ هِيَ الَّتِي بَدَأَتْ بِالِاعْتِدَاءِ عَلَى الْفَرَاشَةِ", correct: false },
+                    { label: "الْأَطْفَالُ هُمُ الَّذِينَ أَشْعَلُوا الْخِلَافَ بَيْنَهُمَا", correct: false }
+                ]
+            },
+            {
+                text: "فِي رَأْيِكَ ، هَلْ يَحِقُّ لِأَحَدٍ أَنْ يَسْخَرَ مِنْ أَحَدٍ ؟",
+                options: [
+                    { label: "لَا يَحِقُّ لِأَحَدٍ أَنْ يَسْخَرَ مِنْ خَلْقِ اللَّهِ وَمَظَاهِرِ النَّاسِ", correct: true },
+                    { label: "نَعَمْ ، يَحِقُّ لِلْجَمِيلِ أَنْ يَسْخَرَ مِمَّنْ هُوَ أَقَلُّ مِنْهُ جَمَالًا", correct: false },
+                    { label: "نَعَمْ ، يَحِقُّ لِلْأَقْوِيَاءِ السُّخْرِيَةُ مِنَ الضُّعَفَاءِ دَائِمًا", correct: false }
+                ]
+            },
+            {
+                text: "هَلْ يُحِبُّ النَّاسُ الشَّخْصَ الْمَغْرُورَ ؟ وَلِمَاذَا ؟",
+                options: [
+                    { label: "لَا ، لِأَنَّ الْغُرُورَ يُورِثُ الْكَرَاهِيَةَ وَيُبْعِدُ الْأَصْدِقَاءَ", correct: true },
+                    { label: "نَعَمْ ، لِأَنَّ الْمَغْرُورَ يَكُونُ دَائِمًا أَكْثَرَ جَاذِبِيَّةً", correct: false },
+                    { label: "نَعَمْ ، لِأَنَّ الْغُرُورَ يَدُلُّ عَلَى النَّجَاحِ فِي الْحَيَاةِ", correct: false }
+                ]
+            }
+        ]);
+
+        // 3. كتاب التلميذ - صفحة 20
+        buildRandomizedMCQ('ex-p20-letter-mcq', 'ex-p20', [
+            {
+                text: "الْكَلِمَاتُ الْمُلَوَّنَةُ (مِنْ ، إِلَى ، عَلَى ، لَا ، أَنْ) تَدُلُّ عَلَى :",
+                options: [
+                    { label: "حُرُوفٍ", correct: true },
+                    { label: "أَسْمَاءٍ", correct: false },
+                    { label: "أَفْعَالٍ", correct: false }
+                ]
+            }
+        ]);
+
+        buildRandomizedMCQ('ex-p20-ta-mcq', 'ex-p20', [
+            {
+                text: "كَيْفَ كُتِبَتِ التَّاءُ فِي آخِرِ كَلِمَاتِ (صَافِيَةً ، الدَّافِئَةُ ، الْمُلَوَّنَةِ) ؟",
+                options: [
+                    { label: "تَاءً مَرْبُوطَةً (ـة / ة)", correct: true },
+                    { label: "تَاءً مَفْتُوحَةً (ت)", correct: false }
+                ]
+            },
+            {
+                text: "وَرَدَتْ هَذِهِ الْأَسْمَاءُ فِي :",
+                options: [
+                    { label: "الْمُفْرَدِ الْمُؤَنَّثِ", correct: true },
+                    { label: "الْمُفْرَدِ الْمُذَكَّرِ", correct: false },
+                    { label: "جَمْعِ الْمُذَكَّرِ", correct: false }
+                ]
+            }
+        ]);
+
+        setupTapToFill('pool-p20-insects', '.img-grid-responsive div p .drop-zone', 'ex-p20', [
+            { label: "دَعْسُوقَةٌ", val: "دَعْسُوقَةٌ" },
+            { label: "يَعْسُوبٌ", val: "يَعْسُوبٌ" },
+            { label: "نَحْلَةٌ", val: "نَحْلَةٌ" },
+            { label: "نَمْلَةٌ", val: "نَمْلَةٌ" },
+            { label: "دَبُّورٌ", val: "دَبُّورٌ" },
+            { label: "جَرَادَةٌ", val: "جَرَادَةٌ" }
+        ]);
+
+        // 4. كراس الأنشطة - صفحة 12
+        setupDualCategoryTable('pool-act12-speech', '#td-fox-speech', '#td-rooster-speech', 'ex-act12', [
+            { label: "« أَهْلًا بِكَ ، مَاذَا تُرِيدُ مِنِّي ؟ »", val: "rooster" },
+            { label: "« تَعَالَ مَعِي لِأُنَصِّبَكَ قَبْلَ فَوَاتِ الْأَوَانِ »", val: "fox" },
+            { label: "« نَعَمْ سَآتِي مَعَكَ بِفَرَحٍ وَسُرُورٍ »", val: "rooster" },
+            { label: "« هَذَا جَزَاءُ الْغُرُورِ ، وَالْآنَ أَبْحَثُ عَنْ مَغْرُورٍ آخَرَ »", val: "fox" }
+        ]);
+
+        setupColorTraits('box-rooster-traits', [
+            { label: "مَغْرُورٌ", isCorrect: true },
+            { label: "ذَكِيٌّ", isCorrect: false },
+            { label: "مُغَفَّلٌ", isCorrect: true },
+            { label: "مُتَوَاضِعٌ", isCorrect: false }
+        ], 'ex-act12');
+
+        setupColorTraits('box-fox-traits', [
+            { label: "طَيِّبٌ", isCorrect: false },
+            { label: "مُتَحَايِلٌ", isCorrect: true },
+            { label: "صَادِقٌ", isCorrect: false },
+            { label: "مُخَادِعٌ", isCorrect: true }
+        ], 'ex-act12');
+
+        setupTapToFill('pool-act12-lakin-cases', '#pool-act12-lakin-cases ~ p .drop-zone', 'ex-act12', [
+            { label: "لَكِنَّ", val: "لَكِنَّ" },
+            { label: "الْوَقْتَ مُتَأَخِّرٌ", val: "الْوَقْتَ مُتَأَخِّرٌ" },
+            { label: "لَكِنَّ", val: "لَكِنَّ" },
+            { label: "التِّلْفَازَ مُعَطَّلٌ", val: "التِّلْفَازَ مُعَطَّلٌ" },
+            { label: "لَكِنَّهُ", val: "لَكِنَّهُ" },
+            { label: "غَالِي الثَّمَنِ", val: "غَالِي الثَّمَنِ" }
+        ]);
+
+        // 5. كراس الأنشطة - صفحة 13
+        buildFixedTrueFalse('ex-act13-tf', 'ex-act13', [
+            { text: "عَيَّرَتِ الْفَرَاشَةُ النَّمْلَةَ لِأَنَّهَا سَوْدَاءُ وَقَبِيحَةُ الْمَنْظَرِ .", isCorrectAnswer: true },
+            { text: "حَزِنَتِ النَّمْلَةُ وَاعْتَرَفَتْ بِأَنَّ الْجَمَالَ هُوَ جَمَالُ الثِّيَابِ وَالْأَجْسَادِ .", isCorrectAnswer: false },
+            { text: "لَا قِيمَةَ لِلْجَمَالِ دُونَ عَقْلٍ وَحُسْنِ تَدْبِيرٍ .", isCorrectAnswer: true },
+            { text: "جَمَالُ الْفَرَاشَةِ يَجْلِبُ لَهَا الْكَثِيرَ مِنَ الْمَتَاعِبِ .", isCorrectAnswer: true },
+            { text: "كَانَتِ النَّمْلَةُ قَاسِيَةً مَعَ الْفَرَاشَةِ وَظَلَمَتْهَا .", isCorrectAnswer: false }
+        ]);
+
+        setupTapToFill('pool-act13-harf-fill', '#pool-act13-harf-fill ~ p .drop-zone', 'ex-act13', [
+            { label: "بِـ", val: "بِـ" },
+            { label: "فَـ", val: "فَـ" },
+            { label: "ثُمَّ", val: "ثُمَّ" },
+            { label: "فِي", val: "فِي" },
+            { label: "فَـ", val: "فَـ" },
+            { label: "وَ", val: "وَ" },
+            { label: "أَنَّهَا", val: "أَنَّهَا" },
+            { label: "مِنَ", val: "مِنَ" }
+        ]);
+
+        setupTapToFill('pool-act13-prep-imgs', '#pool-act13-prep-imgs ~ .img-grid-responsive p .drop-zone', 'ex-act13', [
+            { label: "إِلَى", val: "إِلَى" },
+            { label: "لِـ", val: "لِـ" },
+            { label: "مِنْ", val: "مِنْ" },
+            { label: "إِلَى", val: "إِلَى" },
+            { label: "مِنَ", val: "مِنَ" },
+            { label: "فِي", val: "فِي" }
+        ]);
+
+        setupTapToFill('pool-act13-dictation', '#pool-act13-dictation ~ .img-grid-responsive p .drop-zone', 'ex-act13', [
+            { label: "حَدِيقَةٌ", val: "حَدِيقَةٌ" },
+            { label: "زَهْرَةٌ", val: "زَهْرَةٌ" },
+            { label: "نَخْلَةٌ", val: "نَخْلَةٌ" },
+            { label: "سَمَكَةٌ", val: "سَمَكَةٌ" }
+        ]);
+
+        // 6. كراس الأنشطة - صفحة 14
+        setupTapToFill('pool-act14-map', '#pool-act14-map ~ table .drop-zone', 'ex-act14', [
+            { label: "اسْمٌ", val: "اسْمٌ" },
+            { label: "التَّكَبُّرُ / الْإِعْجَابُ بِالنَّفْسِ", val: "التَّكَبُّرُ / الْإِعْجَابُ بِالنَّفْسِ" },
+            { label: "التَّوَاضُعُ", val: "التَّوَاضُعُ" }
+        ]);
+
+        setupTapToFill('pool-act14-pattern', '#pool-act14-pattern ~ p .drop-zone', 'ex-act14', [
+            { label: "لَكِنَّهَا", val: "لَكِنَّهَا" },
+            { label: "قَوِيَّةٌ وَنَشِيطَةٌ", val: "قَوِيَّةٌ وَنَشِيطَةٌ" },
+            { label: "لَكِنَّهَا", val: "لَكِنَّهَا" },
+            { label: "مَغْرُورَةٌ بِجَمَالِهَا", val: "مَغْرُورَةٌ بِجَمَالِهَا" }
+        ]);
+
+        setupTapToFill('pool-act14-fill-words', '#pool-act14-fill-words ~ p .drop-zone', 'ex-act14', [
+            { label: "مَغْرُورَةٌ", val: "مَغْرُورَةٌ" },
+            { label: "حَكِيمَةٌ", val: "حَكِيمَةٌ" },
+            { label: "الْحِيلَةِ", val: "الْحِيلَةِ" },
+            { label: "صَوْتِهِ", val: "صَوْتِهِ" }
+        ]);
+
+        setupTapToFill('pool-act14-letters', '#pool-act14-letters ~ p .drop-zone', 'ex-act14', [
+            { label: "بِـ", val: "بِـ" },
+            { label: "فَـ", val: "فَـ" },
+            { label: "عَلَى", val: "عَلَى" },
+            { label: "مِنْ", val: "مِنْ" },
+            { label: "إِلَى", val: "إِلَى" },
+            { label: "أَنَّ", val: "أَنَّ" },
+            { label: "لَا", val: "لَا" },
+            { label: "مِنَ", val: "مِنَ" },
+            { label: "وَ", val: "وَ" }
+        ]);
+
+        setupTapToFill('pool-act14-ta-letters', '#pool-act14-ta-letters ~ p .drop-zone', 'ex-act14', [
+            { label: "ةٌ", val: "ةٌ" },
+            { label: "ةً", val: "ةً" },
+            { label: "ةُ", val: "ةُ" },
+            { label: "ةِ", val: "ةِ" },
+            { label: "تْ", val: "تْ" },
+            { label: "ةً", val: "ةً" },
+            { label: "ةً", val: "ةً" },
+            { label: "ةُ", val: "ةُ" },
+            { label: "ةِ", val: "ةِ" },
+            { label: "ةَ", val: "ةَ" }
+        ]);
+
+        setupTapToFill('pool-act14-butterfly-desc', '#pool-act14-butterfly-desc ~ p .drop-zone', 'ex-act14', [
+            { label: "حُلْوَةٌ", val: "حُلْوَةٌ" },
+            { label: "مُلَوَّنَةٌ", val: "مُلَوَّنَةٌ" },
+            { label: "رَشَاقَةٍ", val: "رَشَاقَةٍ" },
+            { label: "الْبُسْتَانِ", val: "الْبُسْتَانِ" },
+            { label: "رَحِيقَ", val: "رَحِيقَ" },
+            { label: "كَبِيرٌ", val: "كَبِيرٌ" },
+            { label: "الصَّغِيرِ", val: "الصَّغِيرِ" },
+            { label: "الْفَرِيدَةَ", val: "الْفَرِيدَةَ" }
+        ]);
+
+        // 7. كراس الأنشطة - صفحة 15
+        setupTapToFill('pool-act15-table', '#pool-act15-table ~ table .drop-zone', 'ex-act15', [
+            { label: "الطَّاوُوسُ ، الثَّعْلَبُ ، بَقِيَّةُ الطُّيُورِ", val: "الطَّاوُوسُ ، الثَّعْلَبُ ، بَقِيَّةُ الطُّيُورِ" },
+            { label: "الطَّاوُوسُ", val: "الطَّاوُوسُ" },
+            { label: "الثَّعْلَبُ", val: "الثَّعْلَبُ" },
+            { label: "الطَّاوُوسُ", val: "الطَّاوُوسُ" },
+            { label: "بَقِيَّةُ الطُّيُورِ", val: "بَقِيَّةُ الطُّيُورِ" },
+            { label: "ضَيْعَةٌ جَمِيلَةٌ", val: "ضَيْعَةٌ جَمِيلَةٌ" },
+            { label: "ذَاتَ لَيْلَةٍ", val: "ذَاتَ لَيْلَةٍ" }
+        ]);
+
+        setupTapToFill('pool-act15-positions', '#pool-act15-positions ~ table .drop-zone', 'ex-act15', [
+            { label: "بِدَايَةُ الْقِصَّةِ", val: "بِدَايَةُ الْقِصَّةِ" },
+            { label: "وَسَطُ الْقِصَّةِ", val: "وَسَطُ الْقِصَّةِ" },
+            { label: "نِهَايَةُ الْقِصَّةِ", val: "نِهَايَةُ الْقِصَّةِ" }
+        ]);
+    }
+
+    function restartEntireLesson() {
+        document.querySelectorAll('.eval-badge span span').forEach(el => el.textContent = '0');
+        initAllActivities();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function exitTelegramApp() {
+        if (tg && tg.close) {
+            tg.close();
+        } else {
+            alert('للخروج يرجى إغلاق النافذة من زر الإغلاق بأعلى الشاشة.');
+        }
+    }
+
+    window.onload = initAllActivities;
+</script>
+</body>
+</html>
