@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>رياضيات - الدرس 01: الأعداد من 0 إلى 99 | السنة الثالثة ابتدائي</title>
+    
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0288d1;
+            --primary-dark: #01579b;
+            --success: #2e7d32;
+            --error: #c62828;
+            --bg: #f4f9fd;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --text-muted: #546e7a;
+            --accent: #ff9800;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 12px;
+            padding-bottom: 70px;
+        }
+
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: var(--primary-dark); margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 22px; }
+
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: var(--primary);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: var(--success);
+            border: 2px solid var(--success);
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+        }
+
+        .sub-status-msg { margin-top: 15px; font-size: 0.95rem; font-weight: 700; min-height: 24px; }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: #ffffff;
+            padding: 8px 15px;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .app-title-mini { font-weight: 800; color: var(--primary-dark); font-size: 1.05rem; }
+        .audio-btn {
+            background: #e1f5fe;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+            font-size: 19px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .page-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .lesson-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-top: 6px solid var(--primary);
+        }
+
+        .lesson-title {
+            color: var(--primary-dark);
+            font-weight: 900;
+            font-size: 1.3rem;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #b3e5fc;
+            padding-bottom: 10px;
+        }
+
+        .math-ltr {
+            direction: ltr;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="number"] {
+            padding: 6px 8px;
+            border: 1.5px solid #cfd8dc;
+            border-radius: 6px;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+        }
+
+        input.is-correct {
+            border-color: var(--success) !important;
+            background-color: #e8f5e9 !important;
+            color: var(--success) !important;
+            font-weight: bold;
+        }
+        input.is-wrong {
+            border-color: var(--error) !important;
+            background-color: #ffebee !important;
+            color: var(--error) !important;
+            font-weight: bold;
+        }
+
+        .grid-container {
+            display: flex;
+            gap: 10px;
+            direction: ltr;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .tens-strip {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            width: 90px;
+            direction: rtl;
+        }
+        .tens-label {
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #e2e8f0;
+            font-size: 0.82rem;
+            font-weight: bold;
+            border-radius: 4px;
+            color: #334155;
+        }
+        .hundred-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 3px;
+            flex: 1;
+        }
+        .grid-cell {
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f5f9;
+            border: 1px solid #cfd8dc;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .grid-cell.empty {
+            background: #fffbeb;
+            border-color: #f59e0b;
+            padding: 0;
+        }
+        .grid-cell input {
+            width: 100%;
+            height: 100%;
+            border: none;
+            text-align: center;
+            font-weight: bold;
+            background: transparent;
+            outline: none;
+            direction: ltr;
+            padding: 0;
+        }
+
+        .blocks-visual-container {
+            display: flex;
+            gap: 20px;
+            align-items: flex-end;
+            justify-content: center;
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            padding: 16px;
+            border-radius: 8px;
+            margin: 15px 0;
+            direction: ltr;
+        }
+        .rod-column {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .rod-unit, .single-unit {
+            width: 18px;
+            height: 12px;
+            background: #0288d1;
+            border: 1px solid #01579b;
+            border-radius: 2px;
+        }
+        .single-units-group {
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 4px;
+            margin-left: 15px;
+        }
+        .single-unit {
+            background: #ff9800;
+            border-color: #e65100;
+            height: 16px;
+            width: 16px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+        }
+        .btn-submit { background: var(--primary); color: white; margin-top: 10px; }
+        .btn-submit:hover { background: var(--primary-dark); }
+        .btn-submit:disabled { background: #94a3b8; cursor: not-allowed; }
+
+        .eval-badge {
+            background: #f1f8e9;
+            border: 1px solid #dcedc8;
+            padding: 8px 14px;
+            border-radius: 10px;
+            margin-top: 12px;
+            display: none;
+            font-weight: 800;
+            font-size: 0.95rem;
+        }
+
+        .coins-box {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 15px 0;
+            direction: ltr;
+        }
+        .coin {
+            width: 58px;
+            height: 58px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+            border: 2px solid;
+        }
+        .coin[data-val="50"] { background: #fef08a; border-color: #ca8a04; color: #854d0e; }
+        .coin[data-val="20"] { background: #fed7aa; border-color: #ea580c; color: #9a3412; }
+        .coin[data-val="10"] { background: #e2e8f0; border-color: #64748b; color: #334155; }
+        .coin[data-val="5"]  { background: #bbf7d0; border-color: #16a34a; color: #166534; }
+
+        .coin.struck {
+            background: #f1f5f9 !important;
+            border-color: #cbd5e1 !important;
+            color: #94a3b8 !important;
+            text-decoration: line-through;
+            transform: scale(0.92);
+        }
+
+        .form-row {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        #final-report {
+            text-align: center;
+            background: #ffffff;
+            border: 3px solid var(--primary);
+            border-radius: 18px;
+            padding: 25px 18px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+            margin-top: 30px;
+            display: none;
+        }
+        .final-score {
+            font-size: 3.2rem;
+            font-weight: 900;
+            color: var(--primary-dark);
+            margin: 12px 0;
+        }
+        .final-remark {
+            font-size: 1.25rem;
+            font-weight: 800;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .btn-restart {
+            background: var(--primary);
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1.15rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        .btn-exit {
+            background: #546e7a;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1.15rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        /* زر العودة إلى الفهرس */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            background: #01579b;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1.15rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .disabled-step {
+            opacity: 0.45;
+            pointer-events: none;
+            filter: grayscale(80%);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="sub-lock-screen">
+        <div class="lock-box">
+            <div class="lock-icon">🔒</div>
+            <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+            <div class="lock-desc">
+                لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الْأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الِانْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الِاشْتِرَاكِ.
+            </div>
+            <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">📢 الِانْضِمَامُ إِلَى الْقَنَاةِ</a>
+            <button class="btn-check-sub" onclick="verifySubscription()">✅ تَأْكِيدُ الِاشْتِرَاكِ</button>
+            <div id="sub-status-msg" class="sub-status-msg"></div>
+        </div>
+    </div>
+
+    <div class="top-bar">
+        <span class="app-title-mini">الرياضيات • الدرس 01: الْأَعْدَادُ مِنْ 0 إِلَى 99</span>
+        <button class="audio-btn" id="audio-toggle" onclick="toggleAudio()" title="كتم/تشغيل الصوت">🔊</button>
+    </div>
+
+<div class="container">
+
+  <!-- 1. أكتشف: جدول الأعداد ص 12 -->
+  <div class="lesson-card" id="step1">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 12</span>
+    <h2 class="lesson-title">1. أَكْتَشِفُ: جَدْوَلُ الْأَعْدَادِ مِنْ 0 إِلَى 99</h2>
+    <p>لاحظ جدول الأعداد، ثم املأ الخانات الفارغة أفقياً وعمودياً:</p>
+    <div class="grid-container">
+      <div class="hundred-grid" id="gridBox"></div>
+      <div class="tens-strip">
+        <div class="tens-label">عشرة</div>
+        <div class="tens-label">عشرون</div>
+        <div class="tens-label">ثلاثون</div>
+        <div class="tens-label">أربعون</div>
+        <div class="tens-label">خمسون</div>
+        <div class="tens-label">ستون</div>
+        <div class="tens-label">سبعون</div>
+        <div class="tens-label">ثمانون</div>
+        <div class="tens-label">تسعون</div>
+        <div class="tens-label">---</div>
+      </div>
+    </div>
+    <button class="btn btn-submit" id="btn1" onclick="validateStep1()">تثبيت الإجابة والانتقال</button>
+    <div id="fb1" class="eval-badge"></div>
+  </div>
+
+  <!-- 2. أكتشف: الكتابة بالحروف وبالأرقام ص 12 -->
+  <div class="lesson-card disabled-step" id="step2">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 12</span>
+    <h2 class="lesson-title">2. أَكْتَشِفُ: كِتَابَةُ الْأَعْدَادِ بِالْحُرُوفِ وَبِالْأَرْقَامِ</h2>
+    <p><strong>أ) اكتب الأعداد بالحروف:</strong></p>
+    <div class="form-row">
+      <label>43:</label><input type="text" id="w_43" style="width: 170px;">
+      <label>34:</label><input type="text" id="w_34" style="width: 170px;">
+      <label>68:</label><input type="text" id="w_68" style="width: 170px;">
+      <label>86:</label><input type="text" id="w_86" style="width: 170px;">
+    </div>
+    <p><strong>ب) اكتب الأعداد بالأرقام:</strong></p>
+    <div class="form-row">
+      <label>سَبْعَةٌ وَثَلَاثُونَ:</label><input type="number" id="n_37" style="width: 80px; direction:ltr;">
+      <label>سِتَّةٌ وَتِسْعُونَ:</label><input type="number" id="n_96" style="width: 80px; direction:ltr;">
+      <label>ثَمَانِيَةٌ وَخَمْسُونَ:</label><input type="number" id="n_58" style="width: 80px; direction:ltr;">
+    </div>
+    <button class="btn btn-submit" id="btn2" onclick="validateStep2()">تثبيت الإجابة والانتقال</button>
+    <div id="fb2" class="eval-badge"></div>
+  </div>
+
+  <!-- 3. أكتشف: السؤال الرابع - الشكل الهندسي ص 12 -->
+  <div class="lesson-card disabled-step" id="step3">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 12</span>
+    <h2 class="lesson-title">3. أَكْتَشِفُ: اكْتُبِ الْعَدَدَ الْمُمَثَّلَ فِي الشَّكْلِ</h2>
+    <p>لاحظ التمثيل الهندسي المقابل، ثم اكتب العدد الذي يمثله بالأرقام وبالحروف:</p>
+    <div class="blocks-visual-container">
+      <div class="rod-column">
+        <div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div>
+        <div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div>
+      </div>
+      <div class="rod-column">
+        <div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div>
+        <div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div>
+      </div>
+      <div class="rod-column">
+        <div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div>
+        <div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div><div class="rod-unit"></div>
+      </div>
+      <div class="single-units-group">
+        <div class="single-unit"></div><div class="single-unit"></div><div class="single-unit"></div><div class="single-unit"></div>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>اكتب العدد بالأرقام:</label>
+      <input type="number" id="geo_num" style="width: 80px; direction:ltr;">
+      <label>اكتب العدد بالحروف:</label>
+      <input type="text" id="geo_word" style="width: 200px;">
+    </div>
+    <button class="btn btn-submit" id="btn3" onclick="validateStep3()">تثبيت الإجابة والانتقال</button>
+    <div id="fb3" class="eval-badge"></div>
+  </div>
+
+  <!-- 4. أنجز: تشكيل الأعداد بالبطاقات (5 ، 6 ، 9) ص 12 -->
+  <div class="lesson-card disabled-step" id="step4">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 12</span>
+    <h2 class="lesson-title">4. أُنْجِزُ: تَشْكِيلُ الْأَعْدَادِ الْمُمْكِنَةِ</h2>
+    <p>باستعمال الأرقام: <strong>5 ، 6 ، 9</strong>، اكتب كل الأعداد الممكنة والمكونة من رقمين مختلفين (6 أعداد):</p>
+    <div class="form-row math-ltr">
+      <input type="number" id="c1" style="width:70px">
+      <input type="number" id="c2" style="width:70px">
+      <input type="number" id="c3" style="width:70px">
+      <input type="number" id="c4" style="width:70px">
+      <input type="number" id="c5" style="width:70px">
+      <input type="number" id="c6" style="width:70px">
+    </div>
+    <div><button class="btn btn-submit" id="btn4" onclick="validateStep4()">تثبيت الإجابة والانتقال</button></div>
+    <div id="fb4" class="eval-badge"></div>
+  </div>
+
+  <!-- 5. أنجز: كتابة الأعداد ص 12 -->
+  <div class="lesson-card disabled-step" id="step5">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 12</span>
+    <h2 class="lesson-title">5. أُنْجِزُ: التَّطْبِيقُ الْكِتَابِيُّ</h2>
+    <p><strong>أ) اكتب الأعداد بالحروف:</strong></p>
+    <div class="form-row">
+      <label>96:</label><input type="text" id="w2_96" style="width: 170px;">
+      <label>75:</label><input type="text" id="w2_75" style="width: 170px;">
+      <label>89:</label><input type="text" id="w2_89" style="width: 170px;">
+      <label>57:</label><input type="text" id="w2_57" style="width: 170px;">
+    </div>
+    <p><strong>ب) اكتب الأعداد بالأرقام:</strong></p>
+    <div class="form-row">
+      <label>ثَلَاثَةٌ وَثَمَانُونَ:</label><input type="number" id="n2_83" style="width: 80px; direction:ltr;">
+      <label>سِتَّةٌ وَسَبْعُونَ:</label><input type="number" id="n2_76" style="width: 80px; direction:ltr;">
+      <label>سَبْعَةٌ وَسِتُّونَ:</label><input type="number" id="n2_67" style="width: 80px; direction:ltr;">
+      <label>أَرْبَعَةٌ وَتِسْعُونَ:</label><input type="number" id="n2_94" style="width: 80px; direction:ltr;">
+    </div>
+    <button class="btn btn-submit" id="btn5" onclick="validateStep5()">تثبيت الإجابة والانتقال</button>
+    <div id="fb5" class="eval-badge"></div>
+  </div>
+
+  <!-- 6. أتمرن: السؤال 1 و 2 من دفتر الأنشطة ص 6 -->
+  <div class="lesson-card disabled-step" id="step6">
+    <span class="page-badge">كُرَّاسُ الأَنْشِطَةِ - صَفْحَةُ 6</span>
+    <h2 class="lesson-title">6. أَتَمَرَّنُ (1 و 2): كِتَابَةُ الْأَعْدَادِ</h2>
+    <p><strong>1. اكتب الأعداد بالأرقام:</strong></p>
+    <div class="form-row">
+      <label>سِتُّونَ:</label><input type="number" id="act1_60" style="width: 80px; direction:ltr;">
+      <label>أَرْبَعَةٌ وَسَبْعُونَ:</label><input type="number" id="act1_74" style="width: 80px; direction:ltr;">
+      <label>وَاحِدٌ وَثَمَانُونَ:</label><input type="number" id="act1_81" style="width: 80px; direction:ltr;">
+    </div>
+    <p><strong>2. اكتب الأعداد بالحروف:</strong></p>
+    <div class="form-row">
+      <label>54:</label><input type="text" id="act2_54" style="width: 180px;">
+      <label>92:</label><input type="text" id="act2_92" style="width: 180px;">
+      <label>36:</label><input type="text" id="act2_36" style="width: 180px;">
+    </div>
+    <button class="btn btn-submit" id="btn6" onclick="validateStep6()">تثبيت الإجابة والانتقال</button>
+    <div id="fb6" class="eval-badge"></div>
+  </div>
+
+  <!-- 7. أتمرن: السؤال 3 و 4 المراتب والترتيب ص 6 دفتر الأنشطة -->
+  <div class="lesson-card disabled-step" id="step7">
+    <span class="page-badge">كُرَّاسُ الأَنْشِطَةِ - صَفْحَةُ 6</span>
+    <h2 class="lesson-title">7. أَتَمَرَّنُ (3 و 4): الْقِيمَةُ الْمَكَانِيَّةُ وَالتَّرْتِيبُ</h2>
+    <p><strong>3. أكمل في العدد 92:</strong></p>
+    <div class="form-row">
+      <label>رَقْمُ الوَحَدَاتِ هو:</label><input type="number" id="p_u" style="width: 60px; direction:ltr;">
+      <label>رَقْمُ العَشَرَاتِ هو:</label><input type="number" id="p_t" style="width: 60px; direction:ltr;">
+      <label>عَدَدُ الوَحَدَاتِ هو:</label><input type="number" id="p_tot" style="width: 80px; direction:ltr;">
+    </div>
+    <p><strong>4. رتّب الأعداد من الأصغر إلى الأكبر (63 ، 80 ، 36 ، 65):</strong></p>
+    <div class="form-row math-ltr">
+      <input type="number" id="ord_1" style="width: 65px;">
+      <span> &lt; </span>
+      <input type="number" id="ord_2" style="width: 65px;">
+      <span> &lt; </span>
+      <input type="number" id="ord_3" style="width: 65px;">
+      <span> &lt; </span>
+      <input type="number" id="ord_4" style="width: 65px;">
+    </div>
+    <div><button class="btn btn-submit" id="btn7" onclick="validateStep7()">تثبيت الإجابة والانتقال</button></div>
+    <div id="fb7" class="eval-badge"></div>
+  </div>
+
+  <!-- 8. أتمرن: السؤال 5 التفكيك الجمعي ص 6 دفتر الأنشطة -->
+  <div class="lesson-card disabled-step" id="step8">
+    <span class="page-badge">كُرَّاسُ الأَنْشِطَةِ - صَفْحَةُ 6</span>
+    <h2 class="lesson-title">8. أَتَمَرَّنُ (5): التَّفْكِيكُ الْجَمْعِيُّ</h2>
+    <p>أكمل التفكيك الجمعي كما في المثال: 86 = 80 + 6</p>
+    <div class="form-row math-ltr"><span>62 = </span><input type="number" id="dec_62_t" style="width:70px"><span> + </span><input type="number" id="dec_62_u" style="width:60px"></div>
+    <div class="form-row math-ltr"><span>78 = </span><input type="number" id="dec_78_t" style="width:70px"><span> + </span><input type="number" id="dec_78_u" style="width:60px"></div>
+    <div class="form-row math-ltr"><span>44 = </span><input type="number" id="dec_44_t" style="width:70px"><span> + </span><input type="number" id="dec_44_u" style="width:60px"></div>
+    <div class="form-row math-ltr"><span>91 = </span><input type="number" id="dec_91_t" style="width:70px"><span> + </span><input type="number" id="dec_91_u" style="width:60px"></div>
+    <div><button class="btn btn-submit" id="btn8" onclick="validateStep8()">تثبيت الإجابة والانتقال</button></div>
+    <div id="fb8" class="eval-badge"></div>
+  </div>
+
+  <!-- 9. أتمرن: السؤال 6 مسألة القطع النقدية ص 6 دفتر الأنشطة -->
+  <div class="lesson-card disabled-step" id="step9">
+    <span class="page-badge">كُرَّاسُ الأَنْشِطَةِ - صَفْحَةُ 6</span>
+    <h2 class="lesson-title">9. أَتَمَرَّنُ (6): الدَّفْعُ بِأَقَلِّ عَدَدٍ مِنَ الْقِطَعِ</h2>
+    <p>اشترى أيمن لعبة ثمنها <strong>95 ديناراً</strong>. هذه هي القطع الموجودة في حافظته:</p>
+    <p><em>اشطب على القطع التي دفعها أيمن ليدفع الثمن بأقل عدد ممكن من القطع:</em></p>
+
+    <div class="coins-box" id="walletArea">
+      <div class="coin" data-val="50" onclick="clickCoin(this)">50 دج</div>
+      <div class="coin" data-val="50" onclick="clickCoin(this)">50 دج</div>
+      <div class="coin" data-val="20" onclick="clickCoin(this)">20 دج</div>
+      <div class="coin" data-val="20" onclick="clickCoin(this)">20 دج</div>
+      <div class="coin" data-val="10" onclick="clickCoin(this)">10 دج</div>
+      <div class="coin" data-val="10" onclick="clickCoin(this)">10 دج</div>
+      <div class="coin" data-val="10" onclick="clickCoin(this)">10 دج</div>
+      <div class="coin" data-val="10" onclick="clickCoin(this)">10 دج</div>
+      <div class="coin" data-val="10" onclick="clickCoin(this)">10 دج</div>
+      <div class="coin" data-val="5" onclick="clickCoin(this)">5 دج</div>
+      <div class="coin" data-val="5" onclick="clickCoin(this)">5 دج</div>
+    </div>
+    <p>المبلغ المحدد بالشطب حالياً: <span id="currentWalletSum" style="font-weight:bold; color:var(--primary);">0</span> دج (عدد القطع: <span id="currentWalletCount">0</span>)</p>
+    <button class="btn btn-submit" id="btn9" onclick="validateStep9()">تثبيت الإجابة والانتقال</button>
+    <div id="fb9" class="eval-badge"></div>
+  </div>
+
+  <!-- 10. أبحث: تشكيل الأعداد بالبطاقات 1 ، 0 ، 9 ص 6 دفتر الأنشطة -->
+  <div class="lesson-card disabled-step" id="step10">
+    <span class="page-badge">كُرَّاسُ الأَنْشِطَةِ - صَفْحَةُ 6</span>
+    <h2 class="lesson-title">10. أَبْحَثُ: تَشْكِيلُ الْأَعْدَادِ بِالْبِطَاقَاتِ 1 ، 0 ، 9</h2>
+    <p>اكتب كل الأعداد ذات رقمين والتي يمكن تشكيلها بالبطاقات <strong>1 ، 0 ، 9</strong> (توجد 4 أعداد ممكنة):</p>
+    <div class="form-row math-ltr">
+      <input type="number" id="b1" style="width:75px">
+      <input type="number" id="b2" style="width:75px">
+      <input type="number" id="b3" style="width:75px">
+      <input type="number" id="b4" style="width:75px">
+    </div>
+    <div><button class="btn btn-submit" id="btn10" onclick="validateStep10()">تثبيت الإجابة وإظهار التقييم النهائي</button></div>
+    <div id="fb10" class="eval-badge"></div>
+  </div>
+
+  <!-- التقييم النهائي الشامل -->
+  <div id="final-report">
+    <h2 style="color: var(--primary-dark); margin-top: 0;">📊 التَّقْرِيرُ النِّهَائِيُّ لِلْوَحْدَةِ</h2>
+    <p style="color: var(--text-muted); font-size:1.1rem; margin-bottom:15px;">حصيلة إجابات التمارين التفاعلية :</p>
+    
+    <div style="display:flex; justify-content: space-around; margin: 15px 0;">
+        <div style="color: var(--success); font-weight:800; font-size:1.25rem;">
+            إجابات صحيحة<br><span id="repCorrect" style="font-size:1.8rem;">0</span>
+        </div>
+        <div style="color: var(--error); font-weight:800; font-size:1.25rem;">
+            إجابات خاطئة<br><span id="repWrong" style="font-size:1.8rem;">0</span>
+        </div>
+    </div>
+
+    <div class="final-score" id="circleText">0%</div>
+    <div class="final-remark" id="repGrade">ممتاز!</div>
+    
+    <button class="btn-restart" onclick="restartEntireLesson()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنَ الْبِدَايَةِ</button>
+    <button class="btn-exit" onclick="exitTelegramApp()">🚪 الْخُرُوجُ مِنَ التَّطْبِيقِ</button>
+    <a href="../../../index.html" class="btn-back-home">← الْعَوْدَةُ إِلَى الْفِهْرِسِ</a>
+  </div>
+
+</div>
+
+<script>
+    // ⚠️ تم حذف BOT_TOKEN من هنا (لأسباب أمنية)
+    const CHANNEL_ID = "-1003910412986";
+
+    const tg = window.Telegram?.WebApp;
+    if(tg) {
+        tg.ready();
+        tg.expand();
+    }
+
+    async function verifySubscription() {
+        const statusMsg = document.getElementById('sub-status-msg');
+        statusMsg.style.color = "#0288d1";
+        statusMsg.textContent = "جَارٍ التَّحَقُّقُ مِنَ الِاشْتِرَاكِ...";
+
+        let userId = null;
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            userId = tg.initDataUnsafe.user.id;
+        }
+
+        if (!userId) {
+            statusMsg.style.color = "#e65100";
+            statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+            return;
+        }
+
+        try {
+            // ⬇️ استدعاء الوسيط على Vercel
+            const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.isSubscribed) {
+                statusMsg.style.color = "#2e7d32";
+                statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارٍ فَتْحُ الدَّرْسِ...";
+                setTimeout(() => {
+                    document.getElementById('sub-lock-screen').style.display = 'none';
+                }, 600);
+            } else {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الِانْضِمَامُ أَوَّلًا.";
+            }
+        } catch (error) {
+            statusMsg.style.color = "#c62828";
+            statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الِاتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+        }
+    }
+
+    let audioEnabled = true;
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let actx = null;
+
+    function getAudioContext() {
+        if (!actx) actx = new AudioContext();
+        if (actx.state === 'suspended') actx.resume();
+        return actx;
+    }
+
+    function toggleAudio() {
+        audioEnabled = !audioEnabled;
+        document.getElementById('audio-toggle').textContent = audioEnabled ? '🔊' : '🔇';
+    }
+
+    function playTone(freq, type, duration) {
+        if(!audioEnabled) return;
+        try {
+            const ctx = getAudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, ctx.currentTime);
+            gain.gain.setValueAtTime(0.12, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + duration);
+        } catch(e) {}
+    }
+
+    function playSuccess() {
+        if(tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+        playTone(523.25, 'sine', 0.12);
+        setTimeout(() => playTone(659.25, 'sine', 0.12), 110);
+        setTimeout(() => playTone(783.99, 'sine', 0.22), 220);
+    }
+
+    function playError() {
+        if(tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+        playTone(180, 'sawtooth', 0.35);
+    }
+
+    function playTap() {
+        if(tg && tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+        playTone(600, 'triangle', 0.04);
+    }
+
+    function playClaps() {
+        if(!audioEnabled) return;
+        let count = 3;
+        let intv = setInterval(() => {
+            playTone(850, 'square', 0.08);
+            if(--count === 0) clearInterval(intv);
+        }, 220);
+    }
+
+    function exitTelegramApp() {
+        if (tg && tg.close) {
+            tg.close();
+        } else {
+            alert('للخروج يرجى إغلاق النافذة من زر الإغلاق بأعلى الشاشة.');
+        }
+    }
+
+    let totalCorrect = 0;
+    let totalWrong = 0;
+
+    const emptyCells = [
+      11, 12, 13, 14, 15, 16, 17, 18,
+      33, 43, 46, 47, 48, 49,
+      53, 63, 67, 68,
+      73, 77, 78,
+      80, 81, 82, 83,
+      97, 98
+    ];
+
+    function renderGrid() {
+      const box = document.getElementById('gridBox');
+      if (!box) return;
+      box.innerHTML = '';
+      for(let i = 0; i < 100; i++) {
+        const cell = document.createElement('div');
+        if (emptyCells.includes(i)) {
+          cell.className = 'grid-cell empty';
+          cell.innerHTML = `<input type="number" id="cell_${i}" data-correct="${i}">`;
+        } else {
+          cell.className = 'grid-cell';
+          cell.innerText = i;
+        }
+        box.appendChild(cell);
+      }
+    }
+
+    function markField(id, isCorrect) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.disabled = true;
+      if (isCorrect) {
+        el.classList.add('is-correct');
+        totalCorrect++;
+      } else {
+        el.classList.add('is-wrong');
+        totalWrong++;
+      }
+    }
+
+    function showPartial(fbId, c, w) {
+      const fb = document.getElementById(fbId);
+      if (!fb) return;
+      fb.style.display = 'flex';
+      fb.style.justifyContent = 'space-around';
+      fb.innerHTML = `<span>صحيحة: <strong style="color:var(--success)">${c}</strong></span><span>خاطئة: <strong style="color:var(--error)">${w}</strong></span>`;
+      
+      if (w === 0 && c > 0) {
+        playSuccess();
+      } else {
+        playError();
+      }
+    }
+
+    function unlockNext(nextStepId, btnId) {
+      const currentBtn = document.getElementById(btnId);
+      if (currentBtn) currentBtn.disabled = true;
+      if (nextStepId) {
+        const nextCard = document.getElementById(nextStepId);
+        if (nextCard) {
+          nextCard.classList.remove('disabled-step');
+          nextCard.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    }
+
+    function normalizeArabic(txt) {
+      return (txt || '').trim().replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/\s+/g, ' ');
+    }
+
+    function validateStep1() {
+      playTap();
+      let c = 0, w = 0;
+      emptyCells.forEach(num => {
+        const el = document.getElementById(`cell_${num}`);
+        if (el) {
+          const val = parseInt(el.value);
+          el.disabled = true;
+          if (val === num) {
+            el.classList.add('is-correct');
+            c++; totalCorrect++;
+          } else {
+            el.classList.add('is-wrong');
+            w++; totalWrong++;
+          }
+        }
+      });
+      showPartial('fb1', c, w);
+      unlockNext('step2', 'btn1');
+    }
+
+    function validateStep2() {
+      playTap();
+      let c = 0, w = 0;
+      const checks = [
+        { id: 'w_43', ok: ['ثلاثه واربعون', 'ثلاثة واربعون', 'ثلاثه و اربعون'] },
+        { id: 'w_34', ok: ['اربعه وثلاثون', 'اربعة وثلاثون', 'اربعه و ثلاثون'] },
+        { id: 'w_68', ok: ['ثمانيه وستون', 'ثمانية وستون', 'ثمانيه و ستون'] },
+        { id: 'w_86', ok: ['سته وثمانون', 'ستة وثمانون', 'سته و ثمانون'] },
+        { id: 'n_37', val: 37 },
+        { id: 'n_96', val: 96 },
+        { id: 'n_58', val: 58 }
+      ];
+      checks.forEach(item => {
+        const el = document.getElementById(item.id);
+        if (el) {
+          let passed = item.ok ? item.ok.includes(normalizeArabic(el.value)) : (parseInt(el.value) === item.val);
+          markField(item.id, passed);
+          if (passed) c++; else w++;
+        }
+      });
+      showPartial('fb2', c, w);
+      unlockNext('step3', 'btn2');
+    }
+
+    function validateStep3() {
+      playTap();
+      let c = 0, w = 0;
+      const nEl = document.getElementById('geo_num');
+      const wEl = document.getElementById('geo_word');
+
+      if (nEl && wEl) {
+        const numOk = (parseInt(nEl.value) === 34);
+        markField('geo_num', numOk);
+        if (numOk) c++; else w++;
+
+        const wordOk = ['اربعه وثلاثون', 'اربعة وثلاثون', 'اربعه و ثلاثون'].includes(normalizeArabic(wEl.value));
+        markField('geo_word', wordOk);
+        if (wordOk) c++; else w++;
+      }
+
+      showPartial('fb3', c, w);
+      unlockNext('step4', 'btn3');
+    }
+
+    function validateStep4() {
+      playTap();
+      const valid = [56, 59, 65, 69, 95, 96];
+      const inputs = ['c1','c2','c3','c4','c5','c6'];
+      let c = 0, w = 0, seen = [];
+      inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          const val = parseInt(el.value);
+          let isOk = (!isNaN(val) && valid.includes(val) && !seen.includes(val));
+          if (isOk) {
+            seen.push(val);
+            markField(id, true);
+            c++;
+          } else {
+            markField(id, false);
+            w++;
+          }
+        }
+      });
+      showPartial('fb4', c, w);
+      unlockNext('step5', 'btn4');
+    }
+
+    function validateStep5() {
+      playTap();
+      let c = 0, w = 0;
+      const checks = [
+        { id: 'w2_96', ok: ['سته وتسعون', 'ستة وتسعون'] },
+        { id: 'w2_75', ok: ['خمسه وسبعون', 'خمسة وسبعون'] },
+        { id: 'w2_89', ok: ['تسعه وثمانون', 'تسعة وثمانون'] },
+        { id: 'w2_57', ok: ['سبعه وخمسون', 'سبعة وخمسون'] },
+        { id: 'n2_83', val: 83 },
+        { id: 'n2_76', val: 76 },
+        { id: 'n2_67', val: 67 },
+        { id: 'n2_94', val: 94 }
+      ];
+      checks.forEach(item => {
+        const el = document.getElementById(item.id);
+        if (el) {
+          let passed = item.ok ? item.ok.includes(normalizeArabic(el.value)) : (parseInt(el.value) === item.val);
+          markField(item.id, passed);
+          if (passed) c++; else w++;
+        }
+      });
+      showPartial('fb5', c, w);
+      unlockNext('step6', 'btn5');
+    }
+
+    function validateStep6() {
+      playTap();
+      let c = 0, w = 0;
+      const checks = [
+        { id: 'act1_60', val: 60 },
+        { id: 'act1_74', val: 74 },
+        { id: 'act1_81', val: 81 },
+        { id: 'act2_54', ok: ['اربعه وخمسون', 'اربعة وخمسون', 'اربعه و خمسون'] },
+        { id: 'act2_92', ok: ['اثنان وتسعون', 'اثنان و تسعون'] },
+        { id: 'act2_36', ok: ['سته وثلاثون', 'ستة وثلاثون', 'سته و ثلاثون'] }
+      ];
+      checks.forEach(item => {
+        const el = document.getElementById(item.id);
+        if (el) {
+          let passed = item.ok ? item.ok.includes(normalizeArabic(el.value)) : (parseInt(el.value) === item.val);
+          markField(item.id, passed);
+          if (passed) c++; else w++;
+        }
+      });
+      showPartial('fb6', c, w);
+      unlockNext('step7', 'btn6');
+    }
+
+    function validateStep7() {
+      playTap();
+      let c = 0, w = 0;
+      const checks = [
+        { id: 'p_u', val: 2 },
+        { id: 'p_t', val: 9 },
+        { id: 'p_tot', val: 92 },
+        { id: 'ord_1', val: 36 },
+        { id: 'ord_2', val: 63 },
+        { id: 'ord_3', val: 65 },
+        { id: 'ord_4', val: 80 }
+      ];
+      checks.forEach(item => {
+        const el = document.getElementById(item.id);
+        if (el) {
+          const passed = (parseInt(el.value) === item.val);
+          markField(item.id, passed);
+          if (passed) c++; else w++;
+        }
+      });
+      showPartial('fb7', c, w);
+      unlockNext('step8', 'btn7');
+    }
+
+    function validateStep8() {
+      playTap();
+      let c = 0, w = 0;
+      const checks = [
+        { id: 'dec_62_t', val: 60 }, { id: 'dec_62_u', val: 2 },
+        { id: 'dec_78_t', val: 70 }, { id: 'dec_78_u', val: 8 },
+        { id: 'dec_44_t', val: 40 }, { id: 'dec_44_u', val: 4 },
+        { id: 'dec_91_t', val: 90 }, { id: 'dec_91_u', val: 1 }
+      ];
+      checks.forEach(item => {
+        const el = document.getElementById(item.id);
+        if (el) {
+          const passed = (parseInt(el.value) === item.val);
+          markField(item.id, passed);
+          if (passed) c++; else w++;
+        }
+      });
+      showPartial('fb8', c, w);
+      unlockNext('step9', 'btn8');
+    }
+
+    function clickCoin(el) {
+      if (el.dataset.locked === "true") return;
+      el.classList.toggle('struck');
+      playTap();
+      updateCoinsStats();
+    }
+
+    function updateCoinsStats() {
+      const struckList = document.querySelectorAll('.coin.struck');
+      let sum = 0;
+      struckList.forEach(c => sum += parseInt(c.getAttribute('data-val')));
+      const sEl = document.getElementById('currentWalletSum');
+      const cEl = document.getElementById('currentWalletCount');
+      if (sEl) sEl.innerText = sum;
+      if (cEl) cEl.innerText = struckList.length;
+    }
+
+    function validateStep9() {
+      playTap();
+      const coins = document.querySelectorAll('.coin');
+      coins.forEach(c => c.dataset.locked = "true");
+
+      const struck = document.querySelectorAll('.coin.struck');
+      let sum = 0;
+      let counts = { 50: 0, 20: 0, 10: 0, 5: 0 };
+      struck.forEach(c => {
+        const val = parseInt(c.getAttribute('data-val'));
+        sum += val;
+        counts[val]++;
+      });
+
+      const isOptimal = (sum === 95 && counts[50] === 1 && counts[20] === 2 && counts[5] === 1 && counts[10] === 0);
+      const fb = document.getElementById('fb9');
+      if (fb) {
+        fb.style.display = 'flex';
+        fb.style.justifyContent = 'space-around';
+        if (isOptimal) {
+          fb.innerHTML = `<span>النتيجة: <strong style="color:var(--success)">صحيحة ومثالية (4 قطع: 50 + 20 + 20 + 5)</strong></span>`;
+          totalCorrect++;
+          playSuccess();
+        } else {
+          fb.innerHTML = `<span>النتيجة: <strong style="color:var(--error)">غير مطابقة للشرط (المطلوب أقل عدد ممكن)</strong></span>`;
+          totalWrong++;
+          playError();
+        }
+      }
+
+      unlockNext('step10', 'btn9');
+    }
+
+    function validateStep10() {
+      playTap();
+      const valid = [10, 19, 90, 91];
+      const inputs = ['b1','b2','b3','b4'];
+      let c = 0, w = 0, seen = [];
+      inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          const val = parseInt(el.value);
+          let isOk = (!isNaN(val) && valid.includes(val) && !seen.includes(val));
+          if (isOk) {
+            seen.push(val);
+            markField(id, true);
+            c++;
+          } else {
+            markField(id, false);
+            w++;
+          }
+        }
+      });
+      showPartial('fb10', c, w);
+      unlockNext(null, 'btn10');
+      renderFinalReport();
+    }
+
+    function renderFinalReport() {
+      const rep = document.getElementById('final-report');
+      if (!rep) return;
+      rep.style.display = 'block';
+      rep.scrollIntoView({ behavior: 'smooth' });
+
+      const totalQuestions = totalCorrect + totalWrong;
+      const percentage = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+
+      document.getElementById('repCorrect').innerText = totalCorrect;
+      document.getElementById('repWrong').innerText = totalWrong;
+      document.getElementById('circleText').innerText = `${percentage}%`;
+
+      const gradeDiv = document.getElementById('repGrade');
+      if (gradeDiv) {
+        if (percentage >= 85) {
+          gradeDiv.style.backgroundColor = '#c8e6c9';
+          gradeDiv.style.color = '#1b5e20';
+          gradeDiv.innerText = 'ممتاز! عمل رائع وإتقان تام لكفاءات الدرس.';
+          playClaps();
+        } else if (percentage >= 65) {
+          gradeDiv.style.backgroundColor = '#bbdefb';
+          gradeDiv.style.color = '#0d47a1';
+          gradeDiv.innerText = 'جيد جداً! استيعابك للمفاهيم ممتاز.';
+          playSuccess();
+        } else {
+          gradeDiv.style.backgroundColor = '#ffcdd2';
+          gradeDiv.style.color = '#b71c1c';
+          gradeDiv.innerText = 'حاول مجدداً وركز أكثر في التمارين.';
+          playError();
+        }
+      }
+    }
+
+    function restartEntireLesson() {
+      totalCorrect = 0;
+      totalWrong = 0;
+
+      document.querySelectorAll('input').forEach(inp => {
+        inp.value = '';
+        inp.disabled = false;
+        inp.className = '';
+      });
+
+      document.querySelectorAll('.eval-badge').forEach(f => {
+        f.style.display = 'none';
+        f.innerHTML = '';
+      });
+
+      document.querySelectorAll('.btn-submit').forEach(btn => btn.disabled = false);
+
+      document.querySelectorAll('.coin').forEach(c => {
+        c.classList.remove('struck');
+        delete c.dataset.locked;
+      });
+      updateCoinsStats();
+
+      for(let i = 2; i <= 10; i++) {
+        const step = document.getElementById(`step${i}`);
+        if (step) step.classList.add('disabled-step');
+      }
+      const step1 = document.getElementById('step1');
+      if (step1) step1.classList.remove('disabled-step');
+
+      const rep = document.getElementById('final-report');
+      if (rep) rep.style.display = 'none';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function initAllActivities() {
+        totalCorrect = 0;
+        totalWrong = 0;
+        renderGrid();
+        verifySubscription();
+    }
+
+    window.onload = initAllActivities;
+</script>
+
+</body>
+</html>
