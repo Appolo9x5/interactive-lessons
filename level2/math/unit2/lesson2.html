@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>جمع وطرح كميات صغيرة واستعمال الرمزين «+» و «-»</title>
+  
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1e3c72;
+      --secondary: #e67e22;
+      --success: #27ae60;
+      --danger: #e74c3c;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #2d3748;
+      --border: #cbd5e0;
+
+      --c-green: #97c93e;
+      --c-blue: #70b3e6;
+      --c-yellow: #a8b922;
+      --c-orange: #d89838;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 15px;
+    }
+
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: var(--success);
+      border: 2px solid var(--success);
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+    }
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    .container { max-width: 950px; margin: 0 auto; }
+
+    header {
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+    header h1 { font-size: 1.5rem; margin-bottom: 5px; }
+    header p { font-size: 0.95rem; opacity: 0.9; }
+
+    .lesson-section {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+      transition: all 0.3s ease;
+    }
+    .lesson-section.locked {
+      opacity: 0.45;
+      pointer-events: none;
+      filter: grayscale(85%);
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #edf2f7;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+      color: var(--primary);
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .task-card {
+      background: #fafafa;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .task-text {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .visual-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px dashed #cbd5e0;
+      margin-bottom: 12px;
+      align-items: center;
+      justify-content: center;
+      min-height: 50px;
+    }
+
+    .token {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+    .token.blue { background-color: #3182ce; }
+    .token.orange { background-color: #ed8936; }
+    .token.red { background-color: #e53e3e; }
+    .token.crossed {
+      position: relative;
+      opacity: 0.5;
+    }
+    .token.crossed::after {
+      content: '✕';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #000;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .math-ltr {
+      direction: ltr;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    input[type="number"], select {
+      width: 55px;
+      height: 38px;
+      font-size: 1.1rem;
+      text-align: center;
+      border: 2px solid #cbd5e0;
+      border-radius: 6px;
+      outline: none;
+      font-weight: bold;
+      transition: border-color 0.2s;
+    }
+    input:focus, select:focus { border-color: var(--primary); }
+
+    input.correct, select.correct {
+      border-color: var(--success) !important;
+      background-color: #e8f8f0 !important;
+      color: var(--success) !important;
+    }
+    input.wrong, select.wrong {
+      border-color: var(--danger) !important;
+      background-color: #fdeeee !important;
+      color: var(--danger) !important;
+    }
+    input:disabled, select:disabled { cursor: not-allowed; }
+
+    .grid-math {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+
+    .table-container {
+      position: relative;
+      overflow-x: auto;
+      margin: 15px auto;
+      display: flex;
+      justify-content: center;
+      padding-right: 45px;
+    }
+
+    table.addition-table {
+      border-collapse: collapse;
+      direction: ltr;
+      background: #ffffff;
+      position: relative;
+    }
+
+    table.addition-table th, table.addition-table td {
+      border: 1.5px solid #2d3748;
+      width: 44px;
+      height: 44px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: bold;
+      padding: 0;
+      position: relative;
+    }
+
+    table.addition-table th {
+      background-color: #ffffff;
+      color: #000;
+      font-size: 1.2rem;
+    }
+
+    .c-green { background-color: var(--c-green) !important; }
+    .c-blue { background-color: var(--c-blue) !important; }
+    .c-yellow { background-color: var(--c-yellow) !important; }
+    .c-orange { background-color: var(--c-orange) !important; }
+    .c-fixed { background-color: #ffffff; color: #000; font-size: 1.2rem; }
+
+    table.addition-table input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 0;
+      text-align: center;
+    }
+
+    .arrow-h-dash {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: -30px;
+      border-top: 2px dashed #b91c1c;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .arrow-v-dash {
+      position: absolute;
+      top: 0;
+      bottom: -45px;
+      left: 50%;
+      border-left: 2px dashed #b91c1c;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .arrow-head-v {
+      position: absolute;
+      bottom: -10px;
+      left: calc(50% - 4px);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 7px solid #b91c1c;
+    }
+    .arrow-head-h {
+      position: absolute;
+      right: -32px;
+      top: calc(50% - 4px);
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 7px solid #b91c1c;
+    }
+    .result-13-label {
+      position: absolute;
+      right: -42px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #b91c1c;
+      font-size: 1.3rem;
+      font-weight: bold;
+    }
+
+    .learned-box {
+      background: #fffaf0;
+      border-right: 5px solid #dd6b20;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    .learned-box h3 {
+      color: #dd6b20;
+      margin-bottom: 8px;
+      font-size: 1.25rem;
+    }
+    .learned-box p {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      font-weight: 500;
+    }
+
+    .btn-submit {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: block;
+      margin: 15px auto 0;
+      transition: background 0.2s;
+    }
+    .btn-submit:hover { background-color: #152c52; }
+
+    .partial-feedback {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+    }
+
+    #final-evaluation-section {
+      display: none;
+      background: #ffffff;
+      border: 3px solid var(--primary);
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      margin-top: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    }
+
+    .progress-circle {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: conic-gradient(var(--primary) 0%, #edf2f7 0%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto;
+      position: relative;
+    }
+    .progress-circle::before {
+      content: "";
+      position: absolute;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background-color: white;
+    }
+    .percentage-text {
+      position: relative;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .eval-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 25px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .eval-actions button {
+      flex: 1;
+      padding: 12px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn-retry { background-color: var(--secondary); color: white; }
+    .btn-exit { background-color: #718096; color: white; }
+    .btn-review { background-color: #3182ce; color: white; width: 100%; margin-top: 10px; padding: 10px; border-radius: 6px; border:none; cursor: pointer; font-weight: bold; }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      background: #1e3c72;
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الْأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الانْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">الانْضِمَامُ إِلَى الْقَنَاةِ</a>
+      <button class="btn-check-sub" onclick="verifySubscription()">تَأْكِيدُ الاشْتِرَاكِ</button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <header>
+      <h1>جَمْعُ وَطَرْحُ كَمِّيَّاتٍ صَغِيرَةٍ ، وَاسْتِعْمَالُ الرَّمْزَيْنِ «+» وَ «-»</h1>
+      <p>السنة الثانية ابتدائي • الميدان: الأعداد والحساب</p>
+    </header>
+
+    <!-- 1. أكتشف -->
+    <section class="lesson-section" id="sec-1">
+      <div class="section-title">
+        <span>أَكْتَشِفُ (كتاب التلميذ ص 15)</span>
+      </div>
+
+      <div class="task-card">
+        <p class="task-text">1 - وَضَعَتْ إِيمَانُ 7 قُرَيْصَاتٍ فِي عُلْبَةٍ فَارِغَةٍ، وَوَضَعَ فِيهَا رَائِدُ 6 قُرَيْصَاتٍ . كَمْ قُرَيْصَةً تُوجَدُ فِي الْعُلْبَةِ الْآنَ؟</p>
+        <div class="visual-box">
+          <div style="display:flex; gap:4px;" id="q1-vis-iman"></div>
+          <span style="font-weight:bold; margin: 0 10px; font-size:1.3rem;">+</span>
+          <div style="display:flex; gap:4px;" id="q1-vis-raed"></div>
+        </div>
+        <div class="math-ltr">
+          <span>7</span>
+          <select class="quiz-item" data-ans="+">
+            <option value="">?</option>
+            <option value="+">+</option>
+            <option value="-">-</option>
+          </select>
+          <span>6</span>
+          <span>=</span>
+          <input type="number" class="quiz-item" data-ans="13">
+        </div>
+      </div>
+
+      <div class="task-card">
+        <p class="task-text">2 - وَضَعَ أَمِينٌ 9 قُرَيْصَاتٍ فِي عُلْبَةٍ فَارِغَةٍ ثُمَّ أَخَذَتْ مِنْهَا لَيْلَى 4 قُرَيْصَاتٍ . كَمْ قُرَيْصَةً تُوجَدُ فِي الْعُلْبَةِ الْآنَ ؟</p>
+        <div class="visual-box" id="q2-vis-box"></div>
+        <div class="math-ltr">
+          <span>9</span>
+          <select class="quiz-item" data-ans="-">
+            <option value="">?</option>
+            <option value="+">+</option>
+            <option value="-">-</option>
+          </select>
+          <span>4</span>
+          <span>=</span>
+          <input type="number" class="quiz-item" data-ans="5">
+        </div>
+      </div>
+
+      <button class="btn-submit" onclick="evaluateSection('sec-1', 'sec-2')">تأكيد الإجابة</button>
+      <div class="partial-feedback" id="feedback-sec-1"></div>
+    </section>
+
+    <!-- 2. أنجز -->
+    <section class="lesson-section locked" id="sec-2">
+      <div class="section-title">
+        <span>أَنْجِزُ (كتاب التلميذ ص 15)</span>
+      </div>
+
+      <div class="task-card">
+        <p class="task-text">1 - تَمْلِكُ مَرْيَم 9 صُوَرٍ ، وَأَهْدَتْ لَهَا أُمُّهَا 3 صُوَرٍ . كَمْ صُورَةٌ تَمْلِكُ مَرْيَمُ الْآنَ ؟</p>
+        <div class="math-ltr">
+          <span>9 + 3 = </span>
+          <input type="number" class="quiz-item" data-ans="12">
+        </div>
+        <div style="margin-top: 10px;">
+          تَمْلِكُ مَرْيَمَ الْآنَ <input type="number" class="quiz-item" data-ans="12"> صُوَرٍ .
+        </div>
+      </div>
+
+      <div class="task-card">
+        <p class="task-text">2 - لَدَى أَيْمَنْ 8 صُوَرٍ ، أَهْدَى لِأُخْتِهِ 5 صُوَرٍ . كَمْ صُورَةً بَقِيَتْ لَهُ الْآنَ ؟</p>
+        <div class="math-ltr">
+          <span>8 - 5 = </span>
+          <input type="number" class="quiz-item" data-ans="3">
+        </div>
+        <div style="margin-top: 10px;">
+          بَقِيَتْ لَدَى أَيْمَنْ <input type="number" class="quiz-item" data-ans="3"> صُوَرٍ .
+        </div>
+      </div>
+
+      <div class="learned-box">
+        <h3>تَعَلَّمْتُ .</h3>
+        <p>عِنْدَمَا أُضِيفُ قُرَيْصَاتٍ أَوْ صُوَرٍ ( كَمِّيَّاتٍ ) أُمَثَلُهَا ثُمَّ أَعُدُهَا كُلَّهَا. وَإِذَا كُنْتُ أَبْحَثُ عَنِ الْبَاقِي ، أُمَثْلُهَا ثُمَّ أَشْطُبُ تِلْكَ الَّتِي أُرِيدُ حَذْفَها .</p>
+      </div>
+
+      <button class="btn-submit" onclick="evaluateSection('sec-2', 'sec-3')">تأكيد الإجابة</button>
+      <div class="partial-feedback" id="feedback-sec-2"></div>
+    </section>
+
+    <!-- 3. أتمرن (1 و 2) -->
+    <section class="lesson-section locked" id="sec-3">
+      <div class="section-title">
+        <span>أَتَمَرَّنُ (1 و 2 - دفتر الأنشطة ص 9)</span>
+      </div>
+
+      <p style="font-weight: bold; margin-bottom: 8px;">1 أحْسُبْ :</p>
+      <div class="grid-math task-card">
+        <div class="math-ltr">5 + 3 = <input type="number" class="quiz-item" data-ans="8"></div>
+        <div class="math-ltr">5 - 3 = <input type="number" class="quiz-item" data-ans="2"></div>
+        <div class="math-ltr">7 + 2 = <input type="number" class="quiz-item" data-ans="9"></div>
+        <div class="math-ltr">7 - 2 = <input type="number" class="quiz-item" data-ans="5"></div>
+        <div class="math-ltr">8 + 2 = <input type="number" class="quiz-item" data-ans="10"></div>
+        <div class="math-ltr">8 - 2 = <input type="number" class="quiz-item" data-ans="6"></div>
+        <div class="math-ltr">9 + 3 = <input type="number" class="quiz-item" data-ans="12"></div>
+        <div class="math-ltr">9 - 3 = <input type="number" class="quiz-item" data-ans="6"></div>
+      </div>
+
+      <p style="font-weight: bold; margin-bottom: 8px;">2 أحْسُبْ :</p>
+      <div class="grid-math task-card">
+        <div class="math-ltr">8 + 5 = <input type="number" class="quiz-item" data-ans="13"></div>
+        <div class="math-ltr">8 - 5 = <input type="number" class="quiz-item" data-ans="3"></div>
+        <div class="math-ltr">6 + 2 = <input type="number" class="quiz-item" data-ans="8"></div>
+        <div class="math-ltr">6 - 2 = <input type="number" class="quiz-item" data-ans="4"></div>
+        <div class="math-ltr">8 + 3 = <input type="number" class="quiz-item" data-ans="11"></div>
+        <div class="math-ltr">8 - 3 = <input type="number" class="quiz-item" data-ans="5"></div>
+        <div class="math-ltr">9 + 4 = <input type="number" class="quiz-item" data-ans="13"></div>
+        <div class="math-ltr">9 - 4 = <input type="number" class="quiz-item" data-ans="5"></div>
+      </div>
+
+      <button class="btn-submit" onclick="evaluateSection('sec-3', 'sec-4')">تأكيد الإجابة</button>
+      <div class="partial-feedback" id="feedback-sec-3"></div>
+    </section>
+
+    <!-- 4. أتمرن (3) -->
+    <section class="lesson-section locked" id="sec-4">
+      <div class="section-title">
+        <span>أَتَمَرَّنُ (3 - دفتر الأنشطة ص 9)</span>
+      </div>
+      <p style="font-weight: bold; margin-bottom: 8px;">3 أحْسُبْ :</p>
+      <div class="grid-math task-card">
+        <div class="math-ltr">10 - <input type="number" class="quiz-item" data-ans="3"> = 7</div>
+        <div class="math-ltr">10 - <input type="number" class="quiz-item" data-ans="5"> = 5</div>
+        <div class="math-ltr">10 - <input type="number" class="quiz-item" data-ans="6"> = 4</div>
+        <div class="math-ltr">10 - <input type="number" class="quiz-item" data-ans="7"> = 3</div>
+        <div class="math-ltr">10 - <input type="number" class="quiz-item" data-ans="9"> = 1</div>
+        <div class="math-ltr">10 - <input type="number" class="quiz-item" data-ans="8"> = 2</div>
+        <div class="math-ltr">10 - <input type="number" class="quiz-item" data-ans="4"> = 6</div>
+        <div class="math-ltr">10 - <input type="number" class="quiz-item" data-ans="2"> = 8</div>
+      </div>
+
+      <button class="btn-submit" onclick="evaluateSection('sec-4', 'sec-5')">تأكيد الإجابة</button>
+      <div class="partial-feedback" id="feedback-sec-4"></div>
+    </section>
+
+    <!-- 5. جدول الجمع وأبحث -->
+    <section class="lesson-section locked" id="sec-5">
+      <div class="section-title">
+        <span>4 - جَدْوَلُ الْجَمْعِ وَأَبْحَثُ (دفتر الأنشطة ص 9)</span>
+      </div>
+
+      <div class="task-card">
+        <p class="task-text" style="line-height: 1.8;">
+          1 - إِمْلَإِ الخَانَاتِ الْخَضْرَاءَ فِي جَدْوَلِ الْجَمْعِ حَسْبَ الْمِثَالِ .<br>
+          2 - إِمْلَا الْخَانَاتِ الزَّرْقَاءَ .<br>
+          3 - إِمْلَا الْخَانَاتِ الصَّفْرَاء .<br>
+          4 - إِمْلَا الْخَانَاتِ الْبُرْتُقَالِيَةَ .<br>
+          5 - أَكْمِلْ مَلْءَ بَقِيَّةِ الْخَانَاتِ الْفَارِغَةِ .
+        </p>
+
+        <div class="table-container">
+          <table class="addition-table" id="addition-grid"></table>
+        </div>
+      </div>
+
+      <div class="task-card">
+        <p class="task-text">أَبْحَثُ : أَهْدَتْ لَيْلَى لِصَدِيقَتِهَا إِيمَان 7 صُوَرٍ، فَصَارَ عِنْدَ إيمان 15 صُورَةً . كَمْ صُورَةً كَانَتْ تَمْلِكُ إِيمَانِ فِي الْبِدَايَةِ ؟</p>
+        <div class="math-ltr">
+          <span>15 - 7 = </span>
+          <input type="number" class="quiz-item" data-ans="8">
+        </div>
+        <div style="margin-top:10px;">
+          كَانَتْ تَمْلِكُ إِيمَانِ فِي الْبِدَايَةِ <input type="number" class="quiz-item" data-ans="8"> صُوَرٍ .
+        </div>
+      </div>
+
+      <button class="btn-submit" onclick="evaluateFinal('sec-5')">تأكيد وإظهار التقييم النهائي</button>
+      <div class="partial-feedback" id="feedback-sec-5"></div>
+    </section>
+
+    <!-- التقييم العام المدمج أسفل الصفحة -->
+    <section id="final-evaluation-section">
+      <h2 style="color: var(--primary); font-size: 1.6rem; margin-bottom: 10px;">التَّقْيِيمُ الْعَامُّ لِلْأَنْشِطَةِ</h2>
+      <p style="color: #718096; font-size: 0.95rem;">يمكن لولي الأمر الصعود للأعلى لمعاينة إجابات التلميذ ومواضع الخطأ الملونة بالأحمر.</p>
+      
+      <div class="progress-circle" id="circle-bar">
+        <div class="percentage-text" id="final-pct">0%</div>
+      </div>
+
+      <div id="score-details" style="font-size: 1.15rem; margin-bottom: 15px;"></div>
+      <p id="appreciation" style="font-weight: 800; font-size: 1.3rem; margin-bottom: 20px;"></p>
+
+      <button class="btn-review" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">الصعود للأعلى لمراجعة الإجابات ⬆️</button>
+
+      <div class="eval-actions">
+        <button class="btn-retry" onclick="resetApp()">إِعَادَةُ الْمُحَاوَلَةِ</button>
+        <button class="btn-exit" onclick="exitTelegramApp()">خُرُوجٌ</button>
+      </div>
+      <a href="../../../index.html" class="btn-back-home">← الْعَوْدَةُ إِلَى الْفِهْرِسِ</a>
+    </section>
+  </div>
+
+<script>
+  // ⚠️ تم حذف BOT_TOKEN من هنا (لأسباب أمنية)
+  const CHANNEL_ID = "-1004461185731";
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارٍ التَّحَقُّقُ مِنَ الاشْتِرَاكِ ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِيلِيجْرَامِ لِلتَّحَقِّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ، جَارٍ فَتْحُ الدَّرْسِ ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الانْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  function exitTelegramApp() {
+    if (tg && tg.close) {
+      tg.close();
+    } else {
+      alert("لِلْخُرُوجِ، يُرْجَى إِغْلَاقُ النَّافِذَةِ مِنْ زِرِّ الإِغْلَاقِ بِأَعْلَى الشَّاشَةِ.");
+    }
+  }
+
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  function playSound(isCorrect) {
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    if (isCorrect) {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(783.99, audioCtx.currentTime + 0.15);
+      gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.25);
+    } else {
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(130.81, audioCtx.currentTime + 0.2);
+      gainNode.gain.setValueAtTime(0.25, audioCtx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.25);
+    }
+  }
+
+  function initVisuals() {
+    const q1Iman = document.getElementById('q1-vis-iman');
+    const q1Raed = document.getElementById('q1-vis-raed');
+    q1Iman.innerHTML = '';
+    q1Raed.innerHTML = '';
+    for(let i=0; i<7; i++) q1Iman.innerHTML += '<div class="token blue" title="إيمان"></div>';
+    for(let i=0; i<6; i++) q1Raed.innerHTML += '<div class="token orange" title="رائد"></div>';
+
+    const q2Box = document.getElementById('q2-vis-box');
+    q2Box.innerHTML = '';
+    for(let i=0; i<5; i++) q2Box.innerHTML += '<div class="token red"></div>';
+    for(let i=0; i<4; i++) q2Box.innerHTML += '<div class="token red crossed" title="أخذتها ليلى"></div>';
+  }
+
+  function buildAdditionTable() {
+    const table = document.getElementById('addition-grid');
+    table.innerHTML = '';
+
+    let headerRow = '<tr><th style="font-size:1.4rem;">↱+</th>';
+    for (let c = 1; c <= 9; c++) {
+      headerRow += `<th>${c}</th>`;
+    }
+    headerRow += '</tr>';
+    table.innerHTML += headerRow;
+
+    for (let r = 1; r <= 9; r++) {
+      let rowHtml = `<tr><th>${r}</th>`;
+      for (let c = 1; c <= 9; c++) {
+        let sum = r + c;
+        let cellClass = "";
+        let cellContent = "";
+
+        if (r === c) {
+          if (r === 5) {
+            cellClass = "c-blue";
+            cellContent = `<input type="number" class="quiz-item" data-ans="${sum}">`;
+          } else if (r === 1) {
+            cellClass = "c-green";
+            cellContent = `2`;
+          } else if (r === 9) {
+            cellClass = "c-green";
+            cellContent = `18`;
+          } else {
+            cellClass = "c-green";
+            cellContent = `<input type="number" class="quiz-item" data-ans="${sum}">`;
+          }
+        }
+        else if (r + c === 10) {
+          cellClass = "c-blue";
+          if (r === 3 && c === 7) {
+            cellContent = `10`;
+          } else if (r === 9 && c === 1) {
+            cellContent = `10`;
+          } else {
+            cellContent = `<input type="number" class="quiz-item" data-ans="${sum}">`;
+          }
+        }
+        else if ((r === 1 && c >= 2 && c <= 8) || (r === 9 && c >= 2 && c <= 8)) {
+          cellClass = "c-yellow";
+          cellContent = `<input type="number" class="quiz-item" data-ans="${sum}">`;
+        }
+        else if (
+          (r === 5 && c >= 1 && c <= 4) ||
+          (r === 6 && c >= 1 && c <= 3) ||
+          (r === 7 && c >= 1 && c <= 2) ||
+          (r === 8 && c === 1)
+        ) {
+          cellClass = "c-orange";
+          cellContent = `<input type="number" class="quiz-item" data-ans="${sum}">`;
+        }
+        else if (r === 7 && c === 5) {
+          cellClass = "c-fixed";
+          cellContent = `12`;
+        }
+        else {
+          cellContent = `<input type="number" class="quiz-item" data-ans="${sum}">`;
+        }
+
+        let extras = "";
+        if (r === 1 && c === 9) {
+          extras = `<div class="arrow-v-dash"><div class="arrow-head-v"></div></div>`;
+        }
+        if (r === 4 && c === 9) {
+          extras += `<div class="arrow-h-dash"><div class="arrow-head-h"></div></div><span class="result-13-label">13</span>`;
+        }
+
+        rowHtml += `<td class="${cellClass}">${cellContent}${extras}</td>`;
+      }
+      rowHtml += '</tr>';
+      table.innerHTML += rowHtml;
+    }
+  }
+
+  function validateInputsFilled(sectionId) {
+    const inputs = document.querySelectorAll(`#${sectionId} .quiz-item`);
+    for (let el of inputs) {
+      if (el.value.trim() === "") {
+        alert("يُرْجَى الإِجَابَةُ عَنْ كَامِلِ أَمْثِلَةِ التَّمْرِينِ قَبْلَ التَّأْكِيدِ!");
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function evaluateSection(currSecId, nextSecId) {
+    if (!validateInputsFilled(currSecId)) return;
+
+    const items = document.querySelectorAll(`#${currSecId} .quiz-item`);
+    let correct = 0, wrong = 0;
+
+    items.forEach(item => {
+      const userVal = item.value.trim();
+      const trueVal = item.getAttribute('data-ans');
+
+      if (userVal === trueVal) {
+        item.classList.add('correct');
+        correct++;
+      } else {
+        item.classList.add('wrong');
+        wrong++;
+      }
+      item.disabled = true;
+    });
+
+    playSound(wrong === 0);
+
+    const btn = document.querySelector(`#${currSecId} .btn-submit`);
+    if(btn) btn.style.display = 'none';
+
+    const feedback = document.getElementById(`feedback-${currSecId}`);
+    feedback.style.display = 'block';
+    feedback.style.backgroundColor = wrong === 0 ? '#e8f8f0' : '#fef7e0';
+    feedback.style.color = wrong === 0 ? 'var(--success)' : '#b7791f';
+    feedback.innerHTML = `التقييم الجزئي: الإجابات الصحيحة: ${correct} | الخاطئة: ${wrong}`;
+
+    if (nextSecId) {
+      const nextSec = document.getElementById(nextSecId);
+      nextSec.classList.remove('locked');
+      nextSec.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  function evaluateFinal(lastSecId) {
+    if (!validateInputsFilled(lastSecId)) return;
+    evaluateSection(lastSecId, null);
+
+    const allItems = document.querySelectorAll('.quiz-item');
+    let totalCorrect = 0;
+    let totalItems = allItems.length;
+
+    allItems.forEach(item => {
+      if (item.classList.contains('correct')) totalCorrect++;
+    });
+
+    const totalWrong = totalItems - totalCorrect;
+    const pct = Math.round((totalCorrect / totalItems) * 100);
+
+    const evalSection = document.getElementById('final-evaluation-section');
+    evalSection.style.display = 'block';
+
+    document.getElementById('final-pct').innerText = `${pct}%`;
+    document.getElementById('circle-bar').style.background = 
+      `conic-gradient(var(--success) ${pct}%, #edf2f7 ${pct}%)`;
+
+    document.getElementById('score-details').innerHTML = 
+      `مجموع الإجابات الصحيحة: <b style="color:var(--success)">${totalCorrect}</b> مِنْ أَصْلِ <b>${totalItems}</b><br>` +
+      `مجموع الإجابات الخاطئة: <b style="color:var(--danger)">${totalWrong}</b>`;
+
+    let msg = "";
+    if (pct >= 90) msg = "مُمْتَازٌ! أَنْتَ بَطَلٌ فِي الْحِسَابِ 🌟";
+    else if (pct >= 70) msg = "جَيِّدٌ جِدًّا! وَاصِلْ تَمَيُّزَكَ 👍";
+    else if (pct >= 50) msg = "حَسَنٌ! يُمْكِنُكَ التَّدَرُّبُ أَكْثَرَ لِتُصْبِحَ أَفْضَلَ 💪";
+    else msg = "تَحْتَاجُ إِلَى الْمَزِيدِ مِنَ التَّدْرِيبِ! أَعِدِ الْمُحَاوَلَةَ 🔄";
+
+    document.getElementById('appreciation').innerText = msg;
+    evalSection.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetApp() {
+    document.getElementById('final-evaluation-section').style.display = 'none';
+
+    document.querySelectorAll('.quiz-item').forEach(el => {
+      el.value = '';
+      el.disabled = false;
+      el.classList.remove('correct', 'wrong');
+    });
+
+    const sections = document.querySelectorAll('.lesson-section');
+    sections.forEach((sec, idx) => {
+      if (idx !== 0) sec.classList.add('locked');
+      const btn = sec.querySelector('.btn-submit');
+      if (btn) btn.style.display = 'block';
+      const fb = sec.querySelector('.partial-feedback');
+      if (fb) fb.style.display = 'none';
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function initAllActivities() {
+    initVisuals();
+    buildAdditionTable();
+    verifySubscription();
+  }
+
+  window.onload = initAllActivities;
+</script>
+</body>
+</html>
