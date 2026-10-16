@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>رِيَاضِيَّاتٌ: الأَعْدَادُ مِنْ 1 إِلَى 5 (2)</title>
+
+  <!-- مكتبة Telegram WebApp الرسمية -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #1976d2;
+      --primary-dark: #0d47a1;
+      --secondary: #ff9800;
+      --accent: #4caf50;
+      --bg: #f4f7fb;
+      --card-bg: #ffffff;
+      --correct: #2e7d32;
+      --wrong: #c62828;
+      --text: #263238;
+      --border: #cfd8dc;
+      --radius: 18px;
+      --shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 16px;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 900px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* نافذة القفل والاشتراك الإجباري */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon {
+      font-size: 50px;
+      margin-bottom: 12px;
+    }
+    .lock-title {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #01579b;
+      margin-bottom: 10px;
+    }
+    .lock-desc {
+      font-size: 1rem;
+      color: #546e7a;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+    }
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* هيدر التطبيق */
+    header {
+      background: linear-gradient(135deg, #1e88e5, #1565c0);
+      color: white;
+      padding: 20px 24px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-title h1 {
+      font-size: 1.6rem;
+      font-weight: 900;
+    }
+    .header-title p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+    }
+    .badge-level {
+      background: #ffeb3b;
+      color: #333;
+      padding: 6px 16px;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    /* بطاقات الأنشطة */
+    .section-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .section-card.locked {
+      opacity: 0.45;
+      filter: grayscale(0.85);
+      pointer-events: none;
+    }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      border-bottom: 2px dashed #eceff1;
+      padding-bottom: 12px;
+    }
+    .section-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: #e3f2fd;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.2rem;
+    }
+    .section-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+    .exercise-box {
+      background: #fafbfc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+    .instruction {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: #37474f;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .instruction-num {
+      background: var(--secondary);
+      color: white;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+    .btn-action {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.2s;
+      margin-top: 14px;
+    }
+    .btn-action:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+    .btn-action:disabled {
+      background: #b0bec5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .sub-result-bar {
+      margin-top: 16px;
+      padding: 10px 16px;
+      background: #eceff1;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    /* المشهد الكشفي SVG */
+    .camp-illustration {
+      width: 100%;
+      height: 230px;
+      background: #e1f5fe;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      border: 2px solid #b3e5fc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+    .compare-card {
+      background: white;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #cfd8dc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .compare-icons {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      width: 100%;
+    }
+    .compare-options {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+    .opt-btn {
+      flex: 1;
+      padding: 8px;
+      border: 2px solid #cfd8dc;
+      border-radius: 8px;
+      background: white;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: 0.2s;
+    }
+    .opt-btn.selected {
+      border-color: var(--primary);
+      background: #e3f2fd;
+      color: var(--primary-dark);
+    }
+    .opt-btn.correct-ans {
+      background: #e8f5e9 !important;
+      border-color: var(--correct) !important;
+      color: var(--correct) !important;
+    }
+    .opt-btn.wrong-ans {
+      background: #ffebee !important;
+      border-color: var(--wrong) !important;
+      color: var(--wrong) !important;
+    }
+
+    /* تلوين المثلثات والمربعات */
+    .as-many-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .grid-boxes {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .ref-square {
+      width: 44px;
+      height: 44px;
+      background: #ff7043;
+      border-radius: 6px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .clickable-triangle {
+      width: 48px;
+      height: 48px;
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 4px;
+      transition: transform 0.15s;
+    }
+    .clickable-triangle:active {
+      transform: scale(0.9);
+    }
+    .clickable-triangle polygon {
+      fill: #ffffff;
+      stroke: #546e7a;
+      stroke-width: 2.5;
+      transition: fill 0.2s, stroke 0.2s;
+    }
+    .clickable-triangle.active polygon {
+      fill: #ffb300 !important;
+      stroke: #e65100 !important;
+    }
+
+    /* الربط في أنجز */
+    .match-columns {
+      display: flex;
+      justify-content: space-around;
+      gap: 16px;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+    .match-item {
+      background: white;
+      border: 2px solid #cfd8dc;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      width: 140px;
+      transition: 0.2s;
+    }
+    .match-item.selected {
+      border-color: var(--primary);
+      background: #e3f2fd;
+    }
+    .match-nums {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .circle-num {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 2px solid var(--primary);
+      background: white;
+      color: var(--primary-dark);
+      font-size: 1.3rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .circle-num.selected {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* الجداول */
+    .table-check {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+    }
+    .table-check td {
+      border: 1px solid #cfd8dc;
+      padding: 12px;
+      text-align: center;
+      font-weight: 700;
+    }
+    .check-box-ui {
+      width: 32px;
+      height: 32px;
+      border: 2px solid #78909c;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 900;
+      cursor: pointer;
+      background: white;
+    }
+    .check-box-ui.checked {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* قاعدة تعلمت */
+    .rule-card {
+      background: linear-gradient(135deg, #fff9c4, #fffde7);
+      border: 2px solid #fbc02d;
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      box-shadow: var(--shadow);
+    }
+    .rule-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #f57f17;
+      margin-bottom: 8px;
+    }
+    .rule-text {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #37474f;
+    }
+
+    /* أكياس أتمرن */
+    .bags-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 14px;
+    }
+    .bag-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .bag-visual {
+      position: relative;
+      width: 100px;
+      height: 120px;
+    }
+    .marble-dot {
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .marble-dot.colored {
+      fill: #e91e63 !important;
+    }
+    .bag-target {
+      background: #e0f2f1;
+      color: #00796b;
+      font-size: 1.2rem;
+      font-weight: 800;
+      padding: 4px 16px;
+      border-radius: 20px;
+    }
+
+    /* تحويط أتمرن */
+    .surround-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+    }
+    .surround-card {
+      background: white;
+      border: 1px solid #cfd8dc;
+      border-radius: 12px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .num-choices {
+      display: flex;
+      direction: ltr;
+      border: 1px solid #90a4ae;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .num-opt {
+      padding: 8px 14px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+      border-right: 1px solid #90a4ae;
+      background: white;
+    }
+    .num-opt:last-child {
+      border-right: none;
+    }
+    .num-opt.picked {
+      background: #ffe0b2;
+      color: #e65100;
+      border: 2px solid #f57c00;
+      border-radius: 50%;
+    }
+
+    /* القريصات */
+    .cards-dots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .dot-card {
+      background: white;
+      border: 2px dashed #90caf9;
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .dots-slots {
+      display: flex;
+      gap: 8px;
+      direction: ltr;
+    }
+    .slot-circle {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px dashed #b0bec5;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .slot-circle.filled-base {
+      background: #e91e63;
+      border-color: #c2185b;
+      cursor: default;
+    }
+    .slot-circle.filled-user {
+      background: #9c27b0;
+      border-color: #7b1fa2;
+    }
+
+    /* تتبع نقاط الرقم 3 */
+    .tracing-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      margin: 10px 0;
+    }
+    .trace-board {
+      width: 260px;
+      height: 280px;
+      background: white;
+      border: 2px solid #b0bec5;
+      border-radius: 14px;
+      position: relative;
+      touch-action: none;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .trace-svg-guide {
+      width: 100%;
+      height: 100%;
+    }
+    .trace-dot {
+      fill: #cfd8dc;
+      transition: fill 0.2s, r 0.2s;
+      cursor: pointer;
+    }
+    .trace-dot.touched {
+      fill: #1976d2 !important;
+      r: 8 !important;
+    }
+
+    /* أبحث */
+    .rabbit-field {
+      background: #e8f5e9;
+      border-radius: 12px;
+      border: 2px solid #a5d6a7;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .carrot-bucket {
+      display: flex;
+      gap: 10px;
+      min-height: 50px;
+      align-items: center;
+      padding: 6px 14px;
+      border: 2px dashed #66bb6a;
+      border-radius: 10px;
+      background: white;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* الشاشة الختامية أسفل الصفحة */
+    .final-score-section {
+      background: white;
+      border-radius: var(--radius);
+      padding: 30px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 18px;
+      border: 3px solid #e0e0e0;
+      margin-top: 10px;
+    }
+    .circular-progress-wrap {
+      width: 140px;
+      height: 140px;
+      position: relative;
+    }
+    .circular-progress-wrap svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+    .circle-bg {
+      fill: none;
+      stroke: #eceff1;
+      stroke-width: 10;
+    }
+    .circle-val {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-dasharray: 283;
+      stroke-dashoffset: 283;
+      transition: stroke-dashoffset 1s ease;
+    }
+    .score-percent-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--primary-dark);
+    }
+    .pedagogical-msg {
+      font-size: 1.25rem;
+      font-weight: 800;
+      padding: 8px 24px;
+      border-radius: 30px;
+    }
+    .final-actions {
+      display: flex;
+      gap: 14px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn-retry {
+      background: var(--secondary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
+    .btn-exit-app {
+      background: #d32f2f;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.2s;
+      margin-bottom: 12px;
+    }
+    .btn-review {
+      background: #78909c;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 800;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.2s;
+    }
+    .btn-retry:hover, .btn-exit-app:hover, .btn-review:hover {
+      transform: translateY(-2px);
+    }
+    .frozen {
+      pointer-events: none !important;
+    }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- نافذة قفل الاشتراك الإجباري -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الانْضِمَامُ إِلَى قَنَاتِنَا أَوَّلاً ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel" id="channel-link">📢 الانْضِمَامُ إِلَى الْقَنَاةِ</a>
+      <button class="btn-check-sub" onclick="verifySubscription()">☑ تَأْكِيدُ الاشْتِرَاكِ</button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- هيدر الدرس -->
+    <header>
+      <div class="header-title">
+        <h1>دَرْسُ الرِّيَاضِيَّاتِ: الأَعْدَادُ مِنْ 1 إِلَى 5 (2)</h1>
+        <p>السَّنَةُ الأُولَى ابْتِدَائِيٌّ - الْمِنْهَاجُ الْجَزَائِرِيُّ</p>
+      </div>
+      <div class="badge-level">الْمُسْتَوَى 1</div>
+    </header>
+
+    <!-- 1. أَكْتَشِفُ -->
+    <section class="section-card" id="sec-discover">
+      <div class="section-header">
+        <div class="section-icon">١</div>
+        <h2 class="section-title">أَكْتَشِفُ</h2>
+      </div>
+
+      <!-- تمرين 1: مقارنة الخيام والأشجار والكراسي والطيور -->
+      <div class="exercise-box" id="ex-disc-1">
+        <div class="instruction">
+          <span class="instruction-num">1</span>
+          <span>لَاحِظِ الصُّورَةَ، ثُمَّ عُدَّ الأَشْيَاءَ وَلَوِّنِ الْبِطَاقَةَ الصَّحِيحَةَ:</span>
+        </div>
+
+        <div class="camp-illustration" id="camp-scene">
+          <svg viewBox="0 0 700 240" width="100%" height="100%">
+            <defs>
+              <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#81d4fa"/>
+                <stop offset="100%" stop-color="#e1f5fe"/>
+              </linearGradient>
+              <linearGradient id="grassGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#aed581"/>
+                <stop offset="100%" stop-color="#7cb342"/>
+              </linearGradient>
+            </defs>
+            <rect width="700" height="170" fill="url(#skyGrad)"/>
+            <rect y="160" width="700" height="80" fill="url(#grassGrad)"/>
+
+            <g transform="translate(40, 50)">
+              <rect x="22" y="70" width="14" height="60" fill="#795548"/>
+              <circle cx="29" cy="55" r="38" fill="#ffa726"/>
+            </g>
+            <g transform="translate(130, 60)">
+              <rect x="20" y="65" width="12" height="55" fill="#795548"/>
+              <circle cx="26" cy="50" r="34" fill="#fb8c00"/>
+            </g>
+            <g transform="translate(530, 50)">
+              <rect x="22" y="70" width="14" height="60" fill="#795548"/>
+              <circle cx="29" cy="55" r="38" fill="#ffa726"/>
+            </g>
+            <g transform="translate(620, 65)">
+              <rect x="18" y="55" width="12" height="50" fill="#795548"/>
+              <circle cx="24" cy="40" r="32" fill="#ffb74d"/>
+            </g>
+
+            <polygon points="220,185 265,95 310,185" fill="#fbc02d" stroke="#f57f17" stroke-width="2"/>
+            <polygon points="265,95 285,185 310,185" fill="#f57f17"/>
+
+            <polygon points="325,185 365,105 405,185" fill="#fdd835" stroke="#f57f17" stroke-width="2"/>
+            <polygon points="365,105 385,185 405,185" fill="#f57f17"/>
+
+            <polygon points="420,185 455,115 490,185" fill="#fbc02d" stroke="#f57f17" stroke-width="2"/>
+            <polygon points="455,115 470,185 490,185" fill="#f57f17"/>
+
+            <g transform="translate(195, 160)">
+              <rect x="5" y="0" width="20" height="4" fill="#ad1457"/>
+              <rect x="5" y="0" width="4" height="30" fill="#ad1457"/>
+              <rect x="5" y="15" width="20" height="4" fill="#ad1457"/>
+              <rect x="21" y="15" width="4" height="15" fill="#ad1457"/>
+            </g>
+            <g transform="translate(505, 160)">
+              <rect x="5" y="0" width="20" height="4" fill="#ad1457"/>
+              <rect x="5" y="0" width="4" height="30" fill="#ad1457"/>
+              <rect x="5" y="15" width="20" height="4" fill="#ad1457"/>
+              <rect x="21" y="15" width="4" height="15" fill="#ad1457"/>
+            </g>
+
+            <path d="M 100,40 Q 110,30 120,40 Q 130,30 140,40" stroke="#37474f" stroke-width="3" fill="none"/>
+            <path d="M 210,35 Q 220,25 230,35 Q 240,25 250,35" stroke="#37474f" stroke-width="3" fill="none"/>
+            <path d="M 330,45 Q 340,35 350,45 Q 360,35 370,45" stroke="#37474f" stroke-width="3" fill="none"/>
+            <path d="M 450,30 Q 460,20 470,30 Q 480,20 490,30" stroke="#37474f" stroke-width="3" fill="none"/>
+            <path d="M 520,55 Q 530,45 540,55 Q 550,45 560,55" stroke="#37474f" stroke-width="3" fill="none"/>
+          </svg>
+        </div>
+
+        <div class="comparison-grid">
+          <div class="compare-card">
+            <div class="compare-icons">
+              <span style="font-weight:bold; font-size:1.1rem;">الْخِيَامُ</span>
+              <span>⟵</span>
+              <span style="font-weight:bold; font-size:1.1rem;">الأَشْجَارُ</span>
+            </div>
+            <div class="compare-options" id="opt-group-1">
+              <button class="opt-btn" onclick="selectCompare(1, 'more')">أَكْثَرُ مِنْ</button>
+              <button class="opt-btn" onclick="selectCompare(1, 'less')">أَقَلُّ مِنْ</button>
+            </div>
+          </div>
+
+          <div class="compare-card">
+            <div class="compare-icons">
+              <span style="font-weight:bold; font-size:1.1rem;">الْكَرَاسِي</span>
+              <span>⟵</span>
+              <span style="font-weight:bold; font-size:1.1rem;">الْخِيَامُ</span>
+            </div>
+            <div class="compare-options" id="opt-group-2">
+              <button class="opt-btn" onclick="selectCompare(2, 'more')">أَكْثَرُ مِنْ</button>
+              <button class="opt-btn" onclick="selectCompare(2, 'less')">أَقَلُّ مِنْ</button>
+            </div>
+          </div>
+
+          <div class="compare-card">
+            <div class="compare-icons">
+              <span style="font-weight:bold; font-size:1.1rem;">الأَشْجَارُ</span>
+              <span>⟵</span>
+              <span style="font-weight:bold; font-size:1.1rem;">الطُّيُورُ</span>
+            </div>
+            <div class="compare-options" id="opt-group-3">
+              <button class="opt-btn" onclick="selectCompare(3, 'more')">أَكْثَرُ مِنْ</button>
+              <button class="opt-btn" onclick="selectCompare(3, 'less')">أَقَلُّ مِنْ</button>
+            </div>
+          </div>
+        </div>
+        <button class="btn-action" id="btn-disc-1" onclick="submitDisc1()">تَأْكِيدُ الْمُقَارَنَاتِ</button>
+      </div>
+
+      <div class="exercise-box" id="ex-disc-2">
+        <div class="instruction">
+          <span class="instruction-num">2</span>
+          <span>لَوِّنْ مُثَلَّثَاتٍ بِقَدْرِ الْمُرَبَّعَاتِ:</span>
+        </div>
+        <div class="as-many-container">
+          <div>
+            <p style="font-weight:700; margin-bottom:8px; text-align:center;">الْمُرَبَّعَاتُ:</p>
+            <div class="grid-boxes">
+              <div class="ref-square"></div>
+              <div class="ref-square"></div>
+              <div class="ref-square"></div>
+              <div class="ref-square"></div>
+              <div class="ref-square"></div>
+            </div>
+          </div>
+
+          <div>
+            <p style="font-weight:700; margin-bottom:8px; text-align:center;">لَوِّنْ بِقَدْرِهَا مِنَ الْمُثَلَّثَاتِ (انْقُرْ عَلَى الْمُثَلَّثِ لِتَلْوِينِهِ):</p>
+            <div class="grid-boxes" id="triangles-wrap">
+              <svg class="clickable-triangle" onclick="toggleTri(this)" viewBox="0 0 50 50"><polygon points="25,5 45,45 5,45"/></svg>
+              <svg class="clickable-triangle" onclick="toggleTri(this)" viewBox="0 0 50 50"><polygon points="25,5 45,45 5,45"/></svg>
+              <svg class="clickable-triangle" onclick="toggleTri(this)" viewBox="0 0 50 50"><polygon points="25,5 45,45 5,45"/></svg>
+              <svg class="clickable-triangle" onclick="toggleTri(this)" viewBox="0 0 50 50"><polygon points="25,5 45,45 5,45"/></svg>
+              <svg class="clickable-triangle" onclick="toggleTri(this)" viewBox="0 0 50 50"><polygon points="25,5 45,45 5,45"/></svg>
+              <svg class="clickable-triangle" onclick="toggleTri(this)" viewBox="0 0 50 50"><polygon points="25,5 45,45 5,45"/></svg>
+            </div>
+          </div>
+        </div>
+        <button class="btn-action" id="btn-disc-2" onclick="submitDisc2()">تَأْكِيدُ التَّلْوِينِ</button>
+      </div>
+
+      <div class="sub-result-bar" id="sub-res-disc" style="display:none;">
+        <span>نَتِيجَةُ مَحَطَّةِ أَكْتَشِفُ:</span>
+        <span id="disc-score-text">✓ 0 | ✗ 0</span>
+      </div>
+    </section>
+
+    <!-- 2. أُنْجِزُ -->
+    <section class="section-card locked" id="sec-achieve">
+      <div class="section-header">
+        <div class="section-icon">٢</div>
+        <h2 class="section-title">أُنْجِزُ</h2>
+      </div>
+
+      <div class="exercise-box" id="ex-ach-1">
+        <div class="instruction">
+          <span class="instruction-num">1</span>
+          <span>ارْبِطْ كُلَّ بِطَاقَةٍ بِالْعَدَدِ الْمُنَاسِبِ:</span>
+        </div>
+        <p style="font-size:0.9rem; color:#546e7a; margin-bottom:8px;">انْقُرْ عَلَى مَجْمُوعَةِ الأَدَوَاتِ ثُمَّ انْقُرْ عَلَى الْعَدَدِ الْمُطَابِقِ لَهَا:</p>
+        
+        <div class="match-columns">
+          <div class="match-item" id="card-scissors" onclick="pickCard('scissors')">
+            <div style="font-weight:700;">مِقَصَّاتٌ</div>
+            <svg width="85" height="55" viewBox="0 0 100 70">
+              <circle cx="15" cy="15" r="7" fill="none" stroke="#e53935" stroke-width="2.5"/>
+              <circle cx="15" cy="32" r="7" fill="none" stroke="#e53935" stroke-width="2.5"/>
+              <line x1="21" y1="18" x2="38" y2="30" stroke="#78909c" stroke-width="2.5"/>
+              <line x1="21" y1="29" x2="38" y2="17" stroke="#78909c" stroke-width="2.5"/>
+
+              <circle cx="65" cy="15" r="7" fill="none" stroke="#e53935" stroke-width="2.5"/>
+              <circle cx="65" cy="32" r="7" fill="none" stroke="#e53935" stroke-width="2.5"/>
+              <line x1="71" y1="18" x2="88" y2="30" stroke="#78909c" stroke-width="2.5"/>
+              <line x1="71" y1="29" x2="88" y2="17" stroke="#78909c" stroke-width="2.5"/>
+
+              <circle cx="15" cy="50" r="7" fill="none" stroke="#e53935" stroke-width="2.5"/>
+              <circle cx="15" cy="65" r="7" fill="none" stroke="#e53935" stroke-width="2.5"/>
+              <line x1="21" y1="52" x2="38" y2="64" stroke="#78909c" stroke-width="2.5"/>
+              <line x1="21" y1="63" x2="38" y2="51" stroke="#78909c" stroke-width="2.5"/>
+
+              <circle cx="65" cy="50" r="7" fill="none" stroke="#e53935" stroke-width="2.5"/>
+              <circle cx="65" cy="65" r="7" fill="none" stroke="#e53935" stroke-width="2.5"/>
+              <line x1="71" y1="52" x2="88" y2="64" stroke="#78909c" stroke-width="2.5"/>
+              <line x1="71" y1="63" x2="88" y2="51" stroke="#78909c" stroke-width="2.5"/>
+            </svg>
+            <span class="linked-label" id="link-scissors" style="font-weight:800; color:var(--primary);">--</span>
+          </div>
+
+          <div class="match-item" id="card-erasers" onclick="pickCard('erasers')">
+            <div style="font-weight:700;">مَمَاحٍ</div>
+            <svg width="85" height="55" viewBox="0 0 100 65">
+              <rect x="5" y="6" width="30" height="16" rx="3" fill="#e53935"/>
+              <rect x="23" y="6" width="16" height="16" rx="3" fill="#1e88e5"/>
+
+              <rect x="55" y="6" width="30" height="16" rx="3" fill="#e53935"/>
+              <rect x="73" y="6" width="16" height="16" rx="3" fill="#1e88e5"/>
+
+              <rect x="30" y="36" width="30" height="16" rx="3" fill="#e53935"/>
+              <rect x="48" y="36" width="16" height="16" rx="3" fill="#1e88e5"/>
+            </svg>
+            <span class="linked-label" id="link-erasers" style="font-weight:800; color:var(--primary);">--</span>
+          </div>
+
+          <div class="match-item" id="card-pens" onclick="pickCard('pens')">
+            <div style="font-weight:700;">أَقْلَامٌ</div>
+            <svg width="85" height="55" viewBox="0 0 100 65">
+              <g transform="translate(10,5)">
+                <rect x="0" y="5" width="8" height="45" fill="#ab47bc"/>
+                <polygon points="0,5 4,0 8,5" fill="#ffd54f"/>
+              </g>
+              <g transform="translate(28,5)">
+                <rect x="0" y="5" width="8" height="45" fill="#29b6f6"/>
+                <polygon points="0,5 4,0 8,5" fill="#ffd54f"/>
+              </g>
+              <g transform="translate(46,5)">
+                <rect x="0" y="5" width="8" height="45" fill="#26a69a"/>
+                <polygon points="0,5 4,0 8,5" fill="#ffd54f"/>
+              </g>
+              <g transform="translate(64,5)">
+                <rect x="0" y="5" width="8" height="45" fill="#ffa726"/>
+                <polygon points="0,5 4,0 8,5" fill="#ffd54f"/>
+              </g>
+              <g transform="translate(82,5)">
+                <rect x="0" y="5" width="8" height="45" fill="#ef5350"/>
+                <polygon points="0,5 4,0 8,5" fill="#ffd54f"/>
+              </g>
+            </svg>
+            <span class="linked-label" id="link-pens" style="font-weight:800; color:var(--primary);">--</span>
+          </div>
+        </div>
+
+        <div class="match-nums" style="direction: ltr;">
+          <div class="circle-num" onclick="bindNumber(1)">1</div>
+          <div class="circle-num" onclick="bindNumber(2)">2</div>
+          <div class="circle-num" onclick="bindNumber(3)">3</div>
+          <div class="circle-num" onclick="bindNumber(4)">4</div>
+          <div class="circle-num" onclick="bindNumber(5)">5</div>
+        </div>
+        <button class="btn-action" id="btn-ach-1" onclick="submitAch1()">تَأْكِيدُ الرَّبْطِ</button>
+      </div>
+
+      <div class="exercise-box" id="ex-ach-2">
+        <div class="instruction">
+          <span class="instruction-num">2</span>
+          <span>ضَعِ الْعَلَامَةَ (×) أَمَامَ الْجُمْلَةِ الصَّحِيحَةِ:</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-around; gap:16px; flex-wrap:wrap; margin-bottom:14px; background:#fff; padding:14px; border-radius:12px;">
+          <div style="text-align:center;">
+            <span style="font-weight:bold; display:block; margin-bottom:4px;">الْمَوْزُ</span>
+            <div style="font-size:1.6rem; letter-spacing:2px;">🍌🍌🍌🍌🍌🍌</div>
+          </div>
+          <div style="text-align:center;">
+            <span style="font-weight:bold; display:block; margin-bottom:4px;">التُّفَّاحُ</span>
+            <div style="font-size:1.6rem; letter-spacing:2px;">🍎🍎🍎🍎</div>
+          </div>
+          <div style="text-align:center;">
+            <span style="font-weight:bold; display:block; margin-bottom:4px;">الْبُرْتُقَالُ</span>
+            <div style="font-size:1.6rem; letter-spacing:2px;">🍊🍊🍊🍊🍊</div>
+          </div>
+        </div>
+
+        <table class="table-check">
+          <tr>
+            <td>«الْمَوْزَاتُ أَكْثَرُ مِنَ التُّفَّاحَاتِ»</td>
+            <td width="70"><div class="check-box-ui" id="chk-1" onclick="toggleCheck(1)"></div></td>
+          </tr>
+          <tr>
+            <td>«التُّفَّاحَاتُ أَقَلُّ مِنَ الْبُرْتُقَالَاتِ»</td>
+            <td><div class="check-box-ui" id="chk-2" onclick="toggleCheck(2)"></div></td>
+          </tr>
+          <tr>
+            <td>«الْبُرْتُقَالَاتُ أَكْثَرُ مِنَ الْمَوْزَاتِ»</td>
+            <td><div class="check-box-ui" id="chk-3" onclick="toggleCheck(3)"></div></td>
+          </tr>
+        </table>
+        <button class="btn-action" id="btn-ach-2" onclick="submitAch2()">تَأْكِيدُ الْجُمَلِ</button>
+      </div>
+
+      <div class="sub-result-bar" id="sub-res-ach" style="display:none;">
+        <span>نَتِيجَةُ مَحَطَّةِ أُنْجِزُ:</span>
+        <span id="ach-score-text">✓ 0 | ✗ 0</span>
+      </div>
+    </section>
+
+    <!-- 3. تَعَلَّمْتُ -->
+    <div class="rule-card">
+      <div class="rule-title">★ تَعَلَّمْتُ:</div>
+      <div class="rule-text">
+        «لِمُقَارَنَةِ الْكَمِّيَّاتِ، أَسْتَعْمِلُ: <strong>«أَكْثَرُ مِنْ»</strong>، <strong>«أَقَلُّ مِنْ»</strong>، <strong>«بِقَدْرِ»</strong>.»
+      </div>
+    </div>
+
+    <!-- 4. أَتَمَرَّنُ -->
+    <section class="section-card locked" id="sec-practice">
+      <div class="section-header">
+        <div class="section-icon">٣</div>
+        <h2 class="section-title">أَتَمَرَّنُ (دَفْتَرُ الأَنْشِطَةِ ص 8)</h2>
+      </div>
+
+      <div class="exercise-box" id="ex-prac-1">
+        <div class="instruction">
+          <span class="instruction-num">1</span>
+          <span>لَوِّنْ كُرَاتٍ بِقَدْرِ الْعَدَدِ الْمَكْتُوبِ فِي الْبِطَاقَةِ:</span>
+        </div>
+
+        <div class="bags-container" id="bags-wrapper">
+          <div class="bag-card" data-req="1">
+            <div class="bag-visual">
+              <svg viewBox="0 0 90 110" width="100%" height="100%">
+                <path d="M 25,20 C 15,2 75,2 65,20 C 85,30 90,95 70,105 C 50,110 40,110 20,105 C 0,95 5,30 25,20 Z" fill="#fafafa" stroke="#78909c" stroke-width="2"/>
+                <circle class="marble-dot" cx="30" cy="50" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="60" cy="50" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="30" cy="72" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="60" cy="72" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="30" cy="94" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="60" cy="94" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+              </svg>
+            </div>
+            <div class="bag-target">1</div>
+          </div>
+
+          <div class="bag-card" data-req="4">
+            <div class="bag-visual">
+              <svg viewBox="0 0 90 110" width="100%" height="100%">
+                <path d="M 25,20 C 15,2 75,2 65,20 C 85,30 90,95 70,105 C 50,110 40,110 20,105 C 0,95 5,30 25,20 Z" fill="#fafafa" stroke="#78909c" stroke-width="2"/>
+                <circle class="marble-dot" cx="30" cy="50" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="60" cy="50" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="30" cy="72" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="60" cy="72" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="30" cy="94" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="60" cy="94" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+              </svg>
+            </div>
+            <div class="bag-target">4</div>
+          </div>
+
+          <div class="bag-card" data-req="5">
+            <div class="bag-visual">
+              <svg viewBox="0 0 90 110" width="100%" height="100%">
+                <path d="M 25,20 C 15,2 75,2 65,20 C 85,30 90,95 70,105 C 50,110 40,110 20,105 C 0,95 5,30 25,20 Z" fill="#fafafa" stroke="#78909c" stroke-width="2"/>
+                <circle class="marble-dot" cx="30" cy="50" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="60" cy="50" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="30" cy="72" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="60" cy="72" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="30" cy="94" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="60" cy="94" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+              </svg>
+            </div>
+            <div class="bag-target">5</div>
+          </div>
+
+          <div class="bag-card" data-req="2">
+            <div class="bag-visual">
+              <svg viewBox="0 0 90 110" width="100%" height="100%">
+                <path d="M 25,20 C 15,2 75,2 65,20 C 85,30 90,95 70,105 C 50,110 40,110 20,105 C 0,95 5,30 25,20 Z" fill="#fafafa" stroke="#78909c" stroke-width="2"/>
+                <circle class="marble-dot" cx="30" cy="50" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="60" cy="50" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="30" cy="72" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="60" cy="72" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="30" cy="94" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="60" cy="94" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+              </svg>
+            </div>
+            <div class="bag-target">2</div>
+          </div>
+
+          <div class="bag-card" data-req="3">
+            <div class="bag-visual">
+              <svg viewBox="0 0 90 110" width="100%" height="100%">
+                <path d="M 25,20 C 15,2 75,2 65,20 C 85,30 90,95 70,105 C 50,110 40,110 20,105 C 0,95 5,30 25,20 Z" fill="#fafafa" stroke="#78909c" stroke-width="2"/>
+                <circle class="marble-dot" cx="30" cy="50" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="60" cy="50" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="30" cy="72" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="60" cy="72" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="30" cy="94" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+                <circle class="marble-dot" cx="60" cy="94" r="9" fill="#fff" stroke="#455a64" stroke-width="1.5" onclick="toggleMarble(this)"/>
+              </svg>
+            </div>
+            <div class="bag-target">3</div>
+          </div>
+        </div>
+        <button class="btn-action" id="btn-prac-1" onclick="submitPrac1()">تَأْكِيدُ الأَكْيَاسِ</button>
+      </div>
+
+      <div class="exercise-box" id="ex-prac-2">
+        <div class="instruction">
+          <span class="instruction-num">2</span>
+          <span>حَوِّطِ الْعَدَدَ الْمُنَاسِبَ كَمَا فِي الْمِثَالِ:</span>
+        </div>
+
+        <div class="surround-row">
+          <div class="surround-card" style="border: 2px dashed #4caf50;">
+            <div style="font-size:1.8rem;">🍐🍐🍐</div>
+            <span style="font-size:0.8rem; color:#2e7d32; font-weight:bold;">[الْمِثَالُ الْمَحْلُولُ]</span>
+            <div class="num-choices">
+              <span class="num-opt">1</span>
+              <span class="num-opt">2</span>
+              <span class="num-opt picked" style="background:#c8e6c9; color:#2e7d32; border-color:#2e7d32;">3</span>
+            </div>
+          </div>
+
+          <div class="surround-card" id="surr-apples">
+            <div style="font-size:1.8rem; letter-spacing:2px;">🍎🍎🍎🍎🍎</div>
+            <span style="font-weight:700;">التُّفَّاحُ</span>
+            <div class="num-choices">
+              <span class="num-opt" onclick="pickSurround('apples', 2, this)">2</span>
+              <span class="num-opt" onclick="pickSurround('apples', 4, this)">4</span>
+              <span class="num-opt" onclick="pickSurround('apples', 5, this)">5</span>
+            </div>
+          </div>
+
+          <div class="surround-card" id="surr-oranges">
+            <div style="font-size:1.8rem; letter-spacing:2px;">🍊🍊</div>
+            <span style="font-weight:700;">الْبُرْتُقَالُ</span>
+            <div class="num-choices">
+              <span class="num-opt" onclick="pickSurround('oranges', 1, this)">1</span>
+              <span class="num-opt" onclick="pickSurround('oranges', 2, this)">2</span>
+              <span class="num-opt" onclick="pickSurround('oranges', 3, this)">3</span>
+            </div>
+          </div>
+
+          <div class="surround-card" id="surr-banana">
+            <div style="font-size:1.8rem;">🍌</div>
+            <span style="font-weight:700;">الْمَوْزُ</span>
+            <div class="num-choices">
+              <span class="num-opt" onclick="pickSurround('banana', 3, this)">3</span>
+              <span class="num-opt" onclick="pickSurround('banana', 1, this)">1</span>
+              <span class="num-opt" onclick="pickSurround('banana', 4, this)">4</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn-action" id="btn-prac-2" onclick="submitPrac2()">تَأْكِيدُ التَّحْوِيطِ</button>
+      </div>
+
+      <div class="exercise-box" id="ex-prac-3">
+        <div class="instruction">
+          <span class="instruction-num">3</span>
+          <span>ارْسُمِ الْقُرَيْصَاتِ النَّاقِصَةَ فِي كُلِّ بِطَاقَةٍ:</span>
+        </div>
+
+        <div class="cards-dots-grid">
+          <div class="dot-card" data-need="1" id="card-dot-1">
+            <div class="dots-slots">
+              <div class="slot-circle filled-base"></div>
+              <div class="slot-circle filled-base"></div>
+              <div class="slot-circle filled-base"></div>
+              <div class="slot-circle filled-base"></div>
+              <div class="slot-circle" onclick="toggleDotSlot(this)"></div>
+            </div>
+            <span style="font-weight:bold; color:#1565c0;">5</span>
+          </div>
+
+          <div class="dot-card" data-need="3" id="card-dot-2">
+            <div class="dots-slots">
+              <div class="slot-circle filled-base"></div>
+              <div class="slot-circle filled-base"></div>
+              <div class="slot-circle" onclick="toggleDotSlot(this)"></div>
+              <div class="slot-circle" onclick="toggleDotSlot(this)"></div>
+              <div class="slot-circle" onclick="toggleDotSlot(this)"></div>
+            </div>
+            <span style="font-weight:bold; color:#1565c0;">5</span>
+          </div>
+
+          <div class="dot-card" data-need="4" id="card-dot-3">
+            <div class="dots-slots">
+              <div class="slot-circle filled-base"></div>
+              <div class="slot-circle" onclick="toggleDotSlot(this)"></div>
+              <div class="slot-circle" onclick="toggleDotSlot(this)"></div>
+              <div class="slot-circle" onclick="toggleDotSlot(this)"></div>
+              <div class="slot-circle" onclick="toggleDotSlot(this)"></div>
+            </div>
+            <span style="font-weight:bold; color:#1565c0;">5</span>
+          </div>
+        </div>
+        <button class="btn-action" id="btn-prac-3" onclick="submitPrac3()">تَأْكِيدُ الْقُرَيْصَاتِ</button>
+      </div>
+
+      <div class="exercise-box" id="ex-prac-4">
+        <div class="instruction">
+          <span class="instruction-num">4</span>
+          <span>أَكْتُبُ: مَرِّرْ إِصْبَعَكَ أَوْ فَأْرَةَ الْحَاسُوبِ فَوْقَ النِّقَاطِ لِكِتَابَةِ الْعَدَدِ 3:</span>
+        </div>
+
+        <div class="tracing-container">
+          <div class="trace-board" id="trace-board">
+            <svg class="trace-svg-guide" viewBox="0 0 200 240">
+              <path d="M 60,50 Q 140,50 140,105 Q 140,120 110,120 Q 150,120 150,180 Q 150,220 50,220" 
+                    fill="none" stroke="#f0f0f0" stroke-width="16" stroke-linecap="round"/>
+              
+              <circle class="trace-dot" data-idx="1" cx="60" cy="50" r="6"/>
+              <circle class="trace-dot" data-idx="2" cx="85" cy="48" r="6"/>
+              <circle class="trace-dot" data-idx="3" cx="115" cy="52" r="6"/>
+              <circle class="trace-dot" data-idx="4" cx="138" cy="72" r="6"/>
+              <circle class="trace-dot" data-idx="5" cx="138" cy="98" r="6"/>
+              <circle class="trace-dot" data-idx="6" cx="120" cy="116" r="6"/>
+              <circle class="trace-dot" data-idx="7" cx="95" cy="120" r="6"/>
+              
+              <circle class="trace-dot" data-idx="8" cx="125" cy="125" r="6"/>
+              <circle class="trace-dot" data-idx="9" cx="145" cy="145" r="6"/>
+              <circle class="trace-dot" data-idx="10" cx="148" cy="175" r="6"/>
+              <circle class="trace-dot" data-idx="11" cx="135" cy="202" r="6"/>
+              <circle class="trace-dot" data-idx="12" cx="105" cy="218" r="6"/>
+              <circle class="trace-dot" data-idx="13" cx="75" cy="220" r="6"/>
+              <circle class="trace-dot" data-idx="14" cx="50" cy="216" r="6"/>
+            </svg>
+          </div>
+          <p id="trace-status" style="font-weight:700; color:var(--primary);">مَرِّرْ الآنَ لِرَسْمِ الرَّقْمِ كَامِلاً...</p>
+        </div>
+        <button class="btn-action" id="btn-prac-4" onclick="submitPrac4()">تَأْكِيدُ كِتَابَةِ الرَّقْمِ 3</button>
+      </div>
+
+      <div class="sub-result-bar" id="sub-res-prac" style="display:none;">
+        <span>نَتِيجَةُ مَحَطَّةِ أَتَمَرَّنُ:</span>
+        <span id="prac-score-text">✓ 0 | ✗ 0</span>
+      </div>
+    </section>
+
+    <!-- 5. أَبْحَثُ -->
+    <section class="section-card locked" id="sec-search">
+      <div class="section-header">
+        <div class="section-icon">٤</div>
+        <h2 class="section-title">أَبْحَثُ</h2>
+      </div>
+      <div class="exercise-box">
+        <div class="instruction">
+          <span class="instruction-num">✦</span>
+          <span>ارْسُمْ جَزَرَةً لِكُلِّ أَرْنَبٍ (أَضِفْ بِقَدْرِ الأَرَانِبِ مِنَ الْجَزَرِ):</span>
+        </div>
+
+        <div class="rabbit-field">
+          <div style="font-weight:800; font-size:1.2rem; color:#2e7d32; letter-spacing:4px;">
+            🐇 🐇 🐇 🐇 🐇
+          </div>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <button class="btn-action" style="margin-top:0;" onclick="addCarrot()">🥕 إِضَافَةُ جَزَرَةٍ</button>
+            <button class="btn-action" style="margin-top:0; background:#78909c;" onclick="removeCarrot()">حَذْفُ جَزَرَةٍ</button>
+          </div>
+          <div class="carrot-bucket" id="carrot-box">
+            <span id="empty-carrot-txt" style="color:#9e9e9e;">اضْغَطْ عَلَى الزِّرِّ لإِضَافَةِ جَزَرَةٍ...</span>
+          </div>
+        </div>
+        <button class="btn-action" id="btn-search" onclick="submitSearch()">تَأْكِيدُ فَقْرَةِ أَبْحَثُ</button>
+      </div>
+
+      <div class="sub-result-bar" id="sub-res-search" style="display:none;">
+        <span>نَتِيجَةُ فَقْرَةِ أَبْحَثُ:</span>
+        <span id="search-score-text">✓ 0 | ✗ 0</span>
+      </div>
+    </section>
+
+    <!-- الشاشة الختامية أسفل الصفحة دائماً -->
+    <footer class="final-score-section" id="final-screen" style="display:none;">
+      <h2 style="font-weight:900; color:var(--primary-dark);">حَصِيلَةُ التَّقْيِيمِ الْعَامِّ لِلدَّرْسِ</h2>
+      
+      <div class="circular-progress-wrap">
+        <svg>
+          <circle class="circle-bg" cx="70" cy="70" r="45"></circle>
+          <circle class="circle-val" id="score-circle" cx="70" cy="70" r="45"></circle>
+        </svg>
+        <div class="score-percent-text" id="final-percent">0%</div>
+      </div>
+
+      <div style="font-size:1.2rem; font-weight:800;" id="final-counts-text">
+        إِجْمَالِيُّ الصَّوَابِ: 0 | إِجْمَالِيُّ الأَخْطَاءِ: 0
+      </div>
+
+      <div class="pedagogical-msg" id="pedagogical-msg">--</div>
+
+      <div class="final-actions">
+        <button class="btn-retry" onclick="location.reload();">🔄 إِعَادَةُ الْمُحَاوَلَةِ</button>
+        <button class="btn-exit-app" onclick="exitTelegramApp();">🚪 خُرُوجٌ مِنَ التَّطْبِيقِ</button>
+        <button class="btn-review" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">⬆ مُعَايَنَةُ الإِجَابَاتِ</button>
+      </div>
+      <div style="margin-top:16px; width:100%;">
+        <a href="../../../index.html" class="btn-back-home">← الْعَوْدَةُ إِلَى الْفِهْرِسِ</a>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    // ==========================================
+    // بروتوكول التحقق من الاشتراك الإجباري عبر تيليجرام (عبر Vercel)
+    // ==========================================
+    // ⚠️ تم حذف BOT_TOKEN من هنا (لأسباب أمنية)
+    const CHANNEL_ID = "-1004456852024";
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارٍ التَّحَقَّقُ مِنَ الاسْتِرَاكِ ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلِيغْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        // ⬇️ استدعاء الوسيط على Vercel
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ، جَارٍ فَتْحُ الدَّرْسِ ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الانْضِمَامُ أَوَّلاً.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    function exitTelegramApp() {
+      if (tg && tg.close) {
+        tg.close();
+      } else {
+        alert("لِلْخُرُوجِ يُرْجَى إِغْلَاقُ النَّافِذَةِ مِنْ زِرِّ الإِغْلَاقِ بِأَعْلَى الشَّاشَةِ.");
+      }
+    }
+
+    // ==========================================
+    // منطق أنشطة الدرس والصوتيات
+    // ==========================================
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      if (type === 'correct') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.25);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      } else if (type === 'wrong') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+        osc.frequency.linearRampToValueAtTime(140, audioCtx.currentTime + 0.3);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.3);
+      } else if (type === 'click') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.08);
+      }
+    }
+
+    let totalCorrect = 0;
+    let totalWrong = 0;
+
+    /* أكتشف - 1 */
+    const compAnswers = { 1: null, 2: null, 3: null };
+    function selectCompare(id, val) {
+      playSound('click');
+      compAnswers[id] = val;
+      const btns = document.querySelectorAll(`#opt-group-${id} .opt-btn`);
+      btns.forEach(b => b.classList.remove('selected'));
+      if (val === 'more') btns[0].classList.add('selected');
+      if (val === 'less') btns[1].classList.add('selected');
+    }
+
+    let discCorrect = 0;
+    let discWrong = 0;
+
+    function submitDisc1() {
+      const expected = { 1: 'less', 2: 'less', 3: 'less' };
+      let ex1Correct = 0;
+
+      for (let i = 1; i <= 3; i++) {
+        const btns = document.querySelectorAll(`#opt-group-${i} .opt-btn`);
+        const userChoice = compAnswers[i];
+        if (userChoice === expected[i]) {
+          ex1Correct++;
+          if (userChoice === 'more') btns[0].classList.add('correct-ans');
+          else btns[1].classList.add('correct-ans');
+        } else {
+          if (userChoice === 'more') btns[0].classList.add('wrong-ans');
+          else if (userChoice === 'less') btns[1].classList.add('wrong-ans');
+          if (expected[i] === 'more') btns[0].classList.add('correct-ans');
+          else btns[1].classList.add('correct-ans');
+        }
+      }
+
+      if (ex1Correct === 3) {
+        playSound('correct');
+        discCorrect++;
+      } else {
+        playSound('wrong');
+        discWrong++;
+      }
+
+      document.getElementById('ex-disc-1').classList.add('frozen');
+      document.getElementById('btn-disc-1').disabled = true;
+    }
+
+    /* أكتشف - 2 */
+    function toggleTri(el) {
+      playSound('click');
+      el.classList.toggle('active');
+    }
+
+    function submitDisc2() {
+      const activeTriangles = document.querySelectorAll('.clickable-triangle.active').length;
+      if (activeTriangles === 5) {
+        playSound('correct');
+        discCorrect++;
+        document.getElementById('triangles-wrap').style.border = '2px solid var(--correct)';
+      } else {
+        playSound('wrong');
+        discWrong++;
+        document.getElementById('triangles-wrap').style.border = '2px solid var(--wrong)';
+      }
+
+      totalCorrect += discCorrect;
+      totalWrong += discWrong;
+
+      document.getElementById('ex-disc-2').classList.add('frozen');
+      document.getElementById('btn-disc-2').disabled = true;
+      document.getElementById('sec-discover').classList.add('frozen');
+
+      const sub = document.getElementById('sub-res-disc');
+      sub.style.display = 'flex';
+      document.getElementById('disc-score-text').textContent = `✓ ${discCorrect} صَحِيحٌ | ✗ ${discWrong} خَطَأٌ`;
+
+      document.getElementById('sec-achieve').classList.remove('locked');
+    }
+
+    /* أنجز - 1 */
+    let activeCard = null;
+    const matchBinds = { scissors: null, erasers: null, pens: null };
+
+    function pickCard(id) {
+      playSound('click');
+      activeCard = id;
+      document.querySelectorAll('.match-item').forEach(c => c.classList.remove('selected'));
+      document.getElementById(`card-${id}`).classList.add('selected');
+    }
+
+    function bindNumber(num) {
+      if (!activeCard) return;
+      playSound('click');
+      matchBinds[activeCard] = num;
+      document.getElementById(`link-${activeCard}`).textContent = `الْعَدَدُ: ${num}`;
+    }
+
+    let achCorrect = 0;
+    let achWrong = 0;
+
+    function submitAch1() {
+      const correct = (matchBinds.scissors === 4 && matchBinds.erasers === 3 && matchBinds.pens === 5);
+      if (correct) {
+        playSound('correct');
+        achCorrect++;
+        document.getElementById('ex-ach-1').style.borderColor = 'var(--correct)';
+      } else {
+        playSound('wrong');
+        achWrong++;
+        document.getElementById('ex-ach-1').style.borderColor = 'var(--wrong)';
+      }
+      document.getElementById('ex-ach-1').classList.add('frozen');
+      document.getElementById('btn-ach-1').disabled = true;
+    }
+
+    /* أنجز - 2 */
+    const checkStatus = { 1: false, 2: false, 3: false };
+    function toggleCheck(row) {
+      playSound('click');
+      checkStatus[row] = !checkStatus[row];
+      const el = document.getElementById(`chk-${row}`);
+      el.textContent = checkStatus[row] ? '×' : '';
+      el.classList.toggle('checked');
+    }
+
+    function submitAch2() {
+      const isCorrect = (checkStatus[1] && checkStatus[2] && !checkStatus[3]);
+
+      if (isCorrect) {
+        playSound('correct');
+        achCorrect++;
+        document.getElementById('ex-ach-2').style.borderColor = 'var(--correct)';
+      } else {
+        playSound('wrong');
+        achWrong++;
+        document.getElementById('ex-ach-2').style.borderColor = 'var(--wrong)';
+      }
+
+      totalCorrect += achCorrect;
+      totalWrong += achWrong;
+
+      document.getElementById('ex-ach-2').classList.add('frozen');
+      document.getElementById('btn-ach-2').disabled = true;
+      document.getElementById('sec-achieve').classList.add('frozen');
+
+      const sub = document.getElementById('sub-res-ach');
+      sub.style.display = 'flex';
+      document.getElementById('ach-score-text').textContent = `✓ ${achCorrect} صَحِيحٌ | ✗ ${achWrong} خَطَأٌ`;
+
+      document.getElementById('sec-practice').classList.remove('locked');
+    }
+
+    /* أتمرن - 1 */
+    function toggleMarble(el) {
+      playSound('click');
+      el.classList.toggle('colored');
+    }
+
+    let pracCorrect = 0;
+    let pracWrong = 0;
+
+    function submitPrac1() {
+      const bags = document.querySelectorAll('.bag-card');
+      let allValid = true;
+      bags.forEach(bag => {
+        const target = parseInt(bag.getAttribute('data-req'));
+        const coloredCount = bag.querySelectorAll('.marble-dot.colored').length;
+        if (coloredCount !== target) {
+          allValid = false;
+          bag.style.borderColor = 'var(--wrong)';
+        } else {
+          bag.style.borderColor = 'var(--correct)';
+        }
+      });
+
+      if (allValid) {
+        playSound('correct');
+        pracCorrect++;
+      } else {
+        playSound('wrong');
+        pracWrong++;
+      }
+      document.getElementById('ex-prac-1').classList.add('frozen');
+      document.getElementById('btn-prac-1').disabled = true;
+    }
+
+    /* أتمرن - 2 */
+    const surrChoices = { apples: null, oranges: null, banana: null };
+    function pickSurround(fruit, val, el) {
+      playSound('click');
+      surrChoices[fruit] = val;
+      el.parentElement.querySelectorAll('.num-opt').forEach(opt => opt.classList.remove('picked'));
+      el.classList.add('picked');
+    }
+
+    function submitPrac2() {
+      const valid = (surrChoices.apples === 5 && surrChoices.oranges === 2 && surrChoices.banana === 1);
+      if (valid) {
+        playSound('correct');
+        pracCorrect++;
+        document.getElementById('ex-prac-2').style.borderColor = 'var(--correct)';
+      } else {
+        playSound('wrong');
+        pracWrong++;
+        document.getElementById('ex-prac-2').style.borderColor = 'var(--wrong)';
+      }
+      document.getElementById('ex-prac-2').classList.add('frozen');
+      document.getElementById('btn-prac-2').disabled = true;
+    }
+
+    /* أتمرن - 3 */
+    function toggleDotSlot(el) {
+      playSound('click');
+      el.classList.toggle('filled-user');
+    }
+
+    function submitPrac3() {
+      let allGood = true;
+      for (let i = 1; i <= 3; i++) {
+        const card = document.getElementById(`card-dot-${i}`);
+        const needed = parseInt(card.getAttribute('data-need'));
+        const userAdded = card.querySelectorAll('.slot-circle.filled-user').length;
+        if (userAdded !== needed) {
+          allGood = false;
+          card.style.borderColor = 'var(--wrong)';
+        } else {
+          card.style.borderColor = 'var(--correct)';
+        }
+      }
+
+      if (allGood) {
+        playSound('correct');
+        pracCorrect++;
+      } else {
+        playSound('wrong');
+        pracWrong++;
+      }
+      document.getElementById('ex-prac-3').classList.add('frozen');
+      document.getElementById('btn-prac-3').disabled = true;
+    }
+
+    /* أتمرن - 4 */
+    const traceBoard = document.getElementById('trace-board');
+    const traceDots = document.querySelectorAll('.trace-dot');
+    let touchedDots = new Set();
+    let isPointerDown = false;
+
+    function handleTouchPoint(clientX, clientY) {
+      traceDots.forEach(dot => {
+        const rect = dot.getBoundingClientRect();
+        const dist = Math.hypot(clientX - (rect.left + rect.width / 2), clientY - (rect.top + rect.height / 2));
+        if (dist < 18 && !dot.classList.contains('touched')) {
+          dot.classList.add('touched');
+          touchedDots.add(dot.dataset.idx);
+          playSound('click');
+          if (touchedDots.size >= 12) {
+            document.getElementById('trace-status').textContent = 'رَائِعٌ! اكْتَمَلَ رَسْمُ الْعَدَدِ 3.';
+            document.getElementById('trace-status').style.color = 'var(--correct)';
+          }
+        }
+      });
+    }
+
+    traceBoard.addEventListener('pointerdown', (e) => {
+      isPointerDown = true;
+      handleTouchPoint(e.clientX, e.clientY);
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (isPointerDown) {
+        handleTouchPoint(e.clientX, e.clientY);
+      }
+    });
+    window.addEventListener('pointerup', () => { isPointerDown = false; });
+
+    function submitPrac4() {
+      if (touchedDots.size >= 11) {
+        playSound('correct');
+        pracCorrect++;
+      } else {
+        playSound('wrong');
+        pracWrong++;
+      }
+
+      totalCorrect += pracCorrect;
+      totalWrong += pracWrong;
+
+      document.getElementById('ex-prac-4').classList.add('frozen');
+      document.getElementById('btn-prac-4').disabled = true;
+      document.getElementById('sec-practice').classList.add('frozen');
+
+      const sub = document.getElementById('sub-res-prac');
+      sub.style.display = 'flex';
+      document.getElementById('prac-score-text').textContent = `✓ ${pracCorrect} صَحِيحٌ | ✗ ${pracWrong} خَطَأٌ`;
+
+      document.getElementById('sec-search').classList.remove('locked');
+    }
+
+    /* أبحث */
+    let carrotCount = 0;
+    function addCarrot() {
+      if (carrotCount >= 8) return;
+      playSound('click');
+      carrotCount++;
+      renderCarrots();
+    }
+
+    function removeCarrot() {
+      if (carrotCount <= 0) return;
+      playSound('click');
+      carrotCount--;
+      renderCarrots();
+    }
+
+    function renderCarrots() {
+      const box = document.getElementById('carrot-box');
+      box.innerHTML = '';
+      if (carrotCount === 0) {
+        box.innerHTML = '<span id="empty-carrot-txt" style="color:#9e9e9e;">اضْغَطْ عَلَى الزِّرِّ لإِضَافَةِ جَزَرَةٍ...</span>';
+      } else {
+        for (let i = 0; i < carrotCount; i++) {
+          const span = document.createElement('span');
+          span.style.fontSize = '2rem';
+          span.textContent = '🥕';
+          box.appendChild(span);
+        }
+      }
+    }
+
+    function submitSearch() {
+      let searchCorrect = 0;
+      let searchWrong = 0;
+      if (carrotCount === 5) {
+        playSound('correct');
+        searchCorrect = 1;
+      } else {
+        playSound('wrong');
+        searchWrong = 1;
+      }
+
+      totalCorrect += searchCorrect;
+      totalWrong += searchWrong;
+
+      document.getElementById('sec-search').classList.add('frozen');
+      document.getElementById('btn-search').disabled = true;
+
+      const sub = document.getElementById('sub-res-search');
+      sub.style.display = 'flex';
+      document.getElementById('search-score-text').textContent = `✓ ${searchCorrect} صَحِيحٌ | ✗ ${searchWrong} خَطَأٌ`;
+
+      showFinalEvaluation();
+    }
+
+    /* شاشة التقييم النهائي */
+    function showFinalEvaluation() {
+      const totalQuestions = totalCorrect + totalWrong;
+      const percentage = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+
+      const finalScreen = document.getElementById('final-screen');
+      finalScreen.style.display = 'flex';
+
+      const circle = document.getElementById('score-circle');
+      const offset = 283 - (283 * percentage / 100);
+      setTimeout(() => {
+        circle.style.strokeDashoffset = offset;
+      }, 200);
+
+      document.getElementById('final-percent').textContent = `${percentage}%`;
+      document.getElementById('final-counts-text').textContent = `إِجْمَالِيُّ الإِجَابَاتِ الصَّحِيحَةِ: ${totalCorrect} (✓) | إِجْمَالِيُّ الأَخْطَاءِ: ${totalWrong} (✗)`;
+
+      const msg = document.getElementById('pedagogical-msg');
+      if (percentage >= 85) {
+        msg.textContent = 'مُمْتَازٌ! تَمَكُّنٌ كَامِلٌ وَرَائِعٌ مِنْ مَفَاهِيمِ الْمُقَارَنَةِ وَالأَعْدَادِ.';
+        msg.style.background = '#e8f5e9';
+        msg.style.color = '#2e7d32';
+        circle.style.stroke = '#2e7d32';
+      } else if (percentage >= 60) {
+        msg.textContent = 'جَيِّدٌ جِدًّا! اسْتِيعَابٌ طَيِّبٌ، مَعَ الْحَاجَةِ إِلَى مَزِيدٍ مِنَ التَّرْكِيزِ.';
+        msg.style.background = '#fff8e1';
+        msg.style.color = '#f57f17';
+        circle.style.stroke = '#f57f17';
+      } else {
+        msg.textContent = 'يُوصَى بِمُرَاجَعَةِ الدَّرْسِ وَإِعَادَةِ التَّطْبِيقِ مَرَّةً أُخْرَى لِتَثْبِيتِ الْمَفَاهِيمِ.';
+        msg.style.background = '#ffebee';
+        msg.style.color = '#c62828';
+        circle.style.stroke = '#c62828';
+      }
+
+      finalScreen.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function initAllActivities() {
+      verifySubscription();
+    }
+    window.onload = initAllActivities;
+  </script>
+
+</body>
+</html>
