@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>مركز التعلم التفاعلي</title>
+  
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #f5f9fc;
+      color: #263238;
+      margin: 0;
+      padding: 12px;
+      padding-bottom: 30px;
+      font-size: 1.05rem;
+    }
+
+    /* الرأس */
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #1976d2, #0d47a1);
+      padding: 24px 18px;
+      border-radius: 20px;
+      color: #fff;
+      box-shadow: 0 6px 16px rgba(25, 118, 210, 0.25);
+    }
+    .header h1 {
+      margin: 0 0 8px 0;
+      font-size: 1.6rem;
+      font-weight: 900;
+    }
+    .header p {
+      margin: 0;
+      font-size: 1rem;
+      opacity: 0.95;
+    }
+
+    /* شاشة التحميل */
+    .loading-screen {
+      text-align: center;
+      padding: 50px 20px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .spinner {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      border: 5px solid #e3f2fd;
+      border-top-color: #1976d2;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .loading-text {
+      color: #1976d2;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    /* بطاقة المستوى */
+    .level-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      border-top: 6px solid #1976d2;
+    }
+    .level-card.locked {
+      border-top-color: #b0bec5;
+      opacity: 0.75;
+    }
+
+    .level-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px dashed #e3f2fd;
+    }
+    .level-title {
+      color: #0d47a1;
+      font-size: 1.25rem;
+      font-weight: 900;
+      margin: 0;
+    }
+    .level-status {
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 10px;
+    }
+    .level-status.open {
+      background: #c8e6c9;
+      color: #1b5e20;
+    }
+    .level-status.closed {
+      background: #ffcdd2;
+      color: #b71c1c;
+    }
+
+    /* أقسام المواد */
+    .subject-section {
+      margin-bottom: 16px;
+    }
+    .subject-title {
+      color: #e65100;
+      font-size: 1.1rem;
+      font-weight: 900;
+      margin: 12px 0 8px 0;
+      padding-right: 8px;
+      border-right: 4px solid #ff9800;
+      padding-right: 10px;
+    }
+
+    /* روابط الدروس */
+    .lesson-link {
+      display: flex;
+      align-items: center;
+      padding: 12px 14px;
+      margin: 6px 0;
+      background: #f8fafc;
+      border: 2px solid #e3f2fd;
+      border-radius: 12px;
+      text-decoration: none;
+      color: #263238;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+    .lesson-link:hover {
+      background: #e3f2fd;
+      border-color: #1976d2;
+      transform: translateX(-4px);
+    }
+    .lesson-link .icon {
+      font-size: 1.2rem;
+      margin-left: 10px;
+    }
+
+    /* رسالة القفل */
+    .lock-message {
+      background: #ffebee;
+      border: 2px solid #ef9a9a;
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+      color: #c62828;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    .lock-message a {
+      display: inline-block;
+      background: #c62828;
+      color: #fff;
+      padding: 8px 18px;
+      border-radius: 10px;
+      text-decoration: none;
+      margin-top: 8px;
+      font-weight: 900;
+    }
+
+    /* رسالة خطأ عامة */
+    .error-screen {
+      text-align: center;
+      padding: 30px 20px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .error-icon { font-size: 50px; margin-bottom: 10px; }
+    .error-text {
+      color: #c62828;
+      font-weight: 700;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    /* التذييل */
+    .footer {
+      text-align: center;
+      color: #90a4ae;
+      font-size: 0.85rem;
+      margin-top: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>📚 مركز التعلم التفاعلي</h1>
+    <p>اختر المستوى والدرس لتبدأ رحلة التعلم</p>
+  </div>
+
+  <div id="app-content">
+    <div class="loading-screen">
+      <div class="spinner"></div>
+      <div class="loading-text">جَارٍ التَّحَقُّقُ مِنَ الِاشْتِرَاكِ...</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    © مركز التعلم التفاعلي
+  </div>
+
+<script>
+  // ========================================
+  // ⚙️ إعدادات المشروع
+  // ========================================
+  
+  // رابط Vercel (الوسيط)
+  const VERCEL_URL = "https://interactive-lessons-nine.vercel.app";
+  
+  // معرفات القنوات الثلاث
+  const CHANNELS = {
+    level1: { 
+      id: "-1004456852024", 
+      name: "السنة الأولى",
+      link: "https://t.me/c/4456852024"
+    },
+    level2: { 
+      id: "-1004461185731", 
+      name: "السنة الثانية",
+      link: "https://t.me/c/4461185731"
+    },
+    level3: { 
+      id: "-1003910412986", 
+      name: "السنة الثالثة",
+      link: "https://t.me/c/3910412986"
+    }
+  };
+
+  // ========================================
+  // 📚 بيانات الدروس
+  // أضف دروسك هنا حسب الحاجة
+  // ========================================
+  const LESSONS = {
+    level1: {
+      name: "السنة الأولى ابتدائي",
+      subjects: {
+        arabic: {
+          name: "📖 اللغة العربية",
+          lessons: [
+            { title: "الدرس 1: أحمد يرحب بكم", url: "level1/arabic/unit1/lesson1.html" }
+          ]
+        },
+        math: {
+          name: "📐 الرياضيات",
+          lessons: [
+            // أضف دروس الرياضيات هنا
+          ]
+        },
+        memorization: {
+          name: "🎵 المحفوظات",
+          lessons: [
+            // أضف دروس المحفوظات هنا
+          ]
+        }
+      }
+    },
+    level2: {
+      name: "السنة الثانية ابتدائي",
+      subjects: {
+        arabic: {
+          name: "📖 اللغة العربية",
+          lessons: [
+            { title: "الدرس 1: اليوم نعود إلى المدرسة", url: "level2/arabic/unit1/lesson1.html" }
+          ]
+        },
+        math: {
+          name: "📐 الرياضيات",
+          lessons: []
+        },
+        memorization: {
+          name: "🎵 المحفوظات",
+          lessons: []
+        }
+      }
+    },
+    level3: {
+      name: "السنة الثالثة ابتدائي",
+      subjects: {
+        arabic: {
+          name: "📖 اللغة العربية",
+          lessons: [
+            { title: "الدرس 1: الفراشة والنملة", url: "level3/arabic/unit1/lesson1.html" }
+          ]
+        },
+        islamic: {
+          name: "🕌 التربية الإسلامية",
+          lessons: []
+        },
+        math: {
+          name: "📐 الرياضيات",
+          lessons: []
+        },
+        memorization: {
+          name: "🎵 المحفوظات",
+          lessons: []
+        }
+      }
+    }
+  };
+
+  // ========================================
+  // تهيئة Telegram
+  // ========================================
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  // ========================================
+  // التحقق من الاشتراك في قناة
+  // ========================================
+  async function checkSubscription(channelId, userId) {
+    try {
+      const url = `${VERCEL_URL}/api/check-subscription?userId=${userId}&channelId=${channelId}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      return data.isSubscribed === true;
+    } catch (error) {
+      console.error("خطأ في التحقق:", error);
+      return false;
+    }
+  }
+
+  // ========================================
+  // عرض المستويات والدروس
+  // ========================================
+  function renderContent(access) {
+    const container = document.getElementById('app-content');
+    container.innerHTML = '';
+
+    Object.keys(LESSONS).forEach(levelKey => {
+      const level = LESSONS[levelKey];
+      const hasAccess = access[levelKey];
+      const channel = CHANNELS[levelKey];
+
+      const card = document.createElement('div');
+      card.className = 'level-card' + (hasAccess ? '' : ' locked');
+
+      let html = `
+        <div class="level-header">
+          <h2 class="level-title">${level.name}</h2>
+          <span class="level-status ${hasAccess ? 'open' : 'closed'}">
+            ${hasAccess ? '✅ مفتوح' : '🔒 مقفل'}
+          </span>
+        </div>
+      `;
+
+      if (!hasAccess) {
+        // عرض رسالة القفل
+        html += `
+          <div class="lock-message">
+            🔒 هَذَا الْمُسْتَوَى مُقْفَلٌ
+            <br>
+            <span style="font-size:0.9rem;">لِفَتْحِهِ، انْضَمَّ إِلَى قَنَاةِ ${channel.name}</span>
+            <br>
+            <a href="${channel.link}" target="_blank">📢 الانضمام إلى القناة</a>
+          </div>
+        `;
+      } else {
+        // عرض المواد والدروس
+        Object.keys(level.subjects).forEach(subjectKey => {
+          const subject = level.subjects[subjectKey];
+          
+          if (subject.lessons.length === 0) {
+            // تجاهل المواد الفارغة
+            return;
+          }
+
+          html += `<div class="subject-section">`;
+          html += `<h3 class="subject-title">${subject.name}</h3>`;
+          
+          subject.lessons.forEach(lesson => {
+            html += `
+              <a href="${lesson.url}" class="lesson-link">
+                <span class="icon">▶️</span>
+                <span>${lesson.title}</span>
+              </a>
+            `;
+          });
+          
+          html += `</div>`;
+        });
+      }
+
+      card.innerHTML = html;
+      container.appendChild(card);
+    });
+  }
+
+  // ========================================
+  // عرض رسالة خطأ
+  // ========================================
+  function showError(message) {
+    document.getElementById('app-content').innerHTML = `
+      <div class="error-screen">
+        <div class="error-icon">⚠️</div>
+        <div class="error-text">${message}</div>
+      </div>
+    `;
+  }
+
+  // ========================================
+  // التشغيل الرئيسي
+  // ========================================
+  async function init() {
+    // 1. الحصول على معرف المستخدم
+    const userId = tg?.initDataUnsafe?.user?.id;
+
+    if (!userId) {
+      showError("يُرْجَى فَتْحُ التَّطْبِيقِ مِنْ دَاخِلِ تِلْيِجْرَام لِلتَّحَقُّقِ مِنَ الِاشْتِرَاكِ.");
+      return;
+    }
+
+    // 2. التحقق من الاشتراكات الثلاثة بالتوازي (أسرع)
+    try {
+      const [hasLevel1, hasLevel2, hasLevel3] = await Promise.all([
+        checkSubscription(CHANNELS.level1.id, userId),
+        checkSubscription(CHANNELS.level2.id, userId),
+        checkSubscription(CHANNELS.level3.id, userId)
+      ]);
+
+      // 3. عرض المحتوى
+      renderContent({
+        level1: hasLevel1,
+        level2: hasLevel2,
+        level3: hasLevel3
+      });
+    } catch (error) {
+      showError("حَدَثَ خَطَأٌ فِي الِاتِّصَالِ. حَاوِلْ مَرَّةً أُخْرَى.");
+    }
+  }
+
+  // تشغيل التطبيق عند التحميل
+  window.addEventListener('load', init);
+</script>
+</body>
+</html>
