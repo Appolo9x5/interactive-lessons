@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>السنة الأولى • فِي مَنْزِلِنَا</title>
+  
+  <!-- مكتبة Telegram WebApp -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #ff5722;
+      --primary-dark: #e64a19;
+      --secondary: #4caf50;
+      --success: #2e7d32;
+      --error: #c62828;
+      --bg: #fffdf9;
+      --card-bg: #ffffff;
+      --text: #37474f;
+      --accent-yellow: #ffeb3b;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 12px;
+      padding-bottom: 75px;
+      font-size: 1.15rem;
+    }
+
+    /* شاشة قفل الاشتراك الإجباري */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(255, 87, 34, 0.15);
+      border: 2px solid #ffe0b2;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.35rem; font-weight: 900; color: var(--primary-dark); margin-bottom: 10px; }
+    .lock-desc { font-size: 1.05rem; color: var(--text); line-height: 1.6; margin-bottom: 22px; font-weight: 700; }
+
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: var(--primary);
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 900;
+      border-radius: 14px;
+      font-size: 1.15rem;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+    }
+
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: var(--success);
+      border: 2px solid var(--success);
+      padding: 14px;
+      font-weight: 900;
+      border-radius: 14px;
+      font-size: 1.15rem;
+      cursor: pointer;
+    }
+
+    .sub-status-msg { margin-top: 15px; font-size: 1rem; font-weight: 800; min-height: 24px; }
+
+    /* الشريط العلوي */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      background: #ffffff;
+      padding: 10px 16px;
+      border-radius: 16px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+      border: 2px solid #ffe0b2;
+    }
+    .app-title-mini { font-weight: 900; color: var(--primary-dark); font-size: 1.25rem; }
+    .audio-btn {
+      background: #fff3e0;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .page-badge {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .lesson-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 24px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+      border-top: 8px solid var(--primary);
+      border-bottom: 4px solid #ffe0b2;
+    }
+
+    .lesson-title {
+      color: var(--primary-dark);
+      font-weight: 900;
+      font-size: 1.5rem;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 16px;
+      border-bottom: 3px dashed #ffccbc;
+      padding-bottom: 10px;
+    }
+
+    .lesson-text-box {
+      background: #fff8e1;
+      border: 2px solid #ffe082;
+      border-right: 8px solid #ffb300;
+      border-radius: 16px;
+      padding: 16px;
+      line-height: 2.2;
+      font-size: 1.35rem;
+      margin-bottom: 18px;
+      color: #263238;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .instruction { font-weight: 900; color: #bf360c; margin: 18px 0 12px 0; font-size: 1.25rem; }
+
+    .audio-wrapper {
+      background: #e8f5e9;
+      padding: 16px;
+      border-radius: 16px;
+      margin: 12px 0 18px 0;
+      border: 2px solid #a5d6a7;
+      text-align: center;
+    }
+    .media-player { width: 100%; max-width: 420px; }
+
+    .hero-img-box {
+      text-align: center;
+      margin: 12px 0 18px 0;
+    }
+    .hero-img-box img {
+      max-width: 220px;
+      height: auto;
+      border-radius: 16px;
+      background: #fff;
+    }
+
+    .big-btn {
+      display: block;
+      width: 100%;
+      background: #ffffff;
+      border: 3px solid #cfd8dc;
+      padding: 14px 18px;
+      border-radius: 16px;
+      font-size: 1.25rem;
+      font-weight: 900;
+      margin: 10px 0;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      color: #37474f;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+    }
+    .big-btn:active { transform: scale(0.98); }
+
+    .locked { pointer-events: none !important; opacity: 0.9; }
+    .correct { background-color: #c8e6c9 !important; border-color: var(--success) !important; color: #1b5e20 !important; }
+    .wrong { background-color: #ffcdd2 !important; border-color: var(--error) !important; color: #b71c1c !important; }
+
+    .word-chip {
+      display: inline-block;
+      background: #e3f2fd;
+      border: 3px solid #90caf9;
+      color: #0d47a1;
+      padding: 10px 18px;
+      margin: 6px;
+      border-radius: 16px;
+      font-size: 1.2rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+    }
+    .word-chip.selected {
+      border-color: var(--primary);
+      background: #ffe0b2;
+      transform: scale(1.08);
+    }
+
+    .drop-zone {
+      display: inline-block;
+      min-width: 95px;
+      min-height: 44px;
+      border-bottom: 3px dashed #ff9800;
+      margin: 4px;
+      vertical-align: middle;
+      text-align: center;
+      color: #bf360c;
+      font-weight: 900;
+      font-size: 1.15rem;
+      background: #fff3e0;
+      border-radius: 10px;
+      padding: 6px 10px;
+      line-height: 32px;
+      cursor: pointer;
+    }
+
+    .eval-badge {
+      background: #f1f8e9;
+      border: 2px solid #c8e6c9;
+      padding: 10px 16px;
+      border-radius: 14px;
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-around;
+      font-weight: 900;
+      font-size: 1.15rem;
+    }
+    .text-success { color: var(--success); }
+    .text-error { color: var(--error); }
+
+    .grid-2-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 15px 0;
+    }
+
+    .grid-4-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 15px 0;
+    }
+
+    .card-item {
+      background: #fafafa;
+      border: 2.5px solid #cfd8dc;
+      border-radius: 16px;
+      padding: 10px;
+      text-align: center;
+    }
+    .card-item img {
+      width: 100%;
+      max-width: 120px;
+      height: 100px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 6px auto;
+    }
+
+    .tf-inline-btn {
+      background: #ffffff;
+      border: 2px solid #b0bec5;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 900;
+      margin: 4px 6px;
+      cursor: pointer;
+    }
+
+    .item-quiz-card {
+      background: #fafafa;
+      border: 2.5px solid #ffe0b2;
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .item-quiz-card img {
+      width: 100%;
+      max-width: 130px;
+      height: 110px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto 10px auto;
+    }
+
+    #final-report {
+      text-align: center;
+      background: #ffffff;
+      border: 4px solid var(--primary);
+      border-radius: 24px;
+      padding: 26px 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      margin-top: 30px;
+    }
+    .final-score { font-size: 3.5rem; font-weight: 900; color: var(--primary-dark); margin: 12px 0; }
+    .final-remark { font-size: 1.4rem; font-weight: 900; padding: 10px 20px; border-radius: 20px; display: inline-block; margin-bottom: 20px; }
+
+    .btn-restart {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 16px 24px;
+      font-size: 1.3rem;
+      font-weight: 900;
+      border-radius: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+
+    .btn-exit {
+      background: #546e7a;
+      color: #ffffff;
+      border: none;
+      padding: 16px 24px;
+      font-size: 1.3rem;
+      font-weight: 900;
+      border-radius: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 12px;
+    }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      background: #e64a19;
+      color: #ffffff;
+      border: none;
+      padding: 16px 24px;
+      font-size: 1.2rem;
+      font-weight: 900;
+      border-radius: 16px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- نافذة قفل الاشتراك الإجباري -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ أَنْشِطَةِ وَأَلْعَابِ الدَّرْسِ، يُرْجَى الِانْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الِاشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel" id="channel-link">📢 الِانْضِمَامُ إِلَى الْقَنَاةِ</a>
+      <button class="btn-check-sub" onclick="verifySubscription()">✅ تَأْكِيدُ الِاشْتِرَاكِ</button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <div class="top-bar">
+    <span class="app-title-mini">السنة الأولى • فِي مَنْزِلِنَا</span>
+    <button class="audio-btn" id="audio-toggle" onclick="toggleAudio()" title="كتم/تشغيل الصوت">🔊</button>
+  </div>
+
+  <!-- ========================================================
+       الجزء 1: فهم المنطوق (الأسئلة الرسمية السبعة)
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">1. فَهْمُ الْمَنْطُوقِ</span>
+    <h2 class="lesson-title">أَسْتَمِعُ وَأَفْهَمُ • عَلَى مَائِدَةِ الطَّعَامِ</h2>
+    
+    <div class="hero-img-box">
+      <img src="family_dining_table.png" alt="مائدة الطعام">
+    </div>
+
+    <p class="instruction">🎧 اِسْتَمِعْ إِلَى النَّصِّ الْمَنْطُوقِ :</p>
+    <div class="audio-wrapper">
+      <audio controls class="media-player" preload="auto">
+        <source src="ala_maidat_attaam.mp3" type="audio/mpeg">
+        متصفحك لا يدعم مشغل الصوت.
+      </audio>
+    </div>
+
+    <p class="instruction">اخْتَرِ الْإِجَابَةَ الصَّحِيحَةَ :</p>
+    <div id="ex-listening-questions"></div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-list-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-list-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 2: كتاب التلميذ - صفحة 17 (أستعمل: كَبِيرٌ / صَغِيرٌ)
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 17</span>
+    <h2 class="lesson-title">أُعَبِّرُ وَأَبْنِي • أَسْتَعْمِلُ : كَبِيرٌ / صَغِيرٌ</h2>
+    
+    <div class="lesson-text-box">
+      « مَنْزِلُنَا جَمِيلٌ وَوَاسِعٌ ، فِيهِ غُرْفَةُ الْجُلُوسِ وَغُرَفُ النَّوْمِ وَمَطْبَخٌ وَحَمَّامٌ وَبَهْوٌ كَبِيرٌ »
+    </div>
+
+    <p class="instruction">أَضَعُ ( كَبِيرَةٌ / صَغِيرَةٌ ) فِي الْفَرَاغِ الْمُنَاسِبِ :</p>
+    <div style="text-align:center;" id="pool-p17-sizes"></div>
+    <div style="text-align: center; font-size: 1.35rem; line-height: 2.8; margin-top:10px;" id="zone-p17-sizes-container">
+      • غُرْفَةُ الْجُلُوسِ <span class="drop-zone" data-ans="كَبِيرَةٌ" style="min-width:120px;"></span>.<br>
+      • غُرْفَتِي <span class="drop-zone" data-ans="صَغِيرَةٌ" style="min-width:120px;"></span>.
+    </div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-p17-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-p17-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 3: كتاب التلميذ - صفحة 18 (في غرفة الجلوس أريكة)
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 18</span>
+    <h2 class="lesson-title">قِرَاءةٌ • فِي غُرْفَةِ الْجُلُوسِ أَرِيكَةٌ</h2>
+    
+    <p class="instruction">1. رَتِّبِ الْكَلِمَاتِ لِتُكَوِّنَ الْجُمْلَةَ :</p>
+    <div style="text-align:center;" id="pool-p18-sentence"></div>
+    <div style="text-align: center; margin: 15px 0;" id="zone-p18-sentence-container">
+      <span class="drop-zone" data-ans="فِي"></span>
+      <span class="drop-zone" data-ans="غُرْفَةِ الْجُلُوسِ" style="min-width:130px;"></span>
+      <span class="drop-zone" data-ans="أَرِيكَةٌ"></span>.
+    </div>
+
+    <hr style="margin:20px 0; border:0; border-top:2px dashed #ffe0b2;">
+
+    <p class="instruction">2. أَكْتَشِفُ الْكَلِمَاتِ وَأُثَبِّتُ : صِلْ كُلَّ صُورَةٍ بِالْكَلِمَةِ الْمُنَاسِبَةِ :</p>
+    <div style="text-align:center;" id="pool-p18-words"></div>
+
+    <div class="grid-4-cards" id="zone-p18-words-container">
+      <div class="card-item">
+        <img src="furniture_sofa.png" alt="أريكة">
+        <span class="drop-zone" data-ans="أَرِيكَةٌ" style="min-width:85px;"></span>
+      </div>
+      <div class="card-item">
+        <img src="room_kitchen.png" alt="مطبخ">
+        <span class="drop-zone" data-ans="مَطْبَخٌ" style="min-width:85px;"></span>
+      </div>
+      <div class="card-item">
+        <img src="clean_bathroom.png" alt="حمام">
+        <span class="drop-zone" data-ans="حَمَّامٌ" style="min-width:85px;"></span>
+      </div>
+      <div class="card-item">
+        <img src="room_living.png" alt="غرفة الجلوس">
+        <span class="drop-zone" data-ans="غُرْفَةُ الْجُلُوسِ" style="min-width:110px;"></span>
+      </div>
+    </div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-p18-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-p18-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 4: كتاب التلميذ - صفحة 19 (في غرفتي خزانة وسرير)
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 19</span>
+    <h2 class="lesson-title">قِرَاءَةٌ • فِي غُرْفَتِي خِزَانَةٌ وَسَرِيرٌ</h2>
+    
+    <p class="instruction">1. رَتِّبِ الْكَلِمَاتِ لِتُكَوِّنَ الْجُمْلَةَ :</p>
+    <div style="text-align:center;" id="pool-p19-sentence"></div>
+    <div style="text-align: center; margin: 15px 0;" id="zone-p19-sentence-container">
+      <span class="drop-zone" data-ans="فِي"></span>
+      <span class="drop-zone" data-ans="غُرْفَتِي"></span>
+      <span class="drop-zone" data-ans="خِزَانَةٌ"></span>
+      <span class="drop-zone" data-ans="وَسَرِيرٌ"></span>.
+    </div>
+
+    <hr style="margin:20px 0; border:0; border-top:2px dashed #ffe0b2;">
+
+    <p class="instruction">2. أَكْتَشِفُ الْكَلِمَاتِ وَأُثَبِّتُ : اخْتَرِ الْكَلِمَاتِ الْمُنَاسِبَةَ :</p>
+    <div style="text-align:center;" id="pool-p19-words"></div>
+
+    <div class="grid-4-cards" id="zone-p19-words-container">
+      <div class="card-item">
+        <img src="furniture_bed.png" alt="سرير">
+        <span class="drop-zone" data-ans="سَرِيرٌ" style="min-width:85px;"></span>
+      </div>
+      <div class="card-item">
+        <img src="furniture_closet.png" alt="خزانة">
+        <span class="drop-zone" data-ans="خِزَانَةٌ" style="min-width:85px;"></span>
+      </div>
+      <div class="card-item">
+        <img src="study_desk.png" alt="مكتب">
+        <span class="drop-zone" data-ans="مَكْتَبٌ" style="min-width:85px;"></span>
+      </div>
+      <div class="card-item">
+        <img src="room_bedroom.png" alt="غرفة النوم">
+        <span class="drop-zone" data-ans="غُرْفَةُ النَّوْمِ" style="min-width:105px;"></span>
+      </div>
+    </div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-p19-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-p19-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 5: كتاب التلميذ - صفحة 20 (التربية الإسلامية: أستأذن)
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 20</span>
+    <h2 class="lesson-title">التَّرْبِيَةُ الْإِسْلَامِيَّةُ • أَسْتَأْذِنُ</h2>
+    
+    <div class="grid-2-cards">
+      <div class="card-item">
+        <img src="child_knocking_door.png" alt="أطرق الباب">
+        <p style="margin:4px 0; font-size:1rem; font-weight:700;">أَطْرُقُ الْبَابَ بِأَدَبٍ</p>
+      </div>
+      <div class="card-item">
+        <img src="child_raising_hand.png" alt="أطلب الإذن">
+        <p style="margin:4px 0; font-size:1rem; font-weight:700;">أَرْفَعُ إِصْبَعِي لِأَسْتَأْذِنَ</p>
+      </div>
+    </div>
+
+    <div class="lesson-text-box">
+      « الْإِسْتِئْذَانُ مِنْ آدَابِ الْمُسْلِمِ ».<br>
+      « أَسْتَأْذِنُ لِأَنِّي أَحْتَرِمُ النَّاسَ ».<br>
+      <strong>« أَنَا طِفْلٌ مُهَذَّبٌ أَسْتَأْذِنُ غَيْرِي »</strong>
+    </div>
+
+    <p class="instruction">اخْتَرِ التَّصَرُّفَ الصَّحِيحَ :</p>
+    <div id="ex-islamic-permission"></div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-islam-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-islam-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 6: دفتر الأنشطة - صفحة 8 (أثبت 1 + أثبت 2)
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">دَفْتَرُ الأَنْشِطَةِ - صَفْحَةُ 8</span>
+    <h2 class="lesson-title">أُثَبِّتُ (1) وَ أُثَبِّتُ (2)</h2>
+    
+    <p class="instruction">1. أُثَبِّتُ (1) : أَرْبِطُ كُلَّ كَلِمَةٍ بِصُورَةِ الْغُرْفَةِ الْمُنَاسِبَةِ :</p>
+    <div style="text-align:center;" id="pool-act8-rooms"></div>
+
+    <div class="grid-4-cards" id="zone-act8-rooms-container" style="margin-top:12px;">
+      <div class="card-item">
+        <img src="room_kitchen.png" alt="المطبخ">
+        <span class="drop-zone" data-ans="الْمَطْبَخُ" style="min-width:95px;"></span>
+      </div>
+      <div class="card-item">
+        <img src="room_bedroom.png" alt="غرفة النوم">
+        <span class="drop-zone" data-ans="غُرْفَةُ النَّوْمِ" style="min-width:105px;"></span>
+      </div>
+      <div class="card-item">
+        <img src="room_living.png" alt="غرفة الجلوس">
+        <span class="drop-zone" data-ans="غُرْفَةُ الْجُلُوسِ" style="min-width:105px;"></span>
+      </div>
+      <div class="card-item">
+        <img src="clean_bathroom.png" alt="الحمام">
+        <span class="drop-zone" data-ans="الْحَمَّامُ" style="min-width:95px;"></span>
+      </div>
+    </div>
+
+    <hr style="margin:20px 0; border:0; border-top:2px dashed #ffe0b2;">
+
+    <p class="instruction">2. أُثَبِّتُ (2) : هَلْ يُوجَدُ هَذَا الْمَكَانُ دَاخِلَ مَنْزِلِ أَحْمَدَ ؟ (صَحِيحٌ ✅ / خَطَأٌ ❌) :</p>
+    <div id="box-act8-home-places" style="text-align:center; margin:15px 0;"></div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-act8-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-act8-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 7: دفتر الأنشطة - صفحة 9 (أنتج: تصنيف الأدوات بالصور)
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">دَفْتَرُ الأَنْشِطَةِ - صَفْحَةُ 9</span>
+    <h2 class="lesson-title">أُنْتِجُ • أُصَنِّفُ أَثَاثَ وَأَدَوَاتِ الْمَنْزِلِ</h2>
+    
+    <p class="instruction">تَأَمَّلِ الصُّورَةَ، ثُمَّ اخْتَرِ الْغُرْفَةَ الْمُنَاسِبَةَ لِوَضْعِهَا :</p>
+    <div id="box-act9-sorting"></div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-act9-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-act9-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       التقرير النهائي الشامل
+       ======================================================== -->
+  <div id="final-report">
+    <h2 style="color: var(--primary-dark); margin-top: 0;">🎉 بَطَلُ الْيَوْمِ !</h2>
+    <p style="color: #546e7a; font-size:1.25rem; margin-bottom:15px; font-weight:700;">نَتِيجَةُ تَمَارِينِكَ الرَّائِعَةِ :</p>
+    
+    <div style="display:flex; justify-content: space-around; margin: 15px 0;">
+      <div style="color: var(--success); font-weight:900; font-size:1.35rem;">
+        صَحِيحَة ⭐<br><span id="total-c" style="font-size:2.2rem;">0</span>
+      </div>
+      <div style="color: var(--error); font-weight:900; font-size:1.35rem;">
+        خَاطِئَة ❌<br><span id="total-w" style="font-size:2.2rem;">0</span>
+      </div>
+    </div>
+
+    <div class="final-score" id="total-percent">0%</div>
+    <div class="final-remark" id="total-remark">هَيَّا نَبْدَأُ اللَّعِبَ وَالتَّعَلُّمَ!</div>
+    
+    <button class="btn-restart" onclick="restartEntireLesson()">🔄 أَلْعَبُ مَرَّةً أُخْرَى</button>
+    <button class="btn-exit" onclick="exitTelegramApp()">🚪 خُرُوجٌ</button>
+    <a href="../../../index.html" class="btn-back-home">← الْعَوْدَةُ إِلَى الْفِهْرِسِ</a>
+  </div>
+
+<script>
+  // ⚠️ تم حذف BOT_TOKEN من هنا (لأسباب أمنية)
+  // التوكن الآن محفوظ بأمان في Vercel
+  const CHANNEL_ID = "-1004456852024";
+
+  // تهيئة Telegram WebApp
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  // التحقق من الاشتراك الإجباري (عبر الوسيط على Vercel)
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#ff5722";
+    statusMsg.textContent = "جَارٍ التَّحَقُّقُ مِنَ الِاشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e64a19";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      // ⬇️ استدعاء الوسيط على Vercel
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارٍ فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الِانْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الِاتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  // إدارة الصوت والتفاعل
+  let audioEnabled = true;
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  let actx = null;
+
+  function getAudioContext() {
+    if (!actx) actx = new AudioContext();
+    if (actx.state === 'suspended') actx.resume();
+    return actx;
+  }
+
+  function toggleAudio() {
+    audioEnabled = !audioEnabled;
+    document.getElementById('audio-toggle').textContent = audioEnabled ? '🔊' : '🔇';
+  }
+
+  function playTone(freq, type, duration) {
+    if(!audioEnabled) return;
+    try {
+      const ctx = getAudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch(e) {}
+  }
+
+  function playSuccess() {
+    if(tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+    playTone(523.25, 'sine', 0.12);
+    setTimeout(() => playTone(659.25, 'sine', 0.12), 120);
+    setTimeout(() => playTone(783.99, 'sine', 0.25), 240);
+  }
+
+  function playError() {
+    if(tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('error');
+    playTone(180, 'sawtooth', 0.35);
+  }
+
+  function playTap() {
+    if(tg && tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+    playTone(600, 'triangle', 0.05);
+  }
+
+  function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  let totalCorrectAnswers = 0;
+  let totalWrongAnswers = 0;
+
+  function registerScore(badgePrefix, isCorrect) {
+    if (isCorrect) {
+      totalCorrectAnswers++;
+      const el = document.getElementById(`${badgePrefix}-c`);
+      if (el) el.textContent = parseInt(el.textContent) + 1;
+    } else {
+      totalWrongAnswers++;
+      const el = document.getElementById(`${badgePrefix}-w`);
+      if (el) el.textContent = parseInt(el.textContent) + 1;
+    }
+    updateLiveReport();
+  }
+
+  function updateLiveReport() {
+    document.getElementById('total-c').textContent = totalCorrectAnswers;
+    document.getElementById('total-w').textContent = totalWrongAnswers;
+
+    const answeredCount = totalCorrectAnswers + totalWrongAnswers;
+    const percent = answeredCount === 0 ? 0 : Math.round((totalCorrectAnswers / answeredCount) * 100);
+    document.getElementById('total-percent').textContent = percent + '%';
+
+    const remarkEl = document.getElementById('total-remark');
+    if (answeredCount < 4) {
+      remarkEl.textContent = 'وَاصِلْ يَا بَطَلُ! 🌟';
+      remarkEl.style.backgroundColor = '#fff3e0';
+      remarkEl.style.color = '#e65100';
+    } else if (percent >= 80) {
+      remarkEl.textContent = 'مُمْتَازٌ جِدًّا! أَنْتَ رَائِعٌ! 🏆';
+      remarkEl.style.backgroundColor = '#c8e6c9';
+      remarkEl.style.color = '#1b5e20';
+    } else {
+      remarkEl.textContent = 'أَحْسَنْتَ، حَاوِلْ مَرَّةً أُخْرَى! 👏';
+      remarkEl.style.backgroundColor = '#ffe0b2';
+      remarkEl.style.color = '#bf360c';
+    }
+  }
+
+  function buildSimpleBigMCQ(containerId, badgeId, questions) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+
+    questions.forEach(q => {
+      const wrap = document.createElement('div');
+      wrap.style.marginBottom = "18px";
+      wrap.innerHTML = `<span style="font-size:1.25rem; font-weight:900; display:block; margin-bottom:8px; color:#bf360c;">• ${q.text}</span>`;
+      
+      const btnGroup = document.createElement('div');
+      const shuffledOptions = shuffleArray(q.options);
+
+      shuffledOptions.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'big-btn';
+        btn.textContent = opt.label;
+
+        btn.onclick = () => {
+          playTap();
+          Array.from(btnGroup.querySelectorAll('.big-btn')).forEach(b => b.classList.add('locked'));
+
+          if (opt.correct) {
+            btn.classList.add('correct');
+            playSuccess();
+            registerScore(badgeId, true);
+          } else {
+            btn.classList.add('wrong');
+            playError();
+            registerScore(badgeId, false);
+          }
+        };
+        btnGroup.appendChild(btn);
+      });
+
+      wrap.appendChild(btnGroup);
+      container.appendChild(wrap);
+    });
+  }
+
+  function buildIllustratedQuiz(containerId, badgeId, items) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    const shuffledItems = shuffleArray(items);
+
+    shuffledItems.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'item-quiz-card';
+
+      card.innerHTML = `
+        <img src="${item.img}" alt="${item.label}">
+        <span style="font-size:1.3rem; font-weight:900; display:block; margin-bottom:10px; color:#bf360c;">${item.label}</span>
+      `;
+
+      const btnGroup = document.createElement('div');
+      const shuffledOpts = shuffleArray(item.options);
+
+      shuffledOpts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'big-btn';
+        btn.textContent = opt.label;
+
+        btn.onclick = () => {
+          playTap();
+          Array.from(btnGroup.querySelectorAll('.big-btn')).forEach(b => b.classList.add('locked'));
+
+          if (opt.correct) {
+            btn.classList.add('correct');
+            playSuccess();
+            registerScore(badgeId, true);
+          } else {
+            btn.classList.add('wrong');
+            playError();
+            registerScore(badgeId, false);
+          }
+        };
+        btnGroup.appendChild(btn);
+      });
+
+      card.appendChild(btnGroup);
+      container.appendChild(card);
+    });
+  }
+
+  function buildTFInteractive(containerId, badgeId, items) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    const shuffled = shuffleArray(items);
+
+    shuffled.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'card-item';
+      
+      let imgTag = item.img ? `<img src="${item.img}" alt="${item.label}">` : '';
+      card.innerHTML = `
+        ${imgTag}
+        <p style="margin:6px 0 10px 0; font-weight:900; font-size:1.25rem; color:#263238;">${item.label}</p>
+        <div>
+          <button class="tf-inline-btn" data-val="true">صَحِيحٌ ✅</button>
+          <button class="tf-inline-btn" data-val="false">خَطَأٌ ❌</button>
+        </div>
+      `;
+
+      const btns = card.querySelectorAll('.tf-inline-btn');
+      btns.forEach(btn => {
+        btn.onclick = () => {
+          playTap();
+          btns.forEach(b => b.classList.add('locked'));
+          const chosen = btn.getAttribute('data-val') === 'true';
+
+          if (chosen === item.isCorrect) {
+            btn.classList.add('correct');
+            playSuccess();
+            registerScore(badgeId, true);
+          } else {
+            btn.classList.add('wrong');
+            playError();
+            registerScore(badgeId, false);
+          }
+        };
+      });
+
+      container.appendChild(card);
+    });
+  }
+
+  let activeSelectedWord = null;
+
+  function setupTapToFill(poolId, zonesSelector, badgeId, wordsList) {
+    const pool = document.getElementById(poolId);
+    if (!pool) return;
+    pool.innerHTML = '';
+    const shuffledWords = shuffleArray(wordsList);
+
+    shuffledWords.forEach(wObj => {
+      const span = document.createElement('span');
+      span.className = 'word-chip';
+      span.textContent = wObj.label;
+      span.setAttribute('data-val', wObj.val);
+
+      span.onclick = () => {
+        if (span.classList.contains('locked')) return;
+        playTap();
+        document.querySelectorAll('.word-chip.selected').forEach(el => el.classList.remove('selected'));
+        span.classList.add('selected');
+        activeSelectedWord = span;
+      };
+
+      pool.appendChild(span);
+    });
+
+    const zones = document.querySelectorAll(zonesSelector);
+    zones.forEach(zone => {
+      zone.textContent = '';
+      zone.classList.remove('locked', 'correct', 'wrong');
+
+      zone.onclick = () => {
+        if (zone.classList.contains('locked') || !activeSelectedWord) return;
+
+        const expected = zone.getAttribute('data-ans').trim();
+        const actual = activeSelectedWord.getAttribute('data-val').trim();
+
+        activeSelectedWord.classList.remove('selected');
+        activeSelectedWord.classList.add('locked');
+        zone.classList.add('locked');
+
+        zone.textContent = activeSelectedWord.textContent;
+        activeSelectedWord.style.visibility = 'hidden';
+
+        if (expected === actual) {
+          playSuccess();
+          zone.classList.add('correct');
+          registerScore(badgeId, true);
+        } else {
+          playError();
+          zone.classList.add('wrong');
+          registerScore(badgeId, false);
+        }
+
+        activeSelectedWord = null;
+      };
+    });
+  }
+
+  function initAllActivities() {
+    totalCorrectAnswers = 0;
+    totalWrongAnswers = 0;
+    activeSelectedWord = null;
+    updateLiveReport();
+
+    // 1. فهم المنطوق (الأسئلة السبعة)
+    buildSimpleBigMCQ('ex-listening-questions', 'ex-list', [
+      {
+        text: "1. مِنْ أَيْنَ أَحْضَرَتِ الْأُمُّ الطَّعَامَ ؟",
+        options: [
+          { label: "مِنَ الْمَطْبَخِ", correct: true },
+          { label: "مِنَ السُّوقِ", correct: false }
+        ]
+      },
+      {
+        text: "2. مَاذَا قَالَتِ الْأُمُّ ؟",
+        options: [
+          { label: "الطَّعَامُ جَاهِزٌ، هَيَّا إِلَى الْأَكْلِ", correct: true },
+          { label: "حَانَ وَقْتُ النَّوْمِ", correct: false }
+        ]
+      },
+      {
+        text: "3. أَيْنَ كَانَ أَحْمَدُ يَغْسِلُ يَدَيْهِ ؟",
+        options: [
+          { label: "فِي الْحَمَّامِ", correct: true },
+          { label: "فِي الْحَدِيقَةِ", correct: false }
+        ]
+      },
+      {
+        text: "4. أَيْنَ كَانَ الْجَدُّ وَالْجَدَّةُ ؟",
+        options: [
+          { label: "فِي غُرْفَةِ الْجُلُوسِ", correct: true },
+          { label: "فِي الْمَطْبَخِ", correct: false }
+        ]
+      },
+      {
+        text: "5. مَنِ الَّتِي ذَهَبَتْ لِتُنَادِيَ عَلَيْهِمَا ؟",
+        options: [
+          { label: "خَدِيجَةُ", correct: true },
+          { label: "الْمُعَلِّمَةُ", correct: false }
+        ]
+      },
+      {
+        text: "6. أَيْنَ كَانَ الْأَبُ ؟",
+        options: [
+          { label: "فِي غُرْفَةِ النَّوْمِ", correct: true },
+          { label: "فِي الْفِنَاءِ", correct: false }
+        ]
+      },
+      {
+        text: "7. مَاذَا قَالَتِ الْأُمُّ عَنِ الْأَبِ ؟",
+        options: [
+          { label: "لَا تَنْسَيْ أَبَاكِ، هُوَ فِي غُرْفَةِ النَّوْمِ", correct: true },
+          { label: "دَعِي أَبَاكِ نَائِمًا", correct: false }
+        ]
+      }
+    ]);
+
+    // 2. ص 17 : أستعمل (كبير / صغير)
+    setupTapToFill('pool-p17-sizes', '#zone-p17-sizes-container .drop-zone', 'ex-p17', [
+      { label: "كَبِيرَةٌ", val: "كَبِيرَةٌ" },
+      { label: "صَغِيرَةٌ", val: "صَغِيرَةٌ" }
+    ]);
+
+    // 3. ص 18 : أكتشف الجملة (في غرفة الجلوس أريكة)
+    setupTapToFill('pool-p18-sentence', '#zone-p18-sentence-container .drop-zone', 'ex-p18', [
+      { label: "فِي", val: "فِي" },
+      { label: "غُرْفَةِ الْجُلُوسِ", val: "غُرْفَةِ الْجُلُوسِ" },
+      { label: "أَرِيكَةٌ", val: "أَرِيكَةٌ" }
+    ]);
+
+    // ص 18 : أكتشف الكلمات (أريكة، مطبخ، حمام، غرفة الجلوس)
+    setupTapToFill('pool-p18-words', '#zone-p18-words-container .drop-zone', 'ex-p18', [
+      { label: "أَرِيكَةٌ", val: "أَرِيكَةٌ" },
+      { label: "مَطْبَخٌ", val: "مَطْبَخٌ" },
+      { label: "حَمَّامٌ", val: "حَمَّامٌ" },
+      { label: "غُرْفَةُ الْجُلُوسِ", val: "غُرْفَةُ الْجُلُوسِ" }
+    ]);
+
+    // 4. ص 19 : أكتشف الجملة (في غرفتي خزانة وسرير)
+    setupTapToFill('pool-p19-sentence', '#zone-p19-sentence-container .drop-zone', 'ex-p19', [
+      { label: "فِي", val: "فِي" },
+      { label: "غُرْفَتِي", val: "غُرْفَتِي" },
+      { label: "خِزَانَةٌ", val: "خِزَانَةٌ" },
+      { label: "وَسَرِيرٌ", val: "وَسَرِيرٌ" }
+    ]);
+
+    // ص 19 : أثبت (سرير، خزانة، مكتب، غرفة النوم)
+    setupTapToFill('pool-p19-words', '#zone-p19-words-container .drop-zone', 'ex-p19', [
+      { label: "سَرِيرٌ", val: "سَرِيرٌ" },
+      { label: "خِزَانَةٌ", val: "خِزَانَةٌ" },
+      { label: "مَكْتَبٌ", val: "مَكْتَبٌ" },
+      { label: "غُرْفَةُ النَّوْمِ", val: "غُرْفَةُ النَّوْمِ" }
+    ]);
+
+    // 5. ص 20 : التربية الإسلامية (أستأذن)
+    buildSimpleBigMCQ('ex-islamic-permission', 'ex-islam', [
+      {
+        text: "مَاذَا أَفْعَلُ قَبْلَ أَنْ أَدْخُلَ غُرْفَةَ وَالِدَيَّ ؟",
+        options: [
+          { label: "أَطْرُقُ الْبَابَ وَأَسْتَأْذِنُ بِأَدَبٍ", correct: true },
+          { label: "أَدْخُلُ مُبَاشَرَةً دُونَ طَرْقٍ", correct: false }
+        ]
+      },
+      {
+        text: "كَيْفَ أَسْتَأْذِنُ مُعَلِّمَتِي فِي الْقِسْمِ ؟",
+        options: [
+          { label: "أَرْفَعُ إِصْبَعِي بِهُدُوءٍ", correct: true },
+          { label: "أَصْرُخُ بِصَوْتٍ عَالٍ", correct: false }
+        ]
+      }
+    ]);
+
+    // 6. دفتر الأنشطة ص 8 : أثبت (1) ربط الكلمات بصور الغرف الكاملة
+    setupTapToFill('pool-act8-rooms', '#zone-act8-rooms-container .drop-zone', 'ex-act8', [
+      { label: "الْمَطْبَخُ", val: "الْمَطْبَخُ" },
+      { label: "غُرْفَةُ النَّوْمِ", val: "غُرْفَةُ النَّوْمِ" },
+      { label: "غُرْفَةُ الْجُلُوسِ", val: "غُرْفَةُ الْجُلُوسِ" },
+      { label: "الْحَمَّامُ", val: "الْحَمَّامُ" }
+    ]);
+
+    // دفتر الأنشطة ص 8 : أثبت (2) أماكن داخل المنزل
+    buildTFInteractive('box-act8-home-places', 'ex-act8', [
+      { label: "غُرْفَةُ النَّوْمِ", isCorrect: true },
+      { label: "الْمَلْعَبُ", isCorrect: false },
+      { label: "الْمَطْبَخُ", isCorrect: true },
+      { label: "الْحَمَّامُ", isCorrect: true },
+      { label: "الْمَدْرَسَةُ", isCorrect: false }
+    ]);
+
+    // 7. دفتر الأنشطة ص 9 : أنتج (تصنيف الأدوات بالصور الفردية)
+    buildIllustratedQuiz('box-act9-sorting', 'ex-act9', [
+      {
+        label: "أَيْنَ نَضَعُ ( الْقِدْرَ وَالْمِلْعَقَةَ ) ؟",
+        img: "item_pot_spoon.png",
+        options: [
+          { label: "فِي الْمَطْبَخِ", correct: true },
+          { label: "فِي غُرْفَةِ النَّوْمِ", correct: false }
+        ]
+      },
+      {
+        label: "أَيْنَ نَضَعُ ( السَّرِيرَ ) ؟",
+        img: "furniture_bed.png",
+        options: [
+          { label: "فِي غُرْفَةِ النَّوْمِ", correct: true },
+          { label: "فِي الْمَطْبَخِ", correct: false }
+        ]
+      },
+      {
+        label: "أَيْنَ نَضَعُ ( الْخِزَانَةَ ) ؟",
+        img: "furniture_closet.png",
+        options: [
+          { label: "فِي غُرْفَةِ النَّوْمِ", correct: true },
+          { label: "فِي الْحَمَّامِ", correct: false }
+        ]
+      },
+      {
+        label: "أَيْنَ نَضَعُ ( الْغَسَّالَةَ ) ؟",
+        img: "item_washing_machine.png",
+        options: [
+          { label: "فِي الْحَمَّامِ", correct: true },
+          { label: "فِي غُرْفَةِ الْجُلُوسِ", correct: false }
+        ]
+      },
+      {
+        label: "أَيْنَ نَضَعُ ( الثَّلَّاجَةَ ) ؟",
+        img: "item_fridge.png",
+        options: [
+          { label: "فِي الْمَطْبَخِ", correct: true },
+          { label: "فِي غُرْفَةِ النَّوْمِ", correct: false }
+        ]
+      },
+      {
+        label: "أَيْنَ نَضَعُ ( الْمِرَشَّ ) ؟",
+        img: "item_shower.png",
+        options: [
+          { label: "فِي الْحَمَّامِ", correct: true },
+          { label: "فِي غُرْفَةِ الْجُلُوسِ", correct: false }
+        ]
+      }
+    ]);
+  }
+
+  // التصفير الشامل
+  function restartEntireLesson() {
+    document.querySelectorAll('.eval-badge span span').forEach(el => el.textContent = '0');
+    
+    document.querySelectorAll('.drop-zone').forEach(dz => {
+      dz.textContent = '';
+      dz.classList.remove('locked', 'correct', 'wrong');
+    });
+
+    initAllActivities();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function exitTelegramApp() {
+    if (tg && tg.close) {
+      tg.close();
+    } else {
+      window.close();
+    }
+  }
+
+  window.onload = () => {
+    initAllActivities();
+    verifySubscription();
+  };
+</script>
+</body>
+</html>
