@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>الرياضيات - الأعداد من 1 إلى 5 (الجزء 1)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- مكتبة Telegram WebApp الرسمية -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --primary-light: #2563eb;
+      --accent: #f59e0b;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --border-color: #cbd5e1;
+      --text: #0f172a;
+      --font-main: 'Tajawal', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    body {
+      margin: 0;
+      padding: 16px;
+      background: linear-gradient(135deg, #eef2ff 0%, #f8fafc 100%);
+      font-family: var(--font-main);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* تنسيقات نافذة قفل الاشتراك الإجباري عبر تيليجرام */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lock-icon {
+      font-size: 50px;
+      margin-bottom: 12px;
+    }
+
+    .lock-title {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #01579b;
+      margin-bottom: 10px;
+    }
+
+    .lock-desc {
+      font-size: 1rem;
+      color: #546e7a;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: var(--success);
+      border: 2px solid var(--success);
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+    }
+
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* تنسيقات محتوى الدرس التفاعلي */
+    .app-container {
+      width: 100%;
+      max-width: 950px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    header {
+      background: white;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      border: 2px solid #e2e8f0;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--primary);
+    }
+
+    header p {
+      margin: 6px 0 0 0;
+      font-size: 15px;
+      font-weight: 700;
+      color: #64748b;
+    }
+
+    .exercise-card {
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+      border: 3px solid #e2e8f0;
+      transition: all 0.3s ease;
+    }
+
+    .exercise-card.locked {
+      opacity: 0.35;
+      pointer-events: none;
+      filter: grayscale(85%);
+    }
+
+    .badge-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px dashed #f1f5f9;
+    }
+
+    .stage-title {
+      background: #eff6ff;
+      color: var(--primary);
+      padding: 6px 16px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 15px;
+      border: 1px solid #bfdbfe;
+    }
+
+    .instruction {
+      font-size: 19px;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .grid-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 16px;
+    }
+
+    .interactive-item {
+      background: #f8fafc;
+      border: 2px solid var(--border-color);
+      border-radius: 18px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .svg-visual-box {
+      width: 100%;
+      height: 125px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      padding: 6px;
+    }
+
+    .svg-visual-box svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .num-choices-strip {
+      display: flex;
+      gap: 6px;
+      direction: ltr;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .num-btn {
+      flex: 1;
+      min-width: 28px;
+      height: 42px;
+      background: white;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      font-size: 19px;
+      font-weight: 900;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .num-btn:active { transform: scale(0.92); }
+
+    .num-btn.correct {
+      background: #dcfce7 !important;
+      border-color: var(--success) !important;
+      color: #166534 !important;
+    }
+
+    .num-btn.incorrect {
+      background: #fee2e2 !important;
+      border-color: var(--danger) !important;
+      color: #991b1b !important;
+    }
+
+    .interactive-item.completed {
+      pointer-events: none;
+    }
+
+    .color-picker-palette {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .palette-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-weight: 800;
+      font-size: 15px;
+      border: 3px solid transparent;
+      cursor: pointer;
+      background: white;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+    }
+
+    .palette-btn.active { transform: scale(1.06); }
+    .palette-btn[data-color="orange"].active { border-color: #ea580c; background: #fff7ed; }
+    .palette-btn[data-color="blue"].active { border-color: #2563eb; background: #eff6ff; }
+    .palette-btn[data-color="green"].active { border-color: #16a34a; background: #f0fdf4; }
+
+    .disk-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      padding: 20px;
+      background: #f1f5f9;
+      border-radius: 18px;
+    }
+
+    .clickable-disk {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: #ffffff;
+      border: 3px dashed #94a3b8;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .clickable-disk.painted-orange { background: #f97316 !important; border: 3px solid #c2410c !important; }
+    .clickable-disk.painted-blue { background: #3b82f6 !important; border: 3px solid #1d4ed8 !important; }
+    .clickable-disk.painted-green { background: #22c55e !important; border: 3px solid #15803d !important; }
+
+    .learn-banner {
+      background: #fefce8;
+      border: 2px solid #fde047;
+      border-radius: 20px;
+      padding: 20px;
+    }
+
+    .hands-row {
+      display: flex;
+      justify-content: space-around;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+      direction: ltr;
+    }
+
+    .hand-card {
+      background: white;
+      border: 2px solid #fef08a;
+      border-radius: 16px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      width: 130px;
+    }
+
+    .hand-card .digit-label {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--primary);
+    }
+
+    .number-line {
+      display: flex;
+      direction: ltr;
+      gap: 8px;
+      width: 100%;
+      max-width: 720px;
+      margin: 15px auto;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .line-tile {
+      flex: 1;
+      min-width: 50px;
+      height: 68px;
+      background: white;
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .line-tile.active-frog { background: #ecfdf5; border-color: #10b981; }
+    .line-tile.selected-correct { background: #dcfce7 !important; border-color: var(--success) !important; color: #166534 !important; }
+    .line-tile.selected-wrong { background: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b !important; }
+
+    .canvas-card {
+      background: white;
+      border: 2px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 500px;
+      margin: 10px auto;
+    }
+
+    .canvas-container {
+      position: relative;
+      width: 100%;
+      height: 160px;
+      background: #fffdfa;
+      border: 2px dashed #94a3b8;
+      border-radius: 12px;
+      touch-action: none;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .clear-btn {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      padding: 6px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .action-btn-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+    }
+
+    .btn-submit {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      font-size: 16px;
+      font-weight: 800;
+      border-radius: 14px;
+      cursor: pointer;
+    }
+
+    .partial-summary {
+      margin-top: 14px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: #f8fafc;
+      font-size: 15px;
+      font-weight: 800;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #e2e8f0;
+    }
+
+    .final-evaluation-container {
+      background: white;
+      border-radius: 24px;
+      padding: 30px;
+      border: 3px solid #3b82f6;
+      box-shadow: 0 15px 35px -5px rgba(59, 130, 246, 0.15);
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .circle-progress-wrapper {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 20px;
+    }
+
+    .circle-progress-wrapper svg { transform: rotate(-90deg); }
+    .circle-progress-bg { fill: none; stroke: #f1f5f9; stroke-width: 12; }
+    .circle-progress-fill {
+      fill: none;
+      stroke: var(--primary-light);
+      stroke-width: 12;
+      stroke-linecap: round;
+      stroke-dasharray: 377;
+      stroke-dashoffset: 377;
+      transition: stroke-dashoffset 1s ease-out;
+    }
+
+    .circle-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--primary);
+      direction: ltr;
+    }
+
+    .stats-breakdown {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin: 16px 0;
+      font-size: 17px;
+      font-weight: 800;
+    }
+
+    .stat-correct { color: #16a34a; }
+    .stat-wrong { color: #dc2626; }
+
+    .pedagogical-feedback {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+
+    .final-btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-reset {
+      background: #f59e0b;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn-exit {
+      background: #64748b;
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+      margin-bottom: 12px;
+    }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      background: #1e3a8a;
+      color: #ffffff;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- نافذة قفل الاشتراك الإجباري -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الْأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الانْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الِاشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel" id="channel-link">الانْضِمَامُ إِلَى الْقَنَاةِ</a>
+      <button class="btn-check-sub" onclick="verifySubscription()">تَأْكِيدُ الِاشْتِرَاكِ</button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <div class="app-container">
+    <header>
+      <h1>الْأَعْدَادُ مِنْ 1 إِلَى 5 (1)</h1>
+      <p>الرّيَاضِيَّاتُ - السَّنَةُ الْأُولَى ابْتِدَائِيٌّ (كِتَابُ التِّلْمِيذِ ص 12 وَدَفْتَرُ الْأَنْشِطَةِ ص 6)</p>
+    </header>
+
+    <!-- 1. كتاب التلميذ: أَكْتَشِفُ -->
+    <section class="exercise-card" id="card-stage-discover">
+      <div class="badge-bar">
+        <span class="stage-title">كِتَابُ التِّلْمِيذِ: أَكْتَشِفُ (ص 12)</span>
+        <span style="font-weight: 800; color: #64748b;">5 مَجْمُوعَاتٍ</span>
+      </div>
+      <div class="instruction">أَرْبِطُ كُلَّ صُورَةٍ بِالْعَدَدِ الْمُنَاسِبِ لَهَا:</div>
+
+      <div class="grid-cards">
+        <div class="interactive-item" id="disc-item-1" data-answer="4">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 150 100">
+              <g transform="translate(15,15)"><circle cx="15" cy="15" r="13" fill="#dc2626"/><path d="M15,2 Q18,0 20,-2" stroke="#15803d" stroke-width="2" fill="none"/></g>
+              <g transform="translate(55,15)"><circle cx="15" cy="15" r="13" fill="#dc2626"/><path d="M15,2 Q18,0 20,-2" stroke="#15803d" stroke-width="2" fill="none"/></g>
+              <g transform="translate(95,15)"><circle cx="15" cy="15" r="13" fill="#dc2626"/><path d="M15,2 Q18,0 20,-2" stroke="#15803d" stroke-width="2" fill="none"/></g>
+              <g transform="translate(55,55)"><circle cx="15" cy="15" r="13" fill="#dc2626"/><path d="M15,2 Q18,0 20,-2" stroke="#15803d" stroke-width="2" fill="none"/></g>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-1', 2, 'discover')">2</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-1', 4, 'discover')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-1', 1, 'discover')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-1', 5, 'discover')">5</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-1', 3, 'discover')">3</button>
+          </div>
+        </div>
+
+        <div class="interactive-item" id="disc-item-2" data-answer="1">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="35" fill="#f97316" stroke="#ea580c" stroke-width="3"/>
+              <circle cx="40" cy="40" r="8" fill="#fff" opacity="0.4"/>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-2', 3, 'discover')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-2', 5, 'discover')">5</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-2', 1, 'discover')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-2', 4, 'discover')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-2', 2, 'discover')">2</button>
+          </div>
+        </div>
+
+        <div class="interactive-item" id="disc-item-3" data-answer="5">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 170 100">
+              <g transform="translate(10,20)"><path d="M 0,15 Q 10,0 20,15 Q 30,0 40,15" fill="none" stroke="#2563eb" stroke-width="3"/></g>
+              <g transform="translate(60,15)"><path d="M 0,15 Q 10,0 20,15 Q 30,0 40,15" fill="none" stroke="#2563eb" stroke-width="3"/></g>
+              <g transform="translate(110,20)"><path d="M 0,15 Q 10,0 20,15 Q 30,0 40,15" fill="none" stroke="#2563eb" stroke-width="3"/></g>
+              <g transform="translate(35,55)"><path d="M 0,15 Q 10,0 20,15 Q 30,0 40,15" fill="none" stroke="#2563eb" stroke-width="3"/></g>
+              <g transform="translate(85,55)"><path d="M 0,15 Q 10,0 20,15 Q 30,0 40,15" fill="none" stroke="#2563eb" stroke-width="3"/></g>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-3', 5, 'discover')">5</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-3', 2, 'discover')">2</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-3', 4, 'discover')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-3', 1, 'discover')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-3', 3, 'discover')">3</button>
+          </div>
+        </div>
+
+        <div class="interactive-item" id="disc-item-4" data-answer="2">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 140 90">
+              <g transform="translate(15,20)">
+                <ellipse cx="20" cy="25" rx="16" ry="10" fill="#ec4899"/>
+                <ellipse cx="20" cy="25" rx="8" ry="14" fill="#a855f7"/>
+                <line x1="20" y1="10" x2="20" y2="40" stroke="#1e293b" stroke-width="2"/>
+              </g>
+              <g transform="translate(75,20)">
+                <ellipse cx="20" cy="25" rx="16" ry="10" fill="#ec4899"/>
+                <ellipse cx="20" cy="25" rx="8" ry="14" fill="#a855f7"/>
+                <line x1="20" y1="10" x2="20" y2="40" stroke="#1e293b" stroke-width="2"/>
+              </g>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-4', 1, 'discover')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-4', 3, 'discover')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-4', 2, 'discover')">2</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-4', 5, 'discover')">5</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-4', 4, 'discover')">4</button>
+          </div>
+        </div>
+
+        <div class="interactive-item" id="disc-item-5" data-answer="3">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 160 100">
+              <g transform="translate(10,10)"><rect x="5" y="10" width="30" height="15" rx="4" fill="#0284c7"/><circle cx="12" cy="27" r="4" fill="#334155"/><circle cx="28" cy="27" r="4" fill="#334155"/></g>
+              <g transform="translate(60,10)"><rect x="5" y="10" width="30" height="15" rx="4" fill="#0284c7"/><circle cx="12" cy="27" r="4" fill="#334155"/><circle cx="28" cy="27" r="4" fill="#334155"/></g>
+              <g transform="translate(110,10)"><rect x="5" y="10" width="30" height="15" rx="4" fill="#0284c7"/><circle cx="12" cy="27" r="4" fill="#334155"/><circle cx="28" cy="27" r="4" fill="#334155"/></g>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-5', 4, 'discover')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-5', 1, 'discover')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-5', 5, 'discover')">5</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-5', 3, 'discover')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'disc-item-5', 2, 'discover')">2</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="partial-summary" id="summary-discover"></div>
+    </section>
+
+    <!-- 2. كتاب التلميذ: أُنْجِزُ (1) -->
+    <section class="exercise-card locked" id="card-stage-onjez1">
+      <div class="badge-bar">
+        <span class="stage-title">كِتَابُ التِّلْمِيذِ: أُنْجِزُ (السُّؤَالُ 1)</span>
+        <span style="font-weight: 800; color: #64748b;">ص 12</span>
+      </div>
+      <div class="instruction">
+        لَوِّنْ حَسْبَ مَا يُطْلَبُ مِنْكَ:<br>
+        • لَوِّنْ قُرَيْصَةً وَاحِدَةً بِاللَّوْنِ الْبُرْتُقَالِي.<br>
+        • لَوِّنْ 3 قُرَيْصَاتٍ بِاللَّوْنِ الْأَزْرَقِ.<br>
+        • لَوِّنْ قُرَيْصَتَيْنِ اثْنَتَيْنِ بِاللَّوْنِ الْأَخْضَرِ.
+      </div>
+
+      <div class="color-picker-palette">
+        <button class="palette-btn active" data-color="orange" onclick="selectPalette('orange', this)">
+          <span style="width:16px;height:16px;background:#ea580c;border-radius:50%;display:inline-block;"></span>
+          بُرْتُقَالِي (1)
+        </button>
+        <button class="palette-btn" data-color="blue" onclick="selectPalette('blue', this)">
+          <span style="width:16px;height:16px;background:#2563eb;border-radius:50%;display:inline-block;"></span>
+          أَزْرَق (3)
+        </button>
+        <button class="palette-btn" data-color="green" onclick="selectPalette('green', this)">
+          <span style="width:16px;height:16px;background:#16a34a;border-radius:50%;display:inline-block;"></span>
+          أَخْضَر (2)
+        </button>
+      </div>
+
+      <div class="disk-grid" id="disks-container">
+        <div class="clickable-disk" onclick="paintDisk(this)"></div>
+        <div class="clickable-disk" onclick="paintDisk(this)"></div>
+        <div class="clickable-disk" onclick="paintDisk(this)"></div>
+        <div class="clickable-disk" onclick="paintDisk(this)"></div>
+        <div class="clickable-disk" onclick="paintDisk(this)"></div>
+        <div class="clickable-disk" onclick="paintDisk(this)"></div>
+      </div>
+
+      <div class="action-btn-row">
+        <button class="btn-submit" id="btn-validate-disks" onclick="validateDisksStage()">تَأْكِيدُ التَّلْوِينِ</button>
+      </div>
+      <div class="partial-summary" id="summary-onjez1"></div>
+    </section>
+
+    <!-- 3. كتاب التلميذ: أُنْجِزُ (2) -->
+    <section class="exercise-card locked" id="card-stage-onjez2">
+      <div class="badge-bar">
+        <span class="stage-title">كِتَابُ التِّلْمِيذِ: أُنْجِزُ (السُّؤَالُ 2)</span>
+        <span style="font-weight: 800; color: #64748b;">5 بِطَاقَاتِ نَرْدٍ (ص 12)</span>
+      </div>
+      <div class="instruction">اخْتَرِ الْعَدَدَ الْمُنَاسِبَ لِكُلِّ نَرْدٍ:</div>
+
+      <div class="grid-cards">
+        <div class="interactive-item" id="onjez2-item-1" data-answer="3">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 100 100">
+              <rect x="10" y="10" width="80" height="80" rx="14" fill="#ffffff" stroke="#334155" stroke-width="4"/>
+              <circle cx="28" cy="28" r="7" fill="#1e293b"/>
+              <circle cx="50" cy="50" r="7" fill="#1e293b"/>
+              <circle cx="72" cy="72" r="7" fill="#1e293b"/>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-1', 1, 'onjez2')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-1', 4, 'onjez2')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-1', 3, 'onjez2')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-1', 5, 'onjez2')">5</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-1', 2, 'onjez2')">2</button>
+          </div>
+        </div>
+
+        <div class="interactive-item" id="onjez2-item-2" data-answer="5">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 100 100">
+              <rect x="10" y="10" width="80" height="80" rx="14" fill="#ffffff" stroke="#334155" stroke-width="4"/>
+              <circle cx="26" cy="26" r="7" fill="#1e293b"/>
+              <circle cx="74" cy="26" r="7" fill="#1e293b"/>
+              <circle cx="50" cy="50" r="7" fill="#1e293b"/>
+              <circle cx="26" cy="74" r="7" fill="#1e293b"/>
+              <circle cx="74" cy="74" r="7" fill="#1e293b"/>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-2', 5, 'onjez2')">5</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-2', 2, 'onjez2')">2</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-2', 4, 'onjez2')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-2', 3, 'onjez2')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-2', 1, 'onjez2')">1</button>
+          </div>
+        </div>
+
+        <div class="interactive-item" id="onjez2-item-3" data-answer="1">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 100 100">
+              <rect x="10" y="10" width="80" height="80" rx="14" fill="#ffffff" stroke="#334155" stroke-width="4"/>
+              <circle cx="50" cy="50" r="9" fill="#dc2626"/>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-3', 2, 'onjez2')">2</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-3', 5, 'onjez2')">5</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-3', 1, 'onjez2')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-3', 4, 'onjez2')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-3', 3, 'onjez2')">3</button>
+          </div>
+        </div>
+
+        <div class="interactive-item" id="onjez2-item-4" data-answer="4">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 100 100">
+              <rect x="10" y="10" width="80" height="80" rx="14" fill="#ffffff" stroke="#334155" stroke-width="4"/>
+              <circle cx="28" cy="28" r="7" fill="#1e293b"/>
+              <circle cx="72" cy="28" r="7" fill="#1e293b"/>
+              <circle cx="28" cy="72" r="7" fill="#1e293b"/>
+              <circle cx="72" cy="72" r="7" fill="#1e293b"/>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-4', 3, 'onjez2')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-4', 4, 'onjez2')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-4', 2, 'onjez2')">2</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-4', 1, 'onjez2')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-4', 5, 'onjez2')">5</button>
+          </div>
+        </div>
+
+        <div class="interactive-item" id="onjez2-item-5" data-answer="2">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 100 100">
+              <rect x="10" y="10" width="80" height="80" rx="14" fill="#ffffff" stroke="#334155" stroke-width="4"/>
+              <circle cx="30" cy="30" r="7" fill="#1e293b"/>
+              <circle cx="70" cy="70" r="7" fill="#1e293b"/>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-5', 4, 'onjez2')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-5', 3, 'onjez2')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-5', 5, 'onjez2')">5</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-5', 2, 'onjez2')">2</button>
+            <button class="num-btn" onclick="checkChoice(this, 'onjez2-item-5', 1, 'onjez2')">1</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="partial-summary" id="summary-onjez2"></div>
+    </section>
+
+    <!-- 4. كتاب التلميذ: تَعَلَّمْتُ -->
+    <section class="exercise-card learn-banner locked" id="card-stage-learn">
+      <div class="badge-bar">
+        <span class="stage-title" style="background:#fef08a; border-color:#eab308; color:#854d0e;">كِتَابُ التِّلْمِيذِ: تَعَلَّمْتُ (ص 12)</span>
+        <span style="font-weight: 800; color:#854d0e;">تَثْبِيتُ الْمَفَاهِيمِ</span>
+      </div>
+      <div class="instruction" style="color:#713f12;">
+        أَسْتَعْمِلُ أَصَابِعَ يَدِي لِتَعْيِينِ الْأَعْدَادِ 1 ، 2 ، 3 ، 4 ، وَ 5 كَمَا فِي الصُّورَةِ:
+      </div>
+
+      <div class="hands-row">
+        <div class="hand-card">
+          <svg viewBox="0 0 60 70" width="50" height="60">
+            <rect x="25" y="15" width="10" height="35" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+            <path d="M 15,45 Q 15,65 35,65 Q 45,65 45,45 Z" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+          </svg>
+          <span class="digit-label">1</span>
+        </div>
+        <div class="hand-card">
+          <svg viewBox="0 0 60 70" width="50" height="60">
+            <rect x="18" y="15" width="9" height="35" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+            <rect x="32" y="12" width="9" height="38" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+            <path d="M 12,45 Q 12,65 35,65 Q 45,65 45,45 Z" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+          </svg>
+          <span class="digit-label">2</span>
+        </div>
+        <div class="hand-card">
+          <svg viewBox="0 0 60 70" width="50" height="60">
+            <rect x="12" y="18" width="8" height="32" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+            <rect x="24" y="12" width="8" height="38" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+            <rect x="36" y="15" width="8" height="35" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+            <path d="M 10,45 Q 10,65 35,65 Q 48,65 48,45 Z" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+          </svg>
+          <span class="digit-label">3</span>
+        </div>
+        <div class="hand-card">
+          <svg viewBox="0 0 60 70" width="50" height="60">
+            <rect x="10" y="20" width="7" height="30" rx="3" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+            <rect x="20" y="14" width="7" height="36" rx="3" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+            <rect x="30" y="12" width="7" height="38" rx="3" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+            <rect x="40" y="16" width="7" height="34" rx="3" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+            <path d="M 8,45 Q 8,65 32,65 Q 50,65 50,45 Z" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+          </svg>
+          <span class="digit-label">4</span>
+        </div>
+        <div class="hand-card">
+          <svg viewBox="0 0 60 70" width="50" height="60">
+            <rect x="6" y="24" width="7" height="26" rx="3" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+            <rect x="16" y="18" width="7" height="32" rx="3" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+            <rect x="26" y="12" width="7" height="38" rx="3" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+            <rect x="36" y="15" width="7" height="35" rx="3" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+            <rect x="46" y="22" width="7" height="28" rx="3" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+            <path d="M 6,45 Q 6,65 30,65 Q 52,65 52,45 Z" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+          </svg>
+          <span class="digit-label">5</span>
+        </div>
+      </div>
+
+      <div class="action-btn-row">
+        <button class="btn-submit" onclick="passLearnStage()">حَفِظْتُهَا، انْتَقِلْ إِلَى دَفْتَرِ الْأَنْشِطَةِ ←</button>
+      </div>
+    </section>
+
+    <!-- 5. دفتر الأنشطة: أَتَمَرَّنُ (1) -->
+    <section class="exercise-card locked" id="card-stage-act1">
+      <div class="badge-bar">
+        <span class="stage-title">دَفْتَرُ الْأَنْشِطَةِ: أَتَمَرَّنُ (السُّؤَالُ 1)</span>
+        <span style="font-weight: 800; color: #64748b;">5 بِطَاقَاتِ أَزْهَارٍ (ص 6)</span>
+      </div>
+      <div class="instruction">ارْبِطْ كُلَّ بِطَاقَةِ أَزْهَارٍ بِالْعَدَدِ الْمُنَاسِبِ كَمَا فِي الْمِثَالِ:</div>
+
+      <div class="grid-cards">
+        <div class="interactive-item" id="act1-item-1" data-answer="3">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 160 100">
+              <g transform="translate(15,20)"><circle cx="15" cy="15" r="10" fill="#a855f7"/><circle cx="15" cy="15" r="3" fill="#fff"/><line x1="15" y1="25" x2="15" y2="60" stroke="#16a34a" stroke-width="3"/></g>
+              <g transform="translate(65,15)"><circle cx="15" cy="15" r="10" fill="#a855f7"/><circle cx="15" cy="15" r="3" fill="#fff"/><line x1="15" y1="25" x2="15" y2="60" stroke="#16a34a" stroke-width="3"/></g>
+              <g transform="translate(115,20)"><circle cx="15" cy="15" r="10" fill="#a855f7"/><circle cx="15" cy="15" r="3" fill="#fff"/><line x1="15" y1="25" x2="15" y2="60" stroke="#16a34a" stroke-width="3"/></g>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-1', 1, 'act1')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-1', 4, 'act1')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-1', 3, 'act1')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-1', 5, 'act1')">5</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-1', 2, 'act1')">2</button>
+          </div>
+        </div>
+
+        <div class="interactive-item" id="act1-item-2" data-answer="1">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="40" r="14" fill="#ec4899"/>
+              <circle cx="50" cy="40" r="5" fill="#facc15"/>
+              <path d="M 50,54 Q 52,70 50,85" stroke="#16a34a" stroke-width="4" fill="none"/>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-2', 3, 'act1')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-2', 1, 'act1')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-2', 4, 'act1')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-2', 2, 'act1')">2</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-2', 5, 'act1')">5</button>
+          </div>
+        </div>
+
+        <div class="interactive-item" id="act1-item-3" data-answer="5">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 190 100">
+              <g transform="translate(10,20)"><circle cx="11" cy="11" r="8" fill="#3b82f6"/><circle cx="11" cy="11" r="3" fill="#fff"/><line x1="11" y1="19" x2="11" y2="55" stroke="#16a34a" stroke-width="2.5"/></g>
+              <g transform="translate(45,15)"><circle cx="11" cy="11" r="8" fill="#3b82f6"/><circle cx="11" cy="11" r="3" fill="#fff"/><line x1="11" y1="19" x2="11" y2="55" stroke="#16a34a" stroke-width="2.5"/></g>
+              <g transform="translate(80,20)"><circle cx="11" cy="11" r="8" fill="#3b82f6"/><circle cx="11" cy="11" r="3" fill="#fff"/><line x1="11" y1="19" x2="11" y2="55" stroke="#16a34a" stroke-width="2.5"/></g>
+              <g transform="translate(115,15)"><circle cx="11" cy="11" r="8" fill="#3b82f6"/><circle cx="11" cy="11" r="3" fill="#fff"/><line x1="11" y1="19" x2="11" y2="55" stroke="#16a34a" stroke-width="2.5"/></g>
+              <g transform="translate(150,20)"><circle cx="11" cy="11" r="8" fill="#3b82f6"/><circle cx="11" cy="11" r="3" fill="#fff"/><line x1="11" y1="19" x2="11" y2="55" stroke="#16a34a" stroke-width="2.5"/></g>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-3', 4, 'act1')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-3', 3, 'act1')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-3', 5, 'act1')">5</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-3', 2, 'act1')">2</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-3', 1, 'act1')">1</button>
+          </div>
+        </div>
+
+        <div class="interactive-item" id="act1-item-4" data-answer="2">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 140 100">
+              <g transform="translate(25,20)"><circle cx="20" cy="20" r="12" fill="#ef4444"/><circle cx="20" cy="20" r="4" fill="#facc15"/><line x1="20" y1="32" x2="20" y2="65" stroke="#16a34a" stroke-width="4"/></g>
+              <g transform="translate(75,20)"><circle cx="20" cy="20" r="12" fill="#ef4444"/><circle cx="20" cy="20" r="4" fill="#facc15"/><line x1="20" y1="32" x2="20" y2="65" stroke="#16a34a" stroke-width="4"/></g>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-4', 5, 'act1')">5</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-4', 2, 'act1')">2</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-4', 3, 'act1')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-4', 1, 'act1')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-4', 4, 'act1')">4</button>
+          </div>
+        </div>
+
+        <div class="interactive-item" id="act1-item-5" data-answer="4">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 170 100">
+              <g transform="translate(10,20)"><circle cx="12" cy="12" r="9" fill="#f59e0b"/><circle cx="12" cy="12" r="3" fill="#fff"/><line x1="12" y1="21" x2="12" y2="55" stroke="#16a34a" stroke-width="3"/></g>
+              <g transform="translate(50,15)"><circle cx="12" cy="12" r="9" fill="#f59e0b"/><circle cx="12" cy="12" r="3" fill="#fff"/><line x1="12" y1="21" x2="12" y2="55" stroke="#16a34a" stroke-width="3"/></g>
+              <g transform="translate(90,20)"><circle cx="12" cy="12" r="9" fill="#f59e0b"/><circle cx="12" cy="12" r="3" fill="#fff"/><line x1="12" y1="21" x2="12" y2="55" stroke="#16a34a" stroke-width="3"/></g>
+              <g transform="translate(130,15)"><circle cx="12" cy="12" r="9" fill="#f59e0b"/><circle cx="12" cy="12" r="3" fill="#fff"/><line x1="12" y1="21" x2="12" y2="55" stroke="#16a34a" stroke-width="3"/></g>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-5', 2, 'act1')">2</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-5', 4, 'act1')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-5', 1, 'act1')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-5', 3, 'act1')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act1-item-5', 5, 'act1')">5</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="partial-summary" id="summary-act1"></div>
+    </section>
+
+    <!-- 6. دفتر الأنشطة: أَتَمَرَّنُ (2) -->
+    <section class="exercise-card locked" id="card-stage-act2">
+      <div class="badge-bar">
+        <span class="stage-title">دَفْتَرُ الْأَنْشِطَةِ: أَتَمَرَّنُ (السُّؤَالُ 2)</span>
+        <span style="font-weight: 800; color: #64748b;">4 بِطَاقَاتٍ (ص 6)</span>
+      </div>
+      <div class="instruction">لَوِّنِ الْعَدَدَ الْمُنَاسِبَ فِي كُلِّ بِطَاقَةٍ:</div>
+
+      <div class="grid-cards">
+        <div class="interactive-item" id="act2-item-1" data-answer="5">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 180 110">
+              <g transform="translate(15,10)"><rect x="0" y="20" width="10" height="70" rx="3" fill="#dc2626"/><polygon points="0,20 5,5 10,20" fill="#475569"/><rect x="2" y="90" width="6" height="15" fill="#94a3b8"/></g>
+              <g transform="translate(48,10)"><rect x="0" y="20" width="10" height="70" rx="3" fill="#1e293b"/><polygon points="0,20 5,5 10,20" fill="#475569"/><rect x="2" y="90" width="6" height="15" fill="#94a3b8"/></g>
+              <g transform="translate(81,10)"><rect x="0" y="20" width="10" height="70" rx="3" fill="#15803d"/><polygon points="0,20 5,5 10,20" fill="#475569"/><rect x="2" y="90" width="6" height="15" fill="#94a3b8"/></g>
+              <g transform="translate(114,10)"><rect x="0" y="20" width="10" height="70" rx="3" fill="#dc2626"/><polygon points="0,20 5,5 10,20" fill="#475569"/><rect x="2" y="90" width="6" height="15" fill="#94a3b8"/></g>
+              <g transform="translate(147,10)"><rect x="0" y="20" width="10" height="70" rx="3" fill="#15803d"/><polygon points="0,20 5,5 10,20" fill="#475569"/><rect x="2" y="90" width="6" height="15" fill="#94a3b8"/></g>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-1', 1, 'act2')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-1', 2, 'act2')">2</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-1', 3, 'act2')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-1', 4, 'act2')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-1', 5, 'act2')">5</button>
+          </div>
+        </div>
+
+        <div class="interactive-item" id="act2-item-2" data-answer="1">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 150 90">
+              <rect x="20" y="28" width="105" height="38" rx="16" fill="#0d9488" stroke="#115e59" stroke-width="3"/>
+              <path d="M 30,38 Q 70,44 115,38" stroke="#f0fdf4" stroke-width="2.5" stroke-dasharray="4,4" fill="none"/>
+              <circle cx="25" cy="47" r="5" fill="#fbbf24"/>
+              <path d="M 12,47 Q 10,34 22,32" stroke="#f59e0b" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-2', 1, 'act2')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-2', 2, 'act2')">2</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-2', 3, 'act2')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-2', 4, 'act2')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-2', 5, 'act2')">5</button>
+          </div>
+        </div>
+
+        <div class="interactive-item" id="act2-item-3" data-answer="4">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 170 110">
+              <g transform="translate(25,12) rotate(8)"><rect x="0" y="18" width="7" height="70" fill="#38bdf8"/><polygon points="0,18 3.5,4 7,18" fill="#78350f"/><rect x="0" y="88" width="7" height="10" fill="#f43f5e"/></g>
+              <g transform="translate(60,10)"><rect x="0" y="18" width="7" height="70" fill="#84cc16"/><polygon points="0,18 3.5,4 7,18" fill="#78350f"/><rect x="0" y="88" width="7" height="10" fill="#f43f5e"/></g>
+              <g transform="translate(95,12) rotate(-6)"><rect x="0" y="18" width="7" height="70" fill="#f97316"/><polygon points="0,18 3.5,4 7,18" fill="#78350f"/><rect x="0" y="88" width="7" height="10" fill="#f43f5e"/></g>
+              <g transform="translate(130,15)"><rect x="0" y="18" width="7" height="70" fill="#e11d48"/><polygon points="0,18 3.5,4 7,18" fill="#78350f"/><rect x="0" y="88" width="7" height="10" fill="#f43f5e"/></g>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-3', 1, 'act2')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-3', 2, 'act2')">2</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-3', 3, 'act2')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-3', 4, 'act2')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-3', 5, 'act2')">5</button>
+          </div>
+        </div>
+
+        <div class="interactive-item" id="act2-item-4" data-answer="3">
+          <div class="svg-visual-box">
+            <svg viewBox="0 0 150 110">
+              <g transform="translate(25,15)"><rect width="34" height="46" rx="4" fill="#15803d"/><rect x="3" y="3" width="5" height="40" fill="#166534"/><line x1="12" y1="14" x2="28" y2="14" stroke="white" stroke-width="2"/></g>
+              <g transform="translate(90,15)"><rect width="34" height="46" rx="4" fill="#15803d"/><rect x="3" y="3" width="5" height="40" fill="#166534"/><line x1="12" y1="14" x2="28" y2="14" stroke="white" stroke-width="2"/></g>
+              <g transform="translate(58,55)"><rect width="34" height="46" rx="4" fill="#15803d"/><rect x="3" y="3" width="5" height="40" fill="#166534"/><line x1="12" y1="14" x2="28" y2="14" stroke="white" stroke-width="2"/></g>
+            </svg>
+          </div>
+          <div class="num-choices-strip">
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-4', 1, 'act2')">1</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-4', 2, 'act2')">2</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-4', 3, 'act2')">3</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-4', 4, 'act2')">4</button>
+            <button class="num-btn" onclick="checkChoice(this, 'act2-item-4', 5, 'act2')">5</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="partial-summary" id="summary-act2"></div>
+    </section>
+
+    <!-- 7. دفتر الأنشطة: أَبْحَثُ -->
+    <section class="exercise-card locked" id="card-stage-search">
+      <div class="badge-bar">
+        <span class="stage-title">دَفْتَرُ الْأَنْشِطَةِ: أَبْحَثُ (ص 6)</span>
+        <span style="font-weight: 800; color: #64748b;">خَانَةُ الْوُصُولِ</span>
+      </div>
+      <div class="instruction">
+        تَتَقَدَّمُ الضَّفْدَعَةُ بِثَلَاثِ (3) خَانَاتٍ، لَوِّنْ (انْقُرْ عَلَى) خَانَةَ الْوُصُولِ:
+      </div>
+
+      <div class="number-line" id="frog-strip">
+        <div class="line-tile active-frog" data-num="1" onclick="selectFrogDestination(1, this)">🐸<span>1</span></div>
+        <div class="line-tile" data-num="2" onclick="selectFrogDestination(2, this)"><span>2</span></div>
+        <div class="line-tile" data-num="3" onclick="selectFrogDestination(3, this)"><span>3</span></div>
+        <div class="line-tile" data-num="4" onclick="selectFrogDestination(4, this)"><span>4</span></div>
+        <div class="line-tile" data-num="5" onclick="selectFrogDestination(5, this)"><span>5</span></div>
+        <div class="line-tile" data-num="6" onclick="selectFrogDestination(6, this)"><span>6</span></div>
+        <div class="line-tile" data-num="7" onclick="selectFrogDestination(7, this)"><span>7</span></div>
+        <div class="line-tile" data-num="8" onclick="selectFrogDestination(8, this)"><span>8</span></div>
+        <div class="line-tile" data-num="9" onclick="selectFrogDestination(9, this)"><span>9</span></div>
+        <div class="line-tile" data-num="10" onclick="selectFrogDestination(10, this)"><span>10</span></div>
+      </div>
+
+      <div class="partial-summary" id="summary-search"></div>
+    </section>
+
+    <!-- 8. دفتر الأنشطة: أَكْتُبُ -->
+    <section class="exercise-card locked" id="card-stage-write">
+      <div class="badge-bar">
+        <span class="stage-title">دَفْتَرُ الْأَنْشِطَةِ: أَكْتُبُ (ص 6)</span>
+        <span style="font-weight: 800; color: #64748b;">تَخْطِيطُ الرَّقْمَيْنِ 1 وَ 2</span>
+      </div>
+      <div class="instruction">مَرِّرْ إِصْبَعَكَ أَوْ سَهْمَ الْفَأْرَةِ فَوْقَ النِّقَاطِ لِكِتَابَةِ الرَّقْمَيْنِ:</div>
+
+      <div class="canvas-card">
+        <span style="font-weight:800; color:var(--primary);">كِتَابَةُ الرَّقْمِ (1)</span>
+        <div class="canvas-container">
+          <canvas id="canvas-1"></canvas>
+        </div>
+        <button class="clear-btn" onclick="clearCanvas('canvas-1', '1')">إِعَادَةُ الْمَسْحِ</button>
+      </div>
+
+      <div class="canvas-card">
+        <span style="font-weight:800; color:var(--primary);">كِتَابَةُ الرَّقْمِ (2)</span>
+        <div class="canvas-container">
+          <canvas id="canvas-2"></canvas>
+        </div>
+        <button class="clear-btn" onclick="clearCanvas('canvas-2', '2')">إِعَادَةُ الْمَسْحِ</button>
+      </div>
+
+      <div class="action-btn-row">
+        <button class="btn-submit" id="btn-finish-writing" onclick="evaluateWritingStage()">تَثْبِيتُ الْكِتَابَةِ وَعَرْضُ النَّتِيجَةِ الْعَامَّةِ</button>
+      </div>
+
+      <div class="partial-summary" id="summary-write"></div>
+    </section>
+
+    <!-- الشاشة الختامية: التقييم العام -->
+    <section class="final-evaluation-container" id="final-report-card">
+      <h2 style="margin:0 0 16px 0; font-size:24px; color:var(--primary); font-weight:900;">بِطَاقَةُ التَّقْيِيمِ الشَّامِلِ لِلْوَحْدَةِ</h2>
+
+      <div class="circle-progress-wrapper">
+        <svg width="150" height="150">
+          <circle class="circle-progress-bg" cx="75" cy="75" r="60"/>
+          <circle class="circle-progress-fill" id="circle-bar" cx="75" cy="75" r="60"/>
+        </svg>
+        <div class="circle-label" id="circle-percentage">0%</div>
+      </div>
+
+      <div class="stats-breakdown">
+        <div class="stat-correct">الإِجَابَاتُ الصَّحِيحَةُ: <span id="stat-correct-count">0</span></div>
+        <div class="stat-wrong">الإِجَابَاتُ الْخَاطِئَةُ: <span id="stat-wrong-count">0</span></div>
+      </div>
+
+      <div class="pedagogical-feedback" id="pedagogical-comment"></div>
+
+      <div class="final-btn-group">
+        <button class="btn-reset" onclick="resetFullApp()">إِعَادَةُ الْمُحَاوَلَةِ</button>
+        <button class="btn-exit" onclick="exitTelegramApp()">خُرُوجٌ مِنَ التَّطْبِيقِ</button>
+      </div>
+      <div style="margin-top:16px;">
+        <a href="../../../index.html" class="btn-back-home">← الْعَوْدَةُ إِلَى الْفِهْرِسِ</a>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       بروتوكول التحقق من الاشتراك الإجباري عبر تيليجرام (عبر Vercel)
+       ========================================================================== */
+    // ⚠️ تم حذف BOT_TOKEN من هنا (لأسباب أمنية)
+    const CHANNEL_ID = "-1004456852024";
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارٍ التَّحَقُّقُ مِنَ الِاشْتِرَاكِ ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        // ⬇️ استدعاء الوسيط على Vercel
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارٍ فَتْحُ الدَّرْسِ ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الِانْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الِاتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    function exitTelegramApp() {
+      if (tg && tg.close) {
+        tg.close();
+      } else {
+        if (confirm('هَلْ تُرِيدُ الْخُرُوجَ مِنَ التَّطْبِيقِ؟')) {
+          window.close();
+          document.body.innerHTML = `
+            <div style="display:flex;justify-content:center;align-items:center;height:100vh;flex-direction:column;font-family:'Tajawal',sans-serif;">
+              <h2 style="color:#1e3a8a;">تَمَّ الْخُرُوجُ مِنَ التَّطْبِيقِ بِنَجَاحٍ.</h2>
+              <p style="color:#64748b;">يُمْكِنُكَ إِغْلَاقُ هَذِهِ النَّافِذَةِ الْآنَ.</p>
+            </div>
+          `;
+        }
+      }
+    }
+
+    /* ==========================================================================
+       محرك الصوت (Web Audio API)
+       ========================================================================== */
+    const AudioEngine = {
+      ctx: null,
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+      },
+      playTone(freq, duration, type = 'sine') {
+        try {
+          this.init();
+          if (!this.ctx) return;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+          gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch(e) {}
+      },
+      correctSound() {
+        this.playTone(523.25, 0.1);
+        setTimeout(() => this.playTone(659.25, 0.15), 100);
+        setTimeout(() => this.playTone(783.99, 0.3), 200);
+      },
+      wrongSound() {
+        this.playTone(220, 0.15, 'sawtooth');
+        setTimeout(() => this.playTone(180, 0.25, 'sawtooth'), 120);
+      }
+    };
+
+    /* ==========================================================================
+       منطق ومنظومة أنشطة الدرس والتقييم
+       ========================================================================== */
+    const TOTAL_QUESTIONS = 21;
+
+    const state = {
+      totalCorrect: 0,
+      totalWrong: 0,
+      stages: {
+        discover: { answered: 0, total: 5, correct: 0, wrong: 0, next: 'card-stage-onjez1', summaryId: 'summary-discover' },
+        onjez2:   { answered: 0, total: 5, correct: 0, wrong: 0, next: 'card-stage-learn',  summaryId: 'summary-onjez2' },
+        act1:     { answered: 0, total: 5, correct: 0, wrong: 0, next: 'card-stage-act2',   summaryId: 'summary-act1' },
+        act2:     { answered: 0, total: 4, correct: 0, wrong: 0, next: 'card-stage-search', summaryId: 'summary-act2' }
+      },
+      currentColor: 'orange',
+      hasDrawn1: false,
+      hasDrawn2: false
+    };
+
+    function checkChoice(btn, containerId, chosenNum, stageKey) {
+      const container = document.getElementById(containerId);
+      if (container.classList.contains('completed')) return;
+
+      const correctNum = parseInt(container.getAttribute('data-answer'));
+      const buttons = container.querySelectorAll('.num-btn');
+      
+      container.classList.add('completed');
+      buttons.forEach(b => b.style.pointerEvents = 'none');
+
+      const st = state.stages[stageKey];
+
+      if (chosenNum === correctNum) {
+        btn.classList.add('correct');
+        AudioEngine.correctSound();
+        st.correct++;
+        state.totalCorrect++;
+      } else {
+        btn.classList.add('incorrect');
+        buttons.forEach(b => {
+          if (parseInt(b.textContent) === correctNum) b.classList.add('correct');
+        });
+        AudioEngine.wrongSound();
+        st.wrong++;
+        state.totalWrong++;
+      }
+
+      st.answered++;
+
+      if (st.answered === st.total) {
+        showPartialSummary(st.summaryId, st.correct, st.wrong);
+        unlockCard(st.next);
+      }
+    }
+
+    function selectPalette(col, btn) {
+      state.currentColor = col;
+      document.querySelectorAll('.palette-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function paintDisk(disk) {
+      disk.classList.remove('painted-orange', 'painted-blue', 'painted-green');
+      disk.classList.add('painted-' + state.currentColor);
+      disk.setAttribute('data-color', state.currentColor);
+      AudioEngine.playTone(440, 0.05);
+    }
+
+    function validateDisksStage() {
+      const disks = document.querySelectorAll('#disks-container .clickable-disk');
+      let orange = 0, blue = 0, green = 0;
+      disks.forEach(d => {
+        const c = d.getAttribute('data-color');
+        if (c === 'orange') orange++;
+        if (c === 'blue') blue++;
+        if (c === 'green') green++;
+      });
+
+      const isValid = (orange === 1 && blue === 3 && green === 2);
+      document.getElementById('btn-validate-disks').disabled = true;
+      disks.forEach(d => d.style.pointerEvents = 'none');
+
+      if (isValid) {
+        AudioEngine.correctSound();
+        state.totalCorrect++;
+        showPartialSummary('summary-onjez1', 1, 0);
+      } else {
+        AudioEngine.wrongSound();
+        state.totalWrong++;
+        showPartialSummary('summary-onjez1', 0, 1);
+      }
+
+      unlockCard('card-stage-onjez2');
+    }
+
+    function passLearnStage() {
+      unlockCard('card-stage-act1');
+    }
+
+    function selectFrogDestination(num, tile) {
+      const strip = document.getElementById('frog-strip');
+      if (strip.classList.contains('locked-step')) return;
+      strip.classList.add('locked-step');
+
+      const allTiles = strip.querySelectorAll('.line-tile');
+      allTiles.forEach(t => t.style.pointerEvents = 'none');
+
+      if (num === 4) {
+        tile.classList.add('selected-correct');
+        AudioEngine.correctSound();
+        state.totalCorrect++;
+        showPartialSummary('summary-search', 1, 0);
+      } else {
+        tile.classList.add('selected-wrong');
+        allTiles.forEach(t => {
+          if (parseInt(t.getAttribute('data-num')) === 4) t.classList.add('selected-correct');
+        });
+        AudioEngine.wrongSound();
+        state.totalWrong++;
+        showPartialSummary('summary-search', 0, 1);
+      }
+
+      unlockCard('card-stage-write');
+    }
+
+    function initCanvas(id, digit) {
+      const canvas = document.getElementById(id);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+
+      function drawBase() {
+        canvas.width = canvas.parentElement.clientWidth;
+        canvas.height = canvas.parentElement.clientHeight;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(10, canvas.height * 0.75);
+        ctx.lineTo(canvas.width - 10, canvas.height * 0.75);
+        ctx.stroke();
+
+        ctx.font = `bold ${canvas.height * 0.65}px 'Tajawal', sans-serif`;
+        ctx.fillStyle = '#f1f5f9';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(digit, canvas.width / 2, canvas.height / 2);
+
+        ctx.setLineDash([4, 6]);
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 2;
+        ctx.strokeText(digit, canvas.width / 2, canvas.height / 2);
+        ctx.setLineDash([]);
+      }
+
+      drawBase();
+      window.addEventListener('resize', drawBase);
+
+      let drawing = false;
+      ctx.lineWidth = 7;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = '#1e3a8a';
+
+      function getCoords(e) {
+        const rect = canvas.getBoundingClientRect();
+        const cx = e.touches ? e.touches[0].clientX : e.clientX;
+        const cy = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: cx - rect.left, y: cy - rect.top };
+      }
+
+      function start(e) {
+        drawing = true;
+        if (id === 'canvas-1') state.hasDrawn1 = true;
+        if (id === 'canvas-2') state.hasDrawn2 = true;
+        const c = getCoords(e);
+        ctx.beginPath();
+        ctx.moveTo(c.x, c.y);
+      }
+      function move(e) {
+        if (!drawing) return;
+        const c = getCoords(e);
+        ctx.lineTo(c.x, c.y);
+        ctx.stroke();
+      }
+      function end() { drawing = false; }
+
+      canvas.addEventListener('mousedown', start);
+      canvas.addEventListener('mousemove', move);
+      canvas.addEventListener('mouseup', end);
+      canvas.addEventListener('touchstart', (e) => { e.preventDefault(); start(e); }, { passive: false });
+      canvas.addEventListener('touchmove', (e) => { e.preventDefault(); move(e); }, { passive: false });
+      canvas.addEventListener('touchend', end);
+
+      canvas.resetCanvas = drawBase;
+    }
+
+    function clearCanvas(id, digit) {
+      const c = document.getElementById(id);
+      if (c && c.resetCanvas) c.resetCanvas();
+    }
+
+    function evaluateWritingStage() {
+      const writeSummary = document.getElementById('summary-write');
+      writeSummary.style.display = 'flex';
+      
+      const writtenSuccess = state.hasDrawn1 && state.hasDrawn2;
+      writeSummary.innerHTML = `
+        <span>تَقْيِيمُ نَشَاطِ الْكِتَابَةِ:</span>
+        <span>
+          <strong style="color:${writtenSuccess ? '#16a34a' : '#d97706'};">
+            ${writtenSuccess ? '✅ تَمَّ التَّخْطِيطُ وَالتَّتَبُّعُ بِنَجَاحٍ' : '⚠️ يُمْكِنُكَ إِعَادَةُ التَّدَرُّبِ عَلَى رَسْمِ الْأَعْدَادِ مَرَّةً أُخْرَى'}
+          </strong>
+        </span>
+      `;
+
+      document.getElementById('btn-finish-writing').disabled = true;
+      showFinalEvaluation();
+    }
+
+    function showFinalEvaluation() {
+      const report = document.getElementById('final-report-card');
+      report.style.display = 'block';
+
+      const rawPct = (state.totalCorrect / TOTAL_QUESTIONS) * 100;
+      const pct = Math.min(100, Math.max(0, Math.round(rawPct)));
+
+      document.getElementById('stat-correct-count').textContent = state.totalCorrect;
+      document.getElementById('stat-wrong-count').textContent = state.totalWrong;
+      document.getElementById('circle-percentage').textContent = pct + '%';
+
+      const circumference = 2 * Math.PI * 60;
+      const offset = circumference - (circumference * pct) / 100;
+      const circleBar = document.getElementById('circle-bar');
+      circleBar.style.strokeDasharray = circumference;
+      circleBar.style.strokeDashoffset = offset;
+
+      const feedback = document.getElementById('pedagogical-comment');
+      if (pct >= 85) {
+        feedback.innerHTML = '🌟 <strong>مُمْتَازٌ جِدًّا!</strong> اسْتِيعَابٌ كَامِلٌ لِلْأَعْدَادِ مِنْ 1 إِلَى 5 قِرَاءَةً، تَمْثِيلًا، وَكِتَابَةً.';
+        feedback.style.color = '#15803d';
+      } else if (pct >= 60) {
+        feedback.innerHTML = '👍 <strong>جَيِّدٌ!</strong> لَدَى التِّلْمِيذِ تَحَكُّمٌ مُعْتَبَرٌ، وَيُفَضَّلُ مَسْحُ الْأَخْطَاءِ بِإِعَادَةِ التَّطْبِيقِ مَرَّةً أُخْرَى.';
+        feedback.style.color = '#b45309';
+      } else {
+        feedback.innerHTML = '⚠️ <strong>يَحْتَاجُ إِلَى دَعْمٍ:</strong> يُوصَى بِمُرَاجَعَةِ رَبْطِ الْكَمِّيَّاتِ بِالْأَعْدَادِ بِاسْتِعْمَالِ الْأَصَابِعِ وَالْخَشِيبَاتِ.';
+        feedback.style.color = '#b91c1c';
+      }
+
+      AudioEngine.correctSound();
+      report.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function unlockCard(id) {
+      const c = document.getElementById(id);
+      if (c) {
+        c.classList.remove('locked');
+        setTimeout(() => c.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+      }
+    }
+
+    function showPartialSummary(id, correct, wrong) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.style.display = 'flex';
+        el.innerHTML = `
+          <span>تَقْيِيمُ الْمَحَطَّةِ:</span>
+          <span>
+            <strong style="color:#16a34a;">✅ صَحِيح: ${correct}</strong>
+            &nbsp;|&nbsp;
+            <strong style="color:#dc2626;">❌ خَطَأ: ${wrong}</strong>
+          </span>
+        `;
+      }
+    }
+
+    function resetFullApp() {
+      window.location.reload();
+    }
+
+    function initAllActivities() {
+      initCanvas('canvas-1', '1');
+      initCanvas('canvas-2', '2');
+      verifySubscription();
+    }
+
+    window.onload = initAllActivities;
+  </script>
+</body>
+</html>
