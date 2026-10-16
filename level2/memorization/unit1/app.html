@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>تحدي المحفوظات - نشيد مَدْرَسَتِي</title>
+  
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #4A90E2;
+      --secondary: #F39C12;
+      --success: #2ECC71;
+      --warning: #F1C40F;
+      --danger: #E74C3C;
+      --orange-alert: #FF9800;
+      --bg: #F4F7FC;
+      --card-bg: #FFFFFF;
+      --text: #2C3E50;
+      --text-muted: #7F8C8D;
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 16px 14px 100px 14px;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #2C3E50;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .section-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 22px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+      border: 2px solid transparent;
+      transition: all 0.4s ease;
+      position: relative;
+    }
+
+    .section-card.active {
+      border-color: var(--primary);
+      box-shadow: 0 10px 28px rgba(74, 144, 226, 0.15);
+    }
+
+    .section-card.locked {
+      opacity: 0.55;
+      pointer-events: none;
+      filter: grayscale(0.5);
+    }
+
+    .section-card.completed {
+      border-color: var(--success);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px dashed #ECEFF1;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .badge-primary { background: #EBF3FD; color: var(--primary); }
+
+    .poem-box {
+      font-size: 1.15rem;
+      font-weight: 700;
+      text-align: center;
+      line-height: 2.2;
+    }
+
+    .poem-line {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid #F5F7FA;
+    }
+
+    .hidden-word-slot {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 68px;
+      padding: 2px 10px;
+      margin: 0 4px;
+      background: #EDF2F7;
+      border: 2px dashed #CBD5E0;
+      border-radius: 10px;
+      color: transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 1.05rem;
+    }
+
+    .hidden-word-slot.empty {
+      background: #FFF3E0;
+      border-color: var(--secondary);
+      color: #E67E22;
+      animation: pulse 1.8s infinite;
+    }
+
+    .hidden-word-slot.solved-green {
+      background: #E8F8F5;
+      border: 2px solid var(--success);
+      color: #27AE60;
+      cursor: default;
+    }
+
+    .hidden-word-slot.solved-yellow {
+      background: #FEF9E7;
+      border: 2px solid var(--warning);
+      color: #D4AC0D;
+      cursor: default;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .audio-player-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 15px 0;
+      padding: 10px;
+      background: #F8FAFC;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .audio-player-bar.disabled {
+      background: #EDF2F7;
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .btn-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: none;
+      background: var(--primary);
+      color: #FFF;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-circle:disabled {
+      background: #A0AEC0;
+      cursor: not-allowed;
+    }
+
+    .btn-main {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 900;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 14px rgba(74, 144, 226, 0.35);
+      transition: all 0.2s ease;
+      margin-top: 14px;
+    }
+
+    .btn-main:active {
+      transform: scale(0.97);
+    }
+
+    .stage-report {
+      margin-top: 14px;
+      padding: 10px;
+      background: #FAFAFA;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid #ECEFF1;
+    }
+
+    .stat-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+    }
+
+    .reorder-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .reorder-item {
+      background: #FFFFFF;
+      border: 2px solid #E2E8F0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .reorder-item.first-try {
+      border-color: var(--success);
+      background-color: #F4FDF8;
+    }
+
+    .reorder-item.multi-try {
+      border-color: var(--warning);
+      background-color: #FEFDF2;
+    }
+
+    .reorder-item.dragging {
+      opacity: 0.7;
+      background: #EBF3FD;
+      border: 2px dashed var(--primary);
+    }
+
+    .drag-handle {
+      color: #A0AEC0;
+      font-size: 1.2rem;
+      margin-left: 8px;
+    }
+
+    .mic-control-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .mic-btn {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-size: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .mic-btn.listening {
+      background: var(--danger);
+      animation: pulse-mic 1.2s infinite;
+    }
+
+    @keyframes pulse-mic {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.6); }
+      70% { box-shadow: 0 0 0 16px rgba(231, 76, 60, 0); }
+    }
+
+    .voice-error-box {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background-color: #FFF3E0;
+      border: 2px solid var(--orange-alert);
+      color: #E65100;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+      animation: slideInDown 0.3s ease;
+    }
+
+    .voice-error-box.visible {
+      display: inline-flex;
+    }
+
+    .voice-error-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      background-color: var(--orange-alert);
+      color: #FFF;
+      border-radius: 50%;
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+
+    @keyframes slideInDown {
+      from { transform: translateY(-8px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .live-transcript-box {
+      min-height: 140px;
+      width: 100%;
+      background: #FAFAFA;
+      border: 2px dashed #CBD5E0;
+      border-radius: 14px;
+      padding: 14px;
+      text-align: right;
+      font-size: 1.15rem;
+      line-height: 2.3;
+      font-weight: 700;
+    }
+
+    .spoken-word {
+      display: inline-block;
+      margin: 0 3px;
+      padding: 1px 5px;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .spoken-word.verified-first {
+      color: #1E824C;
+      background: #E8F8F5;
+      border: 1px solid #A3E4D7;
+    }
+
+    .spoken-word.verified-assisted {
+      color: #B7791F;
+      background: #FEF9E7;
+      border: 1px solid #F9E79F;
+    }
+
+    .help-prompt-box {
+      display: none;
+      background: #FFF8E1;
+      border: 2px solid var(--warning);
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    .help-prompt-box.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn-small {
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .sheet-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(2px);
+      z-index: 1000;
+      display: none;
+      align-items: flex-end;
+    }
+
+    .sheet-overlay.active {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .bottom-sheet {
+      background: #FFFFFF;
+      width: 100%;
+      max-height: 70vh;
+      border-radius: 24px 24px 0 0;
+      padding: 22px 18px 30px;
+      box-shadow: 0 -8px 30px rgba(0,0,0,0.15);
+      animation: slideUp 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .sheet-options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .choice-btn {
+      padding: 14px;
+      background: #F8FAFC;
+      border: 2px solid #E2E8F0;
+      border-radius: 14px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #2D3748;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+
+    .choice-btn:active {
+      background: #EDF2F7;
+      transform: scale(0.98);
+    }
+
+    .final-score-card {
+      text-align: center;
+      padding: 26px 18px;
+    }
+
+    .circle-progress-wrapper {
+      position: relative;
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 16px;
+    }
+
+    .circle-progress-svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .circle-bg {
+      fill: none;
+      stroke: #EDF2F7;
+      stroke-width: 12;
+    }
+
+    .circle-val {
+      fill: none;
+      stroke: var(--success);
+      stroke-width: 12;
+      stroke-linecap: round;
+      stroke-dasharray: 440;
+      stroke-dashoffset: 440;
+      transition: stroke-dashoffset 1.5s ease-out;
+    }
+
+    .circle-text-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    .score-feedback {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .browser-btn {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 9999;
+      background: var(--secondary);
+      color: #fff;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-family: inherit;
+      font-size: 0.85rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+
+    .ios-warning {
+      display: none;
+      background: #FFF3E0;
+      border: 2px solid var(--orange-alert);
+      border-radius: 10px;
+      padding: 10px;
+      margin: 12px 0;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #E65100;
+      text-align: center;
+    }
+
+    /* زر العودة إلى البوت */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="browser-btn" onclick="forceOpenInBrowser()">🌐 افتح في المتصفح</button>
+
+  <div class="ios-warning" id="iosWarning">
+    ⚠️ إذا كُنْتَ تَسْتَعْمِلُ iPhone وَوَجَدْتَ مُشْكِلَةً فِي الْمِيكْرُوفُون، يُمْكِنُكَ تَشْغِيلُ التَّطْبِيقِ عَلَى جِهَازِ Android أَوْ كَمْبْيُوتَر.
+  </div>
+
+  <header>
+    <h1>نَشِيدُ مَدْرَسَتِي 🏫</h1>
+    <p class="subtitle">تحدي الحفظ التفاعلي لطلاب الابتدائي</p>
+  </header>
+
+  <section class="section-card active" id="sec-stage-0">
+    <div class="card-header">
+      <span class="card-title">📖 مرحلة التدريب والاستماع</span>
+      <span class="badge badge-primary" id="audio-lock-badge">متاح للاستماع</span>
+    </div>
+
+    <div class="audio-player-bar" id="audioBar">
+      <button class="btn-circle" id="playAudioBtn" onclick="toggleMainAudio()">▶</button>
+      <span id="audioLabelText" style="font-weight: 700; font-size: 0.95rem;">استمع لترتيل الأنشودة</span>
+      <audio id="mainAudio" src="nashid.mp3" preload="auto"></audio>
+    </div>
+
+    <div class="poem-box" id="fullPoemText">
+      <div class="poem-line">« مَدْرَسَتِي حَدِيقَتِي ... وَبَابُهَا الْكِتَابُ »</div>
+      <div class="poem-line">« أَقْرَأُ فِيهِ قِصَصًا ... وَأَدْرُسُ الْحِسَابَ »</div>
+      <div class="poem-line">« فِي كُلِّ صُبْحٍ نَذْهَبُ ... مَعَ الرِّفَاقِ نَلْعَبُ »</div>
+      <div class="poem-line">« نَدْرُسُ فِي صُفُوفِنَا ... وَفِي الْمَسَاءِ نَكْتُبُ »</div>
+      <div class="poem-line">« أَنَا الصَّغِيرُ الصَّالِحُ ... بِعَمَلِي أُكَافِحُ »</div>
+      <div style="font-size: 0.85rem; color: #95A5A6; margin-top: 10px;">الشاعر: محمد السيّد محمد</div>
+    </div>
+
+    <button class="btn-main" onclick="startLevel1Part1()">
+      هل أنت مستعد للاختبار؟ انطلق! 🚀
+    </button>
+  </section>
+
+  <section class="section-card locked" id="sec-stage-1">
+    <div class="card-header">
+      <span class="card-title">🎯 المستوى 1: اختفاء 20%</span>
+      <span class="badge badge-primary">اضغط الفراغ</span>
+    </div>
+    <div class="poem-box" id="poemStage1Container"></div>
+    <div class="stage-report">
+      <span class="stat-badge" style="color: var(--success);">✔ صح من أول مرة: <b id="s1-green">0</b></span>
+      <span class="stat-badge" style="color: #D4AC0D;">⚠ بعد خطأ: <b id="s1-yellow">0</b></span>
+      <span class="stat-badge" style="color: var(--danger);">✖ أخطاء: <b id="s1-wrong">0</b></span>
+    </div>
+    <button class="btn-main" id="btnGoStage2" style="display:none;" onclick="startLevel1Part2()">
+      أحسنت! إلى المرحلة التالية (إخفاء 40%) 🌟
+    </button>
+  </section>
+
+  <section class="section-card locked" id="sec-stage-2">
+    <div class="card-header">
+      <span class="card-title">🔥 المستوى 1: اختفاء 40%</span>
+      <span class="badge badge-primary">تركيز أعلى</span>
+    </div>
+    <div class="poem-box" id="poemStage2Container"></div>
+    <div class="stage-report">
+      <span class="stat-badge" style="color: var(--success);">✔ صح من أول مرة: <b id="s2-green">0</b></span>
+      <span class="stat-badge" style="color: #D4AC0D;">⚠ بعد خطأ: <b id="s2-yellow">0</b></span>
+      <span class="stat-badge" style="color: var(--danger);">✖ أخطاء: <b id="s2-wrong">0</b></span>
+    </div>
+    <button class="btn-main" id="btnGoReorder" style="display:none;" onclick="startLevel2Reorder()">
+      ممتاز! انتقل إلى ترتيب الأبيات 🧩
+    </button>
+  </section>
+
+  <section class="section-card locked" id="sec-stage-3">
+    <div class="card-header">
+      <span class="card-title">🧩 المستوى 2: رتّب الأبيات</span>
+      <span class="badge badge-primary">سحب وإفلات</span>
+    </div>
+    <p style="font-size:0.85rem; color:#718096; margin-bottom:12px;">حرّك الأبيات من الأعلى للأسفل حتى ترتب النشيد كما حفظته:</p>
+    <ul class="reorder-list" id="reorderUl"></ul>
+    <button class="btn-main" onclick="checkPoemOrder()">
+      تحقق من ترتيبك ✔️
+    </button>
+    <div class="stage-report" id="stage3-report" style="display:none;">
+      <span class="stat-badge" id="s3-status">محاولات الترتيب: <b>0</b></span>
+    </div>
+    <button class="btn-main" id="btnGoSpeech" style="display:none; background: var(--secondary);" onclick="startLevel3Voice()">
+      تحدي المستشار الصوتي النهائي 🎙️
+    </button>
+  </section>
+
+  <section class="section-card locked" id="sec-stage-4">
+    <div class="card-header">
+      <span class="card-title">🎙️ المستوى 3: مستشار الصوت</span>
+      <span class="badge badge-primary">تسميع هادئ</span>
+    </div>
+    
+    <div class="mic-control-center">
+      <button class="mic-btn" id="micBtn" onclick="toggleVoiceRecognition()">🎤</button>
+      <span id="voiceStatusText" style="font-size: 0.95rem; font-weight: 700; color: #4A5568; text-align: center;">اضغط الميكروفون وابدأ القراءة</span>
+      
+      <div class="voice-error-box" id="voiceErrorBadge">
+        <span class="voice-error-icon">✕</span>
+        <span>الكلمة غير مطابقة، تذكرها وواصل...</span>
+      </div>
+
+      <p id="liveHeardWords" style="font-size:0.8rem; color:#718096; min-height: 20px;"></p>
+    </div>
+
+    <div class="live-transcript-box" id="voiceLiveBox"></div>
+
+    <div class="help-prompt-box" id="helpPromptBox">
+      <p style="font-weight: 800; color: #B7791F;">هل تحتاج إلى مساعدة؟ 🤔</p>
+      <div class="btn-group">
+        <button class="btn-small" style="background:var(--success); color:#fff;" onclick="acceptVoiceHelp(true)">نعم، ساعدني</button>
+        <button class="btn-small" style="background:#E2E8F0; color:#4A5568;" onclick="acceptVoiceHelp(false)">لا، سأ
