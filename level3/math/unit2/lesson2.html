@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>الجمع والطرح (1)</title>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    :root {
+      --primary: #1976d2;
+      --secondary: #ff9800;
+      --success: #2e7d32;
+      --danger: #d32f2f;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #cfd8dc;
+      --text-muted: #546e7a;
+    }
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg); margin: 0; padding: 12px; color: #263238; direction: rtl; }
+    .container { max-width: 580px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+    
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(25, 118, 210, 0.15);
+      border: 2px solid #e3f2fd;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #0d47a1; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 22px; }
+
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: var(--primary);
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(25, 118, 210, 0.3);
+    }
+
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: var(--success);
+      border: 2px solid var(--success);
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+    }
+
+    .sub-status-msg { margin-top: 15px; font-size: 0.95rem; font-weight: 700; min-height: 24px; }
+
+    .header {
+      background: #fff;
+      padding: 18px;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-top: 6px solid var(--primary);
+    }
+    .header h1 { margin: 0; font-size: 1.4rem; color: var(--primary); }
+    .header .sub { font-size: 0.85rem; color: #546e7a; margin-top: 6px; font-weight: bold; }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: var(--primary);
+      border-bottom: 2px solid #eceff1;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .badge-name {
+      display: inline-block;
+      background: #e3f2fd;
+      color: #0d47a1;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 0.85rem;
+      margin-bottom: 8px;
+    }
+
+    .exercise-box {
+      background: #fafafa;
+      border: 1px solid #eeeeee;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+      line-height: 2.2;
+    }
+
+    .math-ltr {
+      direction: ltr !important;
+      unicode-bidi: isolate;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      flex-wrap: wrap;
+    }
+
+    input.inp {
+      width: 58px;
+      height: 34px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: 2px solid #90a4ae;
+      border-radius: 6px;
+      background: #fff;
+      direction: ltr;
+    }
+    input.inp:focus { outline: none; border-color: var(--primary); }
+    input.inp.correct { background-color: #e8f5e9 !important; border-color: var(--success) !important; color: var(--success); }
+    input.inp.wrong { background-color: #ffebee !important; border-color: var(--danger) !important; color: var(--danger); }
+
+    select.inp-select {
+      height: 36px;
+      border-radius: 6px;
+      border: 2px solid #90a4ae;
+      font-size: 0.9rem;
+      font-weight: bold;
+      padding: 0 8px;
+      background: #fff;
+    }
+    select.inp-select.correct { border-color: var(--success); background: #e8f5e9; color: var(--success); }
+    select.inp-select.wrong { border-color: var(--danger); background: #ffebee; color: var(--danger); }
+
+    .btn {
+      width: 100%;
+      padding: 11px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-check { background: #37474f; margin-top: 8px; }
+    .btn-reset { background: var(--danger); margin-top: 12px; }
+
+    .score-feedback {
+      font-size: 0.85rem;
+      font-weight: bold;
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 6px;
+      display: none;
+    }
+    .score-feedback.show { display: block; }
+    .score-feedback.pass { background: #e8f5e9; color: var(--success); }
+    .score-feedback.fail { background: #ffebee; color: var(--danger); }
+
+    .pyramid { display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 15px 0; direction: ltr; }
+    .pyr-row { display: flex; gap: 6px; }
+    .pyr-cell {
+      width: 52px;
+      height: 44px;
+      background: #fff8e1;
+      border: 2px solid #ffe082;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.05rem;
+    }
+
+    .dashboard {
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      border: 2px solid var(--primary);
+    }
+    .dash-metric { display: flex; justify-content: space-around; margin: 16px 0; }
+    .metric-box { flex: 1; padding: 10px; margin: 0 4px; border-radius: 8px; background: #eceff1; }
+    .metric-val { font-size: 1.4rem; font-weight: bold; }
+    .metric-val.green { color: var(--success); }
+    .metric-val.red { color: var(--danger); }
+    .metric-val.blue { color: var(--primary); }
+    .verdict-box { font-size: 1.1rem; font-weight: bold; padding: 12px; border-radius: 8px; margin-top: 10px; }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 900;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الْأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الِانْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الِاشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">📢 الِانْضِمَامُ إِلَى الْقَنَاةِ</a>
+    <button class="btn-check-sub" onclick="verifySubscription()">✅ تَأْكِيدُ الِاشْتِرَاكِ</button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="header">
+    <h1>الْجَمْعُ وَالطَّرْحُ (1)</h1>
+    <div class="sub">السنة الثالثة ابتدائي • كتاب التلميذ ص 13 و دفتر الأنشطة ص 7</div>
+  </div>
+
+  <!-- 1. أَكْتَشِفُ -->
+  <div class="card">
+    <div class="card-title"><span>أَكْتَشِفُ (كتاب التلميذ ص 13)</span></div>
+
+    <p style="font-weight: bold; margin: 0 0 10px 0;">كَيْفَ أَحْسُبُ بِتَمَعُّنٍ <span class="math-ltr">54 + 7</span> ؟</p>
+    
+    <div class="exercise-box">
+      <span class="badge-name">• مَرْيَم : أَسْتَعْمِلُ التَّفْكِيكَ</span><br>
+      <div class="math-ltr">54 = 50 + 4</div><br>
+      <div class="math-ltr">54 + 7 = 50 + 4 + 7</div><br>
+      <div class="math-ltr">54 + 7 = 50 + <input type="number" class="inp" id="in_akt_1" data-ans="11"></div><br>
+      <div class="math-ltr">54 + 7 = <input type="number" class="inp" id="in_akt_2" data-ans="61"></div>
+    </div>
+
+    <div class="exercise-box">
+      <span class="badge-name">• أَمِين : اسْتَعْمِلُ المتمم إلى : 60</span><br>
+      <div class="math-ltr">7 = 6 + 1</div><br>
+      <div class="math-ltr">54 + 7 = 54 + 6 + 1</div><br>
+      <div class="math-ltr">54 + 7 = <input type="number" class="inp" id="in_akt_3" data-ans="60"> + 1</div><br>
+      <div class="math-ltr">54 + 7 = <input type="number" class="inp" id="in_akt_4" data-ans="61"></div>
+    </div>
+
+    <p style="font-weight: bold; margin: 15px 0 10px 0;">كَيْفَ أَحْسُبُ بِتَمَعُّنٍ <span class="math-ltr">54 - 7</span> ؟</p>
+
+    <div class="exercise-box">
+      <span class="badge-name">• سَامِي : هَلْ عَرَفْتَ كَيْفَ حَسَبْتُ؟</span><br>
+      <div class="math-ltr">54 - 7 = 50 - 3</div><br>
+      <div class="math-ltr">54 - 7 = <input type="number" class="inp" id="in_akt_5" data-ans="47"></div>
+    </div>
+
+    <div class="exercise-box">
+      <span class="badge-name">• أَيْمَن : أُحَوِّلُ الطَّرْحَ إِلَى الجَمْعِ</span><br>
+      أَبْحَثُ عَنْ عَدَدٍ أُضِيفُهُ إِلَى 7 لِأَجِدَ 54:<br>
+      <div class="math-ltr">7 + <input type="number" class="inp" id="in_akt_6" data-ans="47"> = 54</div><br>
+      <div class="math-ltr">54 - 7 = <input type="number" class="inp" id="in_akt_7" data-ans="47"></div>
+    </div>
+
+    <button class="btn btn-check" onclick="evaluateBlock(['in_akt_1','in_akt_2','in_akt_3','in_akt_4','in_akt_5','in_akt_6','in_akt_7'], 'fb_akt')">تحقق من إجابات أَكْتَشِفُ</button>
+    <div id="fb_akt" class="score-feedback"></div>
+  </div>
+
+  <!-- 2. أُنْجِزُ -->
+  <div class="card">
+    <div class="card-title"><span>أُنْجِزُ (كتاب التلميذ ص 13)</span></div>
+    <p style="font-weight: bold;">أَحْسُبْ فِي كُلِّ حَالَةٍ، بِكَيْفِيَّتَيْنِ مُخْتَلِفَتَيْنِ:</p>
+
+    <div class="exercise-box">
+      <b>العملية الأولى: <span class="math-ltr">59 + 3</span></b><br>
+      <span class="badge-name">الكيفية الأولى: التَّفْكِيك</span><br>
+      • المرحلة 1: <span class="math-ltr">59 + 3 = <input type="number" class="inp" id="inj_1a" data-ans="50"> + <input type="number" class="inp" id="inj_1b" data-ans="9"> + <input type="number" class="inp" id="inj_1c" data-ans="3"></span><br>
+      • المرحلة 2: <span class="math-ltr">59 + 3 = <input type="number" class="inp" id="inj_1d" data-ans="50"> + <input type="number" class="inp" id="inj_1e" data-ans="12"></span><br>
+      • المحصلة النهائية: <span class="math-ltr">59 + 3 = <input type="number" class="inp" id="inj_1f" data-ans="62"></span><br><br>
+
+      <span class="badge-name">الكيفية الثانية: التَّتْمِيم (المتمم إلى 60)</span><br>
+      • المرحلة 1: <span class="math-ltr">59 + 3 = 59 + <input type="number" class="inp" id="inj_2a" data-ans="1"> + <input type="number" class="inp" id="inj_2b" data-ans="2"></span><br>
+      • المرحلة 2: <span class="math-ltr">59 + 3 = <input type="number" class="inp" id="inj_2c" data-ans="60"> + <input type="number" class="inp" id="inj_2d" data-ans="2"></span><br>
+      • المحصلة النهائية: <span class="math-ltr">59 + 3 = <input type="number" class="inp" id="inj_2e" data-ans="62"></span>
+    </div>
+
+    <div class="exercise-box">
+      <b>العملية الثانية: <span class="math-ltr">35 + 18</span></b><br>
+      <span class="badge-name">الكيفية الأولى: التَّفْكِيك</span><br>
+      • المرحلة 1: <span class="math-ltr">35 + 18 = <input type="number" class="inp" id="inj_3a" data-ans="30"> + <input type="number" class="inp" id="inj_3b" data-ans="10"> + <input type="number" class="inp" id="inj_3c" data-ans="5"> + <input type="number" class="inp" id="inj_3d" data-ans="8"></span><br>
+      • المرحلة 2: <span class="math-ltr">35 + 18 = <input type="number" class="inp" id="inj_3e" data-ans="40"> + <input type="number" class="inp" id="inj_3f" data-ans="13"></span><br>
+      • المحصلة النهائية: <span class="math-ltr">35 + 18 = <input type="number" class="inp" id="inj_3g" data-ans="53"></span><br><br>
+
+      <span class="badge-name">الكيفية الثانية: التَّتْمِيم (المتمم إلى 40)</span><br>
+      • المرحلة 1: <span class="math-ltr">35 + 18 = 35 + <input type="number" class="inp" id="inj_4a" data-ans="5"> + <input type="number" class="inp" id="inj_4b" data-ans="13"></span><br>
+      • المرحلة 2: <span class="math-ltr">35 + 18 = <input type="number" class="inp" id="inj_4c" data-ans="40"> + <input type="number" class="inp" id="inj_4d" data-ans="13"></span><br>
+      • المحصلة النهائية: <span class="math-ltr">35 + 18 = <input type="number" class="inp" id="inj_4e" data-ans="53"></span>
+    </div>
+
+    <div class="exercise-box">
+      <b>المسألة:</b> فِي كِيسِ أَمِين 99 كُرَيَّةً. أَعْطَى لِصَدِيقِهِ سَامِي 37 كُرَيَّةً.<br>
+      مَا هُوَ عَدَدُ كُرَيَّاتِ أَمِين الآنَ؟<br>
+      <div class="math-ltr">99 - 37 = <input type="number" class="inp" id="inj_koryat" data-ans="62"></div>
+    </div>
+
+    <button class="btn btn-check" onclick="evaluateBlock(['inj_1a','inj_1b','inj_1c','inj_1d','inj_1e','inj_1f','inj_2a','inj_2b','inj_2c','inj_2d','inj_2e','inj_3a','inj_3b','inj_3c','inj_3d','inj_3e','inj_3f','inj_3g','inj_4a','inj_4b','inj_4c','inj_4d','inj_4e','inj_koryat'], 'fb_onj')">تحقق من إجابات أُنْجِزُ</button>
+    <div id="fb_onj" class="score-feedback"></div>
+  </div>
+
+  <!-- 3. أَتَمَرَّنُ -->
+  <div class="card">
+    <div class="card-title"><span>أَتَمَرَّنُ (دفتر الأنشطة ص 7)</span></div>
+
+    <div class="exercise-box">
+      <b>1. اِشْرَحِ الكَيْفِيَّاتِ المُخْتَلِفَةِ المُسْتَعْمَلَةِ لِحِسَابِ <span class="math-ltr">43 + 28</span> :</b><br><br>
+      • طريقة أَمِين: <span class="math-ltr">40 + 20 + 3 + 8</span><br>
+      ما هي الكيفية؟ 
+      <select class="inp-select" id="sel_atm1" data-ans="تفكيك">
+        <option value="">-- اختر الكيفية --</option>
+        <option value="تفكيك">تفكيك</option>
+        <option value="تتميم">تتميم</option>
+        <option value="إضافة العقد وطرح الزيادة">إضافة العقد وطرح الزيادة</option>
+      </select><br><br>
+
+      • طريقة مَرْيَم: <span class="math-ltr">43 + 7 + 21</span><br>
+      ما هي الكيفية؟ 
+      <select class="inp-select" id="sel_atm2" data-ans="تتميم">
+        <option value="">-- اختر الكيفية --</option>
+        <option value="تفكيك">تفكيك</option>
+        <option value="تتميم">تتميم</option>
+        <option value="إضافة العقد وطرح الزيادة">إضافة العقد وطرح الزيادة</option>
+      </select><br><br>
+
+      • طريقة أَيْمَن: <span class="math-ltr">43 + 30 - 2</span><br>
+      ما هي الكيفية؟ 
+      <select class="inp-select" id="sel_atm3" data-ans="إضافة العقد وطرح الزيادة">
+        <option value="">-- اختر الكيفية --</option>
+        <option value="تفكيك">تفكيك</option>
+        <option value="تتميم">تتميم</option>
+        <option value="إضافة العقد وطرح الزيادة">إضافة العقد وطرح الزيادة</option>
+      </select>
+    </div>
+
+    <div class="exercise-box">
+      <b>2. اِسْتَعْمِلْ نَفْسَ الكَيْفِيَّاتِ السَّابِقَةِ لِحِسَابِ <span class="math-ltr">76 + 19</span> :</b><br><br>
+      • طريقة أَمِين (التفكيك):<br>
+      <span class="math-ltr">76 + 19 = <input type="number" class="inp" id="atm2_a1" data-ans="70"> + <input type="number" class="inp" id="atm2_a2" data-ans="10"> + <input type="number" class="inp" id="atm2_a3" data-ans="6"> + <input type="number" class="inp" id="atm2_a4" data-ans="9"> = <input type="number" class="inp" id="atm2_a5" data-ans="95"></span><br><br>
+
+      • طريقة مَرْيَم (التتميم):<br>
+      <span class="math-ltr">76 + 19 = 76 + <input type="number" class="inp" id="atm2_m1" data-ans="4"> + <input type="number" class="inp" id="atm2_m2" data-ans="15"> = <input type="number" class="inp" id="atm2_m3" data-ans="95"></span><br><br>
+
+      • طريقة أَيْمَن (إضافة العقد وطرح الزيادة):<br>
+      <span class="math-ltr">76 + 19 = 76 + <input type="number" class="inp" id="atm2_ay1" data-ans="20"> - <input type="number" class="inp" id="atm2_ay2" data-ans="1"> = <input type="number" class="inp" id="atm2_ay3" data-ans="95"></span>
+    </div>
+
+    <div class="exercise-box">
+      <b>3. أُحْسُبْ:</b><br>
+      • <span class="math-ltr">16 + 9 = <input type="number" class="inp" id="atm3_1" data-ans="25"></span><br>
+      • <span class="math-ltr">27 + 19 = <input type="number" class="inp" id="atm3_2" data-ans="46"></span><br>
+      • <span class="math-ltr">57 + 36 = <input type="number" class="inp" id="atm3_3" data-ans="93"></span><br>
+      • <span class="math-ltr">20 + 16 + 54 = <input type="number" class="inp" id="atm3_4" data-ans="90"></span>
+    </div>
+
+    <div class="exercise-box">
+      <b>4. اُحْسُبْ بِاسْتِعْمَالِ طَرِيقَةِ أَيْمَن:</b><br>
+      • <span class="math-ltr">57 + 36 = 57 + <input type="number" class="inp" id="atm4_1a" data-ans="40"> - <input type="number" class="inp" id="atm4_1b" data-ans="4"> = <input type="number" class="inp" id="atm4_1c" data-ans="93"></span><br>
+      • <span class="math-ltr">27 + 19 = 27 + <input type="number" class="inp" id="atm4_2a" data-ans="20"> - <input type="number" class="inp" id="atm4_2b" data-ans="1"> = <input type="number" class="inp" id="atm4_2c" data-ans="46"></span>
+    </div>
+
+    <button class="btn btn-check" onclick="evaluateBlock(['sel_atm1','sel_atm2','sel_atm3','atm2_a1','atm2_a2','atm2_a3','atm2_a4','atm2_a5','atm2_m1','atm2_m2','atm2_m3','atm2_ay1','atm2_ay2','atm2_ay3','atm3_1','atm3_2','atm3_3','atm3_4','atm4_1a','atm4_1b','atm4_1c','atm4_2a','atm4_2b','atm4_2c'], 'fb_atm')">تحقق من إجابات أَتَمَرَّنُ</button>
+    <div id="fb_atm" class="score-feedback"></div>
+  </div>
+
+  <!-- 4. أَبْحَثُ -->
+  <div class="card">
+    <div class="card-title"><span>أَبْحَثُ (دفتر الأنشطة ص 7)</span></div>
+    <p>أَكْمِلْ مَلْءَ هَرَمِ الأَعْدَادِ (كل لبنة تساوي حاصل جمع اللبنتين اللتين تحتها مباشرة):</p>
+    
+    <div class="pyramid">
+      <div class="pyr-row">
+        <div class="pyr-cell">57</div>
+      </div>
+      <div class="pyr-row">
+        <input type="number" class="inp pyr-cell" id="pyr_r2_1" data-ans="20" placeholder="؟">
+        <input type="number" class="inp pyr-cell" id="pyr_r2_2" data-ans="37" placeholder="؟">
+      </div>
+      <div class="pyr-row">
+        <div class="pyr-cell">12</div>
+        <input type="number" class="inp pyr-cell" id="pyr_r1_1" data-ans="8" placeholder="؟">
+        <input type="number" class="inp pyr-cell" id="pyr_r1_2" data-ans="29" placeholder="؟">
+      </div>
+      <div class="pyr-row">
+        <div class="pyr-cell">8</div>
+        <div class="pyr-cell">4</div>
+        <div class="pyr-cell">4</div>
+        <div class="pyr-cell">25</div>
+      </div>
+    </div>
+
+    <button class="btn btn-check" onclick="evaluateBlock(['pyr_r2_1','pyr_r2_2','pyr_r1_1','pyr_r1_2'], 'fb_pyr')">تحقق من الهرم</button>
+    <div id="fb_pyr" class="score-feedback"></div>
+  </div>
+
+  <!-- 5. تَعَلَّمْتُ -->
+  <div class="card" style="border-right: 6px solid var(--success);">
+    <div class="card-title" style="color:var(--success);">تَعَلَّمْتُ (كتاب التلميذ ص 13)</div>
+    <p style="line-height:2; font-size:1rem; margin:0;">
+      عِنْدَمَا أَحْسُبُ بِتَمَعُّنٍ، <b>أُفَكِّكُ الأَعْدَادَ</b> أَوْ <b>أَسْتَعْمِلُ الإِتْمَامَ</b> إِلَى العَشَرَةِ الموَالِيَةِ وَأَسْتَعِينُ <b>بِالشَّرِيطِ العَدَدِيِّ</b> فِي كِلَا الحَالَتَيْنِ.
+    </p>
+  </div>
+
+  <!-- 6. لوحة التقييم العام الشامل -->
+  <div class="dashboard">
+    <h2 style="margin:0 0 10px 0; color:var(--primary);">التقييم الشامل والنتيجة العامة</h2>
+    <p style="font-size:0.9rem; color:#616161; margin-bottom:15px;">اضغط لعرض التقرير الكامل لجميع الأنشطة:</p>
+    
+    <button class="btn" onclick="generateComprehensiveReport()">عرض التقييم العام للدرس 📊</button>
+
+    <div class="dash-metric">
+      <div class="metric-box">
+        <div class="metric-val green" id="final-correct">0</div>
+        <div style="font-size:0.8rem; font-weight:bold;">صحيحة</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val red" id="final-wrong">0</div>
+        <div style="font-size:0.8rem; font-weight:bold;">خاطئة أو فارغة</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val blue" id="final-percent">0%</div>
+        <div style="font-size:0.8rem; font-weight:bold;">النسبة المئوية</div>
+      </div>
+    </div>
+
+    <div id="final-verdict" class="verdict-box" style="display:none;"></div>
+
+    <button class="btn btn-reset" onclick="restartLesson()">🔄 أَعِدِ المُحَاوَلَةَ مِنْ جَدِيدٍ</button>
+    <a href="../../../index.html" class="btn-back-home">← الْعَوْدَةُ إِلَى الْفِهْرِسِ</a>
+  </div>
+
+</div>
+
+<script>
+  // ⚠️ تم حذف BOT_TOKEN من هنا (لأسباب أمنية)
+  const CHANNEL_ID = "-1003910412986";
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#1976d2";
+    statusMsg.textContent = "جَارٍ التَّحَقُّقُ مِنَ الِاشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      // ⬇️ استدعاء الوسيط على Vercel
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارٍ فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#d32f2f";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الِانْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#d32f2f";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الِاتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    verifySubscription();
+  });
+
+  function evaluateBlock(ids, fbId) {
+    let correct = 0;
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el.tagName === "SELECT") {
+        if (el.value === el.dataset.ans) {
+          el.className = "inp-select correct";
+          correct++;
+        } else {
+          el.className = "inp-select wrong";
+        }
+      } else {
+        const val = parseInt(el.value.trim());
+        const ans = parseInt(el.dataset.ans);
+        if (val === ans) {
+          el.className = el.className.includes("pyr-cell") ? "inp pyr-cell correct" : "inp correct";
+          correct++;
+        } else {
+          el.className = el.className.includes("pyr-cell") ? "inp pyr-cell wrong" : "inp wrong";
+        }
+      }
+    });
+
+    const fb = document.getElementById(fbId);
+    fb.className = "score-feedback show " + (correct === ids.length ? "pass" : "fail");
+    fb.innerHTML = `التقييم الجزئي: <b>${correct}</b> من <b>${ids.length}</b> خانات صحيحة. ` + 
+      (correct === ids.length ? "ممتاز! إجاباتك كلها دقيقة." : "يوجد أخطاء في الخانات الحمراء، راجع الحساب مجدداً.");
+  }
+
+  function generateComprehensiveReport() {
+    const allInputs = document.querySelectorAll('input.inp, select.inp-select');
+    let correct = 0;
+    let wrong = 0;
+
+    allInputs.forEach(el => {
+      if (el.tagName === "SELECT") {
+        if (el.value === el.dataset.ans) {
+          correct++;
+          el.className = "inp-select correct";
+        } else {
+          wrong++;
+          el.className = "inp-select wrong";
+        }
+      } else {
+        const val = parseInt(el.value.trim());
+        const ans = parseInt(el.dataset.ans);
+        if (val === ans) {
+          correct++;
+          el.className = el.className.includes("pyr-cell") ? "inp pyr-cell correct" : "inp correct";
+        } else {
+          wrong++;
+          el.className = el.className.includes("pyr-cell") ? "inp pyr-cell wrong" : "inp wrong";
+        }
+      }
+    });
+
+    const total = allInputs.length;
+    const percentage = Math.round((correct / total) * 100);
+
+    document.getElementById('final-correct').innerText = correct;
+    document.getElementById('final-wrong').innerText = wrong;
+    document.getElementById('final-percent').innerText = percentage + "%";
+
+    const vBox = document.getElementById('final-verdict');
+    vBox.style.display = "block";
+
+    if (percentage === 100) {
+      vBox.style.background = "#e8f5e9";
+      vBox.style.color = "#2e7d32";
+      vBox.innerText = "🌟 ممتاز! علامة كاملة، أحسنت استيعاب المنهاج.";
+    } else if (percentage >= 80) {
+      vBox.style.background = "#e3f2fd";
+      vBox.style.color = "#1565c0";
+      vBox.innerText = "👏 جيد جداً! عمل رائع، بقيت بعض الهفوات البسيطة.";
+    } else if (percentage >= 50) {
+      vBox.style.background = "#fff3e0";
+      vBox.style.color = "#ef6c00";
+      vBox.innerText = "👍 حسن! خطوة جيدة، لكنك بحاجة إلى مراجعة بعض المراحل.";
+    } else {
+      vBox.style.background = "#ffebee";
+      vBox.style.color = "#c62828";
+      vBox.innerText = "💪 حاول أفضل في المرة القادمة! راجع طرائق التفكيك والتتميم بعناية ثم أعد المحاولة.";
+    }
+
+    vBox.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function restartLesson() {
+    if (confirm("هل تريد تصفير جميع الإجابات والبدء من جديد؟")) {
+      document.querySelectorAll('input.inp').forEach(inp => {
+        inp.value = "";
+        inp.className = inp.className.includes("pyr-cell") ? "inp pyr-cell" : "inp";
+      });
+      document.querySelectorAll('select.inp-select').forEach(sel => {
+        sel.value = "";
+        sel.className = "inp-select";
+      });
+      document.querySelectorAll('.score-feedback').forEach(fb => {
+        fb.className = "score-feedback";
+        fb.innerHTML = "";
+      });
+      document.getElementById('final-correct').innerText = "0";
+      document.getElementById('final-wrong').innerText = "0";
+      document.getElementById('final-percent').innerText = "0%";
+      document.getElementById('final-verdict').style.display = "none";
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+</script>
+
+</body>
+</html>
