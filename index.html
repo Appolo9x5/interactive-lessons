@@ -6,9 +6,25 @@
   <title>مركز التعلم التفاعلي</title>
   
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
   
   <style>
+    :root {
+      --primary: #0288d1;
+      --primary-dark: #01579b;
+      --success: #2e7d32;
+      --error: #c62828;
+      --warning: #f57c00;
+      --free: #ff9800;
+      --bg: #f4f7fb;
+      --card-bg: #ffffff;
+      --text: #263238;
+      --text-muted: #546e7a;
+      --border: #cfd8dc;
+      --shadow: 0 4px 14px rgba(0,0,0,0.06);
+      --shadow-hover: 0 8px 22px rgba(2,136,209,0.15);
+    }
+
     * {
       box-sizing: border-box;
       font-family: 'Tajawal', sans-serif;
@@ -16,306 +32,483 @@
     }
 
     body {
-      background: #f5f9fc;
-      color: #263238;
+      background: var(--bg);
+      color: var(--text);
       margin: 0;
-      padding: 12px;
-      padding-bottom: 30px;
+      padding: 16px 14px 40px;
+      min-height: 100vh;
       font-size: 1.05rem;
     }
 
-    /* الرأس */
-    .header {
-      text-align: center;
-      margin-bottom: 20px;
-      background: linear-gradient(135deg, #1976d2, #0d47a1);
-      padding: 24px 18px;
-      border-radius: 20px;
+    .container { max-width: 640px; margin: 0 auto; }
+
+    /* ====== الشريط العلوي ====== */
+    .topbar {
+      background: linear-gradient(135deg, #0288d1, #01579b);
       color: #fff;
-      box-shadow: 0 6px 16px rgba(25, 118, 210, 0.25);
+      padding: 18px 18px;
+      border-radius: 20px;
+      box-shadow: 0 6px 18px rgba(2,136,209,0.3);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .header h1 {
-      margin: 0 0 8px 0;
-      font-size: 1.6rem;
+    .topbar-icon {
+      font-size: 1.8rem;
+      background: rgba(255,255,255,0.2);
+      border-radius: 14px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .topbar-text { flex: 1; }
+    .topbar-title {
+      font-size: 1.25rem;
       font-weight: 900;
+      margin: 0 0 2px 0;
     }
-    .header p {
+    .topbar-subtitle {
+      font-size: 0.88rem;
+      opacity: 0.9;
       margin: 0;
-      font-size: 1rem;
-      opacity: 0.95;
+      font-weight: 500;
     }
 
-    /* شاشة التحميل */
+    /* ====== شريط التنقل (Breadcrumb) ====== */
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+      padding: 8px 12px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+    .breadcrumb-item {
+      color: var(--primary);
+      cursor: pointer;
+      padding: 3px 8px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .breadcrumb-item:hover { background: #e3f2fd; }
+    .breadcrumb-item.current {
+      color: var(--text-muted);
+      cursor: default;
+      pointer-events: none;
+    }
+    .breadcrumb-separator { color: #b0bec5; }
+
+    /* ====== شاشة الترحيب ====== */
+    .welcome-screen {
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px 20px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border-top: 6px solid var(--primary);
+    }
+    .welcome-icon { font-size: 3.5rem; margin-bottom: 12px; }
+    .welcome-title {
+      color: var(--primary-dark);
+      font-size: 1.4rem;
+      font-weight: 900;
+      margin-bottom: 8px;
+    }
+    .welcome-desc {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      font-weight: 500;
+    }
+    .welcome-features {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+    .welcome-feature {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      min-width: 90px;
+    }
+    .welcome-feature-icon { font-size: 1.8rem; }
+    .welcome-feature-text {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    /* ====== شاشة التحميل ====== */
     .loading-screen {
       text-align: center;
       padding: 50px 20px;
       background: #fff;
       border-radius: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      box-shadow: var(--shadow);
     }
     .spinner {
       display: inline-block;
-      width: 50px;
-      height: 50px;
+      width: 48px;
+      height: 48px;
       border: 5px solid #e3f2fd;
-      border-top-color: #1976d2;
+      border-top-color: var(--primary);
       border-radius: 50%;
       animation: spin 1s linear infinite;
       margin-bottom: 16px;
     }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
     .loading-text {
-      color: #1976d2;
+      color: var(--primary);
       font-weight: 700;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
     }
 
-    /* بطاقة المستوى */
-    .level-card {
+    /* ====== قائمة العناصر (مستويات / مواد / دروس) ====== */
+    .list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .list-item {
       background: #fff;
-      border-radius: 20px;
-      padding: 18px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-      border-top: 6px solid #1976d2;
-    }
-    .level-card.locked {
-      border-top-color: #b0bec5;
-      opacity: 0.75;
-    }
-
-    .level-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-      padding-bottom: 10px;
-      border-bottom: 2px dashed #e3f2fd;
-    }
-    .level-title {
-      color: #0d47a1;
-      font-size: 1.25rem;
-      font-weight: 900;
-      margin: 0;
-    }
-    .level-status {
-      font-size: 0.9rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 10px;
-    }
-    .level-status.open {
-      background: #c8e6c9;
-      color: #1b5e20;
-    }
-    .level-status.closed {
-      background: #ffcdd2;
-      color: #b71c1c;
-    }
-
-    /* أقسام المواد */
-    .subject-section {
-      margin-bottom: 16px;
-    }
-    .subject-title {
-      color: #e65100;
-      font-size: 1.1rem;
-      font-weight: 900;
-      margin: 12px 0 8px 0;
-      padding-right: 8px;
-      border-right: 4px solid #ff9800;
-      padding-right: 10px;
-    }
-
-    /* روابط الدروس */
-    .lesson-link {
-      display: flex;
-      align-items: center;
-      padding: 12px 14px;
-      margin: 6px 0;
-      background: #f8fafc;
       border: 2px solid #e3f2fd;
-      border-radius: 12px;
-      text-decoration: none;
-      color: #263238;
-      font-weight: 700;
-      font-size: 1rem;
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
       transition: all 0.2s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
-    .lesson-link:hover {
-      background: #e3f2fd;
-      border-color: #1976d2;
-      transform: translateX(-4px);
-    }
-    .lesson-link .icon {
-      font-size: 1.2rem;
-      margin-left: 10px;
+    .list-item:hover,
+    .list-item:active {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-hover);
+      transform: translateY(-2px);
     }
 
-    /* رسالة القفل */
-    .lock-message {
-      background: #ffebee;
-      border: 2px solid #ef9a9a;
+    .list-item-icon {
+      font-size: 1.6rem;
+      width: 46px;
+      height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 12px;
-      padding: 14px;
-      text-align: center;
-      color: #c62828;
-      font-weight: 700;
-      margin-top: 8px;
-    }
-    .lock-message a {
-      display: inline-block;
-      background: #c62828;
-      color: #fff;
-      padding: 8px 18px;
-      border-radius: 10px;
-      text-decoration: none;
-      margin-top: 8px;
-      font-weight: 900;
+      background: #e3f2fd;
+      flex-shrink: 0;
     }
 
-    /* رسالة خطأ عامة */
-    .error-screen {
-      text-align: center;
-      padding: 30px 20px;
+    .list-item-body { flex: 1; min-width: 0; }
+    .list-item-title {
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: var(--primary-dark);
+      margin-bottom: 3px;
+    }
+    .list-item-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .list-item-arrow {
+      font-size: 1.3rem;
+      color: var(--primary);
+      flex-shrink: 0;
+    }
+
+    /* بطاقة المستوى مغلقة */
+    .list-item.locked {
+      background: #fafafa;
+      border-color: #eceff1;
+      cursor: not-allowed;
+      opacity: 0.85;
+    }
+    .list-item.locked:hover { transform: none; box-shadow: 0 2px 6px rgba(0,0,0,0.03); border-color: #eceff1; }
+    .list-item.locked .list-item-icon { background: #eceff1; }
+    .list-item.locked .list-item-title { color: #78909c; }
+    .list-item.locked .list-item-arrow { color: #b0bec5; }
+
+    /* بطاقة الدرس المجاني */
+    .list-item.free-item {
+      background: linear-gradient(135deg, #fff8e1, #fffde7);
+      border: 2px dashed var(--free);
+    }
+    .list-item.free-item:hover {
+      border-style: solid;
+      box-shadow: 0 8px 22px rgba(255,152,0,0.2);
+    }
+    .list-item.free-item .list-item-icon { background: #ffe0b2; }
+    .list-item.free-item .list-item-title { color: #e65100; }
+    .list-item.free-item .list-item-arrow { color: var(--free); }
+
+    .free-badge {
+      display: inline-block;
+      background: var(--free);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-radius: 8px;
+      margin-right: 6px;
+      vertical-align: middle;
+    }
+
+    /* زر العودة */
+    .back-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      background: #fff;
+      color: var(--primary-dark);
+      border: 2px solid var(--primary);
+      padding: 12px;
+      border-radius: 14px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      cursor: pointer;
+      margin-top: 18px;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .back-btn:hover { background: #e3f2fd; }
+
+    /* شاشة القفل */
+    .lock-screen {
       background: #fff;
       border-radius: 20px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      padding: 30px 22px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      border: 2px solid #ffe0b2;
     }
-    .error-icon { font-size: 50px; margin-bottom: 10px; }
-    .error-text {
-      color: #c62828;
+    .lock-icon { font-size: 3rem; margin-bottom: 12px; }
+    .lock-title {
+      color: var(--primary-dark);
+      font-size: 1.3rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+    .lock-desc {
+      color: var(--text-muted);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: var(--primary);
+      color: #fff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 900;
+      border-radius: 14px;
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 10px rgba(2,136,209,0.3);
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: var(--success);
+      border: 2px solid var(--success);
+      padding: 13px;
+      font-weight: 900;
+      border-radius: 14px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .sub-status-msg {
+      margin-top: 14px;
+      font-size: 0.95rem;
       font-weight: 700;
-      font-size: 1.1rem;
-      line-height: 1.6;
+      min-height: 24px;
     }
 
-    /* التذييل */
+    /* Footer */
     .footer {
       text-align: center;
       color: #90a4ae;
-      font-size: 0.85rem;
-      margin-top: 24px;
+      font-size: 0.82rem;
+      margin-top: 28px;
+      padding: 12px;
+      font-weight: 500;
     }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <h1>📚 مركز التعلم التفاعلي</h1>
-    <p>اختر المستوى والدرس لتبدأ رحلة التعلم</p>
-  </div>
+<div class="container">
 
-  <div id="app-content">
-    <div class="loading-screen">
-      <div class="spinner"></div>
-      <div class="loading-text">جَارٍ التَّحَقُّقُ مِنَ الِاشْتِرَاكِ...</div>
+  <!-- الشريط العلوي -->
+  <div class="topbar">
+    <div class="topbar-icon">📚</div>
+    <div class="topbar-text">
+      <h1 class="topbar-title">مركز التعلم التفاعلي</h1>
+      <p class="topbar-subtitle">دروس تفاعلية للمستويات الابتدائية</p>
     </div>
   </div>
 
-  <div class="footer">
-    © مركز التعلم التفاعلي
+  <!-- Breadcrumb -->
+  <div class="breadcrumb" id="breadcrumb"></div>
+
+  <!-- منطقة المحتوى الرئيسية -->
+  <div id="app-content">
+    <div class="loading-screen">
+      <div class="spinner"></div>
+      <div class="loading-text">جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...</div>
+    </div>
   </div>
+
+  <div class="footer">© مركز التعلم التفاعلي</div>
+</div>
 
 <script>
   // ========================================
   // ⚙️ إعدادات المشروع
   // ========================================
-  
-  // رابط Vercel (الوسيط)
   const VERCEL_URL = "https://interactive-lessons-nine.vercel.app";
-  
-  // معرفات القنوات الثلاث
+
   const CHANNELS = {
-    level1: { 
-      id: "-1004456852024", 
-      name: "السنة الأولى",
-      link: "https://t.me/c/4456852024"
-    },
-    level2: { 
-      id: "-1004461185731", 
-      name: "السنة الثانية",
-      link: "https://t.me/c/4461185731"
-    },
-    level3: { 
-      id: "-1003910412986", 
-      name: "السنة الثالثة",
-      link: "https://t.me/c/3910412986"
-    }
+    level1: { id: "-1004456852024", name: "السنة الأولى", link: "https://t.me/c/4456852024" },
+    level2: { id: "-1004461185731", name: "السنة الثانية", link: "https://t.me/c/4461185731" },
+    level3: { id: "-1003910412986", name: "السنة الثالثة", link: "https://t.me/c/3910412986" }
   };
 
   // ========================================
-  // 📚 بيانات الدروس
-  // أضف دروسك هنا حسب الحاجة
+  // 📚 هيكل المستويات والمواد والدروس
   // ========================================
-  const LESSONS = {
+  const CURRICULUM = {
     level1: {
       name: "السنة الأولى ابتدائي",
+      icon: "1️⃣",
       subjects: {
         arabic: {
-          name: "📖 اللغة العربية",
+          name: "اللغة العربية",
+          icon: "📖",
           lessons: [
-            { title: "الدرس 1: أحمد يرحب بكم", url: "level1/arabic/unit1/lesson1.html" }
+            { title: "الدرس 1: أحمد يرحب بكم", url: "level1/arabic/unit1/lesson1.html" },
+            { title: "الدرس 2: تعرف على عائلتي", url: "level1/arabic/unit2/lesson2.html" },
+            { title: "الدرس 3: في منزلنا", url: "level1/arabic/unit3/lesson3.html" }
           ]
         },
         math: {
-          name: "📐 الرياضيات",
+          name: "الرياضيات",
+          icon: "📐",
           lessons: [
-            // أضف دروس الرياضيات هنا
+            { title: "الدرس 1: الأعداد من 1 إلى 5 (ج1)", url: "level1/math/unit1/lesson1.html" },
+            { title: "الدرس 2: تعيين موقع في الفضاء", url: "level1/math/unit2/lesson2.html" },
+            { title: "الدرس 3: الأعداد من 1 إلى 5 (ج2)", url: "level1/math/unit3/lesson3.html" }
           ]
         },
         memorization: {
-          name: "🎵 المحفوظات",
+          name: "المحفوظات",
+          icon: "🎵",
           lessons: [
-            // أضف دروس المحفوظات هنا
+            { title: "الدرس 1: نشيد قسمنا", url: "level1/memorization/unit1/index.html" }
           ]
         }
       }
     },
     level2: {
       name: "السنة الثانية ابتدائي",
+      icon: "2️⃣",
       subjects: {
         arabic: {
-          name: "📖 اللغة العربية",
+          name: "اللغة العربية",
+          icon: "📖",
           lessons: [
-            { title: "الدرس 1: اليوم نعود إلى المدرسة", url: "level2/arabic/unit1/lesson1.html" }
+            { title: "الدرس 1: اليوم نعود إلى المدرسة", url: "level2/arabic/unit1/lesson1.html" },
+            { title: "الدرس 2: في ساحة المدرسة", url: "level2/arabic/unit2/lesson2.html" },
+            { title: "الدرس 3: في القسم", url: "level2/arabic/unit3/lesson3.html" }
           ]
         },
         math: {
-          name: "📐 الرياضيات",
-          lessons: []
+          name: "الرياضيات",
+          icon: "📐",
+          lessons: [
+            { title: "الدرس 1: عد كميات صغيرة", url: "level2/math/unit1/lesson1.html" },
+            { title: "الدرس 2: جمع وطرح كميات صغيرة", url: "level2/math/unit2/lesson2.html" },
+            { title: "الدرس 3: متتالية الأعداد", url: "level2/math/unit3/lesson3.html" }
+          ]
         },
         memorization: {
-          name: "🎵 المحفوظات",
-          lessons: []
+          name: "المحفوظات",
+          icon: "🎵",
+          lessons: [
+            { title: "الدرس 1: نشيد مدرستي", url: "level2/memorization/unit1/index.html" }
+          ]
         }
       }
     },
     level3: {
       name: "السنة الثالثة ابتدائي",
+      icon: "3️⃣",
       subjects: {
         arabic: {
-          name: "📖 اللغة العربية",
+          name: "اللغة العربية",
+          icon: "📖",
           lessons: [
+            { title: "الدرس 2: الوعد هو الوعد", url: "level3/arabic/unit2/lesson2.html" },
             { title: "الدرس 3: الفراشة والنملة", url: "level3/arabic/unit1/lesson3.html" }
           ]
         },
-        islamic: {
-          name: "🕌 التربية الإسلامية",
-          lessons: []
-        },
         math: {
-          name: "📐 الرياضيات",
-          lessons: []
+          name: "الرياضيات",
+          icon: "📐",
+          lessons: [
+            { title: "الدرس 1: الأعداد من 0 إلى 99", url: "level3/math/unit1/lesson1.html" },
+            { title: "الدرس 2: الجمع والطرح (1)", url: "level3/math/unit2/lesson2.html" },
+            { title: "الدرس 3: مقارنة أطوال", url: "level3/math/unit3/lesson3.html" }
+          ]
+        },
+        islamic: {
+          name: "التربية الإسلامية",
+          icon: "🕌",
+          lessons: [
+            { title: "5 دروس مدمجة: أركان الإسلام والإيمان، سورة التكاثر، الأذان", url: "level3/islamic/unit1/lesson1.html" }
+          ]
         },
         memorization: {
-          name: "🎵 المحفوظات",
-          lessons: []
+          name: "المحفوظات",
+          icon: "🎵",
+          lessons: [
+            { title: "الدرس 1: نشيد الأبوة والطفولة", url: "level3/memorization/unit1/index.html" }
+          ]
         }
       }
     }
+  };
+
+  // ========================================
+  // 🎁 الدرس المجاني (يُعرض دائماً في الأعلى)
+  // ========================================
+  const FREE_LESSON = {
+    title: "الدرس 1: أنا لست أنانيا",
+    subtitle: "درس نموذجي من السنة الثالثة ابتدائي",
+    url: "https://t.me/IamNotSelfish_bot/IamNotSelfish",
+    icon: "🎁"
   };
 
   // ========================================
@@ -328,94 +521,254 @@
   }
 
   // ========================================
-  // التحقق من الاشتراك في قناة
+  // حالة التنقل الحالية
+  // ========================================
+  let access = { level1: false, level2: false, level3: false };
+  let nav = { level: null, subject: null };
+
+  // ========================================
+  // التحقق من الاشتراك
   // ========================================
   async function checkSubscription(channelId, userId) {
     try {
       const url = `${VERCEL_URL}/api/check-subscription?userId=${userId}&channelId=${channelId}`;
-      const response = await fetch(url);
-      const data = await response.json();
+      const res = await fetch(url);
+      const data = await res.json();
       return data.isSubscribed === true;
-    } catch (error) {
-      console.error("خطأ في التحقق:", error);
+    } catch (e) {
+      console.error("Subscription error:", e);
       return false;
     }
   }
 
   // ========================================
-  // عرض المستويات والدروس
+  // فتح الروابط الخارجية (تيليجرام)
   // ========================================
-  function renderContent(access) {
-    const container = document.getElementById('app-content');
-    container.innerHTML = '';
+  function openExternalLink(event, url) {
+    event.preventDefault();
+    if (tg && tg.openLink) {
+      tg.openLink(url, { try_instant_view: false });
+    } else {
+      window.open(url, '_blank');
+    }
+  }
 
-    Object.keys(LESSONS).forEach(levelKey => {
-      const level = LESSONS[levelKey];
-      const hasAccess = access[levelKey];
-      const channel = CHANNELS[levelKey];
+  // ========================================
+  // رسم شريط التنقل
+  // ========================================
+  function renderBreadcrumb() {
+    const bc = document.getElementById('breadcrumb');
+    const items = [];
 
-      const card = document.createElement('div');
-      card.className = 'level-card' + (hasAccess ? '' : ' locked');
-
-      let html = `
-        <div class="level-header">
-          <h2 class="level-title">${level.name}</h2>
-          <span class="level-status ${hasAccess ? 'open' : 'closed'}">
-            ${hasAccess ? '✅ مفتوح' : '🔒 مقفل'}
-          </span>
-        </div>
-      `;
-
-      if (!hasAccess) {
-        // عرض رسالة القفل
-        html += `
-          <div class="lock-message">
-            🔒 هَذَا الْمُسْتَوَى مُقْفَلٌ
-            <br>
-            <span style="font-size:0.9rem;">لِفَتْحِهِ، انْضَمَّ إِلَى قَنَاةِ ${channel.name}</span>
-            <br>
-            <a href="${channel.link}" target="_blank">📢 الانضمام إلى القناة</a>
-          </div>
-        `;
+    if (!nav.level) {
+      items.push({ label: "🏠 الرئيسية", current: true });
+    } else {
+      items.push({ label: "🏠 الرئيسية", action: () => { nav.level = null; nav.subject = null; renderLevels(); } });
+      const lvl = CURRICULUM[nav.level];
+      if (!nav.subject) {
+        items.push({ label: lvl.name, current: true });
       } else {
-        // عرض المواد والدروس
-        Object.keys(level.subjects).forEach(subjectKey => {
-          const subject = level.subjects[subjectKey];
-          
-          if (subject.lessons.length === 0) {
-            // تجاهل المواد الفارغة
-            return;
-          }
-
-          html += `<div class="subject-section">`;
-          html += `<h3 class="subject-title">${subject.name}</h3>`;
-          
-          subject.lessons.forEach(lesson => {
-            html += `
-              <a href="${lesson.url}" class="lesson-link">
-                <span class="icon">▶️</span>
-                <span>${lesson.title}</span>
-              </a>
-            `;
-          });
-          
-          html += `</div>`;
-        });
+        items.push({ label: lvl.name, action: () => { nav.subject = null; renderSubjects(nav.level); } });
+        items.push({ label: lvl.subjects[nav.subject].name, current: true });
       }
+    }
 
-      card.innerHTML = html;
-      container.appendChild(card);
+    bc.innerHTML = items.map((it, i) => {
+      const sep = i > 0 ? '<span class="breadcrumb-separator">›</span>' : '';
+      if (it.current) {
+        return `${sep}<span class="breadcrumb-item current">${it.label}</span>`;
+      }
+      return `${sep}<span class="breadcrumb-item" data-bc="${i}">${it.label}</span>`;
+    }).join('');
+
+    // ربط الأحداث
+    bc.querySelectorAll('.breadcrumb-item[data-bc]').forEach(el => {
+      const idx = parseInt(el.getAttribute('data-bc'));
+      el.onclick = () => items[idx].action();
     });
   }
 
   // ========================================
-  // عرض رسالة خطأ
+  // 1. عرض المستويات
+  // ========================================
+  function renderLevels() {
+    nav.level = null;
+    nav.subject = null;
+    renderBreadcrumb();
+
+    const container = document.getElementById('app-content');
+    let html = '<div class="list-container">';
+
+    // بطاقة الدرس المجاني في الأعلى
+    html += `
+      <div class="list-item free-item" onclick="openExternalLink(event, '${FREE_LESSON.url}')">
+        <div class="list-item-icon">${FREE_LESSON.icon}</div>
+        <div class="list-item-body">
+          <div class="list-item-title">
+            <span class="free-badge">مجاني</span>${FREE_LESSON.title}
+          </div>
+          <div class="list-item-subtitle">${FREE_LESSON.subtitle}</div>
+        </div>
+        <div class="list-item-arrow">›</div>
+      </div>
+    `;
+
+    // بطاقات المستويات
+    Object.keys(CURRICULUM).forEach(levelKey => {
+      const lvl = CURRICULUM[levelKey];
+      const hasAccess = access[levelKey];
+      const subjectCount = Object.keys(lvl.subjects).length;
+
+      if (hasAccess) {
+        html += `
+          <div class="list-item" onclick="renderSubjects('${levelKey}')">
+            <div class="list-item-icon">${lvl.icon}</div>
+            <div class="list-item-body">
+              <div class="list-item-title">${lvl.name}</div>
+              <div class="list-item-subtitle">${subjectCount} مواد دراسية</div>
+            </div>
+            <div class="list-item-arrow">›</div>
+          </div>
+        `;
+      } else {
+        html += `
+          <div class="list-item locked" onclick="showLockScreen('${levelKey}')">
+            <div class="list-item-icon">🔒</div>
+            <div class="list-item-body">
+              <div class="list-item-title">${lvl.name}</div>
+              <div class="list-item-subtitle">مقفل - اضغط للانضمام إلى القناة</div>
+            </div>
+            <div class="list-item-arrow">›</div>
+          </div>
+        `;
+      }
+    });
+
+    html += '</div>';
+    container.innerHTML = html;
+  }
+
+  // ========================================
+  // 2. عرض المواد
+  // ========================================
+  function renderSubjects(levelKey) {
+    nav.level = levelKey;
+    nav.subject = null;
+    renderBreadcrumb();
+
+    const lvl = CURRICULUM[levelKey];
+    const container = document.getElementById('app-content');
+
+    let html = '<div class="list-container">';
+    Object.keys(lvl.subjects).forEach(subjectKey => {
+      const sub = lvl.subjects[subjectKey];
+      html += `
+        <div class="list-item" onclick="renderLessons('${levelKey}', '${subjectKey}')">
+          <div class="list-item-icon">${sub.icon}</div>
+          <div class="list-item-body">
+            <div class="list-item-title">${sub.name}</div>
+            <div class="list-item-subtitle">${sub.lessons.length} دروس</div>
+          </div>
+          <div class="list-item-arrow">›</div>
+        </div>
+      `;
+    });
+    html += '</div>';
+
+    // زر العودة
+    html += `<button class="back-btn" onclick="renderLevels()">← العودة إلى المستويات</button>`;
+
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ========================================
+  // 3. عرض الدروس
+  // ========================================
+  function renderLessons(levelKey, subjectKey) {
+    nav.level = levelKey;
+    nav.subject = subjectKey;
+    renderBreadcrumb();
+
+    const sub = CURRICULUM[levelKey].subjects[subjectKey];
+    const container = document.getElementById('app-content');
+
+    let html = '<div class="list-container">';
+    sub.lessons.forEach(lesson => {
+      html += `
+        <div class="list-item" onclick="window.location.href='${lesson.url}'">
+          <div class="list-item-icon">▶️</div>
+          <div class="list-item-body">
+            <div class="list-item-title">${lesson.title}</div>
+          </div>
+          <div class="list-item-arrow">›</div>
+        </div>
+      `;
+    });
+    html += '</div>';
+
+    // زر العودة
+    html += `<button class="back-btn" onclick="renderSubjects('${levelKey}')">← العودة إلى المواد</button>`;
+
+    container.innerHTML = html;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ========================================
+  // 4. شاشة القفل
+  // ========================================
+  function showLockScreen(levelKey) {
+    const ch = CHANNELS[levelKey];
+    const container = document.getElementById('app-content');
+
+    container.innerHTML = `
+      <div class="lock-screen">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">${CURRICULUM[levelKey].name} - مقفل</div>
+        <div class="lock-desc">
+          لفتح دروس ${ch.name}، يُرجى الانضمام إلى القناة أولاً ثم الضغط على تأكيد الاشتراك.
+        </div>
+        <a href="${ch.link}" target="_blank" class="btn-channel">📢 الانضمام إلى القناة</a>
+        <button class="btn-check-sub" onclick="recheckLevel('${levelKey}')">✅ تأكيد الاشتراك</button>
+        <div id="sub-status-msg" class="sub-status-msg"></div>
+      </div>
+      <button class="back-btn" onclick="renderLevels()">← العودة إلى المستويات</button>
+    `;
+  }
+
+  async function recheckLevel(levelKey) {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّق...";
+
+    const userId = tg?.initDataUnsafe?.user?.id;
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ مِنْ دَاخِلِ تِلْيِجْرَام.";
+      return;
+    }
+
+    const isSub = await checkSubscription(CHANNELS[levelKey].id, userId);
+    if (isSub) {
+      access[levelKey] = true;
+      statusMsg.style.color = "#2e7d32";
+      statusMsg.textContent = "✅ تم التأكد بنجاح!";
+      setTimeout(() => renderLevels(), 600);
+    } else {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "❌ لم تشترك بعد، يرجى الانضمام أولاً.";
+    }
+  }
+
+  // ========================================
+  // شاشة الخطأ
   // ========================================
   function showError(message) {
     document.getElementById('app-content').innerHTML = `
-      <div class="error-screen">
-        <div class="error-icon">⚠️</div>
-        <div class="error-text">${message}</div>
+      <div class="lock-screen">
+        <div class="lock-icon">⚠️</div>
+        <div class="lock-title">تنبيه</div>
+        <div class="lock-desc">${message}</div>
       </div>
     `;
   }
@@ -424,34 +777,44 @@
   // التشغيل الرئيسي
   // ========================================
   async function init() {
-    // 1. الحصول على معرف المستخدم
     const userId = tg?.initDataUnsafe?.user?.id;
 
     if (!userId) {
-      showError("يُرْجَى فَتْحُ التَّطْبِيقِ مِنْ دَاخِلِ تِلْيِجْرَام لِلتَّحَقُّقِ مِنَ الِاشْتِرَاكِ.");
+      // في المتصفح: اعرض فقط الدرس المجاني + رسالة توضيحية
+      const container = document.getElementById('app-content');
+      container.innerHTML = `
+        <div class="list-container">
+          <div class="list-item free-item" onclick="openExternalLink(event, '${FREE_LESSON.url}')">
+            <div class="list-item-icon">${FREE_LESSON.icon}</div>
+            <div class="list-item-body">
+              <div class="list-item-title"><span class="free-badge">مجاني</span>${FREE_LESSON.title}</div>
+              <div class="list-item-subtitle">${FREE_LESSON.subtitle}</div>
+            </div>
+            <div class="list-item-arrow">›</div>
+          </div>
+        </div>
+        <div class="lock-screen" style="margin-top:20px;">
+          <div class="lock-icon">⚠️</div>
+          <div class="lock-title">يُرْجَى فَتْحُ التَّطْبِيقِ مِنْ دَاخِلِ تِلْيِجْرَام</div>
+          <div class="lock-desc">للتَّحَقُّقِ مِنَ الاِشْتِرَاكِ وَعَرْضِ جَمِيعِ الدُّرُوسِ.</div>
+        </div>
+      `;
       return;
     }
 
-    // 2. التحقق من الاشتراكات الثلاثة بالتوازي (أسرع)
     try {
-      const [hasLevel1, hasLevel2, hasLevel3] = await Promise.all([
+      const [a1, a2, a3] = await Promise.all([
         checkSubscription(CHANNELS.level1.id, userId),
         checkSubscription(CHANNELS.level2.id, userId),
         checkSubscription(CHANNELS.level3.id, userId)
       ]);
-
-      // 3. عرض المحتوى
-      renderContent({
-        level1: hasLevel1,
-        level2: hasLevel2,
-        level3: hasLevel3
-      });
-    } catch (error) {
-      showError("حَدَثَ خَطَأٌ فِي الِاتِّصَالِ. حَاوِلْ مَرَّةً أُخْرَى.");
+      access = { level1: a1, level2: a2, level3: a3 };
+      renderLevels();
+    } catch (e) {
+      showError("حَدَثَ خَطَأٌ فِي الاِتِّصَالِ. حَاوِلْ مَرَّةً أُخْرَى.");
     }
   }
 
-  // تشغيل التطبيق عند التحميل
   window.addEventListener('load', init);
 </script>
 </body>
