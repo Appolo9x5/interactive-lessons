@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>درس متتالية الأعداد من 0 إلى 29</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1976d2;
+      --primary-dark: #0d47a1;
+      --accent: #f57c00;
+      --success: #2e7d32;
+      --error: #c62828;
+      --bg: #f4f6f9;
+      --card-bg: #ffffff;
+      --border: #cbd5e1;
+      --text: #1e293b;
+      --blue-cell: #42a5f5;
+      --ruler-wood: #d99b61;
+      --ruler-border: #7c441b;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 16px;
+      direction: rtl;
+    }
+
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: var(--success);
+      border: 2px solid var(--success);
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+    }
+    .sub-status-msg { margin-top: 15px; font-size: 0.95rem; font-weight: 700; min-height: 24px; }
+
+    .app-container {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      padding: 24px 20px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 6px 18px rgba(25, 118, 210, 0.25);
+    }
+    header h1 { font-size: 1.85rem; font-weight: 900; margin-bottom: 6px; }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 24px;
+      border: 2px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 2px dashed #e2e8f0;
+    }
+    .badge {
+      background: var(--accent);
+      color: #fff;
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+    .instruction {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+    .strip-scroll-wrap {
+      overflow-x: auto;
+      padding: 14px 4px;
+      direction: ltr;
+      display: flex;
+      justify-content: center;
+    }
+    .strip-grid {
+      display: flex;
+      border: 2.5px solid #0f172a;
+      background: #ffffff;
+      border-radius: 4px;
+    }
+    .strip-cell {
+      width: 31px;
+      height: 52px;
+      border-right: 1.5px solid #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.15rem;
+      user-select: none;
+      cursor: pointer;
+      position: relative;
+      background: #ffffff;
+      transition: background 0.2s;
+    }
+    .strip-cell:last-child { border-right: none; }
+    .strip-cell.fixed-lesson { background: #f1f5f9; color: #0f172a; cursor: default; }
+    .strip-cell.blue-empty { background-color: var(--blue-cell) !important; cursor: default; }
+    .strip-cell.placed { background-color: #e0f2fe; color: #0369a1; }
+    .strip-cell.eval-correct { background-color: #c8e6c9 !important; color: var(--success) !important; }
+    .strip-cell.eval-wrong { background-color: #ffcdd2 !important; color: var(--error) !important; }
+
+    .tokens-flex {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .token {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #bbdefb;
+      border: 2px solid #1976d2;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.25rem;
+      color: #0d47a1;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .token::after {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #1976d2;
+      border-radius: 50%;
+      position: absolute;
+      bottom: 4px;
+    }
+    .token.is-selected {
+      transform: scale(1.18);
+      border-color: var(--accent);
+      background: #ffe0b2;
+      box-shadow: 0 6px 14px rgba(245, 124, 0, 0.4);
+    }
+    .token.is-used { opacity: 0.25; pointer-events: none; filter: grayscale(100%); }
+
+    .match-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 16px 0;
+    }
+    .match-card {
+      padding: 12px 16px;
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1.15rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .match-card:hover { border-color: var(--primary); background: #f0f7ff; }
+    .match-card.is-selected { border-color: var(--accent); background: #fff7ed; }
+    .match-card.matched-correct {
+      background: #e8f5e9;
+      border-color: var(--success);
+      color: var(--success);
+      pointer-events: none;
+    }
+    .match-card.matched-wrong {
+      background: #ffebee;
+      border-color: var(--error);
+      color: var(--error);
+      pointer-events: none;
+    }
+
+    .pills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      margin: 16px 0;
+    }
+    .pill-item {
+      padding: 10px 22px;
+      border: 2.5px solid #94a3b8;
+      background: #ffffff;
+      border-radius: 30px;
+      font-size: 1.3rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+    .pill-item.active {
+      background: #e0f2fe;
+      border-color: var(--primary);
+      color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(25, 118, 210, 0.25);
+    }
+    .pill-item.eval-correct {
+      background: #e8f5e9 !important;
+      border-color: var(--success) !important;
+      color: var(--success) !important;
+      pointer-events: none;
+    }
+    .pill-item.eval-wrong {
+      background: #ffebee !important;
+      border-color: var(--error) !important;
+      color: var(--error) !important;
+      pointer-events: none;
+    }
+
+    .ruler-board {
+      background: var(--ruler-wood);
+      border: 3.5px solid var(--ruler-border);
+      border-radius: 10px;
+      padding: 10px 14px 18px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.25);
+      direction: ltr;
+      overflow-x: auto;
+      margin: 18px 0;
+    }
+    .ruler-notches {
+      display: flex;
+      height: 25px;
+      border-bottom: 2px solid #5a3013;
+      margin-bottom: 12px;
+    }
+    .ruler-notch { flex: 1; border-right: 1.5px solid #5a3013; height: 100%; }
+    .ruler-notch.half { height: 50%; align-self: flex-start; }
+    .ruler-numbers-line { display: flex; justify-content: space-between; align-items: center; }
+    .ruler-num {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 32px;
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: #3e200c;
+    }
+    .ruler-input {
+      width: 34px;
+      height: 38px;
+      background: #ffffff;
+      border: 2px dashed #7c441b;
+      border-radius: 6px;
+      text-align: center;
+      font-weight: 900;
+      font-size: 1.15rem;
+      outline: none;
+    }
+
+    input[type="number"], input[type="text"] {
+      height: 42px;
+      text-align: center;
+      font-size: 1.15rem;
+      font-weight: 700;
+      border: 2px solid #94a3b8;
+      border-radius: 8px;
+      outline: none;
+      background: #ffffff;
+      transition: all 0.2s;
+    }
+    input:focus { border-color: var(--primary); }
+    .text-word-input { width: 175px; }
+    .is-correct-input {
+      background-color: #e8f5e9 !important;
+      border-color: var(--success) !important;
+      color: var(--success) !important;
+      pointer-events: none;
+    }
+    .is-wrong-input {
+      background-color: #ffebee !important;
+      border-color: var(--error) !important;
+      color: var(--error) !important;
+      pointer-events: none;
+    }
+
+    .sub-section {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: 18px;
+      border-radius: 12px;
+      margin-top: 18px;
+    }
+
+    .rule-container {
+      background: #fffde7;
+      border: 2px solid #fbc02d;
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 20px;
+      line-height: 1.85;
+      font-size: 1.15rem;
+    }
+    .rule-header {
+      font-weight: 900;
+      color: #f57f17;
+      margin-bottom: 6px;
+      font-size: 1.3rem;
+    }
+
+    .btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: var(--primary-dark); }
+    .btn:disabled { background: #94a3b8; cursor: not-allowed; }
+
+    .eval-row {
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      background: #f1f5f9;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 700;
+    }
+    .tag { padding: 4px 10px; border-radius: 6px; }
+    .tag.good { background: #dcfce7; color: var(--success); }
+    .tag.bad { background: #fee2e2; color: var(--error); }
+
+    #final-report {
+      background: #ffffff;
+      border: 3px solid var(--primary);
+      border-radius: 20px;
+      padding: 30px 20px;
+      text-align: center;
+      margin-top: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      display: none;
+    }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      margin-top: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الْأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الانْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">📢 الانْضِمَامُ إِلَى الْقَنَاةِ</a>
+      <button class="btn-check-sub" onclick="verifySubscription()">✅ تَأْكِيدُ الاشْتِرَاكِ</button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+<div class="app-container">
+
+  <header>
+    <h1>مُتَتَالِيَةُ الأَعْدَادِ مِنْ 0 إِلَى 29</h1>
+    <p>مَادَّةُ الرِّيَاضِيَّاتِ - السَّنَةُ الثَّانِيَةُ ابْتِدَائِيٌّ</p>
+  </header>
+
+  <!-- 1. أكتشف -->
+  <div class="card" id="part-aktashif">
+    <div class="card-title">
+      <span class="badge">أَكْتَشِفُ</span>
+      <h2>شَرِيطُ الأَعْدَادِ وَالْقُرَيْصَاتُ (الْكِتَابُ ص 16)</h2>
+    </div>
+
+    <p class="instruction">
+      1. اضْغَطْ عَلَى الْقُرَيْصَةِ، ثُمَّ اضْغَطْ عَلَى مَكَانِهَا الْمُنَاسِبِ عَلَى شَرِيطِ الأَعْدَادِ:
+    </p>
+
+    <div class="tokens-flex">
+      <div class="token" onclick="selectToken(this)" data-val="19">19</div>
+      <div class="token" onclick="selectToken(this)" data-val="1">1</div>
+      <div class="token" onclick="selectToken(this)" data-val="13">13</div>
+      <div class="token" onclick="selectToken(this)" data-val="7">7</div>
+      <div class="token" onclick="selectToken(this)" data-val="23">23</div>
+      <div class="token" onclick="selectToken(this)" data-val="9">9</div>
+      <div class="token" onclick="selectToken(this)" data-val="17">17</div>
+    </div>
+
+    <div class="strip-scroll-wrap">
+      <div class="strip-grid" id="main-strip"></div>
+    </div>
+
+    <div style="text-align: center; margin-top: 14px;">
+      <button class="btn" id="btn-check-strip" onclick="checkStripPlacements()">تَأْكِيدُ مَوَاضِعِ الْقُرَيْصَاتِ</button>
+    </div>
+
+    <div class="sub-section" id="sub-blue-cells" style="display: none;">
+      <p class="instruction">2. اكْتُبِ الأَعْدَادَ الْمُنَاسِبَةَ فِي الْخَانَاتِ الزَّرْقَاءِ:</p>
+      <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+        <div>الْخَانَةُ الزَّرْقَاءُ 1: <input type="number" id="blue-in-3" data-ans="3" style="width: 70px;"></div>
+        <div>الْخَانَةُ الزَّرْقَاءُ 2: <input type="number" id="blue-in-12" data-ans="12" style="width: 70px;"></div>
+        <div>الْخَانَةُ الزَّرْقَاءُ 3: <input type="number" id="blue-in-18" data-ans="18" style="width: 70px;"></div>
+        <div>الْخَانَةُ الزَّرْقَاءُ 4: <input type="number" id="blue-in-27" data-ans="27" style="width: 70px;"></div>
+      </div>
+      <div style="text-align: center; margin-top: 14px;">
+        <button class="btn" id="btn-check-blue" onclick="checkBlueCells()">تَأْكِيدُ الْخَانَاتِ الزَّرْقَاءِ</button>
+      </div>
+    </div>
+
+    <div class="sub-section" id="sub-sort-tokens" style="display: none;">
+      <p class="instruction">3. رَتِّبِ الْقُرَيْصَاتِ (19 ، 1 ، 13 ، 7 ، 23 ، 9 ، 17) مِنَ الأَصْغَرِ إِلَى الأَكْبَرِ:</p>
+      <div style="display: flex; gap: 8px; justify-content: center; align-items: center; direction: ltr; flex-wrap: wrap;">
+        <input type="number" id="ord-1" data-ans="1" style="width: 52px;">
+        <span>&lt;</span>
+        <input type="number" id="ord-2" data-ans="7" style="width: 52px;">
+        <span>&lt;</span>
+        <input type="number" id="ord-3" data-ans="9" style="width: 52px;">
+        <span>&lt;</span>
+        <input type="number" id="ord-4" data-ans="13" style="width: 52px;">
+        <span>&lt;</span>
+        <input type="number" id="ord-5" data-ans="17" style="width: 52px;">
+        <span>&lt;</span>
+        <input type="number" id="ord-6" data-ans="19" style="width: 52px;">
+        <span>&lt;</span>
+        <input type="number" id="ord-7" data-ans="23" style="width: 52px;">
+      </div>
+      <div style="text-align: center; margin-top: 14px;">
+        <button class="btn" id="btn-check-sort" onclick="checkTokensSort()">تَأْكِيدُ التَّرْتِيبِ</button>
+      </div>
+    </div>
+
+    <div class="sub-section" id="sub-write-words" style="display: none;">
+      <p class="instruction">4. اكْتُبِ الأَعْدَادَ بِالْحُرُوفِ (اكْتُبِ الْعَدَدَ كَامِلًا):</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px;">
+        <div style="background: #ffffff; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1;">
+          <strong>1 :</strong>
+          <input type="text" class="text-word-input" id="word-ans-1" data-ans="واحد" placeholder="اكتب بالحروف...">
+        </div>
+        <div style="background: #ffffff; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1;">
+          <strong>13 :</strong>
+          <input type="text" class="text-word-input" id="word-ans-13" data-ans="ثلاثة عشر" placeholder="اكتب بالحروف...">
+        </div>
+        <div style="background: #ffffff; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1;">
+          <strong>9 :</strong>
+          <input type="text" class="text-word-input" id="word-ans-9" data-ans="تسعة" placeholder="اكتب بالحروف...">
+        </div>
+        <div style="background: #ffffff; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1;">
+          <strong>7 :</strong>
+          <input type="text" class="text-word-input" id="word-ans-7" data-ans="سبعة" placeholder="اكتب بالحروف...">
+        </div>
+        <div style="background: #ffffff; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1;">
+          <strong>17 :</strong>
+          <input type="text" class="text-word-input" id="word-ans-17" data-ans="سبعة عشر" placeholder="اكتب بالحروف...">
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 14px;">
+        <button class="btn" id="btn-check-words" onclick="checkWordsWriting()">تَأْكِيدُ كِتَابَةِ الْحُرُوفِ</button>
+      </div>
+    </div>
+
+    <div class="rule-container" id="rule-display" style="display: none;">
+      <div class="rule-header">💡 تَعَلَّمْتُ:</div>
+      <p>كُلُّ الْأَعْدَادِ تُكْتَبُ بِالأَرْقَامِ وَ بِالْحُرُوفِ . وَعِنْدَمَا أُرَتِّبُ هَذِهِ الْأَعْدَادَ مِنَ الْأَصْغَرِ إِلَى الْأَكْبَرِ أَسْتَعْمِلُ الْأَرْقَامَ وَأُرَتِّبُهَا كَمَا فِي الشَّرِيطِ، مِنْ أَصْغَرِ عَدَدٍ إِلَى أَكْبَرِ عَدَدٍ . (مِثَالٌ: 16 : سِتَّةَ عَشَرَ)</p>
+    </div>
+
+    <div class="eval-row" id="eval-aktashif-row" style="display: none;"></div>
+  </div>
+
+  <!-- 2. أُنْجِزُ -->
+  <div class="card" id="part-unjiz" style="display: none;">
+    <div class="card-title">
+      <span class="badge">أُنْجِزُ</span>
+      <h2>كِتَابُ التِّلْمِيذِ (صَفْحَة 16)</h2>
+    </div>
+
+    <div class="sub-section">
+      <p class="instruction">1. ارْبِطْ بِخَطٍّ الأَعْدَادَ كَمَا فِي الْمِثَالِ (اضْغَطْ عَلَى الْعَدَدِ ثُمَّ عَلَى كِتَابَتِهِ بِالْحُرُوفِ):</p>
+      <div class="match-columns">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="match-card" onclick="selectMatchPair('left', 0, this)">16</div>
+          <div class="match-card" onclick="selectMatchPair('left', 1, this)">17</div>
+          <div class="match-card" onclick="selectMatchPair('left', 2, this)">26</div>
+          <div class="match-card" onclick="selectMatchPair('left', 3, this)">13</div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="match-card" onclick="selectMatchPair('right', 0, this)">سَبْعَةَ عَشَرَ</div>
+          <div class="match-card" onclick="selectMatchPair('right', 1, this)">سِتَّةَ عَشَرَ</div>
+          <div class="match-card" onclick="selectMatchPair('right', 2, this)">ثَلَاثَةَ عَشَرَ</div>
+          <div class="match-card" onclick="selectMatchPair('right', 3, this)">سِتَّةٌ وَعِشْرُونَ</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-section" id="sub-unjiz-p2" style="display: none;">
+      <p class="instruction">2. أَحِطْ بِطَاقَاتِ الأَعْدَادِ الْمَحْصُورَةِ بَيْنَ 10 وَ 25 (اضْغَطْ عَلَى الْبِطَاقَةِ لِإِحَاطَتِهَا):</p>
+      <div class="pills-grid" id="unjiz-pills-container">
+        <div class="pill-item" onclick="toggleBetweenPill(this)" data-val="8">8</div>
+        <div class="pill-item" onclick="toggleBetweenPill(this)" data-val="23">23</div>
+        <div class="pill-item" onclick="toggleBetweenPill(this)" data-val="15">15</div>
+        <div class="pill-item" onclick="toggleBetweenPill(this)" data-val="21">21</div>
+        <div class="pill-item" onclick="toggleBetweenPill(this)" data-val="12">12</div>
+        <div class="pill-item" onclick="toggleBetweenPill(this)" data-val="26">26</div>
+        <div class="pill-item" onclick="toggleBetweenPill(this)" data-val="13">13</div>
+        <div class="pill-item" onclick="toggleBetweenPill(this)" data-val="19">19</div>
+        <div class="pill-item" onclick="toggleBetweenPill(this)" data-val="5">5</div>
+        <div class="pill-item" onclick="toggleBetweenPill(this)" data-val="17">17</div>
+        <div class="pill-item" onclick="toggleBetweenPill(this)" data-val="27">27</div>
+        <div class="pill-item" onclick="toggleBetweenPill(this)" data-val="16">16</div>
+      </div>
+      <div style="text-align: center; margin-top: 14px;">
+        <button class="btn" id="btn-check-unjiz-p2" onclick="checkUnjizPills()">تَأْكِيدُ الأَعْدَادِ الْمَحْصُورَةِ</button>
+      </div>
+    </div>
+
+    <div class="eval-row" id="eval-unjiz-row" style="display: none;"></div>
+  </div>
+
+  <!-- 3. أتمرن -->
+  <div class="card" id="part-atmaran" style="display: none;">
+    <div class="card-title">
+      <span class="badge">أَتَمَرَّنُ</span>
+      <h2>دَفْتَرُ الأَنْشِطَةِ (صَفْحَة 10)</h2>
+    </div>
+
+    <div class="sub-section">
+      <p class="instruction">1. اكْتُبِ الْعَدَدَ الْمُنَاسِبَ لِكُلِّ مَجْمُوعَةٍ:</p>
+      <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: space-around;">
+        <div style="text-align: center;">
+          <div style="font-size: 2rem;">🍅🍅🍅🍅🍅</div>
+          <p style="font-weight: 700; margin-top: 6px;">حَبَّاتِ طَمَاطِمٍ:</p>
+          <input type="number" id="count-tomatoes" data-ans="5" style="width: 70px;">
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 1.8rem; max-width: 220px; line-height: 1.2;">🥕🥕🥕🥕🥕🥕🥕<br>🥕🥕🥕🥕🥕🥕🥕<br>🥕🥕🥕🥕🥕🥕🥕</div>
+          <p style="font-weight: 700; margin-top: 6px;">حَبَّاتِ جَزَرٍ:</p>
+          <input type="number" id="count-carrots" data-ans="21" style="width: 70px;">
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 1.8rem; max-width: 220px; line-height: 1.2;">🥚🥚🥚🥚🥚🥚<br>🥚🥚🥚🥚🥚🥚</div>
+          <p style="font-weight: 700; margin-top: 6px;">حَبَّاتِ بَيْضٍ:</p>
+          <input type="number" id="count-eggs" data-ans="12" style="width: 70px;">
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 14px;">
+        <button class="btn" id="btn-check-ex1" onclick="checkExercise1()">تَأْكِيدُ التَّمْرِينِ (1)</button>
+      </div>
+    </div>
+
+    <div class="sub-section" id="sub-ex2" style="display: none;">
+      <p class="instruction">2. اكْتُبِ الأَعْدَادَ بِالأَرْقَامِ أَوْ بِالْحُرُوفِ:</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
+        <div style="background:#ffffff; padding:12px; border-radius:8px; border:1px solid #cbd5e1;">
+          <span>تِسْعَةٌ :</span>
+          <input type="number" id="num-in-9" data-ans="9" style="width: 70px;">
+        </div>
+        <div style="background:#ffffff; padding:12px; border-radius:8px; border:1px solid #cbd5e1;">
+          <span>خَمْسَةٌ وَعِشْرُونَ :</span>
+          <input type="number" id="num-in-25" data-ans="25" style="width: 70px;">
+        </div>
+        <div style="background:#ffffff; padding:12px; border-radius:8px; border:1px solid #cbd5e1;">
+          <span>7 :</span>
+          <input type="text" class="text-word-input" id="word-in-7" data-ans="سبعة" placeholder="اكتب بالحروف...">
+        </div>
+        <div style="background:#ffffff; padding:12px; border-radius:8px; border:1px solid #cbd5e1;">
+          <span>عِشْرُونَ :</span>
+          <input type="number" id="num-in-20" data-ans="20" style="width: 70px;">
+        </div>
+        <div style="background:#ffffff; padding:12px; border-radius:8px; border:1px solid #cbd5e1;">
+          <span>13 :</span>
+          <input type="text" class="text-word-input" id="word-in-13" data-ans="ثلاثة عشر" placeholder="اكتب بالحروف...">
+        </div>
+        <div style="background:#ffffff; padding:12px; border-radius:8px; border:1px solid #cbd5e1;">
+          <span>ثَمَانِيَةَ عَشَرَ :</span>
+          <input type="number" id="num-in-18" data-ans="18" style="width: 70px;">
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 14px;">
+        <button class="btn" id="btn-check-ex2" onclick="checkExercise2()">تَأْكِيدُ التَّمْرِينِ (2)</button>
+      </div>
+    </div>
+
+    <div class="sub-section" id="sub-ex3" style="display: none;">
+      <p class="instruction">3. اكْتُبِ الأَعْدَادَ النَّاقِصَةَ عَلَى الْمِسْطَرَةِ:</p>
+      <div class="ruler-board">
+        <div class="ruler-notches">
+          <div class="ruler-notch"></div><div class="ruler-notch half"></div><div class="ruler-notch"></div><div class="ruler-notch half"></div>
+          <div class="ruler-notch"></div><div class="ruler-notch half"></div><div class="ruler-notch"></div><div class="ruler-notch half"></div>
+          <div class="ruler-notch"></div><div class="ruler-notch half"></div><div class="ruler-notch"></div><div class="ruler-notch half"></div>
+          <div class="ruler-notch"></div><div class="ruler-notch half"></div><div class="ruler-notch"></div><div class="ruler-notch half"></div>
+          <div class="ruler-notch"></div><div class="ruler-notch half"></div><div class="ruler-notch"></div><div class="ruler-notch half"></div>
+        </div>
+        <div class="ruler-numbers-line">
+          <div class="ruler-num">1</div>
+          <div class="ruler-num">2</div>
+          <div class="ruler-num"><input type="number" class="ruler-input" id="ruler-3" data-ans="3"></div>
+          <div class="ruler-num">4</div>
+          <div class="ruler-num">5</div>
+          <div class="ruler-num"><input type="number" class="ruler-input" id="ruler-6" data-ans="6"></div>
+          <div class="ruler-num"><input type="number" class="ruler-input" id="ruler-7" data-ans="7"></div>
+          <div class="ruler-num">8</div>
+          <div class="ruler-num"><input type="number" class="ruler-input" id="ruler-9" data-ans="9"></div>
+          <div class="ruler-num"><input type="number" class="ruler-input" id="ruler-10" data-ans="10"></div>
+          <div class="ruler-num"><input type="number" class="ruler-input" id="ruler-11" data-ans="11"></div>
+          <div class="ruler-num">12</div>
+          <div class="ruler-num">13</div>
+          <div class="ruler-num"><input type="number" class="ruler-input" id="ruler-14" data-ans="14"></div>
+          <div class="ruler-num">15</div>
+          <div class="ruler-num">16</div>
+          <div class="ruler-num"><input type="number" class="ruler-input" id="ruler-17" data-ans="17"></div>
+          <div class="ruler-num">18</div>
+          <div class="ruler-num"><input type="number" class="ruler-input" id="ruler-19" data-ans="19"></div>
+          <div class="ruler-num">20</div>
+        </div>
+      </div>
+      <div style="text-align: center; margin-top: 14px;">
+        <button class="btn" id="btn-check-ex3" onclick="checkExercise3()">تَأْكِيدُ أَعْدَادِ الْمِسْطَرَةِ</button>
+      </div>
+    </div>
+
+    <div class="sub-section" id="sub-ex4" style="display: none;">
+      <p class="instruction">4. ارْبِطْ بِخَطٍّ الأَعْدَادَ مِنَ الأَصْغَرِ إِلَى الأَكْبَرِ (اضْغَطْ عَلَى الأَعْدَادِ بِالتَّرْتِيبِ التَّصَاعُدِيِّ):</p>
+      <div style="display: flex; justify-content: center; gap: 14px; flex-wrap: wrap;">
+        <button class="btn" style="background:#e0f2fe; color:#0369a1;" onclick="pickSeqNumber(this, 19)">19</button>
+        <button class="btn" style="background:#e0f2fe; color:#0369a1;" onclick="pickSeqNumber(this, 9)">9</button>
+        <button class="btn" style="background:#e0f2fe; color:#0369a1;" onclick="pickSeqNumber(this, 24)">24</button>
+        <button class="btn" style="background:#e0f2fe; color:#0369a1;" onclick="pickSeqNumber(this, 13)">13</button>
+        <button class="btn" style="background:#e0f2fe; color:#0369a1;" onclick="pickSeqNumber(this, 29)">29</button>
+      </div>
+      <p id="seq-msg" style="text-align:center; margin-top:10px; font-weight:700; color:var(--primary);"></p>
+
+      <div id="sub-ex4-p2" style="margin-top: 20px; display: none; border-top: 1px dashed #cbd5e1; padding-top: 16px;">
+        <p class="instruction">رَتِّبِ الأَعْدَادَ (17 ، 28 ، 15 ، 22) مِنَ الأَصْغَرِ إِلَى الأَكْبَرِ:</p>
+        <div style="display: flex; gap: 10px; justify-content: center; align-items: center; direction: ltr;">
+          <input type="number" id="sort-ex4-1" data-ans="15" style="width: 60px;">
+          <span>&lt;</span>
+          <input type="number" id="sort-ex4-2" data-ans="17" style="width: 60px;">
+          <span>&lt;</span>
+          <input type="number" id="sort-ex4-3" data-ans="22" style="width: 60px;">
+          <span>&lt;</span>
+          <input type="number" id="sort-ex4-4" data-ans="28" style="width: 60px;">
+        </div>
+        <div style="text-align: center; margin-top: 14px;">
+          <button class="btn" id="btn-check-ex4-p2" onclick="checkExercise4Part2()">تَأْكِيدُ التَّرْتِيبِ</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="eval-row" id="eval-atmaran-row" style="display: none;"></div>
+  </div>
+
+  <!-- 4. أبحث -->
+  <div class="card" id="part-abhath" style="display: none;">
+    <div class="card-title">
+      <span class="badge">أَبْحَثُ</span>
+      <h2>مَسْأَلَةُ كُرَيَّاتِ أَيْمَنَ (دَفْتَرُ الأَنْشِطَةِ ص 10)</h2>
+    </div>
+
+    <div class="sub-section">
+      <p class="instruction" style="font-weight: 500;">
+        وَصَلَ أَيْمَنُ إِلَى الْمَدْرَسَةِ وَمَعَهُ <strong>17</strong> كُرَيَّةً.<br>
+        رَبِحَ <strong>5</strong> كُرَيَّاتٍ فِي اسْتِرَاحَةِ الصَّبَاحِ، وَ <strong>3</strong> فِي اسْتِرَاحَةِ الْمَسَاءِ.<br>
+        <strong>كَمْ صَارَ لَدَى أَيْمَنَ مِنْ كُرَيَّةٍ الآنَ؟</strong>
+      </p>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; align-items: center; margin-top: 16px;">
+        <div style="font-size: 1.15rem; font-weight: 700;">
+          حِسَابُ مَجْمُوعِ الْكُرَيَّاتِ:
+          <span style="direction: ltr; display: inline-block;">17 + 5 + 3 = </span>
+          <input type="number" id="ans-total-marbles" data-ans="25" style="width: 75px;">
+        </div>
+        <p style="font-weight: 700; color: #1e293b;">
+          صَارَ لَدَى أَيْمَنَ الآنَ: <input type="number" id="ans-marbles-text" data-ans="25" style="width: 75px;"> كُرَيَّةً.
+        </p>
+      </div>
+
+      <div style="text-align: center; margin-top: 16px;">
+        <button class="btn" id="btn-check-abhath" onclick="checkAbhath()">تَأْكِيدُ حَلِّ الْمَسْأَلَةِ</button>
+      </div>
+    </div>
+
+    <div class="eval-row" id="eval-abhath-row" style="display: none;"></div>
+  </div>
+
+  <!-- لوحة التقييم النهائي -->
+  <div id="final-report">
+    <h2 style="font-size: 1.8rem; color: var(--primary-dark); margin-bottom: 16px;">نَتِيجَةُ التَّقْيِيمِ الْعَامِّ</h2>
+    
+    <div style="font-size: 2.8rem; font-weight: 900; color: var(--primary); margin-bottom: 12px;" id="final-percentage">0%</div>
+
+    <div style="display: flex; justify-content: center; gap: 24px; font-size: 1.25rem; font-weight: 700; margin-bottom: 16px;">
+      <span style="color: var(--success);">الإِجَابَاتُ الصَّحِيحَةُ: <span id="stat-c">0</span></span>
+      <span style="color: var(--error);">الإِجَابَاتُ الْخَاطِئَةُ: <span id="stat-w">0</span></span>
+    </div>
+
+    <p id="final-comment" style="font-size: 1.25rem; font-weight: 700; color: #334155; margin-bottom: 24px;"></p>
+
+    <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+      <button class="btn" style="background:var(--accent);" onclick="window.location.reload()">🔄 إِعَادَةُ الْمُحَاوَلَةِ</button>
+      <button class="btn" style="background:#64748b;" onclick="exitTelegramApp()">🚪 خُرُوجٌ</button>
+    </div>
+    <a href="../../../index.html" class="btn-back-home">← الْعَوْدَةُ إِلَى الْفِهْرِسِ</a>
+  </div>
+
+</div>
+
+<script>
+  // ⚠️ تم حذف BOT_TOKEN من هنا (لأسباب أمنية)
+  const CHANNEL_ID = "-1004461185731";
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارٍ التَّحَقُّقُ مِنَ الاسْتِرَاكِ ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلِيجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ، جَارٍ فَتْحُ الدَّرْسِ ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الانْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  function exitTelegramApp() {
+    if (tg && tg.close) {
+      tg.close();
+    } else {
+      alert("لِلْخُرُوجِ يُرْجَى إِغْلَاقُ النَّافِذَةِ مِنْ زِرِّ الإِغْلَاقِ بِأَعْلَى الشَّاشَةِ.");
+    }
+  }
+
+  const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  function playBeep(success) {
+    if (audioContext.state === 'suspended') audioContext.resume();
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    osc.connect(gain);
+    gain.connect(audioContext.destination);
+
+    if (success) {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(523.25, audioContext.currentTime);
+      osc.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.35);
+      osc.start(); osc.stop(audioContext.currentTime + 0.35);
+    } else {
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(220, audioContext.currentTime);
+      osc.frequency.setValueAtTime(164.81, audioContext.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.35);
+      osc.start(); osc.stop(audioContext.currentTime + 0.35);
+    }
+  }
+
+  function sanitizeArabic(str) {
+    return str.trim()
+      .replace(/[\u064B-\u065F]/g, '')
+      .replace(/[إأآا]/g, 'ا')
+      .replace(/ة/g, 'ه')
+      .replace(/\s+/g, ' ');
+  }
+
+  let totalQuestionsCount = 0;
+  let correctAnswersCount = 0;
+  let wrongAnswersCount = 0;
+
+  const fixedPositions = [0, 5, 10, 15, 20, 25];
+  const bluePositions = [3, 12, 18, 27];
+  let selectedToken = null;
+  let aktashifC = 0, aktashifW = 0;
+
+  function renderStrip() {
+    const strip = document.getElementById('main-strip');
+    strip.innerHTML = '';
+    for (let i = 0; i <= 29; i++) {
+      const cell = document.createElement('div');
+      cell.className = 'strip-cell';
+      cell.dataset.index = i;
+
+      if (fixedPositions.includes(i)) {
+        cell.classList.add('fixed-lesson');
+        cell.textContent = i;
+      } else if (bluePositions.includes(i)) {
+        cell.classList.add('blue-empty');
+      } else {
+        cell.onclick = () => onCellClicked(cell, i);
+      }
+      strip.appendChild(cell);
+    }
+  }
+
+  function selectToken(el) {
+    if (el.classList.contains('is-used')) return;
+    document.querySelectorAll('.token').forEach(t => t.classList.remove('is-selected'));
+    selectedToken = {
+      val: parseInt(el.dataset.val),
+      element: el
+    };
+    el.classList.add('is-selected');
+  }
+
+  function onCellClicked(cell, idx) {
+    if (!selectedToken) return;
+    if (cell.classList.contains('fixed-lesson') || cell.classList.contains('blue-empty')) return;
+
+    if (cell.dataset.val) {
+      const prevVal = cell.dataset.val;
+      const prevEl = document.querySelector(`.token[data-val="${prevVal}"]`);
+      if (prevEl) prevEl.classList.remove('is-used');
+    }
+
+    cell.textContent = selectedToken.val;
+    cell.dataset.val = selectedToken.val;
+    cell.classList.add('placed');
+
+    selectedToken.element.classList.add('is-used');
+    selectedToken.element.classList.remove('is-selected');
+    selectedToken = null;
+  }
+
+  function checkStripPlacements() {
+    const list = [1, 7, 9, 13, 17, 19, 23];
+    let allGood = true;
+
+    list.forEach(num => {
+      totalQuestionsCount++;
+      const cell = document.querySelector(`.strip-cell[data-index="${num}"]`);
+      if (cell && parseInt(cell.dataset.val) === num) {
+        cell.classList.add('eval-correct');
+        correctAnswersCount++; aktashifC++;
+      } else {
+        if (cell) cell.classList.add('eval-wrong');
+        wrongAnswersCount++; aktashifW++;
+        allGood = false;
+      }
+    });
+
+    playBeep(allGood);
+    document.getElementById('btn-check-strip').disabled = true;
+    document.getElementById('sub-blue-cells').style.display = 'block';
+    document.getElementById('sub-blue-cells').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function checkBlueCells() {
+    const list = [
+      { id: 'blue-in-3', ans: 3 },
+      { id: 'blue-in-12', ans: 12 },
+      { id: 'blue-in-18', ans: 18 },
+      { id: 'blue-in-27', ans: 27 }
+    ];
+    let allGood = true;
+
+    list.forEach(item => {
+      totalQuestionsCount++;
+      const el = document.getElementById(item.id);
+      if (parseInt(el.value) === item.ans) {
+        el.className = 'is-correct-input';
+        correctAnswersCount++; aktashifC++;
+      } else {
+        el.className = 'is-wrong-input';
+        wrongAnswersCount++; aktashifW++;
+        allGood = false;
+      }
+    });
+
+    playBeep(allGood);
+    document.getElementById('btn-check-blue').disabled = true;
+    document.getElementById('sub-sort-tokens').style.display = 'block';
+    document.getElementById('sub-sort-tokens').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function checkTokensSort() {
+    const inputs = [1, 2, 3, 4, 5, 6, 7].map(i => document.getElementById(`ord-${i}`));
+    let allGood = true;
+
+    inputs.forEach(input => {
+      totalQuestionsCount++;
+      if (parseInt(input.value) === parseInt(input.dataset.ans)) {
+        input.className = 'is-correct-input';
+        correctAnswersCount++; aktashifC++;
+      } else {
+        input.className = 'is-wrong-input';
+        wrongAnswersCount++; aktashifW++;
+        allGood = false;
+      }
+    });
+
+    playBeep(allGood);
+    document.getElementById('btn-check-sort').disabled = true;
+    document.getElementById('sub-write-words').style.display = 'block';
+    document.getElementById('sub-write-words').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function checkWordsWriting() {
+    const items = [
+      { id: 'word-ans-1', ans: 'واحد' },
+      { id: 'word-ans-13', ans: 'ثلاثة عشر' },
+      { id: 'word-ans-9', ans: 'تسعة' },
+      { id: 'word-ans-7', ans: 'سبعة' },
+      { id: 'word-ans-17', ans: 'سبعة عشر' }
+    ];
+    let allGood = true;
+
+    items.forEach(it => {
+      totalQuestionsCount++;
+      const el = document.getElementById(it.id);
+      if (sanitizeArabic(el.value) === sanitizeArabic(it.ans)) {
+        el.classList.add('is-correct-input');
+        correctAnswersCount++; aktashifC++;
+      } else {
+        el.classList.add('is-wrong-input');
+        wrongAnswersCount++; aktashifW++;
+        allGood = false;
+      }
+    });
+
+    playBeep(allGood);
+    document.getElementById('btn-check-words').disabled = true;
+    document.getElementById('rule-display').style.display = 'block';
+
+    const row = document.getElementById('eval-aktashif-row');
+    row.innerHTML = `
+      <span>تَقْيِيمُ مَحَطَّةِ أَكْتَشِفُ:</span>
+      <div>
+        <span class="tag good">✓ صَحِيحٌ: ${aktashifC}</span>
+        <span class="tag bad">✗ خَاطِئٌ: ${aktashifW}</span>
+      </div>
+    `;
+    row.style.display = 'flex';
+
+    document.getElementById('part-unjiz').style.display = 'block';
+    document.getElementById('part-unjiz').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  let unjizC = 0, unjizW = 0;
+  let matchLeft = null;
+  let matchRight = null;
+  const matchTargetMap = { 0: 1, 1: 0, 2: 3, 3: 2 };
+  let finishedPairs = 0;
+
+  function selectMatchPair(side, index, element) {
+    if (element.classList.contains('matched-correct') || element.classList.contains('matched-wrong')) return;
+
+    if (side === 'left') {
+      if (matchLeft) matchLeft.el.classList.remove('is-selected');
+      matchLeft = { idx: index, el: element };
+      element.classList.add('is-selected');
+    } else {
+      if (matchRight) matchRight.el.classList.remove('is-selected');
+      matchRight = { idx: index, el: element };
+      element.classList.add('is-selected');
+    }
+
+    if (matchLeft && matchRight) {
+      totalQuestionsCount++;
+      finishedPairs++;
+      if (matchTargetMap[matchLeft.idx] === matchRight.idx) {
+        matchLeft.el.className = 'match-card matched-correct';
+        matchRight.el.className = 'match-card matched-correct';
+        correctAnswersCount++; unjizC++;
+        playBeep(true);
+      } else {
+        matchLeft.el.className = 'match-card matched-wrong';
+        matchRight.el.className = 'match-card matched-wrong';
+        wrongAnswersCount++; unjizW++;
+        playBeep(false);
+      }
+      matchLeft = null;
+      matchRight = null;
+
+      if (finishedPairs === 4) {
+        document.getElementById('sub-unjiz-p2').style.display = 'block';
+        document.getElementById('sub-unjiz-p2').scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }
+
+  function toggleBetweenPill(pill) {
+    if (pill.classList.contains('eval-correct') || pill.classList.contains('eval-wrong')) return;
+    pill.classList.toggle('active');
+  }
+
+  function checkUnjizPills() {
+    const pills = document.querySelectorAll('#unjiz-pills-container .pill-item');
+    let allGood = true;
+
+    pills.forEach(p => {
+      const val = parseInt(p.dataset.val);
+      const isBetween = (val > 10 && val < 25) || (val === 23);
+      const isSelected = p.classList.contains('active');
+      totalQuestionsCount++;
+
+      if ((isBetween && isSelected) || (!isBetween && !isSelected)) {
+        correctAnswersCount++; unjizC++;
+        p.classList.add('eval-correct');
+      } else {
+        wrongAnswersCount++; unjizW++;
+        p.classList.add('eval-wrong');
+        allGood = false;
+      }
+    });
+
+    playBeep(allGood);
+    document.getElementById('btn-check-unjiz-p2').disabled = true;
+
+    const row = document.getElementById('eval-unjiz-row');
+    row.innerHTML = `
+      <span>تَقْيِيمُ مَحَطَّةِ أُنْجِزُ:</span>
+      <div>
+        <span class="tag good">✓ صَحِيحٌ: ${unjizC}</span>
+        <span class="tag bad">✗ خَاطِئٌ: ${unjizW}</span>
+      </div>
+    `;
+    row.style.display = 'flex';
+
+    document.getElementById('part-atmaran').style.display = 'block';
+    document.getElementById('part-atmaran').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  let atmaranC = 0, atmaranW = 0;
+
+  function checkExercise1() {
+    const list = [
+      { id: 'count-tomatoes', ans: 5 },
+      { id: 'count-carrots', ans: 21 },
+      { id: 'count-eggs', ans: 12 }
+    ];
+    let allGood = true;
+
+    list.forEach(it => {
+      totalQuestionsCount++;
+      const el = document.getElementById(it.id);
+      if (parseInt(el.value) === it.ans) {
+        el.className = 'is-correct-input';
+        correctAnswersCount++; atmaranC++;
+      } else {
+        el.className = 'is-wrong-input';
+        wrongAnswersCount++; atmaranW++;
+        allGood = false;
+      }
+    });
+
+    playBeep(allGood);
+    document.getElementById('btn-check-ex1').disabled = true;
+    document.getElementById('sub-ex2').style.display = 'block';
+    document.getElementById('sub-ex2').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function checkExercise2() {
+    const items = [
+      { id: 'num-in-9', ans: 9, isNum: true },
+      { id: 'num-in-25', ans: 25, isNum: true },
+      { id: 'word-in-7', ans: 'سبعة', isNum: false },
+      { id: 'num-in-20', ans: 20, isNum: true },
+      { id: 'word-in-13', ans: 'ثلاثة عشر', isNum: false },
+      { id: 'num-in-18', ans: 18, isNum: true }
+    ];
+    let allGood = true;
+
+    items.forEach(it => {
+      totalQuestionsCount++;
+      const el = document.getElementById(it.id);
+      const isOk = it.isNum 
+        ? (parseInt(el.value) === it.ans)
+        : (sanitizeArabic(el.value) === sanitizeArabic(it.ans));
+
+      if (isOk) {
+        el.classList.add('is-correct-input');
+        correctAnswersCount++; atmaranC++;
+      } else {
+        el.classList.add('is-wrong-input');
+        wrongAnswersCount++; atmaranW++;
+        allGood = false;
+      }
+    });
+
+    playBeep(allGood);
+    document.getElementById('btn-check-ex2').disabled = true;
+    document.getElementById('sub-ex3').style.display = 'block';
+    document.getElementById('sub-ex3').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function checkExercise3() {
+    const list = [3, 6, 7, 9, 10, 11, 14, 17, 19];
+    let allGood = true;
+
+    list.forEach(n => {
+      totalQuestionsCount++;
+      const el = document.getElementById(`ruler-${n}`);
+      if (parseInt(el.value) === n) {
+        el.className = 'ruler-input is-correct-input';
+        correctAnswersCount++; atmaranC++;
+      } else {
+        el.className = 'ruler-input is-wrong-input';
+        wrongAnswersCount++; atmaranW++;
+        allGood = false;
+      }
+    });
+
+    playBeep(allGood);
+    document.getElementById('btn-check-ex3').disabled = true;
+    document.getElementById('sub-ex4').style.display = 'block';
+    document.getElementById('sub-ex4').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  const seqOrder = [9, 13, 19, 24, 29];
+  let curSeqPos = 0;
+
+  function pickSeqNumber(btn, val) {
+    if (btn.disabled) return;
+    totalQuestionsCount++;
+
+    if (val === seqOrder[curSeqPos]) {
+      btn.style.background = '#2e7d32';
+      btn.style.color = '#fff';
+      btn.disabled = true;
+      curSeqPos++;
+      correctAnswersCount++; atmaranC++;
+      playBeep(true);
+
+      if (curSeqPos === seqOrder.length) {
+        document.getElementById('seq-msg').textContent = '✓ رَائِعٌ! رَبَطْتَ الأَعْدَادَ بِالتَّرْتِيبِ التَّصَاعُدِيِّ الصَّحِيحِ.';
+        document.getElementById('sub-ex4-p2').style.display = 'block';
+        document.getElementById('sub-ex4-p2').scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      btn.style.background = '#c62828';
+      btn.style.color = '#fff';
+      btn.disabled = true;
+      wrongAnswersCount++; atmaranW++;
+      playBeep(false);
+    }
+  }
+
+  function checkExercise4Part2() {
+    const inputs = [1, 2, 3, 4].map(i => document.getElementById(`sort-ex4-${i}`));
+    let allGood = true;
+
+    inputs.forEach(input => {
+      totalQuestionsCount++;
+      if (parseInt(input.value) === parseInt(input.dataset.ans)) {
+        input.className = 'is-correct-input';
+        correctAnswersCount++; atmaranC++;
+      } else {
+        input.className = 'is-wrong-input';
+        wrongAnswersCount++; atmaranW++;
+        allGood = false;
+      }
+    });
+
+    playBeep(allGood);
+    document.getElementById('btn-check-ex4-p2').disabled = true;
+
+    const row = document.getElementById('eval-atmaran-row');
+    row.innerHTML = `
+      <span>تَقْيِيمُ مَحَطَّةِ أَتَمَرَّنُ:</span>
+      <div>
+        <span class="tag good">✓ صَحِيحٌ: ${atmaranC}</span>
+        <span class="tag bad">✗ خَاطِئٌ: ${atmaranW}</span>
+      </div>
+    `;
+    row.style.display = 'flex';
+
+    document.getElementById('part-abhath').style.display = 'block';
+    document.getElementById('part-abhath').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  let abhathC = 0, abhathW = 0;
+
+  function checkAbhath() {
+    const a1 = document.getElementById('ans-total-marbles');
+    const a2 = document.getElementById('ans-marbles-text');
+    let allGood = true;
+
+    [a1, a2].forEach(inp => {
+      totalQuestionsCount++;
+      if (parseInt(inp.value) === parseInt(inp.dataset.ans)) {
+        inp.className = 'is-correct-input';
+        correctAnswersCount++; abhathC++;
+      } else {
+        inp.className = 'is-wrong-input';
+        wrongAnswersCount++; abhathW++;
+        allGood = false;
+      }
+    });
+
+    playBeep(allGood);
+    document.getElementById('btn-check-abhath').disabled = true;
+
+    const row = document.getElementById('eval-abhath-row');
+    row.innerHTML = `
+      <span>تَقْيِيمُ مَحَطَّةِ أَبْحَثُ:</span>
+      <div>
+        <span class="tag good">✓ صَحِيحٌ: ${abhathC}</span>
+        <span class="tag bad">✗ خَاطِئٌ: ${abhathW}</span>
+      </div>
+    `;
+    row.style.display = 'flex';
+
+    showFinalResults();
+  }
+
+  function showFinalResults() {
+    const report = document.getElementById('final-report');
+    report.style.display = 'block';
+    report.scrollIntoView({ behavior: 'smooth' });
+
+    const pct = Math.round((correctAnswersCount / totalQuestionsCount) * 100);
+    document.getElementById('stat-c').textContent = correctAnswersCount;
+    document.getElementById('stat-w').textContent = wrongAnswersCount;
+    document.getElementById('final-percentage').textContent = pct + '%';
+
+    const comment = document.getElementById('final-comment');
+    if (pct >= 85) {
+      comment.textContent = '🌟 مُمْتَازٌ جِدًّا! تَمَكَّنَ التِّلْمِيذُ مِنْ مَفْهُومِ شَرِيطِ الأَعْدَادِ وَالْحَصْرِ وَالْمِسْطَرَةِ وَكِتَابَةِ الأَعْدَادِ بِاقْتِدَارٍ.';
+      comment.style.color = '#2e7d32';
+    } else if (pct >= 65) {
+      comment.textContent = '👍 جَيِّدٌ! اسْتِيعَابٌ طَيِّبٌ مَعَ الْحَاجَةِ إِلَى مَزِيدٍ مِنَ التَّرْكِيزِ فِي كِتَابَةِ الْحُرُوفِ وَحَصْرِ الأَعْدَادِ.';
+      comment.style.color = '#1976d2';
+    } else {
+      comment.textContent = '⚠️ يُوصَى بِمُرَاجَعَةِ شَرِيطِ الأَعْدَادِ وَالتَّمَرُّنِ عَلَى التَّرْتِيبِ التَّصَاعُدِيِّ وَالْحَصْرِ.';
+      comment.style.color = '#c62828';
+    }
+  }
+
+  function initAllActivities() {
+    renderStrip();
+    verifySubscription();
+  }
+
+  window.onload = initAllActivities;
+</script>
+
+</body>
+</html>
