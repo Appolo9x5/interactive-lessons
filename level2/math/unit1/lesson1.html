@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>عَدُّ كِمِّيَّاتٍ صَغِيرَةٍ</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --primary: #1976d2;
+      --secondary: #ff9800;
+      --success: #2e7d32;
+      --danger: #d32f2f;
+      --bg: #f5f7fb;
+      --card-bg: #ffffff;
+      --border: #cfd8dc;
+      --text-muted: #546e7a;
+    }
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg); margin: 0; padding: 12px; color: #263238; direction: rtl; }
+    .container { max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(25, 118, 210, 0.15);
+      border: 2px solid #e3f2fd;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #0d47a1; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 22px; }
+
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: var(--primary);
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(25, 118, 210, 0.3);
+    }
+
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: var(--success);
+      border: 2px solid var(--success);
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+    }
+
+    .sub-status-msg { margin-top: 15px; font-size: 0.95rem; font-weight: 700; min-height: 24px; }
+
+    .header {
+      background: #fff;
+      padding: 16px;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-top: 6px solid var(--primary);
+    }
+    .header h1 { margin: 0; font-size: 1.35rem; color: var(--primary); }
+    .header .sub { font-size: 0.85rem; color: #546e7a; margin-top: 5px; font-weight: bold; }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--primary);
+      border-bottom: 2px solid #eceff1;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .exercise-box {
+      background: #fafafa;
+      border: 1px solid #eeeeee;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 12px;
+      line-height: 2;
+    }
+
+    input.inp {
+      width: 65px;
+      height: 36px;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border: 2px solid #90a4ae;
+      border-radius: 6px;
+      background: #fff;
+      direction: ltr;
+    }
+    input.inp-text {
+      width: 140px;
+      height: 36px;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: bold;
+      border: 2px solid #90a4ae;
+      border-radius: 6px;
+      background: #fff;
+      direction: rtl;
+    }
+    input.inp:focus, input.inp-text:focus { outline: none; border-color: var(--primary); }
+    .correct { background-color: #e8f5e9 !important; border-color: var(--success) !important; color: var(--success); }
+    .wrong { background-color: #ffebee !important; border-color: var(--danger) !important; color: var(--danger); }
+
+    .items-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px dashed #b0bec5;
+      justify-content: center;
+      margin: 8px 0;
+    }
+    .bird-item { font-size: 1.6rem; user-select: none; }
+    .book-item {
+      width: 12px;
+      height: 38px;
+      border-radius: 2px;
+      display: inline-block;
+      box-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+    .card-item {
+      width: 22px;
+      height: 30px;
+      background: #e3f2fd;
+      border: 1px solid #1976d2;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    .token-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      background: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #cfd8dc;
+      margin: 10px 0;
+    }
+    .token {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      border: 2px solid #9e9e9e;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .token.selected {
+      background: #ff7043;
+      border: 3px solid #d84315;
+      transform: scale(1.1);
+      box-shadow: 0 0 5px rgba(216,67,21,0.5);
+    }
+
+    .pen {
+      width: 6px;
+      height: 32px;
+      background: #fbc02d;
+      border: 1px solid #f57f17;
+      border-radius: 1px;
+      display: inline-block;
+    }
+    .pen-box-frame {
+      border: 2px dashed #0288d1;
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: #e1f5fe;
+      display: inline-flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .dot-cluster {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 4px;
+      background: #fafafa;
+      padding: 6px;
+      border: 1px solid #b0bec5;
+      border-radius: 6px;
+    }
+    .dot-symbol {
+      width: 9px;
+      height: 9px;
+      background: #263238;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .match-container { display: flex; justify-content: space-between; gap: 10px; margin: 12px 0; }
+    .match-col { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+    .match-btn {
+      padding: 8px;
+      background: #fff;
+      border: 2px solid #90a4ae;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
+    .match-btn.active { border-color: var(--secondary); background: #fff3e0; }
+    .match-btn.matched { border-color: var(--success); background: #e8f5e9; color: var(--success); pointer-events: none; }
+
+    .dots-card-container { display: flex; justify-content: space-around; gap: 8px; margin: 12px 0; }
+    .dots-card-box {
+      flex: 1;
+      background: #fff;
+      border: 2px solid #546e7a;
+      border-radius: 8px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .dots-area {
+      width: 100%;
+      min-height: 95px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-content: flex-start;
+      justify-content: center;
+      padding: 6px;
+      cursor: pointer;
+      background: #fafafa;
+      border-radius: 4px;
+      border: 1px dashed #b0bec5;
+    }
+    .dot { width: 9px; height: 9px; border-radius: 50%; background: #37474f; }
+    .dot.user-added { background: #d32f2f; }
+
+    .grid-board {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 4px;
+      background: #37474f;
+      padding: 4px;
+      border-radius: 6px;
+      margin: 12px auto;
+      max-width: 340px;
+    }
+    .grid-cell {
+      aspect-ratio: 1;
+      background: #fff;
+      border-radius: 2px;
+      cursor: pointer;
+    }
+    .grid-cell.green { background: #4caf50; }
+    .grid-cell.red { background: #f44336; }
+    .palette-btn {
+      padding: 6px 12px;
+      border: 2px solid #ccc;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+    .palette-btn.selected { border-color: #000; box-shadow: 0 0 4px #000; }
+
+    .btn {
+      width: 100%;
+      padding: 11px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-check { background: #37474f; margin-top: 8px; }
+    .btn-reset { background: var(--danger); margin-top: 12px; }
+
+    .score-feedback {
+      font-size: 0.85rem;
+      font-weight: bold;
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 6px;
+      display: none;
+    }
+    .score-feedback.show { display: block; }
+    .score-feedback.pass { background: #e8f5e9; color: var(--success); }
+    .score-feedback.fail { background: #ffebee; color: var(--danger); }
+
+    .dashboard {
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px;
+      text-align: center;
+      border: 2px solid var(--primary);
+    }
+    .dash-metric { display: flex; justify-content: space-around; margin: 16px 0; }
+    .metric-box { flex: 1; padding: 10px; margin: 0 4px; border-radius: 8px; background: #eceff1; }
+    .metric-val { font-size: 1.4rem; font-weight: bold; }
+    .metric-val.green { color: var(--success); }
+    .metric-val.red { color: var(--danger); }
+    .metric-val.blue { color: var(--primary); }
+    .verdict-box { font-size: 1.1rem; font-weight: bold; padding: 12px; border-radius: 8px; margin-top: 10px; }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 900;
+      font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الْأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الِانْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الِاشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">📢 الِانْضِمَامُ إِلَى الْقَنَاةِ</a>
+    <button class="btn-check-sub" onclick="verifySubscription()">✅ تَأْكِيدُ الِاشْتِرَاكِ</button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="header">
+    <h1>عَدُّ كِمِّيَّاتٍ صَغِيرَةٍ</h1>
+    <div class="sub">السنة الثانية ابتدائي • كتاب التلميذ ص 14 و دفتر الأنشطة ص 8</div>
+  </div>
+
+  <div class="card" style="border-right: 5px solid var(--secondary);">
+    <div class="card-title" style="color:var(--secondary);">حِسَابٌ ذِهْنِيٌّ</div>
+    <p style="margin:0; font-size:0.95rem; line-height:1.8;">
+      يَعُدُّ التَّلَامِيذُ مُتَتَالِيَةَ الأَعْدَادِ الطَّبِيعِيَّةِ انْطِلَاقًا مِنَ 1. يَبْدَأُ التِّلْمِيذُ الأَوَّلُ بِالعَدَدِ 1، يُكْمِلُ زَمِيلُهُ بِالعَدَدِ 2، ثُمَّ الَّذِي يَلِيهِمَا بِالعَدَدِ 3، وَهَكَذَا...
+    </p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">أَكْتَشِفُ (كتاب التلميذ ص 14)</div>
+    
+    <div class="exercise-box">
+      <b>1- أُحْسُبْ عَدَدَ الْعَصَافِيرِ:</b>
+      <div class="items-grid" id="birds-container">
+        <span class="bird-item">🐦</span><span class="bird-item">🐦</span>
+        <span class="bird-item">🐦</span><span class="bird-item">🐦</span>
+        <span class="bird-item">🐦</span><span class="bird-item">🐦</span>
+        <span class="bird-item">🐦</span><span class="bird-item">🐦</span>
+        <span class="bird-item">🐦</span><span class="bird-item">🐦</span>
+      </div>
+      عَدَدُ الْعَصَافِيرِ هُوَ: <input type="number" class="inp" id="in_birds" data-ans="10">
+    </div>
+
+    <button class="btn btn-check" onclick="evaluateSingle('in_birds', 'fb_akt')">تحقق من إجابة أَكْتَشِفُ</button>
+    <div id="fb_akt" class="score-feedback"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">أُنْجِزُ (كتاب التلميذ ص 14)</div>
+
+    <div class="exercise-box">
+      <b>1- أُحْسُبْ عَدَدَ الْقُرَيْصَاتِ:</b><br>
+      عَدَدُ القُرَيْصَاتِ هُوَ: <input type="number" class="inp" id="in_tokens_count" data-ans="40"><br><br>
+      
+      <b>2- أَحِطْ 25 قُرَيْصَةً:</b><br>
+      <span style="font-size:0.85rem; color:#616161;">(المس القريصة لاختيارها وإحاطتها)</span>
+      <div class="token-grid" id="tokens-box"></div>
+    </div>
+
+    <div class="exercise-box">
+      <b>2- كَمْ مِنْ كِتَابٍ يُوجَدُ عَلَى الرَّفِّ ؟</b>
+      <div class="items-grid" style="background:#efebe9; border-bottom: 5px solid #795548; align-items:flex-end;">
+        <span class="book-item" style="background:#e53935; height:32px;"></span>
+        <span class="book-item" style="background:#1e88e5; height:40px;"></span>
+        <span class="book-item" style="background:#43a047; height:35px;"></span>
+        <span class="book-item" style="background:#fb8c00; height:42px;"></span>
+        <span class="book-item" style="background:#8e24aa; height:30px;"></span>
+        <span class="book-item" style="background:#00acc1; height:38px;"></span>
+        <span class="book-item" style="background:#fdd835; height:36px;"></span>
+        <span class="book-item" style="background:#3949ab; height:44px;"></span>
+        <span class="book-item" style="background:#d81b60; height:33px;"></span>
+        <span class="book-item" style="background:#00897b; height:39px;"></span>
+        <span class="book-item" style="background:#f4511e; height:41px;"></span>
+        <span class="book-item" style="background:#6d4c41; height:34px;"></span>
+        <span class="book-item" style="background:#546e7a; height:37px;"></span>
+        <span class="book-item" style="background:#1e88e5; height:42px;"></span>
+        <span class="book-item" style="background:#43a047; height:31px;"></span>
+        <span class="book-item" style="background:#8e24aa; height:40px;"></span>
+        <span class="book-item" style="background:#e53935; height:36px;"></span>
+        <span class="book-item" style="background:#fb8c00; height:38px;"></span>
+        <span class="book-item" style="background:#00acc1; height:35px;"></span>
+      </div>
+      يُوجَدُ: <input type="number" class="inp" id="in_books" data-ans="19"> كِتَابًا.
+    </div>
+
+    <div class="exercise-box">
+      <b>3- كَمْ بِطَاقَةً تُوجَدُ ؟</b>
+      <div class="items-grid" id="cards-container"></div>
+      يُوجَدُ: <input type="number" class="inp" id="in_cards" data-ans="50"> بِطَاقَةً.
+    </div>
+
+    <div class="exercise-box">
+      <b>4- اِرْبِطْ كُلَّ عَدَدٍ بِكِتَابَتِهِ:</b> (المس العدد ثم المس كتابته بالحروف للتوصيل)<br>
+      <div class="match-container">
+        <div class="match-col" id="col-digits">
+          <div class="match-btn" data-val="42" onclick="selectMatch('digit', '42', this)">42</div>
+          <div class="match-btn" data-val="9" onclick="selectMatch('digit', '9', this)">9</div>
+          <div class="match-btn" data-val="63" onclick="selectMatch('digit', '63', this)">63</div>
+          <div class="match-btn" data-val="31" onclick="selectMatch('digit', '31', this)">31</div>
+          <div class="match-btn" data-val="24" onclick="selectMatch('digit', '24', this)">24</div>
+        </div>
+        <div class="match-col" id="col-words">
+          <div class="match-btn" data-val="24" onclick="selectMatch('word', '24', this)">أَرْبَعَةٌ وَعِشْرُونَ</div>
+          <div class="match-btn" data-val="42" onclick="selectMatch('word', '42', this)">اثْنَانِ وَأَرْبَعُونَ</div>
+          <div class="match-btn" data-val="63" onclick="selectMatch('word', '63', this)">ثَلَاثَةٌ وَسِتُّونَ</div>
+          <div class="match-btn" data-val="9" onclick="selectMatch('word', '9', this)">تِسْعَةٌ</div>
+          <div class="match-btn" data-val="31" onclick="selectMatch('word', '31', this)">وَاحِدٌ وَثَلَاثُونَ</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="exercise-box">
+      <b>5- كَمْ نُقْطَةً تُوجَدُ؟</b>
+      <div class="items-grid" style="padding:10px; gap:8px;">
+        <div class="dot-cluster">
+          <span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span>
+          <span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span>
+        </div>
+        <div class="dot-cluster">
+          <span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span>
+          <span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span>
+        </div>
+        <div class="dot-cluster">
+          <span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span>
+          <span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span>
+        </div>
+        <div class="dot-cluster">
+          <span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span>
+          <span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span>
+        </div>
+        <div class="dot-cluster">
+          <span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span>
+          <span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span>
+        </div>
+        <div class="dot-cluster" style="grid-template-columns: repeat(3, 1fr); align-self:center;">
+          <span class="dot-symbol"></span><span class="dot-symbol"></span><span class="dot-symbol"></span>
+        </div>
+      </div>
+      عَدَدُ النُّقَطِ: <input type="number" class="inp" id="in_dots_count" data-ans="53"> نُقْطَةً.
+    </div>
+
+    <button class="btn btn-check" onclick="evaluateOnjiz()">تحقق من إجابات أُنْجِزُ</button>
+    <div id="fb_onj" class="score-feedback"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">أَتَمَرَّنُ (دفتر الأنشطة ص 8)</div>
+
+    <div class="exercise-box">
+      <b>1- رَتِّبْ هَذِهِ الْأَقْلَامَ فِي عُلَبٍ ذَاتِ 10 أَقْلَامٍ. كَمْ عُلْبَةً تَحْتَاجُ ؟</b><br>
+      <div class="items-grid" style="align-items:center; gap:14px; padding:12px;">
+        <div class="pen-box-frame">
+          <span class="pen"></span><span class="pen"></span><span class="pen"></span><span class="pen"></span><span class="pen"></span>
+          <span class="pen"></span><span class="pen"></span><span class="pen"></span><span class="pen"></span><span class="pen"></span>
+        </div>
+        <div style="display:inline-flex; gap:4px; flex-wrap:wrap; max-width:145px;">
+          <span class="pen"></span><span class="pen"></span><span class="pen"></span><span class="pen"></span><span class="pen"></span>
+          <span class="pen"></span><span class="pen"></span><span class="pen"></span><span class="pen"></span><span class="pen"></span>
+          <span class="pen"></span><span class="pen"></span><span class="pen"></span><span class="pen"></span><span class="pen"></span>
+          <span class="pen"></span><span class="pen"></span><span class="pen"></span><span class="pen"></span><span class="pen"></span>
+        </div>
+      </div>
+      أَحْتَاجُ إِلَى <input type="number" class="inp" id="in_pens_boxes" data-ans="3"> عُلَبٍ ذَاتِ 10 أَقْلَامٍ.
+    </div>
+
+    <div class="exercise-box">
+      <b>2- اكْتُبْ بِالْحُرُوفِ الْأَعْدَادَ:</b><br>
+      • 11: <input type="text" class="inp-text" id="in_w_11" data-ans="أحد عشر|إحدى عشرة"><br>
+      • 13: <input type="text" class="inp-text" id="in_w_13" data-ans="ثلاثة عشر|ثلاث عشرة"><br>
+      • 17: <input type="text" class="inp-text" id="in_w_17" data-ans="سبعة عشر|سبع عشرة"><br>
+      • 21: <input type="text" class="inp-text" id="in_w_21" data-ans="واحد وعشرون|إحدى وعشرون"><br>
+      • 35: <input type="text" class="inp-text" id="in_w_35" data-ans="خمسة وثلاثون|خمس وثلاثون"><br><br>
+
+      <b>1- اكْتُبْ بِالْأَرْقَامِ الْأَعْدَادَ:</b><br>
+      • عَشْرَةٌ: <input type="number" class="inp" id="in_d_10" data-ans="10"><br>
+      • عِشْرُونَ: <input type="number" class="inp" id="in_d_20" data-ans="20"><br>
+      • ثَلَاثُونَ: <input type="number" class="inp" id="in_d_30" data-ans="30"><br>
+      • أَرْبَعُونَ: <input type="number" class="inp" id="in_d_40" data-ans="40"><br>
+      • خَمْسُونَ: <input type="number" class="inp" id="in_d_50" data-ans="50">
+    </div>
+
+    <div class="exercise-box">
+      <b>3- اُرْسُمْ النُّقَطَ النَّاقِصَةَ لِكَيْ تَحْصُلَ عَلَى الْعَدَدِ الْمَكْتُوبِ فِي الْبِطَاقَةِ:</b><br>
+      <span style="font-size:0.8rem; color:#616161;">(المس داخل المستطيل لإضافة نقطة حمراء ناقصة، أو المس النقطة الحمراء لحذفها)</span>
+      
+      <div class="dots-card-container">
+        <div class="dots-card-box">
+          <div class="dots-area" id="dotbox-20" onclick="addDot(this, 20)"></div>
+          <div style="font-size:1.15rem; font-weight:bold; color:var(--primary); margin-top:6px;">20</div>
+        </div>
+
+        <div class="dots-card-box">
+          <div class="dots-area" id="dotbox-30" onclick="addDot(this, 30)"></div>
+          <div style="font-size:1.15rem; font-weight:bold; color:var(--primary); margin-top:6px;">30</div>
+        </div>
+
+        <div class="dots-card-box">
+          <div class="dots-area" id="dotbox-40" onclick="addDot(this, 40)"></div>
+          <div style="font-size:1.15rem; font-weight:bold; color:var(--primary); margin-top:6px;">40</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-check" onclick="evaluateAtamarano()">تحقق من إجابات أَتَمَرَّنُ</button>
+    <div id="fb_atm" class="score-feedback"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">أَبْحَثُ (دفتر الأنشطة ص 8)</div>
+    <p style="margin:0 0 6px 0; font-size:0.95rem;">
+      1 - لَوِّنْ بِالْأَخْضَرِ 10 خَانَاتٍ فِي الْجَدْوَلِ.<br>
+      2 - لَوِّنْ بِالْأَحْمَرِ 10 خَانَاتٍ فِي الْجَدْوَلِ.<br>
+      3 - كَمْ خَانَةً بَقِيَتْ دُونَ لَوْنٍ ؟
+    </p>
+
+    <div style="display:flex; justify-content:center; gap:8px; margin-bottom:8px;">
+      <button class="palette-btn selected" id="btn-green" style="background:#e8f5e9; color:#2e7d32;" onclick="setGridColor('green')">🟢 أخضر</button>
+      <button class="palette-btn" id="btn-red" style="background:#ffebee; color:#c62828;" onclick="setGridColor('red')">🔴 أحمر</button>
+      <button class="palette-btn" style="background:#f5f5f5;" onclick="setGridColor('white')">⚪ مسح</button>
+    </div>
+
+    <div class="grid-board" id="abhath-grid"></div>
+
+    <div style="margin-top:10px;">
+      3- عَدَدُ الخَانَاتِ الَّتِي بَقِيَتْ دُونَ لَوْنٍ هُوَ:
+      <input type="number" class="inp" id="in_remaining_cells" data-ans="12">
+    </div>
+
+    <button class="btn btn-check" onclick="evaluateAbhath()">تحقق من إجابة أَبْحَثُ</button>
+    <div id="fb_abh" class="score-feedback"></div>
+  </div>
+
+  <div class="card" style="border-right: 6px solid var(--success);">
+    <div class="card-title" style="color:var(--success);">تَعَلَّمْتُ (كتاب التلميذ ص 14)</div>
+    <p style="line-height:2; font-size:0.95rem; margin:0;">
+      عِنْدَمَا أَعُدُّ كِمِّيَّاتٍ أَعُدُّهَا <b>وَاحِدًا وَاحِدًا</b> ثُمَّ أَجْمَعُهَا فِي <b>رُزَمٍ ذَاتِ 10 عَنَاصِرَ</b>، وَبَعْدَهَا أَجْمَعُ العَشَرَاتِ الَّتِي وَجَدْتُهَا مَعَ العَنَاصِرِ المُتَبَقِّيَةِ.
+    </p>
+  </div>
+
+  <div class="dashboard">
+    <h2 style="margin:0 0 10px 0; color:var(--primary);">التقييم الشامل للوحدة</h2>
+    <p style="font-size:0.9rem; color:#616161; margin-bottom:15px;">اضغط لمعاينة نتيجتك العامة في جميع الأنشطة:</p>
+    
+    <button class="btn" onclick="generateComprehensiveReport()">عرض التقرير الشامل 📊</button>
+
+    <div class="dash-metric">
+      <div class="metric-box">
+        <div class="metric-val green" id="final-correct">0</div>
+        <div style="font-size:0.8rem; font-weight:bold;">صحيحة</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val red" id="final-wrong">0</div>
+        <div style="font-size:0.8rem; font-weight:bold;">خاطئة أو ناقصة</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val blue" id="final-percent">0%</div>
+        <div style="font-size:0.8rem; font-weight:bold;">النسبة المئوية</div>
+      </div>
+    </div>
+
+    <div id="final-verdict" class="verdict-box" style="display:none;"></div>
+
+    <button class="btn btn-reset" onclick="restartLesson()">🔄 أَعِدِ المُحَاوَلَةَ مِنْ جَدِيدٍ</button>
+    <a href="../../../index.html" class="btn-back-home">← الْعَوْدَةُ إِلَى الْفِهْرِسِ</a>
+  </div>
+
+</div>
+
+<script>
+  // ⚠️ تم حذف BOT_TOKEN من هنا (لأسباب أمنية)
+  const CHANNEL_ID = "-1004461185731";
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#1976d2";
+    statusMsg.textContent = "جَارٍ التَّحَقُّقُ مِنَ الِاشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارٍ فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#d32f2f";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الِانْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#d32f2f";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الِاتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    verifySubscription();
+  });
+
+  const tokensBox = document.getElementById('tokens-box');
+  let selectedTokens = 0;
+  for (let i = 0; i < 40; i++) {
+    const token = document.createElement('div');
+    token.className = 'token';
+    token.onclick = function() {
+      this.classList.toggle('selected');
+      selectedTokens = document.querySelectorAll('.token.selected').length;
+    };
+    tokensBox.appendChild(token);
+  }
+
+  const cardsContainer = document.getElementById('cards-container');
+  for (let i = 0; i < 50; i++) {
+    const cardEl = document.createElement('span');
+    cardEl.className = 'card-item';
+    cardsContainer.appendChild(cardEl);
+  }
+
+  let selectedDigit = null;
+  let selectedWord = null;
+  let matchesFound = 0;
+
+  function selectMatch(type, val, el) {
+    if (type === 'digit') {
+      if (selectedDigit) selectedDigit.el.classList.remove('active');
+      selectedDigit = { val: val, el: el };
+      el.classList.add('active');
+    } else {
+      if (selectedWord) selectedWord.el.classList.remove('active');
+      selectedWord = { val: val, el: el };
+      el.classList.add('active');
+    }
+
+    if (selectedDigit && selectedWord) {
+      if (selectedDigit.val === selectedWord.val) {
+        selectedDigit.el.className = 'match-btn matched';
+        selectedWord.el.className = 'match-btn matched';
+        matchesFound++;
+      } else {
+        selectedDigit.el.classList.remove('active');
+        selectedWord.el.classList.remove('active');
+      }
+      selectedDigit = null;
+      selectedWord = null;
+    }
+  }
+
+  function setupInitialDots(boxId, count) {
+    const box = document.getElementById(boxId);
+    box.innerHTML = '';
+    for (let i = 0; i < count; i++) {
+      const d = document.createElement('div');
+      d.className = 'dot';
+      box.appendChild(d);
+    }
+  }
+  setupInitialDots('dotbox-20', 15);
+  setupInitialDots('dotbox-30', 23);
+  setupInitialDots('dotbox-40', 29);
+
+  function addDot(box, target) {
+    const totalDots = box.querySelectorAll('.dot').length;
+    if (totalDots < target + 10) {
+      const d = document.createElement('div');
+      d.className = 'dot user-added';
+      d.onclick = function(e) {
+        e.stopPropagation();
+        this.remove();
+      };
+      box.appendChild(d);
+    }
+  }
+
+  let activeColor = 'green';
+  function setGridColor(c) {
+    activeColor = c;
+    document.querySelectorAll('.palette-btn').forEach(b => b.classList.remove('selected'));
+    if (c === 'green') document.getElementById('btn-green').classList.add('selected');
+    if (c === 'red') document.getElementById('btn-red').classList.add('selected');
+  }
+
+  const gridBoard = document.getElementById('abhath-grid');
+  for (let i = 0; i < 32; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'grid-cell';
+    cell.onclick = function() {
+      if (activeColor === 'green') {
+        const greens = gridBoard.querySelectorAll('.grid-cell.green').length;
+        if (this.classList.contains('green')) {
+          this.className = 'grid-cell';
+        } else if (greens < 10) {
+          this.className = 'grid-cell green';
+        }
+      } else if (activeColor === 'red') {
+        const reds = gridBoard.querySelectorAll('.grid-cell.red').length;
+        if (this.classList.contains('red')) {
+          this.className = 'grid-cell';
+        } else if (reds < 10) {
+          this.className = 'grid-cell red';
+        }
+      } else {
+        this.className = 'grid-cell';
+      }
+    };
+    gridBoard.appendChild(cell);
+  }
+
+  function evaluateSingle(id, fbId) {
+    const el = document.getElementById(id);
+    const fb = document.getElementById(fbId);
+    if (parseInt(el.value.trim()) === parseInt(el.dataset.ans)) {
+      el.className = 'inp correct';
+      fb.className = 'score-feedback show pass';
+      fb.innerText = 'ممتاز! عدد العصافير صحيح (10).';
+    } else {
+      el.className = 'inp wrong';
+      fb.className = 'score-feedback show fail';
+      fb.innerText = 'أعد العد بدقة.';
+    }
+  }
+
+  function evaluateOnjiz() {
+    let score = 0;
+    const total = 5;
+
+    const tokInput = document.getElementById('in_tokens_count');
+    if (parseInt(tokInput.value) === 40) { tokInput.className = 'inp correct'; score++; }
+    else { tokInput.className = 'inp wrong'; }
+
+    if (selectedTokens === 25) { score++; }
+
+    const bookInput = document.getElementById('in_books');
+    if (parseInt(bookInput.value) === 19) { bookInput.className = 'inp correct'; score++; }
+    else { bookInput.className = 'inp wrong'; }
+
+    const cardInput = document.getElementById('in_cards');
+    if (parseInt(cardInput.value) === 50) { cardInput.className = 'inp correct'; score++; }
+    else { cardInput.className = 'inp wrong'; }
+
+    const dotsInput = document.getElementById('in_dots_count');
+    if (parseInt(dotsInput.value) === 53 && matchesFound === 5) {
+      dotsInput.className = 'inp correct';
+      score++;
+    } else {
+      if (parseInt(dotsInput.value) === 53) dotsInput.className = 'inp correct';
+      else dotsInput.className = 'inp wrong';
+    }
+
+    const fb = document.getElementById('fb_onj');
+    fb.className = 'score-feedback show ' + (score === total ? 'pass' : 'fail');
+    fb.innerHTML = `التقييم الجزئي لـ أُنْجِزُ: <b>${score}</b> من <b>${total}</b> مهام صحيحة.` +
+      (selectedTokens !== 25 ? '<br>• تنبيه: تأكد من إحاطة 25 قريصة بدقة.' : '') +
+      (matchesFound !== 5 ? '<br>• تنبيه: أكمل توصيل جميع الأعداد بكتابتها.' : '');
+  }
+
+  function evaluateAtamarano() {
+    let correct = 0;
+    let total = 12;
+
+    const pensInp = document.getElementById('in_pens_boxes');
+    if (parseInt(pensInp.value) === 3) { pensInp.className = 'inp correct'; correct++; }
+    else { pensInp.className = 'inp wrong'; }
+
+    const wordsIds = ['in_w_11', 'in_w_13', 'in_w_17', 'in_w_21', 'in_w_35'];
+    wordsIds.forEach(id => {
+      const el = document.getElementById(id);
+      const val = el.value.trim();
+      const acceptable = el.dataset.ans.split('|');
+      if (acceptable.some(a => val.includes(a.trim()))) {
+        el.className = 'inp-text correct';
+        correct++;
+      } else {
+        el.className = 'inp-text wrong';
+      }
+    });
+
+    const digitsIds = ['in_d_10', 'in_d_20', 'in_d_30', 'in_d_40', 'in_d_50'];
+    digitsIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (parseInt(el.value) === parseInt(el.dataset.ans)) {
+        el.className = 'inp correct';
+        correct++;
+      } else {
+        el.className = 'inp wrong';
+      }
+    });
+
+    const c20 = document.querySelectorAll('#dotbox-20 .dot').length;
+    const c30 = document.querySelectorAll('#dotbox-30 .dot').length;
+    const c40 = document.querySelectorAll('#dotbox-40 .dot').length;
+    if (c20 === 20 && c30 === 30 && c40 === 40) { correct++; }
+
+    const fb = document.getElementById('fb_atm');
+    fb.className = 'score-feedback show ' + (correct === total ? 'pass' : 'fail');
+    fb.innerHTML = `التقييم الجزئي لـ أَتَمَرَّنُ: <b>${correct}</b> من <b>${total}</b> مهام صحيحة.`;
+  }
+
+  function evaluateAbhath() {
+    const greens = gridBoard.querySelectorAll('.grid-cell.green').length;
+    const reds = gridBoard.querySelectorAll('.grid-cell.red').length;
+    const remInput = document.getElementById('in_remaining_cells');
+    const remVal = parseInt(remInput.value);
+
+    let pass = (greens === 10 && reds === 10 && remVal === 12);
+    if (remVal === 12) remInput.className = 'inp correct';
+    else remInput.className = 'inp wrong';
+
+    const fb = document.getElementById('fb_abh');
+    fb.className = 'score-feedback show ' + (pass ? 'pass' : 'fail');
+    fb.innerHTML = pass ? 'ممتاز! تم تلوين 10 بالأخضر و 10 بالأحمر وبقي 12 خانة دون تلوين.' :
+      'راجع تلوين 10 خانات خضراء و 10 حمراء وحساب الخانات المتبقية بدقة.';
+  }
+
+  function generateComprehensiveReport() {
+    let correct = 0;
+    const total = 19;
+
+    if (parseInt(document.getElementById('in_birds').value) === 10) correct++;
+    if (parseInt(document.getElementById('in_tokens_count').value) === 40) correct++;
+    if (selectedTokens === 25) correct++;
+    if (parseInt(document.getElementById('in_books').value) === 19) correct++;
+    if (parseInt(document.getElementById('in_cards').value) === 50) correct++;
+    if (matchesFound === 5) correct++;
+    if (parseInt(document.getElementById('in_dots_count').value) === 53) correct++;
+    if (parseInt(document.getElementById('in_pens_boxes').value) === 3) correct++;
+
+    const wordsIds = ['in_w_11', 'in_w_13', 'in_w_17', 'in_w_21', 'in_w_35'];
+    wordsIds.forEach(id => {
+      const el = document.getElementById(id);
+      const val = el.value.trim();
+      const acceptable = el.dataset.ans.split('|');
+      if (acceptable.some(a => val.includes(a.trim()))) correct++;
+    });
+
+    const digitsIds = ['in_d_10', 'in_d_20', 'in_d_30', 'in_d_40', 'in_d_50'];
+    digitsIds.forEach(id => {
+      if (parseInt(document.getElementById(id).value) === parseInt(document.getElementById(id).dataset.ans)) correct++;
+    });
+
+    const c20 = document.querySelectorAll('#dotbox-20 .dot').length;
+    const c30 = document.querySelectorAll('#dotbox-30 .dot').length;
+    const c40 = document.querySelectorAll('#dotbox-40 .dot').length;
+    if (c20 === 20 && c30 === 30 && c40 === 40) correct++;
+
+    const greens = gridBoard.querySelectorAll('.grid-cell.green').length;
+    const reds = gridBoard.querySelectorAll('.grid-cell.red').length;
+    const remVal = parseInt(document.getElementById('in_remaining_cells').value);
+    if (greens === 10 && reds === 10 && remVal === 12) correct++;
+
+    const wrong = total - correct;
+    const percentage = Math.round((correct / total) * 100);
+
+    document.getElementById('final-correct').innerText = correct;
+    document.getElementById('final-wrong').innerText = wrong;
+    document.getElementById('final-percent').innerText = percentage + '%';
+
+    const vBox = document.getElementById('final-verdict');
+    vBox.style.display = 'block';
+
+    if (percentage === 100) {
+      vBox.style.background = '#e8f5e9';
+      vBox.style.color = '#2e7d32';
+      vBox.innerText = '🌟 ممتاز! علامة كاملة، أتقنت كفاءة عد الكميات الصغيرة والتجميع بالعشرات بدقة!';
+    } else if (percentage >= 80) {
+      vBox.style.background = '#e3f2fd';
+      vBox.style.color = '#1565c0';
+      vBox.innerText = '👏 جيد جداً! عمل متقن، بقيت لديك بعض التمارين البسيطة لتصل للعلامة الكاملة.';
+    } else if (percentage >= 50) {
+      vBox.style.background = '#fff3e0';
+      vBox.style.color = '#ef6c00';
+      vBox.innerText = '👍 حسن! استوعبت مبدأ العد، راجع الأخطاء لتحسين نتيجتك.';
+    } else {
+      vBox.style.background = '#ffebee';
+      vBox.style.color = '#c62828';
+      vBox.innerText = '💪 حاول أفضل في المرة القادمة! تذكر: نعد العناصر واحداً واحداً ثم نجمعها في رزم من 10.';
+    }
+
+    vBox.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function restartLesson() {
+    if (confirm('هل تريد تصفير جميع الإجابات وإعادة الدرس من جديد؟')) {
+      document.querySelectorAll('input.inp, input.inp-text').forEach(i => {
+        i.value = '';
+        i.className = i.className.includes('inp-text') ? 'inp-text' : 'inp';
+      });
+      document.querySelectorAll('.score-feedback').forEach(fb => {
+        fb.className = 'score-feedback';
+        fb.innerHTML = '';
+      });
+      document.querySelectorAll('.token').forEach(t => t.classList.remove('selected'));
+      selectedTokens = 0;
+
+      document.querySelectorAll('.match-btn').forEach(b => b.className = 'match-btn');
+      matchesFound = 0;
+
+      setupInitialDots('dotbox-20', 15);
+      setupInitialDots('dotbox-30', 23);
+      setupInitialDots('dotbox-40', 29);
+
+      document.querySelectorAll('.grid-cell').forEach(c => c.className = 'grid-cell');
+
+      document.getElementById('final-correct').innerText = '0';
+      document.getElementById('final-wrong').innerText = '0';
+      document.getElementById('final-percent').innerText = '0%';
+      document.getElementById('final-verdict').style.display = 'none';
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+</script>
+
+</body>
+</html>
