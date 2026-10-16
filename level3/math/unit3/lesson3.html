@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>الرياضيات • السنة الثالثة • مُقَارَنَةُ أَطْوَالٍ</title>
+  
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #0288d1;
+      --primary-dark: #01579b;
+      --secondary: #ff8f00;
+      --success: #2e7d32;
+      --error: #c62828;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #263238;
+      --text-muted: #546e7a;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 12px;
+      padding-bottom: 160px;
+      font-size: 1.15rem;
+    }
+
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: var(--primary-dark); margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 22px; }
+
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: var(--primary);
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: var(--success);
+      border: 2px solid var(--success);
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+    }
+
+    .sub-status-msg { margin-top: 15px; font-size: 0.95rem; font-weight: 700; min-height: 24px; }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      background: #ffffff;
+      padding: 10px 16px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border: 2px solid #b3e5fc;
+    }
+    .app-title-mini { font-weight: 900; color: var(--primary-dark); font-size: 1.25rem; }
+    .audio-btn {
+      background: #e1f5fe;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    #ruler-tool {
+      position: fixed;
+      top: 85px;
+      left: 10px;
+      width: 450px;
+      background: rgba(255, 249, 196, 0.98);
+      border: 2px solid #fbc02d;
+      border-top: 3px solid #d32f2f;
+      border-radius: 6px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+      z-index: 1000;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      transform-origin: 0px 0px;
+      direction: ltr;
+      pointer-events: auto;
+    }
+
+    .ruler-edge-top {
+      display: flex;
+      width: 450px;
+      height: 38px;
+      border-bottom: 1px dashed #b0bec5;
+      padding: 0;
+      position: relative;
+      pointer-events: none;
+    }
+
+    .ruler-unit {
+      width: 30px;
+      height: 100%;
+      border-right: 1.5px solid #263238;
+      position: relative;
+      flex-shrink: 0;
+    }
+    .ruler-unit:first-child { border-left: 2.5px solid #d32f2f; }
+    .ruler-unit::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 1px;
+      height: 45%;
+      background: #78909c;
+    }
+
+    .ruler-val {
+      position: absolute;
+      top: 14px;
+      left: -4px;
+      font-size: 11px;
+      font-weight: 900;
+      color: #212121;
+    }
+
+    .ruler-drag-bottom {
+      background: #fbc02d;
+      color: #37474f;
+      padding: 7px 10px;
+      font-size: 0.85rem;
+      font-weight: 900;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: grab;
+      touch-action: none;
+      direction: rtl;
+    }
+    .ruler-drag-bottom:active {
+      cursor: grabbing;
+      background: #f9a825;
+    }
+
+    .ruler-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px;
+      padding: 5px;
+      background: #fffde7;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+      direction: rtl;
+    }
+    .r-btn {
+      background: #ffffff;
+      border: 1px solid #b0bec5;
+      border-radius: 5px;
+      padding: 4px 7px;
+      font-size: 11px;
+      font-weight: 900;
+      cursor: pointer;
+      color: #37474f;
+    }
+    .r-btn:hover { background: #eceff1; }
+
+    .lesson-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 24px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+      border-top: 8px solid var(--primary);
+      border-bottom: 3px solid #b3e5fc;
+      position: relative;
+      z-index: 1;
+    }
+
+    .page-badge {
+      display: inline-block;
+      background: var(--primary);
+      color: #fff;
+      padding: 5px 14px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .lesson-title {
+      color: var(--primary-dark);
+      font-weight: 900;
+      font-size: 1.45rem;
+      margin-top: 0;
+      margin-bottom: 16px;
+      border-bottom: 3px dashed #b3e5fc;
+      padding-bottom: 10px;
+      text-align: center;
+    }
+
+    .instruction { font-weight: 900; color: #01579b; margin: 16px 0 10px 0; font-size: 1.2rem; }
+
+    .problem-box {
+      background: #fffde7;
+      border: 2px solid #fff59d;
+      border-right: 6px solid #fbc02d;
+      border-radius: 16px;
+      padding: 14px 16px;
+      line-height: 2.1;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #263238;
+      margin-bottom: 16px;
+    }
+
+    .svg-canvas-box {
+      background: #ffffff;
+      border: 2px solid #cfd8dc;
+      border-radius: 16px;
+      padding: 14px;
+      margin: 14px 0;
+      text-align: center;
+      overflow-x: auto;
+    }
+
+    .question-row {
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    .question-title {
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: #0d47a1;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .big-btn {
+      display: block;
+      width: 100%;
+      background: #ffffff;
+      border: 2.5px solid #cfd8dc;
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 1.2rem;
+      font-weight: 900;
+      margin: 8px 0;
+      cursor: pointer;
+      text-align: center;
+      color: #37474f;
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+    .big-btn:hover { background: #f5f5f5; border-color: #90a4ae; }
+    .big-btn:active { transform: scale(0.98); }
+
+    .locked { pointer-events: none !important; opacity: 0.9; }
+    .correct { background-color: #c8e6c9 !important; border-color: var(--success) !important; color: #1b5e20 !important; }
+    .wrong { background-color: #ffcdd2 !important; border-color: var(--error) !important; color: #b71c1c !important; }
+
+    .word-chip {
+      display: inline-block;
+      background: #e1f5fe;
+      border: 2.5px solid #81d4fa;
+      color: #01579b;
+      padding: 8px 16px;
+      margin: 5px;
+      border-radius: 12px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+    .word-chip.selected {
+      border-color: var(--secondary);
+      background: #ffe0b2;
+      transform: scale(1.06);
+    }
+
+    .drop-zone {
+      display: inline-block;
+      min-width: 80px;
+      min-height: 42px;
+      border-bottom: 3px dashed var(--primary);
+      margin: 4px;
+      vertical-align: middle;
+      text-align: center;
+      color: #01579b;
+      font-weight: 900;
+      font-size: 1.15rem;
+      background: #e1f5fe;
+      border-radius: 10px;
+      padding: 4px 10px;
+      line-height: 32px;
+      cursor: pointer;
+      touch-action: manipulation;
+    }
+
+    .eval-badge {
+      background: #f1f8e9;
+      border: 2px solid #c8e6c9;
+      padding: 10px 16px;
+      border-radius: 14px;
+      margin-top: 14px;
+      display: flex;
+      justify-content: space-around;
+      font-weight: 900;
+      font-size: 1.15rem;
+    }
+    .text-success { color: var(--success); }
+    .text-error { color: var(--error); }
+
+    .interactive-line-box {
+      border: 2.5px solid #cfd8dc;
+      border-radius: 14px;
+      padding: 12px;
+      margin: 10px 0;
+      background: #ffffff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      touch-action: manipulation;
+    }
+    .interactive-line-box:hover { border-color: #90a4ae; }
+    .interactive-line-box.active-paired {
+      border-color: #2e7d32;
+      background: #e8f5e9;
+    }
+
+    #final-report {
+      text-align: center;
+      background: #ffffff;
+      border: 4px solid var(--primary);
+      border-radius: 24px;
+      padding: 26px 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      margin-top: 30px;
+    }
+    .final-score { font-size: 3.5rem; font-weight: 900; color: var(--primary-dark); margin: 12px 0; }
+    .final-remark { font-size: 1.4rem; font-weight: 900; padding: 10px 20px; border-radius: 20px; display: inline-block; margin-bottom: 20px; }
+
+    .btn-restart {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 16px 24px;
+      font-size: 1.3rem;
+      font-weight: 900;
+      border-radius: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 12px;
+      touch-action: manipulation;
+    }
+    .btn-exit {
+      background: #546e7a;
+      color: #ffffff;
+      border: none;
+      padding: 16px 24px;
+      font-size: 1.3rem;
+      font-weight: 900;
+      border-radius: 16px;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 12px;
+      touch-action: manipulation;
+    }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      background: #01579b;
+      color: #ffffff;
+      border: none;
+      padding: 16px 24px;
+      font-size: 1.2rem;
+      font-weight: 900;
+      border-radius: 16px;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الْأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الِانْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الِاشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">📢 الِانْضِمَامُ إِلَى الْقَنَاةِ</a>
+      <button class="btn-check-sub" onclick="verifySubscription()">✅ تَأْكِيدُ الِاشْتِرَاكِ</button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <div id="ruler-tool">
+    <div class="ruler-edge-top">
+      <div class="ruler-unit"><span class="ruler-val">0</span></div>
+      <div class="ruler-unit"><span class="ruler-val">1</span></div>
+      <div class="ruler-unit"><span class="ruler-val">2</span></div>
+      <div class="ruler-unit"><span class="ruler-val">3</span></div>
+      <div class="ruler-unit"><span class="ruler-val">4</span></div>
+      <div class="ruler-unit"><span class="ruler-val">5</span></div>
+      <div class="ruler-unit"><span class="ruler-val">6</span></div>
+      <div class="ruler-unit"><span class="ruler-val">7</span></div>
+      <div class="ruler-unit"><span class="ruler-val">8</span></div>
+      <div class="ruler-unit"><span class="ruler-val">9</span></div>
+      <div class="ruler-unit"><span class="ruler-val">10</span></div>
+      <div class="ruler-unit"><span class="ruler-val">11</span></div>
+      <div class="ruler-unit"><span class="ruler-val">12</span></div>
+      <div class="ruler-unit"><span class="ruler-val">13</span></div>
+      <div class="ruler-unit"><span class="ruler-val">14</span></div>
+      <div class="ruler-unit"><span class="ruler-val">15</span></div>
+    </div>
+    
+    <div class="ruler-drag-bottom" id="ruler-handle">
+      <span>📏 مِسْطَرَةُ 15 سم (اسْحَبْنِي أَوْ دَوِّرْنِي بِإِصْبَعَيْنِ)</span>
+      <span id="ruler-angle-val">0°</span>
+    </div>
+    
+    <div class="ruler-actions">
+      <button class="r-btn" onclick="moveRuler(0, -20)">⬆️ أَعْلَى</button>
+      <button class="r-btn" onclick="moveRuler(0, 20)">⬇️ أَسْفَل</button>
+      <button class="r-btn" onclick="moveRuler(-20, 0)">⬅ يَسَار</button>
+      <button class="r-btn" onclick="moveRuler(20, 0)">➡ يَمِين</button>
+      <button class="r-btn" onclick="rotateRuler(-1)">↺ 1°</button>
+      <button class="r-btn" onclick="rotateRuler(-15)">↺ 15°</button>
+      <button class="r-btn" onclick="rotateRuler(15)">↻ 15°</button>
+      <button class="r-btn" onclick="rotateRuler(1)">↻ 1°</button>
+      <button class="r-btn" onclick="resetRuler()">🔄 إِعَادَة</button>
+    </div>
+  </div>
+
+  <div class="top-bar">
+    <span class="app-title-mini">الرِّيَاضِيَّاتُ • السَّنَةُ الثَّالِثَةُ ابْتِدَائِيٌّ</span>
+    <button class="audio-btn" id="audio-toggle" onclick="toggleAudio()" title="كتم/تشغيل الصوت">🔊</button>
+  </div>
+
+  <!-- البطاقة 1 -->
+  <div class="lesson-card">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 14</span>
+    <h2 class="lesson-title">أَكْتَشِفُ • سِبَاقٌ لِلْوُصُولِ إِلَى السُّكَّرِ</h2>
+    
+    <div class="problem-box">
+      « فِي سِبَاقٍ لِلْوُصُولِ إِلَى السُّكَّرِ، تَنْطَلِقُ النَّمْلَاتُ الثَّلَاثُ مِنَ النُّقْطَةِ (A) نَحْوَ النُّقْطَةِ (B). فَتَخْتَارُ كُلُّ وَاحِدَةٍ مِنْهَا طَرِيقًا كَمَا هُوَ مُبَيَّنٌ فِي الرَّسْمِ. اسْتَعْمِلْ مِسْطَرَتَكَ الْمُدَرَّجَةَ لِتَعْرِفَ النَّمْلَةَ الَّتِي اخْتَارَتْ أَقْصَرَ طَرِيقٍ لِتَفُوزَ بِالْجَائِزَةِ »
+    </div>
+
+    <div class="svg-canvas-box">
+      <svg width="450" height="230" viewBox="0 0 450 230">
+        <circle cx="50" cy="115" r="7" fill="#d32f2f"/>
+        <text x="35" y="100" font-weight="900" font-size="16" fill="#d32f2f">A</text>
+        
+        <circle cx="290" cy="115" r="7" fill="#2e7d32"/>
+        <text x="295" y="100" font-weight="900" font-size="15" fill="#2e7d32">B (السُّكَّر 🍬)</text>
+
+        <line x1="50" y1="115" x2="290" y2="115" stroke="#4caf50" stroke-width="6" stroke-linecap="round"/>
+        <text x="130" y="105" font-weight="900" font-size="13" fill="#2e7d32">الْمَسَارُ الْأَخْضَرُ (مُسْتَقِيمٌ)</text>
+
+        <polyline points="50,115 154,55 245,108 290,115" fill="none" stroke="#ab47bc" stroke-width="6" stroke-linecap="round"/>
+        <text x="110" y="45" font-weight="900" font-size="13" fill="#7b1fa2">الْمَسَارُ الْبَنَفْسَجِيُّ</text>
+
+        <polyline points="50,115 124,189 198,115 272,41 290,115" fill="none" stroke="#ffa726" stroke-width="6" stroke-linecap="round"/>
+        <text x="190" y="215" font-weight="900" font-size="13" fill="#e65100">الْمَسَارُ الْبُرْتُقَالِيُّ</text>
+      </svg>
+    </div>
+
+    <p class="instruction">1. قِسْ بِالْمِسْطَرَةِ طُولَ كُلِّ مَسَارٍ :</p>
+    <div class="question-row">
+      <span class="question-title">• مَا هُوَ طُولُ الْمَسَارِ الْأَخْضَرِ (الْمُسْتَقِيمِ) بِالْمِسْطَرَةِ ؟</span>
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-p14')">8 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-p14')">11 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-p14')">14 سنتيمتر</button>
+      </div>
+    </div>
+
+    <div class="question-row">
+      <span class="question-title">• مَا هُوَ مَجْمُوعُ طُولِ الْمَسَارِ الْبَنَفْسَجِيِّ (الْمُنْكَسِرِ) ؟</span>
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-p14')">11 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-p14')">8 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-p14')">14 سنتيمتر</button>
+      </div>
+    </div>
+
+    <div class="question-row">
+      <span class="question-title">• مَا هُوَ مَجْمُوعُ طُولِ الْمَسَارِ الْبُرْتُقَالِيِّ ؟</span>
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-p14')">14 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-p14')">11 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-p14')">8 سنتيمتر</button>
+      </div>
+    </div>
+
+    <hr style="margin:20px 0; border:0; border-top:2px dashed #b3e5fc;">
+
+    <p class="instruction">2. مَنِ النَّمْلَةُ الَّتِي اخْتَارَتْ أَقْصَرَ طَرِيقٍ وَتَفُوزُ بِالْجَائِزَةِ ؟</p>
+    <div class="question-row">
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-p14')">النَّمْلَةُ صَاحِبَةُ الْمَسَارِ الْأَخْضَرِ (الْمُسْتَقِيمِ)</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-p14')">النَّمْلَةُ صَاحِبَةُ الْمَسَارِ الْبَنَفْسَجِيِّ</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-p14')">النَّمْلَةُ صَاحِبَةُ الْمَسَارِ الْبُرْتُقَالِيِّ</button>
+      </div>
+    </div>
+
+    <hr style="margin:20px 0; border:0; border-top:2px dashed #b3e5fc;">
+
+    <p class="instruction">3. رَتِّبِ الْمَسَارَاتِ الثَّلَاثَةَ مِنَ الْأَطْوَلِ إِلَى الْأَقْصَرِ :</p>
+    <div style="text-align:center;">
+      <span class="word-chip" onclick="selectChip(this)" data-val="الْمَسَارُ الْبُرْتُقَالِيُّ">الْمَسَارُ الْبُرْتُقَالِيُّ</span>
+      <span class="word-chip" onclick="selectChip(this)" data-val="الْمَسَارُ الْأَخْضَرُ">الْمَسَارُ الْأَخْضَرُ</span>
+      <span class="word-chip" onclick="selectChip(this)" data-val="الْمَسَارُ الْبَنَفْسَجِيُّ">الْمَسَارُ الْبَنَفْسَجِيُّ</span>
+    </div>
+    <div style="text-align:center; font-size:1.3rem; margin:15px 0;">
+      (الْأَطْوَلُ) <span class="drop-zone" onclick="fillZone(this, 'ex-p14')" data-ans="الْمَسَارُ الْبُرْتُقَالِيُّ"></span>
+      &gt; <span class="drop-zone" onclick="fillZone(this, 'ex-p14')" data-ans="الْمَسَارُ الْبَنَفْسَجِيُّ"></span>
+      &gt; <span class="drop-zone" onclick="fillZone(this, 'ex-p14')" data-ans="الْمَسَارُ الْأَخْضَرُ"></span> (الْأَقْصَرُ)
+    </div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-p14-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-p14-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- البطاقة 2 -->
+  <div class="lesson-card">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 14</span>
+    <h2 class="lesson-title">أُنْجِزُ • مُقَارَنَةُ قِطْعَةِ مُسْتَقِيمٍ وَخَطٍّ مُنْكَسِرٍ</h2>
+
+    <div class="problem-box">
+      « اسْتَعْمِلِ الْمِسْطَرَةَ الرَّقْمِيَّةَ لِقِيَاسِ طُولِ هَذِهِ الْقِطَعِ وَتَرْتِيبِهَا مِنَ الْأَقْصَرِ إِلَى الْأَطْوَلِ لِنَعْرِفَ أَيُّهَا أَكْثَرُ طُولًا »
+    </div>
+
+    <div class="svg-canvas-box">
+      <svg width="380" height="160" viewBox="0 0 380 160">
+        <text x="20" y="45" font-weight="900" font-size="16" fill="#0288d1">الْخَطُّ ( A ) :</text>
+        <line x1="120" y1="40" x2="300" y2="40" stroke="#0288d1" stroke-width="6" stroke-linecap="round"/>
+
+        <text x="20" y="115" font-weight="900" font-size="16" fill="#d32f2f">الْخَطُّ ( B ) :</text>
+        <polyline points="70,120 148,75 226,120 304,75" fill="none" stroke="#d32f2f" stroke-width="6" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <p class="instruction">1. قِسْ بِالْمِسْطَرَةِ طُولَ الْخَطِّ الْمُسْتَقِيمِ ( A ) :</p>
+    <div class="question-row">
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-onjez')">6 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-onjez')">8 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-onjez')">4 سنتيمتر</button>
+      </div>
+    </div>
+
+    <hr style="margin:20px 0; border:0; border-top:2px dashed #b3e5fc;">
+
+    <p class="instruction">2. قِسْ أَجْزَاءَ الْخَطِّ الْمُنْكَسِرِ ( B ) وَاحْسُبْ مَجْمُوعَهَا :</p>
+    <div class="question-row">
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-onjez')">9 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-onjez')">6 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-onjez')">7 سنتيمتر</button>
+      </div>
+    </div>
+
+    <hr style="margin:20px 0; border:0; border-top:2px dashed #b3e5fc;">
+
+    <p class="instruction">3. أَيُّ الْخَطَّيْنِ أَكْبَرُ طُولًا ؟</p>
+    <div class="question-row">
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-onjez')">الْخَطُّ الْمُنْكَسِرُ ( B )</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-onjez')">الْخَطُّ الْمُسْتَقِيمُ ( A )</button>
+      </div>
+    </div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-onjez-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-onjez-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- البطاقة 3 -->
+  <div class="lesson-card">
+    <span class="page-badge">دَفْتَرُ الأَنْشِطَةِ - صَفْحَةُ 8</span>
+    <h2 class="lesson-title">أَتَمَرَّنُ (1) • قِيَاسُ وَتَرْتِيبُ قِطَعِ الْمُسْتَقِيمِ</h2>
+
+    <div class="problem-box">
+      « 1) اسْتَعْمِلِ الْمِسْطَرَةَ لِقِيَاسِ أَطْوَالِ الْقِطَعِ a , b , c »<br>
+      « 2) رَتِّبْ قِطَعَ الْمُسْتَقِيمِ a , b , c مِنَ الْأَكْبَرِ إِلَى الْأَصْغَرِ »
+    </div>
+
+    <div class="svg-canvas-box">
+      <svg width="350" height="170" viewBox="0 0 350 170">
+        <text x="20" y="40" font-weight="900" font-size="16" fill="#37474f">( a )</text>
+        <line x1="65" y1="35" x2="215" y2="35" stroke="#00897b" stroke-width="6" stroke-linecap="round"/>
+
+        <text x="20" y="95" font-weight="900" font-size="16" fill="#37474f">( b )</text>
+        <line x1="65" y1="90" x2="305" y2="90" stroke="#3949ab" stroke-width="6" stroke-linecap="round"/>
+
+        <text x="20" y="150" font-weight="900" font-size="16" fill="#37474f">( c )</text>
+        <line x1="65" y1="145" x2="155" y2="145" stroke="#d81b60" stroke-width="6" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <p class="instruction">1. قِسْ كُلَّ قِطْعَةٍ بِالْمِسْطَرَةِ :</p>
+    <div class="question-row">
+      <span class="question-title">• طُولُ قِطْعَةِ الْمُسْتَقِيمِ ( a ) بِالْمِسْطَرَةِ هُوَ :</span>
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-act1')">5 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-act1')">8 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-act1')">3 سنتيمتر</button>
+      </div>
+    </div>
+
+    <div class="question-row">
+      <span class="question-title">• طُولُ قِطْعَةِ الْمُسْتَقِيمِ ( b ) بِالْمِسْطَرَةِ هُوَ :</span>
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-act1')">8 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-act1')">5 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-act1')">3 سنتيمتر</button>
+      </div>
+    </div>
+
+    <div class="question-row">
+      <span class="question-title">• طُولُ قِطْعَةِ الْمُسْتَقِيمِ ( c ) بِالْمِسْطَرَةِ هُوَ :</span>
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-act1')">3 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-act1')">5 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-act1')">7 سنتيمتر</button>
+      </div>
+    </div>
+
+    <hr style="margin:20px 0; border:0; border-top:2px dashed #b3e5fc;">
+
+    <p class="instruction">2. رَتِّبِ الْقِطَعَ مِنَ الْأَكْبَرِ إِلَى الْأَصْغَرِ :</p>
+    <div style="text-align:center;">
+      <span class="word-chip" onclick="selectChip(this)" data-val="( b )">( b )</span>
+      <span class="word-chip" onclick="selectChip(this)" data-val="( c )">( c )</span>
+      <span class="word-chip" onclick="selectChip(this)" data-val="( a )">( a )</span>
+    </div>
+    <div style="text-align:center; font-size:1.35rem; margin:15px 0;">
+      (الْأَكْبَرُ) <span class="drop-zone" onclick="fillZone(this, 'ex-act1')" data-ans="( b )"></span>
+      &gt; <span class="drop-zone" onclick="fillZone(this, 'ex-act1')" data-ans="( a )"></span>
+      &gt; <span class="drop-zone" onclick="fillZone(this, 'ex-act1')" data-ans="( c )"></span> (الْأَصْغَرُ)
+    </div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-act1-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-act1-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- البطاقة 4 -->
+  <div class="lesson-card">
+    <span class="page-badge">دَفْتَرُ الأَنْشِطَةِ - صَفْحَةُ 8</span>
+    <h2 class="lesson-title">أَتَمَرَّنُ (2) • أُحِيطُ الْقِطَعَ الْمُتَقَايِسَةَ بِنَفْسِ اللَّوْنِ</h2>
+    
+    <div class="problem-box">
+      « اسْتَعْمِلِ الْمِسْطَرَةَ لِقِيَاسِ الْقِطَعِ الْأَرْبَعِ، ثُمَّ انْقُرْ عَلَى الْقِطْعَتَيْنِ الْمُتَقَايِسَتَيْنِ (لَهُمَا نَفْسُ الطُّولِ تَمَامًا) »
+    </div>
+
+    <div id="box-act2-paired-lines">
+      <div class="interactive-line-box" onclick="togglePair(this)" data-id="p1">
+        <span style="font-weight:900;">الْقِطْعَةُ ( 1 )</span>
+        <svg width="220" height="24"><line x1="10" y1="12" x2="190" y2="12" stroke="#e91e63" stroke-width="6" stroke-linecap="round"/></svg>
+      </div>
+      <div class="interactive-line-box" onclick="togglePair(this)" data-id="p2">
+        <span style="font-weight:900;">الْقِطْعَةُ ( 2 )</span>
+        <svg width="220" height="24"><line x1="10" y1="12" x2="130" y2="12" stroke="#00acc1" stroke-width="6" stroke-linecap="round"/></svg>
+      </div>
+      <div class="interactive-line-box" onclick="togglePair(this)" data-id="p3">
+        <span style="font-weight:900;">الْقِطْعَةُ ( 3 )</span>
+        <svg width="220" height="24"><line x1="10" y1="12" x2="190" y2="12" stroke="#e91e63" stroke-width="6" stroke-linecap="round"/></svg>
+      </div>
+      <div class="interactive-line-box" onclick="togglePair(this)" data-id="p4">
+        <span style="font-weight:900;">الْقِطْعَةُ ( 4 )</span>
+        <svg width="220" height="24"><line x1="10" y1="12" x2="160" y2="12" stroke="#ffb300" stroke-width="6" stroke-linecap="round"/></svg>
+      </div>
+    </div>
+
+    <button class="big-btn" id="btn-validate-paired" onclick="validatePairedLines()" style="margin-top:14px; background:#e1f5fe; border-color:#0288d1; color:#01579b;">
+      تَأْكِيدُ التَّقَايُسِ ✔
+    </button>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-act2-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-act2-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- البطاقة 5 -->
+  <div class="lesson-card">
+    <span class="page-badge">دَفْتَرُ الأَنْشِطَةِ - صَفْحَةُ 8</span>
+    <h2 class="lesson-title">أَتَمَرَّنُ (3) • قِيَاسُ مَسَالِكِ النَّمْلَةِ لِلْوُصُولِ إِلَى الْحَبِّ</h2>
+
+    <div class="problem-box">
+      « بِاسْتِعْمَالِ مِسْطَرَتِكَ الْمُدَرَّجَةِ، عَيِّنْ طُولَ أَقْصَرِ مَسْلَكٍ لِلنَّمْلَةِ لِلْوُصُولِ إِلَى الْحَبِّ »
+    </div>
+
+    <div class="svg-canvas-box">
+      <svg width="360" height="200" viewBox="0 0 360 200">
+        <circle cx="40" cy="100" r="7" fill="#5d4037"/>
+        <text x="25" y="85" font-weight="900" font-size="14" fill="#5d4037">النَّمْلَةُ</text>
+
+        <circle cx="250" cy="100" r="7" fill="#fbc02d"/>
+        <text x="255" y="85" font-weight="900" font-size="14" fill="#f57f17">الْحَبُّ 🌾</text>
+
+        <line x1="40" y1="100" x2="250" y2="100" stroke="#388e3c" stroke-width="5" stroke-linecap="round"/>
+        <text x="120" y="118" font-weight="900" font-size="13" fill="#2e7d32">الْمَسْلَكُ الْأَخْضَرُ</text>
+
+        <polyline points="40,100 145,32 250,100" fill="none" stroke="#0288d1" stroke-width="5" stroke-linecap="round"/>
+        <text x="110" y="30" font-weight="900" font-size="13" fill="#0288d1">الْمَسْلَكُ الْأَزْرَقُ</text>
+
+        <polyline points="40,100 100,165 190,35 250,100" fill="none" stroke="#795548" stroke-width="5" stroke-linecap="round"/>
+        <text x="175" y="180" font-weight="900" font-size="13" fill="#795548">الْمَسْلَكُ الْبُنِّيُّ</text>
+      </svg>
+    </div>
+
+    <p class="instruction">1. قِسْ بِالْمِسْطَرَةِ أَطْوَالَ الْمَسَالِكِ الثَّلَاثَةِ :</p>
+    <div class="question-row">
+      <span class="question-title">• طُولُ الْمَسْلَكِ الْأَخْضَرِ (الْمُسْتَقِيمِ) هُوَ :</span>
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-act3')">7 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-act3')">9 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-act3')">11 سنتيمتر</button>
+      </div>
+    </div>
+
+    <div class="question-row">
+      <span class="question-title">• طُولُ الْمَسْلَكِ الْأَزْرَقِ هُوَ :</span>
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-act3')">9 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-act3')">7 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-act3')">11 سنتيمتر</button>
+      </div>
+    </div>
+
+    <div class="question-row">
+      <span class="question-title">• طُولُ الْمَسْلَكِ الْبُنِّيِّ هُوَ :</span>
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-act3')">11 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-act3')">9 سنتيمتر</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-act3')">7 سنتيمتر</button>
+      </div>
+    </div>
+
+    <hr style="margin:20px 0; border:0; border-top:2px dashed #b3e5fc;">
+
+    <p class="instruction">2. أَقْصَرُ مَسْلَكٍ لِلْوُصُولِ إِلَى الْحَبِّ هُوَ :</p>
+    <div class="question-row">
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-act3')">الْمَسْلَكُ الْأَخْضَرُ ( 7 سنتيمتر )</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-act3')">الْمَسْلَكُ الْأَزْرَقُ ( 9 سنتيمتر )</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-act3')">الْمَسْلَكُ الْبُنِّيُّ ( 11 سنتيمتر )</button>
+      </div>
+    </div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-act3-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-act3-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- البطاقة 6 -->
+  <div class="lesson-card">
+    <span class="page-badge">دَفْتَرُ الأَنْشِطَةِ - صَفْحَةُ 8</span>
+    <h2 class="lesson-title">أَبْحَثُ • هَلْ أَطْوَالُ الْخُطُوطِ الثَّلَاثَةِ مُتَسَاوِيَةٌ ؟</h2>
+
+    <div class="problem-box">
+      « هَلْ أَطْوَالُ الْخُطُوطِ الثَّلَاثَةِ a , b , c مُتَسَاوِيَةٌ ؟ كَيْفَ عَرَفْتَ ذَلِكَ ؟ (يُمْكِنُنِي اسْتِعْمَالُ الْمِسْطَرَةِ الرَّقْمِيَّةِ الْمُدَرَّجَةِ) »
+    </div>
+
+    <div class="svg-canvas-box">
+      <svg width="350" height="180" viewBox="0 0 350 180">
+        <text x="20" y="38" font-weight="900" font-size="15" fill="#37474f">( a ) :</text>
+        <line x1="75" y1="35" x2="285" y2="35" stroke="#3949ab" stroke-width="4.5"/>
+        <polyline points="90,20 75,35 90,50" fill="none" stroke="#3949ab" stroke-width="4.5" stroke-linecap="round"/>
+        <polyline points="270,20 285,35 270,50" fill="none" stroke="#3949ab" stroke-width="4.5" stroke-linecap="round"/>
+
+        <text x="20" y="93" font-weight="900" font-size="15" fill="#37474f">( b ) :</text>
+        <line x1="75" y1="90" x2="285" y2="90" stroke="#00897b" stroke-width="4.5"/>
+        <polyline points="60,75 75,90 60,105" fill="none" stroke="#00897b" stroke-width="4.5" stroke-linecap="round"/>
+        <polyline points="300,75 285,90 300,105" fill="none" stroke="#00897b" stroke-width="4.5" stroke-linecap="round"/>
+
+        <text x="20" y="148" font-weight="900" font-size="15" fill="#37474f">( c ) :</text>
+        <line x1="75" y1="145" x2="285" y2="145" stroke="#e53935" stroke-width="4.5"/>
+        <polyline points="90,130 75,145 90,160" fill="none" stroke="#e53935" stroke-width="4.5" stroke-linecap="round"/>
+        <polyline points="300,130 285,145 300,160" fill="none" stroke="#e53935" stroke-width="4.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <p class="instruction">1. هَلْ أَطْوَالُ الْخُطُوطِ الثَّلَاثَةِ ( a , b , c ) مُتَسَاوِيَةٌ عِنْدَ قِيَاسِهَا ؟</p>
+    <div class="question-row">
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-abhath')">نَعَمْ، كُلُّهَا مُتَسَاوِيَةٌ فِي الطُّولِ (مُتَقَايِسَةٌ)</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-abhath')">لَا، غَيْرُ مُتَسَاوِيَةٍ</button>
+      </div>
+    </div>
+
+    <hr style="margin:20px 0; border:0; border-top:2px dashed #b3e5fc;">
+
+    <p class="instruction">2. كَيْفَ عَرَفْتَ ذَلِكَ ؟ (مَا هِيَ الْأَدَاةُ الَّتِي اسْتَعْمَلْتَهَا لِلتَّأَكُّدِ) ؟</p>
+    <div class="question-row">
+      <div>
+        <button class="big-btn" onclick="checkBtn(this, true, 'ex-abhath')">بِاسْتِعْمَالِ الْمِسْطَرَةِ الرَّقْمِيَّةِ الْمُدَرَّجَةِ</button>
+        <button class="big-btn" onclick="checkBtn(this, false, 'ex-abhath')">بِالنَّظَرِ بِالْعَيْنِ فَقَطْ دُونَ أَدَاةٍ</button>
+      </div>
+    </div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-abhath-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-abhath-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- التقرير النهائي -->
+  <div id="final-report">
+    <h2 style="color: var(--primary-dark); margin-top: 0;">🎉 إِتْمَامُ دَرْسِ مُقَارَنَةِ الْأَطْوَالِ !</h2>
+    <p style="color: #546e7a; font-size:1.25rem; margin-bottom:15px; font-weight:700;">نَتِيجَةُ إِجَابَاتِكَ الْهَنْدَسِيَّةِ :</p>
+    
+    <div style="display:flex; justify-content: space-around; margin: 15px 0;">
+      <div style="color: var(--success); font-weight:900; font-size:1.35rem;">
+        صَحِيحَة ⭐<br><span id="total-c" style="font-size:2.2rem;">0</span>
+      </div>
+      <div style="color: var(--error); font-weight:900; font-size:1.35rem;">
+        خَاطِئَة ❌<br><span id="total-w" style="font-size:2.2rem;">0</span>
+      </div>
+    </div>
+
+    <div class="final-score" id="total-percent">0%</div>
+    <div class="final-remark" id="total-remark">هَيَّا نَبْدَأُ الْقِيَاسَ وَالتَّعَلُّمَ!</div>
+    
+    <button class="btn-restart" onclick="restartEntireLesson()">🔄 أَلْعَبُ مَرَّةً أُخْرَى</button>
+    <button class="btn-exit" onclick="exitTelegramApp()">🚪 خُرُوجٌ</button>
+    <a href="../../../index.html" class="btn-back-home">← الْعَوْدَةُ إِلَى الْفِهْرِسِ</a>
+  </div>
+
+<script>
+  // ⚠️ تم حذف BOT_TOKEN من هنا (لأسباب أمنية)
+  const CHANNEL_ID = "-1003910412986";
+
+  const tg = window.Telegram?.WebApp;
+  if(tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارٍ التَّحَقُّقُ مِنَ الِاشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      // ⬇️ استدعاء الوسيط على Vercel
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارٍ فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الِانْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الِاتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  // محرك المسطرة الرقمية
+  var rulerTool = document.getElementById('ruler-tool');
+  var rulerHandle = document.getElementById('ruler-handle');
+  var currentAngle = 0;
+  var posX = 10, posY = 85;
+  var isDragging = false;
+  var startX = 0, startY = 0;
+  var initialLeft = 0, initialTop = 0;
+
+  function updateRuler() {
+    rulerTool.style.left = posX + 'px';
+    rulerTool.style.top = posY + 'px';
+    rulerTool.style.transform = 'rotate(' + currentAngle + 'deg)';
+    document.getElementById('ruler-angle-val').textContent = currentAngle + '°';
+  }
+
+  rulerHandle.addEventListener('pointerdown', function(e) {
+    if (e.pointerType === 'touch' && !e.isPrimary) return;
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    initialLeft = posX;
+    initialTop = posY;
+    try { rulerHandle.setPointerCapture(e.pointerId); } catch(err) {}
+    e.preventDefault();
+  });
+
+  window.addEventListener('pointermove', function(e) {
+    if (!isDragging) return;
+    posX = initialLeft + (e.clientX - startX);
+    posY = initialTop + (e.clientY - startY);
+    updateRuler();
+  });
+
+  window.addEventListener('pointerup', function(e) {
+    if (isDragging) {
+      isDragging = false;
+      try { rulerHandle.releasePointerCapture(e.pointerId); } catch(err) {}
+    }
+  });
+
+  window.addEventListener('pointercancel', function() {
+    isDragging = false;
+  });
+
+  var initialPinchAngle = 0;
+  var angleAtPinchStart = 0;
+
+  rulerTool.addEventListener('touchstart', function(e) {
+    if (e.touches.length === 2) {
+      isDragging = false;
+      var t1 = e.touches[0];
+      var t2 = e.touches[1];
+      initialPinchAngle = Math.atan2(t2.clientY - t1.clientY, t2.clientX - t1.clientX) * (180 / Math.PI);
+      angleAtPinchStart = currentAngle;
+    }
+  }, { passive: true });
+
+  rulerTool.addEventListener('touchmove', function(e) {
+    if (e.touches.length === 2) {
+      var t1 = e.touches[0];
+      var t2 = e.touches[1];
+      var currentTouchAngle = Math.atan2(t2.clientY - t1.clientY, t2.clientX - t1.clientX) * (180 / Math.PI);
+      var delta = Math.round(currentTouchAngle - initialPinchAngle);
+      currentAngle = (angleAtPinchStart + delta) % 360;
+      updateRuler();
+    }
+  }, { passive: true });
+
+  function moveRuler(dx, dy) {
+    posX += dx;
+    posY += dy;
+    updateRuler();
+  }
+
+  function rotateRuler(deg) {
+    currentAngle = (currentAngle + deg) % 360;
+    updateRuler();
+  }
+
+  function resetRuler() {
+    posX = 10;
+    posY = 85;
+    currentAngle = 0;
+    updateRuler();
+  }
+
+  var audioEnabled = true;
+
+  function toggleAudio() {
+    audioEnabled = !audioEnabled;
+    document.getElementById('audio-toggle').textContent = audioEnabled ? '🔊' : '🔇';
+  }
+
+  function playTone(freq, type, duration) {
+    if (!audioEnabled) return;
+    try {
+      var AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      var ctx = new AudioCtx();
+      if (ctx.state === 'suspended') { ctx.resume(); }
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch(err) {}
+  }
+
+  function playSuccess() {
+    try {
+      playTone(523, 'sine', 0.12);
+      setTimeout(function(){ playTone(659, 'sine', 0.12); }, 120);
+      setTimeout(function(){ playTone(783, 'sine', 0.25); }, 240);
+    } catch(e) {}
+  }
+
+  function playError() {
+    try { playTone(180, 'sawtooth', 0.3); } catch(e) {}
+  }
+
+  function playTap() {
+    try { playTone(600, 'triangle', 0.05); } catch(e) {}
+  }
+
+  var totalCorrect = 0;
+  var totalWrong = 0;
+
+  function registerScore(badgePrefix, isCorrect) {
+    if (isCorrect) {
+      totalCorrect++;
+      var el = document.getElementById(badgePrefix + '-c');
+      if (el) el.textContent = parseInt(el.textContent) + 1;
+    } else {
+      totalWrong++;
+      var el = document.getElementById(badgePrefix + '-w');
+      if (el) el.textContent = parseInt(el.textContent) + 1;
+    }
+    updateLiveReport();
+  }
+
+  function updateLiveReport() {
+    document.getElementById('total-c').textContent = totalCorrect;
+    document.getElementById('total-w').textContent = totalWrong;
+
+    var answeredCount = totalCorrect + totalWrong;
+    var percent = answeredCount === 0 ? 0 : Math.round((totalCorrect / answeredCount) * 100);
+    document.getElementById('total-percent').textContent = percent + '%';
+
+    var remarkEl = document.getElementById('total-remark');
+    if (answeredCount < 4) {
+      remarkEl.textContent = 'وَاصِلْ يَا بَطَلَ الرِّيَاضِيَّاتِ! 📐';
+      remarkEl.style.backgroundColor = '#e1f5fe';
+      remarkEl.style.color = '#01579b';
+    } else if (percent >= 80) {
+      remarkEl.textContent = 'مُمْتَازٌ! أَنْتَ مُهَنْدِسٌ بَارِعٌ! 🏆';
+      remarkEl.style.backgroundColor = '#c8e6c9';
+      remarkEl.style.color = '#1b5e20';
+    } else {
+      remarkEl.textContent = 'أَحْسَنْتَ، اسْتَعْمِلِ الْمِسْطَرَةَ بِدِقَّةٍ وَحَاوِلْ مَرَّةً أُخْرَى! 👏';
+      remarkEl.style.backgroundColor = '#ffe0b2';
+      remarkEl.style.color = '#bf360c';
+    }
+  }
+
+  function checkBtn(btn, isCorrect, badgeId) {
+    playTap();
+    var parent = btn.parentElement;
+    var allBtns = parent.querySelectorAll('.big-btn');
+    for (var i = 0; i < allBtns.length; i++) {
+      allBtns[i].classList.add('locked');
+    }
+
+    if (isCorrect) {
+      btn.classList.add('correct');
+      playSuccess();
+      registerScore(badgeId, true);
+    } else {
+      btn.classList.add('wrong');
+      playError();
+      registerScore(badgeId, false);
+    }
+  }
+
+  var activeSelectedWord = null;
+
+  function selectChip(span) {
+    if (span.classList.contains('locked')) return;
+    playTap();
+    var chips = document.querySelectorAll('.word-chip.selected');
+    for (var i = 0; i < chips.length; i++) {
+      chips[i].classList.remove('selected');
+    }
+    span.classList.add('selected');
+    activeSelectedWord = span;
+  }
+
+  function fillZone(zone, badgeId) {
+    if (zone.classList.contains('locked') || !activeSelectedWord) return;
+
+    var expected = zone.getAttribute('data-ans').trim();
+    var actual = activeSelectedWord.getAttribute('data-val').trim();
+
+    activeSelectedWord.classList.remove('selected');
+    activeSelectedWord.classList.add('locked');
+    zone.classList.add('locked');
+
+    zone.textContent = activeSelectedWord.textContent;
+    activeSelectedWord.style.visibility = 'hidden';
+
+    if (expected === actual) {
+      playSuccess();
+      zone.classList.add('correct');
+      registerScore(badgeId, true);
+    } else {
+      playError();
+      zone.classList.add('wrong');
+      registerScore(badgeId, false);
+    }
+
+    activeSelectedWord = null;
+  }
+
+  var selectedLines = [];
+
+  function togglePair(box) {
+    if (box.classList.contains('locked')) return;
+    playTap();
+    var id = box.getAttribute('data-id');
+
+    var idx = selectedLines.indexOf(id);
+    if (idx !== -1) {
+      selectedLines.splice(idx, 1);
+      box.classList.remove('active-paired');
+    } else {
+      if (selectedLines.length < 2) {
+        selectedLines.push(id);
+        box.classList.add('active-paired');
+      }
+    }
+  }
+
+  function validatePairedLines() {
+    if (selectedLines.length !== 2) {
+      alert("اخْتَرْ قِطْعَتَيْنِ اثْنَتَيْنِ أَوَّلًا بِالنَّقْرِ عَلَيْهِمَا!");
+      return;
+    }
+
+    var boxes = document.querySelectorAll('#box-act2-paired-lines .interactive-line-box');
+    for (var i = 0; i < boxes.length; i++) {
+      boxes[i].classList.add('locked');
+    }
+    document.getElementById('btn-validate-paired').classList.add('locked');
+
+    if (selectedLines.indexOf('p1') !== -1 && selectedLines.indexOf('p3') !== -1) {
+      playSuccess();
+      for (var j = 0; j < boxes.length; j++) {
+        var bid = boxes[j].getAttribute('data-id');
+        if (bid === 'p1' || bid === 'p3') {
+          boxes[j].classList.add('correct');
+        }
+      }
+      registerScore('ex-act2', true);
+    } else {
+      playError();
+      for (var k = 0; k < boxes.length; k++) {
+        var bid2 = boxes[k].getAttribute('data-id');
+        if (selectedLines.indexOf(bid2) !== -1) {
+          boxes[k].classList.add('wrong');
+        }
+      }
+      registerScore('ex-act2', false);
+    }
+  }
+
+  function restartEntireLesson() {
+    var badges = document.querySelectorAll('.eval-badge span span');
+    for (var i = 0; i < badges.length; i++) { badges[i].textContent = '0'; }
+
+    var bigBtns = document.querySelectorAll('.big-btn');
+    for (var j = 0; j < bigBtns.length; j++) {
+      bigBtns[j].classList.remove('locked', 'correct', 'wrong');
+    }
+
+    var zones = document.querySelectorAll('.drop-zone');
+    for (var k = 0; k < zones.length; k++) {
+      zones[k].textContent = '';
+      zones[k].classList.remove('locked', 'correct', 'wrong');
+    }
+
+    var chips = document.querySelectorAll('.word-chip');
+    for (var l = 0; l < chips.length; l++) {
+      chips[l].style.visibility = 'visible';
+      chips[l].classList.remove('locked', 'selected');
+    }
+
+    var pBoxes = document.querySelectorAll('.interactive-line-box');
+    for (var m = 0; m < pBoxes.length; m++) {
+      pBoxes[m].classList.remove('active-paired', 'locked', 'correct', 'wrong');
+    }
+
+    var valBtn = document.getElementById('btn-validate-paired');
+    if (valBtn) valBtn.classList.remove('locked');
+
+    selectedLines = [];
+    activeSelectedWord = null;
+    totalCorrect = 0;
+    totalWrong = 0;
+    updateLiveReport();
+    resetRuler();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function exitTelegramApp() {
+    if (tg && tg.close) {
+      tg.close();
+    } else {
+      window.close();
+    }
+  }
+
+  window.addEventListener('load', function() {
+    updateRuler();
+    verifySubscription();
+  });
+</script>
+</body>
+</
