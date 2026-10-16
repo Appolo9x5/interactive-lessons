@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>التحقق من الاشتراك - نشيد مدرستي</title>
+    
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0288d1;
+            --primary-dark: #01579b;
+            --success: #2e7d32;
+            --error: #c62828;
+            --bg: #f4f9fd;
+            --text-muted: #546e7a;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 22px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .lock-icon { font-size: 56px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.4rem; font-weight: 900; color: var(--primary-dark); margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 22px; }
+
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: var(--primary);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+
+        .btn-check {
+            width: 100%;
+            background: #e8f5e9;
+            color: var(--success);
+            border: 2px solid var(--success);
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .btn-open-app {
+            width: 100%;
+            background: var(--success);
+            color: #ffffff;
+            border: none;
+            padding: 16px;
+            font-weight: 900;
+            border-radius: 12px;
+            font-size: 1.15rem;
+            cursor: pointer;
+            font-family: inherit;
+            display: none;
+            margin-top: 12px;
+            box-shadow: 0 6px 16px rgba(46, 125, 50, 0.4);
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .status-msg { margin-top: 15px; font-size: 0.95rem; font-weight: 700; min-height: 24px; }
+
+        .hint {
+            font-size: 0.85rem;
+            color: #78909c;
+            margin-top: 14px;
+            line-height: 1.6;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+        <div class="lock-desc">
+            لِفَتْحِ التَّطْبِيقِ، يُرْجَى الِانْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الِاشْتِرَاكِ.
+        </div>
+
+        <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel">
+            📢 الِانْضِمَامُ إِلَى الْقَنَاةِ
+        </a>
+
+        <button class="btn-check" id="checkBtn" onclick="verifySubscription()">
+            ✅ تَأْكِيدُ الِاشْتِرَاكِ
+        </button>
+
+        <button class="btn-open-app" id="openAppBtn" onclick="openApp()">
+            🚀 افْتَحِ التَّطْبِيقَ الْآن
+        </button>
+
+        <div id="statusMsg" class="status-msg"></div>
+
+        <div class="hint" id="hintBox">
+            💡 إذا فُتِحَ التَّطْبِيقُ دَاخِلَ تِلْيِجْرَام وَلَمْ يَعْمَلِ الْمِيكْرُوفُون، اضْغَطْ عَلَى (⋯) أَعْلَى الشَّاشَة وَاخْتَرْ (Open in Browser).
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ تم حذف BOT_TOKEN من هنا (لأسباب أمنية)
+        const CHANNEL_ID = "-1004461185731";
+        const APP_URL = "app.html";
+
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        let isVerified = false;
+
+        async function verifySubscription() {
+            const statusMsg = document.getElementById('statusMsg');
+            statusMsg.style.color = "#0288d1";
+            statusMsg.textContent = "جَارٍ التَّحَقُّقُ مِنَ الِاشْتِرَاكِ...";
+
+            let userId = null;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                userId = tg.initDataUnsafe.user.id;
+            }
+
+            if (!userId) {
+                statusMsg.style.color = "#e65100";
+                statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+                return;
+            }
+
+            try {
+                // ⬇️ استدعاء الوسيط على Vercel
+                const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.isSubscribed) {
+                    statusMsg.style.color = "#2e7d32";
+                    statusMsg.textContent = "✅ تَمَّ التَّأَكُّدُ بِنَجَاحٍ!";
+                    isVerified = true;
+                    document.getElementById('openAppBtn').style.display = 'block';
+                    document.getElementById('checkBtn').style.display = 'none';
+                    document.getElementById('hintBox').style.display = 'block';
+                } else {
+                    statusMsg.style.color = "#c62828";
+                    statusMsg.textContent = "❌ لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الِانْضِمَامُ أَوَّلًا.";
+                }
+            } catch (error) {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الِاتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+            }
+        }
+
+        function openApp() {
+            if (!isVerified) return;
+            if (tg && tg.openLink) {
+                const fullUrl = new URL(APP_URL, window.location.href).href;
+                tg.openLink(fullUrl, { try_instant_view: false });
+            } else {
+                window.location.href = APP_URL;
+            }
+            setTimeout(() => {
+                document.getElementById('hintBox').style.display = 'block';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
