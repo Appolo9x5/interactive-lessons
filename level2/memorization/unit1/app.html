@@ -707,4 +707,873 @@
       <p style="font-weight: 800; color: #B7791F;">هل تحتاج إلى مساعدة؟ 🤔</p>
       <div class="btn-group">
         <button class="btn-small" style="background:var(--success); color:#fff;" onclick="acceptVoiceHelp(true)">نعم، ساعدني</button>
-        <button class="btn-small" style="background:#E2E8F0; color:#4A5568;" onclick="acceptVoiceHelp(false)">لا، سأ
+        <button class="btn-small" style="background:#E2E8F0; color:#4A5568;" onclick="acceptVoiceHelp(false)">لا، سأواصل</button>
+      </div>
+    </div>
+
+    <div class="stage-report">
+      <span class="stat-badge" style="color: var(--success); font-size: 1rem;">الكلمات المحفوظة: <b id="s4-words">0/24</b></span>
+      <span class="stat-badge" style="color: #D4AC0D; font-size: 1rem;">طلب مساعدة: <b id="s4-helps">0</b></span>
+    </div>
+
+    <button class="btn-main" id="btnFinishAll" style="display:none; background: var(--success);" onclick="showFinalEvaluation()">
+      عرض التقييم الختامي والشهادة 🏆
+    </button>
+  </section>
+
+  <section class="section-card final-score-card locked" id="sec-final-score" style="display:none;">
+    <h2 style="font-size: 1.4rem; color: var(--text); margin-bottom: 14px;">🎓 التقييم النهائي للمحفوظات</h2>
+    
+    <div class="circle-progress-wrapper">
+      <svg class="circle-progress-svg" viewBox="0 0 160 160">
+        <circle class="circle-bg" cx="80" cy="80" r="70"></circle>
+        <circle class="circle-val" id="scoreCirclePath" cx="80" cy="80" r="70"></circle>
+      </svg>
+      <div class="circle-text-center" id="scorePercentLabel">0%</div>
+    </div>
+
+    <div class="score-feedback" id="scoreFeedbackText">ممتاز جداً!</div>
+    <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 18px;" id="scoreSummaryDetailed"></p>
+
+    <div class="btn-group" style="margin-top: 14px;">
+      <button class="btn-main" style="background: var(--primary); margin-top:0;" onclick="restartChallenge()">
+        إعادة التحدي 🔄
+      </button>
+      <button class="btn-main" style="background: var(--danger); margin-top:0;" onclick="exitApp()">
+        الخروج من التطبيق 🚪
+      </button>
+    </div>
+    <a href="https://t.me/ListOfLessons3an_bot" class="btn-back-home" target="_blank">← العودة إلى البوت</a>
+  </section>
+
+  <div class="sheet-overlay" id="sheetOverlay" onclick="closeSheet(event)">
+    <div class="bottom-sheet" onclick="event.stopPropagation()">
+      <h3 style="text-align: center; font-size: 1.1rem; color: #2D3748;">اختر الكلمة الصحيحة للنشيد:</h3>
+      <div class="sheet-options-grid" id="sheetOptionsContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    if (tg) {
+      tg.expand();
+      tg.enableClosingConfirmation();
+    }
+
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) audioCtx = new AudioCtx();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+    }
+
+    function triggerVibration(pattern) {
+      if (tg && tg.HapticFeedback) {
+        if (pattern === 'error') tg.HapticFeedback.notificationOccurred('error');
+        else if (pattern === 'success') tg.HapticFeedback.notificationOccurred('success');
+        else tg.HapticFeedback.impactOccurred('medium');
+      } else if (navigator.vibrate) {
+        navigator.vibrate(pattern === 'error' ? [120, 60, 120] : 50);
+      }
+    }
+
+    function playTone(type) {
+      initAudio();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      const now = audioCtx.currentTime;
+
+      if (type === 'correct') {
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.18);
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+        osc.start(now);
+        osc.stop(now + 0.25);
+        triggerVibration('success');
+      } else if (type === 'win') {
+        const notes = [440, 554, 659, 880];
+        notes.forEach((freq, idx) => {
+          const o = audioCtx.createOscillator();
+          const g = audioCtx.createGain();
+          o.connect(g);
+          g.connect(audioCtx.destination);
+          o.frequency.value = freq;
+          g.gain.setValueAtTime(0.15, now + idx * 0.1);
+          g.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.1 + 0.2);
+          o.start(now + idx * 0.1);
+          o.stop(now + idx * 0.1 + 0.2);
+        });
+        triggerVibration('success');
+      }
+    }
+
+    const POEM_DATA = [
+      { id: 1, first: "مَدْرَسَتِي حَدِيقَتِي", second: "وَبَابُهَا الْكِتَابُ" },
+      { id: 2, first: "أَقْرَأُ فِيهِ قِصَصًا", second: "وَأَدْرُسُ الْحِسَابَ" },
+      { id: 3, first: "فِي كُلِّ صُبْحٍ نَذْهَبُ", second: "مَعَ الرِّفَاقِ نَلْعَبُ" },
+      { id: 4, first: "نَدْرُسُ فِي صُفُوفِنَا", second: "وَفِي الْمَسَاءِ نَكْتُبُ" },
+      { id: 5, first: "أَنَا الصَّغِيرُ الصَّالِحُ", second: "بِعَمَلِي أُكَافِحُ" }
+    ];
+
+    function cleanArabic(str) {
+      if (!str) return "";
+      return str
+        .replace(/[ًٌٍَُِّْـ]/g, '')
+        .replace(/[إأآء]/g, 'ا')
+        .replace(/ة/g, 'ه')
+        .replace(/ى/g, 'ي')
+        .replace(/ؤ/g, 'و')
+        .replace(/ئ/g, 'ي')
+        .replace(/[«»\.\,\:\-\_\؟\؛]/g, '')
+        .trim();
+    }
+
+    function isPhoneticallySimilar(spoken, target) {
+      if (!spoken || !target) return false;
+      const s = cleanArabic(spoken);
+      const t = cleanArabic(target);
+      if (s === t) return true;
+
+      const stripAl = (w) => w.startsWith('ال') ? w.substring(2) : w;
+      const w1 = stripAl(s);
+      const w2 = stripAl(t);
+      if (w1 === w2 && w1.length >= 2) return true;
+
+      const harmonize = (w) => w
+        .replace(/[طت]/g, 'ت')
+        .replace(/[صسث]/g, 'س')
+        .replace(/[ضدذظز]/g, 'د')
+        .replace(/[قكغ]/g, 'ك')
+        .replace(/[حهخ]/g, 'ه')
+        .replace(/[فث]/g, 'ف');
+
+      const h1 = harmonize(w1);
+      const h2 = harmonize(w2);
+      if (h1 === h2) return true;
+
+      if (w1.length >= 3 && w2.length >= 3) {
+        if (w1.includes(w2) || w2.includes(w1)) return true;
+        
+        let matchCount = 0;
+        for (let char of h1) {
+          if (h2.includes(char)) matchCount++;
+        }
+        if (matchCount >= Math.min(h1.length, h2.length) - 1) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    const DISTRACTOR_POOL = [
+      "رَوْضَتِي", "بَيْتِي", "جَنَّتِي", "صَفِّي", "نُورُهَا", "مِفْتَاحُهَا", "الدَّفْتَرُ", "الْمُعَلِّمُ",
+      "أَرْوِي", "أَكْتُبُ", "عِبَرًا", "حِكَايَاتٍ", "أَفْهَمُ", "الْقُرْآنَ", "الْعُلُومَ", "الرِّيَاضَةَ",
+      "فَجْرٍ", "يَوْمٍ", "نَمْشِي", "نَسْعَى", "الْأَصْحَابِ", "الْإِخْوَةِ", "نَمْرَحُ", "نَفْرَحُ",
+      "نَجْلِسُ", "أَقْسَامِنَا", "بَيْتِنَا", "النَّهَارِ", "الْفَصْلِ", "نَرْسُمُ", "نَحْفَظُ",
+      "الْوَلَدُ", "التِّلْمِيذُ", "النَّاجِحُ", "الْمُؤَدَّبُ", "بِجُهْدِي", "بِعِلْمِي", "أَنْجَحُ", "أُثَابِرُ"
+    ];
+
+    const scoreState = {
+      s1: { green: 0, yellow: 0, wrong: 0, totalSlots: 0, answered: 0 },
+      s2: { green: 0, yellow: 0, wrong: 0, totalSlots: 0, answered: 0 },
+      s3: { attempts: 0, firstTrySuccess: false },
+      s4: { correctWords: 0, helps: 0, totalWords: 24 }
+    };
+
+    let activeSlotTarget = null;
+
+    function toggleMainAudio() {
+      const audio = document.getElementById('mainAudio');
+      const btn = document.getElementById('playAudioBtn');
+      if (btn.disabled) return;
+
+      if (audio.paused) {
+        audio.play().then(() => {
+          btn.textContent = '⏸';
+        }).catch(() => {
+          alert('تأكد من وجود ملف nashid.mp3 في نفس المجلد.');
+        });
+      } else {
+        audio.pause();
+        btn.textContent = '▶';
+      }
+    }
+
+    function lockMainAudio() {
+      const audio = document.getElementById('mainAudio');
+      const btn = document.getElementById('playAudioBtn');
+      const bar = document.getElementById('audioBar');
+      const label = document.getElementById('audioLabelText');
+      const badge = document.getElementById('audio-lock-badge');
+
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = '🔒';
+      }
+      if (bar) bar.classList.add('disabled');
+      if (label) label.textContent = 'تم قفل الصوت لمنع الغش 🔒';
+      if (badge) {
+        badge.textContent = 'مغلق';
+        badge.className = 'badge';
+        badge.style.background = '#FED7D7';
+        badge.style.color = '#C53030';
+      }
+    }
+
+    function scrollToElement(id) {
+      setTimeout(() => {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 150);
+    }
+
+    function maskCardText(containerId) {
+      const el = document.getElementById(containerId);
+      if (!el) return;
+      el.querySelectorAll('.poem-line').forEach(line => {
+        line.innerText = "************************************";
+        line.style.color = "#A0AEC0";
+        line.style.letterSpacing = "3px";
+      });
+    }
+
+    function buildClozeStage(containerId, hideRatio, stageKey) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+      let totalSlots = 0;
+
+      POEM_DATA.forEach((item, lineIdx) => {
+        const lineDiv = document.createElement('div');
+        lineDiv.className = 'poem-line';
+
+        const fullLine = item.first + ' ... ' + item.second;
+        const words = fullLine.split(/\s+/);
+
+        words.forEach((w, wIdx) => {
+          if (w === '...') {
+            lineDiv.appendChild(document.createTextNode(' ... '));
+            return;
+          }
+
+          const isHidden = (stageKey === 's1') 
+            ? ((wIdx + lineIdx) % 5 === 1) 
+            : ((wIdx + lineIdx) % 3 === 0);
+
+          if (isHidden) {
+            totalSlots++;
+            const slot = document.createElement('span');
+            slot.className = 'hidden-word-slot empty';
+            slot.innerText = '؟';
+            slot.dataset.correct = w;
+            slot.dataset.stage = stageKey;
+            slot.dataset.attempts = "0";
+            slot.onclick = () => openOptionsSheet(slot);
+            lineDiv.appendChild(slot);
+          } else {
+            lineDiv.appendChild(document.createTextNode(w + ' '));
+          }
+        });
+
+        container.appendChild(lineDiv);
+      });
+
+      scoreState[stageKey].totalSlots = totalSlots;
+    }
+
+    function openOptionsSheet(slotEl) {
+      if (slotEl.classList.contains('solved-green') || slotEl.classList.contains('solved-yellow')) return;
+      activeSlotTarget = slotEl;
+
+      const correctWord = slotEl.dataset.correct;
+      const options = [correctWord];
+
+      const shuffledDistractors = [...DISTRACTOR_POOL].sort(() => 0.5 - Math.random());
+      for (let w of shuffledDistractors) {
+        if (cleanArabic(w) !== cleanArabic(correctWord) && !options.includes(w)) {
+          options.push(w);
+        }
+        if (options.length === 5) break;
+      }
+
+      options.sort(() => 0.5 - Math.random());
+
+      const grid = document.getElementById('sheetOptionsContainer');
+      grid.innerHTML = '';
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'choice-btn';
+        btn.innerText = opt;
+        btn.onclick = () => handleChoiceSelect(opt);
+        grid.appendChild(btn);
+      });
+
+      document.getElementById('sheetOverlay').classList.add('active');
+    }
+
+    function closeSheet(e) {
+      if (e) e.stopPropagation();
+      document.getElementById('sheetOverlay').classList.remove('active');
+      activeSlotTarget = null;
+    }
+
+    function handleChoiceSelect(chosenWord) {
+      if (!activeSlotTarget) return;
+
+      const correct = activeSlotTarget.dataset.correct;
+      const stageKey = activeSlotTarget.dataset.stage;
+      let tries = parseInt(activeSlotTarget.dataset.attempts, 10);
+
+      if (cleanArabic(chosenWord) === cleanArabic(correct)) {
+        playTone('correct');
+        activeSlotTarget.innerText = correct;
+        activeSlotTarget.classList.remove('empty');
+
+        if (tries === 0) {
+          activeSlotTarget.classList.add('solved-green');
+          scoreState[stageKey].green++;
+        } else {
+          activeSlotTarget.classList.add('solved-yellow');
+          scoreState[stageKey].yellow++;
+        }
+
+        scoreState[stageKey].answered++;
+        closeSheet();
+        updateStageCounters(stageKey);
+
+        if (scoreState[stageKey].answered === scoreState[stageKey].totalSlots) {
+          finishClozeStage(stageKey);
+        }
+      } else {
+        triggerVibration('error');
+        tries++;
+        activeSlotTarget.dataset.attempts = tries;
+        scoreState[stageKey].wrong++;
+        updateStageCounters(stageKey);
+      }
+    }
+
+    function updateStageCounters(stageKey) {
+      if (stageKey === 's1') {
+        document.getElementById('s1-green').innerText = scoreState.s1.green;
+        document.getElementById('s1-yellow').innerText = scoreState.s1.yellow;
+        document.getElementById('s1-wrong').innerText = scoreState.s1.wrong;
+      } else {
+        document.getElementById('s2-green').innerText = scoreState.s2.green;
+        document.getElementById('s2-yellow').innerText = scoreState.s2.yellow;
+        document.getElementById('s2-wrong').innerText = scoreState.s2.wrong;
+      }
+    }
+
+    function startLevel1Part1() {
+      lockMainAudio();
+      maskCardText('fullPoemText');
+      document.getElementById('sec-stage-0').classList.add('completed');
+      
+      const s1 = document.getElementById('sec-stage-1');
+      s1.classList.remove('locked');
+      s1.classList.add('active');
+
+      buildClozeStage('poemStage1Container', 0.2, 's1');
+      updateStageCounters('s1');
+      scrollToElement('sec-stage-1');
+    }
+
+    function finishClozeStage(stageKey) {
+      playTone('win');
+      if (stageKey === 's1') {
+        document.getElementById('btnGoStage2').style.display = 'block';
+      } else {
+        document.getElementById('btnGoReorder').style.display = 'block';
+      }
+    }
+
+    function startLevel1Part2() {
+      maskCardText('poemStage1Container');
+      document.getElementById('sec-stage-1').classList.remove('active');
+      document.getElementById('sec-stage-1').classList.add('completed');
+
+      const s2 = document.getElementById('sec-stage-2');
+      s2.classList.remove('locked');
+      s2.classList.add('active');
+
+      buildClozeStage('poemStage2Container', 0.4, 's2');
+      updateStageCounters('s2');
+      scrollToElement('sec-stage-2');
+    }
+
+    let reorderCards = [];
+
+    function startLevel2Reorder() {
+      maskCardText('poemStage2Container');
+      document.getElementById('sec-stage-2').classList.remove('active');
+      document.getElementById('sec-stage-2').classList.add('completed');
+
+      const s3 = document.getElementById('sec-stage-3');
+      s3.classList.remove('locked');
+      s3.classList.add('active');
+
+      reorderCards = POEM_DATA.map(d => ({
+        id: d.id,
+        text: `« ${d.first} ... ${d.second} »`
+      })).sort(() => 0.5 - Math.random());
+
+      renderReorderList();
+      scrollToElement('sec-stage-3');
+    }
+
+    function renderReorderList() {
+      const ul = document.getElementById('reorderUl');
+      ul.innerHTML = '';
+      reorderCards.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.className = 'reorder-item';
+        li.dataset.index = index;
+        li.draggable = true;
+
+        li.innerHTML = `
+          <span>${item.text}</span>
+          <span class="drag-handle">☰</span>
+        `;
+
+        li.addEventListener('dragstart', handleDragStart);
+        li.addEventListener('dragover', handleDragOver);
+        li.addEventListener('drop', handleDrop);
+        li.addEventListener('dragend', handleDragEnd);
+
+        setupTouchSort(li);
+        ul.appendChild(li);
+      });
+    }
+
+    let dragSrcIndex = null;
+    function handleDragStart(e) {
+      dragSrcIndex = this.dataset.index;
+      this.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    }
+    function handleDragOver(e) {
+      if (e.preventDefault) e.preventDefault();
+      return false;
+    }
+    function handleDrop(e) {
+      if (e.stopPropagation) e.stopPropagation();
+      const targetIndex = this.dataset.index;
+      if (dragSrcIndex !== null && dragSrcIndex !== targetIndex) {
+        const itemMoved = reorderCards.splice(dragSrcIndex, 1)[0];
+        reorderCards.splice(targetIndex, 0, itemMoved);
+        renderReorderList();
+      }
+      return false;
+    }
+    function handleDragEnd() {
+      this.classList.remove('dragging');
+    }
+
+    function setupTouchSort(el) {
+      let touchStartY = 0;
+      el.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      el.addEventListener('touchend', (e) => {
+        const touchEndY = e.changedTouches[0].clientY;
+        const diff = touchEndY - touchStartY;
+        const currentIndex = parseInt(el.dataset.index, 10);
+
+        if (diff > 35 && currentIndex < reorderCards.length - 1) {
+          const temp = reorderCards[currentIndex];
+          reorderCards[currentIndex] = reorderCards[currentIndex + 1];
+          reorderCards[currentIndex + 1] = temp;
+          renderReorderList();
+          triggerVibration('medium');
+        } else if (diff < -35 && currentIndex > 0) {
+          const temp = reorderCards[currentIndex];
+          reorderCards[currentIndex] = reorderCards[currentIndex - 1];
+          reorderCards[currentIndex - 1] = temp;
+          renderReorderList();
+          triggerVibration('medium');
+        }
+      }, { passive: true });
+    }
+
+    function checkPoemOrder() {
+      scoreState.s3.attempts++;
+      const isCorrect = reorderCards.every((card, idx) => card.id === idx + 1);
+      const items = document.querySelectorAll('.reorder-item');
+
+      if (isCorrect) {
+        playTone('correct');
+        playTone('win');
+        items.forEach(li => {
+          if (scoreState.s3.attempts === 1) {
+            li.classList.add('first-try');
+          } else {
+            li.classList.add('multi-try');
+          }
+        });
+        document.getElementById('stage3-report').style.display = 'flex';
+        document.getElementById('s3-status').innerHTML = `محاولات الترتيب: <b>${scoreState.s3.attempts}</b> (${scoreState.s3.attempts === 1 ? 'من أول مرة! 🌟' : 'تم بنجاح'})`;
+        document.getElementById('btnGoSpeech').style.display = 'block';
+        scoreState.s3.firstTrySuccess = (scoreState.s3.attempts === 1);
+      } else {
+        triggerVibration('error');
+        alert('الأبيات غير مرتبة بالشكل الصحيح، حاول مجدداً!');
+      }
+    }
+
+    let recognition = null;
+    let isListening = false;
+    let voiceSilenceTimer = null;
+    let expectedPoemWords = [];
+    let currentWordIndex = 0;
+
+    POEM_DATA.forEach(d => {
+      const lineWords = (d.first + " " + d.second).split(/\s+/).filter(Boolean);
+      lineWords.forEach(w => {
+        expectedPoemWords.push({
+          original: w,
+          normalized: cleanArabic(w),
+          status: 'pending'
+        });
+      });
+    });
+    scoreState.s4.totalWords = expectedPoemWords.length;
+
+    async function initSpeechEngine() {
+      if (window.location.protocol === 'file:') {
+        alert("⚠️ تنبيه:\nالتعرف الصوتي لا يعمل محلياً عبر (file://).\nيرجى فتحه من رابط خادم أو GitHub.");
+        return null;
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        showFallbackMode("محرك الصوت يحتاج متصفح Chrome أو Safari للعمل.");
+        return null;
+      }
+
+      try {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          stream.getTracks().forEach(track => track.stop());
+        }
+      } catch (err) {
+        alert("يرجى منح إذن استخدام الميكروفون في الهاتف.");
+        return null;
+      }
+
+      const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const rec = new SpeechRecognition();
+      rec.lang = 'ar-SA';
+      rec.continuous = !isIOS;
+      rec.interimResults = true;
+      rec.maxAlternatives = 3;
+
+      rec.onstart = () => {
+        isListening = true;
+        const micBtn = document.getElementById('micBtn');
+        micBtn.classList.add('listening');
+        document.getElementById('voiceStatusText').innerText = "أنا أستمع إليك الآن... ابدأ القراءة 🎙️";
+        resetSilenceTimer();
+      };
+
+      rec.onresult = (event) => {
+        resetSilenceTimer();
+        hideHelpBox();
+
+        let liveText = "";
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          const transcriptChunk = event.results[i][0].transcript;
+          liveText += " " + transcriptChunk;
+          processSpokenChunk(transcriptChunk);
+        }
+        document.getElementById('liveHeardWords').innerText = "المسموع: " + liveText;
+      };
+
+      rec.onerror = (e) => {
+        console.warn("Speech error:", e.error);
+        if (e.error === 'not-allowed') {
+          alert("تم رفض إذن الميكروفون. يرجى تفعيله من إعدادات المتصفح.");
+          stopVoice();
+        } else if (e.error === 'service-not-allowed' || e.error === 'network') {
+          showFallbackMode("خدمة الصوت غير متاحة هنا، افتح الرابط في المتصفح الخارجي.");
+          stopVoice();
+        }
+      };
+
+      rec.onend = () => {
+        if (isListening && currentWordIndex < expectedPoemWords.length) {
+          const delay = isIOS ? 500 : 100;
+          setTimeout(() => {
+            try { rec.start(); } catch(e) {}
+          }, delay);
+        }
+      };
+
+      return rec;
+    }
+
+    function showFallbackMode(msg) {
+      const status = document.getElementById('voiceStatusText');
+      status.innerHTML = `<span style="color:var(--danger); font-size:0.85rem;">${msg}</span><br>
+      <button class="btn-small" style="margin-top:8px; background:var(--primary); color:#fff;" onclick="window.open(window.location.href, '_blank')">🌐 فتح في المتصفح الخارجي</button>`;
+    }
+
+    function startLevel3Voice() {
+      document.getElementById('reorderUl').querySelectorAll('.reorder-item').forEach(el => {
+        el.innerText = "************************************";
+        el.style.color = "#A0AEC0";
+      });
+      document.getElementById('sec-stage-3').classList.remove('active');
+      document.getElementById('sec-stage-3').classList.add('completed');
+
+      const s4 = document.getElementById('sec-stage-4');
+      s4.classList.remove('locked');
+      s4.classList.add('active');
+
+      scrollToElement('sec-stage-4');
+    }
+
+    async function toggleVoiceRecognition() {
+      initAudio();
+      if (audioCtx && audioCtx.state === 'suspended') {
+        try { await audioCtx.resume(); } catch(e) {}
+      }
+
+      if (isListening) {
+        stopVoice();
+        return;
+      }
+
+      if (!recognition) {
+        recognition = await initSpeechEngine();
+        if (!recognition) return;
+      }
+
+      let attempts = 0;
+      const maxAttempts = 3;
+
+      const tryStart = () => {
+        attempts++;
+        try {
+          recognition.start();
+        } catch(e) {
+          console.warn("Start attempt " + attempts + " failed:", e);
+          if (attempts < maxAttempts) {
+            setTimeout(tryStart, 400);
+          } else {
+            document.getElementById('voiceStatusText').innerHTML = 
+              '<span style="color:#c62828;">تعذّر تشغيل الميكروفون. اضغط الزر مرة أخرى.</span>';
+          }
+        }
+      };
+
+      tryStart();
+    }
+
+    function stopVoice() {
+      isListening = false;
+      if (recognition) recognition.stop();
+      const micBtn = document.getElementById('micBtn');
+      micBtn.classList.remove('listening');
+      document.getElementById('voiceStatusText').innerText = "اضغط الميكروفون لاستئناف التسميع";
+      clearTimeout(voiceSilenceTimer);
+    }
+
+    function resetSilenceTimer() {
+      clearTimeout(voiceSilenceTimer);
+      voiceSilenceTimer = setTimeout(() => {
+        if (isListening && currentWordIndex < expectedPoemWords.length) {
+          showHelpBox();
+        }
+      }, 8000);
+    }
+
+    function showHelpBox() {
+      document.getElementById('helpPromptBox').classList.add('active');
+    }
+
+    function hideHelpBox() {
+      document.getElementById('helpPromptBox').classList.remove('active');
+    }
+
+    function showVoiceErrorBadge() {
+      const badge = document.getElementById('voiceErrorBadge');
+      badge.classList.add('visible');
+    }
+
+    function hideVoiceErrorBadge() {
+      const badge = document.getElementById('voiceErrorBadge');
+      badge.classList.remove('visible');
+    }
+
+    function acceptVoiceHelp(wantsHelp) {
+      hideHelpBox();
+      if (wantsHelp) {
+        scoreState.s4.helps++;
+        if (currentWordIndex < expectedPoemWords.length) {
+          expectedPoemWords[currentWordIndex].status = 'yellow';
+          appendWordToLiveBox(expectedPoemWords[currentWordIndex]);
+          currentWordIndex++;
+          updateVoiceCounters();
+          
+          hideVoiceErrorBadge();
+
+          if (currentWordIndex >= expectedPoemWords.length) {
+            finishVoiceLevel();
+          }
+        }
+      }
+      resetSilenceTimer();
+    }
+
+    function processSpokenChunk(text) {
+      const rawWords = text.trim().split(/\s+/);
+
+      rawWords.forEach(rw => {
+        if (currentWordIndex >= expectedPoemWords.length) return;
+
+        const normalizedSpoken = cleanArabic(rw);
+        if (!normalizedSpoken || normalizedSpoken.length < 2) return;
+
+        const target = expectedPoemWords[currentWordIndex];
+
+        if (isPhoneticallySimilar(normalizedSpoken, target.normalized)) {
+          target.status = (target.status === 'pending') ? 'green' : target.status;
+          appendWordToLiveBox(target);
+          currentWordIndex++;
+          scoreState.s4.correctWords++;
+
+          hideVoiceErrorBadge();
+
+          if (currentWordIndex >= expectedPoemWords.length) {
+            finishVoiceLevel();
+          }
+        } else {
+          triggerVibration('error');
+          showVoiceErrorBadge();
+        }
+      });
+
+      updateVoiceCounters();
+    }
+
+    function appendWordToLiveBox(wordObj) {
+      const box = document.getElementById('voiceLiveBox');
+      const span = document.createElement('span');
+      span.className = 'spoken-word ' + (wordObj.status === 'green' ? 'verified-first' : 'verified-assisted');
+      span.innerText = wordObj.original;
+      box.appendChild(span);
+    }
+
+    function updateVoiceCounters() {
+      document.getElementById('s4-words').innerText = `${scoreState.s4.correctWords}/${scoreState.s4.totalWords}`;
+      document.getElementById('s4-helps').innerText = scoreState.s4.helps;
+    }
+
+    function finishVoiceLevel() {
+      stopVoice();
+      hideVoiceErrorBadge();
+      playTone('win');
+      document.getElementById('btnFinishAll').style.display = 'block';
+      document.getElementById('voiceStatusText').innerText = "رائع! أنهيت التسميع بنجاح 🎉";
+    }
+
+    function showFinalEvaluation() {
+      document.getElementById('sec-stage-4').classList.remove('active');
+      document.getElementById('sec-stage-4').classList.add('completed');
+
+      const secFinal = document.getElementById('sec-final-score');
+      secFinal.style.display = 'block';
+      secFinal.classList.remove('locked');
+
+      const s1Ratio = (scoreState.s1.green * 1 + scoreState.s1.yellow * 0.7) / (scoreState.s1.totalSlots || 1);
+      const s2Ratio = (scoreState.s2.green * 1 + scoreState.s2.yellow * 0.7) / (scoreState.s2.totalSlots || 1);
+      const level1Score = ((s1Ratio + s2Ratio) / 2) * 35;
+
+      const level2Score = scoreState.s3.firstTrySuccess ? 25 : Math.max(10, 25 - (scoreState.s3.attempts - 1) * 5);
+
+      const penalty = scoreState.s4.helps * 2.5;
+      const level3Score = Math.max(15, 40 - penalty);
+
+      const finalPercent = Math.min(100, Math.round(level1Score + level2Score + level3Score));
+
+      const circlePath = document.getElementById('scoreCirclePath');
+      const circumference = 2 * Math.PI * 70;
+      const offset = circumference - (finalPercent / 100) * circumference;
+      
+      setTimeout(() => {
+        circlePath.style.strokeDashoffset = offset;
+      }, 200);
+
+      document.getElementById('scorePercentLabel').innerText = `${finalPercent}%`;
+
+      const feedback = document.getElementById('scoreFeedbackText');
+      const detailed = document.getElementById('scoreSummaryDetailed');
+
+      if (finalPercent >= 90) {
+        feedback.innerText = "عبقري المحفوظات! حفظ متقن ومثالي 🌟";
+        feedback.style.color = "var(--success)";
+      } else if (finalPercent >= 75) {
+        feedback.innerText = "رائع جداً! أداء قوي وثقة عالية 👏";
+        feedback.style.color = "var(--primary)";
+      } else if (finalPercent >= 50) {
+        feedback.innerText = "جيد! يحتاج بعض التكرار لتثبيت الأبيات الأخيرة 👍";
+        feedback.style.color = "var(--warning)";
+      } else {
+        feedback.innerText = "بداية جيدة! استمع للنشيد مجدداً وأعد المحاولة 🔄";
+        feedback.style.color = "var(--danger)";
+      }
+
+      detailed.innerText = `المستوى 1: إتقان الكلمات (${scoreState.s1.green + scoreState.s2.green} من أول مرة) | المستوى 2: الترتيب في (${scoreState.s3.attempts} محاولة) | المستوى 3: (${scoreState.s4.helps} مساعدات).`;
+
+      scrollToElement('sec-final-score');
+    }
+
+    function restartChallenge() {
+      location.reload();
+    }
+
+    function exitApp() {
+      // إذا كان داخل تيليجرام، أغلق التطبيق
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
+        try {
+          window.Telegram.WebApp.close();
+          return;
+        } catch(e) {}
+      }
+
+      // إذا كان في المتصفح الخارجي، افتح البوت
+      try {
+        window.location.href = "https://t.me/ListOfLessons3an_bot";
+      } catch(e) {
+        window.close();
+      }
+    }
+
+    function forceOpenInBrowser() {
+      const url = window.location.href;
+      if (tg && tg.openLink) {
+        tg.openLink(url, { try_instant_view: false });
+      } else {
+        window.open(url, '_blank');
+      }
+    }
+
+    if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+      document.addEventListener('DOMContentLoaded', () => {
+        const w = document.getElementById('iosWarning');
+        if (w) w.style.display = 'block';
+      });
+    }
+  </script>
+</body>
+</html>
