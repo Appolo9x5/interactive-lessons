@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>رياضيات - الدرس 04: التَّنَقُّلُ عَلَى مَرْصُوفَةٍ | السنة الثالثة ابتدائي</title>
+
+  <!-- مكتبة Telegram WebApp (ضرورية للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --accent: #2563eb;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #cbd5e1;
+      --text: #0f172a;
+      --correct: #16a34a;
+      --correct-bg: #dcfce7;
+      --wrong: #dc2626;
+      --wrong-bg: #fee2e2;
+    }
+
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { margin: 0; padding: 15px; background: var(--bg); color: var(--text); line-height: 1.5; }
+    .container { max-width: 980px; margin: 0 auto; }
+
+    .header-panel {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .header-panel h1 { margin: 0 0 6px 0; font-size: 1.6rem; }
+
+    .card {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 22px;
+      transition: all 0.3s ease;
+    }
+
+    .card.disabled-step {
+      opacity: 0.45;
+      pointer-events: none;
+      filter: grayscale(80%);
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: bold;
+      color: var(--primary);
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+    }
+
+    .math-ltr {
+      direction: ltr;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: bold;
+    }
+
+    input[type="text"], input[type="number"], select {
+      padding: 6px 8px;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      font-size: 1rem;
+      text-align: center;
+      outline: none;
+    }
+
+    input.is-correct, select.is-correct {
+      border-color: var(--correct) !important;
+      background-color: var(--correct-bg) !important;
+      color: var(--correct) !important;
+      font-weight: bold;
+    }
+    input.is-wrong, select.is-wrong {
+      border-color: var(--wrong) !important;
+      background-color: var(--wrong-bg) !important;
+      color: var(--wrong) !important;
+      font-weight: bold;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: background 0.2s;
+    }
+    .btn-submit { background: var(--primary); color: white; margin-top: 10px; }
+    .btn-submit:hover { background: var(--accent); }
+    .btn-submit:disabled { background: #94a3b8; cursor: not-allowed; }
+
+    .partial-feedback {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      display: none;
+      font-size: 0.95rem;
+    }
+
+    .form-row {
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .grid-visual-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      padding: 16px;
+      border-radius: 8px;
+      margin: 15px 0;
+    }
+
+    .custom-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      text-align: center;
+    }
+    .custom-table th, .custom-table td {
+      border: 1.5px solid var(--border);
+      padding: 8px;
+    }
+    .custom-table th {
+      background: #f1f5f9;
+      color: var(--primary);
+    }
+
+    .learn-box {
+      background: #eff6ff;
+      border: 2px solid #3b82f6;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+      line-height: 1.8;
+      font-size: 1.05rem;
+    }
+    .learn-title {
+      font-weight: bold;
+      color: #1d4ed8;
+      font-size: 1.2rem;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    #finalReport {
+      display: none;
+      background: white;
+      border: 3px solid var(--primary);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      margin: 30px 0;
+    }
+    .chart-container {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      margin: 15px auto;
+    }
+    .chart-svg {
+      transform: rotate(-90deg);
+      width: 170px;
+      height: 170px;
+    }
+    .chart-bg {
+      fill: none;
+      stroke: #e2e8f0;
+      stroke-width: 14;
+    }
+    .chart-progress {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 14;
+      stroke-linecap: round;
+      stroke-dasharray: 440;
+      stroke-dashoffset: 440;
+      transition: stroke-dashoffset 1s ease;
+    }
+    .chart-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .btn-group-final {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+    .btn-retry { background: #2563eb; color: white; padding: 10px 24px; font-size: 1rem; border-radius: 8px; }
+    .btn-retry:hover { background: #1d4ed8; }
+    .btn-exit { background: #dc2626; color: white; padding: 10px 24px; font-size: 1rem; border-radius: 8px; }
+    .btn-exit:hover { background: #b91c1c; }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+<div class="container">
+
+  <div class="header-panel">
+    <h1>الدرس 04: التَّنَقُّلُ عَلَى مَرْصُوفَةٍ</h1>
+    <p>السنة الثالثة ابتدائي | المنهاج الرسمي - مرحلة التقويم البيداغوجي المباشر</p>
+  </div>
+
+  <!-- 1. أعزز مكتسباتي (1): مسار رائد من المدرسة إلى المنزل (مرصوفة 5×5 تامة) -->
+  <div class="card" id="step1">
+    <div class="card-title">1. أُعَزِّزُ مُكْتَسَبَاتِي (التمرين 1): مَسَارُ رَائِدٍ بِالأَسْهُمِ (كتاب التلميذ ص 15)</div>
+    <p>
+      لَاحِظْ كَيْفَ بَدَأَ رَائِدٌ تَمْثِيلَ طَرِيقِ عَوْدَتِهِ مِنَ الْمَدْرَسَةِ إِلَى الْمَنْزِلِ بِأَسْهُمٍ عَلَى الْمَرْصُوفَةِ (5×5).<br>
+      <strong>أَكْمِلْ تَمْثِيلَ الْمَسْلَكِ بِاخْتِيَارِ اتِّجَاهِ الأَسْهُمِ الْمُنَاسِبَةِ فِي كُلِّ خُطْوَةٍ:</strong>
+    </p>
+
+    <div class="grid-visual-box">
+      <svg width="290" height="290" viewBox="0 0 290 290">
+        <rect x="25" y="25" width="45" height="45" fill="#fde68a" stroke="#d97706" />
+        <rect x="70" y="25" width="45" height="45" fill="#fde68a" stroke="#d97706" />
+        <rect x="70" y="70" width="45" height="45" fill="#fde68a" stroke="#d97706" />
+        <rect x="70" y="115" width="45" height="45" fill="#fde68a" stroke="#d97706" />
+        <rect x="115" y="115" width="45" height="45" fill="#fde68a" stroke="#d97706" />
+        <rect x="160" y="115" width="45" height="45" fill="#fde68a" stroke="#d97706" />
+        <rect x="160" y="160" width="45" height="45" fill="#fde68a" stroke="#d97706" />
+        <rect x="160" y="205" width="45" height="45" fill="#fde68a" stroke="#d97706" />
+
+        <g stroke="#94a3b8" stroke-width="1.5" fill="none">
+          <line x1="25" y1="25" x2="25" y2="250" />
+          <line x1="70" y1="25" x2="70" y2="250" />
+          <line x1="115" y1="25" x2="115" y2="250" />
+          <line x1="160" y1="25" x2="160" y2="250" />
+          <line x1="205" y1="25" x2="205" y2="250" />
+          <line x1="250" y1="25" x2="250" y2="250" />
+
+          <line x1="25" y1="25" x2="250" y2="25" />
+          <line x1="25" y1="70" x2="250" y2="70" />
+          <line x1="25" y1="115" x2="250" y2="115" />
+          <line x1="25" y1="160" x2="250" y2="160" />
+          <line x1="25" y1="205" x2="250" y2="205" />
+          <line x1="25" y1="250" x2="250" y2="250" />
+        </g>
+
+        <text x="47" y="18" font-size="12" font-weight="bold" fill="#1e3a8a" text-anchor="middle">المدرسة 🏫</text>
+        <text x="182" y="272" font-size="12" font-weight="bold" fill="#15803d" text-anchor="middle">المنزل 🏠</text>
+
+        <defs>
+          <marker id="arrowRed1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L6,3 z" fill="#dc2626" />
+          </marker>
+        </defs>
+        <line x1="47" y1="47" x2="85" y2="47" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arrowRed1)" />
+        <line x1="92" y1="47" x2="92" y2="85" stroke="#dc2626" stroke-width="2.5" marker-end="url(#arrowRed1)" />
+      </svg>
+    </div>
+
+    <p>تَسَلْسُلُ الأَسْهُمِ (مِنَ الْيَسَارِ إِلَى الْيَمِينِ كَمَا فِي الْكِتَابِ):</p>
+    <div class="form-row math-ltr" style="font-size: 1.3rem;">
+      <span style="color:#64748b;">➔</span>
+      <span style="color:#64748b;">🠃</span>
+      <select id="s1_step1" style="font-size:1.1rem; width:70px;">
+        <option value="">؟</option>
+        <option value="down">🠃 أسفل</option>
+        <option value="right">➔ يمين</option>
+        <option value="left">🠄 يسار</option>
+        <option value="up">🠅 أعلى</option>
+      </select>
+      <select id="s1_step2" style="font-size:1.1rem; width:70px;">
+        <option value="">؟</option>
+        <option value="down">🠃 أسفل</option>
+        <option value="right">➔ يمين</option>
+        <option value="left">🠄 يسار</option>
+        <option value="up">🠅 أعلى</option>
+      </select>
+      <select id="s1_step3" style="font-size:1.1rem; width:70px;">
+        <option value="">؟</option>
+        <option value="down">🠃 أسفل</option>
+        <option value="right">➔ يمين</option>
+        <option value="left">🠄 يسار</option>
+        <option value="up">🠅 أعلى</option>
+      </select>
+      <select id="s1_step4" style="font-size:1.1rem; width:70px;">
+        <option value="">؟</option>
+        <option value="down">🠃 أسفل</option>
+        <option value="right">➔ يمين</option>
+        <option value="left">🠄 يسار</option>
+        <option value="up">🠅 أعلى</option>
+      </select>
+      <select id="s1_step5" style="font-size:1.1rem; width:70px;">
+        <option value="">؟</option>
+        <option value="down">🠃 أسفل</option>
+        <option value="right">➔ يمين</option>
+        <option value="left">🠄 يسار</option>
+        <option value="up">🠅 أعلى</option>
+      </select>
+    </div>
+
+    <button class="btn btn-submit" id="btn1" onclick="validateStep1()">تثبيت الإجابة والانتقال</button>
+    <div id="fb1" class="partial-feedback"></div>
+  </div>
+
+  <!-- 2. أعزز مكتسباتي (2): قراءة وتشفير مواقع الحيوانات -->
+  <div class="card disabled-step" id="step2">
+    <div class="card-title">2. أُعَزِّزُ مُكْتَسَبَاتِي (التمرين 2): تَشْفِيرُ مَوَاقِعِ الْحَيَوَانَاتِ (كتاب التلميذ ص 15)</div>
+    <p>لَاحِظْ مَوْقِعَ كُلِّ حَيَوَانٍ عَلَى الْمَرْصُوفَةِ، ثُمَّ أَكْمِلِ الْجَدْوَلَ بِتَشْفِيرِ الْخَانَةِ (السطر ؛ العمود):</p>
+
+    <div class="grid-visual-box">
+      <svg width="330" height="260" viewBox="0 0 330 260">
+        <text x="20" y="220" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">أ</text>
+        <text x="20" y="180" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">ب</text>
+        <text x="20" y="140" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">ج</text>
+        <text x="20" y="100" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">د</text>
+        <text x="20" y="60" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">هـ</text>
+
+        <text x="62.5" y="250" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">1</text>
+        <text x="107.5" y="250" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">2</text>
+        <text x="152.5" y="250" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">3</text>
+        <text x="197.5" y="250" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">4</text>
+        <text x="242.5" y="250" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">5</text>
+        <text x="287.5" y="250" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">6</text>
+
+        <rect x="220" y="120" width="45" height="40" fill="#fecaca" stroke="#ef4444" />
+        <rect x="265" y="120" width="45" height="40" fill="#fecaca" stroke="#ef4444" />
+        <rect x="265" y="80" width="45" height="40" fill="#fecaca" stroke="#ef4444" />
+
+        <g stroke="#64748b" stroke-width="1.5" fill="none">
+          <line x1="40" y1="40" x2="310" y2="40" />
+          <line x1="40" y1="80" x2="310" y2="80" />
+          <line x1="40" y1="120" x2="310" y2="120" />
+          <line x1="40" y1="160" x2="310" y2="160" />
+          <line x1="40" y1="200" x2="310" y2="200" />
+          <line x1="40" y1="240" x2="310" y2="240" />
+
+          <line x1="40" y1="40" x2="40" y2="240" />
+          <line x1="85" y1="40" x2="85" y2="240" />
+          <line x1="130" y1="40" x2="130" y2="240" />
+          <line x1="175" y1="40" x2="175" y2="240" />
+          <line x1="220" y1="40" x2="220" y2="240" />
+          <line x1="265" y1="40" x2="265" y2="240" />
+          <line x1="310" y1="40" x2="310" y2="240" />
+        </g>
+
+        <text x="62.5" y="68" font-size="24" text-anchor="middle">🕊️</text>
+        <text x="107.5" y="148" font-size="24" text-anchor="middle">🐘</text>
+        <text x="152.5" y="148" font-size="24" text-anchor="middle">🦌</text>
+        <text x="152.5" y="228" font-size="24" text-anchor="middle">🦁</text>
+        <text x="242.5" y="188" font-size="24" text-anchor="middle">🐻‍❄️</text>
+        <text x="287.5" y="68" font-size="24" text-anchor="middle">🐱</text>
+      </svg>
+    </div>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>الْأَسَدُ</th>
+          <th>الدُّبُّ</th>
+          <th>الْفِيلُ</th>
+          <th>الْغَزَالَةُ</th>
+          <th><input type="text" id="s2_ani1" placeholder="الحيوان؟" style="width:110px;"></th>
+          <th><input type="text" id="s2_ani2" placeholder="الحيوان؟" style="width:110px;"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>(أ ؛ 3)</td>
+          <td>
+            (<select id="s2_bear_r"><option value="">؟</option><option value="أ">أ</option><option value="ب">ب</option><option value="ج">ج</option><option value="د">د</option><option value="هـ">هـ</option></select>
+            ؛
+            <input type="number" id="s2_bear_c" style="width:45px;">)
+          </td>
+          <td>
+            (<select id="s2_ele_r"><option value="">؟</option><option value="أ">أ</option><option value="ب">ب</option><option value="ج">ج</option><option value="د">د</option><option value="هـ">هـ</option></select>
+            ؛
+            <input type="number" id="s2_ele_c" style="width:45px;">)
+          </td>
+          <td>
+            (<select id="s2_gaz_r"><option value="">؟</option><option value="أ">أ</option><option value="ب">ب</option><option value="ج">ج</option><option value="د">د</option><option value="هـ">هـ</option></select>
+            ؛
+            <input type="number" id="s2_gaz_c" style="width:45px;">)
+          </td>
+          <td>
+            (هـ ؛ 6)
+          </td>
+          <td>
+            (هـ ؛ 1)
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button class="btn btn-submit" id="btn2" onclick="validateStep2()">تثبيت الإجابة والانتقال</button>
+    <div id="fb2" class="partial-feedback"></div>
+  </div>
+
+  <!-- 3. أعزز مكتسباتي (3): تشفير المسلك الملون بالأحمر -->
+  <div class="card disabled-step" id="step3">
+    <div class="card-title">3. أُعَزِّزُ مُكْتَسَبَاتِي (التمرين 3): تَشْفِيرُ الْمَسْلَكِ الْمُلَوَّنِ بِالأَحْمَرِ (كتاب التلميذ ص 15)</div>
+    <p>اكْتُبْ تَشْفِيرَ كُلِّ خُطْوَةٍ فِي الْمَسْلَكِ الْمُلَوَّنِ بِالأَحْمَرِ عَلَى الْمَرْصُوفَةِ أَعْلَاهُ (بِالتَّرْتِيبِ):</p>
+    
+    <div class="form-row math-ltr" style="font-size: 1.1rem;">
+      <span>الْخَانَةُ الأُولَى:</span>
+      ( <select id="s3_r1"><option value="">؟</option><option value="أ">أ</option><option value="ب">ب</option><option value="ج">ج</option><option value="د">د</option><option value="هـ">هـ</option></select>
+      ؛ <input type="number" id="s3_c1" style="width:50px;"> )
+      <span>➔ الْخَانَةُ الثَّانِيَةُ:</span>
+      ( <select id="s3_r2"><option value="">؟</option><option value="أ">أ</option><option value="ب">ب</option><option value="ج">ج</option><option value="د">د</option><option value="هـ">هـ</option></select>
+      ؛ <input type="number" id="s3_c2" style="width:50px;"> )
+      <span>➔ الْخَانَةُ الثَّالِثَةُ:</span>
+      ( <select id="s3_r3"><option value="">؟</option><option value="أ">أ</option><option value="ب">ب</option><option value="ج">ج</option><option value="د">د</option><option value="هـ">هـ</option></select>
+      ؛ <input type="number" id="s3_c3" style="width:50px;"> )
+    </div>
+
+    <div class="learn-box">
+      <div class="learn-title">📌 تَعَلَّمْتُ:</div>
+      <div>يُمْكِنُ التَّنَقُّلُ عَلَى مَرْصُوفَةٍ حَسَبَ السَّطْرِ يَمِينًا أَوْ يَسَارًا، وَحَسَبَ الْعَمُودِ إِلَى الأَعْلَى أَوْ إِلَى الأَسْفَلِ.</div>
+      <div>نُعَيِّنُ مَوْقِعَ خَانَةٍ عَلَى مَرْصُوفَةٍ مِنْ خِلَالِ تَقَاطُعِ سَطْرٍ وَعَمُودٍ مِنْهَا.</div>
+    </div>
+
+    <button class="btn btn-submit" id="btn3" onclick="validateStep3()">تثبيت الإجابة والانتقال لدفتر الأنشطة</button>
+    <div id="fb3" class="partial-feedback"></div>
+  </div>
+
+  <!-- 4. أتمرن (1): تلوين المسلك بدءاً من النقطة الحمراء -->
+  <div class="card disabled-step" id="step4">
+    <div class="card-title">4. أَتَمَرَّنُ (التمرين 1): تَلْوِينُ الْمَسْلَكِ عَلَى الْمَرْصُوفَةِ (دفتر الأنشطة ص 9)</div>
+    <p>
+      لَوِّنْ عَلَى الْمَرْصُوفَةِ (بِالنَّقْرِ عَلَى الْخَانَاتِ)، بَدْءًا مِنَ <strong>النُّقْطَةِ الْحَمْرَاءِ</strong>، الْمَسْلَكَ الْمُمَثَّلَ بِالأَسْهُمِ:<br>
+      <span class="math-ltr" style="font-size:1.4rem; color:var(--primary); margin:8px 0; display:inline-block;">
+        ➔ 🠅 🠅 🠅 ➔ ➔ ➔ 🠅
+      </span>
+    </p>
+
+    <div class="grid-visual-box">
+      <div id="drawGrid" style="display:grid; grid-template-columns: repeat(6, 42px); grid-template-rows: repeat(6, 42px); gap:2px; background:#94a3b8; border:2px solid #475569; padding:2px; direction:ltr;"></div>
+    </div>
+
+    <p style="font-size:0.9rem; color:#64748b;">(انقر على الخانة لتلوينها بالأصفر أو إلغاء تلوينها لتشكيل المسلك المطلوب)</p>
+    <button class="btn btn-submit" id="btn4" onclick="validateStep4()">تثبيت الإجابة والانتقال</button>
+    <div id="fb4" class="partial-feedback"></div>
+  </div>
+
+  <!-- 5. أتمرن (2): تصحيح إجابة أحد التلاميذ -->
+  <div class="card disabled-step" id="step5">
+    <div class="card-title">5. أَتَمَرَّنُ (التمرين 2): تَصْحِيحُ الأَخْطَاءِ فِي تَشْفِيرِ الأَدَوَاتِ (دفتر الأنشطة ص 9)</div>
+    <p>
+      هَذِهِ إِجَابَةُ أَحَدِ التَّلَامِيذِ حَوْلَ سُؤَالِ إِكْمَالِ تَشْفِيرِ مَوْقِعِ كُلِّ أَدَاةٍ عَلَى الْمَرْصُوفَةِ.<br>
+      <strong>صَحِّحِ الأَخْطَاءَ إِنْ وُجِدَتْ (اكْتُبِ التَّشْفِيرَ الصَّحِيحَ لِكُلِّ أَدَاةٍ):</strong>
+    </p>
+
+    <div class="grid-visual-box">
+      <svg width="330" height="260" viewBox="0 0 330 260">
+        <text x="20" y="220" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">أ</text>
+        <text x="20" y="180" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">ب</text>
+        <text x="20" y="140" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">ج</text>
+        <text x="20" y="100" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">د</text>
+        <text x="20" y="60" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">هـ</text>
+
+        <text x="62.5" y="250" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">1</text>
+        <text x="107.5" y="250" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">2</text>
+        <text x="152.5" y="250" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">3</text>
+        <text x="197.5" y="250" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">4</text>
+        <text x="242.5" y="250" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">5</text>
+        <text x="287.5" y="250" font-size="15" font-weight="bold" fill="#1e3a8a" text-anchor="middle">6</text>
+
+        <g stroke="#64748b" stroke-width="1.5" fill="none">
+          <line x1="40" y1="40" x2="310" y2="40" />
+          <line x1="40" y1="80" x2="310" y2="80" />
+          <line x1="40" y1="120" x2="310" y2="120" />
+          <line x1="40" y1="160" x2="310" y2="160" />
+          <line x1="40" y1="200" x2="310" y2="200" />
+          <line x1="40" y1="240" x2="310" y2="240" />
+
+          <line x1="40" y1="40" x2="40" y2="240" />
+          <line x1="85" y1="40" x2="85" y2="240" />
+          <line x1="130" y1="40" x2="130" y2="240" />
+          <line x1="175" y1="40" x2="175" y2="240" />
+          <line x1="220" y1="40" x2="220" y2="240" />
+          <line x1="265" y1="40" x2="265" y2="240" />
+          <line x1="310" y1="40" x2="310" y2="240" />
+        </g>
+
+        <text x="242.5" y="67" font-size="24" text-anchor="middle">🎒</text>
+        <text x="107.5" y="107" font-size="24" text-anchor="middle">📐</text>
+        
+        <g transform="translate(107.5, 180)">
+          <line x1="-5" y1="12" x2="-2" y2="-12" stroke="#dc2626" stroke-width="3" stroke-linecap="round" />
+          <line x1="3" y1="12" x2="6" y2="-12" stroke="#16a34a" stroke-width="3" stroke-linecap="round" />
+        </g>
+
+        <text x="197.5" y="227" font-size="24" text-anchor="middle">📚</text>
+      </svg>
+    </div>
+
+    <table class="custom-table">
+      <thead>
+        <tr>
+          <th>الأَدَاةُ</th>
+          <th>الْكُتُبُ 📚</th>
+          <th>الْقَلَمَانِ ✏️</th>
+          <th>الْمِدْوَرُ 📐</th>
+          <th>الْمِحْفَظَةُ 🎒</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#fef2f2; color:#991b1b; font-weight:bold;">
+          <td>إِجَابَةُ الزَّمِيلِ</td>
+          <td>(أ ؛ 3)</td>
+          <td>(أ ؛ 2)</td>
+          <td>(أ ؛ 2)</td>
+          <td>(هـ ؛ 5)</td>
+        </tr>
+        <tr>
+          <td><strong>التَّصْحِيحُ</strong></td>
+          <td>
+            (<select id="s5_b_r"><option value="">؟</option><option value="أ">أ</option><option value="ب">ب</option><option value="ج">ج</option><option value="د">د</option><option value="هـ">هـ</option></select>
+            ؛ <input type="number" id="s5_b_c" style="width:45px;">)
+          </td>
+          <td>
+            (<select id="s5_p_r"><option value="">؟</option><option value="أ">أ</option><option value="ب">ب</option><option value="ج">ج</option><option value="د">د</option><option value="هـ">هـ</option></select>
+            ؛ <input type="number" id="s5_p_c" style="width:45px;">)
+          </td>
+          <td>
+            (<select id="s5_c_r"><option value="">؟</option><option value="أ">أ</option><option value="ب">ب</option><option value="ج">ج</option><option value="د">د</option><option value="هـ">هـ</option></select>
+            ؛ <input type="number" id="s5_c_c" style="width:45px;">)
+          </td>
+          <td>
+            (<select id="s5_bag_r"><option value="">؟</option><option value="أ">أ</option><option value="ب">ب</option><option value="ج">ج</option><option value="د">د</option><option value="هـ">هـ</option></select>
+            ؛ <input type="number" id="s5_bag_c" style="width:45px;">)
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button class="btn btn-submit" id="btn5" onclick="validateStep5()">تثبيت الإجابة والانتقال</button>
+    <div id="fb5" class="partial-feedback"></div>
+  </div>
+
+  <!-- 6. أبحث: حساب عدد المسالك الممكنة -->
+  <div class="card disabled-step" id="step6">
+    <div class="card-title">6. أَبْحَثُ: حِسَابُ عَدَدِ الْمَسَالِكِ الْمُمْكِنَةِ (دفتر الأنشطة ص 9)</div>
+    <p>
+      يُمْكِنُ التَّنَقُّلُ عَلَى مَرْصُوفَةٍ <strong>حَسَبَ السَّطْرِ يَمِينًا، وَحَسَبَ الْعَمُودِ إِلَى الأَعْلَى فَقَطْ</strong>.<br>
+      <strong>مَا عَدَدُ الْمَسَالِكِ لِلاِنْتِقَالِ مِنَ الْخَانَةِ (أ ؛ 1) إِلَى الْخَانَةِ (د ؛ 3)؟</strong>
+    </p>
+
+    <div class="grid-visual-box">
+      <svg width="220" height="220" viewBox="0 0 220 220">
+        <text x="15" y="175" font-size="13" font-weight="bold" fill="#1e3a8a">أ</text>
+        <text x="15" y="135" font-size="13" font-weight="bold" fill="#1e3a8a">ب</text>
+        <text x="15" y="95" font-size="13" font-weight="bold" fill="#1e3a8a">ج</text>
+        <text x="15" y="55" font-size="13" font-weight="bold" fill="#1e3a8a">د</text>
+
+        <text x="50" y="205" font-size="13" font-weight="bold" fill="#1e3a8a">1</text>
+        <text x="90" y="205" font-size="13" font-weight="bold" fill="#1e3a8a">2</text>
+        <text x="130" y="205" font-size="13" font-weight="bold" fill="#1e3a8a">3</text>
+        <text x="170" y="205" font-size="13" font-weight="bold" fill="#1e3a8a">4</text>
+
+        <rect x="30" y="150" width="40" height="40" fill="#bbf7d0" stroke="#16a34a" />
+        <rect x="110" y="30" width="40" height="40" fill="#fed7aa" stroke="#ea580c" />
+        <text x="35" y="175" font-size="11" font-weight="bold" fill="#166534">البداية</text>
+        <text x="115" y="55" font-size="11" font-weight="bold" fill="#9a3412">الوصول</text>
+
+        <g stroke="#64748b" stroke-width="1.5" fill="none">
+          <line x1="30" y1="30" x2="190" y2="30" /><line x1="30" y1="70" x2="190" y2="70" />
+          <line x1="30" y1="110" x2="190" y2="110" /><line x1="30" y1="150" x2="190" y2="150" />
+          <line x1="30" y1="190" x2="190" y2="190" />
+
+          <line x1="30" y1="30" x2="30" y2="190" /><line x1="70" y1="30" x2="70" y2="190" />
+          <line x1="110" y1="30" x2="110" y2="190" /><line x1="150" y1="30" x2="150" y2="190" />
+          <line x1="190" y1="30" x2="190" y2="190" />
+        </g>
+      </svg>
+    </div>
+
+    <div class="form-row">
+      <label>عَدَدُ الْمَسَالِكِ الْمُمْكِنَةِ هُوَ:</label>
+      <input type="number" id="s6_ans" style="width: 80px; direction:ltr;">
+      <span>مَسَالِك.</span>
+    </div>
+
+    <button class="btn btn-submit" id="btn6" onclick="validateStep6()">تثبيت الإجابة وإظهار التقييم النهائي</button>
+    <div id="fb6" class="partial-feedback"></div>
+  </div>
+
+  <!-- التقييم النهائي -->
+  <div id="finalReport">
+    <h2 style="color: var(--primary); margin-top: 0;">التقرير الشامل للتقييم النهائي</h2>
+    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;">
+    
+    <div class="chart-container">
+      <svg class="chart-svg" viewBox="0 0 160 160">
+        <circle class="chart-bg" cx="80" cy="80" r="70"></circle>
+        <circle class="chart-progress" id="circleProg" cx="80" cy="80" r="70"></circle>
+      </svg>
+      <div class="chart-text" id="circleText">0%</div>
+    </div>
+
+    <div style="font-size: 1.15rem; line-height: 2;">
+      <div>مجموع العناصر المقيمة: <strong id="repTotal">0</strong> عنصراً</div>
+      <div style="color: var(--correct);">عدد الإجابات الصحيحة: <strong id="repCorrect">0</strong></div>
+      <div style="color: var(--wrong);">عدد الإجابات الخاطئة: <strong id="repWrong">0</strong></div>
+      <div id="repGrade" style="font-weight: bold; padding: 12px; border-radius: 8px; margin-top: 15px;"></div>
+    </div>
+
+    <div class="btn-group-final">
+      <button class="btn btn-retry" onclick="resetEntireSession()">إعادة المحاولة وتصفير الإجابات</button>
+      <button class="btn btn-exit" onclick="exitApp()">الخروج من البرنامج</button>
+    </div>
+  </div>
+
+  <!-- زر العودة إلى الفهرس -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</div>
+
+<script>
+  // ========================================================
+  // 🛡️ قسم الحماية - يجب أن يكون أولاً
+  // ========================================================
+  // ⚠️ لا يوجد BOT_TOKEN هنا (محفوظ في Vercel)
+  const CHANNEL_ID = "-1003910412986";  // ← قناة السنة الثالثة
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+
+  // ========================================================
+  // 🎯 قسم أنشطة الدرس - كما هو من درسك الأصلي
+  // ========================================================
+  let totalCorrect = 0;
+  let totalWrong = 0;
+
+  let audioCtx = null;
+  function getAudioContext() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    return audioCtx;
+  }
+
+  function playTone(freq, type, duration, delay = 0) {
+    setTimeout(() => {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }, delay);
+  }
+
+  function soundSuccess() {
+    playTone(523.25, 'sine', 0.12, 0);
+    playTone(659.25, 'sine', 0.12, 100);
+    playTone(783.99, 'sine', 0.25, 200);
+  }
+
+  function soundError() {
+    playTone(260, 'sawtooth', 0.18, 0);
+    playTone(200, 'sawtooth', 0.28, 120);
+  }
+
+  function soundFanfare() {
+    playTone(523.25, 'triangle', 0.15, 0);
+    playTone(659.25, 'triangle', 0.15, 120);
+    playTone(783.99, 'triangle', 0.15, 240);
+    playTone(1046.50, 'triangle', 0.45, 380);
+  }
+
+  function markField(id, isCorrect) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.disabled = true;
+    if (isCorrect) {
+      el.classList.add('is-correct');
+      totalCorrect++;
+    } else {
+      el.classList.add('is-wrong');
+      totalWrong++;
+    }
+  }
+
+  function showPartial(fbId, c, w) {
+    const fb = document.getElementById(fbId);
+    fb.style.display = 'block';
+    fb.style.background = '#f1f5f9';
+    fb.style.border = '1px solid #cbd5e1';
+    fb.innerHTML = `التقييم الجزئي: <span style="color:var(--correct)">صحيحة: ${c}</span> | <span style="color:var(--wrong)">خاطئة: ${w}</span>`;
+    
+    if (w === 0 && c > 0) {
+      soundSuccess();
+    } else {
+      soundError();
+    }
+  }
+
+  function unlockNext(nextStepId, btnId) {
+    document.getElementById(btnId).disabled = true;
+    if (nextStepId) {
+      const nextCard = document.getElementById(nextStepId);
+      nextCard.classList.remove('disabled-step');
+      nextCard.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  function normalizeArabic(txt) {
+    return txt.trim().replace(/[أإآ]/g, 'ا').replace(/ة/g, 'ه').replace(/\s+/g, ' ');
+  }
+
+  // 1. تصحيح مسار رائد
+  function validateStep1() {
+    let c = 0, w = 0;
+    const correctVals = ['down', 'right', 'right', 'down', 'down'];
+    for (let i = 1; i <= 5; i++) {
+      const el = document.getElementById(`s1_step${i}`);
+      const isOk = (el.value === correctVals[i-1]);
+      markField(`s1_step${i}`, isOk);
+      if (isOk) c++; else w++;
+    }
+    showPartial('fb1', c, w);
+    unlockNext('step2', 'btn1');
+  }
+
+  // 2. تصحيح جدول الحيوانات
+  function validateStep2() {
+    let c = 0, w = 0;
+    const ani1Val = normalizeArabic(document.getElementById('s2_ani1').value);
+    const ani2Val = normalizeArabic(document.getElementById('s2_ani2').value);
+
+    const catSynonyms = ['قط', 'القط', 'قطه', 'القطه', 'هر', 'الهر', 'هره', 'الهره'];
+    const isAni1 = catSynonyms.includes(ani1Val);
+    markField('s2_ani1', isAni1);
+    if (isAni1) c++; else w++;
+
+    const pigeonSynonyms = ['حمامه', 'الحمامه', 'يمامه', 'اليمامه'];
+    const isAni2 = pigeonSynonyms.includes(ani2Val);
+    markField('s2_ani2', isAni2);
+    if (isAni2) c++; else w++;
+
+    const bearR = (document.getElementById('s2_bear_r').value === 'ب');
+    const bearC = (parseInt(document.getElementById('s2_bear_c').value) === 5);
+    markField('s2_bear_r', bearR);
+    markField('s2_bear_c', bearC);
+    if (bearR) c++; else w++;
+    if (bearC) c++; else w++;
+
+    const eleR = (document.getElementById('s2_ele_r').value === 'ج');
+    const eleC = (parseInt(document.getElementById('s2_ele_c').value) === 2);
+    markField('s2_ele_r', eleR);
+    markField('s2_ele_c', eleC);
+    if (eleR) c++; else w++;
+    if (eleC) c++; else w++;
+
+    const gazR = (document.getElementById('s2_gaz_r').value === 'ج');
+    const gazC = (parseInt(document.getElementById('s2_gaz_c').value) === 3);
+    markField('s2_gaz_r', gazR);
+    markField('s2_gaz_c', gazC);
+    if (gazR) c++; else w++;
+    if (gazC) c++; else w++;
+
+    showPartial('fb2', c, w);
+    unlockNext('step3', 'btn2');
+  }
+
+  // 3. تصحيح المسلك الملون بالأحمر
+  function validateStep3() {
+    let c = 0, w = 0;
+    const checks = [
+      { r: 's3_r1', c: 's3_c1', er: 'ج', ec: 5 },
+      { r: 's3_r2', c: 's3_c2', er: 'ج', ec: 6 },
+      { r: 's3_r3', c: 's3_c3', er: 'د', ec: 6 }
+    ];
+
+    checks.forEach(chk => {
+      const okR = (document.getElementById(chk.r).value === chk.er);
+      const okC = (parseInt(document.getElementById(chk.c).value) === chk.ec);
+      markField(chk.r, okR);
+      markField(chk.c, okC);
+      if (okR) c++; else w++;
+      if (okC) c++; else w++;
+    });
+
+    showPartial('fb3', c, w);
+    unlockNext('step4', 'btn3');
+  }
+
+  // 4. شبكة التلوين
+  const targetCells = [
+    '4,1', '4,2', '3,2', '2,2', '1,2', '1,3', '1,4', '1,5', '0,5'
+  ];
+
+  let selectedCells = new Set();
+  let step4Locked = false;
+
+  function renderDrawGrid() {
+    const container = document.getElementById('drawGrid');
+    container.innerHTML = '';
+    for (let r = 0; r < 6; r++) {
+      for (let c = 0; c < 6; c++) {
+        const cell = document.createElement('div');
+        cell.id = `cell_${r}_${c}`;
+        cell.style.background = '#ffffff';
+        cell.style.cursor = 'pointer';
+        cell.style.display = 'flex';
+        cell.style.alignItems = 'center';
+        cell.style.justifyContent = 'center';
+        cell.style.userSelect = 'none';
+
+        if (r === 4 && c === 1) {
+          const dot = document.createElement('div');
+          dot.style.width = '10px';
+          dot.style.height = '10px';
+          dot.style.borderRadius = '50%';
+          dot.style.background = '#dc2626';
+          cell.appendChild(dot);
+        }
+
+        cell.onclick = () => {
+          if (step4Locked) return;
+          const key = `${r},${c}`;
+          if (selectedCells.has(key)) {
+            selectedCells.delete(key);
+            cell.style.background = '#ffffff';
+          } else {
+            selectedCells.add(key);
+            cell.style.background = '#fef08a';
+            playTone(450, 'sine', 0.05);
+          }
+        };
+        container.appendChild(cell);
+      }
+    }
+  }
+
+  function validateStep4() {
+    step4Locked = true;
+    let c = 0, w = 0;
+    
+    const isExact = (selectedCells.size === targetCells.length) &&
+                    targetCells.every(k => selectedCells.has(k));
+
+    if (isExact) {
+      targetCells.forEach(k => {
+        const [r, col] = k.split(',');
+        document.getElementById(`cell_${r}_${col}`).style.background = 'var(--correct-bg)';
+      });
+      c = 1; totalCorrect++;
+    } else {
+      selectedCells.forEach(k => {
+        const [r, col] = k.split(',');
+        document.getElementById(`cell_${r}_${col}`).style.background = 'var(--wrong-bg)';
+      });
+      w = 1; totalWrong++;
+    }
+
+    showPartial('fb4', c, w);
+    unlockNext('step5', 'btn4');
+  }
+
+  // 5. تصحيح إجابة الزميل
+  function validateStep5() {
+    let c = 0, w = 0;
+    const bR = (document.getElementById('s5_b_r').value === 'أ');
+    const bC = (parseInt(document.getElementById('s5_b_c').value) === 4);
+    markField('s5_b_r', bR); markField('s5_b_c', bC);
+    if (bR) c++; else w++;
+    if (bC) c++; else w++;
+
+    const pR = (document.getElementById('s5_p_r').value === 'ب');
+    const pC = (parseInt(document.getElementById('s5_p_c').value) === 2);
+    markField('s5_p_r', pR); markField('s5_p_c', pC);
+    if (pR) c++; else w++;
+    if (pC) c++; else w++;
+
+    const cR = (document.getElementById('s5_c_r').value === 'د');
+    const cC = (parseInt(document.getElementById('s5_c_c').value) === 2);
+    markField('s5_c_r', cR); markField('s5_c_c', cC);
+    if (cR) c++; else w++;
+    if (cC) c++; else w++;
+
+    const bagR = (document.getElementById('s5_bag_r').value === 'هـ');
+    const bagC = (parseInt(document.getElementById('s5_bag_c').value) === 5);
+    markField('s5_bag_r', bagR); markField('s5_bag_c', bagC);
+    if (bagR) c++; else w++;
+    if (bagC) c++; else w++;
+
+    showPartial('fb5', c, w);
+    unlockNext('step6', 'btn5');
+  }
+
+  // 6. أبحث
+  function validateStep6() {
+    let c = 0, w = 0;
+    const ans = parseInt(document.getElementById('s6_ans').value);
+    const isOk = (ans === 10);
+    markField('s6_ans', isOk);
+    if (isOk) c++; else w++;
+
+    showPartial('fb6', c, w);
+    unlockNext(null, 'btn6');
+    renderFinalReport();
+  }
+
+  function renderFinalReport() {
+    const rep = document.getElementById('finalReport');
+    rep.style.display = 'block';
+    rep.scrollIntoView({ behavior: 'smooth' });
+
+    const totalQuestions = totalCorrect + totalWrong;
+    const percentage = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+
+    document.getElementById('repTotal').innerText = totalQuestions;
+    document.getElementById('repCorrect').innerText = totalCorrect;
+    document.getElementById('repWrong').innerText = totalWrong;
+
+    const circle = document.getElementById('circleProg');
+    const circleText = document.getElementById('circleText');
+    const circumference = 2 * Math.PI * 70;
+    const offset = circumference - (percentage / 100) * circumference;
+
+    let strokeColor = '#dc2626';
+    if (percentage >= 85) strokeColor = '#16a34a';
+    else if (percentage >= 65) strokeColor = '#f59e0b';
+
+    circle.style.stroke = strokeColor;
+    circleText.style.color = strokeColor;
+    circleText.innerText = `${percentage}%`;
+    setTimeout(() => {
+      circle.style.strokeDashoffset = offset;
+    }, 100);
+
+    const gradeDiv = document.getElementById('repGrade');
+    if (percentage >= 85) {
+      gradeDiv.style.background = '#dcfce7';
+      gradeDiv.style.color = '#15803d';
+      gradeDiv.innerText = 'ملاحظة التقدير: ممتاز! تحصيل بيداغوجي رفيع واستيعاب كامل ومتقن لكفاءات التنقل على المرصوفة وتشفيرها.';
+      setTimeout(soundFanfare, 400);
+    } else if (percentage >= 65) {
+      gradeDiv.style.background = '#fef3c7';
+      gradeDiv.style.color = '#b45309';
+      gradeDiv.innerText = 'ملاحظة التقدير: جيد! توجد بعض الأخطاء في التشفير أو المسالك التي تم تظليلها بالأحمر للمراجعة.';
+      setTimeout(soundSuccess, 400);
+    } else {
+      gradeDiv.style.background = '#fee2e2';
+      gradeDiv.style.color = '#b91c1c';
+      gradeDiv.innerText = 'ملاحظة التقدير: يحتاج إلى دعم ومرافقة! يرجى من الولي مراجعة الخانات والتشفيرات الملونة بالأحمر مع التلميذ.';
+      setTimeout(soundError, 400);
+    }
+  }
+
+  function resetEntireSession() {
+    totalCorrect = 0;
+    totalWrong = 0;
+
+    document.querySelectorAll('input').forEach(inp => {
+      inp.value = '';
+      inp.disabled = false;
+      inp.className = '';
+    });
+
+    document.querySelectorAll('select').forEach(sel => {
+      sel.value = '';
+      sel.disabled = false;
+      sel.className = '';
+    });
+
+    document.querySelectorAll('.partial-feedback').forEach(f => {
+      f.style.display = 'none';
+      f.innerHTML = '';
+    });
+
+    document.querySelectorAll('.btn-submit').forEach(btn => btn.disabled = false);
+
+    selectedCells.clear();
+    step4Locked = false;
+    renderDrawGrid();
+
+    for(let i = 2; i <= 6; i++) {
+      document.getElementById(`step${i}`).classList.add('disabled-step');
+    }
+    document.getElementById('step1').classList.remove('disabled-step');
+
+    document.getElementById('finalReport').style.display = 'none';
+    const circle = document.getElementById('circleProg');
+    circle.style.strokeDashoffset = 440;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function exitApp() {
+    if (confirm('هل ترغب حقاً في الخروج من التطبيق؟')) {
+      window.close();
+      document.body.innerHTML = '<div style="text-align:center; padding: 60px; font-family:sans-serif;"><h2>تم إنهاء الجلسة وإغلاق البرنامج بنجاح.</h2></div>';
+    }
+  }
+
+  window.onload = function() {
+    renderDrawGrid();
+  };
+</script>
+
+</body>
+</html>
