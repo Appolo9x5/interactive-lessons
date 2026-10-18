@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>اللغة العربية • عِيدُ الفِطْرِ</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- مكتبة Telegram WebApp (ضرورية للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    :root {
+      --primary: #1976d2;
+      --primary-dark: #0d47a1;
+      --success: #2e7d32;
+      --error: #c62828;
+      --bg: #f5f9fc;
+      --card-bg: #ffffff;
+      --text: #263238;
+      --text-muted: #546e7a;
+      --accent: #ff9800;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 12px;
+      padding-bottom: 70px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      background: #ffffff;
+      padding: 8px 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .app-title-mini { font-weight: 800; color: var(--primary-dark); font-size: 1.05rem; }
+    .audio-btn {
+      background: #e1f5fe;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      font-size: 19px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .page-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .lesson-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-top: 6px solid var(--primary);
+    }
+
+    .lesson-title {
+      color: var(--primary-dark);
+      font-weight: 900;
+      font-size: 1.3rem;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 15px;
+      border-bottom: 2px dashed #b3e5fc;
+      padding-bottom: 10px;
+    }
+
+    .lesson-text-box {
+      background: #fdfbf7;
+      border: 1px solid #ffe0b2;
+      border-right: 5px solid var(--accent);
+      border-radius: 10px;
+      padding: 14px;
+      line-height: 2;
+      font-size: 1.05rem;
+      margin-bottom: 18px;
+      color: #37474f;
+      text-align: justify;
+    }
+    .lesson-text-title { font-weight: bold; color: #e65100; margin-bottom: 6px; display: block; }
+
+    .instruction { font-weight: 800; color: #37474f; margin: 15px 0 10px 0; font-size: 1.05rem; }
+
+    .audio-wrapper {
+      background: #e3f2fd;
+      padding: 14px;
+      border-radius: 12px;
+      margin: 10px 0 15px 0;
+      border: 1px solid #90caf9;
+      text-align: center;
+    }
+    .media-player { width: 100%; max-width: 400px; margin-top: 6px; }
+
+    .q-image-box {
+      text-align: center;
+      margin: 14px 0 18px 0;
+      background: #fafafa;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #cfd8dc;
+    }
+    .q-image-box img {
+      width: 100%;
+      max-width: 220px;
+      height: 150px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #fff;
+      display: block;
+      margin: 0 auto 10px auto;
+    }
+
+    .tf-btn, .drag-word, .tag-btn, .match-btn {
+      background: #ffffff;
+      border: 2px solid #b0bec5;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-block;
+      text-align: right;
+    }
+
+    .drag-word.selected, .match-btn.selected {
+      border-color: var(--primary) !important;
+      background: #e1f5fe !important;
+      transform: scale(1.02);
+      box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
+    }
+
+    .locked { pointer-events: none !important; cursor: not-allowed; opacity: 0.85; }
+    .correct { background-color: #e8f5e9 !important; border-color: var(--success) !important; color: var(--success) !important; font-weight: bold; }
+    .wrong { background-color: #ffebee !important; border-color: var(--error) !important; color: var(--error) !important; font-weight: bold; }
+
+    .drop-zone {
+      display: inline-block;
+      min-width: 75px;
+      min-height: 32px;
+      border-bottom: 2px dashed #0288d1;
+      margin: 0 4px;
+      vertical-align: middle;
+      text-align: center;
+      color: var(--primary-dark);
+      font-weight: bold;
+      background: #e1f5fe;
+      border-radius: 6px;
+      padding: 2px 6px;
+      line-height: 28px;
+    }
+
+    .match-container {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .match-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td { border: 1.5px solid #cfd8dc; padding: 8px; text-align: center; font-size: 0.95rem; }
+    th { background: #eceff1; color: #37474f; font-weight: 800; }
+
+    .eval-badge {
+      background: #f1f8e9;
+      border: 1px solid #dcedc8;
+      padding: 8px 14px;
+      border-radius: 10px;
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-around;
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+    .text-success { color: var(--success); }
+    .text-error { color: var(--error); }
+
+    .word-pool {
+      background: #f8fafc;
+      border: 1.5px dashed #b0bec5;
+      padding: 10px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+
+    /* Tracing Canvas Style */
+    .trace-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+    .trace-box {
+      width: 100px;
+      height: 100px;
+      border: 2px dashed #90caf9;
+      border-radius: 10px;
+      background: #fdfbf7;
+      position: relative;
+      text-align: center;
+    }
+    .trace-letter {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 4rem;
+      color: #e0e0e0;
+      font-weight: bold;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .trace-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      cursor: crosshair;
+      border-radius: 10px;
+    }
+
+    #final-report {
+      text-align: center;
+      background: #ffffff;
+      border: 3px solid var(--primary);
+      border-radius: 18px;
+      padding: 25px 18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      margin-top: 30px;
+    }
+    .final-score { font-size: 3.2rem; font-weight: 900; color: var(--primary-dark); margin: 12px 0; }
+    .final-remark { font-size: 1.25rem; font-weight: 800; padding: 8px 16px; border-radius: 20px; display: inline-block; margin-bottom: 20px; }
+
+    .btn-restart {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      font-size: 1.15rem;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <div class="top-bar">
+    <span class="app-title-mini">اللغة العربية • السنة الثانية ابتدائي • عيد الفطر</span>
+    <button class="audio-btn" id="audio-toggle" onclick="toggleAudio()" title="كتم/تشغيل الصوت">🔊</button>
+  </div>
+
+  <!-- ========================================================
+       الجزء 1: كتاب التلميذ - صفحة 27 (فهم المنطوق)
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 27</span>
+    <h2 class="lesson-title">فَهْمُ الْمَنْطُوقِ • عِيدُ الفِطْرِ</h2>
+    
+    <p class="instruction">🎧 اسْتَمِعْ إِلَى النَّصِّ الْمَنْطُوقِ (عِيدُ الفِطْرِ) :</p>
+    <div class="audio-wrapper">
+      <audio controls class="media-player" preload="auto">
+        <source src="eid_fitr_comprehension.mp3" type="audio/mpeg">
+        متصفحك لا يدعم مشغل الصوت.
+      </audio>
+    </div>
+
+    <p class="instruction">أَفْهَمُ النَّصَّ الْمَنْطُوقَ (اخْتَرِ الْإِجَابَةَ الصَّحِيحَةَ) :</p>
+    <div id="ex-p27-listening-mcq"></div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-p27-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-p27-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 2: كتاب التلميذ - صفحة 28 (أنتج شفهيا)
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 28</span>
+    <h2 class="lesson-title">أُنْتِجُ شَفَوِيًّا</h2>
+    
+    <p class="instruction">أُلاحِظُ الْمَشَاهِدَ وَأَخْتَارُ الْوَصْفَ الْمُنَاسِبَ لِكُلِّ صُورَةٍ :</p>
+    
+    <div class="q-image-box">
+      <img src="p28_scene1_mosque.png" alt="الذهاب إلى المسجد">
+      <div id="ex-p28-q1"></div>
+    </div>
+
+    <div class="q-image-box">
+      <img src="p28_scene2_grandpa.png" alt="الجد مع حفيديه">
+      <div id="ex-p28-q2"></div>
+    </div>
+
+    <div class="q-image-box">
+      <img src="p28_scene3_visit.png" alt="تبادل الزيارات">
+      <div id="ex-p28-q3"></div>
+    </div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-p28-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-p28-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 3: كتاب التلميذ - صفحة 29 (نص القراءة)
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 29</span>
+    <h2 class="lesson-title">نَصُّ الْقِرَاءَةِ : زَفَافُ أُخْتِي</h2>
+    
+    <div class="lesson-text-box">
+      <span class="lesson-text-title">📖 اِقْرَأِ النَّصَّ :</span>
+      مَا قَدْ حَلَّ الْيَوْمُ الَّذِي انْتَظَرْنَاهُ، إِنَّهُ الْيَوْمُ الَّذِي تُزَفُّ فِيهِ أُخْتِي عَرُوسًا. أَعْدَدْنَا كُلَّ شَيْءٍ، حَضَرْنَا أَطْبَاقًا كَثِيرَةً مِنَ الْحَلَوِيَّاتِ.<br>
+      بَدَأَ الضُّيُوفُ يَلْتَحِقُونَ الْوَاحِدَ تِلْوَ الْآخَرِ، وَمَعَهُمُ الْعَدِيدُ مِنَ الْهَدَايَا. قَالَتْ أُمِّي : هَيَّا يَا سَلْمَى، لِنَسْتَقْبِلَ ضُيُوفَنَا.<br>
+      وَفِي الْغَدِ، حَضَرَ مَوْكِبٌ مِنَ السَّيَّارَاتِ، تَتَقَدَّمُهُ سَيَّارَةٌ مُزَيَّنَةٌ بِالْوُرُودِ، وَخَرَجَتْ أُخْتِي بِبُرْنُسِهَا وَفُسْتَانِهَا الْأَبْيَضِ الْجَمِيلِ، تُرَافِقُهَا زَغَارِيدُ النِّسَاءِ وَأَنْغَامُ الْمَزَامِيرِ. وَقُلْتُ فِي نَفْسِي : سَأَشْتَاقُ إِلَيْكِ كَثِيرًا، أَيَّتُهَا الْأُخْتُ الْحَبِيبَةُ.
+    </div>
+
+    <p class="instruction">أَفْهَمُ النَّصَّ (اخْتَرِ الْإِجَابَةَ الصَّحِيحَةَ) :</p>
+    <div id="ex-p29-mcq"></div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-p29-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-p29-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 4: كتاب التلميذ - صفحة 30 (أتدرب على الإنتاج الكتابي)
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 30</span>
+    <h2 class="lesson-title">أَتَدَرَّبُ عَلَى الْإِنْتَاجِ الْكِتَابِيِّ</h2>
+    
+    <p class="instruction">أَرْبِطُ بَيْنَ السُّؤَالِ وَجَوَابِهِ (اضْغَطْ عَلَى السُّؤَالِ ثُمَّ عَلَى الْجَوَابِ الْمُنَاسِبِ) :</p>
+    
+    <div class="match-container" id="match-p30">
+      <div class="match-col" id="match-questions"></div>
+      <div class="match-col" id="match-answers"></div>
+    </div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-p30-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-p30-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 5: كتاب التلميذ - صفحة 31 (التربية الإسلامية)
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 31</span>
+    <h2 class="lesson-title">التَّرْبِيَةُ الْإِسْلَامِيَّةُ • زِيَارَةُ الْأَقَارِبِ</h2>
+    
+    <div class="lesson-text-box">
+      <span class="lesson-text-title">📖 أَقْرَأُ وَأَلَاحِظُ :</span>
+      فِي الْيَوْمِ الثَّانِي مِنَ الْعِيدِ، قَالَ الْأَبُ :<br>
+      مَنْ يُرَافِقُنِي الْيَوْمَ لِزِيَارَةِ عَمَّتِكُمْ ؟<br>
+      خَالِدٌ : أَنَا أُرِيدُ أَنْ أَذْهَبَ لِلنُّزْهَةِ يَا أَبِي.<br>
+      الْأَبُ : النُّزْهَةُ فِي الْعُطْلَةِ يَا خَالِدُ.<br>
+      الْمُسْلِمُ يَجِبُ أَنْ يَزُورَ كُلَّ أَقَارِبِهِ، لِأَنَّ الزِّيَارَاتِ الْعَائِلِيَّةَ تُقَوِّي الْمَحَبَّةَ وَالِاحْتِرَامَ بَيْنَهُمْ.
+    </div>
+
+    <p class="instruction">أَفْهَمُ (اخْتَرِ الْإِجَابَةَ الصَّحِيحَةَ) :</p>
+    <div id="ex-p31-mcq"></div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-p31-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-p31-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 6: كراس الأنشطة - صفحة 17
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كُرَّاسُ الأَنْشِطَةِ - صَفْحَةُ 17</span>
+    <h2 class="lesson-title">أُوَظِّفُ الصِّيَغَ • أَفْهَمُ وَأُجِيبُ</h2>
+    
+    <p class="instruction">1. أُكْمِلُ الْجُمْلَةَ (اخْتَرِ الْإِجَابَةَ الصَّحِيحَةَ) :</p>
+    <div id="ex-act17-tilw-mcq"></div>
+
+    <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+    <p class="instruction">2. أَفْهَمُ وَأُجِيبُ (صَحِيحٌ أَمْ خَاطِئٌ) :</p>
+    <div id="ex-act17-tf-mcq"></div>
+
+    <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+    <p class="instruction">3. أُوَظِّفُ التَّرَاكِيبَ اللُّغَوِيَّةَ (اضْغَطْ عَلَى الْبِطَاقَاتِ بِالتَّرْتِيبِ لِتُكَوِّنَ جُمْلَةً صَحِيحَةً) :</p>
+    
+    <p style="font-weight:bold; color:var(--primary-dark); text-align:center;">أ. نَحْنُ نُشَاهِدُ التِّلْفَازَ --- هَلْ .......</p>
+    <div class="word-pool" id="pool-act17-formula1"></div>
+    <div style="line-height: 2.8; font-size: 1.05rem; text-align: center; margin-bottom:15px;">
+      <span class="drop-zone" data-ans="أُشَاهِدُ"></span>
+      <span class="drop-zone" data-ans="مَعَكُمْ"></span>؟
+    </div>
+
+    <p style="font-weight:bold; color:var(--primary-dark); text-align:center;">ب. أَحْمَدُ يُوَدِّعُ الْمَوْكِبَ --- أَنَا .......</p>
+    <div class="word-pool" id="pool-act17-formula2"></div>
+    <div style="line-height: 2.8; font-size: 1.05rem; text-align: center;">
+      <span class="drop-zone" data-ans="أُوَدِّعُ"></span>
+      <span class="drop-zone" data-ans="الْمَوْكِبَ"></span>.
+    </div>
+
+    <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+    <p class="instruction">4. أَمْلأُ الْفَرَاغَ (اخْتَرِ الْإِجَابَةَ الصَّحِيحَةَ) :</p>
+    <div id="ex-act17-fill-mcq"></div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-act17-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-act17-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 7: كراس الأنشطة - صفحة 18
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كُرَّاسُ الأَنْشِطَةِ - صَفْحَةُ 18</span>
+    <h2 class="lesson-title">أُصَنِّفُ • أَرْسُمُ</h2>
+    
+    <p class="instruction">1. أَذْكُرُ أَفْرَادَ الْعَائِلَةِ الَّذِينَ ذُكِرُوا فِي النَّصِّ وَالَّذِينَ لَمْ يُذْكَرُوا :</p>
+    <div class="word-pool" id="pool-act18-family"></div>
+    <table>
+      <tr>
+        <th style="width:50%;">أَفْرَادُ الْعَائِلَةِ الَّذِينَ ذُكِرُوا فِي النَّصِّ</th>
+        <th style="width:50%;">أَفْرَادُ الْعَائِلَةِ الَّذِينَ لَمْ يُذْكَرُوا فِي النَّصِّ</th>
+      </tr>
+      <tr>
+        <td id="td-mentioned" class="drop-target" data-type="mentioned" style="min-height:90px; vertical-align:top;"></td>
+        <td id="td-not-mentioned" class="drop-target" data-type="not-mentioned" style="min-height:90px; vertical-align:top;"></td>
+      </tr>
+    </table>
+
+    <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+    <p class="instruction">2. أَرْسُمُ الْحُرُوفَ (د، ذ، ل) بِتَتَبُّعِ النِّقَاطِ :</p>
+    <div class="trace-container">
+      <div class="trace-box">
+        <span class="trace-letter">د</span>
+        <canvas class="trace-canvas" width="100" height="100"></canvas>
+      </div>
+      <div class="trace-box">
+        <span class="trace-letter">ذ</span>
+        <canvas class="trace-canvas" width="100" height="100"></canvas>
+      </div>
+      <div class="trace-box">
+        <span class="trace-letter">ل</span>
+        <canvas class="trace-canvas" width="100" height="100"></canvas>
+      </div>
+    </div>
+    <p style="text-align:center; color:var(--text-muted); font-size:0.85rem; margin-top:5px;">(ارْسُمْ بِإِصْبَعِكَ أَوْ بِالْفَأْرَةِ فَوْقَ الْحَرْفِ)</p>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-act18-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-act18-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 8: كراس الأنشطة - صفحة 19 (التربية الإسلامية)
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كُرَّاسُ الأَنْشِطَةِ - صَفْحَةُ 19</span>
+    <h2 class="lesson-title">التَّرْبِيَةُ الْإِسْلَامِيَّةُ • زِيَارَةُ الْأَقَارِبِ</h2>
+    
+    <p class="instruction">1. أَضَعُ عَلامَةَ (✓) أَمَامَ الْحَدِيثِ الَّذِي يُحَثُّنَا عَلَى زِيَارَةِ الْأَقَارِبِ :</p>
+    <div id="ex-act19-hadith-mcq"></div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-act19-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-act19-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       التقرير النهائي الشامل
+       ======================================================== -->
+  <div id="final-report">
+    <h2 style="color: var(--primary-dark); margin-top: 0;">📊 التَّقْرِيرُ النِّهَائِيُّ لِلْوَحْدَةِ</h2>
+    <p style="color: var(--text-muted); font-size:1.1rem; margin-bottom:15px;">حصيلة إجابات التمارين التفاعلية لكامل الوحدة :</p>
+    
+    <div style="display:flex; justify-content: space-around; margin: 15px 0;">
+      <div style="color: var(--success); font-weight:800; font-size:1.25rem;">
+        إجابات صحيحة<br><span id="total-c" style="font-size:1.8rem;">0</span>
+      </div>
+      <div style="color: var(--error); font-weight:800; font-size:1.25rem;">
+        إجابات خاطئة<br><span id="total-w" style="font-size:1.8rem;">0</span>
+      </div>
+    </div>
+
+    <div class="final-score" id="total-percent">0%</div>
+    <div class="final-remark" id="total-remark">جارٍ الإنجاز...</div>
+    
+    <button class="btn-restart" onclick="restartEntireLesson()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنَ الْبِدَايَةِ</button>
+  </div>
+
+  <!-- زر العودة إلى الفهرس -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+<script>
+  // ========================================================
+  // 🛡️ قسم الحماية - يجب أن يكون أولاً
+  // ========================================================
+  // ⚠️ لا يوجد BOT_TOKEN هنا (محفوظ في Vercel)
+  const CHANNEL_ID = "-1004461185731";  // ← قناة السنة الثانية
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  // تشغيل التحقق تلقائياً عند فتح الصفحة
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+
+  // ========================================================
+  // 🎯 قسم أنشطة الدرس - كما هو من درسك الأصلي
+  // ========================================================
+  let audioEnabled = true;
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  let actx = null;
+
+  function getAudioContext() {
+    if (!actx) actx = new AudioContext();
+    if (actx.state === 'suspended') actx.resume();
+    return actx;
+  }
+
+  function toggleAudio() {
+    audioEnabled = !audioEnabled;
+    document.getElementById('audio-toggle').textContent = audioEnabled ? '🔊' : '🔇';
+  }
+
+  function playTone(freq, type, duration) {
+    if(!audioEnabled) return;
+    try {
+      const ctx = getAudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch(e) {}
+  }
+
+  function playSuccess() {
+    playTone(523.25, 'sine', 0.12);
+    setTimeout(() => playTone(659.25, 'sine', 0.12), 110);
+    setTimeout(() => playTone(783.99, 'sine', 0.22), 220);
+  }
+
+  function playError() {
+    playTone(180, 'sawtooth', 0.35);
+  }
+
+  function playTap() {
+    playTone(600, 'triangle', 0.04);
+  }
+
+  function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  let totalCorrectAnswers = 0;
+  let totalWrongAnswers = 0;
+  const TOTAL_QUESTIONS_COUNT = 36;
+
+  function registerScore(badgePrefix, isCorrect) {
+    if (isCorrect) {
+      totalCorrectAnswers++;
+      const el = document.getElementById(`${badgePrefix}-c`);
+      if (el) el.textContent = parseInt(el.textContent) + 1;
+    } else {
+      totalWrongAnswers++;
+      const el = document.getElementById(`${badgePrefix}-w`);
+      if (el) el.textContent = parseInt(el.textContent) + 1;
+    }
+    updateLiveReport();
+  }
+
+  function updateLiveReport() {
+    document.getElementById('total-c').textContent = totalCorrectAnswers;
+    document.getElementById('total-w').textContent = totalWrongAnswers;
+
+    const answeredCount = totalCorrectAnswers + totalWrongAnswers;
+    let percent = 0;
+
+    if (TOTAL_QUESTIONS_COUNT > 0) {
+        percent = Math.round((totalCorrectAnswers / TOTAL_QUESTIONS_COUNT) * 100);
+        percent = Math.min(Math.max(percent, 0), 100);
+    }
+
+    document.getElementById('total-percent').textContent = percent + '%';
+
+    const remarkEl = document.getElementById('total-remark');
+    if (answeredCount < TOTAL_QUESTIONS_COUNT) {
+      remarkEl.textContent = 'واصِل إنجاز التمارين...';
+      remarkEl.style.backgroundColor = '#eceff1';
+      remarkEl.style.color = '#37474f';
+    } else if (percent >= 90) {
+      remarkEl.textContent = 'ممتاز! عمل رائع وإجابات متفوقة.';
+      remarkEl.style.backgroundColor = '#c8e6c9';
+      remarkEl.style.color = '#1b5e20';
+    } else if (percent >= 70) {
+      remarkEl.textContent = 'جيد جداً! استيعابك ممتاز للدروس.';
+      remarkEl.style.backgroundColor = '#bbdefb';
+      remarkEl.style.color = '#0d47a1';
+    } else if (percent >= 50) {
+      remarkEl.textContent = 'أحسنت، وراجع النص لتقديم نتيجة أفضل.';
+      remarkEl.style.backgroundColor = '#ffe0b2';
+      remarkEl.style.color = '#e65100';
+    } else {
+      remarkEl.textContent = 'حاول مجدداً وركز أكثر.';
+      remarkEl.style.backgroundColor = '#ffcdd2';
+      remarkEl.style.color = '#b71c1c';
+    }
+  }
+
+  function buildRandomizedMCQ(containerId, badgeId, questions) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+
+    questions.forEach(q => {
+      const wrap = document.createElement('div');
+      wrap.style.marginBottom = "14px";
+      wrap.innerHTML = `<span style="font-size:1.02rem; font-weight:700; display:block; margin-bottom:6px;">• ${q.text}</span>`;
+
+      const btnGroup = document.createElement('div');
+      const shuffledOptions = shuffleArray(q.options);
+
+      shuffledOptions.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'tf-btn';
+        btn.textContent = opt.label;
+
+        btn.onclick = () => {
+          playTap();
+          Array.from(btnGroup.querySelectorAll('.tf-btn')).forEach(b => b.classList.add('locked'));
+
+          btn.style.borderColor = 'var(--primary)';
+          btn.style.backgroundColor = '#e1f5fe';
+
+          setTimeout(() => {
+            if (opt.correct) {
+              btn.classList.add('correct');
+              btn.style.borderColor = 'var(--success)';
+              btn.style.backgroundColor = '#e8f5e9';
+              playSuccess();
+              registerScore(badgeId, true);
+            } else {
+              btn.classList.add('wrong');
+              btn.style.borderColor = 'var(--error)';
+              btn.style.backgroundColor = '#ffebee';
+              playError();
+              registerScore(badgeId, false);
+            }
+          }, 150);
+        };
+        btnGroup.appendChild(btn);
+      });
+
+      wrap.appendChild(btnGroup);
+      container.appendChild(wrap);
+    });
+  }
+
+  let activeSelectedWord = null;
+
+  function setupTapToFill(poolId, zonesSelector, badgeId, wordsList) {
+    const pool = document.getElementById(poolId);
+    pool.innerHTML = '';
+    const shuffledWords = shuffleArray(wordsList);
+
+    shuffledWords.forEach(wObj => {
+      const span = document.createElement('span');
+      span.className = 'drag-word';
+      span.textContent = wObj.label;
+      span.setAttribute('data-val', wObj.val);
+
+      span.onclick = () => {
+        if (span.classList.contains('locked')) return;
+        playTap();
+        document.querySelectorAll('.drag-word.selected').forEach(el => el.classList.remove('selected'));
+        span.classList.add('selected');
+        activeSelectedWord = span;
+      };
+
+      pool.appendChild(span);
+    });
+
+    const zones = document.querySelectorAll(zonesSelector);
+    zones.forEach(zone => {
+      zone.onclick = () => {
+        if (zone.classList.contains('locked') || !activeSelectedWord) return;
+
+        const expected = zone.getAttribute('data-ans');
+        const actual = activeSelectedWord.getAttribute('data-val');
+
+        activeSelectedWord.classList.remove('selected');
+        activeSelectedWord.classList.add('locked');
+        zone.classList.add('locked');
+
+        zone.textContent = activeSelectedWord.textContent;
+        activeSelectedWord.style.visibility = 'hidden';
+
+        if (expected === actual) {
+          playSuccess();
+          zone.classList.add('correct');
+          registerScore(badgeId, true);
+        } else {
+          playError();
+          zone.classList.add('wrong');
+          registerScore(badgeId, false);
+        }
+
+        activeSelectedWord = null;
+      };
+    });
+  }
+
+  function setupDualCategoryTable(poolId, targetSelector1, targetSelector2, badgeId, items) {
+    const pool = document.getElementById(poolId);
+    pool.innerHTML = '';
+    const td1 = document.querySelector(targetSelector1);
+    const td2 = document.querySelector(targetSelector2);
+    td1.innerHTML = '';
+    td2.innerHTML = '';
+
+    const shuffled = shuffleArray(items);
+
+    shuffled.forEach(item => {
+      const span = document.createElement('span');
+      span.className = 'drag-word';
+      span.textContent = item.label;
+      span.setAttribute('data-val', item.val);
+
+      span.onclick = () => {
+        if (span.classList.contains('locked')) return;
+        playTap();
+        pool.querySelectorAll('.drag-word.selected').forEach(el => el.classList.remove('selected'));
+        span.classList.add('selected');
+        activeSelectedWord = span;
+      };
+
+      pool.appendChild(span);
+    });
+
+    [td1, td2].forEach(td => {
+      td.onclick = () => {
+        if (!activeSelectedWord || activeSelectedWord.classList.contains('locked')) return;
+
+        const targetType = td.getAttribute('data-type');
+        const wordType = activeSelectedWord.getAttribute('data-val');
+
+        activeSelectedWord.classList.remove('selected');
+        activeSelectedWord.classList.add('locked');
+        activeSelectedWord.style.display = 'block';
+        activeSelectedWord.style.margin = '4px auto';
+
+        if (targetType === wordType) {
+          playSuccess();
+          activeSelectedWord.classList.add('correct');
+          td.appendChild(activeSelectedWord);
+          registerScore(badgeId, true);
+        } else {
+          playError();
+          activeSelectedWord.classList.add('wrong');
+          td.appendChild(activeSelectedWord);
+          registerScore(badgeId, false);
+        }
+
+        activeSelectedWord = null;
+      };
+    });
+  }
+
+  function setupMatchPairs(qContainerId, aContainerId, badgeId, pairs) {
+    const qContainer = document.getElementById(qContainerId);
+    const aContainer = document.getElementById(aContainerId);
+    qContainer.innerHTML = '';
+    aContainer.innerHTML = '';
+
+    const shuffledQs = shuffleArray(pairs);
+    const shuffledAs = shuffleArray(pairs);
+
+    let selectedQ = null;
+
+    shuffledQs.forEach(p => {
+      const btn = document.createElement('button');
+      btn.className = 'match-btn';
+      btn.textContent = p.q;
+      btn.setAttribute('data-id', p.id);
+      btn.onclick = () => {
+        if (btn.classList.contains('locked')) return;
+        playTap();
+        qContainer.querySelectorAll('.match-btn').forEach(el => el.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedQ = btn;
+      };
+      qContainer.appendChild(btn);
+    });
+
+    shuffledAs.forEach(p => {
+      const btn = document.createElement('button');
+      btn.className = 'match-btn';
+      btn.textContent = p.a;
+      btn.setAttribute('data-id', p.id);
+
+      btn.onclick = () => {
+        if (btn.classList.contains('locked') || !selectedQ) return;
+
+        const qId = selectedQ.getAttribute('data-id');
+        const aId = btn.getAttribute('data-id');
+
+        selectedQ.classList.remove('selected');
+        selectedQ.classList.add('locked');
+        btn.classList.add('locked');
+
+        if (qId === aId) {
+          playSuccess();
+          selectedQ.classList.add('correct');
+          btn.classList.add('correct');
+          registerScore(badgeId, true);
+        } else {
+          playError();
+          selectedQ.classList.add('wrong');
+          btn.classList.add('wrong');
+          registerScore(badgeId, false);
+        }
+
+        selectedQ = null;
+      };
+      aContainer.appendChild(btn);
+    });
+  }
+
+  function initTracing() {
+    const canvases = document.querySelectorAll('.trace-canvas');
+    canvases.forEach(canvas => {
+      const ctx = canvas.getContext('2d');
+      let isDrawing = false;
+
+      ctx.strokeStyle = '#1976d2';
+      ctx.lineWidth = 4;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      canvas.addEventListener('mousedown', startDrawing);
+      canvas.addEventListener('mousemove', draw);
+      canvas.addEventListener('mouseup', stopDrawing);
+      canvas.addEventListener('mouseout', stopDrawing);
+
+      canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e.touches[0]); }, {passive: false});
+      canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); }, {passive: false});
+      canvas.addEventListener('touchend', stopDrawing);
+
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: (e.clientX - rect.left) * (canvas.width / rect.width),
+          y: (e.clientY - rect.top) * (canvas.height / rect.height)
+        };
+      }
+
+      function startDrawing(e) {
+        isDrawing = true;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+      }
+
+      function draw(e) {
+        if (!isDrawing) return;
+        const pos = getPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+      }
+
+      function stopDrawing() {
+        isDrawing = false;
+        ctx.beginPath();
+      }
+    });
+  }
+
+  function initAllActivities() {
+    totalCorrectAnswers = 0;
+    totalWrongAnswers = 0;
+    document.querySelectorAll('.eval-badge span span').forEach(el => el.textContent = '0');
+    updateLiveReport();
+
+    // 1. صفحة 27: فهم المنطوق (8 أسئلة)
+    buildRandomizedMCQ('ex-p27-listening-mcq', 'ex-p27', [
+      {
+        text: "مَنْ الَّذِي اسْتَيْقَظَ بَاكِراً ؟",
+        options: [
+          { label: "الأُمُّ", correct: true },
+          { label: "سَلْمَى", correct: false },
+          { label: "الْجَدُّ", correct: false }
+        ]
+      },
+      {
+        text: "مَاذَا فَعَلَتْ سَلْمَى فِي الصَّبَاحِ ؟",
+        options: [
+          { label: "رَتَّبَتْ غُرْفَةَ النَّوْمِ، وَنَظَّفَتِ الْحَمَّامَ، وَغَسَلَتِ الأَوَانِي", correct: true },
+          { label: "أَعَدَّتْ فُطُورَ الصَّبَاحِ مَعَ أُمِّهَا", correct: false },
+          { label: "ذَهَبَتْ إِلَى الْمَسْجِدِ مَعَ أَبِيهَا", correct: false }
+        ]
+      },
+      {
+        text: "هَنَّأَتْ سَلْمَى أَبَاهَا، مَاذَا قَالَتْ لَهُ ؟",
+        options: [
+          { label: "عِيدُكَ مُبَارَكٌ يَا أَبِي، كُلُّ عَامٍ وَأَنْتَ بِخَيْرٍ", correct: true },
+          { label: "كُلُّ عَامٍ وَأَنْتَ طَيِّبٌ يَا أَبِي", correct: false },
+          { label: "عِيدًا سَعِيدًا يَا أَبِي وَكُلَّ عَامٍ وَأَنْتَ سَعِيدٌ", correct: false }
+        ]
+      },
+      {
+        text: "أَجِبْ بِصَحِيحٍ أَوْ خَاطِئٍ : ذَهَبَتْ سَلْمَى إِلَى الْمَسْجِدِ مَعَ أَبِيهَا.",
+        options: [
+          { label: "خَاطِئٌ (لَمْ تَذْهَبْ سَلْمَى، بَلْ ذَهَبَ الأَبُ وَالْجَدُّ)", correct: true },
+          { label: "صَحِيحٌ (ذَهَبَتْ مَعَهُمَا)", correct: false }
+        ]
+      },
+      {
+        text: "أَجِبْ بِصَحِيحٍ أَوْ خَاطِئٍ : حَضَّرَتْ سَلْمَى الْغَدَاءَ وَحْدَهَا.",
+        options: [
+          { label: "خَاطِئٌ (لَمْ تُحَضِّرْهُ وَحْدَهَا، بَلْ هُنَاكَ أَعْمَالٌ كَثِيرَةٌ تَنْتَظِرُهَا)", correct: true },
+          { label: "صَحِيحٌ (حَضَّرَتْهُ بِمُفْرَدِهَا)", correct: false }
+        ]
+      },
+      {
+        text: "أَجِبْ بِصَحِيحٍ أَوْ خَاطِئٍ : اسْتَقْبَلَ خَالِدٌ أَبَاهُ عِنْدَ عَوْدَتِهِ مِنَ الْمَسْجِدِ.",
+        options: [
+          { label: "خَاطِئٌ (سَلْمَى هِيَ الَّتِي اسْتَقْبَلَتْ أَبَاهَا مَعَ جَدِّهَا)", correct: true },
+          { label: "صَحِيحٌ (اسْتَقْبَلَهُ خَالِدٌ)", correct: false }
+        ]
+      },
+      {
+        text: "مَا هِيَ مَظَاهِرُ الِاحْتِفَالِ بِالْعِيدِ ؟",
+        options: [
+          { label: "ارْتِدَاءُ الْمَلَابِسِ الْجَدِيدَةِ، وَتَبَادُلُ التَّهَانِي، وَزِيَارَةُ الْأَقَارِبِ", correct: true },
+          { label: "الذَّهَابُ إِلَى الْمَدْرَسَةِ وَالدِّرَاسَةُ", correct: false },
+          { label: "النَّوْمُ طَوَالَ الْيَوْمِ", correct: false }
+        ]
+      },
+      {
+        text: "مَاذَا يَفْعَلُ الْمُصَلُّونَ بَعْدَ صَلَاةِ الْعِيدِ ؟",
+        options: [
+          { label: "يَتَبَادَلُونَ التَّهَانِيَ وَيَزُورُونَ الْأَقَارِبَ", correct: true },
+          { label: "يَعُودُونَ إِلَى الْمَسْجِدِ لِلنَّوْمِ", correct: false },
+          { label: "يَذْهَبُونَ إِلَى الْعَمَلِ مُبَاشَرَةً", correct: false }
+        ]
+      }
+    ]);
+
+    // 2. صفحة 28: أنتج شفهيا (3 صور)
+    buildRandomizedMCQ('ex-p28-q1', 'ex-p28', [
+      {
+        text: "صِفِ الْمَشْهَدَ الأَوَّلَ :",
+        options: [
+          { label: "ذَهَبَ الأَبُ وَالْجَدُّ وَالطِّفْلُ إِلَى الْمَسْجِدِ لِأَدَاءِ صَلَاةِ الْعِيدِ", correct: true },
+          { label: "خَرَجَ الأَبُ إِلَى السُّوقِ لِشِرَاءِ الْحَلْوَى", correct: false },
+          { label: "ذَهَبَتِ الْعَائِلَةُ إِلَى الْمَزَارِعِ لِلنُّزْهَةِ", correct: false }
+        ]
+      }
+    ]);
+    buildRandomizedMCQ('ex-p28-q2', 'ex-p28', [
+      {
+        text: "صِفِ الْمَشْهَدَ الثَّانِيَ :",
+        options: [
+          { label: "الْجَدُّ يَجْلِسُ عَلَى الْأَرِيكَةِ مَعَ حَفِيدَيْهِ", correct: true },
+          { label: "عَادَ الأَبُ مِنَ الصَّلَاةِ فَاسْتَقْبَلَهُ أَطْفَالُهُ", correct: false },
+          { label: "جَلَسَ الأَبُ لِمُشَاهَدَةِ التِّلْفَازِ", correct: false }
+        ]
+      }
+    ]);
+    buildRandomizedMCQ('ex-p28-q3', 'ex-p28', [
+      {
+        text: "صِفِ الْمَشْهَدَ الثَّالِثَ :",
+        options: [
+          { label: "زَارَتِ الْعَائِلَةُ الْأَقَارِبَ لِتَبَادُلِ التَّهَانِي بِالْعِيدِ", correct: true },
+          { label: "سَافَرَتِ الْعَائِلَةُ إِلَى الْمَدِينَةِ", correct: false },
+          { label: "اسْتَقْبَلَتِ الْعَائِلَةُ الضُّيُوفَ فِي الْمَسَاءِ فَقَطْ", correct: false }
+        ]
+      }
+    ]);
+
+    // 3. صفحة 29: نص القراءة (3 أسئلة)
+    buildRandomizedMCQ('ex-p29-mcq', 'ex-p29', [
+      {
+        text: "مَا هِيَ الْمُنَاسَبَةُ الَّتِي يَتَحَدَّثُ عَنْهَا النَّصُّ ؟",
+        options: [
+          { label: "زَفَافُ أُخْتِ سَلْمَى", correct: true },
+          { label: "الِاحْتِفَالُ بِعِيدِ الْفِطْرِ", correct: false },
+          { label: "النَّجَاحُ فِي الِامْتِحَانَاتِ", correct: false }
+        ]
+      },
+      {
+        text: "مَاذَا أَحْضَرَ الضُّيُوفُ ؟",
+        options: [
+          { label: "الْعَدِيدُ مِنَ الْهَدَايَا", correct: true },
+          { label: "أَطْبَاقًا كَثِيرَةً مِنَ الْحَلَوِيَّاتِ", correct: false },
+          { label: "الْمَزَامِيرَ وَالزَّغَارِيدَ", correct: false }
+        ]
+      },
+      {
+        text: "مَاذَا قَالَتْ سَلْمَى فِي نَفْسِهَا عِنْدَمَا خَرَجَتْ أُخْتُهَا ؟",
+        options: [
+          { label: "سَأَشْتَاقُ إِلَيْكِ كَثِيرًا، أَيَّتُهَا الْأُخْتُ الْحَبِيبَةُ", correct: true },
+          { label: "سَأَزُورُكِ كُلَّ يَوْمٍ فِي بَيْتِكِ الْجَدِيدِ", correct: false },
+          { label: "مَا أَجْمَلَ فُسْتَانَكِ الْأَبْيَضَ", correct: false }
+        ]
+      }
+    ]);
+
+    // 4. صفحة 30: ربط السؤال بالجواب (4 أزواج)
+    setupMatchPairs('match-questions', 'match-answers', 'ex-p30', [
+      { id: 'q1', q: "هَلْ حَضَرْتُمُ الْحَلْوَى ؟", a: "نَعَمْ، وَهِيَ لَذِيذَةٌ جِدًّا." },
+      { id: 'q2', q: "أَيْنَ أَنْتِ يَا سَلْمَى ؟", a: "أَنَا هُنَا، أُرَتِّبُ الْهَدَايَا." },
+      { id: 'q3', q: "كَمْ عَدَدُ السَّيَّارَاتِ ؟", a: "كَثِيرَةٌ، الْوَاحِدَةُ تِلْوَ الْأُخْرَى." },
+      { id: 'q4', q: "مَتَى وَصَلَ الْمَوْكِبُ ؟", a: "لَقَدْ وَصَلَ بَاكِرًا." }
+    ]);
+
+    // 5. صفحة 31: التربية الإسلامية (3 أسئلة)
+    buildRandomizedMCQ('ex-p31-mcq', 'ex-p31', [
+      {
+        text: "مَا هِيَ الْعَائِلَةُ الَّتِي أَرَادَ الْأَبُ زِيَارَتَهَا ؟",
+        options: [
+          { label: "عَمَّتُهُمْ", correct: true },
+          { label: "جَدَّتُهُمْ", correct: false },
+          { label: "خَالَتُهُمْ", correct: false }
+        ]
+      },
+      {
+        text: "مَا هِيَ الْمُنَاسَبَاتُ الَّتِي نَزُورُ فِيهَا الْأَقَارِبَ ؟",
+        options: [
+          { label: "فِي الْأَعْيَادِ وَالْأَفْرَاحِ", correct: true },
+          { label: "فِي أَيَّامِ الدِّرَاسَةِ فَقَطْ", correct: false },
+          { label: "عِنْدَمَا نَلْعَبُ فِي الْحَدِيقَةِ", correct: false }
+        ]
+      },
+      {
+        text: "لَوْ أَنَّ أَحَداً مِنْ أَقَارِبِنَا انْقَطَعَ عَنْ زِيَارَتِنَا، هَلْ نُعَامِلُهُ بِالْمِثْلِ ؟",
+        options: [
+          { label: "لَا، بَلْ نَزُورُهُ وَنَصِلُهُ لِأَنَّ الْإِسْلَامَ يَأْمُرُنَا بِصِلَةِ الرَّحِمِ", correct: true },
+          { label: "نَعَمْ، نَقْطَعُهُ كَمَا قَطَعَنَا", correct: false },
+          { label: "لَا نُكَلِّمُهُ أَبَداً", correct: false }
+        ]
+      }
+    ]);
+
+    // 6. صفحة 17 (كراس الأنشطة)
+    buildRandomizedMCQ('ex-act17-tilw-mcq', 'ex-act17', [
+      {
+        text: "الْوَاحِدُ ......... الآخَرِ (أَحْذِفُ تِلْوَ وَأَخْتَارُ الْبَدِيلَ) :",
+        options: [
+          { label: "بَعْدَ", correct: true },
+          { label: "قَبْلَ", correct: false },
+          { label: "مَعَ", correct: false }
+        ]
+      }
+    ]);
+
+    buildRandomizedMCQ('ex-act17-tf-mcq', 'ex-act17', [
+      {
+        text: "الْيَوْمَ عُرْسُ أُخْتِي.", options: [ { label: "صَحِيحٌ", correct: true }, { label: "خَاطِئٌ", correct: false } ]
+      },
+      {
+        text: "اشْتَرَيْنَا أَطْبَاقاً مِنَ الْحَلْوَى.", options: [ { label: "صَحِيحٌ", correct: true }, { label: "خَاطِئٌ", correct: false } ]
+      },
+      {
+        text: "حَضَرَ الضُّيُوفُ دَفْعَةً وَاحِدَةً.", options: [ { label: "خَاطِئٌ", correct: true }, { label: "صَحِيحٌ", correct: false } ]
+      }
+    ]);
+
+    setupTapToFill('pool-act17-formula1', '#pool-act17-formula1 ~ div .drop-zone', 'ex-act17', [
+      { label: "أُشَاهِدُ", val: "أُشَاهِدُ" },
+      { label: "مَعَكُمْ", val: "مَعَكُمْ" }
+    ]);
+
+    setupTapToFill('pool-act17-formula2', '#pool-act17-formula2 ~ div .drop-zone', 'ex-act17', [
+      { label: "أُوَدِّعُ", val: "أُوَدِّعُ" },
+      { label: "الْمَوْكِبَ", val: "الْمَوْكِبَ" }
+    ]);
+
+    buildRandomizedMCQ('ex-act17-fill-mcq', 'ex-act17', [
+      {
+        text: "اسْتَقْبَلَتِ الْأُمُّ .........",
+        options: [
+          { label: "الضُّيُوفَ", correct: true },
+          { label: "الْحَلْوَى", correct: false },
+          { label: "الْهَدَايَا", correct: false }
+        ]
+      },
+      {
+        text: "قَدَّمَتْ لَهُمُ .........",
+        options: [
+          { label: "الْحَلْوَى", correct: true },
+          { label: "الضُّيُوفَ", correct: false },
+          { label: "الْمَوْكِبَ", correct: false }
+        ]
+      }
+    ]);
+
+    // 7. صفحة 18 (كراس الأنشطة)
+    setupDualCategoryTable('pool-act18-family', '#td-mentioned', '#td-not-mentioned', 'ex-act18', [
+      { label: "الأُمُّ", val: "mentioned" },
+      { label: "الأَبُ", val: "mentioned" },
+      { label: "الْجَدُّ", val: "mentioned" },
+      { label: "الْجَدَّةُ", val: "not-mentioned" },
+      { label: "سَلْمَى", val: "mentioned" },
+      { label: "خَالِدٌ", val: "mentioned" },
+      { label: "الْأَخُ", val: "not-mentioned" }
+    ]);
+
+    initTracing();
+
+    // 8. صفحة 19 (كراس الأنشطة) - حديث واحد فقط
+    buildRandomizedMCQ('ex-act19-hadith-mcq', 'ex-act19', [
+      {
+        text: "أَيُّ الْحَدِيثَيْنِ يُحَثُّنَا عَلَى زِيَارَةِ الْأَقَارِبِ ؟",
+        options: [
+          { label: "«مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيَصِلْ رَحِمَهُ»", correct: true },
+          { label: "«مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيُكْرِمْ ضَيْفَهُ»", correct: false },
+          { label: "«مَنْ كَانَ يُؤْمِنُ بِاللَّهِ وَالْيَوْمِ الآخِرِ فَلْيَقُلْ خَيْرًا أَوْ لِيَصْمُتْ»", correct: false }
+        ]
+      }
+    ]);
+  }
+
+  function restartEntireLesson() {
+    document.querySelectorAll('.eval-badge span span').forEach(el => el.textContent = '0');
+    document.querySelectorAll('.trace-canvas').forEach(canvas => {
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+    initAllActivities();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  window.onload = initAllActivities;
+</script>
+</body>
+</html>
