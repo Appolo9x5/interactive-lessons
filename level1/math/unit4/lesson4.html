@@ -1,0 +1,1442 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>رياضيات - الدرس: الأَعْدَادُ مِنْ 6 إِلَى 9 (1) | السنة الأولى ابتدائي</title>
+
+  <!-- مكتبة Telegram WebApp (ضرورية للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --accent: #2563eb;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #cbd5e1;
+      --text: #0f172a;
+      --correct: #16a34a;
+      --correct-bg: #dcfce7;
+      --wrong: #dc2626;
+      --wrong-bg: #fee2e2;
+    }
+
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { margin: 0; padding: 15px; background: var(--bg); color: var(--text); line-height: 1.6; user-select: none; }
+    .container { max-width: 980px; margin: 0 auto; }
+
+    .header-panel {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .header-panel h1 { margin: 0 0 6px 0; font-size: 1.7rem; }
+
+    .card {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .card.disabled-step {
+      opacity: 0.45;
+      pointer-events: none;
+      filter: grayscale(80%);
+    }
+
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--primary);
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 8px;
+      margin-bottom: 15px;
+    }
+
+    .btn {
+      padding: 9px 18px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-submit { background: var(--primary); color: white; margin-top: 15px; }
+    .btn-submit:hover { background: var(--accent); }
+    .btn-submit:disabled { background: #94a3b8; cursor: not-allowed; }
+
+    .partial-feedback {
+      margin-top: 14px;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      display: none;
+      font-size: 0.95rem;
+    }
+
+    .visual-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      align-items: center;
+      background: #f8fafc;
+      border: 2px dashed #cbd5e1;
+      padding: 16px;
+      border-radius: 10px;
+      margin: 15px 0;
+    }
+
+    .yes-no-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f1f5f9;
+      padding: 10px 16px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #e2e8f0;
+    }
+    .btn-choice {
+      padding: 6px 18px;
+      border: 2px solid #94a3b8;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 1.05rem;
+      margin-right: 8px;
+      transition: all 0.2s;
+    }
+    .btn-choice.selected {
+      background: var(--accent);
+      color: white;
+      border-color: var(--primary);
+    }
+    .btn-choice.is-correct {
+      background: var(--correct) !important;
+      color: white !important;
+      border-color: var(--correct) !important;
+    }
+    .btn-choice.is-wrong {
+      background: var(--wrong) !important;
+      color: white !important;
+      border-color: var(--wrong) !important;
+    }
+
+    .token-circle {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2.5px solid #64748b;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .token-circle.colored-purple {
+      background: #9333ea !important;
+      border-color: #6b21a8 !important;
+    }
+
+    .cup-item {
+      font-size: 2.2rem;
+      padding: 6px 10px;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cup-item.colored-cup {
+      background: #fed7aa !important;
+      border-color: #ea580c !important;
+    }
+
+    .stick-item {
+      width: 10px;
+      height: 75px;
+      border-radius: 5px;
+      background: #ea580c;
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .draw-zone-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin: 15px 0;
+    }
+    .draw-box-card {
+      width: 190px;
+      border: 2px solid #94a3b8;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      background: white;
+    }
+    .draw-area {
+      height: 120px;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      background: #f8fafc;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      cursor: pointer;
+      margin-bottom: 8px;
+    }
+    .draw-counter-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      background: #e2e8f0;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: var(--primary);
+    }
+    .shape-circle { width: 28px; height: 28px; border-radius: 50%; background: #3b82f6; border: 2px solid #1d4ed8; }
+    .shape-square { width: 26px; height: 26px; background: #ec4899; border: 2px solid #be185d; }
+    .shape-triangle {
+      width: 0; height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 26px solid #f59e0b;
+    }
+    .shape-stick { width: 8px; height: 35px; background: #10b981; border-radius: 3px; }
+
+    .match-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      margin: 15px 0;
+    }
+    .match-row-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      direction: ltr;
+    }
+    .match-card {
+      background: white;
+      border: 2.5px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 12px 18px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+      min-width: 140px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .match-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .match-card.selected-source { border-color: var(--accent); background: #eff6ff; box-shadow: 0 0 10px rgba(37,99,235,0.4); }
+
+    .cell-block {
+      width: 38px;
+      height: 38px;
+      border: 2px solid #64748b;
+      background: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .cell-block.colored { background: #3b82f6 !important; border-color: #1d4ed8 !important; }
+    
+    .strikable-item {
+      font-size: 2.2rem;
+      cursor: pointer;
+      position: relative;
+      user-select: none;
+      transition: all 0.2s;
+    }
+    .strikable-item.struck::after {
+      content: "❌";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.6rem;
+    }
+    .strikable-item.struck { opacity: 0.55; }
+
+    .learn-box {
+      background: #eff6ff;
+      border: 2px solid #3b82f6;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+      line-height: 1.9;
+      font-size: 1.1rem;
+    }
+    .learn-title {
+      font-weight: bold;
+      color: #1d4ed8;
+      font-size: 1.25rem;
+      margin-bottom: 6px;
+    }
+
+    #finalReport {
+      display: none;
+      background: white;
+      border: 3px solid var(--primary);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      margin: 30px 0;
+    }
+    .chart-container {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      margin: 15px auto;
+    }
+    .chart-svg {
+      transform: rotate(-90deg);
+      width: 170px;
+      height: 170px;
+    }
+    .chart-bg { fill: none; stroke: #e2e8f0; stroke-width: 14; }
+    .chart-progress {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 14;
+      stroke-linecap: round;
+      stroke-dasharray: 440;
+      stroke-dashoffset: 440;
+      transition: stroke-dashoffset 1s ease;
+    }
+    .chart-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+    .btn-group-final {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+    .btn-retry { background: #2563eb; color: white; padding: 10px 24px; font-size: 1rem; border-radius: 8px; }
+    .btn-retry:hover { background: #1d4ed8; }
+    .btn-exit { background: #dc2626; color: white; padding: 10px 24px; font-size: 1rem; border-radius: 8px; }
+    .btn-exit:hover { background: #b91c1c; }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      margin-top: 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+<div class="container">
+
+  <div class="header-panel">
+    <h1>الدرس: الأَعْدَادُ مِنْ 6 إِلَى 9 (1)</h1>
+    <p>السنة الأولى ابتدائي | كتاب التلميذ (ص 15) & دفتر الأنشطة (ص 9)</p>
+  </div>
+
+  <!-- 1. أَكْتَشِفُ (1): نعم / لا (12 قريصة و 8 خشيبات) -->
+  <div class="card" id="step1">
+    <div class="card-title">1. أَكْتَشِفُ (السؤال 1): الْمُقَارَنَةُ بَيْنَ الْقُرَيْصَاتِ وَالْخُشَيْبَاتِ (كتاب التلميذ ص 15)</div>
+    <p>عُدَّ الْقُرَيْصَاتِ وَالْخُشَيْبَاتِ فِي الصُّورَةِ، ثُمَّ انْقُرْ عَلَى الإِجَابَةِ الصَّحِيحَةِ (نَعَمْ / لَا):</p>
+    
+    <div class="visual-box">
+      <div style="display:grid; grid-template-columns: repeat(3, 38px); gap:8px; direction:ltr;">
+        <div class="token-circle" style="background:#f1f5f9; cursor:default;"></div>
+        <div class="token-circle" style="background:#f1f5f9; cursor:default;"></div>
+        <div class="token-circle" style="background:#f1f5f9; cursor:default;"></div>
+        <div class="token-circle" style="background:#f1f5f9; cursor:default;"></div>
+        <div class="token-circle" style="background:#f1f5f9; cursor:default;"></div>
+        <div class="token-circle" style="background:#f1f5f9; cursor:default;"></div>
+        <div class="token-circle" style="background:#f1f5f9; cursor:default;"></div>
+        <div class="token-circle" style="background:#f1f5f9; cursor:default;"></div>
+        <div class="token-circle" style="background:#f1f5f9; cursor:default;"></div>
+        <div class="token-circle" style="background:#f1f5f9; cursor:default;"></div>
+        <div class="token-circle" style="background:#f1f5f9; cursor:default;"></div>
+        <div class="token-circle" style="background:#f1f5f9; cursor:default;"></div>
+      </div>
+      <div style="width:2px; height:120px; background:#cbd5e1; margin:0 15px;"></div>
+      <div style="display:flex; gap:9px;">
+        <div class="stick-item" style="background:#dc2626;"></div>
+        <div class="stick-item" style="background:#ea580c;"></div>
+        <div class="stick-item" style="background:#16a34a;"></div>
+        <div class="stick-item" style="background:#2563eb;"></div>
+        <div class="stick-item" style="background:#9333ea;"></div>
+        <div class="stick-item" style="background:#0891b2;"></div>
+        <div class="stick-item" style="background:#ca8a04;"></div>
+        <div class="stick-item" style="background:#475569;"></div>
+      </div>
+    </div>
+
+    <div class="yes-no-row">
+      <span>• الْقُرَيْصَاتُ أَكْثَرُ مِنَ الْخُشَيْبَاتِ:</span>
+      <div>
+        <button class="btn-choice" id="s1_q1_yes" onclick="selectYN('s1_q1', true)">نَعَمْ</button>
+        <button class="btn-choice" id="s1_q1_no" onclick="selectYN('s1_q1', false)">لَا</button>
+      </div>
+    </div>
+
+    <div class="yes-no-row">
+      <span>• الْقُرَيْصَاتُ أَقَلُّ مِنَ الْخُشَيْبَاتِ:</span>
+      <div>
+        <button class="btn-choice" id="s1_q2_yes" onclick="selectYN('s1_q2', true)">نَعَمْ</button>
+        <button class="btn-choice" id="s1_q2_no" onclick="selectYN('s1_q2', false)">لَا</button>
+      </div>
+    </div>
+
+    <button class="btn btn-submit" id="btn1" onclick="validateStep1()">تثبيت الإجابة والانتقال</button>
+    <div id="fb1" class="partial-feedback"></div>
+  </div>
+
+  <!-- 2. أَكْتَشِفُ (2): تلوين القريصات بالبنفسجي بقدر الخشيبات -->
+  <div class="card disabled-step" id="step2">
+    <div class="card-title">2. أَكْتَشِفُ (السؤال 2): التَّلْوِينُ بِقَدْرِ الْخُشَيْبَاتِ (كتاب التلميذ ص 15)</div>
+    <p>
+      <strong>لَوِّنْ بِالْبَنَفْسَجِيِّ قُرَيْصَاتٍ بِقَدْرِ الْخُشَيْبَاتِ:</strong><br>
+      <span style="font-size:0.9rem; color:#64748b;">(انقر على القريصة لتلوينها أو إلغاء تلوينها حتى يصبح عددها مساوياً لعدد الخشيبات المقابلة لها)</span>
+    </p>
+
+    <div class="visual-box">
+      <div id="discoArea" style="display:grid; grid-template-columns: repeat(4, 42px); gap:10px;"></div>
+      
+      <div style="width:2px; height:120px; background:#cbd5e1; margin:0 15px;"></div>
+      
+      <div style="display:flex; gap:9px; align-items:center;">
+        <div class="stick-item" style="background:#dc2626;"></div>
+        <div class="stick-item" style="background:#ea580c;"></div>
+        <div class="stick-item" style="background:#16a34a;"></div>
+        <div class="stick-item" style="background:#2563eb;"></div>
+        <div class="stick-item" style="background:#9333ea;"></div>
+        <div class="stick-item" style="background:#0891b2;"></div>
+        <div class="stick-item" style="background:#ca8a04;"></div>
+        <div class="stick-item" style="background:#475569;"></div>
+      </div>
+    </div>
+    
+    <p style="text-align:center; font-weight:bold; color:var(--primary);">
+      عدد القريصات الملونة حالياً: <span id="coloredTokensCount">0</span>
+    </p>
+
+    <button class="btn btn-submit" id="btn2" onclick="validateStep2()">تثبيت الإجابة والانتقال</button>
+    <div id="fb2" class="partial-feedback"></div>
+  </div>
+
+  <!-- 3. أُنْجِزُ (1): نعم / لا (9 ملاعق و 10 فناجين) -->
+  <div class="card disabled-step" id="step3">
+    <div class="card-title">3. أُنْجِزُ (السؤال 1): الْمُقَارَنَةُ بَيْنَ الْفَنَاجِينِ وَالْمَلَاعِقِ (كتاب التلميذ ص 15)</div>
+    <p>عُدَّ الْفَنَاجِينَ وَالْمَلَاعِقَ، ثُمَّ انْقُرْ عَلَى الإِجَابَةِ الصَّحِيحَةِ (نَعَمْ / لَا):</p>
+
+    <div class="visual-box" style="flex-direction:column; gap:12px;">
+      <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center; font-size:2rem;">
+        🥄 🥄 🥄 🥄 🥄 🥄 🥄 🥄 🥄
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center; font-size:2rem;">
+        ☕ ☕ ☕ ☕ ☕ ☕ ☕ ☕ ☕ ☕
+      </div>
+    </div>
+
+    <div class="yes-no-row">
+      <span>• الْفَنَاجِينُ أَكْثَرُ مِنَ الْمَلَاعِقِ:</span>
+      <div>
+        <button class="btn-choice" id="s3_q1_yes" onclick="selectYN('s3_q1', true)">نَعَمْ</button>
+        <button class="btn-choice" id="s3_q1_no" onclick="selectYN('s3_q1', false)">لَا</button>
+      </div>
+    </div>
+
+    <div class="yes-no-row">
+      <span>• الْفَنَاجِينُ أَقَلُّ مِنَ الْمَلَاعِقِ:</span>
+      <div>
+        <button class="btn-choice" id="s3_q2_yes" onclick="selectYN('s3_q2', true)">نَعَمْ</button>
+        <button class="btn-choice" id="s3_q2_no" onclick="selectYN('s3_q2', false)">لَا</button>
+      </div>
+    </div>
+
+    <button class="btn btn-submit" id="btn3" onclick="validateStep3()">تثبيت الإجابة والانتقال</button>
+    <div id="fb3" class="partial-feedback"></div>
+  </div>
+
+  <!-- 4. أُنْجِزُ (2): تلوين فناجين بقدر الملاعق دون ذكر العدد -->
+  <div class="card disabled-step" id="step4">
+    <div class="card-title">4. أُنْجِزُ (السؤال 2): تَلْوِينُ فَنَاجِينَ بِقَدْرِ الْمَلَاعِقِ (كتاب التلميذ ص 15)</div>
+    <p>
+      <strong>لَوِّنْ فَنَاجِينَ بِقَدْرِ الْمَلَاعِقِ:</strong><br>
+      <span style="font-size:0.9rem; color:#64748b;">(انقر على الفنجان لتلوينه أو إلغاء تلوينه حتى يكون عدد الفناجين الملونة بقدر عدد الملاعق المجاورة لها)</span>
+    </p>
+
+    <div class="visual-box" style="flex-direction:column; gap:15px;">
+      <div style="background:#f1f5f9; padding:8px 16px; border-radius:8px; border:1px solid #e2e8f0;">
+        <span style="font-weight:bold; color:#475569; margin-left:10px;">الملاعق:</span>
+        <span style="font-size:1.8rem; letter-spacing:4px;">🥄 🥄 🥄 🥄 🥄 🥄 🥄 🥄 🥄</span>
+      </div>
+
+      <div id="cupsArea" style="display:flex; flex-wrap:wrap; gap:10px; justify-content:center;"></div>
+    </div>
+
+    <p style="text-align:center; font-weight:bold; color:var(--primary);">
+      عدد الفناجين الملونة حالياً: <span id="coloredCupsCount">0</span>
+    </p>
+
+    <button class="btn btn-submit" id="btn4" onclick="validateStep4()">تثبيت الإجابة والانتقال</button>
+    <div id="fb4" class="partial-feedback"></div>
+  </div>
+
+  <!-- 5. أُنْجِزُ (3): إكمال الرسم داخل الأحياز -->
+  <div class="card disabled-step" id="step5">
+    <div class="card-title">5. أُنْجِزُ (السؤال 3): أَكْمِلِ الرَّسْمَ بِمَا يُوَافِقُ الْعَدَدَ فِي الْبِطَاقَةِ (كتاب التلميذ ص 15)</div>
+    <p>
+      <strong>انْقُرْ دَاخِلَ الْحَيِّزِ لإِضَافَةِ الشَّكْلِ حَتَّى يَصِلَ إِلَى الْعَدَدِ الْمَكْتُوبِ:</strong><br>
+      <span style="font-size:0.9rem; color:#64748b;">(إذا زاد العدد عن المطلوب، انقر على زر "تراجع" لإزالة آخر شكل)</span>
+    </p>
+
+    <div class="draw-zone-container">
+      <div class="draw-box-card">
+        <div class="draw-area" id="draw_circles" onclick="addShape('circles', 4)">
+          <div class="shape-circle"></div>
+        </div>
+        <button class="btn" style="padding:2px 8px; font-size:0.8rem; background:#cbd5e1;" onclick="popShape('circles')">تراجع</button>
+        <div style="margin-top:5px;"><span class="draw-counter-badge" id="badge_circles">4</span></div>
+      </div>
+
+      <div class="draw-box-card">
+        <div class="draw-area" id="draw_squares" onclick="addShape('squares', 5)">
+          <div class="shape-square"></div>
+        </div>
+        <button class="btn" style="padding:2px 8px; font-size:0.8rem; background:#cbd5e1;" onclick="popShape('squares')">تراجع</button>
+        <div style="margin-top:5px;"><span class="draw-counter-badge" id="badge_squares">5</span></div>
+      </div>
+
+      <div class="draw-box-card">
+        <div class="draw-area" id="draw_triangles" onclick="addShape('triangles', 3)">
+          <div class="shape-triangle"></div>
+        </div>
+        <button class="btn" style="padding:2px 8px; font-size:0.8rem; background:#cbd5e1;" onclick="popShape('triangles')">تراجع</button>
+        <div style="margin-top:5px;"><span class="draw-counter-badge" id="badge_triangles">3</span></div>
+      </div>
+
+      <div class="draw-box-card">
+        <div class="draw-area" id="draw_sticks" onclick="addShape('sticks', 2)">
+          <div class="shape-stick"></div>
+        </div>
+        <button class="btn" style="padding:2px 8px; font-size:0.8rem; background:#cbd5e1;" onclick="popShape('sticks')">تراجع</button>
+        <div style="margin-top:5px;"><span class="draw-counter-badge" id="badge_sticks">2</span></div>
+      </div>
+    </div>
+
+    <div class="learn-box">
+      <div class="learn-title">📌 تَعَلَّمْتُ:</div>
+      <div>عَدُّ أَشْيَاءَ وَاسْتِعْمَالُ التَّعَابِيرِ: ... <strong>أَقَلُّ مِنْ</strong> ... <strong>أَكْثَرُ مِنْ</strong> ... <strong>بِقَدْرِ</strong> ...</div>
+    </div>
+
+    <button class="btn btn-submit" id="btn5" onclick="validateStep5()">تثبيت الإجابة والانتقال لدفتر الأنشطة</button>
+    <div id="fb5" class="partial-feedback"></div>
+  </div>
+
+  <!-- 6. أَتَمَرَّنُ (1): ربط أصابع الأيدي -->
+  <div class="card disabled-step" id="step6">
+    <div class="card-title">6. أَتَمَرَّنُ (التمرين 1): ارْبِطْ كُلَّ بِطَاقَةٍ بِالْعَدَدِ الْمُنَاسِبِ (دفتر الأنشطة ص 9)</div>
+    <p>
+      <strong>انْقُرْ عَلَى صُورَةِ الأَصَابِعِ، ثُمَّ انْقُرْ عَلَى الْبِطَاقَةِ الَّتِي تُنَاسِبُهَا:</strong>
+    </p>
+
+    <div class="match-panel">
+      <div class="match-row-grid" id="handsContainer"></div>
+      <div class="match-row-grid" id="handsNumContainer"></div>
+    </div>
+
+    <button class="btn btn-submit" id="btn6" onclick="validateStep6()">تثبيت الإجابة والانتقال</button>
+    <div id="fb6" class="partial-feedback"></div>
+  </div>
+
+  <!-- 7. أَتَمَرَّنُ (2): تلوين المربعات بقدر العدد المكتوب -->
+  <div class="card disabled-step" id="step7">
+    <div class="card-title">7. أَتَمَرَّنُ (التمرين 2): حَوِّطْ (لَوِّنْ) بِقَدْرِ الْعَدَدِ الْمَكْتُوبِ (دفتر الأنشطة ص 9)</div>
+    <p>
+      <strong>انْقُرْ عَلَى الْمُرَبَّعَاتِ لِتَلْوِينِهَا حَسَبَ الْعَدَدِ الْمَكْتُوبِ أَسْفَلَ كُلِّ مَجْمُوعَةٍ:</strong>
+    </p>
+
+    <div class="visual-box" style="justify-content:space-around;">
+      <div style="text-align:center;">
+        <div id="rect_group1" style="display:grid; grid-template-columns: repeat(3, 38px); gap:6px; padding:10px; border:2px dashed #94a3b8; border-radius:8px; background:white;"></div>
+        <div style="margin-top:8px; font-weight:bold; font-size:1.3rem; color:var(--primary);">5</div>
+      </div>
+
+      <div style="text-align:center;">
+        <div id="rect_group2" style="display:grid; grid-template-columns: repeat(3, 38px); gap:6px; padding:10px; border:2px dashed #94a3b8; border-radius:8px; background:white;"></div>
+        <div style="margin-top:8px; font-weight:bold; font-size:1.3rem; color:var(--primary);">7</div>
+      </div>
+
+      <div style="text-align:center;">
+        <div id="rect_group3" style="display:grid; grid-template-columns: repeat(4, 38px); gap:6px; padding:10px; border:2px dashed #94a3b8; border-radius:8px; background:white;"></div>
+        <div style="margin-top:8px; font-weight:bold; font-size:1.3rem; color:var(--primary);">6</div>
+      </div>
+    </div>
+
+    <button class="btn btn-submit" id="btn7" onclick="validateStep7()">تثبيت الإجابة والانتقال</button>
+    <div id="fb7" class="partial-feedback"></div>
+  </div>
+
+  <!-- 8. أَتَمَرَّنُ (3): شطب الأشياء الزائدة -->
+  <div class="card disabled-step" id="step8">
+    <div class="card-title">8. أَتَمَرَّنُ (التمرين 3): اشْطُبِ الأَشْيَاءَ الزَّائِدَةَ فِي كُلِّ صُورَةٍ (دفتر الأنشطة ص 9)</div>
+    <p>
+      <strong>انْقُرْ عَلَى الشَّكْلِ الزَّائِدِ لِشَطْبِهِ، حَتَّى يَبْقَى فَقَطِ الْعَدَدُ الْمَكْتُوبُ بِالأَسْفَلِ:</strong>
+    </p>
+
+    <div class="visual-box" style="justify-content:space-around;">
+      <div style="text-align:center;">
+        <div id="strike_group1" style="display:grid; grid-template-columns: repeat(3, 38px); gap:8px; padding:10px; border:2px dashed #94a3b8; border-radius:8px; background:white;"></div>
+        <div style="margin-top:8px; font-weight:bold; font-size:1.3rem; color:var(--primary);">5</div>
+      </div>
+
+      <div style="text-align:center;">
+        <div id="strike_group2" style="display:grid; grid-template-columns: repeat(5, 36px); gap:6px; padding:10px; border:2px dashed #94a3b8; border-radius:8px; background:white;"></div>
+        <div style="margin-top:8px; font-weight:bold; font-size:1.3rem; color:var(--primary);">8</div>
+      </div>
+
+      <div style="text-align:center;">
+        <div id="strike_group3" style="display:grid; grid-template-columns: repeat(6, 32px); gap:6px; padding:10px; border:2px dashed #94a3b8; border-radius:8px; background:white;"></div>
+        <div style="margin-top:8px; font-weight:bold; font-size:1.3rem; color:var(--primary);">9</div>
+      </div>
+    </div>
+
+    <button class="btn btn-submit" id="btn8" onclick="validateStep8()">تثبيت الإجابة والانتقال</button>
+    <div id="fb8" class="partial-feedback"></div>
+  </div>
+
+  <!-- 9. أَبْحَثُ: ربط الأكياس المبعثرة بالبطاقات المناسبة -->
+  <div class="card disabled-step" id="step9">
+    <div class="card-title">9. أَبْحَثُ: صِلْ كُلَّ كِيسٍ بِالْعَدَدِ الْمُنَاسِبِ (دفتر الأنشطة ص 9)</div>
+    <p>
+      <strong>عُدَّ الْقُرَيْصَاتِ فِي كُلِّ كِيسٍ، ثُمَّ انْقُرْ عَلَى الْكِيسِ وَعَلَى بِطَاقَتِهِ الْمُنَاسِبَةِ:</strong>
+    </p>
+
+    <div class="match-panel">
+      <div class="match-row-grid" id="bagsContainer"></div>
+      <div class="match-row-grid" id="bagsNumContainer"></div>
+    </div>
+
+    <button class="btn btn-submit" id="btn9" onclick="validateStep9()">تثبيت الإجابة وإظهار التقييم النهائي</button>
+    <div id="fb9" class="partial-feedback"></div>
+  </div>
+
+  <!-- التقييم النهائي الشامل والرسم الدائري -->
+  <div id="finalReport">
+    <h2 style="color: var(--primary); margin-top: 0;">التقرير الشامل للتقييم النهائي</h2>
+    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 15px 0;">
+    
+    <div class="chart-container">
+      <svg class="chart-svg" viewBox="0 0 160 160">
+        <circle class="chart-bg" cx="80" cy="80" r="70"></circle>
+        <circle class="chart-progress" id="circleProg" cx="80" cy="80" r="70"></circle>
+      </svg>
+      <div class="chart-text" id="circleText">0%</div>
+    </div>
+
+    <div style="font-size: 1.15rem; line-height: 2;">
+      <div>مجموع العناصر المقيمة: <strong id="repTotal">0</strong> عنصراً</div>
+      <div style="color: var(--correct);">عدد الإجابات الصحيحة: <strong id="repCorrect">0</strong></div>
+      <div style="color: var(--wrong);">عدد الإجابات الخاطئة: <strong id="repWrong">0</strong></div>
+      <div id="repGrade" style="font-weight: bold; padding: 12px; border-radius: 8px; margin-top: 15px;"></div>
+    </div>
+
+    <div class="btn-group-final">
+      <button class="btn btn-retry" onclick="resetEntireSession()">إعادة المحاولة وتصفير الإجابات</button>
+      <button class="btn btn-exit" onclick="exitApp()">الخروج من البرنامج</button>
+    </div>
+  </div>
+
+  <!-- زر العودة إلى الفهرس -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</div>
+
+<script>
+  // ========================================================
+  // 🛡️ قسم الحماية
+  // ========================================================
+  const CHANNEL_ID = "-1004456852024";  // ← قناة السنة الأولى
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+
+  // ========================================================
+  // 🎯 قسم أنشطة الدرس
+  // ========================================================
+  let totalCorrect = 0;
+  let totalWrong = 0;
+
+  let audioCtx = null;
+  function getAudioContext() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  function playTone(freq, type, duration, delay = 0) {
+    setTimeout(() => {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }, delay);
+  }
+
+  function soundSuccess() {
+    playTone(523.25, 'sine', 0.12, 0);
+    playTone(659.25, 'sine', 0.12, 100);
+    playTone(783.99, 'sine', 0.25, 200);
+  }
+
+  function soundError() {
+    playTone(260, 'sawtooth', 0.18, 0);
+    playTone(200, 'sawtooth', 0.28, 120);
+  }
+
+  function soundFanfare() {
+    playTone(523.25, 'triangle', 0.15, 0);
+    playTone(659.25, 'triangle', 0.15, 120);
+    playTone(783.99, 'triangle', 0.15, 240);
+    playTone(1046.50, 'triangle', 0.45, 380);
+  }
+
+  function showPartial(fbId, c, w) {
+    const fb = document.getElementById(fbId);
+    fb.style.display = 'block';
+    fb.style.background = '#f1f5f9';
+    fb.style.border = '1px solid #cbd5e1';
+    fb.innerHTML = `التقييم الجزئي: <span style="color:var(--correct)">صحيحة: ${c}</span> | <span style="color:var(--wrong)">خاطئة: ${w}</span>`;
+    if (w === 0 && c > 0) soundSuccess(); else soundError();
+  }
+
+  function unlockNext(nextStepId, btnId) {
+    document.getElementById(btnId).disabled = true;
+    if (nextStepId) {
+      const nextCard = document.getElementById(nextStepId);
+      nextCard.classList.remove('disabled-step');
+      nextCard.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  let userYN = {};
+  function selectYN(group, val) {
+    userYN[group] = val;
+    document.getElementById(`${group}_yes`).classList.toggle('selected', val === true);
+    document.getElementById(`${group}_no`).classList.toggle('selected', val === false);
+    playTone(480, 'sine', 0.05);
+  }
+
+  function validateStep1() {
+    let c = 0, w = 0;
+    const checks = [
+      { id: 's1_q1', ok: true },
+      { id: 's1_q2', ok: false }
+    ];
+
+    checks.forEach(item => {
+      const isCorrect = (userYN[item.id] === item.ok);
+      const chosenBtn = document.getElementById(`${item.id}_${userYN[item.id] ? 'yes' : 'no'}`);
+      if (chosenBtn) {
+        chosenBtn.classList.add(isCorrect ? 'is-correct' : 'is-wrong');
+      }
+      document.getElementById(`${item.id}_yes`).disabled = true;
+      document.getElementById(`${item.id}_no`).disabled = true;
+      if (isCorrect) { c++; totalCorrect++; } else { w++; totalWrong++; }
+    });
+
+    showPartial('fb1', c, w);
+    unlockNext('step2', 'btn1');
+  }
+
+  let purpleCount = 0;
+  let step2Locked = false;
+  function renderStep2() {
+    const box = document.getElementById('discoArea');
+    box.innerHTML = '';
+    for(let i = 0; i < 12; i++) {
+      const t = document.createElement('div');
+      t.className = 'token-circle';
+      t.onclick = () => {
+        if (step2Locked) return;
+        t.classList.toggle('colored-purple');
+        purpleCount = document.querySelectorAll('#discoArea .colored-purple').length;
+        document.getElementById('coloredTokensCount').innerText = purpleCount;
+        playTone(500, 'sine', 0.05);
+      };
+      box.appendChild(t);
+    }
+  }
+
+  function validateStep2() {
+    step2Locked = true;
+    let c = 0, w = 0;
+    const isOk = (purpleCount === 8);
+    if (isOk) { c = 1; totalCorrect++; } else { w = 1; totalWrong++; }
+    showPartial('fb2', c, w);
+    unlockNext('step3', 'btn2');
+  }
+
+  function validateStep3() {
+    let c = 0, w = 0;
+    const checks = [
+      { id: 's3_q1', ok: true },
+      { id: 's3_q2', ok: false }
+    ];
+
+    checks.forEach(item => {
+      const isCorrect = (userYN[item.id] === item.ok);
+      const chosenBtn = document.getElementById(`${item.id}_${userYN[item.id] ? 'yes' : 'no'}`);
+      if (chosenBtn) {
+        chosenBtn.classList.add(isCorrect ? 'is-correct' : 'is-wrong');
+      }
+      document.getElementById(`${item.id}_yes`).disabled = true;
+      document.getElementById(`${item.id}_no`).disabled = true;
+      if (isCorrect) { c++; totalCorrect++; } else { w++; totalWrong++; }
+    });
+
+    showPartial('fb3', c, w);
+    unlockNext('step4', 'btn3');
+  }
+
+  let cupsCount = 0;
+  let step4Locked = false;
+  function renderStep4() {
+    const box = document.getElementById('cupsArea');
+    box.innerHTML = '';
+    for(let i = 0; i < 10; i++) {
+      const cup = document.createElement('div');
+      cup.className = 'cup-item';
+      cup.innerText = '☕';
+      cup.onclick = () => {
+        if (step4Locked) return;
+        cup.classList.toggle('colored-cup');
+        cupsCount = document.querySelectorAll('#cupsArea .colored-cup').length;
+        document.getElementById('coloredCupsCount').innerText = cupsCount;
+        playTone(520, 'sine', 0.05);
+      };
+      box.appendChild(cup);
+    }
+  }
+
+  function validateStep4() {
+    step4Locked = true;
+    let c = 0, w = 0;
+    const isOk = (cupsCount === 9);
+    if (isOk) { c = 1; totalCorrect++; } else { w = 1; totalWrong++; }
+    showPartial('fb4', c, w);
+    unlockNext('step5', 'btn4');
+  }
+
+  const drawCounts = { circles: 1, squares: 1, triangles: 1, sticks: 1 };
+  let step5Locked = false;
+
+  function addShape(type, maxLimit) {
+    if (step5Locked) return;
+    const area = document.getElementById(`draw_${type}`);
+    const el = document.createElement('div');
+    if (type === 'circles') el.className = 'shape-circle';
+    else if (type === 'squares') el.className = 'shape-square';
+    else if (type === 'triangles') el.className = 'shape-triangle';
+    else if (type === 'sticks') el.className = 'shape-stick';
+
+    area.appendChild(el);
+    drawCounts[type]++;
+    playTone(450, 'sine', 0.05);
+  }
+
+  function popShape(type) {
+    if (step5Locked) return;
+    const area = document.getElementById(`draw_${type}`);
+    if (area.children.length > 1) {
+      area.removeChild(area.lastChild);
+      drawCounts[type]--;
+      playTone(350, 'sine', 0.05);
+    }
+  }
+
+  function validateStep5() {
+    step5Locked = true;
+    let c = 0, w = 0;
+    const targetMap = { circles: 4, squares: 5, triangles: 3, sticks: 2 };
+
+    Object.keys(targetMap).forEach(k => {
+      const isOk = (drawCounts[k] === targetMap[k]);
+      const card = document.getElementById(`draw_${k}`).parentElement;
+      if (isOk) {
+        card.style.borderColor = 'var(--correct)';
+        card.style.background = 'var(--correct-bg)';
+        c++; totalCorrect++;
+      } else {
+        card.style.borderColor = 'var(--wrong)';
+        card.style.background = 'var(--wrong-bg)';
+        w++; totalWrong++;
+      }
+    });
+
+    showPartial('fb5', c, w);
+    unlockNext('step6', 'btn5');
+  }
+
+  function getFourFingersThumbFoldedSvg() {
+    return `
+      <svg width="44" height="44" viewBox="0 0 100 100" style="vertical-align:middle;">
+        <defs>
+          <linearGradient id="handGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#ffcc33"/>
+            <stop offset="100%" stop-color="#f59e0b"/>
+          </linearGradient>
+        </defs>
+        <rect x="22" y="8" width="11" height="50" rx="5.5" fill="url(#handGrad)" stroke="#d97706" stroke-width="2.5"/>
+        <rect x="36" y="4" width="11" height="54" rx="5.5" fill="url(#handGrad)" stroke="#d97706" stroke-width="2.5"/>
+        <rect x="50" y="8" width="11" height="50" rx="5.5" fill="url(#handGrad)" stroke="#d97706" stroke-width="2.5"/>
+        <rect x="64" y="16" width="10" height="42" rx="5" fill="url(#handGrad)" stroke="#d97706" stroke-width="2.5"/>
+        <path d="M18,48 C18,42 78,42 78,48 L74,86 C74,92 22,92 22,86 Z" fill="url(#handGrad)" stroke="#d97706" stroke-width="2.5"/>
+        <path d="M18,54 C18,48 48,56 46,65 C44,72 18,66 18,54 Z" fill="#f59e0b" stroke="#b45309" stroke-width="2.5"/>
+        <line x1="24" y1="58" x2="38" y2="61" stroke="#b45309" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    `;
+  }
+
+  const handsData = [
+    { 
+      num: 6, 
+      display: `<span style="font-size:2.4rem; vertical-align:middle;">🖐️</span> <span style="font-size:1.5rem; font-weight:bold; color:#1e293b; margin:0 4px;">+</span> <span style="font-size:2.4rem; vertical-align:middle;">☝️</span>`
+    },
+    { 
+      num: 7, 
+      display: `<span style="font-size:2.4rem; vertical-align:middle;">🖐️</span> <span style="font-size:1.5rem; font-weight:bold; color:#1e293b; margin:0 4px;">+</span> <span style="font-size:2.4rem; vertical-align:middle;">✌️</span>`
+    },
+    { 
+      num: 8, 
+      display: `<span style="font-size:2.4rem; vertical-align:middle;">🖐️</span> <span style="font-size:1.5rem; font-weight:bold; color:#1e293b; margin:0 4px;">+</span> <span style="font-size:2.4rem; vertical-align:middle;">🤟</span>`
+    },
+    { 
+      num: 9, 
+      display: `<span style="font-size:2.4rem; vertical-align:middle;">🖐️</span> <span style="font-size:1.5rem; font-weight:bold; color:#1e293b; margin:0 4px;">+</span> ${getFourFingersThumbFoldedSvg()}`
+    }
+  ];
+
+  let selectedHand = null;
+  let handMatches = {};
+  let step6Locked = false;
+
+  function renderHands() {
+    const hBox = document.getElementById('handsContainer');
+    const nBox = document.getElementById('handsNumContainer');
+    hBox.innerHTML = ''; nBox.innerHTML = '';
+
+    const shuffledHands = [...handsData].sort(() => Math.random() - 0.5);
+    const shuffledNums = [...handsData].sort(() => Math.random() - 0.5);
+
+    shuffledHands.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'match-card';
+      card.id = `hand_${item.num}`;
+      card.innerHTML = `
+        <div style="display:flex; align-items:center; justify-content:center;">${item.display}</div>
+        <div style="font-size:0.95rem; font-weight:bold; color:#64748b; margin-top:8px;">أَصَابِع</div>
+      `;
+      card.onclick = () => {
+        if (step6Locked) return;
+        document.querySelectorAll('#handsContainer .match-card').forEach(c => c.classList.remove('selected-source'));
+        card.classList.add('selected-source');
+        selectedHand = item.num;
+        playTone(440, 'sine', 0.05);
+      };
+      hBox.appendChild(card);
+    });
+
+    shuffledNums.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'match-card';
+      card.id = `hand_num_${item.num}`;
+      card.style.minWidth = '90px';
+      card.innerHTML = `<div style="font-size:2.1rem; font-weight:bold; color:var(--primary); padding:4px 0;">${item.num}</div>`;
+      card.onclick = () => {
+        if (step6Locked || !selectedHand) return;
+        handMatches[selectedHand] = item.num;
+        
+        const hEl = document.getElementById(`hand_${selectedHand}`);
+        hEl.classList.remove('selected-source');
+        hEl.style.borderColor = '#3b82f6';
+        card.style.borderColor = '#3b82f6';
+
+        playTone(600, 'sine', 0.08);
+        selectedHand = null;
+      };
+      nBox.appendChild(card);
+    });
+  }
+
+  function validateStep6() {
+    step6Locked = true;
+    let c = 0, w = 0;
+    handsData.forEach(item => {
+      const isOk = (handMatches[item.num] === item.num);
+      const hEl = document.getElementById(`hand_${item.num}`);
+      if (isOk) {
+        if (hEl) hEl.style.borderColor = 'var(--correct)';
+        c++; totalCorrect++;
+      } else {
+        if (hEl) hEl.style.borderColor = 'var(--wrong)';
+        w++; totalWrong++;
+      }
+    });
+    showPartial('fb6', c, w);
+    unlockNext('step7', 'btn6');
+  }
+
+  let rectCounts = { g1: 0, g2: 0, g3: 0 };
+  let step7Locked = false;
+
+  function renderStep7() {
+    function setupGroup(id, total, groupKey) {
+      const box = document.getElementById(id);
+      box.innerHTML = '';
+      for(let i = 0; i < total; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell-block';
+        cell.onclick = () => {
+          if (step7Locked) return;
+          cell.classList.toggle('colored');
+          rectCounts[groupKey] = box.querySelectorAll('.colored').length;
+          playTone(460, 'sine', 0.05);
+        };
+        box.appendChild(cell);
+      }
+    }
+    setupGroup('rect_group1', 6, 'g1');
+    setupGroup('rect_group2', 9, 'g2');
+    setupGroup('rect_group3', 7, 'g3');
+  }
+
+  function validateStep7() {
+    step7Locked = true;
+    let c = 0, w = 0;
+    const targets = { g1: 5, g2: 7, g3: 6 };
+    Object.keys(targets).forEach(k => {
+      const isOk = (rectCounts[k] === targets[k]);
+      if (isOk) { c++; totalCorrect++; } else { w++; totalWrong++; }
+    });
+    showPartial('fb7', c, w);
+    unlockNext('step8', 'btn7');
+  }
+
+  let strikeCounts = { g1: 0, g2: 0, g3: 0 };
+  let step8Locked = false;
+
+  function renderStep8() {
+    function setupStrike(id, total, symbol, groupKey) {
+      const box = document.getElementById(id);
+      box.innerHTML = '';
+      for(let i = 0; i < total; i++) {
+        const item = document.createElement('div');
+        item.className = 'strikable-item';
+        item.innerText = symbol;
+        item.onclick = () => {
+          if (step8Locked) return;
+          item.classList.toggle('struck');
+          strikeCounts[groupKey] = box.querySelectorAll('.struck').length;
+          playTone(380, 'sawtooth', 0.05);
+        };
+        box.appendChild(item);
+      }
+    }
+    setupStrike('strike_group1', 9, '🟦', 'g1');
+    setupStrike('strike_group2', 10, '⭐', 'g2');
+    setupStrike('strike_group3', 12, '🔺', 'g3');
+  }
+
+  function validateStep8() {
+    step8Locked = true;
+    let c = 0, w = 0;
+    const targets = { g1: 4, g2: 2, g3: 3 };
+    Object.keys(targets).forEach(k => {
+      const isOk = (strikeCounts[k] === targets[k]);
+      if (isOk) { c++; totalCorrect++; } else { w++; totalWrong++; }
+    });
+    showPartial('fb8', c, w);
+    unlockNext('step9', 'btn8');
+  }
+
+  let selectedBag = null;
+  let bagMatches = {};
+  let step9Locked = false;
+
+  function renderBags() {
+    const bBox = document.getElementById('bagsContainer');
+    const nBox = document.getElementById('bagsNumContainer');
+    bBox.innerHTML = ''; nBox.innerHTML = '';
+
+    const list = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+    const shuffledBags = [...list].sort(() => Math.random() - 0.5);
+    const shuffledNums = [...list].sort(() => Math.random() - 0.5);
+
+    shuffledBags.forEach(num => {
+      const card = document.createElement('div');
+      card.className = 'match-card';
+      card.id = `bag_${num}`;
+      card.style.minWidth = '80px';
+      
+      let dotsSvg = '';
+      for(let i = 0; i < num; i++) {
+        const cx = 20 + (i % 3) * 15;
+        const cy = 30 + Math.floor(i / 3) * 12;
+        dotsSvg += `<circle cx="${cx}" cy="${cy}" r="4.5" fill="#dc2626" />`;
+      }
+
+      card.innerHTML = `
+        <svg width="70" height="70" viewBox="0 0 70 70">
+          <path d="M25,12 C25,5 45,5 45,12 C55,18 62,60 50,65 C35,68 15,65 20,60 C12,50 15,18 25,12 Z" fill="#f8fafc" stroke="#475569" stroke-width="2" />
+          <path d="M22,16 L48,16" stroke="#ca8a04" stroke-width="3" />
+          ${dotsSvg}
+        </svg>
+      `;
+
+      card.onclick = () => {
+        if (step9Locked) return;
+        document.querySelectorAll('#bagsContainer .match-card').forEach(c => c.classList.remove('selected-source'));
+        card.classList.add('selected-source');
+        selectedBag = num;
+        playTone(450, 'sine', 0.05);
+      };
+      bBox.appendChild(card);
+    });
+
+    shuffledNums.forEach(num => {
+      const card = document.createElement('div');
+      card.className = 'match-card';
+      card.id = `bag_num_${num}`;
+      card.style.minWidth = '80px';
+      card.innerHTML = `<div style="font-size:1.8rem; font-weight:bold; color:var(--primary);">${num}</div>`;
+      card.onclick = () => {
+        if (step9Locked || !selectedBag) return;
+        bagMatches[selectedBag] = num;
+
+        const bEl = document.getElementById(`bag_${selectedBag}`);
+        bEl.classList.remove('selected-source');
+        bEl.style.borderColor = '#3b82f6';
+        card.style.borderColor = '#3b82f6';
+
+        playTone(620, 'sine', 0.08);
+        selectedBag = null;
+      };
+      nBox.appendChild(card);
+    });
+  }
+
+  function validateStep9() {
+    step9Locked = true;
+    let c = 0, w = 0;
+    for(let i = 1; i <= 9; i++) {
+      const isOk = (bagMatches[i] === i);
+      const bEl = document.getElementById(`bag_${i}`);
+      if (isOk) {
+        if (bEl) bEl.style.borderColor = 'var(--correct)';
+        c++; totalCorrect++;
+      } else {
+        if (bEl) bEl.style.borderColor = 'var(--wrong)';
+        w++; totalWrong++;
+      }
+    }
+    showPartial('fb9', c, w);
+    unlockNext(null, 'btn9');
+    renderFinalReport();
+  }
+
+  function renderFinalReport() {
+    const rep = document.getElementById('finalReport');
+    rep.style.display = 'block';
+    rep.scrollIntoView({ behavior: 'smooth' });
+
+    const totalQuestions = totalCorrect + totalWrong;
+    const percentage = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+
+    document.getElementById('repTotal').innerText = totalQuestions;
+    document.getElementById('repCorrect').innerText = totalCorrect;
+    document.getElementById('repWrong').innerText = totalWrong;
+
+    const circle = document.getElementById('circleProg');
+    const circleText = document.getElementById('circleText');
+    const circumference = 2 * Math.PI * 70;
+    const offset = circumference - (percentage / 100) * circumference;
+
+    let strokeColor = '#dc2626';
+    if (percentage >= 85) strokeColor = '#16a34a';
+    else if (percentage >= 65) strokeColor = '#f59e0b';
+
+    circle.style.stroke = strokeColor;
+    circleText.style.color = strokeColor;
+    circleText.innerText = `${percentage}%`;
+    setTimeout(() => { circle.style.strokeDashoffset = offset; }, 100);
+
+    const gradeDiv = document.getElementById('repGrade');
+    if (percentage >= 85) {
+      gradeDiv.style.background = '#dcfce7';
+      gradeDiv.style.color = '#15803d';
+      gradeDiv.innerText = 'ملاحظة التقدير: بَطَلٌ مُمْتَازٌ! تُتْقِنُ الْعَدَّ وَالْمُقَارَنَةَ بِشَكْلٍ رَائِعٍ.';
+      setTimeout(soundFanfare, 400);
+    } else if (percentage >= 65) {
+      gradeDiv.style.background = '#fef3c7';
+      gradeDiv.style.color = '#b45309';
+      gradeDiv.innerText = 'ملاحظة التقدير: جَيِّدٌ جِدًّا! لَدَيْكَ بَعْضُ الأَخْطَاءِ الْبَسِيطَةِ يُمْكِنُكَ إِعَادَتُهَا.';
+      setTimeout(soundSuccess, 400);
+    } else {
+      gradeDiv.style.background = '#fee2e2';
+      gradeDiv.style.color = '#b91c1c';
+      gradeDiv.innerText = 'ملاحظة التقدير: يُوصَى بِمُرَاجَعَةِ عَدِّ الأَشْيَاءِ مَعَ الأُسْتَاذِ أَوْ الْوَلِيِّ.';
+      setTimeout(soundError, 400);
+    }
+  }
+
+  function resetEntireSession() {
+    totalCorrect = 0;
+    totalWrong = 0;
+    userYN = {};
+    purpleCount = 0;
+    cupsCount = 0;
+    step2Locked = false;
+    step4Locked = false;
+    step5Locked = false;
+    step6Locked = false;
+    step7Locked = false;
+    step8Locked = false;
+    step9Locked = false;
+    handMatches = {};
+    bagMatches = {};
+    rectCounts = { g1: 0, g2: 0, g3: 0 };
+    strikeCounts = { g1: 0, g2: 0, g3: 0 };
+
+    document.querySelectorAll('.btn-choice').forEach(b => {
+      b.className = 'btn-choice';
+      b.disabled = false;
+    });
+
+    document.querySelectorAll('.draw-area').forEach(a => {
+      while(a.children.length > 1) a.removeChild(a.lastChild);
+    });
+    drawCounts.circles = 1; drawCounts.squares = 1; drawCounts.triangles = 1; drawCounts.sticks = 1;
+
+    document.querySelectorAll('.draw-box-card').forEach(c => {
+      c.style.borderColor = '#94a3b8';
+      c.style.background = 'white';
+    });
+
+    document.querySelectorAll('.partial-feedback').forEach(f => {
+      f.style.display = 'none';
+      f.innerHTML = '';
+    });
+
+    document.querySelectorAll('.btn-submit').forEach(btn => btn.disabled = false);
+
+    renderStep2();
+    renderStep4();
+    renderHands();
+    renderStep7();
+    renderStep8();
+    renderBags();
+
+    for(let i = 2; i <= 9; i++) {
+      document.getElementById(`step${i}`).classList.add('disabled-step');
+    }
+    document.getElementById('step1').classList.remove('disabled-step');
+
+    document.getElementById('finalReport').style.display = 'none';
+    document.getElementById('circleProg').style.strokeDashoffset = 440;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function exitApp() {
+    if (confirm('هل ترغب حقاً في الخروج من التطبيق؟')) {
+      window.close();
+      document.body.innerHTML = '<div style="text-align:center; padding: 60px; font-family:sans-serif;"><h2>تم إنهاء الجلسة وإغلاق البرنامج بنجاح.</h2></div>';
+    }
+  }
+
+  window.onload = function() {
+    renderStep2();
+    renderStep4();
+    renderHands();
+    renderStep7();
+    renderStep8();
+    renderBags();
+  };
+</script>
+
+</body>
+</html>
