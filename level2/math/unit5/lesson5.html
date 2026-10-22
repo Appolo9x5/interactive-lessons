@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تَعْيِينُ مَوْقِعٍ فِي الْفَضَاءِ - الرِّيَاضِيَّاتُ - السَّنَةُ الثَّانِيَةُ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- مكتبة Telegram WebApp (ضرورية للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f1f5f9;
+            color: #1e293b;
+        }
+        .locked-station {
+            opacity: 0.55;
+            pointer-events: none;
+            filter: grayscale(35%);
+            position: relative;
+        }
+        .locked-station::after {
+            content: "🔒 مَحَطَّةٌ مُقْفَلَةٌ (أَكْمِلِ النَّشَاطَ السَّابِقَ أَوَّلًا)";
+            position: absolute;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.92);
+            color: #ffffff;
+            padding: 8px 20px;
+            border-radius: 9999px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            z-index: 30;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+            white-space: nowrap;
+        }
+        .color-bubble {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+        }
+        .color-bubble.active {
+            transform: scale(1.18);
+            box-shadow: 0 0 0 4px #0284c7, 0 6px 12px rgba(0,0,0,0.18);
+        }
+        .color-box-slot {
+            border: 3px dashed #000000 !important;
+            transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+        }
+        .color-box-slot:hover {
+            transform: scale(1.04);
+        }
+        .check-box-square {
+            width: 38px;
+            height: 38px;
+            border: 3px solid #64748b;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 900;
+            background: #ffffff;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .check-box-square.checked {
+            border-color: #0284c7;
+            color: #0284c7;
+            background: #e0f2fe;
+        }
+        .disabled-action {
+            pointer-events: none !important;
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            max-width: 600px;
+            margin: 24px auto 0 auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="min-h-screen py-6 px-3 sm:px-6">
+
+    <!-- ========================================
+         نافذة قفل الاشتراك الإجباري
+         ======================================== -->
+    <div id="sub-lock-screen">
+        <div class="lock-box">
+            <div class="lock-icon">🔒</div>
+            <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+            <div class="lock-desc">
+                لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+            </div>
+            <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+                📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+            </a>
+            <button class="btn-check-sub" onclick="verifySubscription()">
+                ✅ تَأْكِيدُ الاِشْتِرَاكِ
+            </button>
+            <div id="sub-status-msg" class="sub-status-msg"></div>
+        </div>
+    </div>
+
+    <!-- الترويسة القياسية -->
+    <header class="max-w-4xl mx-auto mb-8 text-center bg-white rounded-3xl p-6 shadow-sm border-b-4 border-sky-400">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-100 text-sky-800 text-xs sm:text-sm font-bold mb-3">
+            <span>🇩🇿 الْمِنْهَاجُ الْجَزَائِرِيُّ | السَّنَةُ الثَّانِيَةُ ابْتِدَائِيٌّ</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-sky-950 tracking-tight mb-2">
+            دَرْسُ: تَعْيِينُ مَوْقِعٍ فِي الْفَضَاءِ
+        </h1>
+        <p class="text-sm sm:text-base text-slate-500 font-semibold">
+            (كِتَابُ الرِّيَاضِيَّاتِ صَفْحَة 18 — دَفْتَرُ الأَنْشِطَةِ صَفْحَة 12)
+        </p>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-10">
+
+        <!-- =================== 1. أَكْتَشِفُ =================== -->
+        <section id="station-1" class="bg-white rounded-3xl p-5 sm:p-8 shadow-sm border border-slate-200">
+            <div class="flex items-center gap-3 border-b-2 border-sky-100 pb-4 mb-6">
+                <span class="flex items-center justify-center w-10 h-10 rounded-2xl bg-amber-500 text-white font-extrabold text-xl shadow">1</span>
+                <div>
+                    <h2 class="text-2xl font-black text-slate-800">أَكْتَشِفُ</h2>
+                    <p class="text-xs sm:text-sm text-slate-500">صَفْحَة 18 مِنَ الْكِتَابِ الْمَدْرَسِيِّ</p>
+                </div>
+            </div>
+
+            <div class="rounded-2xl overflow-hidden shadow-inner border border-slate-200 mb-6 bg-slate-100 flex items-center justify-center">
+                <img src="act_discover.jpg" alt="حجرة القسم" class="w-full h-auto object-contain max-h-[460px]" onerror="this.onerror=null; this.src='https://placehold.co/900x500/e2e8f0/334155?text=act_discover.jpg';">
+            </div>
+
+            <div class="bg-amber-50 border-r-4 border-amber-400 p-4 rounded-xl mb-6">
+                <p class="text-lg font-bold text-amber-950">
+                    أَكْمِلْ كُلَّ الْبِطَاقَاتِ بِالْكَلِمَاتِ مُسْتَعْمِلًا الصُّورَةَ:
+                </p>
+                <div class="flex flex-wrap items-center gap-2 mt-3">
+                    <span class="text-sm font-semibold text-slate-600">الْخِيَارَاتُ:</span>
+                    <span class="px-3 py-1 bg-white border border-amber-300 rounded-lg text-amber-900 font-bold text-sm">أَمَامَ</span>
+                    <span class="px-3 py-1 bg-white border border-amber-300 rounded-lg text-amber-900 font-bold text-sm">وَرَاءَ</span>
+                    <span class="px-3 py-1 bg-white border border-amber-300 rounded-lg text-amber-900 font-bold text-sm">يَمِينَ</span>
+                    <span class="px-3 py-1 bg-white border border-amber-300 rounded-lg text-amber-900 font-bold text-sm">يَسَارَ</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="discover-inputs-box">
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between gap-3">
+                    <p class="text-lg font-bold text-slate-800">
+                        • يَجْلِسُ <span class="text-sky-700">رَشِيدٌ</span> .................... <span class="text-sky-700">حَنِينَ</span>.
+                    </p>
+                    <div class="grid grid-cols-2 gap-2" data-target="q1_1">
+                        <button type="button" onclick="selectDiscoverWord('q1_1', 'أَمَامَ', this)" class="disco-btn-q1_1 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">أَمَامَ</button>
+                        <button type="button" onclick="selectDiscoverWord('q1_1', 'وَرَاءَ', this)" class="disco-btn-q1_1 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">وَرَاءَ</button>
+                        <button type="button" onclick="selectDiscoverWord('q1_1', 'يَمِينَ', this)" class="disco-btn-q1_1 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">يَمِينَ</button>
+                        <button type="button" onclick="selectDiscoverWord('q1_1', 'يَسَارَ', this)" class="disco-btn-q1_1 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">يَسَارَ</button>
+                    </div>
+                    <div id="feedback-q1_1" class="text-sm font-bold min-h-[20px]"></div>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between gap-3">
+                    <p class="text-lg font-bold text-slate-800">
+                        • يَجْلِسُ <span class="text-sky-700">رَائِدٌ</span> .................... <span class="text-sky-700">كَرِيمٍ</span>.
+                    </p>
+                    <div class="grid grid-cols-2 gap-2" data-target="q1_2">
+                        <button type="button" onclick="selectDiscoverWord('q1_2', 'أَمَامَ', this)" class="disco-btn-q1_2 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">أَمَامَ</button>
+                        <button type="button" onclick="selectDiscoverWord('q1_2', 'وَرَاءَ', this)" class="disco-btn-q1_2 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">وَرَاءَ</button>
+                        <button type="button" onclick="selectDiscoverWord('q1_2', 'يَمِينَ', this)" class="disco-btn-q1_2 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">يَمِينَ</button>
+                        <button type="button" onclick="selectDiscoverWord('q1_2', 'يَسَارَ', this)" class="disco-btn-q1_2 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">يَسَارَ</button>
+                    </div>
+                    <div id="feedback-q1_2" class="text-sm font-bold min-h-[20px]"></div>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between gap-3">
+                    <p class="text-lg font-bold text-slate-800">
+                        • يَجْلِسُ <span class="text-sky-700">عِصَامٌ</span> .................... <span class="text-sky-700">سُعَادَ</span>.
+                    </p>
+                    <div class="grid grid-cols-2 gap-2" data-target="q1_3">
+                        <button type="button" onclick="selectDiscoverWord('q1_3', 'أَمَامَ', this)" class="disco-btn-q1_3 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">أَمَامَ</button>
+                        <button type="button" onclick="selectDiscoverWord('q1_3', 'وَرَاءَ', this)" class="disco-btn-q1_3 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">وَرَاءَ</button>
+                        <button type="button" onclick="selectDiscoverWord('q1_3', 'يَمِينَ', this)" class="disco-btn-q1_3 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">يَمِينَ</button>
+                        <button type="button" onclick="selectDiscoverWord('q1_3', 'يَسَارَ', this)" class="disco-btn-q1_3 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">يَسَارَ</button>
+                    </div>
+                    <div id="feedback-q1_3" class="text-sm font-bold min-h-[20px]"></div>
+                </div>
+
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col justify-between gap-3">
+                    <p class="text-lg font-bold text-slate-800">
+                        • تَجْلِسُ <span class="text-sky-700">خَدِيجَةُ</span> .................... <span class="text-sky-700">سُعَادَ</span>.
+                    </p>
+                    <div class="grid grid-cols-2 gap-2" data-target="q1_4">
+                        <button type="button" onclick="selectDiscoverWord('q1_4', 'أَمَامَ', this)" class="disco-btn-q1_4 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">أَمَامَ</button>
+                        <button type="button" onclick="selectDiscoverWord('q1_4', 'وَرَاءَ', this)" class="disco-btn-q1_4 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">وَرَاءَ</button>
+                        <button type="button" onclick="selectDiscoverWord('q1_4', 'يَمِينَ', this)" class="disco-btn-q1_4 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">يَمِينَ</button>
+                        <button type="button" onclick="selectDiscoverWord('q1_4', 'يَسَارَ', this)" class="disco-btn-q1_4 py-2 px-3 rounded-xl border border-slate-300 bg-white hover:bg-sky-50 font-bold text-slate-700 transition">يَسَارَ</button>
+                    </div>
+                    <div id="feedback-q1_4" class="text-sm font-bold min-h-[20px]"></div>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center">
+                <button id="btn-validate-station1" onclick="validateStation1()" class="px-8 py-3.5 bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-lg rounded-2xl shadow-md transition transform hover:-translate-y-0.5">
+                    تَأْكِيدُ الإِجَابَاتِ
+                </button>
+            </div>
+
+            <div id="scorebar-station1" class="hidden mt-6 p-4 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-between">
+                <span class="font-bold text-slate-700">نَتِيجَةُ فَقْرَةِ أَكْتَشِفُ:</span>
+                <div class="flex items-center gap-4 text-base font-extrabold">
+                    <span class="text-[#2e7d32]">صَحِيحٌ (✓): <span id="s1-correct">0</span></span>
+                    <span class="text-[#c62828]">خَاطِئٌ (✗): <span id="s1-wrong">0</span></span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =================== 2. أُنْجِزُ =================== -->
+        <section id="station-2" class="bg-white rounded-3xl p-5 sm:p-8 shadow-sm border border-slate-200 locked-station">
+            <div class="flex items-center gap-3 border-b-2 border-emerald-100 pb-4 mb-6">
+                <span class="flex items-center justify-center w-10 h-10 rounded-2xl bg-emerald-500 text-white font-extrabold text-xl shadow">2</span>
+                <div>
+                    <h2 class="text-2xl font-black text-slate-800">أُنْجِزُ</h2>
+                    <p class="text-xs sm:text-sm text-slate-500">صَفْحَة 18 مِنَ الْكِتَابِ الْمَدْرَسِيِّ</p>
+                </div>
+            </div>
+
+            <div class="bg-emerald-50/70 p-5 rounded-2xl border border-emerald-200 mb-8">
+                <h3 class="text-lg font-extrabold text-emerald-950 mb-2">1- لَوِّنْ:</h3>
+                <ul class="text-slate-700 font-bold space-y-1 mb-5 text-sm sm:text-base">
+                    <li>• لَوِّنْ <span class="text-[#8D6E63] font-black">بِالْبُنِّيِّ</span> الْمُتَسَابِقَ الَّذِي وَرَاءَ الْمُتَسَابِقِ الأَحْمَرِ.</li>
+                    <li>• لَوِّنْ <span class="text-[#f97316] font-black">بِالْبُرْتُقَالِيِّ</span> الْمُتَسَابِقَ الْمُتَأَخِّرَ.</li>
+                    <li>• لَوِّنْ <span class="text-[#ca8a04] font-black">بِالأَصْفَرِ</span> الْمُتَسَابِقَ الْمُتَقَدِّمَ.</li>
+                </ul>
+
+                <div class="flex flex-wrap items-center justify-center gap-3 p-3 bg-white rounded-2xl border border-slate-200 shadow-sm max-w-md mx-auto mb-6">
+                    <span class="font-bold text-xs sm:text-sm text-slate-600">اخْتَرْ لَوْنًا:</span>
+                    <button type="button" onclick="setPaletteColor('cyclist', 'brown')" id="pal-c-brown" class="color-bubble px-3 py-1.5 rounded-full border border-slate-300 font-bold text-xs" style="background:#8D6E63; color:#fff;">
+                        بُنِّيّ
+                    </button>
+                    <button type="button" onclick="setPaletteColor('cyclist', 'orange')" id="pal-c-orange" class="color-bubble px-3 py-1.5 rounded-full border border-slate-300 font-bold text-xs" style="background:#f97316; color:#fff;">
+                        بُرْتُقَالِيّ
+                    </button>
+                    <button type="button" onclick="setPaletteColor('cyclist', 'yellow')" id="pal-c-yellow" class="color-bubble px-3 py-1.5 rounded-full border border-slate-300 font-bold text-xs" style="background:#eab308; color:#fff;">
+                        أَصْفَر
+                    </button>
+                    <button type="button" onclick="setPaletteColor('cyclist', 'white')" id="pal-c-white" class="color-bubble px-3 py-1.5 rounded-full border border-slate-300 font-bold text-xs bg-white text-slate-700">
+                        مَحْو
+                    </button>
+                </div>
+
+                <div class="w-full max-w-3xl mx-auto bg-white rounded-2xl border border-slate-200 p-2 sm:p-4 shadow-sm mb-2">
+                    <div class="rounded-xl overflow-hidden bg-slate-100 mb-3">
+                        <img src="act_onjiz.jpg" alt="سباق الدراجات" class="w-full h-auto object-contain max-h-[380px]" onerror="this.onerror=null; this.src='https://placehold.co/900x500/e2e8f0/334155?text=act_onjiz.jpg';">
+                    </div>
+                    <div class="grid grid-cols-4 gap-2 sm:gap-4 px-2">
+                        <div class="flex justify-center">
+                            <div id="c-slot-1" onclick="applyColorToSlot('cyclist', 'c-slot-1')" class="color-box-slot w-full h-12 sm:h-14 rounded-xl bg-white shadow-inner"></div>
+                        </div>
+                        <div class="flex justify-center">
+                            <div id="c-slot-2" onclick="applyColorToSlot('cyclist', 'c-slot-2')" class="color-box-slot w-full h-12 sm:h-14 rounded-xl bg-white shadow-inner"></div>
+                        </div>
+                        <div class="flex justify-center">
+                            <div id="c-slot-3" onclick="applyColorToSlot('cyclist', 'c-slot-3')" class="color-box-slot w-full h-12 sm:h-14 rounded-xl bg-white shadow-inner"></div>
+                        </div>
+                        <div class="flex justify-center">
+                            <div id="c-slot-4" onclick="applyColorToSlot('cyclist', 'c-slot-4')" class="color-box-slot w-full h-12 sm:h-14 rounded-xl bg-white shadow-inner"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 mb-6">
+                <h3 class="text-lg font-extrabold text-slate-800 mb-4">2- أَحِطِ الْجَوَابَ الصَّحِيحَ:</h3>
+                
+                <div class="space-y-4 max-w-2xl mx-auto">
+                    <div class="p-4 bg-white rounded-xl border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <span class="font-bold text-slate-800 text-base">
+                            • الْمُتَسَابِقُ الأَحْمَرُ أَمَامَ الْمُتَسَابِقِ الأَصْفَرِ.
+                        </span>
+                        <div class="flex items-center gap-3">
+                            <button type="button" onclick="selectYesNo('yn1', 'نعم', this)" class="btn-yn1 px-6 py-2 rounded-xl border-2 border-slate-300 font-extrabold text-slate-700 hover:border-emerald-500 transition">نَعَمْ</button>
+                            <button type="button" onclick="selectYesNo('yn1', 'لا', this)" class="btn-yn1 px-6 py-2 rounded-xl border-2 border-slate-300 font-extrabold text-slate-700 hover:border-emerald-500 transition">لَا</button>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-white rounded-xl border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <span class="font-bold text-slate-800 text-base">
+                            • الْمُتَسَابِقُ الأَحْمَرُ بَيْنَ الْمُتَسَابِقِ الْبُنِّيِّ وَالْمُتَسَابِقِ الأَصْفَرِ.
+                        </span>
+                        <div class="flex items-center gap-3">
+                            <button type="button" onclick="selectYesNo('yn2', 'نعم', this)" class="btn-yn2 px-6 py-2 rounded-xl border-2 border-slate-300 font-extrabold text-slate-700 hover:border-emerald-500 transition">نَعَمْ</button>
+                            <button type="button" onclick="selectYesNo('yn2', 'لا', this)" class="btn-yn2 px-6 py-2 rounded-xl border-2 border-slate-300 font-extrabold text-slate-700 hover:border-emerald-500 transition">لَا</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button id="btn-validate-station2" onclick="validateStation2()" class="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-lg rounded-2xl shadow-md transition transform hover:-translate-y-0.5">
+                    تَأْكِيدُ إِجَابَاتِ أُنْجِزُ
+                </button>
+            </div>
+
+            <div id="scorebar-station2" class="hidden mt-6 p-4 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-between">
+                <span class="font-bold text-slate-700">نَتِيجَةُ مَحَطَّةِ أُنْجِزُ:</span>
+                <div class="flex items-center gap-4 text-base font-extrabold">
+                    <span class="text-[#2e7d32]">صَحِيحٌ (✓): <span id="s2-correct">0</span></span>
+                    <span class="text-[#c62828]">خَاطِئٌ (✗): <span id="s2-wrong">0</span></span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =================== 3. تَعَلَّمْتُ =================== -->
+        <section id="station-rules" class="bg-gradient-to-r from-amber-100 via-amber-50 to-orange-100 rounded-3xl p-6 sm:p-8 shadow-sm border-2 border-amber-300">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-black text-xl shadow">
+                    ⭐
+                </div>
+                <h2 class="text-2xl font-black text-amber-950">تَعَلَّمْتُ</h2>
+            </div>
+            <div class="bg-white/90 p-5 rounded-2xl border border-amber-200 text-lg sm:text-xl font-bold leading-loose text-slate-800">
+                «يُمْكِنُنِي أَنْ أُحَدِّدَ مَوْقِعَ شَيْءٍ بِالنِّسْبَةِ إِلَى آخَرَ بِاسْتِعْمَالِ مُفْرَدَاتٍ مِثْلِ:
+                <span class="text-sky-700 px-2.5 py-0.5 bg-sky-50 rounded-lg inline-block my-1 border border-sky-200">أَمَامَ</span>،
+                <span class="text-sky-700 px-2.5 py-0.5 bg-sky-50 rounded-lg inline-block my-1 border border-sky-200">وَرَاءَ</span>،
+                <span class="text-sky-700 px-2.5 py-0.5 bg-sky-50 rounded-lg inline-block my-1 border border-sky-200">مُتَأَخِّرٌ</span>،
+                <span class="text-sky-700 px-2.5 py-0.5 bg-sky-50 rounded-lg inline-block my-1 border border-sky-200">مُتَقَدِّمٌ</span>،
+                <span class="text-sky-700 px-2.5 py-0.5 bg-sky-50 rounded-lg inline-block my-1 border border-sky-200">يَمِينٌ</span>،
+                <span class="text-sky-700 px-2.5 py-0.5 bg-sky-50 rounded-lg inline-block my-1 border border-sky-200">يَسَارٌ</span>.»
+            </div>
+        </section>
+
+
+        <!-- =================== 4. أَتَمَرَّنُ 1 =================== -->
+        <section id="station-3" class="bg-white rounded-3xl p-5 sm:p-8 shadow-sm border border-slate-200 locked-station">
+            <div class="flex items-center gap-3 border-b-2 border-indigo-100 pb-4 mb-6">
+                <span class="flex items-center justify-center w-10 h-10 rounded-2xl bg-indigo-500 text-white font-extrabold text-xl shadow">3</span>
+                <div>
+                    <h2 class="text-2xl font-black text-slate-800">أَتَمَرَّنُ (1)</h2>
+                    <p class="text-xs sm:text-sm text-slate-500">صَفْحَة 12 مِنْ دَفْتَرِ الأَنْشِطَةِ</p>
+                </div>
+            </div>
+
+            <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-200 mb-6">
+                <p class="text-lg font-bold text-indigo-950">
+                    لَوِّنْ <span class="text-[#8D6E63] font-black">بِالْبُنِّيِّ</span> الْجَمَلَ الَّذِي أَمَامَ الرَّجُلِ، وَ<span class="text-[#ca8a04] font-black">بِالأَصْفَرِ</span> الْجَمَلَ الَّذِي وَرَاءَهُ.
+                </p>
+            </div>
+
+            <div class="flex items-center justify-center gap-4 p-3 bg-slate-50 rounded-2xl border border-slate-200 max-w-sm mx-auto mb-6">
+                <span class="font-bold text-xs sm:text-sm text-slate-600">اخْتَرْ لَوْنًا:</span>
+                <button type="button" onclick="setPaletteColor('camel', 'brown')" id="pal-m-brown" class="color-bubble px-4 py-2 rounded-full border border-slate-300 font-bold text-xs" style="background:#8D6E63; color:#fff;">
+                    بُنِّيّ
+                </button>
+                <button type="button" onclick="setPaletteColor('camel', 'yellow')" id="pal-m-yellow" class="color-bubble px-4 py-2 rounded-full border border-slate-300 font-bold text-xs" style="background:#eab308; color:#fff;">
+                    أَصْفَر
+                </button>
+                <button type="button" onclick="setPaletteColor('camel', 'white')" id="pal-m-white" class="color-bubble px-4 py-2 rounded-full border border-slate-300 font-bold text-xs bg-white text-slate-700">
+                    مَحْو
+                </button>
+            </div>
+
+            <div class="w-full max-w-2xl mx-auto bg-white rounded-2xl border border-slate-200 p-2 sm:p-4 shadow-sm mb-6">
+                <div class="rounded-xl overflow-hidden bg-slate-100 mb-3">
+                    <img src="act_tamaran_1.jpg" alt="الجمال والرجل في الصحراء" class="w-full h-auto object-contain max-h-[380px]" onerror="this.onerror=null; this.src='https://placehold.co/900x500/e2e8f0/334155?text=act_tamaran_1.jpg';">
+                </div>
+                <div class="grid grid-cols-2 gap-8 sm:gap-16 px-4 sm:px-8">
+                    <div class="flex justify-center">
+                        <div id="camel-slot-front" onclick="applyColorToSlot('camel', 'camel-slot-front')" class="color-box-slot w-full max-w-[180px] h-12 sm:h-14 rounded-xl bg-white shadow-inner"></div>
+                    </div>
+                    <div class="flex justify-center">
+                        <div id="camel-slot-back" onclick="applyColorToSlot('camel', 'camel-slot-back')" class="color-box-slot w-full max-w-[180px] h-12 sm:h-14 rounded-xl bg-white shadow-inner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button id="btn-validate-station3" onclick="validateStation3()" class="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-lg rounded-2xl shadow-md transition transform hover:-translate-y-0.5">
+                    تَأْكِيدُ إِجَابَةِ التَّمْرِينِ (1)
+                </button>
+            </div>
+
+            <div id="scorebar-station3" class="hidden mt-6 p-4 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-between">
+                <span class="font-bold text-slate-700">نَتِيجَةُ أَتَمَرَّنُ (1):</span>
+                <div class="flex items-center gap-4 text-base font-extrabold">
+                    <span class="text-[#2e7d32]">صَحِيحٌ (✓): <span id="s3-correct">0</span></span>
+                    <span class="text-[#c62828]">خَاطِئٌ (✗): <span id="s3-wrong">0</span></span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =================== 5. أَتَمَرَّنُ 2 =================== -->
+        <section id="station-4" class="bg-white rounded-3xl p-5 sm:p-8 shadow-sm border border-slate-200 locked-station">
+            <div class="flex items-center gap-3 border-b-2 border-purple-100 pb-4 mb-6">
+                <span class="flex items-center justify-center w-10 h-10 rounded-2xl bg-purple-500 text-white font-extrabold text-xl shadow">4</span>
+                <div>
+                    <h2 class="text-2xl font-black text-slate-800">أَتَمَرَّنُ (2)</h2>
+                    <p class="text-xs sm:text-sm text-slate-500">صَفْحَة 12 مِنْ دَفْتَرِ الأَنْشِطَةِ</p>
+                </div>
+            </div>
+
+            <div class="rounded-2xl overflow-hidden shadow-inner border border-slate-200 mb-6 bg-slate-100 flex items-center justify-center">
+                <img src="act_tamaran_2.jpg" alt="الصياد والكلب والشجرة" class="w-full h-auto object-contain max-h-[440px]" onerror="this.onerror=null; this.src='https://placehold.co/900x500/e2e8f0/334155?text=act_tamaran_2.jpg';">
+            </div>
+
+            <div class="bg-purple-50 p-4 rounded-xl border border-purple-200 mb-6">
+                <p class="text-lg font-bold text-purple-950">
+                    ضَعِ الإِشَارَةَ (×) أَمَامَ الاِقْتِرَاحِ الصَّحِيحِ:
+                </p>
+            </div>
+
+            <div class="space-y-4 max-w-xl mx-auto mb-6">
+                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-200 cursor-pointer hover:bg-purple-50/50 transition" onclick="toggleSquareBox('t2_opt1')">
+                    <span class="text-base sm:text-lg font-bold text-slate-800">الصَّيَّادُ وَرَاءَ الشَّجَرَةِ</span>
+                    <div id="t2_opt1" class="check-box-square"></div>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-200 cursor-pointer hover:bg-purple-50/50 transition" onclick="toggleSquareBox('t2_opt2')">
+                    <span class="text-base sm:text-lg font-bold text-slate-800">الشَّجَرَةُ وَرَاءَ الصَّيَّادِ</span>
+                    <div id="t2_opt2" class="check-box-square"></div>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-200 cursor-pointer hover:bg-purple-50/50 transition" onclick="toggleSquareBox('t2_opt3')">
+                    <span class="text-base sm:text-lg font-bold text-slate-800">الْكَلْبُ عَلَى يَمِينِ الصَّيَّادِ</span>
+                    <div id="t2_opt3" class="check-box-square"></div>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-200 cursor-pointer hover:bg-purple-50/50 transition" onclick="toggleSquareBox('t2_opt4')">
+                    <span class="text-base sm:text-lg font-bold text-slate-800">الْكَلْبُ عَلَى يَسَارِ الصَّيَّادِ</span>
+                    <div id="t2_opt4" class="check-box-square"></div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button id="btn-validate-station4" onclick="validateStation4()" class="px-8 py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-lg rounded-2xl shadow-md transition transform hover:-translate-y-0.5">
+                    تَأْكِيدُ إِجَابَةِ التَّمْرِينِ (2)
+                </button>
+            </div>
+
+            <div id="scorebar-station4" class="hidden mt-6 p-4 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-between">
+                <span class="font-bold text-slate-700">نَتِيجَةُ أَتَمَرَّنُ (2):</span>
+                <div class="flex items-center gap-4 text-base font-extrabold">
+                    <span class="text-[#2e7d32]">صَحِيحٌ (✓): <span id="s4-correct">0</span></span>
+                    <span class="text-[#c62828]">خَاطِئٌ (✗): <span id="s4-wrong">0</span></span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =================== 6. أَتَمَرَّنُ 3 =================== -->
+        <section id="station-5" class="bg-white rounded-3xl p-5 sm:p-8 shadow-sm border border-slate-200 locked-station">
+            <div class="flex items-center gap-3 border-b-2 border-teal-100 pb-4 mb-6">
+                <span class="flex items-center justify-center w-10 h-10 rounded-2xl bg-teal-500 text-white font-extrabold text-xl shadow">5</span>
+                <div>
+                    <h2 class="text-2xl font-black text-slate-800">أَتَمَرَّنُ (3)</h2>
+                    <p class="text-xs sm:text-sm text-slate-500">صَفْحَة 12 مِنْ دَفْتَرِ الأَنْشِطَةِ</p>
+                </div>
+            </div>
+
+            <div class="bg-teal-50 p-5 rounded-2xl border border-teal-200 mb-6 space-y-2">
+                <p class="text-base sm:text-lg font-bold text-teal-950">
+                    ❶ لَوِّنْ <span class="text-[#16a34a] font-black">بِالأَخْضَرِ</span> بِطَاقَةَ الْمُتَسَابِقِ الْمُتَقَدِّمِ، وَ<span class="text-[#dc2626] font-black">بِالأَحْمَرِ</span> بِطَاقَةَ الْمُتَسَابِقِ الْمُتَأَخِّرِ.
+                </p>
+                <p class="text-base sm:text-lg font-bold text-teal-950">
+                    ❷ لَوِّنْ <span class="text-[#2563eb] font-black">بِالأَزْرَقِ</span> بِطَاقَةَ الْمُتَسَابِقِ الَّذِي وَرَاءَ الْمُتَسَابِقِ الثَّانِي.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-200 max-w-md mx-auto mb-6">
+                <span class="font-bold text-xs sm:text-sm text-slate-600">اخْتَرْ لَوْنًا:</span>
+                <button type="button" onclick="setPaletteColor('raceCard', 'green')" id="pal-rc-green" class="color-bubble px-3 py-1.5 rounded-full border border-slate-300 font-bold text-xs" style="background:#16a34a; color:#fff;">
+                    أَخْضَر
+                </button>
+                <button type="button" onclick="setPaletteColor('raceCard', 'red')" id="pal-rc-red" class="color-bubble px-3 py-1.5 rounded-full border border-slate-300 font-bold text-xs" style="background:#dc2626; color:#fff;">
+                    أَحْمَر
+                </button>
+                <button type="button" onclick="setPaletteColor('raceCard', 'blue')" id="pal-rc-blue" class="color-bubble px-3 py-1.5 rounded-full border border-slate-300 font-bold text-xs" style="background:#2563eb; color:#fff;">
+                    أَزْرَق
+                </button>
+                <button type="button" onclick="setPaletteColor('raceCard', 'white')" id="pal-rc-white" class="color-bubble px-3 py-1.5 rounded-full border border-slate-300 font-bold text-xs bg-white text-slate-700">
+                    مَحْو
+                </button>
+            </div>
+
+            <div class="w-full max-w-4xl mx-auto bg-white rounded-2xl border border-slate-200 p-2 sm:p-4 shadow-sm mb-6">
+                <div class="rounded-xl overflow-hidden bg-slate-100 mb-3">
+                    <img src="act_tamaran_3.jpg" alt="سباق الأطفال" class="w-full h-auto object-contain max-h-[380px]" onerror="this.onerror=null; this.src='https://placehold.co/900x500/e2e8f0/334155?text=act_tamaran_3.jpg';">
+                </div>
+                <div class="grid grid-cols-5 gap-2 sm:gap-3 px-1 sm:px-3">
+                    <div class="flex justify-center">
+                        <div id="rc-slot-1" onclick="applyColorToSlot('raceCard', 'rc-slot-1')" class="color-box-slot w-full h-11 sm:h-13 rounded-lg bg-white shadow-inner"></div>
+                    </div>
+                    <div class="flex justify-center">
+                        <div id="rc-slot-2" onclick="applyColorToSlot('raceCard', 'rc-slot-2')" class="color-box-slot w-full h-11 sm:h-13 rounded-lg bg-white shadow-inner"></div>
+                    </div>
+                    <div class="flex justify-center">
+                        <div id="rc-slot-3" onclick="applyColorToSlot('raceCard', 'rc-slot-3')" class="color-box-slot w-full h-11 sm:h-13 rounded-lg bg-white shadow-inner"></div>
+                    </div>
+                    <div class="flex justify-center">
+                        <div id="rc-slot-4" onclick="applyColorToSlot('raceCard', 'rc-slot-4')" class="color-box-slot w-full h-11 sm:h-13 rounded-lg bg-white shadow-inner"></div>
+                    </div>
+                    <div class="flex justify-center">
+                        <div id="rc-slot-5" onclick="applyColorToSlot('raceCard', 'rc-slot-5')" class="color-box-slot w-full h-11 sm:h-13 rounded-lg bg-white shadow-inner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button id="btn-validate-station5" onclick="validateStation5()" class="px-8 py-3.5 bg-teal-600 hover:bg-teal-700 text-white font-extrabold text-lg rounded-2xl shadow-md transition transform hover:-translate-y-0.5">
+                    تَأْكِيدُ إِجَابَةِ التَّمْرِينِ (3)
+                </button>
+            </div>
+
+            <div id="scorebar-station5" class="hidden mt-6 p-4 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-between">
+                <span class="font-bold text-slate-700">نَتِيجَةُ أَتَمَرَّنُ (3):</span>
+                <div class="flex items-center gap-4 text-base font-extrabold">
+                    <span class="text-[#2e7d32]">صَحِيحٌ (✓): <span id="s5-correct">0</span></span>
+                    <span class="text-[#c62828]">خَاطِئٌ (✗): <span id="s5-wrong">0</span></span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =================== 7. أَبْحَثُ =================== -->
+        <section id="station-6" class="bg-white rounded-3xl p-5 sm:p-8 shadow-sm border border-slate-200 locked-station">
+            <div class="flex items-center gap-3 border-b-2 border-rose-100 pb-4 mb-6">
+                <span class="flex items-center justify-center w-10 h-10 rounded-2xl bg-rose-500 text-white font-extrabold text-xl shadow">6</span>
+                <div>
+                    <h2 class="text-2xl font-black text-slate-800">أَبْحَثُ</h2>
+                    <p class="text-xs sm:text-sm text-slate-500">صَفْحَة 12 مِنْ دَفْتَرِ الأَنْشِطَةِ</p>
+                </div>
+            </div>
+
+            <div class="rounded-2xl overflow-hidden shadow-inner border border-slate-200 mb-6 bg-slate-100 flex items-center justify-center">
+                <img src="act_abhath.jpg" alt="البنت وأخوها والطاولات" class="w-full h-auto object-contain max-h-[440px]" onerror="this.onerror=null; this.src='https://placehold.co/900x500/e2e8f0/334155?text=act_abhath.jpg';">
+            </div>
+
+            <div class="bg-rose-50 p-5 rounded-2xl border border-rose-200 mb-6 text-slate-800 leading-relaxed font-bold">
+                <p class="text-xl text-rose-950 mb-2">أَيُّ مِنْهُمَا عَلَى صَوَابٍ؟</p>
+                <p>• الْبِنْتُ تَقُولُ لأَخِيهَا: «الْكِتَابُ الأَزْرَقُ عَلَى يَسَارِكَ»</p>
+                <p>• وَهُوَ يَقُولُ لَهَا: «الْكِتَابُ الأَزْرَقُ عَلَى يَمِينِكِ»</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-xl mx-auto mb-6">
+                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-200 cursor-pointer hover:bg-rose-50/50 transition" onclick="selectAbhathChoice('البنت')">
+                    <span class="text-lg font-bold text-slate-800">الْبِنْتُ</span>
+                    <div id="box-abhath-1" class="check-box-square"></div>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-200 cursor-pointer hover:bg-rose-50/50 transition" onclick="selectAbhathChoice('أخوها')">
+                    <span class="text-lg font-bold text-slate-800">أَخُوهَا</span>
+                    <div id="box-abhath-2" class="check-box-square"></div>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-200 cursor-pointer hover:bg-rose-50/50 transition" onclick="selectAbhathChoice('كلاهما')">
+                    <span class="text-lg font-bold text-slate-800">كِلَاهُمَا</span>
+                    <div id="box-abhath-3" class="check-box-square"></div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button id="btn-validate-station6" onclick="validateStation6()" class="px-8 py-3.5 bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-lg rounded-2xl shadow-md transition transform hover:-translate-y-0.5">
+                    تَأْكِيدُ إِجَابَةِ أَبْحَثُ
+                </button>
+            </div>
+
+            <div id="scorebar-station6" class="hidden mt-6 p-4 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-between">
+                <span class="font-bold text-slate-700">نَتِيجَةُ فَقْرَةِ أَبْحَثُ:</span>
+                <div class="flex items-center gap-4 text-base font-extrabold">
+                    <span class="text-[#2e7d32]">صَحِيحٌ (✓): <span id="s6-correct">0</span></span>
+                    <span class="text-[#c62828]">خَاطِئٌ (✗): <span id="s6-wrong">0</span></span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =================== 8. الشَّاشَةُ الْخِتَامِيَّةُ =================== -->
+        <section id="final-summary-card" class="hidden bg-white rounded-3xl p-6 sm:p-10 shadow-lg border-2 border-sky-400 text-center">
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-800 mb-2">تَقْرِيرُ التَّقْيِيمِ الْعَامِّ لِلدَّرْسِ</h2>
+            <p class="text-slate-500 font-bold mb-8">عَمَلٌ مُمْتَازٌ! يُمْكِنُكَ الصُّعُودُ لِلأَعْلَى لِمُعَايَنَةِ تَفَاصِيلِ إِجَابَاتِكَ.</p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-8 mb-8">
+                <div class="relative w-40 h-40">
+                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+                        <circle cx="60" cy="60" r="50" stroke="#e2e8f0" stroke-width="12" fill="transparent"/>
+                        <circle id="final-circle-bar" cx="60" cy="60" r="50" stroke="#0284c7" stroke-width="12" stroke-dasharray="314.159" stroke-dashoffset="314.159" stroke-linecap="round" fill="transparent" class="transition-all duration-1000 ease-out"/>
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span id="final-percentage-text" class="text-3xl font-black text-sky-950" style="direction: ltr;">0%</span>
+                        <span class="text-xs font-bold text-slate-400">النِّسْبَةُ الْمِئَوِيَّةُ</span>
+                    </div>
+                </div>
+
+                <div class="text-right space-y-3 bg-slate-50 p-6 rounded-2xl border border-slate-200 min-w-[280px]">
+                    <div class="flex justify-between items-center text-base sm:text-lg font-bold">
+                        <span class="text-slate-600">إِجْمَالِيُّ الأَسْئِلَةِ:</span>
+                        <span id="final-total-count" class="text-slate-900 font-black">19</span>
+                    </div>
+                    <div class="flex justify-between items-center text-base sm:text-lg font-bold text-[#2e7d32]">
+                        <span>الإِجَابَاتُ الصَّحِيحَةُ (✓):</span>
+                        <span id="final-correct-count" class="font-black">0</span>
+                    </div>
+                    <div class="flex justify-between items-center text-base sm:text-lg font-bold text-[#c62828]">
+                        <span>الإِجَابَاتُ الْخَاطِئَةُ (✗):</span>
+                        <span id="final-wrong-count" class="font-black">0</span>
+                    </div>
+                    <div class="pt-2 border-t border-slate-200">
+                        <span class="block text-xs text-slate-400 mb-1">الْمُلَاحَظَةُ الْبِيدَاغُوجِيَّةُ:</span>
+                        <span id="pedagogical-feedback" class="text-lg sm:text-xl font-black text-sky-700"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-4">
+                <button type="button" onclick="restartLesson()" class="px-8 py-3.5 bg-sky-600 hover:bg-sky-700 text-white font-extrabold text-base sm:text-lg rounded-2xl shadow transition transform hover:-translate-y-0.5">
+                    🔄 إِعَادَةُ الْمُحَاوَلَةِ
+                </button>
+                <button type="button" onclick="exitApp()" class="px-8 py-3.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-extrabold text-base sm:text-lg rounded-2xl transition">
+                    خُرُوجٌ مِنَ التَّطْبِيقِ
+                </button>
+            </div>
+        </section>
+
+        <!-- زر العودة إلى الفهرس -->
+        <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+    </main>
+
+    <!-- نظام المؤثرات الصوتية + الحماية + الأنشطة -->
+    <script>
+        // ========================================================
+        // 🛡️ قسم الحماية
+        // ========================================================
+        const CHANNEL_ID = "-1004461185731";  // ← قناة السنة الثانية
+
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        async function verifySubscription() {
+            const statusMsg = document.getElementById('sub-status-msg');
+            statusMsg.style.color = "#0288d1";
+            statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+            let userId = null;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                userId = tg.initDataUnsafe.user.id;
+            }
+
+            if (!userId) {
+                statusMsg.style.color = "#e65100";
+                statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+                return;
+            }
+
+            try {
+                const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.isSubscribed) {
+                    statusMsg.style.color = "#2e7d32";
+                    statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                    setTimeout(() => {
+                        document.getElementById('sub-lock-screen').style.display = 'none';
+                    }, 600);
+                } else {
+                    statusMsg.style.color = "#c62828";
+                    statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+                }
+            } catch (error) {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+            }
+        }
+
+        window.addEventListener('load', () => {
+            verifySubscription();
+        });
+
+        // ========================================================
+        // 🎯 قسم أنشطة الدرس
+        // ========================================================
+        const AudioFX = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContext) {
+                        this.ctx = new AudioContext();
+                    }
+                }
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            },
+            playCorrect() {
+                try {
+                    this.init();
+                    if (!this.ctx) return;
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.1);
+                    osc.frequency.setValueAtTime(783.99, now + 0.2);
+                    osc.frequency.setValueAtTime(1046.50, now + 0.3);
+
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now);
+                    osc.stop(now + 0.6);
+                } catch(e) { console.warn(e); }
+            },
+            playWrong() {
+                try {
+                    this.init();
+                    if (!this.ctx) return;
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(260, now);
+                    osc.frequency.exponentialRampToValueAtTime(140, now + 0.35);
+
+                    gain.gain.setValueAtTime(0.18, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } catch(e) { console.warn(e); }
+            },
+            playClick() {
+                try {
+                    this.init();
+                    if (!this.ctx) return;
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, now);
+                    osc.frequency.exponentialRampToValueAtTime(400, now + 0.05);
+
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } catch(e) { console.warn(e); }
+            }
+        };
+
+        const globalMetrics = {
+            s1: { correct: 0, wrong: 0, total: 4 },
+            s2: { correct: 0, wrong: 0, total: 6 },
+            s3: { correct: 0, wrong: 0, total: 2 },
+            s4: { correct: 0, wrong: 0, total: 4 },
+            s5: { correct: 0, wrong: 0, total: 5 },
+            s6: { correct: 0, wrong: 0, total: 1 }
+        };
+
+        const activePalette = {
+            cyclist: null,
+            camel: null,
+            raceCard: null
+        };
+
+        const colorMap = {
+            brown: { hex: '#8D6E63' },
+            orange: { hex: '#f97316' },
+            yellow: { hex: '#eab308' },
+            green: { hex: '#16a34a' },
+            red: { hex: '#dc2626' },
+            blue: { hex: '#2563eb' },
+            white: { hex: '#ffffff' }
+        };
+
+        function setPaletteColor(group, colorKey) {
+            AudioFX.playClick();
+            activePalette[group] = colorKey;
+
+            const prefix = group === 'cyclist' ? 'pal-c-' : (group === 'camel' ? 'pal-m-' : 'pal-rc-');
+            document.querySelectorAll(`[id^="${prefix}"]`).forEach(btn => btn.classList.remove('active'));
+            const targetBtn = document.getElementById(`${prefix}${colorKey}`);
+            if (targetBtn) {
+                targetBtn.classList.add('active');
+            }
+        }
+
+        function applyColorToSlot(group, slotId) {
+            const chosen = activePalette[group];
+            if (!chosen) return;
+            AudioFX.playClick();
+            const slot = document.getElementById(slotId);
+            if (!slot || slot.classList.contains('disabled-action')) return;
+
+            const cData = colorMap[chosen];
+            slot.style.backgroundColor = cData.hex;
+            slot.setAttribute('data-assigned-color', chosen);
+        }
+
+        /* ---------------- 1. أَكْتَشِفُ ---------------- */
+        const station1Answers = {
+            q1_1: null,
+            q1_2: null,
+            q1_3: null,
+            q1_4: null
+        };
+
+        function selectDiscoverWord(questionKey, word, btnElement) {
+            AudioFX.playClick();
+            station1Answers[questionKey] = word;
+            document.querySelectorAll(`.disco-btn-${questionKey}`).forEach(btn => {
+                btn.classList.remove('bg-sky-500', 'text-white', 'border-sky-600');
+                btn.classList.add('bg-white', 'text-slate-700');
+            });
+            btnElement.classList.add('bg-sky-500', 'text-white', 'border-sky-600');
+            btnElement.classList.remove('bg-white', 'text-slate-700');
+        }
+
+        function validateStation1() {
+            const correctKeys = {
+                q1_1: 'وَرَاءَ',
+                q1_2: 'أَمَامَ',
+                q1_3: 'يَسَارَ',
+                q1_4: 'يَمِينَ'
+            };
+
+            let stationCorrect = 0;
+            let stationWrong = 0;
+
+            ['q1_1', 'q1_2', 'q1_3', 'q1_4'].forEach(qKey => {
+                const userVal = station1Answers[qKey];
+                const fb = document.getElementById(`feedback-${qKey}`);
+                const isCorrect = (userVal === correctKeys[qKey]);
+
+                if (isCorrect) {
+                    stationCorrect++;
+                    fb.innerHTML = `<span class="text-[#2e7d32]">✓ إِجَابَةٌ صَحِيحَةٌ (${correctKeys[qKey]})</span>`;
+                } else {
+                    stationWrong++;
+                    fb.innerHTML = `<span class="text-[#c62828]">✗ إِجَابَةٌ خَاطِئَةٌ | الصَّوَابُ: (${correctKeys[qKey]})</span>`;
+                }
+
+                document.querySelectorAll(`.disco-btn-${qKey}`).forEach(btn => {
+                    btn.classList.add('disabled-action');
+                    if (btn.textContent.trim() === correctKeys[qKey]) {
+                        btn.style.backgroundColor = '#2e7d32';
+                        btn.style.color = '#ffffff';
+                        btn.style.borderColor = '#2e7d32';
+                    } else if (btn.textContent.trim() === userVal && !isCorrect) {
+                        btn.style.backgroundColor = '#c62828';
+                        btn.style.color = '#ffffff';
+                        btn.style.borderColor = '#c62828';
+                    }
+                });
+            });
+
+            if (stationWrong === 0) AudioFX.playCorrect(); else AudioFX.playWrong();
+
+            globalMetrics.s1.correct = stationCorrect;
+            globalMetrics.s1.wrong = stationWrong;
+
+            document.getElementById('s1-correct').textContent = stationCorrect;
+            document.getElementById('s1-wrong').textContent = stationWrong;
+            document.getElementById('scorebar-station1').classList.remove('hidden');
+
+            document.getElementById('btn-validate-station1').classList.add('disabled-action');
+            document.getElementById('btn-validate-station1').style.opacity = '0.5';
+
+            unlockStation('station-2');
+        }
+
+        /* ---------------- 2. أُنْجِزُ ---------------- */
+        const station2Answers = {
+            yn1: null,
+            yn2: null
+        };
+
+        function selectYesNo(groupKey, val, btnElem) {
+            AudioFX.playClick();
+            station2Answers[groupKey] = val;
+            document.querySelectorAll(`.btn-${groupKey}`).forEach(b => {
+                b.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-700');
+                b.classList.add('text-slate-700');
+            });
+            btnElem.classList.add('bg-emerald-600', 'text-white', 'border-emerald-700');
+            btnElem.classList.remove('text-slate-700');
+        }
+
+        function validateStation2() {
+            let correct = 0;
+            let wrong = 0;
+
+            const cyclSlots = [
+                { id: 'c-slot-1', exp: 'yellow' },
+                { id: 'c-slot-2', exp: 'white' },
+                { id: 'c-slot-3', exp: 'brown' },
+                { id: 'c-slot-4', exp: 'orange' }
+            ];
+
+            cyclSlots.forEach(item => {
+                const el = document.getElementById(item.id);
+                el.classList.add('disabled-action');
+                const userC = el.getAttribute('data-assigned-color') || 'white';
+                el.style.borderStyle = 'solid';
+                if (userC === item.exp) {
+                    correct++;
+                    el.style.borderColor = '#2e7d32';
+                    el.style.borderWidth = '4px';
+                } else {
+                    wrong++;
+                    el.style.borderColor = '#c62828';
+                    el.style.borderWidth = '4px';
+                }
+            });
+
+            const ynExpected = {
+                yn1: 'لا',
+                yn2: 'نعم'
+            };
+
+            ['yn1', 'yn2'].forEach(key => {
+                const userVal = station2Answers[key];
+                const expVal = ynExpected[key];
+                if (userVal === expVal) {
+                    correct++;
+                } else {
+                    wrong++;
+                }
+                document.querySelectorAll(`.btn-${key}`).forEach(b => {
+                    b.classList.add('disabled-action');
+                    if (b.textContent.trim() === expVal) {
+                        b.style.backgroundColor = '#2e7d32';
+                        b.style.color = '#ffffff';
+                        b.style.borderColor = '#2e7d32';
+                    } else if (b.textContent.trim() === userVal && userVal !== expVal) {
+                        b.style.backgroundColor = '#c62828';
+                        b.style.color = '#ffffff';
+                        b.style.borderColor = '#c62828';
+                    }
+                });
+            });
+
+            if (wrong === 0) AudioFX.playCorrect(); else AudioFX.playWrong();
+
+            globalMetrics.s2.correct = correct;
+            globalMetrics.s2.wrong = wrong;
+
+            document.getElementById('s2-correct').textContent = correct;
+            document.getElementById('s2-wrong').textContent = wrong;
+            document.getElementById('scorebar-station2').classList.remove('hidden');
+
+            document.getElementById('btn-validate-station2').classList.add('disabled-action');
+            document.getElementById('btn-validate-station2').style.opacity = '0.5';
+
+            unlockStation('station-3');
+        }
+
+        /* ---------------- 3. أَتَمَرَّنُ 1 ---------------- */
+        function validateStation3() {
+            let correct = 0;
+            let wrong = 0;
+
+            const cFront = document.getElementById('camel-slot-front');
+            const cBack = document.getElementById('camel-slot-back');
+
+            cFront.classList.add('disabled-action');
+            cBack.classList.add('disabled-action');
+
+            cFront.style.borderStyle = 'solid';
+            cBack.style.borderStyle = 'solid';
+
+            const valFront = cFront.getAttribute('data-assigned-color') || 'white';
+            const valBack = cBack.getAttribute('data-assigned-color') || 'white';
+
+            if (valFront === 'brown') {
+                correct++;
+                cFront.style.borderColor = '#2e7d32';
+                cFront.style.borderWidth = '4px';
+            } else {
+                wrong++;
+                cFront.style.borderColor = '#c62828';
+                cFront.style.borderWidth = '4px';
+            }
+
+            if (valBack === 'yellow') {
+                correct++;
+                cBack.style.borderColor = '#2e7d32';
+                cBack.style.borderWidth = '4px';
+            } else {
+                wrong++;
+                cBack.style.borderColor = '#c62828';
+                cBack.style.borderWidth = '4px';
+            }
+
+            if (wrong === 0) AudioFX.playCorrect(); else AudioFX.playWrong();
+
+            globalMetrics.s3.correct = correct;
+            globalMetrics.s3.wrong = wrong;
+
+            document.getElementById('s3-correct').textContent = correct;
+            document.getElementById('s3-wrong').textContent = wrong;
+            document.getElementById('scorebar-station3').classList.remove('hidden');
+
+            document.getElementById('btn-validate-station3').classList.add('disabled-action');
+            document.getElementById('btn-validate-station3').style.opacity = '0.5';
+
+            unlockStation('station-4');
+        }
+
+        /* ---------------- 4. أَتَمَرَّنُ 2 ---------------- */
+        const station4Checks = {
+            t2_opt1: false,
+            t2_opt2: false,
+            t2_opt3: false,
+            t2_opt4: false
+        };
+
+        function toggleSquareBox(boxId) {
+            const el = document.getElementById(boxId);
+            if (!el || el.classList.contains('disabled-action')) return;
+            AudioFX.playClick();
+            station4Checks[boxId] = !station4Checks[boxId];
+            if (station4Checks[boxId]) {
+                el.classList.add('checked');
+                el.textContent = '×';
+            } else {
+                el.classList.remove('checked');
+                el.textContent = '';
+            }
+        }
+
+        function validateStation4() {
+            const expected = {
+                t2_opt1: false,
+                t2_opt2: true,
+                t2_opt3: true,
+                t2_opt4: false
+            };
+
+            let correct = 0;
+            let wrong = 0;
+
+            ['t2_opt1', 't2_opt2', 't2_opt3', 't2_opt4'].forEach(id => {
+                const el = document.getElementById(id);
+                el.classList.add('disabled-action');
+                const isChecked = station4Checks[id];
+                const shouldBeChecked = expected[id];
+
+                if (isChecked === shouldBeChecked) {
+                    correct++;
+                    if (shouldBeChecked) {
+                        el.style.borderColor = '#2e7d32';
+                        el.style.backgroundColor = '#dcfce7';
+                        el.style.color = '#2e7d32';
+                    }
+                } else {
+                    wrong++;
+                    el.style.borderColor = '#c62828';
+                    el.style.backgroundColor = '#fee2e2';
+                    el.style.color = '#c62828';
+                    if (shouldBeChecked && !isChecked) {
+                        el.textContent = '✓';
+                        el.style.borderColor = '#2e7d32';
+                        el.style.color = '#2e7d32';
+                    }
+                }
+            });
+
+            if (wrong === 0) AudioFX.playCorrect(); else AudioFX.playWrong();
+
+            globalMetrics.s4.correct = correct;
+            globalMetrics.s4.wrong = wrong;
+
+            document.getElementById('s4-correct').textContent = correct;
+            document.getElementById('s4-wrong').textContent = wrong;
+            document.getElementById('scorebar-station4').classList.remove('hidden');
+
+            document.getElementById('btn-validate-station4').classList.add('disabled-action');
+            document.getElementById('btn-validate-station4').style.opacity = '0.5';
+
+            unlockStation('station-5');
+        }
+
+        /* ---------------- 5. أَتَمَرَّنُ 3 ---------------- */
+        function validateStation5() {
+            const rcExpected = [
+                { id: 'rc-slot-1', exp: 'green' },
+                { id: 'rc-slot-2', exp: 'white' },
+                { id: 'rc-slot-3', exp: 'blue' },
+                { id: 'rc-slot-4', exp: 'white' },
+                { id: 'rc-slot-5', exp: 'red' }
+            ];
+
+            let correct = 0;
+            let wrong = 0;
+
+            rcExpected.forEach(item => {
+                const el = document.getElementById(item.id);
+                el.classList.add('disabled-action');
+                const userVal = el.getAttribute('data-assigned-color') || 'white';
+                el.style.borderStyle = 'solid';
+                if (userVal === item.exp) {
+                    correct++;
+                    el.style.borderColor = '#2e7d32';
+                    el.style.borderWidth = '4px';
+                } else {
+                    wrong++;
+                    el.style.borderColor = '#c62828';
+                    el.style.borderWidth = '4px';
+                }
+            });
+
+            if (wrong === 0) AudioFX.playCorrect(); else AudioFX.playWrong();
+
+            globalMetrics.s5.correct = correct;
+            globalMetrics.s5.wrong = wrong;
+
+            document.getElementById('s5-correct').textContent = correct;
+            document.getElementById('s5-wrong').textContent = wrong;
+            document.getElementById('scorebar-station5').classList.remove('hidden');
+
+            document.getElementById('btn-validate-station5').classList.add('disabled-action');
+            document.getElementById('btn-validate-station5').style.opacity = '0.5';
+
+            unlockStation('station-6');
+        }
+
+        /* ---------------- 6. أَبْحَثُ ---------------- */
+        let abhathChoice = null;
+
+        function selectAbhathChoice(choice) {
+            AudioFX.playClick();
+            abhathChoice = choice;
+            ['box-abhath-1', 'box-abhath-2', 'box-abhath-3'].forEach(id => {
+                const b = document.getElementById(id);
+                b.classList.remove('checked');
+                b.textContent = '';
+            });
+            if (choice === 'البنت') {
+                const b = document.getElementById('box-abhath-1');
+                b.classList.add('checked');
+                b.textContent = '×';
+            } else if (choice === 'أخوها') {
+                const b = document.getElementById('box-abhath-2');
+                b.classList.add('checked');
+                b.textContent = '×';
+            } else if (choice === 'كلاهما') {
+                const b = document.getElementById('box-abhath-3');
+                b.classList.add('checked');
+                b.textContent = '×';
+            }
+        }
+
+        function validateStation6() {
+            let correct = 0;
+            let wrong = 0;
+
+            const isCorrect = (abhathChoice === 'كلاهما');
+            const box3 = document.getElementById('box-abhath-3');
+            const box1 = document.getElementById('box-abhath-1');
+            const box2 = document.getElementById('box-abhath-2');
+
+            [box1, box2, box3].forEach(b => b.classList.add('disabled-action'));
+
+            if (isCorrect) {
+                correct = 1;
+                box3.style.borderColor = '#2e7d32';
+                box3.style.backgroundColor = '#dcfce7';
+                box3.style.color = '#2e7d32';
+            } else {
+                wrong = 1;
+                if (abhathChoice === 'البنت') {
+                    box1.style.borderColor = '#c62828';
+                    box1.style.backgroundColor = '#fee2e2';
+                    box1.style.color = '#c62828';
+                } else if (abhathChoice === 'أخوها') {
+                    box2.style.borderColor = '#c62828';
+                    box2.style.backgroundColor = '#fee2e2';
+                    box2.style.color = '#c62828';
+                }
+                box3.style.borderColor = '#2e7d32';
+                box3.style.color = '#2e7d32';
+                box3.textContent = '✓';
+            }
+
+            if (isCorrect) AudioFX.playCorrect(); else AudioFX.playWrong();
+
+            globalMetrics.s6.correct = correct;
+            globalMetrics.s6.wrong = wrong;
+
+            document.getElementById('s6-correct').textContent = correct;
+            document.getElementById('s6-wrong').textContent = wrong;
+            document.getElementById('scorebar-station6').classList.remove('hidden');
+
+            document.getElementById('btn-validate-station6').classList.add('disabled-action');
+            document.getElementById('btn-validate-station6').style.opacity = '0.5';
+
+            showFinalEvaluation();
+        }
+
+        /* ---------------- التقييم الختامي العام ---------------- */
+        function showFinalEvaluation() {
+            const card = document.getElementById('final-summary-card');
+            card.classList.remove('hidden');
+
+            const totalQ = Object.values(globalMetrics).reduce((acc, cur) => acc + cur.total, 0);
+            const totalCorrect = Object.values(globalMetrics).reduce((acc, cur) => acc + cur.correct, 0);
+            const totalWrong = totalQ - totalCorrect;
+            const percentage = Math.round((totalCorrect / totalQ) * 100);
+
+            document.getElementById('final-total-count').textContent = totalQ;
+            document.getElementById('final-correct-count').textContent = totalCorrect;
+            document.getElementById('final-wrong-count').textContent = totalWrong;
+            document.getElementById('final-percentage-text').textContent = percentage + '%';
+
+            const circle = document.getElementById('final-circle-bar');
+            const offset = 314.159 - (percentage / 100) * 314.159;
+            setTimeout(() => {
+                circle.style.strokeDashoffset = offset;
+            }, 100);
+
+            const noteEl = document.getElementById('pedagogical-feedback');
+            if (percentage >= 85) {
+                noteEl.textContent = 'مُمْتَازٌ! إِدْرَاكٌ فَضَائِيٌّ رَائِعٌ وَدَقِيقٌ 🌟';
+                noteEl.className = 'text-xl font-black text-[#2e7d32]';
+                circle.setAttribute('stroke', '#2e7d32');
+            } else if (percentage >= 60) {
+                noteEl.textContent = 'جَيِّدٌ جِدًّا! تَمَكَّنْتَ مِنْ مُعْظَمِ الْمَفَاهِيمِ الفَضَائِيَّةِ 👍';
+                noteEl.className = 'text-xl font-black text-sky-700';
+                circle.setAttribute('stroke', '#0284c7');
+            } else {
+                noteEl.textContent = 'يُوصَى بِمُرَاجَعَةِ الدَّرْسِ وَإِعَادَةِ التَّطْبِيقِ 💡';
+                noteEl.className = 'text-xl font-black text-amber-600';
+                circle.setAttribute('stroke', '#ca8a04');
+            }
+
+            card.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function unlockStation(stationId) {
+            const st = document.getElementById(stationId);
+            if (st) {
+                st.classList.remove('locked-station');
+                setTimeout(() => {
+                    st.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+        }
+
+        function restartLesson() {
+            window.location.reload();
+        }
+
+        function exitApp() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
