@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>درس تفاعلي: الْيَوْمَ نُنَظِّفُ بَيْتَنَا</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- مكتبة Telegram WebApp (ضرورية للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    :root {
+      --primary: #1976d2;
+      --primary-dark: #0d47a1;
+      --success: #2e7d32;
+      --error: #c62828;
+      --bg: #f5f9fc;
+      --card-bg: #ffffff;
+      --text: #263238;
+      --text-muted: #546e7a;
+      --accent: #ff9800;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      padding: 15px;
+      direction: rtl;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: var(--card-bg);
+      padding: 16px 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      border-right: 6px solid var(--primary);
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      color: var(--primary-dark);
+      font-weight: 900;
+    }
+
+    .btn-sound {
+      background: #e3f2fd;
+      border: 1px solid #bbdefb;
+      color: var(--primary-dark);
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .lesson-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border-top: 6px solid var(--primary);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      padding: 24px;
+      margin-bottom: 25px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .lesson-card.locked {
+      opacity: 0.55;
+      pointer-events: none;
+      filter: grayscale(40%);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      border-bottom: 2px dashed #eceff1;
+      padding-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .page-badge {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 4px 12px;
+      border-radius: 12px;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--primary-dark);
+    }
+
+    .eval-badge {
+      font-size: 0.85rem;
+      font-weight: 700;
+      background: #eceff1;
+      padding: 4px 10px;
+      border-radius: 10px;
+    }
+
+    .lesson-text-box {
+      background: #fdfbf7;
+      border-right: 5px solid var(--accent);
+      padding: 16px;
+      border-radius: 10px;
+      margin-bottom: 18px;
+      font-size: 1.15rem;
+      color: #37474f;
+      line-height: 2;
+    }
+
+    .img-fluid {
+      width: 100%;
+      max-height: 380px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+    }
+
+    .exercise-block {
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .exercise-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      color: #1e293b;
+    }
+
+    .shuffle-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .opt-btn {
+      background: #f8fafc;
+      border: 2px solid #cfd8dc;
+      color: var(--text);
+      padding: 9px 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 1.05rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .opt-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #e3f2fd;
+    }
+
+    .opt-btn.selected {
+      border-color: var(--primary);
+      background: #bbdefb;
+    }
+
+    .opt-btn.correct {
+      background: #e8f5e9 !important;
+      border-color: var(--success) !important;
+      color: var(--success) !important;
+      font-weight: 700;
+    }
+
+    .opt-btn.wrong {
+      background: #ffebee !important;
+      border-color: var(--error) !important;
+      color: var(--error) !important;
+      font-weight: 700;
+    }
+
+    .slot-box {
+      display: inline-block;
+      min-width: 90px;
+      min-height: 36px;
+      border: 2px dashed #90a4ae;
+      border-radius: 8px;
+      background: #fff;
+      vertical-align: middle;
+      text-align: center;
+      line-height: 36px;
+      padding: 0 10px;
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin: 0 4px;
+    }
+
+    .slot-box.filled {
+      border-style: solid;
+      border-color: var(--primary);
+      background: #e1f5fe;
+    }
+
+    .slot-box.correct {
+      background: #e8f5e9 !important;
+      border-color: var(--success) !important;
+      color: var(--success) !important;
+    }
+
+    .slot-box.wrong {
+      background: #ffebee !important;
+      border-color: var(--error) !important;
+      color: var(--error) !important;
+    }
+
+    .text-input {
+      padding: 8px 12px;
+      border: 2px solid #cfd8dc;
+      border-radius: 8px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-align: center;
+      width: 140px;
+      outline: none;
+    }
+
+    .text-input:focus {
+      border-color: var(--primary);
+    }
+
+    .check-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      display: inline-block;
+    }
+
+    .check-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .feedback-msg {
+      margin-top: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .feedback-msg.success { color: var(--success); }
+    .feedback-msg.error { color: var(--error); }
+
+    .highlight-red {
+      color: var(--error);
+      font-weight: 700;
+    }
+
+    .activity-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      background: #fff;
+    }
+
+    .activity-table th, .activity-table td {
+      border: 1px solid #b0bec5;
+      padding: 10px;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .activity-table th {
+      background: #e3f2fd;
+      color: var(--primary-dark);
+      font-weight: 700;
+    }
+
+    .table-dropzone {
+      min-height: 48px;
+      border: 2px dashed #cfd8dc;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 6px;
+      cursor: pointer;
+    }
+
+    #final-report {
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      margin-top: 30px;
+      display: none;
+      border-top: 6px solid var(--success);
+    }
+
+    .score-pct {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--primary);
+      margin: 15px 0;
+    }
+
+    .action-btn {
+      padding: 12px 28px;
+      border-radius: 12px;
+      border: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin: 6px;
+    }
+    .btn-retry { background: var(--primary); color: #fff; }
+    .btn-exit { background: #cfd8dc; color: #37474f; }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      max-width: 826px;
+      margin: 12px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+<div class="container">
+  <header>
+    <div>
+      <h1>الْيَوْمَ نُنَظِّفُ بَيْتَنَا</h1>
+      <small style="color: var(--text-muted); font-weight: 700;">السنة الثانية ابتدائي • اللغة العربية والتربية الإسلامية</small>
+    </div>
+    <button class="btn-sound" id="soundToggle" onclick="toggleAudio()">🔊 الصَّوْتُ: مُفَعَّل</button>
+  </header>
+
+  <!-- المحطة 1: فهم المنطوق وأسئلته -->
+  <section class="lesson-card" id="card-0">
+    <div class="card-header">
+      <span class="page-badge">دَلِيلُ الْمُعَلِّمِ • فَهْمُ الْمَنْطُوقِ</span>
+      <h2 class="card-title">فَهْمُ الْمَنْطُوقِ: هَلْ يُمْكِنُ الْعَيْشُ بِلَا مَسْكَنٍ؟</h2>
+      <span class="eval-badge" id="badge-0">0 / 4</span>
+    </div>
+
+    <div class="lesson-text-box" style="text-align: center; padding: 20px;">
+      <p style="font-weight: 700; color: var(--primary-dark); margin-bottom: 10px;">🎧 اِسْتَمِعْ بِانْتِبَاهٍ إِلَى النَّصِّ الْمَنْطُوقِ ثُمَّ أَجِبْ عَنِ الْأَسْئِلَةِ:</p>
+      <audio id="audioElement" controls style="width: 100%; max-width: 500px; margin: 0 auto;">
+        <source src="audio_fahmu_mantouq.mp3" type="audio/mpeg">
+        المتصفح لا يدعم مشغل الصوت.
+      </audio>
+    </div>
+
+    <div class="exercise-block" id="fm-q1">
+      <p class="exercise-title">1. حَدِّدْ مِن بَيْنِ الْحَيَوَانَاتِ الْآتِيَةِ تِلْكَ الَّتِي ذُكِرَتْ فِي النَّصِّ:</p>
+      <div class="shuffle-container" id="fm-q1-opts">
+        <button class="opt-btn" data-key="arnab" data-correct="true" onclick="toggleMultiSelect(this)">الْأَرْنَبُ</button>
+        <button class="opt-btn" data-key="kalb" data-correct="false" onclick="toggleMultiSelect(this)">الْكَلْبُ</button>
+        <button class="opt-btn" data-key="sinjab" data-correct="false" onclick="toggleMultiSelect(this)">السِّنْجَابُ</button>
+        <button class="opt-btn" data-key="baqara" data-correct="false" onclick="toggleMultiSelect(this)">الْبَقَرَةُ</button>
+        <button class="opt-btn" data-key="nahl" data-correct="true" onclick="toggleMultiSelect(this)">النَّحْلُ</button>
+        <button class="opt-btn" data-key="asad" data-correct="false" onclick="toggleMultiSelect(this)">الْأَسَدُ</button>
+        <button class="opt-btn" data-key="kharouf" data-correct="false" onclick="toggleMultiSelect(this)">الْخَرُوفُ</button>
+      </div>
+      <button class="check-btn" onclick="checkFmQ1()">تَأْكِيدُ الِاخْتِيَارِ</button>
+      <div class="feedback-msg" id="fm-q1-fb"></div>
+    </div>
+
+    <div class="exercise-block" id="fm-q2">
+      <p class="exercise-title">2. صَحِّحِ الْأَخْطَاءَ (اضْغَطْ عَلَى الْمَسْكَنِ ثُمَّ اضْغَطْ عَلَى مَكَانِهِ لِتَصْحِيحِ النِّسْبَةِ):</p>
+      <div class="shuffle-container" id="fm-q2-bank">
+        <button class="opt-btn" data-val="جُحْرُهُ" onclick="selectWordBank(this)">جُحْرُهُ</button>
+        <button class="opt-btn" data-val="عُشُّهُ" onclick="selectWordBank(this)">عُشُّهُ</button>
+        <button class="opt-btn" data-val="عَرِينُهُ" onclick="selectWordBank(this)">عَرِينُهُ</button>
+        <button class="opt-btn" data-val="خَلِيَّتُهُ" onclick="selectWordBank(this)">خَلِيَّتُهُ</button>
+      </div>
+      <div style="line-height: 2.4; margin-top: 10px;">
+        • لِلْأَرْنَبِ: <span class="slot-box" data-expected="جُحْرُهُ" onclick="placeWordSlot(this)">...</span> | 
+        • لِلْعُصْفُورِ: <span class="slot-box" data-expected="عُشُّهُ" onclick="placeWordSlot(this)">...</span> | 
+        • لِلْأَسَدِ: <span class="slot-box" data-expected="عَرِينُهُ" onclick="placeWordSlot(this)">...</span> | 
+        • وَلِلنَّحْلِ: <span class="slot-box" data-expected="خَلِيَّتُهُ" onclick="placeWordSlot(this)">...</span>
+      </div>
+      <button class="check-btn" onclick="checkSlotsExercise('fm-q2', 0)">تَحَقَّقْ</button>
+      <div class="feedback-msg" id="fm-q2-fb"></div>
+    </div>
+
+    <div class="exercise-block" id="fm-q3">
+      <p class="exercise-title">3. مَتَى يَغْضَبُ الطَّائِرُ غَضَبًا شَدِيدًا؟</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 0)">عِنْدَمَا يَرْجِعُ إِلَى عُشِّهِ لَيْلًا</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 0)">إِذَا اقْتَرَبَ أَحَدٌ مِنْ بَيْضِهِ أَوْ فِرَاخِهِ</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 0)">عِنْدَمَا يَمْطُرُ السَّحَابُ</button>
+      </div>
+    </div>
+
+    <div class="exercise-block" id="fm-q4">
+      <p class="exercise-title">4. الْبَيْتُ أَعَزُّ مَكَانٍ عِنْدَ الْإِنْسَانِ، كَيْفَ يَجِبُ أَنْ يَعِيشَ فِيهِ أَفْرَادُ الْعَائِلَةِ؟</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 0)">يَجْتَمِعُونَ فِيهِ وَيَتَعَاوَنُونَ مَعًا لِيَعِيشُوا عِيشَةً كَرِيمَةً</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 0)">يَعِيشُ كُلُّ فَرْدٍ بِمُفْرَدِهِ دُونَ تَعَاوُنٍ</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- المحطة 2: ص 32 أتأمل وأتحدث -->
+  <section class="lesson-card locked" id="card-1">
+    <div class="card-header">
+      <span class="page-badge">الْكِتَابُ الْمَدْرَسِيُّ ص 32</span>
+      <h2 class="card-title">أَتَأَمَّلُ وَأَتَحَدَّثُ</h2>
+      <span class="eval-badge" id="badge-1">0 / 2</span>
+    </div>
+
+    <div class="exercise-block" id="p32-q1">
+      <img src="p32_bird_nest.jpg" alt="العصفور وفراخه" class="img-fluid">
+      <p class="exercise-title">◄ كَيْفَ يَبْنِي الطَّائِرُ عُشَّهُ؟</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 1)">يَجْمَعُ الْأَغْصَانَ الصَّغِيرَةَ وَالْقَشَّ بِمِنْقَارِهِ بِصَبْرٍ وَإِتْقَانٍ</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 1)">يَشْتَرِي مَوَادَّ الْبِنَاءِ مِنَ الْمَتْجَرِ</button>
+      </div>
+    </div>
+
+    <div class="exercise-block" id="p32-q2">
+      <img src="p32_buildings.jpg" alt="عمارات الجيران" class="img-fluid">
+      <p class="exercise-title">◄ مَا هُوَ وَاجِبُ الْجِيرَانِ نَحْوَ بَعْضِهِمْ؟</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 1)">إِلْقَاءُ الْقُمَامَةِ أَمَامَ أَبْوَابِ الْجِيرَانِ وَإِزْعَاجُهُمْ</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 1)">التَّعَاوُنُ وَالِاحْتِرَامُ الْمُتَبَادَلُ وَالْمُحَافَظَةُ عَلَى نَظَافَةِ الْمُحِيطِ</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- المحطة 3: ص 33 أنتج شفوياً -->
+  <section class="lesson-card locked" id="card-2">
+    <div class="card-header">
+      <span class="page-badge">الْكِتَابُ الْمَدْرَسِيُّ ص 33</span>
+      <h2 class="card-title">أُنْتِجُ شَفَوِيًّا: أُلَاحِظُ الْمَشَاهِدَ وَأُعَبِّرُ عَنْ أَحْدَاثِهَا</h2>
+      <span class="eval-badge" id="badge-2">0 / 3</span>
+    </div>
+
+    <div class="exercise-block" id="p33-m1">
+      <img src="p33_mother_cooking.jpg" alt="المشهد 1" class="img-fluid">
+      <p class="exercise-title">◄ الْمَشْهَدُ (1): عَبِّرْ عَمَّا تَقُومُ بِهِ الْأُمُّ فِي الْمَطْبَخِ:</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 2)">تَقُومُ الْأُمُّ بِإِعْدَادِ طَعَامِ الْغَدَاءِ الشَّهِيّ لِعَائِلَتِهَا</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 2)">تَغْسِلُ الْأُمُّ الْمَلَابِسَ فِي الْفِنَاءِ</button>
+      </div>
+    </div>
+
+    <div class="exercise-block" id="p33-m2">
+      <img src="p33_cleaning_kitchen.jpg" alt="المشهد 2" class="img-fluid">
+      <p class="exercise-title">◄ الْمَشْهَدُ (2): عَبِّرْ عَنِ التَّعَاوُنِ بَيْنَ الْأُخْتَيْنِ فِي الْمَطْبَخِ:</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 2)">تَلْعَبَانِ بِالْكُرَةِ دَاخِلَ الْمَطْبَخِ</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 2)">إِحْدَاهُمَا تَغْسِلُ الْأَوَانِي وَالْأُخْرَى تَمْسَحُ الْأَرْضِيَّةَ بِنَشَاطٍ</button>
+      </div>
+    </div>
+
+    <div class="exercise-block" id="p33-m3">
+      <img src="p33_cleaning_bedroom.jpg" alt="المشهد 3" class="img-fluid">
+      <p class="exercise-title">◄ الْمَشْهَدُ (3): عَبِّرْ عَمَّا يَفْعَلُهُ الْوَلَدُ فِي غُرْفَتِهِ:</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 2)">يَجْمَعُ لُعَبَهُ الْمُبَعْثَرَةَ فِي الصُّنْدُوقِ وَيُرَتِّبُ غُرْفَتَهُ</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 2)">يَبْعَثِرُ الْكُتُبَ وَيُمَزِّقُهَا</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- المحطة 4: ص 34 نص القراءة -->
+  <section class="lesson-card locked" id="card-3">
+    <div class="card-header">
+      <span class="page-badge">الْكِتَابُ الْمَدْرَسِيُّ ص 34</span>
+      <h2 class="card-title">أَقْرَأُ: الْيَوْمَ نُنَظِّفُ بَيْتَنَا</h2>
+      <span class="eval-badge" id="badge-3">0 / 2</span>
+    </div>
+
+    <img src="p34_cleaning_dishes.jpg" alt="اليوم ننظف بيتنا" class="img-fluid">
+
+    <div class="lesson-text-box">
+      <p>فِي صَبَاحِ يَوْمِ الْجُمُعَةِ، قَالَتْ أُمِّي: الْيَوْمَ نُنَظِّفُ بَيْتَنَا.</p>
+      <p>سَاعَدْتُ أُمِّي فِي غَسْلِ الْأَوَانِي، وَكَنْسِ الْبَيْتِ، وَتَرْتِيبِ الْأَثَاثِ، وَنَظَّمْنَا الْمَلَابِسَ فِي الْخِزَانَةِ. أَمَّا أُخْتِي الْكُبْرَى، فَأَخْرَجَتِ الْأَفْرِشَةَ وَالزَّرَابِيَّ إِلَى الشُّرْفَةِ.</p>
+      <p>وَفِي الْمَسَاءِ، جَاءَتْ صَدِيقَتِي مَرْيَمُ لِتَلْعَبَ مَعِي، فَقَالَتْ: مَا أَرْوَعَ بَيْتَكُمْ! نَحْنُ أَيْضًا سَنُنَظِّفُ بَيْتَنَا الْأُسْبُوعَ الْقَادِمَ.</p>
+    </div>
+
+    <div class="lesson-text-box" style="background: #eef7ee; border-right-color: var(--success);">
+      <h3 style="color: var(--success); margin-bottom: 8px;">مَعَانِي الْمُفْرَدَاتِ:</h3>
+      <p>• <span class="highlight-red">كَنَسَ :</span> أَكْنُسُ الْغُبَارَ حَتَّى يُصْبِحَ بَيْتُنَا نَظِيفًا .</p>
+      <p>• <span class="highlight-red">تَرْتِيبُ :</span> الْمَلَابِسُ مُرَتَّبَةٌ فِي الْخِزَانَةِ .</p>
+    </div>
+
+    <div class="exercise-block" id="p34-q1">
+      <p class="exercise-title">◄ سَاعَدَتْ سَلْمَى أُمَّهَا فِي الْكَثِيرِ مِنَ الْأَعْمَالِ، اذْكُرْهَا مُرَتَّبَةً:</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 3)">غَسْلُ الْأَوَانِي، كَنْسُ الْبَيْتِ، تَرْتِيبُ الْأَثَاثِ، تَنْظِيمُ الْمَلَابِسِ فِي الْخِزَانَةِ</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 3)">إِعْدَادُ الطَّعَامِ، شِرَاءُ الْخُضَرِ، النَّوْمُ بَاكِرًا</button>
+      </div>
+    </div>
+
+    <div class="exercise-block" id="p34-q2">
+      <p class="exercise-title">◄ أَرَادَتْ مَرْيَمُ أَنْ تَقُومَ بِنَفْسِ الْعَمَلِ الَّذِي قَامَتْ بِهِ عَائِلَةُ سَلْمَى، مَا رَأْيُكَ فِي تَصَرُّفِهَا؟</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 3)">تَصَرُّفٌ خَاطِئٌ وَغَيْرُ مُفِيدٍ</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 3)">تَصَرُّفٌ رَائِعٌ وَجَمِيلٌ يَدُلُّ عَلَى حُبِّ النَّظَافَةِ وَالْمُسَاعَدَةِ</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- المحطة 5: ص 35 -->
+  <section class="lesson-card locked" id="card-4">
+    <div class="card-header">
+      <span class="page-badge">الْكِتَابُ الْمَدْرَسِيُّ ص 35</span>
+      <h2 class="card-title">أَكْتَشِفُ وَأُمَيِّزُ • أَحْسَنُ قِرَاءَتِي • أَتَدَرَّبُ عَلَى الْإِنْتَاجِ الْكِتَابِيِّ</h2>
+      <span class="eval-badge" id="badge-4">0 / 1</span>
+    </div>
+
+    <div class="lesson-text-box">
+      <h3 style="margin-bottom: 8px;">أَكْتَشِفُ وَأُمَيِّزُ: أَقْرَأُ مُنْتَبِهًا إِلَى الْحَرْفَيْنِ (<span class="highlight-red">ب</span> / <span class="highlight-red">م</span>):</h3>
+      <p>• سَاعَدْتُ أُ<span class="highlight-red">مِّ</span>ي فِي غَسْلِ الْأَوَانِي، وَكَنَسِ الْ<span class="highlight-red">بَ</span>يْتِ، وَتَرْتِي<span class="highlight-red">بِ</span> الْأَثَاثِ .</p>
+      <p style="letter-spacing: 2px; font-weight: 700; margin-top: 8px;">
+        <span class="highlight-red">مَ</span> - <span class="highlight-red">بَ</span> &nbsp;&nbsp;|&nbsp;&nbsp; 
+        <span class="highlight-red">مَا</span> - <span class="highlight-red">بَا</span> &nbsp;&nbsp;|&nbsp;&nbsp; 
+        <span class="highlight-red">مِي</span> - <span class="highlight-red">بِي</span> &nbsp;&nbsp;|&nbsp;&nbsp; 
+        <span class="highlight-red">مُو</span> - <span class="highlight-red">بُو</span>
+      </p>
+      <p style="margin-top: 6px;">
+        • <span class="highlight-red">مَ</span>طَرِيَّةٌ &nbsp;-&nbsp; 
+        <span class="highlight-red">بِ</span>طَانِيَّةٌ &nbsp;-&nbsp; 
+        تُرَتِّ<span class="highlight-red">بُ</span> &nbsp;-&nbsp; 
+        تُنَظِّ<span class="highlight-red">مُ</span> &nbsp;-&nbsp; 
+        أَحْ<span class="highlight-red">بَا</span>بٌ &nbsp;-&nbsp; 
+        حَ<span class="highlight-red">مَا</span>مٌ
+      </p>
+    </div>
+
+    <div class="lesson-text-box">
+      <h3 style="margin-bottom: 8px;">أُحَسِّنُ قِرَاءَتِي: أَقْرَأُ الْمَدَّ جَيِّدًا:</h3>
+      <p>• أَخْبَرْتُ صَدِيقَ<span class="highlight-red">تِي</span> بِكُلِّ <span class="highlight-red">مَا</span> قُمْ<span class="highlight-red">نَا</span> بِهِ، وَقَالَ<span class="highlight-red">تْ</span> <span class="highlight-red">لِي</span>: نَحْنُ أَيْضًا سَنُنَظِّفُ بَيْ<span class="highlight-red">تَنَا</span> الْأُسْ<span class="highlight-red">بُو</span>عَ الْقَادِمَ .</p>
+    </div>
+
+    <div class="exercise-block" id="p35-prod">
+      <p class="exercise-title">◄ أَخْتَارُ الْكَلِمَاتِ، لِأُكْمِلَ بِنَاءَ النَّصِّ: (اضْغَطْ عَلَى الْكَلِمَةِ ثُمَّ عَلَى مَكَانِهَا الْمُنَاسِبِ)</p>
+      
+      <div class="shuffle-container" id="p35-bank">
+        <button class="opt-btn" data-val="فِنَاءَ" onclick="selectWordBank(this)">فِنَاءَ</button>
+        <button class="opt-btn" data-val="مَنْزِلُنَا" onclick="selectWordBank(this)">مَنْزِلُنَا</button>
+        <button class="opt-btn" data-val="وَأَخِي" onclick="selectWordBank(this)">وَأَخِي</button>
+        <button class="opt-btn" data-val="نَظِيفًا" onclick="selectWordBank(this)">نَظِيفًا</button>
+        <button class="opt-btn" data-val="نَحْنُ" onclick="selectWordBank(this)">نَحْنُ</button>
+      </div>
+
+      <div style="background: #fff; padding: 18px; border-radius: 12px; border: 1px solid #cfd8dc; line-height: 2.8; font-size: 1.15rem;">
+        - أَيْنَ أَبِي <span class="slot-box" data-expected="وَأَخِي" onclick="placeWordSlot(this)">...</span> خَالِدٌ؟ <br>
+        - <span class="slot-box" data-expected="نَحْنُ" onclick="placeWordSlot(this)">...</span> نُنَظِّفُ <span class="slot-box" data-expected="فِنَاءَ" onclick="placeWordSlot(this)">...</span> الْمَنْزِلِ، تَعَالَيْ <br>
+        - سَيُصْبِحُ <span class="slot-box" data-expected="مَنْزِلُنَا" onclick="placeWordSlot(this)">...</span> <span class="slot-box" data-expected="نَظِيفًا" onclick="placeWordSlot(this)">...</span> يَا أَبِي
+      </div>
+      <button class="check-btn" onclick="checkSlotsExercise('p35-prod', 4)">تَحَقَّقْ مِنَ الْإِجَابَاتِ</button>
+      <div class="feedback-msg" id="p35-prod-fb"></div>
+    </div>
+  </section>
+
+  <!-- المحطة 6: ص 36 التربية الإسلامية -->
+  <section class="lesson-card locked" id="card-5">
+    <div class="card-header">
+      <span class="page-badge">الْكِتَابُ الْمَدْرَسِيُّ ص 36</span>
+      <h2 class="card-title">التَّرْبِيَةُ الْإِسْلَامِيَّةُ: الصِّدْقُ فِي الْقَوْلِ</h2>
+      <span class="eval-badge" id="badge-5">0 / 3</span>
+    </div>
+
+    <div class="lesson-text-box">
+      <h3 style="color: var(--primary-dark); margin-bottom: 8px;">أَقْرَأُ وَأُلَاحِظُ:</h3>
+      <p>كَانَتْ لِسَلْمَى دُمْيَةٌ وَاحِدَةٌ، وَأَرَادَتْ أَنْ تَشْتَرِيَ أُخْرَى، فَتَوَجَّهَتْ إِلَى أَخِيهَا قَائِلَةً: «أَخِي، هَلْ تَشْتَرِي لِي دُمْيَةً؟ أَنَا لَيْسَ لِي لُعْبَةٌ أَلْعَبُ بِهَا مَعَ صَدِيقَاتِي».</p>
+    </div>
+
+    <div class="exercise-block" id="p36-q1">
+      <p class="exercise-title">1. هَلْ أَخْبَرَتْ سَلْمَى أَخَاهَا بِأَنَّهَا تَمْلِكُ دُمْيَةً؟</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 5)">نَعَمْ، أَخْبَرَتْهُ بِالصِّدْقِ</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 5)">لَا، لَمْ تُخْبِرْهُ بِذَلِكَ (كَذَبَتْ عَلَيْهِ)</button>
+      </div>
+    </div>
+
+    <div class="exercise-block" id="p36-q2">
+      <p class="exercise-title">2. لَوْ كُنْتَ مَكَانَ سَلْمَى، مَاذَا تَقُولُ لِأَخِيكَ؟</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 5)">أَقُولُ لَهُ الصِّدْقَ: «عِنْدِي دُمْيَةٌ وَاحِدَةٌ وَأَرْغَبُ فِي شِرَاءِ دُمْيَةٍ أُخْرَى»</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 5)">أَكْذِبُ عَلَيْهِ لِيَشْتَرِيَ لِي دُمْيَةً جَدِيدَةً</button>
+      </div>
+    </div>
+
+    <div class="exercise-block" id="p36-q3">
+      <p class="exercise-title">3. كَيْفَ نُسَمِّي الْإِنْسَانَ الَّذِي لَا يَكْذِبُ؟</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 5)">مُطِيعًا</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 5)">صَادِقًا</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 5)">هَادِئًا</button>
+      </div>
+    </div>
+
+    <div class="lesson-text-box" style="margin-top: 20px; background: #e8f5e9; border-right-color: var(--success);">
+      <h3 style="color: var(--success); margin-bottom: 8px;">أَتَعَلَّمُ:</h3>
+      <p>«أَنَا تِلْمِيذٌ مُسْلِمٌ، أَقُولُ الصِّدْقَ وَلَا أَكْذِبُ، لِأَنَّ الْإِنْسَانَ الصَّادِقَ يُحِبُّهُ اللَّهُ وَرَسُولُهُ وَالنَّاسُ جَمِيعًا.»</p>
+    </div>
+
+    <div class="lesson-text-box" style="background: #fff8e1; border-right-color: #fbc02d;">
+      <h3 style="color: #f57f17; margin-bottom: 8px;">أَحْفَظُ:</h3>
+      <p>قَالَ الرَّسُولُ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ: <strong>﴿وَإِنَّ الرَّجُلَ لَيَصْدُقُ وَيَتَحَرَّى الصِّدْقَ حَتَّى يُكْتَبَ عِنْدَ اللَّهِ صِدِّيقًا﴾</strong>.</p>
+      <p><small>• يَتَحَرَّى الصِّدْقَ : يَقُولُ الصِّدْقَ دَائِمًا.</small></p>
+    </div>
+  </section>
+
+  <!-- المحطة 7: دفتر الأنشطة ص 20 -->
+  <section class="lesson-card locked" id="card-6">
+    <div class="card-header">
+      <span class="page-badge">دَفْتَرُ الْأَنْشِطَةِ ص 20</span>
+      <h2 class="card-title">تَمَارِينُ دَفْتَرِ الْأَنْشِطَةِ</h2>
+      <span class="eval-badge" id="badge-6">0 / 5</span>
+    </div>
+
+    <div class="exercise-block" id="act-p20-ex1">
+      <p class="exercise-title">1. أَمْلَأُ الْفَرَاغَ بِـ "ذَلِكَ" أَوْ "تِلْكَ": (اضْغَطْ عَلَى الْكَلِمَةِ ثُمَّ عَلَى مَكَانِهَا)</p>
+      <div class="shuffle-container" id="act-p20-bank">
+        <button class="opt-btn" data-val="ذَلِكَ" onclick="selectWordBank(this)">ذَلِكَ</button>
+        <button class="opt-btn" data-val="تِلْكَ" onclick="selectWordBank(this)">تِلْكَ</button>
+        <button class="opt-btn" data-val="ذَلِكَ" onclick="selectWordBank(this)">ذَلِكَ</button>
+        <button class="opt-btn" data-val="تِلْكَ" onclick="selectWordBank(this)">تِلْكَ</button>
+      </div>
+      <div style="line-height: 2.8; font-size: 1.15rem; background: #fff; padding: 15px; border-radius: 10px;">
+        • مُحَمَّدٌ: أُرِيدُ <span class="slot-box" data-expected="ذَلِكَ" onclick="placeWordSlot(this)">...</span> الْقَمِيصَ الْأَخْضَرَ وَ <span class="slot-box" data-expected="تِلْكَ" onclick="placeWordSlot(this)">...</span> الْقُبَّعَةَ الْبُنِّيَّةَ. <br>
+        • سَلْمَى: أَمَّا أَنَا، فَأُرِيدُ <span class="slot-box" data-expected="تِلْكَ" onclick="placeWordSlot(this)">...</span> التَّنُّورَةَ السَّوْدَاءَ وَ <span class="slot-box" data-expected="ذَلِكَ" onclick="placeWordSlot(this)">...</span> الْحِذَاءَ الْأَبْيَضَ.
+      </div>
+      <button class="check-btn" onclick="checkSlotsExercise('act-p20-ex1', 6)">تَحَقَّقْ مِنَ الصِّيَغِ</button>
+      <div class="feedback-msg" id="act-p20-ex1-fb"></div>
+    </div>
+
+    <div class="exercise-block" id="act-p20-reorder">
+      <p class="exercise-title">◄ أُرَتِّبُ كَلِمَاتِ الْجُمْلَةِ:</p>
+      <div class="shuffle-container" id="reorder-stars-bank">
+        <button class="opt-btn" data-val="تَظْهَرُ" onclick="selectWordBank(this)">تَظْهَرُ</button>
+        <button class="opt-btn" data-val="النُّجُومُ" onclick="selectWordBank(this)">النُّجُومُ</button>
+        <button class="opt-btn" data-val="فِي" onclick="selectWordBank(this)">فِي</button>
+        <button class="opt-btn" data-val="السَّمَاءِ" onclick="selectWordBank(this)">السَّمَاءِ</button>
+        <button class="opt-btn" data-val="لَيْلًا" onclick="selectWordBank(this)">لَيْلًا</button>
+      </div>
+      <div style="line-height: 2.8; font-size: 1.15rem; background: #fff; padding: 15px; border-radius: 10px;">
+        <span class="slot-box" data-expected="تَظْهَرُ" onclick="placeWordSlot(this)">...</span>
+        <span class="slot-box" data-expected="النُّجُومُ" onclick="placeWordSlot(this)">...</span>
+        <span class="slot-box" data-expected="فِي" onclick="placeWordSlot(this)">...</span>
+        <span class="slot-box" data-expected="السَّمَاءِ" onclick="placeWordSlot(this)">...</span>
+        <span class="slot-box" data-expected="لَيْلًا" onclick="placeWordSlot(this)">...</span>
+      </div>
+      <button class="check-btn" onclick="checkSlotsExercise('act-p20-reorder', 6)">تَحَقَّقْ مِنَ التَّرْتِيبِ</button>
+      <div class="feedback-msg" id="act-p20-reorder-fb"></div>
+    </div>
+
+    <div class="exercise-block" id="act-p20-ex2">
+      <p class="exercise-title">2. أُسَطِّرُ الْعِبَارَاتِ الصَّحِيحَةَ: تَعَلَّمْتُ مِنَ النَّصِّ:</p>
+      <div class="shuffle-container" id="p20-understand-opts">
+        <button class="opt-btn" data-correct="false" onclick="toggleMultiSelect(this)">1 - أُسَاعِدُ جِيرَانِي .</button>
+        <button class="opt-btn" data-correct="true" onclick="toggleMultiSelect(this)">2 - أُعَاوِنُ أُمِّي .</button>
+        <button class="opt-btn" data-correct="true" onclick="toggleMultiSelect(this)">3 - أُنَظِّفُ بَيْتَنَا .</button>
+        <button class="opt-btn" data-correct="true" onclick="toggleMultiSelect(this)">4 - أُرَتِّبُ الْأَثَاثَ .</button>
+        <button class="opt-btn" data-correct="false" onclick="toggleMultiSelect(this)">5 - أَزُورُ أَقَارِبِي .</button>
+        <button class="opt-btn" data-correct="false" onclick="toggleMultiSelect(this)">6 - أُطَالِعُ الْقِصَصَ .</button>
+      </div>
+      <button class="check-btn" onclick="checkP20Understand()">تَأْكِيدُ الْعِبَارَاتِ</button>
+      <div class="feedback-msg" id="act-p20-understand-fb"></div>
+    </div>
+
+    <div class="exercise-block" id="act-p20-antonym">
+      <p class="exercise-title">◄ مِنْ بَيْنِ الْكَلِمَاتِ الْآتِيَةِ، لَوِّنْ ضِدَّ كَلِمَةِ ( رَتَّبْتُ ) :</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 6)">نَظَّمْتُ</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 6)">أَضَعْتُ</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 6)">بَعْثَرْتُ</button>
+      </div>
+    </div>
+
+    <div class="exercise-block" id="act-p20-ex3">
+      <p class="exercise-title">3. أُكْمِلُ الْجَدْوَلَ وَفْقَ الْمِنْوَالِ (حَقْلُ كِتَابَةٍ):</p>
+      <table class="activity-table">
+        <thead>
+          <tr>
+            <th>أَنَا</th>
+            <th>نَحْنُ (أَنَا وَأُخْتِي)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>أَنَا أَقْفِزُ بِالْحَبْلِ.</td>
+            <td>نَحْنُ <input type="text" id="input-jump" class="text-input" placeholder="اكتب الفعل"> بِالْحَبْلِ.</td>
+          </tr>
+          <tr>
+            <td>أَنَا أَزُورُ خَالِي.</td>
+            <td>نَحْنُ <input type="text" id="input-visit" class="text-input" placeholder="اكتب الفعل"> خَالَنَا.</td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="check-btn" onclick="checkP20Grammar()">تَصْحِيحُ الْكِتَابَةِ</button>
+      <div class="feedback-msg" id="act-p20-grammar-fb"></div>
+    </div>
+  </section>
+
+  <!-- المحطة 8: دفتر الأنشطة ص 21 -->
+  <section class="lesson-card locked" id="card-7">
+    <div class="card-header">
+      <span class="page-badge">دَفْتَرُ الْأَنْشِطَةِ ص 21</span>
+      <h2 class="card-title">أُثْرِي رَصِيدِي اللُّغَوِيَّ</h2>
+      <span class="eval-badge" id="badge-7">0 / 1</span>
+    </div>
+
+    <div class="exercise-block" id="act-p21-ex4">
+      <p class="exercise-title">4. أُصَنِّفُ الْأَدَوَاتِ الْمَنْزِلِيَّةَ: (اضْغَطْ عَلَى الْكَلِمَةِ ثُمَّ عَلَى خَانَةِ الْغُرْفَةِ الْمُنَاسِبَةِ فِي الْجَدْوَلِ)</p>
+      <div class="shuffle-container" id="p21-table-bank">
+        <button class="opt-btn" data-val="صَابُونٌ" data-room="bath" onclick="selectWordBank(this)">صَابُونٌ</button>
+        <button class="opt-btn" data-val="أَرِيكَةٌ" data-room="living" onclick="selectWordBank(this)">أَرِيكَةٌ</button>
+        <button class="opt-btn" data-val="بِطَانِيَّةٌ" data-room="bed" onclick="selectWordBank(this)">بِطَانِيَّةٌ</button>
+        <button class="opt-btn" data-val="غَاسُولٌ" data-room="bath" onclick="selectWordBank(this)">غَاسُولٌ</button>
+        <button class="opt-btn" data-val="مِقْلَاةٌ" data-room="kitchen" onclick="selectWordBank(this)">مِقْلَاةٌ</button>
+        <button class="opt-btn" data-val="ثَلَّاجَةٌ" data-room="kitchen" onclick="selectWordBank(this)">ثَلَّاجَةٌ</button>
+        <button class="opt-btn" data-val="تِلْفَازٌ" data-room="living" onclick="selectWordBank(this)">تِلْفَازٌ</button>
+        <button class="opt-btn" data-val="وِسَادَةٌ" data-room="bed" onclick="selectWordBank(this)">وِسَادَةٌ</button>
+      </div>
+
+      <table class="activity-table">
+        <thead>
+          <tr>
+            <th>الْمَطْبَخُ</th>
+            <th>غُرْفَةُ النَّوْمِ</th>
+            <th>غُرْفَةُ الِاسْتِقْبَالِ</th>
+            <th>الْحَمَّامُ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="table-dropzone" id="zone-kitchen" onclick="dropToZone(this, 'kitchen')"></div></td>
+            <td><div class="table-dropzone" id="zone-bed" onclick="dropToZone(this, 'bed')"></div></td>
+            <td><div class="table-dropzone" id="zone-living" onclick="dropToZone(this, 'living')"></div></td>
+            <td><div class="table-dropzone" id="zone-bath" onclick="dropToZone(this, 'bath')"></div></td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="check-btn" onclick="checkP21Table()">تَأْكِيدُ التَّصْنِيفِ</button>
+      <div class="feedback-msg" id="act-p21-table-fb"></div>
+    </div>
+  </section>
+
+  <!-- المحطة 9: دفتر الأنشطة ص 22 -->
+  <section class="lesson-card locked" id="card-8">
+    <div class="card-header">
+      <span class="page-badge">دَفْتَرُ الْأَنْشِطَةِ ص 22</span>
+      <h2 class="card-title">الصِّدْقُ فِي الْقَوْلِ</h2>
+      <span class="eval-badge" id="badge-8">0 / 4</span>
+    </div>
+
+    <div class="exercise-block" id="act-p22-q1">
+      <p class="exercise-title">1 - قَضَيْتَ وَقْتًا طَوِيلًا فِي اللَّعِبِ، سَأَلَتْكَ أُمُّكَ: أَيْنَ كُنْتَ؟</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 8)">أَكْذِبُ عَلَيْهَا وَأَقُولُ كُنْتُ أَدْرُسُ فِي الْمَكْتَبَةِ</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 8)">أُصَارِحُهَا بِصِدْقٍ وَأَقُولُ: كُنْتُ أَلْعَبُ مَعَ أَصْدِقَائِي</button>
+      </div>
+    </div>
+
+    <div class="exercise-block" id="act-p22-q2">
+      <p class="exercise-title">2 - سَأَلَكَ الْأُسْتَاذُ: لِمَاذَا لَمْ تُنْجِزْ وَاجِبَكَ؟</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 8)">أَقُولُ لَهُ السَّبَبَ الْحَقِيقِيَّ بِصِدْقٍ وَأَعْتَذِرُ لَهُ</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 8)">أَدَّعِي أَنَّ كُرَّاسِي ضَاعَ مِنِّي</button>
+      </div>
+    </div>
+
+    <div class="exercise-block" id="act-p22-q3">
+      <p class="exercise-title">3 - قَالَ الْمُعَلِّمُ: «مَنْ لَيْسَ لَهُ قَلَمٌ أُعْطِيهِ»، وَأَنْتَ كَانَ عِنْدَكَ قَلَمٌ:</p>
+      <div class="shuffle-container">
+        <button class="opt-btn" onclick="checkSingleChoice(this, false, 8)">أَطْلُبُ قَلَمًا لِآخُذَ قَلَمًا إِضَافِيًّا دُونَ حَاجَةٍ</button>
+        <button class="opt-btn" onclick="checkSingleChoice(this, true, 8)">لَا أَطْلُبُ شَيْئًا لِأَنَّ عِنْدِي قَلَمِي وَأَتْرُكُهُ لِمَنْ يَحْتَاجُهُ</button>
+      </div>
+    </div>
+
+    <div class="exercise-block" id="act-p22-hadith">
+      <p class="exercise-title">◄ أُرَتِّبُ كَلِمَاتِ الْحَدِيثِ الشَّرِيفِ، ثُمَّ أَقْرَأُهُ: قَالَ الرَّسُولُ صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ:</p>
+      <div class="shuffle-container" id="hadith-bank">
+        <button class="opt-btn" data-val="وَإِنَّ" onclick="selectWordBank(this)">وَإِنَّ</button>
+        <button class="opt-btn" data-val="الرَّجُلَ" onclick="selectWordBank(this)">الرَّجُلَ</button>
+        <button class="opt-btn" data-val="لَيَصْدُقُ" onclick="selectWordBank(this)">لَيَصْدُقُ</button>
+        <button class="opt-btn" data-val="وَيَتَحَرَّى" onclick="selectWordBank(this)">وَيَتَحَرَّى</button>
+        <button class="opt-btn" data-val="الصِّدْقَ" onclick="selectWordBank(this)">الصِّدْقَ</button>
+        <button class="opt-btn" data-val="حَتَّى" onclick="selectWordBank(this)">حَتَّى</button>
+        <button class="opt-btn" data-val="يُكْتَبَ" onclick="selectWordBank(this)">يُكْتَبَ</button>
+        <button class="opt-btn" data-val="عِنْدَ" onclick="selectWordBank(this)">عِنْدَ</button>
+        <button class="opt-btn" data-val="اللَّهِ" onclick="selectWordBank(this)">اللَّهِ</button>
+        <button class="opt-btn" data-val="صِدِّيقًا" onclick="selectWordBank(this)">صِدِّيقًا</button>
+      </div>
+
+      <div style="background: #fff; padding: 18px; border-radius: 12px; border: 1px solid #cfd8dc; line-height: 2.8; font-size: 1.15rem;">
+        « <span class="slot-box" data-expected="وَإِنَّ" onclick="placeWordSlot(this)">...</span>
+        <span class="slot-box" data-expected="الرَّجُلَ" onclick="placeWordSlot(this)">...</span>
+        <span class="slot-box" data-expected="لَيَصْدُقُ" onclick="placeWordSlot(this)">...</span>
+        <span class="slot-box" data-expected="وَيَتَحَرَّى" onclick="placeWordSlot(this)">...</span>
+        <span class="slot-box" data-expected="الصِّدْقَ" onclick="placeWordSlot(this)">...</span>
+        <span class="slot-box" data-expected="حَتَّى" onclick="placeWordSlot(this)">...</span>
+        <span class="slot-box" data-expected="يُكْتَبَ" onclick="placeWordSlot(this)">...</span>
+        <span class="slot-box" data-expected="عِنْدَ" onclick="placeWordSlot(this)">...</span>
+        <span class="slot-box" data-expected="اللَّهِ" onclick="placeWordSlot(this)">...</span>
+        <span class="slot-box" data-expected="صِدِّيقًا" onclick="placeWordSlot(this)">...</span> »
+      </div>
+      <button class="check-btn" onclick="checkSlotsExercise('act-p22-hadith', 8)">تَحَقَّقْ مِنَ الْحَدِيثِ</button>
+      <div class="feedback-msg" id="act-p22-hadith-fb"></div>
+    </div>
+  </section>
+
+  <!-- التقرير الختامي -->
+  <div id="final-report">
+    <h2>🏆 أَحْسَنْتَ! لَقَدْ أَكْمَلْتَ كَافَّةَ أَنْشِطَةِ الدَّرْسِ بِنَجَاحٍ</h2>
+    <div class="score-pct" id="reportPct">100%</div>
+    <p id="reportMsg" style="font-size: 1.25rem; font-weight: 700; color: #37474f; margin-bottom: 20px;"></p>
+    <div>
+      <button class="action-btn btn-retry" onclick="location.reload()">🔄 إِعَادَةُ الْمُحَاوَلَةِ</button>
+      <button class="action-btn btn-exit" onclick="exitApp()">🚪 خُرُوجٌ</button>
+    </div>
+  </div>
+
+  <!-- زر العودة إلى الفهرس -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+</div>
+
+<script>
+  // ========================================================
+  // 🛡️ قسم الحماية
+  // ========================================================
+  const CHANNEL_ID = "-1004461185731";  // ← قناة السنة الثانية
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+
+  // ========================================================
+  // 🎯 قسم أنشطة الدرس
+  // ========================================================
+  let audioContext = null;
+  let isSoundMuted = false;
+
+  function initAudio() {
+    if (!audioContext) {
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+  }
+
+  function playTone(freq, type, duration) {
+    if (isSoundMuted) return;
+    try {
+      initAudio();
+      const osc = audioContext.createOscillator();
+      const gain = audioContext.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+      gain.gain.setValueAtTime(0.15, audioContext.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(audioContext.destination);
+      osc.start();
+      osc.stop(audioContext.currentTime + duration);
+    } catch(e){}
+  }
+
+  function playSuccess() {
+    playTone(523.25, 'sine', 0.15);
+    setTimeout(() => playTone(659.25, 'sine', 0.25), 120);
+  }
+
+  function playError() {
+    playTone(220, 'triangle', 0.25);
+  }
+
+  function playTap() {
+    playTone(440, 'sine', 0.05);
+  }
+
+  function toggleAudio() {
+    isSoundMuted = !isSoundMuted;
+    const btn = document.getElementById('soundToggle');
+    btn.textContent = isSoundMuted ? '🔇 الصَّوْتُ: مُعَطَّل' : '🔊 الصَّوْتُ: مُفَعَّل';
+    btn.style.background = isSoundMuted ? '#ffebee' : '#e3f2fd';
+  }
+
+  function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function applyShuffles() {
+    document.querySelectorAll('.shuffle-container').forEach(container => {
+      const children = Array.from(container.children);
+      shuffleArray(children);
+      children.forEach(child => container.appendChild(child));
+    });
+  }
+
+  const STAGES = [
+    { id: 'card-0', badge: 'badge-0', total: 4, correct: 0, done: 0 },
+    { id: 'card-1', badge: 'badge-1', total: 2, correct: 0, done: 0 },
+    { id: 'card-2', badge: 'badge-2', total: 3, correct: 0, done: 0 },
+    { id: 'card-3', badge: 'badge-3', total: 2, correct: 0, done: 0 },
+    { id: 'card-4', badge: 'badge-4', total: 1, correct: 0, done: 0 },
+    { id: 'card-5', badge: 'badge-5', total: 3, correct: 0, done: 0 },
+    { id: 'card-6', badge: 'badge-6', total: 5, correct: 0, done: 0 },
+    { id: 'card-7', badge: 'badge-7', total: 1, correct: 0, done: 0 },
+    { id: 'card-8', badge: 'badge-8', total: 4, correct: 0, done: 0 }
+  ];
+
+  function updateStageScore(stageIdx, isCorrect) {
+    const stage = STAGES[stageIdx];
+    stage.done++;
+    if (isCorrect) stage.correct++;
+    
+    document.getElementById(stage.badge).textContent = `${stage.correct} / ${stage.total}`;
+
+    if (stage.done >= stage.total) {
+      if (stageIdx + 1 < STAGES.length) {
+        const nextCard = document.getElementById(STAGES[stageIdx + 1].id);
+        nextCard.classList.remove('locked');
+      } else {
+        renderFinalReport();
+      }
+    }
+  }
+
+  function checkSingleChoice(btn, isCorrect, stageIdx) {
+    playTap();
+    const parent = btn.parentElement;
+    Array.from(parent.children).forEach(b => {
+      b.disabled = true;
+      b.style.pointerEvents = 'none';
+    });
+
+    if (isCorrect) {
+      btn.classList.add('correct');
+      playSuccess();
+      updateStageScore(stageIdx, true);
+    } else {
+      btn.classList.add('wrong');
+      playError();
+      updateStageScore(stageIdx, false);
+    }
+  }
+
+  let activeSelectedWord = null;
+
+  function selectWordBank(btn) {
+    playTap();
+    if (btn.classList.contains('used')) return;
+    document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    activeSelectedWord = btn;
+  }
+
+  function placeWordSlot(slot) {
+    if (!activeSelectedWord || slot.classList.contains('locked')) return;
+    playTap();
+    slot.textContent = activeSelectedWord.getAttribute('data-val');
+    slot.setAttribute('data-placed', activeSelectedWord.getAttribute('data-val'));
+    slot.classList.add('filled');
+    activeSelectedWord.classList.add('used');
+    activeSelectedWord.classList.remove('selected');
+    activeSelectedWord.style.opacity = '0.3';
+    activeSelectedWord.style.pointerEvents = 'none';
+    activeSelectedWord = null;
+  }
+
+  function checkSlotsExercise(containerId, stageIdx) {
+    const container = document.getElementById(containerId);
+    const slots = container.querySelectorAll('.slot-box');
+    const fb = document.getElementById(containerId + '-fb');
+    let allFilled = true;
+    let allRight = true;
+
+    slots.forEach(slot => {
+      const placed = slot.getAttribute('data-placed');
+      const expected = slot.getAttribute('data-expected');
+      if (!placed) allFilled = false;
+      if (placed !== expected) allRight = false;
+    });
+
+    if (!allFilled) {
+      alert('يُرْجَى مِلْءُ كَافَّةِ الْفَرَاغَاتِ أَوَّلًا!');
+      return;
+    }
+
+    slots.forEach(slot => {
+      slot.classList.add('locked');
+      slot.style.pointerEvents = 'none';
+      if (slot.getAttribute('data-placed') === slot.getAttribute('data-expected')) {
+        slot.classList.add('correct');
+      } else {
+        slot.classList.add('wrong');
+      }
+    });
+
+    container.querySelector('.check-btn').disabled = true;
+
+    if (allRight) {
+      playSuccess();
+      fb.className = 'feedback-msg success';
+      fb.textContent = '✓ إِجَابَةٌ رَائِعَةٌ وَصَحِيحَةٌ!';
+      updateStageScore(stageIdx, true);
+    } else {
+      playError();
+      fb.className = 'feedback-msg error';
+      fb.textContent = '✗ حَاوَلْتَ جَيِّدًا، انْتَبِهْ لِلْإِجَابَاتِ الصَّحِيحَةِ الْمُوَضَّحَةِ!';
+      updateStageScore(stageIdx, false);
+    }
+  }
+
+  function toggleMultiSelect(btn) {
+    playTap();
+    btn.classList.toggle('selected');
+  }
+
+  function checkFmQ1() {
+    const container = document.getElementById('fm-q1-opts');
+    const btns = container.querySelectorAll('.opt-btn');
+    const fb = document.getElementById('fm-q1-fb');
+    let allCorrect = true;
+
+    btns.forEach(b => {
+      b.disabled = true;
+      const isExpected = b.getAttribute('data-correct') === 'true';
+      const isSelected = b.classList.contains('selected');
+
+      if (isExpected && isSelected) {
+        b.classList.add('correct');
+      } else if (!isExpected && isSelected) {
+        b.classList.add('wrong');
+        allCorrect = false;
+      } else if (isExpected && !isSelected) {
+        b.classList.add('wrong');
+        allCorrect = false;
+      }
+    });
+
+    document.querySelector('#fm-q1 .check-btn').disabled = true;
+
+    if (allCorrect) {
+      playSuccess();
+      fb.className = 'feedback-msg success';
+      fb.textContent = '✓ أَحْسَنْتَ! ذُكِرَ الْأَرْنَبُ وَالنَّحْلُ فِي النَّصِّ.';
+      updateStageScore(0, true);
+    } else {
+      playError();
+      fb.className = 'feedback-msg error';
+      fb.textContent = '✗ الْحَيَوَانَاتُ الْمَذْكُورَةُ فِي النَّصِّ هِيَ: الْأَرْنَبُ وَالنَّحْلُ فَقَطْ.';
+      updateStageScore(0, false);
+    }
+  }
+
+  function checkP20Understand() {
+    const container = document.getElementById('p20-understand-opts');
+    const btns = container.querySelectorAll('.opt-btn');
+    const fb = document.getElementById('act-p20-understand-fb');
+    let allCorrect = true;
+
+    btns.forEach(b => {
+      b.disabled = true;
+      const isExpected = b.getAttribute('data-correct') === 'true';
+      const isSelected = b.classList.contains('selected');
+
+      if (isExpected && isSelected) {
+        b.classList.add('correct');
+      } else if (!isExpected && isSelected) {
+        b.classList.add('wrong');
+        allCorrect = false;
+      } else if (isExpected && !isSelected) {
+        b.classList.add('wrong');
+        allCorrect = false;
+      }
+    });
+
+    document.querySelector('#act-p20-ex2 .check-btn').disabled = true;
+
+    if (allCorrect) {
+      playSuccess();
+      fb.className = 'feedback-msg success';
+      fb.textContent = '✓ رَائِعٌ جِدًّا! تَعَلَّمْنَا مُعَاوَنَةَ الْأُمِّ، تَنْظِيفَ الْبَيْتِ، وَتَرْتِيبَ الْأَثَاثِ.';
+      updateStageScore(6, true);
+    } else {
+      playError();
+      fb.className = 'feedback-msg error';
+      fb.textContent = '✗ الْعِبَارَاتُ الصَّحِيحَةُ هِيَ: (أُعَاوِنُ أُمِّي - أُنَظِّفُ بَيْتَنَا - أُرَتِّبُ الْأَثَاثَ).';
+      updateStageScore(6, false);
+    }
+  }
+
+  function checkP20Grammar() {
+    const jump = document.getElementById('input-jump').value.trim();
+    const visit = document.getElementById('input-visit').value.trim();
+    const fb = document.getElementById('act-p20-grammar-fb');
+
+    if (!jump || !visit) {
+      alert('يُرْجَى كِتَابَةُ الْكَلِمَتَيْنِ فِي الْفَرَاغَيْنِ!');
+      return;
+    }
+
+    const clean = str => str.replace(/[َُِّْٰ]/g, '');
+    const isJumpValid = clean(jump) === 'نقفز';
+    const isVisitValid = clean(visit) === 'نزور';
+
+    document.getElementById('input-jump').disabled = true;
+    document.getElementById('input-visit').disabled = true;
+    document.querySelector('#act-p20-ex3 .check-btn').disabled = true;
+
+    if (isJumpValid && isVisitValid) {
+      playSuccess();
+      fb.className = 'feedback-msg success';
+      fb.textContent = '✓ مُمْتَازٌ! نَحْنُ نَقْفِزُ بِالْحَبْلِ / نَحْنُ نَزُورُ خَالَنَا.';
+      updateStageScore(6, true);
+    } else {
+      playError();
+      fb.className = 'feedback-msg error';
+      fb.textContent = '✗ انْتَبِهْ: الْكَلِمَتَانِ هُمَا (نَقْفِزُ) وَ (نَزُورُ).';
+      updateStageScore(6, false);
+    }
+  }
+
+  function dropToZone(zone, roomKey) {
+    if (!activeSelectedWord) return;
+    playTap();
+    const wordText = activeSelectedWord.getAttribute('data-val');
+    const wordExpectedRoom = activeSelectedWord.getAttribute('data-room');
+
+    const badge = document.createElement('div');
+    badge.className = 'opt-btn';
+    badge.style.margin = '2px';
+    badge.style.padding = '4px 8px';
+    badge.textContent = wordText;
+    badge.setAttribute('data-room', wordExpectedRoom);
+    badge.setAttribute('data-target-room', roomKey);
+    zone.appendChild(badge);
+
+    activeSelectedWord.classList.add('used');
+    activeSelectedWord.classList.remove('selected');
+    activeSelectedWord.style.opacity = '0.3';
+    activeSelectedWord.style.pointerEvents = 'none';
+    activeSelectedWord = null;
+  }
+
+  function checkP21Table() {
+    const badges = document.querySelectorAll('.table-dropzone .opt-btn');
+    const fb = document.getElementById('act-p21-table-fb');
+
+    if (badges.length < 8) {
+      alert('يُرْجَى تَصْنِيفُ كَافَّةِ الْكَلِمَاتِ الثَّمَانِي فِي الْجَدْوَلِ أَوَّلًا!');
+      return;
+    }
+
+    let allRight = true;
+    badges.forEach(b => {
+      const exp = b.getAttribute('data-room');
+      const target = b.getAttribute('data-target-room');
+      if (exp === target) {
+        b.classList.add('correct');
+      } else {
+        b.classList.add('wrong');
+        allRight = false;
+      }
+    });
+
+    document.querySelector('#act-p21-ex4 .check-btn').disabled = true;
+
+    if (allRight) {
+      playSuccess();
+      fb.className = 'feedback-msg success';
+      fb.textContent = '✓ تَصْنِيفٌ رَائِعٌ وَدَقِيقٌ جِدًّا!';
+      updateStageScore(7, true);
+    } else {
+      playError();
+      fb.className = 'feedback-msg error';
+      fb.textContent = '✗ بَعْضُ الْأَدَوَاتِ وُضِعَتْ فِي غَيْرِ مَكَانِهَا الصَّحِيحِ!';
+      updateStageScore(7, false);
+    }
+  }
+
+  function renderFinalReport() {
+    let totalQ = 0;
+    let totalC = 0;
+    STAGES.forEach(s => {
+      totalQ += s.total;
+      totalC += s.correct;
+    });
+
+    totalC = Math.min(totalC, totalQ);
+    let pct = totalQ > 0 ? Math.round((totalC / totalQ) * 100) : 0;
+    pct = Math.min(Math.max(pct, 0), 100);
+
+    const reportCard = document.getElementById('final-report');
+    const reportPct = document.getElementById('reportPct');
+    const reportMsg = document.getElementById('reportMsg');
+
+    reportPct.textContent = `${pct}%`;
+
+    if (pct >= 85) {
+      reportMsg.textContent = '🌟 عَمَلٌ مُتَمَيِّزٌ وَنَتِيجَةٌ مُمْتَازَةٌ! أَنْتَ بَطَلٌ نَشِيطٌ كَسَلْمَى وَعَائِلَتِهَا!';
+    } else if (pct >= 60) {
+      reportMsg.textContent = '👍 جَيِّدٌ جِدًّا! لَقَدْ حَاوَلْتَ بِشَكْلٍ رَائِعٍ، بِمَزِيدٍ مِنَ التَّرْكِيزِ سَتَنَالُ الْعَلَامَةَ الْكَامِلَةَ.';
+    } else {
+      reportMsg.textContent = '💪 لَا بَأْسَ، التَّجْرِبَةُ هِيَ طَرِيقُ النَّجَاحِ، أَعِدِ الْمُحَاوَلَةَ لِتُحَقِّقَ نَتِيجَةً أَفْضَلَ!';
+    }
+
+    reportCard.style.display = 'block';
+    reportCard.scrollIntoView({ behavior: 'smooth' });
+    playSuccess();
+  }
+
+  function exitApp() {
+    if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.close) {
+      window.Telegram.WebApp.close();
+    } else {
+      window.close();
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    applyShuffles();
+  });
+</script>
+</body>
+</html>
