@@ -1,0 +1,1372 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>درس: أَحْمَدُ فِي الْمَدْرَسَةِ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- مكتبة Telegram WebApp (ضرورية للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    :root {
+      --primary: #1976d2;
+      --primary-dark: #0d47a1;
+      --success: #2e7d32;
+      --error: #c62828;
+      --bg: #f5f9fc;
+      --card-bg: #ffffff;
+      --text: #263238;
+      --text-muted: #546e7a;
+      --accent: #ff9800;
+      --selected: #0288d1;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 60px;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: #fff;
+      padding: 20px 15px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      font-size: 1.3rem;
+      font-weight: 900;
+      flex-grow: 1;
+    }
+
+    .audio-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid #fff;
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .container {
+      max-width: 850px;
+      margin: 20px auto;
+      padding: 0 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .lesson-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border-top: 6px solid var(--primary);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      padding: 22px 18px;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .lesson-card.locked {
+      opacity: 0.55;
+      pointer-events: none;
+      filter: grayscale(40%);
+    }
+
+    .page-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--primary-dark);
+      margin-bottom: 14px;
+      border-bottom: 2px dashed #eceff1;
+      padding-bottom: 8px;
+    }
+
+    .instruction {
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 15px;
+      font-size: 1rem;
+    }
+
+    .lesson-text-box {
+      background: #fdfbf7;
+      border-right: 5px solid var(--accent);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 15px 0;
+      font-size: 1.15rem;
+      line-height: 2;
+      color: #37474f;
+    }
+
+    .highlight-letter {
+      color: #d81b60;
+      font-weight: 900;
+      font-size: 1.3rem;
+    }
+
+    .callout-box {
+      background: #e3f2fd;
+      border: 1px solid #bbdefb;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    .letter-display {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #d81b60;
+      letter-spacing: 12px;
+      margin: 10px 0;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+
+    .syllable-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+      font-size: 1.3rem;
+      background: #fafafa;
+    }
+
+    .syllable-table th, .syllable-table td {
+      border: 2px solid #cfd8dc;
+      padding: 12px 6px;
+      font-weight: 700;
+    }
+
+    .syllable-table .circle-header {
+      background: #ffebee;
+      color: #c2185b;
+      border-radius: 50%;
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+    }
+
+    .q-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .q-text {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #1e293b;
+    }
+
+    .shuffle-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn-opt {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      color: #334155;
+      transition: all 0.2s ease;
+    }
+
+    .btn-opt:hover {
+      border-color: var(--primary);
+    }
+
+    .btn-opt.correct {
+      background-color: var(--success) !important;
+      color: #fff !important;
+      border-color: var(--success) !important;
+    }
+
+    .btn-opt.wrong {
+      background-color: var(--error) !important;
+      color: #fff !important;
+      border-color: var(--error) !important;
+    }
+
+    .match-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 15px;
+      margin: 15px 0;
+    }
+
+    .match-card {
+      border: 3px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+    }
+
+    .match-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: contain;
+      margin-bottom: 8px;
+    }
+
+    .match-card.selected {
+      border-color: var(--selected);
+      background: #e1f5fe;
+      transform: scale(1.03);
+    }
+
+    .match-card.matched {
+      border-color: var(--success);
+      background: #e8f5e9;
+      pointer-events: none;
+    }
+
+    .match-word-btn {
+      width: 100%;
+      font-size: 1.15rem;
+      font-weight: 700;
+      padding: 12px;
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      background: #fff;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .match-word-btn.selected {
+      border-color: var(--selected);
+      background: #e1f5fe;
+    }
+
+    .match-word-btn.matched {
+      border-color: var(--success);
+      background: #e8f5e9;
+      color: var(--success);
+      pointer-events: none;
+    }
+
+    .chips-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+
+    .chip {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      border-radius: 25px;
+      padding: 10px 22px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .chip.selected {
+      border-color: var(--selected);
+      background-color: #e1f5fe;
+      color: #0277bd;
+      box-shadow: 0 0 0 2px var(--selected);
+    }
+
+    .chip.correct {
+      background-color: var(--success) !important;
+      border-color: var(--success) !important;
+      color: #fff !important;
+      box-shadow: none !important;
+    }
+
+    .chip.wrong {
+      background-color: var(--error) !important;
+      border-color: var(--error) !important;
+      color: #fff !important;
+      box-shadow: none !important;
+    }
+
+    .chip.locked {
+      pointer-events: none;
+    }
+
+    .scene-preview {
+      width: 100%;
+      max-height: 330px;
+      object-fit: contain;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      background: #fafafa;
+      border: 1px solid #e0e0e0;
+    }
+
+    .eval-badge {
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 10px;
+      background: #f1f5f9;
+      color: #334155;
+      float: left;
+    }
+
+    .btn-finish-station {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 15px;
+      display: inline-block;
+      transition: background 0.2s;
+    }
+
+    .btn-finish-station:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-verify-activity {
+      background: linear-gradient(135deg, #2e7d32, #1b5e20);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 28px;
+      font-size: 1.1rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 15px;
+      box-shadow: 0 4px 10px rgba(46, 125, 50, 0.25);
+      transition: all 0.25s ease;
+    }
+
+    .btn-verify-activity:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    .btn-verify-activity:disabled {
+      background: #b0bec5;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    #final-report {
+      background: #fff;
+      border-radius: 18px;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      border-top: 8px solid var(--accent);
+      display: none;
+    }
+
+    .pct-number {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--primary);
+      margin: 10px 0;
+    }
+
+    .report-msg {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .report-actions {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-reload {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: calc(100% - 24px);
+      max-width: 826px;
+      margin: 12px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <header>
+    <h1>أَحْمَدُ فِي الْمَدْرَسَةِ — اللُّغَةُ الْعَرَبِيَّةُ (السَّنَةُ الأُولَى)</h1>
+    <button class="audio-btn" id="audio-toggle" onclick="toggleAudioFx()">🔊 الصَّوْتُ: مُفَعَّلٌ</button>
+  </header>
+
+  <main class="container">
+
+    <!-- مَحَطَّةُ فَهْمِ الْمَنْطُوقِ -->
+    <section class="lesson-card" id="station-0">
+      <span class="page-badge">دَلِيلُ الْمُعَلِّمِ / فَهْمُ الْمَنْطُوقِ</span>
+      <span class="eval-badge" id="eval-0">✓ 0 | ✗ 0</span>
+      <h2 class="card-title">1. نَصُّ فَهْمِ الْمَنْطُوقِ وَأَسْئِلَةُ الْفَهْمِ</h2>
+      <p class="instruction">اسْتَمِعْ إِلَى التَّسْجِيلِ الصَّوْتِيِّ جَيِّدًا ثُمَّ أَجِبْ عَنِ الأَسْئِلَةِ:</p>
+      
+      <div style="text-align: center; margin: 20px 0;">
+        <audio id="main-audio" controls style="width: 100%; max-width: 520px;">
+          <source src="ahmed_madrasa.mp3" type="audio/mpeg">
+          مُتَصَفِّحُكَ لَا يَدْعَمُ مُشَغِّلَ الصَّوْتِ.
+        </audio>
+      </div>
+
+      <div id="listening-questions">
+        <div class="q-item" data-answered="false">
+          <div class="q-text">1. مَنْ رَحَّبَ بِالتَّلَامِيذِ عِنْدَمَا دَخَلُوا إِلَى سَاحَةِ الْمَدْرَسَةِ؟</div>
+          <div class="shuffle-container">
+            <button class="btn-opt" data-correct="true" onclick="checkListeningMCQ(this, 0)">الْمُدِيرُ</button>
+            <button class="btn-opt" data-correct="false" onclick="checkListeningMCQ(this, 0)">الْحَارِسُ</button>
+            <button class="btn-opt" data-correct="false" onclick="checkListeningMCQ(this, 0)">الْمُعَلِّمَةُ</button>
+          </div>
+        </div>
+
+        <div class="q-item" data-answered="false">
+          <div class="q-text">2. مَاذَا كَانَ التَّلَامِيذُ يُرَدِّدُونَ؟ وَكَيْفَ كَانَ الْعَلَمُ؟</div>
+          <div class="shuffle-container">
+            <button class="btn-opt" data-correct="true" onclick="checkListeningMCQ(this, 0)">النَّشِيدَ الْوَطَنِيَّ وَالْعَلَمُ يُرَفْرِفُ عَالِيًا</button>
+            <button class="btn-opt" data-correct="false" onclick="checkListeningMCQ(this, 0)">أُنْشُودَةَ الصَّبَاحِ وَالْعَلَمُ نَائِمٌ</button>
+          </div>
+        </div>
+
+        <div class="q-item" data-answered="false">
+          <div class="q-text">3. عِنْدَمَا فَتَحَتِ الْمُعَلِّمَةُ بَابَ الْقِسْمِ، كَيْفَ دَخَلَ التَّلَامِيذُ؟</div>
+          <div class="shuffle-container">
+            <button class="btn-opt" data-correct="true" onclick="checkListeningMCQ(this, 0)">بِهُدُوءٍ</button>
+            <button class="btn-opt" data-correct="false" onclick="checkListeningMCQ(this, 0)">مُسْرِعِينَ بِفَوْضَى</button>
+          </div>
+        </div>
+
+        <div class="q-item" data-answered="false">
+          <div class="q-text">4. مَاذَا قَالَتِ الْمُعَلِّمَةُ فِي الْبِدَايَةِ قَبْلَ أَنْ تُرَحِّبَ بِالتَّلَامِيذِ؟</div>
+          <div class="shuffle-container">
+            <button class="btn-opt" data-correct="true" onclick="checkListeningMCQ(this, 0)">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</button>
+            <button class="btn-opt" data-correct="false" onclick="checkListeningMCQ(this, 0)">السَّلَامُ عَلَيْكُمْ وَرَحْمَةُ اللَّهِ</button>
+          </div>
+        </div>
+
+        <div class="q-item" data-answered="false">
+          <div class="q-text">5. مَا اسْمُ مُعَلِّمَةِ أَحْمَدَ؟ وَمَاذَا طَلَبَتْ مِنَ التَّلَامِيذِ؟</div>
+          <div class="shuffle-container">
+            <button class="btn-opt" data-correct="true" onclick="checkListeningMCQ(this, 0)">اسْمُهَا بُشْرَى، وَطَلَبَتْ أَنْ يُعَرِّفُوهَا بِأَسْمَائِهِمْ</button>
+            <button class="btn-opt" data-correct="false" onclick="checkListeningMCQ(this, 0)">اسْمُهَا مَرْيَمُ، وَطَلَبَتْ فَتْحَ الْكِتَابِ</button>
+          </div>
+        </div>
+
+        <div class="q-item" data-answered="false">
+          <div class="q-text">6. مَنْ أَوَّلُ مَنْ عَرَّفَ بِاسْمِهِ؟</div>
+          <div class="shuffle-container">
+            <button class="btn-opt" data-correct="true" onclick="checkListeningMCQ(this, 0)">أَحْمَدُ</button>
+            <button class="btn-opt" data-correct="false" onclick="checkListeningMCQ(this, 0)">بِلَالُ</button>
+            <button class="btn-opt" data-correct="false" onclick="checkListeningMCQ(this, 0)">هُدَى</button>
+          </div>
+        </div>
+
+        <div class="q-item" data-answered="false">
+          <div class="q-text">7. مَنْ هُمْ أَصْدِقَاءُ أَحْمَدَ الْمَذْكُورُونَ فِي النَّصِّ؟</div>
+          <div class="shuffle-container">
+            <button class="btn-opt" data-correct="true" onclick="checkListeningMCQ(this, 0)">بِلَالٌ وَهُدَى</button>
+            <button class="btn-opt" data-correct="false" onclick="checkListeningMCQ(this, 0)">عُمَرُ وَفَاطِمَةُ</button>
+          </div>
+        </div>
+
+        <div class="q-item" data-answered="false">
+          <div class="q-text">8. مَاذَا طَلَبَتِ الْمُعَلِّمَةُ مِنَ التَّلَامِيذِ فِي نِهَايَةِ النَّصِّ؟</div>
+          <div class="shuffle-container">
+            <button class="btn-opt" data-correct="true" onclick="checkListeningMCQ(this, 0)">أَخْذَ الْوَرَقَةِ وَإِحْضَارَ مَا كُتِبَ عَلَيْهَا غَدًا</button>
+            <button class="btn-opt" data-correct="false" onclick="checkListeningMCQ(this, 0)">الْخُرُوجَ لِلَّعِبِ فِي السَّاحَةِ</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- صَفْحَة 28 -->
+    <section class="lesson-card locked" id="station-1">
+      <span class="page-badge">الْكِتَابُ الْمَدْرَسِيُّ — صَفْحَة 28</span>
+      <span class="eval-badge" id="eval-1">✓ 0 | ✗ 0</span>
+      <h2 class="card-title">2. أَسْتَعْمِلُ: (صَبَاحًا / مَسَاءً)</h2>
+      <p class="instruction">اخْتَرْ لِكُلِّ جُمْلَةٍ الْكَلِمَةَ الْمُنَاسِبَةَ (صَبَاحًا أَوْ مَسَاءً):</p>
+
+      <div class="q-item" data-answered="false">
+        <div class="q-text">أَذْهَبُ إِلَى الْمَدْرَسَةِ .....................</div>
+        <div class="shuffle-container">
+          <button class="btn-opt" data-correct="true" onclick="checkMCQ(this, 1)">صَبَاحًا</button>
+          <button class="btn-opt" data-correct="false" onclick="checkMCQ(this, 1)">مَسَاءً</button>
+        </div>
+      </div>
+
+      <div class="q-item" data-answered="false">
+        <div class="q-text">أَعُودُ إِلَى الْمَنْزِلِ .....................</div>
+        <div class="shuffle-container">
+          <button class="btn-opt" data-correct="true" onclick="checkMCQ(this, 1)">مَسَاءً</button>
+          <button class="btn-opt" data-correct="false" onclick="checkMCQ(this, 1)">صَبَاحًا</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- صَفْحَة 29 -->
+    <section class="lesson-card locked" id="station-2">
+      <span class="page-badge">الْكِتَابُ الْمَدْرَسِيُّ — صَفْحَة 29</span>
+      <span class="eval-badge" id="eval-2">✓ 0 | ✗ 0</span>
+      <h2 class="card-title">3. حَرْفُ الْمِيمِ: أَكْتَشِفُ، أَتَعَرَّفُ، وَأَقْرَأُ</h2>
+
+      <div class="callout-box">
+        <strong>أَكْتَشِفُ:</strong>
+        <div style="font-size: 1.25rem; margin-top: 8px;">
+          مَرْحَبًا بِكُمْ أَنَا <span class="highlight-letter">مُ</span>عَلِّ<span class="highlight-letter">مَـ</span>تُكُمْ<br>
+          <span class="highlight-letter">مُ</span>عَلِّ<span class="highlight-letter">مَـ</span>تُكُمْ<br>
+          <strong><span class="highlight-letter">مُ</span> — <span class="highlight-letter">مَـ</span></strong>
+        </div>
+      </div>
+
+      <div class="callout-box" style="background:#fff3e0; border-color:#ffe082;">
+        <strong>أَتَعَرَّفُ عَلَى رَسْمِ الْحَرْفِ:</strong>
+        <div class="letter-display">م &nbsp;&nbsp; ـمـ &nbsp;&nbsp; ـم</div>
+      </div>
+
+      <p class="instruction">أَقْرَأُ الْكَلِمَاتِ الَّتِي فِيهَا حَرْفُ الْمِيمِ (اضْغَطْ عَلَى الْكَلِمَةِ ثُمَّ عَلَى صُورَتِهَا الْمُطَابِقَةِ):</p>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
+        <div id="m-words" class="shuffle-container" style="flex-direction: column;">
+          <button class="match-word-btn" data-key="mihfadha" onclick="selectMatchItem(this, 'word', 'm-pair')">مِحْفَظَةٌ</button>
+          <button class="match-word-btn" data-key="alam" onclick="selectMatchItem(this, 'word', 'm-pair')">عَلَمٌ</button>
+          <button class="match-word-btn" data-key="muallima" onclick="selectMatchItem(this, 'word', 'm-pair')">مُعَلِّمَةٌ</button>
+          <button class="match-word-btn" data-key="maktab" onclick="selectMatchItem(this, 'word', 'm-pair')">مَكْتَبٌ</button>
+        </div>
+        <div id="m-images" class="shuffle-container" style="display: grid; grid-template-columns: 1fr 1fr;">
+          <div class="match-card" data-key="mihfadha" onclick="selectMatchItem(this, 'card', 'm-pair')">
+            <img src="p29_mihfadha.png" alt="محفظة">
+          </div>
+          <div class="match-card" data-key="alam" onclick="selectMatchItem(this, 'card', 'm-pair')">
+            <img src="p29_alam.png" alt="علم">
+          </div>
+          <div class="match-card" data-key="muallima" onclick="selectMatchItem(this, 'card', 'm-pair')">
+            <img src="p29_muallima.png" alt="معلمة">
+          </div>
+          <div class="match-card" data-key="maktab" onclick="selectMatchItem(this, 'card', 'm-pair')">
+            <img src="p29_maktab.png" alt="مكتب">
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 25px;">
+        <h3 style="font-size: 1.15rem; color: var(--primary-dark); margin-bottom: 8px;">أَقْرَأُ وَأُثَبِّتُ:</h3>
+        <div class="table-responsive">
+          <table class="syllable-table">
+            <tr>
+              <td><span class="circle-header">مَ</span></td>
+              <td>مَـ</td>
+              <td>ـمَـ</td>
+              <td>ـمَ</td>
+              <td><span class="circle-header">مَ</span></td>
+              <td>ـمَ</td>
+              <td>ـمَـ</td>
+              <td>مَـ</td>
+            </tr>
+            <tr>
+              <td>ـَ</td>
+              <td>مَـ</td>
+              <td>ـمَـ</td>
+              <td>ـمَ</td>
+              <td>ا</td>
+              <td>مَا</td>
+              <td>ـمَا</td>
+              <td>مَا</td>
+            </tr>
+            <tr>
+              <td>ـُ</td>
+              <td>مُـ</td>
+              <td>ـمُـ</td>
+              <td>ـمُ</td>
+              <td>و</td>
+              <td>مُو</td>
+              <td>ـمُو</td>
+              <td>مُو</td>
+            </tr>
+            <tr>
+              <td>ـِ</td>
+              <td>مِـ</td>
+              <td>ـمِـ</td>
+              <td>ـمِ</td>
+              <td>ي</td>
+              <td>مِي</td>
+              <td>ـمِيـ</td>
+              <td>ـمِي</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- صَفْحَة 30 -->
+    <section class="lesson-card locked" id="station-3">
+      <span class="page-badge">الْكِتَابُ الْمَدْرَسِيُّ — صَفْحَة 30</span>
+      <span class="eval-badge" id="eval-3">✓ 0 | ✗ 0</span>
+      <h2 class="card-title">4. حَرْفُ الْبَاءِ: أَكْتَشِفُ، أَتَعَرَّفُ، وَأَقْرَأُ</h2>
+
+      <div class="callout-box">
+        <strong>أَكْتَشِفُ:</strong>
+        <div style="font-size: 1.25rem; margin-top: 8px;">
+          اسْمِي <span class="highlight-letter">بُ</span>شْرَى<br>
+          <span class="highlight-letter">بُ</span>شْرَى<br>
+          <strong><span class="highlight-letter">بُـ</span></strong>
+        </div>
+      </div>
+
+      <div class="callout-box" style="background:#fff3e0; border-color:#ffe082;">
+        <strong>أَتَعَرَّفُ عَلَى رَسْمِ الْحَرْفِ:</strong>
+        <div class="letter-display">ب &nbsp;&nbsp; ـبـ &nbsp;&nbsp; ـب</div>
+      </div>
+
+      <p class="instruction">أَقْرَأُ الْكَلِمَاتِ الَّتِي فِيهَا حَرْفُ الْبَاءِ (اضْغَطْ عَلَى الْكَلِمَةِ ثُمَّ عَلَى صُورَتِهَا الْمُطَابِقَةِ):</p>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0;">
+        <div id="b-words" class="shuffle-container" style="flex-direction: column;">
+          <button class="match-word-btn" data-key="bilal" onclick="selectMatchItem(this, 'word', 'b-pair')">بِلَالٌ</button>
+          <button class="match-word-btn" data-key="olba" onclick="selectMatchItem(this, 'word', 'b-pair')">عُلْبَةٌ</button>
+          <button class="match-word-btn" data-key="kitab" onclick="selectMatchItem(this, 'word', 'b-pair')">كِتَابٌ</button>
+          <button class="match-word-btn" data-key="mibrah" onclick="selectMatchItem(this, 'word', 'b-pair')">مِبْرَاةٌ</button>
+        </div>
+        <div id="b-images" class="shuffle-container" style="display: grid; grid-template-columns: 1fr 1fr;">
+          <div class="match-card" data-key="bilal" onclick="selectMatchItem(this, 'card', 'b-pair')">
+            <img src="p30_bilal.png" alt="بلال">
+          </div>
+          <div class="match-card" data-key="olba" onclick="selectMatchItem(this, 'card', 'b-pair')">
+            <img src="p30_olba.png" alt="علبة">
+          </div>
+          <div class="match-card" data-key="kitab" onclick="selectMatchItem(this, 'card', 'b-pair')">
+            <img src="p30_kitab.png" alt="كتاب">
+          </div>
+          <div class="match-card" data-key="mibrah" onclick="selectMatchItem(this, 'card', 'b-pair')">
+            <img src="p30_mibrah.png" alt="مبراة">
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 25px;">
+        <h3 style="font-size: 1.15rem; color: var(--primary-dark); margin-bottom: 8px;">أَقْرَأُ وَأُثَبِّتُ:</h3>
+        <div class="table-responsive">
+          <table class="syllable-table">
+            <tr>
+              <td><span class="circle-header">بَ</span></td>
+              <td>بَـ</td>
+              <td>ـبَـ</td>
+              <td>ـبَ</td>
+              <td><span class="circle-header">بَ</span></td>
+              <td>ـبَ</td>
+              <td>ـبَـ</td>
+              <td>بَـ</td>
+            </tr>
+            <tr>
+              <td>ـَ</td>
+              <td>بَـ</td>
+              <td>ـبَـ</td>
+              <td>ـبَ</td>
+              <td>ا</td>
+              <td>بَا</td>
+              <td>ـبَا</td>
+              <td>بَا</td>
+            </tr>
+            <tr>
+              <td>ـُ</td>
+              <td>بُـ</td>
+              <td>ـبُـ</td>
+              <td>ـبُ</td>
+              <td>و</td>
+              <td>بُو</td>
+              <td>ـبُو</td>
+              <td>بُو</td>
+            </tr>
+            <tr>
+              <td>ـِ</td>
+              <td>بِـ</td>
+              <td>ـبِـ</td>
+              <td>ـبِ</td>
+              <td>ي</td>
+              <td>بِي</td>
+              <td>ـبِيـ</td>
+              <td>ـبِي</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- صَفْحَة 31 -->
+    <section class="lesson-card locked" id="station-4">
+      <span class="page-badge">الْكِتَابُ الْمَدْرَسِيُّ — صَفْحَة 31</span>
+      <h2 class="card-title">5. أُحِبُّ دِينِي: أَفْهَمُ وَأَحْفَظُ (بِسْمِ اللَّهِ)</h2>
+      
+      <div class="lesson-text-box" style="text-align: center; font-size: 1.25rem;">
+        <strong style="color: var(--primary-dark); font-size: 1.4rem;">بِسْمِ اللَّهِ</strong><br><br>
+        بِسْمِ اللَّهِ بِسْمِ اللَّهِ &nbsp;&nbsp; مَا أَحْلَاهَا بِسْمِ اللَّهِ<br>
+        بِسْمِ اللَّهِ أَبْدَأُ يَوْمِي &nbsp;&nbsp; وَبِهَا أَدْعُو عِنْدَ النَّوْمِ<br>
+        بِسْمِ اللَّهِ آكُلُ أَشْرَبُ &nbsp;&nbsp; بِسْمِ اللَّهِ أَخْرُجُ أَلْعَبُ
+      </div>
+
+      <div class="callout-box" style="background:#e8f5e9; border-color:#a5d6a7; text-align: right;">
+        <strong style="color: var(--success); font-size: 1.2rem;">أَحْفَظُ:</strong>
+        <p style="font-size: 1.2rem; margin-top: 8px; line-height: 2;">
+          أَقُولُ <strong>بِسْمِ اللَّهِ</strong>:<br>
+          • قَبْلَ الأَكْلِ.<br>
+          • قَبْلَ الْوُضُوءِ.<br>
+          • عِنْدَ دُخُولِ الْمَسْجِدِ.
+        </p>
+      </div>
+
+      <button class="btn-finish-station" onclick="passReadingStation(4)">قَرَأْتُ وَفَهِمْتُ، انْتَقِلْ إِلَى دَفْتَرِ الأَنْشِطَةِ ←</button>
+    </section>
+
+    <!-- دَفْتَرُ الأَنْشِطَةِ ص 12 - أُثَبِّتُ 1 -->
+    <section class="lesson-card locked" id="station-5">
+      <span class="page-badge">دَفْتَرُ الأَنْشِطَةِ — صَفْحَة 12 (أُثَبِّتُ 1)</span>
+      <span class="eval-badge" id="eval-5">✓ 0 | ✗ 0</span>
+      <h2 class="card-title">6. أُلَوِّنُ كُلَّ كَلِمَةٍ فِيهَا حَرْفُ الْمِيمِ (م)</h2>
+      <p class="instruction">حَدِّدِ الْكَلِمَاتِ الَّتِي فِيهَا حَرْفُ الْمِيمِ، ثُمَّ اضْغَطْ عَلَى زِرِّ التَّحَقُّقِ:</p>
+      
+      <div class="chips-grid shuffle-container" id="grid-m-words">
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">مِحْفَظَةٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">مُعَلِّمَةٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">مُحَمَّدٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">مَسْجِدٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">مِبْرَاةٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">أُمِّي</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">مَكْتَبٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">سَمَاءٌ</div>
+        <div class="chip" data-correct="false" onclick="toggleSelectChip(this)">كُرَّاسٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">عَلَمٌ</div>
+      </div>
+
+      <button class="btn-verify-activity" onclick="verifyActivity(5, 'grid-m-words')">
+        ✓ تَحَقَّقْ مِنَ الإِجَابَةِ
+      </button>
+    </section>
+
+    <!-- دَفْتَرُ الأَنْشِطَةِ ص 12 - أُثَبِّتُ 2 -->
+    <section class="lesson-card locked" id="station-6">
+      <span class="page-badge">دَفْتَرُ الأَنْشِطَةِ — صَفْحَة 12 (أُثَبِّتُ 2)</span>
+      <span class="eval-badge" id="eval-6">✓ 0 | ✗ 0</span>
+      <h2 class="card-title">7. أَرْسُمُ دَائِرَةً حَوْلَ الْكَلِمَاتِ الَّتِي فِيهَا حَرْفُ الْبَاءِ (ب)</h2>
+      <p class="instruction">حَدِّدِ الْكَلِمَاتِ الَّتِي فِيهَا حَرْفُ الْبَاءِ، ثُمَّ اضْغَطْ عَلَى زِرِّ التَّحَقُّقِ:</p>
+      
+      <div class="chips-grid shuffle-container" id="grid-b-words">
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">بَيْتٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">بُسْتَانٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">بَرْمِيلٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">كِتَابٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">بَابٌ</div>
+        <div class="chip" data-correct="false" onclick="toggleSelectChip(this)">مَدْرَسَةٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">أَبِي</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">عُلْبَةٌ</div>
+      </div>
+
+      <button class="btn-verify-activity" onclick="verifyActivity(6, 'grid-b-words')">
+        ✓ تَحَقَّقْ مِنَ الإِجَابَةِ
+      </button>
+    </section>
+
+    <!-- دَفْتَرُ الأَنْشِطَةِ ص 13 - أُنْتِجُ 1 -->
+    <section class="lesson-card locked" id="station-7">
+      <span class="page-badge">دَفْتَرُ الأَنْشِطَةِ — صَفْحَة 13 (أُنْتِجُ 1)</span>
+      <span class="eval-badge" id="eval-7">✓ 0 | ✗ 0</span>
+      <h2 class="card-title">8. أَضَعُ الأَدَوَاتِ الْمُنَاسِبَةَ فِي مِحْفَظَتِي</h2>
+      <p class="instruction">انْظُرْ إِلَى الصُّورَةِ، ثُمَّ حَدِّدِ الأَشْيَاءَ الَّتِي تُوضَعُ فِي الْمِحْفَظَةِ، ثُمَّ اضْغَطْ عَلَى زِرِّ التَّحَقُّقِ:</p>
+      
+      <img src="p13_mahfadha_scene.png" alt="المحفظة والأدوات" class="scene-preview">
+
+      <div class="chips-grid shuffle-container" id="grid-mahfadha-items">
+        <div class="chip" data-correct="false" onclick="toggleSelectChip(this)">حَلَزُونٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">كِتَابٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">طَبَاشِيرُ</div>
+        <div class="chip" data-correct="false" onclick="toggleSelectChip(this)">كُرْسِيٌّ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">مِبْرَاةٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">مِمْحَاةٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">أَقْلَامٌ</div>
+      </div>
+
+      <button class="btn-verify-activity" onclick="verifyActivity(7, 'grid-mahfadha-items')">
+        ✓ تَحَقَّقْ مِنَ الإِجَابَةِ
+      </button>
+    </section>
+
+    <!-- دَفْتَرُ الأَنْشِطَةِ ص 13 - أُنْتِجُ 2 -->
+    <section class="lesson-card locked" id="station-8">
+      <span class="page-badge">دَفْتَرُ الأَنْشِطَةِ — صَفْحَة 13 (أُنْتِجُ 2)</span>
+      <span class="eval-badge" id="eval-8">✓ 0 | ✗ 0</span>
+      <h2 class="card-title">9. أَذْكُرُ الأَشْخَاصَ الَّذِينَ أَجِدُهُمْ فِي الْمَدْرَسَةِ</h2>
+      <p class="instruction">حَدِّدِ الأَشْخَاصَ الَّذِينَ نَجِدُهُمْ فِي الْمَدْرَسَةِ، ثُمَّ اضْغَطْ عَلَى زِرِّ التَّحَقُّقِ:</p>
+      
+      <img src="p13_ashkhas_scene.png" alt="أشخاص في المدرسة" class="scene-preview">
+
+      <div class="chips-grid shuffle-container" id="grid-school-persons">
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">مُعَلِّمَةٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">تَلَامِيذُ</div>
+        <div class="chip" data-correct="false" onclick="toggleSelectChip(this)">شُرْطِيٌّ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">مُدِيرٌ</div>
+      </div>
+
+      <button class="btn-verify-activity" onclick="verifyActivity(8, 'grid-school-persons')">
+        ✓ تَحَقَّقْ مِنَ الإِجَابَةِ
+      </button>
+    </section>
+
+    <!-- دَفْتَرُ الأَنْشِطَةِ ص 13 - أُنْتِجُ 3 -->
+    <section class="lesson-card locked" id="station-9">
+      <span class="page-badge">دَفْتَرُ الأَنْشِطَةِ — صَفْحَة 13 (أُنْتِجُ 3)</span>
+      <span class="eval-badge" id="eval-9">✓ 0 | ✗ 0</span>
+      <h2 class="card-title">10. مَا هِيَ الأَدَوَاتُ الَّتِي تَجِدُهَا فِي الْقِسْمِ؟</h2>
+      <p class="instruction">حَدِّدِ الأَدَوَاتِ الَّتِي نَجِدُهَا دَاخِلَ قِسْمِ الدِّرَاسَةِ، ثُمَّ اضْغَطْ عَلَى زِرِّ التَّحَقُّقِ:</p>
+
+      <div class="chips-grid shuffle-container" id="grid-classroom-items">
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">سَبُّورَةٌ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">مَصَاطِبُ (طَاوِلَاتٌ)</div>
+        <div class="chip" data-correct="false" onclick="toggleSelectChip(this)">سَرِيرُ نَوْمٍ</div>
+        <div class="chip" data-correct="true" onclick="toggleSelectChip(this)">مِكْنَسَةُ الْقِسْمِ</div>
+      </div>
+
+      <button class="btn-verify-activity" onclick="verifyActivity(9, 'grid-classroom-items')">
+        ✓ تَحَقَّقْ مِنَ الإِجَابَةِ
+      </button>
+    </section>
+
+    <!-- التقرير الختامي -->
+    <section id="final-report">
+      <h2 style="font-size: 1.8rem; color: var(--primary-dark);">🎉 مَرْحَى! لَقَدْ أَكْمَلْتَ كَافَّةَ أَنْشِطَةِ الدَّرْسِ</h2>
+      <div class="pct-number" id="final-pct">0%</div>
+      <div class="report-msg" id="final-msg">أَحْسَنْتَ صَنِيعًا!</div>
+      <div style="font-size: 1.1rem; color: var(--text-muted); margin-bottom: 25px;" id="final-detail">
+        الإِجَابَاتُ الصَّحِيحَةُ: 0 مِنَ الإِجْمَالِيِّ 0
+      </div>
+      <div class="report-actions">
+        <button class="btn-reload" onclick="location.reload()">🔄 إِعَادَةُ الْمُحَاوَلَةِ</button>
+        <button class="btn-reload" onclick="exitApp()" style="background:#455a64;">🚪 خُرُوجٌ</button>
+      </div>
+    </section>
+
+    <!-- زر العودة إلى الفهرس -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+  </main>
+
+  <script>
+    // ========================================================
+    // 🛡️ قسم الحماية
+    // ========================================================
+    const CHANNEL_ID = "-1004456852024";  // ← قناة السنة الأولى
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+
+    // ========================================================
+    // 🎯 قسم أنشطة الدرس
+    // ========================================================
+    const state = {
+      soundEnabled: true,
+      currentStation: 0,
+      totalStations: 10,
+      scores: [
+        { correct: 0, wrong: 0, total: 8 },
+        { correct: 0, wrong: 0, total: 2 },
+        { correct: 0, wrong: 0, total: 4 },
+        { correct: 0, wrong: 0, total: 4 },
+        { correct: 0, wrong: 0, total: 0 },
+        { correct: 0, wrong: 0, total: 10 },
+        { correct: 0, wrong: 0, total: 8 },
+        { correct: 0, wrong: 0, total: 7 },
+        { correct: 0, wrong: 0, total: 4 },
+        { correct: 0, wrong: 0, total: 4 }
+      ],
+      selectedMatch: {
+        'm-pair': { word: null, card: null },
+        'b-pair': { word: null, card: null }
+      }
+    };
+
+    let audioCtx = null;
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      return audioCtx;
+    }
+
+    function toggleAudioFx() {
+      state.soundEnabled = !state.soundEnabled;
+      document.getElementById('audio-toggle').innerText = state.soundEnabled ? '🔊 الصَّوْتُ: مُفَعَّلٌ' : '🔇 الصَّوْتُ: مَكْتُومٌ';
+    }
+
+    function playTone(freq, type, duration) {
+      if (!state.soundEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        if (ctx.state === 'suspended') ctx.resume();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    function playSuccess() {
+      playTone(523.25, 'triangle', 0.12);
+      setTimeout(() => playTone(659.25, 'triangle', 0.2), 120);
+    }
+
+    function playError() {
+      playTone(220, 'sawtooth', 0.25);
+    }
+
+    function playTap() {
+      playTone(400, 'sine', 0.05);
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function shuffleDomElements() {
+      document.querySelectorAll('.shuffle-container').forEach(container => {
+        const elements = Array.from(container.children);
+        shuffleArray(elements);
+        elements.forEach(el => container.appendChild(el));
+      });
+    }
+
+    function updateBadge(stationIdx) {
+      const badge = document.getElementById(`eval-${stationIdx}`);
+      if (badge) {
+        badge.innerText = `✓ ${state.scores[stationIdx].correct} | ✗ ${state.scores[stationIdx].wrong}`;
+      }
+      checkAdvance(stationIdx);
+    }
+
+    function checkAdvance(stationIdx) {
+      const s = state.scores[stationIdx];
+      if ((s.correct + s.wrong) >= s.total) {
+        unlockNextStation(stationIdx);
+      }
+    }
+
+    function unlockNextStation(currentIdx) {
+      const nextIdx = currentIdx + 1;
+      const nextElem = document.getElementById(`station-${nextIdx}`);
+      if (nextElem) {
+        nextElem.classList.remove('locked');
+        setTimeout(() => {
+          nextElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 300);
+      } else {
+        renderFinalReport();
+      }
+    }
+
+    function passReadingStation(stationIdx) {
+      playSuccess();
+      unlockNextStation(stationIdx);
+    }
+
+    function checkListeningMCQ(btn, stationIdx) {
+      const qItem = btn.closest('.q-item');
+      if (qItem.getAttribute('data-answered') === 'true') return;
+      qItem.setAttribute('data-answered', 'true');
+
+      const isCorrect = btn.getAttribute('data-correct') === 'true';
+      if (isCorrect) {
+        btn.classList.add('correct');
+        state.scores[stationIdx].correct++;
+        playSuccess();
+      } else {
+        btn.classList.add('wrong');
+        state.scores[stationIdx].wrong++;
+        playError();
+        qItem.querySelectorAll('.btn-opt').forEach(b => {
+          if (b.getAttribute('data-correct') === 'true') b.classList.add('correct');
+        });
+      }
+      qItem.querySelectorAll('.btn-opt').forEach(b => b.style.pointerEvents = 'none');
+      updateBadge(stationIdx);
+    }
+
+    function checkMCQ(btn, stationIdx) {
+      const qItem = btn.closest('.q-item');
+      if (qItem.getAttribute('data-answered') === 'true') return;
+      qItem.setAttribute('data-answered', 'true');
+
+      const isCorrect = btn.getAttribute('data-correct') === 'true';
+      if (isCorrect) {
+        btn.classList.add('correct');
+        state.scores[stationIdx].correct++;
+        playSuccess();
+      } else {
+        btn.classList.add('wrong');
+        state.scores[stationIdx].wrong++;
+        playError();
+        qItem.querySelectorAll('.btn-opt').forEach(b => {
+          if (b.getAttribute('data-correct') === 'true') b.classList.add('correct');
+        });
+      }
+      qItem.querySelectorAll('.btn-opt').forEach(b => b.style.pointerEvents = 'none');
+      updateBadge(stationIdx);
+    }
+
+    function selectMatchItem(element, type, pairKey) {
+      playTap();
+      const stationIdx = pairKey === 'm-pair' ? 2 : 3;
+      const pair = state.selectedMatch[pairKey];
+
+      if (type === 'word') {
+        if (pair.word) pair.word.classList.remove('selected');
+        pair.word = element;
+        pair.word.classList.add('selected');
+      } else {
+        if (pair.card) pair.card.classList.remove('selected');
+        pair.card = element;
+        pair.card.classList.add('selected');
+      }
+
+      if (pair.word && pair.card) {
+        const keyWord = pair.word.getAttribute('data-key');
+        const keyCard = pair.card.getAttribute('data-key');
+
+        if (keyWord === keyCard) {
+          pair.word.classList.remove('selected');
+          pair.card.classList.remove('selected');
+          pair.word.classList.add('matched');
+          pair.card.classList.add('matched');
+          state.scores[stationIdx].correct++;
+          playSuccess();
+        } else {
+          pair.word.classList.remove('selected');
+          pair.card.classList.remove('selected');
+          state.scores[stationIdx].wrong++;
+          playError();
+        }
+        pair.word = null;
+        pair.card = null;
+        updateBadge(stationIdx);
+      }
+    }
+
+    function toggleSelectChip(chip) {
+      if (chip.classList.contains('locked')) return;
+      playTap();
+      chip.classList.toggle('selected');
+    }
+
+    function verifyActivity(stationIdx, containerId) {
+      const container = document.getElementById(containerId);
+      const verifyBtn = event.currentTarget;
+      const chips = container.querySelectorAll('.chip');
+      
+      let allCorrectSoFar = true;
+
+      chips.forEach(chip => {
+        const isExpected = chip.getAttribute('data-correct') === 'true';
+        const isChosen = chip.classList.contains('selected');
+
+        chip.classList.remove('selected');
+        chip.classList.add('locked');
+
+        if (isChosen && isExpected) {
+          chip.classList.add('correct');
+          state.scores[stationIdx].correct++;
+        } else if (!isChosen && !isExpected) {
+          state.scores[stationIdx].correct++;
+        } else if (isChosen && !isExpected) {
+          chip.classList.add('wrong');
+          state.scores[stationIdx].wrong++;
+          allCorrectSoFar = false;
+        } else if (!isChosen && isExpected) {
+          chip.classList.add('wrong');
+          state.scores[stationIdx].wrong++;
+          allCorrectSoFar = false;
+        }
+      });
+
+      if (allCorrectSoFar) {
+        playSuccess();
+      } else {
+        playError();
+      }
+
+      verifyBtn.disabled = true;
+      verifyBtn.innerText = '✓ تَمَّ التَّحَقُّقُ';
+
+      updateBadge(stationIdx);
+    }
+
+    function renderFinalReport() {
+      let totalC = 0;
+      let totalQ = 0;
+
+      state.scores.forEach(s => {
+        totalC += s.correct;
+        totalQ += s.total;
+      });
+
+      totalC = Math.min(totalC, totalQ);
+      let pct = totalQ > 0 ? Math.round((totalC / totalQ) * 100) : 0;
+      pct = Math.min(Math.max(pct, 0), 100);
+
+      const reportSection = document.getElementById('final-report');
+      const pctElement = document.getElementById('final-pct');
+      const msgElement = document.getElementById('final-msg');
+      const detailElement = document.getElementById('final-detail');
+
+      pctElement.innerText = `${pct}%`;
+      detailElement.innerText = `عَدَدُ الإِجَابَاتِ الصَّحِيحَةِ: ${totalC} مِنْ إِجْمَالِي ${totalQ}`;
+
+      if (pct >= 90) {
+        msgElement.innerText = '🌟 مُمْتَازٌ جِدًّا! أَنْتَ بَطَلٌ مُتَفَوِّقٌ!';
+        msgElement.style.color = '#2e7d32';
+      } else if (pct >= 70) {
+        msgElement.innerText = '👏 عَمَلٌ رَائِعٌ! وَاصِلْ جُهْدَكَ يَا بَطَلُ!';
+        msgElement.style.color = '#1976d2';
+      } else {
+        msgElement.innerText = '💪 حَاوِلْ مَرَّةً أُخْرَى، سَتَكُونُ النَّتِيجَةُ أَفْضَلَ بِإِذْنِ اللَّهِ!';
+        msgElement.style.color = '#f57c00';
+      }
+
+      reportSection.style.display = 'block';
+      reportSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function exitApp() {
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.close) {
+        window.Telegram.WebApp.close();
+      } else {
+        window.close();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      shuffleDomElements();
+    });
+  </script>
+</body>
+</html>
