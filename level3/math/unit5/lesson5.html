@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الأَعْدَادُ مِنْ 0 إِلَى 999 (1) - الرِّيَاضِيَّاتُ - السَّنَةُ الثَّالِثَةُ ابْتِدَائِيٌّ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <!-- مكتبة Telegram WebApp (ضرورية للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    body {
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      background-color: #f1f5f9;
+      color: #1e293b;
+      touch-action: manipulation;
+    }
+    .ltr-math {
+      direction: ltr;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card-shadow {
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    }
+    .locked-section {
+      opacity: 0.45;
+      pointer-events: none;
+      filter: grayscale(85%);
+      position: relative;
+    }
+    .correct-field {
+      background-color: #dcfce7 !important;
+      border-color: #16a34a !important;
+      color: #15803d !important;
+    }
+    .incorrect-field {
+      background-color: #fee2e2 !important;
+      border-color: #dc2626 !important;
+      color: #b91c1c !important;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+    .active-badge {
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: calc(100% - 24px);
+      max-width: 800px;
+      margin: 12px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-16 selection:bg-amber-200">
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <!-- Header Banner -->
+  <header class="bg-gradient-to-r from-blue-700 via-indigo-700 to-emerald-600 text-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3 space-x-reverse">
+        <div class="bg-white text-blue-800 font-black rounded-2xl w-12 h-12 flex items-center justify-center text-xl shadow-md border-2 border-amber-300">
+          05
+        </div>
+        <div>
+          <h1 class="text-xl md:text-2xl font-black tracking-wide">الأَعْدَادُ مِنْ 0 إِلَى 999 (1)</h1>
+          <p class="text-xs md:text-sm text-blue-100 font-semibold">الرِّيَاضِيَّاتُ • السَّنَةُ الثَّالِثَةُ ابْتِدَائِيٌّ • كِتَابُ التِّلْمِيذِ ص 16 + دَفْتَرُ الأَنْشِطَةِ ص 10</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="soundToggle" onclick="toggleMute()" class="bg-white/20 hover:bg-white/30 text-white p-2 rounded-xl text-sm transition font-bold">
+          🔊
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-3 sm:px-4 py-6 space-y-8">
+
+    <!-- 1. أكتشف (1) -->
+    <section id="sec-aktachef-1" class="bg-white rounded-3xl p-5 md:p-7 card-shadow border-2 border-blue-100 transition-all">
+      <div class="flex items-center justify-between border-b pb-4 mb-5 border-blue-50">
+        <div class="flex items-center gap-3">
+          <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-base font-bold shadow-sm">أَكْتَشِفُ</span>
+          <span class="text-blue-800 font-bold text-lg">1. رَبْطُ الأَعْدَادِ بِالأَرْقَامِ وَالْحُرُوفِ</span>
+        </div>
+        <div class="score-badge bg-blue-50 text-blue-700 font-bold px-3 py-1 rounded-xl text-sm border border-blue-200">
+          المرحلة <span id="aktachef1-step">1</span> / 6
+        </div>
+      </div>
+
+      <p class="text-gray-800 font-semibold text-base mb-4 leading-relaxed">
+        أُنْقُلْ ثُمَّ اكْتُبْ الرَّمْزَ <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-black">(=)</span> بَيْنَ الْكِتَابَةِ بِالأَرْقَامِ وَالْكِتَابَةِ بِالْحُرُوفِ لِنَفْسِ الأَعْدَادِ الْمُسَجَّلَةِ عَلَى صَدْرِيَّاتِ الْعَدَّائِينَ:
+      </p>
+
+      <div class="rounded-2xl mb-6 border-2 border-sky-300 overflow-hidden shadow-md relative bg-gradient-to-b from-sky-100 to-emerald-50">
+        <div class="relative w-full max-h-[380px] flex items-center justify-center overflow-hidden bg-sky-50">
+          <img src="runners.jpg" alt="صَدْرِيَّاتُ الْعَدَّائِينَ فِي السِّبَاقِ" class="w-full h-auto max-h-[380px] object-contain mx-auto" onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'p-8 text-center text-sky-800 font-bold\'>🏃‍♂️ صَدْرِيَّاتُ الْعَدَّائِينَ فِي السِّبَاقِ: (8 ، 435 ، 500 ، 208 ، 65 ، 990) 🏃‍♀️<br><span class=\'text-xs text-rose-500 font-normal mt-2 block\'>يُرجى حفظ صورة الأطفال يركضون باسم <b>runners.jpg</b> في نفس مجلد الملف</span></div>';">
+        </div>
+        <div class="bg-sky-800 text-white text-xs sm:text-sm font-bold py-2 px-3 text-center">
+          سِبَاقُ الْعَدَّائِينَ • الأَعْدَادُ عَلَى الصَّدْرِيَّاتِ: 8 ، 435 ، 500 ، 208 ، 65 ، 990
+        </div>
+      </div>
+
+      <div class="bg-amber-50 rounded-2xl p-4 border border-amber-200 text-sm text-amber-900 mb-5 font-bold flex items-center gap-2">
+        <span class="text-xl">💡</span>
+        <span>تَعْلِيمَةُ التَّفَاعُلِ: اضْغَطْ عَلَى الْعَدَدِ بِالأَرْقَامِ أَوَّلًا، ثُمَّ اضْغَطْ عَلَى مَا يُقَابِلُهُ بِالْحُرُوفِ لِرَبْطِهِمَا.</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+        <div class="space-y-3">
+          <h4 class="text-center font-bold text-gray-700 text-sm bg-gray-100 py-2 rounded-lg">الْكِتَابَةُ بِالأَرْقَامِ</h4>
+          <div id="aktachef1-digits" class="space-y-2"></div>
+        </div>
+
+        <div class="space-y-3">
+          <h4 class="text-center font-bold text-gray-700 text-sm bg-gray-100 py-2 rounded-lg">الْكِتَابَةُ بِالْحُرُوفِ</h4>
+          <div id="aktachef1-words" class="space-y-2"></div>
+        </div>
+      </div>
+
+      <div id="aktachef1-eval" class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between hidden">
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-bold text-gray-700">تَقْيِيمُ المَحَطَّةِ:</span>
+          <span class="text-emerald-700 font-extrabold text-sm" id="aktachef1-correct">✓ 0 صَحِيح</span>
+          <span class="text-rose-700 font-extrabold text-sm" id="aktachef1-wrong">✗ 0 خَطَأ</span>
+        </div>
+        <span class="text-emerald-600 font-black text-sm bg-emerald-50 px-3 py-1 rounded-lg border border-emerald-200">اِكْتَمَلَ النَّشَاطُ! تَمَّ فَتْحُ الْمَحَطَّةِ التَّالِيَةِ 👇</span>
+      </div>
+    </section>
+
+    <!-- 2. أكتشف (2) -->
+    <section id="sec-aktachef-2" class="bg-white rounded-3xl p-5 md:p-7 card-shadow border-2 border-blue-100 locked-section transition-all">
+      <div class="flex items-center justify-between border-b pb-4 mb-5 border-blue-50">
+        <div class="flex items-center gap-3">
+          <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-base font-bold shadow-sm">أَكْتَشِفُ</span>
+          <span class="text-blue-800 font-bold text-lg">2. التَّفْكِيكُ: (و: وَحَدَات، ع: عَشَرَات، م: مِئَات)</span>
+        </div>
+      </div>
+
+      <p class="text-gray-800 font-semibold text-base mb-3 leading-relaxed">
+        أُكْمِلُ كَمَا فِي الْمِثَالِ:
+      </p>
+
+      <div class="bg-indigo-50 border-2 border-indigo-200 rounded-2xl p-4 mb-6 flex flex-wrap items-center justify-around gap-4 text-center">
+        <div class="bg-white px-5 py-2 rounded-xl font-black text-2xl text-indigo-900 border border-indigo-200 shadow-sm">
+          435
+        </div>
+        <div class="text-2xl text-indigo-400 font-black">➔</div>
+        
+        <div class="flex items-center gap-2">
+          <div class="bg-white px-3.5 py-1.5 rounded-xl border border-emerald-300 shadow-sm flex items-center gap-1">
+            <span class="font-black text-lg text-emerald-700">5</span>
+            <span class="font-bold text-sm text-gray-600">و</span>
+          </div>
+          <div class="bg-white px-3.5 py-1.5 rounded-xl border border-emerald-300 shadow-sm flex items-center gap-1">
+            <span class="font-black text-lg text-emerald-700">3</span>
+            <span class="font-bold text-sm text-gray-600">ع</span>
+          </div>
+          <div class="bg-white px-3.5 py-1.5 rounded-xl border border-emerald-300 shadow-sm flex items-center gap-1">
+            <span class="font-black text-lg text-emerald-700">4</span>
+            <span class="font-bold text-sm text-gray-600">م</span>
+          </div>
+        </div>
+
+        <div class="text-xs text-indigo-700 font-bold bg-indigo-100/70 px-3 py-1.5 rounded-lg">
+          (و = وَحَدَات / ع = عَشَرَات / م = مِئَات)
+        </div>
+      </div>
+
+      <form id="form-aktachef-2" onsubmit="event.preventDefault(); validateAktachef2();">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-3 bg-gray-50 rounded-2xl border border-gray-200 flex items-center justify-between">
+            <span class="font-black text-lg text-gray-800 w-16 text-center">137</span>
+            <div class="flex items-center gap-1 sm:gap-2">
+              <select id="ak2-u-137" class="border rounded-lg px-2 py-1 font-bold text-center bg-white focus:ring-2 focus:ring-blue-500">
+                <option value="">-</option><option value="1">1</option><option value="3">3</option><option value="7">7</option><option value="0">0</option>
+              </select><span class="font-bold text-sm text-gray-600">و</span>
+              <select id="ak2-t-137" class="border rounded-lg px-2 py-1 font-bold text-center bg-white focus:ring-2 focus:ring-blue-500">
+                <option value="">-</option><option value="1">1</option><option value="3">3</option><option value="7">7</option><option value="0">0</option>
+              </select><span class="font-bold text-sm text-gray-600">ع</span>
+              <select id="ak2-h-137" class="border rounded-lg px-2 py-1 font-bold text-center bg-white focus:ring-2 focus:ring-blue-500">
+                <option value="">-</option><option value="1">1</option><option value="3">3</option><option value="7">7</option><option value="0">0</option>
+              </select><span class="font-bold text-sm text-gray-600">م</span>
+            </div>
+          </div>
+
+          <div class="p-3 bg-gray-50 rounded-2xl border border-gray-200 flex items-center justify-between">
+            <span class="font-black text-lg text-gray-800 w-16 text-center">500</span>
+            <div class="flex items-center gap-1 sm:gap-2">
+              <select id="ak2-u-500" class="border rounded-lg px-2 py-1 font-bold text-center bg-white focus:ring-2 focus:ring-blue-500">
+                <option value="">-</option><option value="0">0</option><option value="5">5</option>
+              </select><span class="font-bold text-sm text-gray-600">و</span>
+              <select id="ak2-t-500" class="border rounded-lg px-2 py-1 font-bold text-center bg-white focus:ring-2 focus:ring-blue-500">
+                <option value="">-</option><option value="0">0</option><option value="5">5</option>
+              </select><span class="font-bold text-sm text-gray-600">ع</span>
+              <select id="ak2-h-500" class="border rounded-lg px-2 py-1 font-bold text-center bg-white focus:ring-2 focus:ring-blue-500">
+                <option value="">-</option><option value="0">0</option><option value="5">5</option>
+              </select><span class="font-bold text-sm text-gray-600">م</span>
+            </div>
+          </div>
+
+          <div class="p-3 bg-gray-50 rounded-2xl border border-gray-200 flex items-center justify-between">
+            <span class="font-black text-lg text-gray-800 w-16 text-center">8</span>
+            <div class="flex items-center gap-1 sm:gap-2">
+              <select id="ak2-u-8" class="border rounded-lg px-2 py-1 font-bold text-center bg-white">
+                <option value="">-</option><option value="8">8</option><option value="0">0</option>
+              </select><span class="font-bold text-sm text-gray-600">و</span>
+              <select id="ak2-t-8" class="border rounded-lg px-2 py-1 font-bold text-center bg-white">
+                <option value="">-</option><option value="0">0</option><option value="8">8</option>
+              </select><span class="font-bold text-sm text-gray-600">ع</span>
+              <select id="ak2-h-8" class="border rounded-lg px-2 py-1 font-bold text-center bg-white">
+                <option value="">-</option><option value="0">0</option><option value="8">8</option>
+              </select><span class="font-bold text-sm text-gray-600">م</span>
+            </div>
+          </div>
+
+          <div class="p-3 bg-gray-50 rounded-2xl border border-gray-200 flex items-center justify-between">
+            <span class="font-black text-lg text-gray-800 w-16 text-center">65</span>
+            <div class="flex items-center gap-1 sm:gap-2">
+              <select id="ak2-u-65" class="border rounded-lg px-2 py-1 font-bold text-center bg-white">
+                <option value="">-</option><option value="5">5</option><option value="6">6</option><option value="0">0</option>
+              </select><span class="font-bold text-sm text-gray-600">و</span>
+              <select id="ak2-t-65" class="border rounded-lg px-2 py-1 font-bold text-center bg-white">
+                <option value="">-</option><option value="5">5</option><option value="6">6</option><option value="0">0</option>
+              </select><span class="font-bold text-sm text-gray-600">ع</span>
+              <select id="ak2-h-65" class="border rounded-lg px-2 py-1 font-bold text-center bg-white">
+                <option value="">-</option><option value="0">0</option><option value="6">6</option>
+              </select><span class="font-bold text-sm text-gray-600">م</span>
+            </div>
+          </div>
+
+          <div class="p-3 bg-gray-50 rounded-2xl border border-gray-200 flex items-center justify-between">
+            <span class="font-black text-lg text-gray-800 w-16 text-center">208</span>
+            <div class="flex items-center gap-1 sm:gap-2">
+              <select id="ak2-u-208" class="border rounded-lg px-2 py-1 font-bold text-center bg-white">
+                <option value="">-</option><option value="8">8</option><option value="0">0</option><option value="2">2</option>
+              </select><span class="font-bold text-sm text-gray-600">و</span>
+              <select id="ak2-t-208" class="border rounded-lg px-2 py-1 font-bold text-center bg-white">
+                <option value="">-</option><option value="8">8</option><option value="0">0</option><option value="2">2</option>
+              </select><span class="font-bold text-sm text-gray-600">ع</span>
+              <select id="ak2-h-208" class="border rounded-lg px-2 py-1 font-bold text-center bg-white">
+                <option value="">-</option><option value="8">8</option><option value="0">0</option><option value="2">2</option>
+              </select><span class="font-bold text-sm text-gray-600">م</span>
+            </div>
+          </div>
+
+          <div class="p-3 bg-gray-50 rounded-2xl border border-gray-200 flex items-center justify-between">
+            <span class="font-black text-lg text-gray-800 w-16 text-center">990</span>
+            <div class="flex items-center gap-1 sm:gap-2">
+              <select id="ak2-u-990" class="border rounded-lg px-2 py-1 font-bold text-center bg-white">
+                <option value="">-</option><option value="0">0</option><option value="9">9</option>
+              </select><span class="font-bold text-sm text-gray-600">و</span>
+              <select id="ak2-t-990" class="border rounded-lg px-2 py-1 font-bold text-center bg-white">
+                <option value="">-</option><option value="0">0</option><option value="9">9</option>
+              </select><span class="font-bold text-sm text-gray-600">ع</span>
+              <select id="ak2-h-990" class="border rounded-lg px-2 py-1 font-bold text-center bg-white">
+                <option value="">-</option><option value="0">0</option><option value="9">9</option>
+              </select><span class="font-bold text-sm text-gray-600">م</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end">
+          <button type="submit" id="btn-ak2" class="bg-blue-600 hover:bg-blue-700 text-white font-black px-6 py-2.5 rounded-xl shadow-md transition active:scale-95">
+            تَأْكِيدُ الإِجَابَاتِ ❯
+          </button>
+        </div>
+      </form>
+
+      <div id="aktachef2-eval" class="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between hidden">
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-bold text-gray-700">تَقْيِيمُ المَحَطَّةِ:</span>
+          <span class="text-emerald-700 font-extrabold text-sm" id="aktachef2-correct">✓ 0 صَحِيح</span>
+          <span class="text-rose-700 font-extrabold text-sm" id="aktachef2-wrong">✗ 0 خَطَأ</span>
+        </div>
+        <span class="text-emerald-600 font-black text-sm bg-emerald-50 px-3 py-1 rounded-lg border border-emerald-200">تَمَّ التَّقْيِيمُ! انْتَقِلْ إِلَى مَحَطَّةِ أُنْجِزُ 👇</span>
+      </div>
+    </section>
+
+    <!-- 3. أنجز (1) -->
+    <section id="sec-ondjiz-1" class="bg-white rounded-3xl p-5 md:p-7 card-shadow border-2 border-amber-200 locked-section transition-all">
+      <div class="flex items-center justify-between border-b pb-4 mb-5 border-amber-100">
+        <div class="flex items-center gap-3">
+          <span class="bg-amber-600 text-white px-3 py-1 rounded-full text-base font-bold shadow-sm">أُنْجِزُ</span>
+          <span class="text-amber-900 font-bold text-lg">1. إِكْمَالُ الْجَدْوَلِ (حُرُوفٌ وَأَرْقَامٌ)</span>
+        </div>
+      </div>
+
+      <p class="text-gray-800 font-semibold text-base mb-4">
+        أُكْمِلُ الْجَدْوَلَ بِكِتَابَةِ مَا يُقَابِلُ كُلَّ عَدَدٍ:
+      </p>
+
+      <form id="form-ondjiz-1" onsubmit="event.preventDefault(); validateOndjiz1();">
+        <div class="overflow-x-auto">
+          <table class="w-full text-center border-collapse border border-gray-300 rounded-xl overflow-hidden">
+            <thead>
+              <tr class="bg-amber-100 text-amber-950 font-black text-sm md:text-base">
+                <th class="p-3 border border-amber-300 w-1/2">الْكِتَابَةُ بِالْحُرُوفِ</th>
+                <th class="p-3 border border-amber-300 w-1/2">الْكِتَابَةُ بِالأَرْقَامِ</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 text-base font-bold">
+              <tr class="hover:bg-amber-50/50">
+                <td class="p-3 border border-gray-300 text-gray-800">مِائَةٌ وَخَمْسَةٌ وَثَمَانُونَ</td>
+                <td class="p-3 border border-gray-300">
+                  <input type="text" id="ond1-185" class="w-full max-w-[150px] p-2 text-center border-2 border-gray-300 rounded-xl focus:border-amber-500 focus:outline-none bg-white font-bold">
+                </td>
+              </tr>
+              <tr class="hover:bg-amber-50/50">
+                <td class="p-3 border border-gray-300">
+                  <input type="text" id="ond1-705" class="w-full p-2 text-center border-2 border-gray-300 rounded-xl focus:border-amber-500 focus:outline-none bg-white font-bold">
+                </td>
+                <td class="p-3 border border-gray-300 text-gray-800 font-black text-lg">705</td>
+              </tr>
+              <tr class="hover:bg-amber-50/50">
+                <td class="p-3 border border-gray-300">
+                  <input type="text" id="ond1-856" class="w-full p-2 text-center border-2 border-gray-300 rounded-xl focus:border-amber-500 focus:outline-none bg-white font-bold">
+                </td>
+                <td class="p-3 border border-gray-300 text-gray-800 font-black text-lg">856</td>
+              </tr>
+              <tr class="hover:bg-amber-50/50">
+                <td class="p-3 border border-gray-300 text-gray-800">تِسْعُ مِائَةٍ وَأَحَدَ عَشَرَ</td>
+                <td class="p-3 border border-gray-300">
+                  <input type="text" id="ond1-911" class="w-full max-w-[150px] p-2 text-center border-2 border-gray-300 rounded-xl focus:border-amber-500 focus:outline-none bg-white font-bold">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="mt-4 flex justify-end">
+          <button type="submit" id="btn-ond1" class="bg-amber-600 hover:bg-amber-700 text-white font-black px-6 py-2.5 rounded-xl shadow-md transition active:scale-95">
+            تَحَقَّقْ ❯
+          </button>
+        </div>
+      </form>
+
+      <div id="ondjiz1-eval" class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between hidden">
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-bold text-gray-700">تَقْيِيمُ المَحَطَّةِ:</span>
+          <span class="text-emerald-700 font-extrabold text-sm" id="ondjiz1-correct">✓ 0 صَحِيح</span>
+          <span class="text-rose-700 font-extrabold text-sm" id="ondjiz1-wrong">✗ 0 خَطَأ</span>
+        </div>
+        <span class="text-amber-700 font-black text-sm">أَحْسَنْتَ، وَاصِلِ التَّحَدِّي!</span>
+      </div>
+    </section>
+
+    <!-- 4. أنجز (2) -->
+    <section id="sec-ondjiz-2" class="bg-white rounded-3xl p-5 md:p-7 card-shadow border-2 border-amber-200 locked-section transition-all">
+      <div class="flex items-center justify-between border-b pb-4 mb-5 border-amber-100">
+        <div class="flex items-center gap-3">
+          <span class="bg-amber-600 text-white px-3 py-1 rounded-full text-base font-bold shadow-sm">أُنْجِزُ</span>
+          <span class="text-amber-900 font-bold text-lg">2. صَدْرِيَّةُ أَيْمَن (432)</span>
+        </div>
+      </div>
+
+      <p class="text-gray-800 font-semibold text-base mb-4">
+        عَلَى صَدْرِيَّةِ أَيْمَن مَكْتُوبٌ الْعَدَدُ <span class="text-indigo-800 font-black text-xl px-2 py-0.5 bg-indigo-50 border rounded-lg">432</span>. أُكْمِلُ:
+      </p>
+
+      <form id="form-ondjiz-2" onsubmit="event.preventDefault(); validateOndjiz2();" class="space-y-4">
+        <div class="p-4 bg-amber-50/70 border border-amber-200 rounded-2xl flex flex-wrap items-center gap-3">
+          <span class="font-black text-gray-800 text-lg">432 هُوَ:</span>
+          <div class="inline-flex items-center gap-2">
+            <input type="text" id="ond2-u" maxlength="1" class="w-12 h-11 text-center font-black text-lg border-2 border-amber-300 rounded-xl focus:ring-2 focus:ring-amber-500 bg-white">
+            <span class="font-black text-amber-900">و</span>
+          </div>
+          <div class="inline-flex items-center gap-2">
+            <input type="text" id="ond2-t" maxlength="1" class="w-12 h-11 text-center font-black text-lg border-2 border-amber-300 rounded-xl focus:ring-2 focus:ring-amber-500 bg-white">
+            <span class="font-black text-amber-900">ع</span>
+          </div>
+          <div class="inline-flex items-center gap-2">
+            <input type="text" id="ond2-h" maxlength="1" class="w-12 h-11 text-center font-black text-lg border-2 border-amber-300 rounded-xl focus:ring-2 focus:ring-amber-500 bg-white">
+            <span class="font-black text-amber-900">م</span>
+          </div>
+        </div>
+
+        <div class="p-4 bg-amber-50/70 border border-amber-200 rounded-2xl flex flex-wrap items-center gap-3">
+          <span class="font-black text-gray-800 text-lg">التَّفْكِيكُ:</span>
+          <div class="ltr-math gap-2 text-lg font-black text-gray-800">
+            <span>432</span>
+            <span>=</span>
+            <input type="text" id="ond2-add-h" maxlength="3" class="w-16 h-11 text-center font-black border-2 border-amber-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+            <span>+</span>
+            <input type="text" id="ond2-add-t" maxlength="2" class="w-14 h-11 text-center font-black border-2 border-amber-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+            <span>+</span>
+            <input type="text" id="ond2-add-u" maxlength="1" class="w-12 h-11 text-center font-black border-2 border-amber-300 rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+          </div>
+        </div>
+
+        <div class="flex justify-end pt-2">
+          <button type="submit" id="btn-ond2" class="bg-amber-600 hover:bg-amber-700 text-white font-black px-6 py-2.5 rounded-xl shadow-md transition active:scale-95">
+            تَحَقَّقْ ❯
+          </button>
+        </div>
+      </form>
+
+      <div id="ondjiz2-eval" class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between hidden">
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-bold text-gray-700">تَقْيِيمُ المَحَطَّةِ:</span>
+          <span class="text-emerald-700 font-extrabold text-sm" id="ondjiz2-correct">✓ 0 صَحِيح</span>
+          <span class="text-rose-700 font-extrabold text-sm" id="ondjiz2-wrong">✗ 0 خَطَأ</span>
+        </div>
+        <span class="text-amber-700 font-black text-sm">مُمْتَازٌ! وَاصِلْ إِلَى السُّؤَالِ الثَّالِثِ 👇</span>
+      </div>
+    </section>
+
+    <!-- 5. أنجز (3) -->
+    <section id="sec-ondjiz-3" class="bg-white rounded-3xl p-5 md:p-7 card-shadow border-2 border-amber-200 locked-section transition-all">
+      <div class="flex items-center justify-between border-b pb-4 mb-5 border-amber-100">
+        <div class="flex items-center gap-3">
+          <span class="bg-amber-600 text-white px-3 py-1 rounded-full text-base font-bold shadow-sm">أُنْجِزُ</span>
+          <span class="text-amber-900 font-bold text-lg">3. تَعْيِينُ خَانَةِ الإِجَابَةِ الصَّحِيحَةِ</span>
+        </div>
+      </div>
+
+      <p class="text-gray-800 font-semibold text-base mb-4">
+        عَيِّنْ خَانَةَ الإِجَابَةِ الصَّحِيحَةِ بِالضَّغْطِ عَلَيْهَا:
+      </p>
+
+      <div class="space-y-6">
+        <div class="p-4 rounded-2xl border border-gray-200 bg-gray-50/50">
+          <p class="font-bold text-gray-800 mb-3 text-base">
+            • الْكِتَابَةُ بِالأَعْدَادِ لِلْعَدَدِ <span class="text-blue-700 font-black">«سَبْعُ مِائَةٍ وَثَلَاثَةٌ»</span> هِيَ:
+          </p>
+          <div class="grid grid-cols-3 gap-3 max-w-md mx-auto" id="ond3-q1-choices">
+            <button type="button" onclick="chooseOnd3(1, 307, this)" class="choice-btn py-3 px-4 rounded-xl border-2 border-gray-300 font-black text-xl hover:border-amber-500 hover:bg-amber-50 transition">307</button>
+            <button type="button" onclick="chooseOnd3(1, 703, this)" class="choice-btn py-3 px-4 rounded-xl border-2 border-gray-300 font-black text-xl hover:border-amber-500 hover:bg-amber-50 transition">703</button>
+            <button type="button" onclick="chooseOnd3(1, 730, this)" class="choice-btn py-3 px-4 rounded-xl border-2 border-gray-300 font-black text-xl hover:border-amber-500 hover:bg-amber-50 transition">730</button>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-2xl border border-gray-200 bg-gray-50/50">
+          <p class="font-bold text-gray-800 mb-3 text-base">
+            • عَدَدٌ رَقْمُ وَحَدَاتِهِ <span class="text-blue-700 font-black">0</span> وَرَقْمُ عَشَرَاتِهِ <span class="text-blue-700 font-black">5</span>:
+          </p>
+          <div class="grid grid-cols-3 gap-3 max-w-md mx-auto" id="ond3-q2-choices">
+            <button type="button" onclick="chooseOnd3(2, 50, this)" class="choice-btn py-3 px-4 rounded-xl border-2 border-gray-300 font-black text-xl hover:border-amber-500 hover:bg-amber-50 transition">50</button>
+            <button type="button" onclick="chooseOnd3(2, 150, this)" class="choice-btn py-3 px-4 rounded-xl border-2 border-gray-300 font-black text-xl hover:border-amber-500 hover:bg-amber-50 transition">150</button>
+            <button type="button" onclick="chooseOnd3(2, 105, this)" class="choice-btn py-3 px-4 rounded-xl border-2 border-gray-300 font-black text-xl hover:border-amber-500 hover:bg-amber-50 transition">105</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="ondjiz3-eval" class="mt-6 pt-3 border-t border-gray-100 flex items-center justify-between hidden">
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-bold text-gray-700">تَقْيِيمُ المَحَطَّةِ:</span>
+          <span class="text-emerald-700 font-extrabold text-sm" id="ondjiz3-correct">✓ 0 صَحِيح</span>
+          <span class="text-rose-700 font-extrabold text-sm" id="ondjiz3-wrong">✗ 0 خَطَأ</span>
+        </div>
+        <span class="text-emerald-600 font-black text-sm bg-emerald-50 px-3 py-1 rounded-lg border border-emerald-200">أَحْسَنْتَ! اكْتَمَلَتْ أَنْشِطَةُ الْكِتَابِ المَدْرَسِيِّ 🌟</span>
+      </div>
+    </section>
+
+    <!-- 6. بطاقة تعلمت -->
+    <section id="sec-taalamtou" class="bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 rounded-3xl p-6 md:p-8 card-shadow border-4 border-amber-300 relative overflow-hidden">
+      <div class="absolute -top-6 -right-6 text-amber-200/40 text-9xl font-black select-none pointer-events-none">📖</div>
+      <div class="flex items-center gap-4 mb-4 relative z-10">
+        <div class="bg-amber-500 text-white p-3 rounded-2xl shadow-md text-2xl">
+          💡
+        </div>
+        <div>
+          <h3 class="text-2xl font-black text-amber-900">تَعَلَّمْتُ</h3>
+          <p class="text-xs font-bold text-amber-700">الْخُلَاصَةُ الْبِيدَاغُوجِيَّةُ الْمُعْتَمَدَةُ (صَفْحَة 16)</p>
+        </div>
+      </div>
+      <div class="space-y-4 text-gray-800 text-base md:text-lg font-bold leading-relaxed relative z-10 bg-white/80 p-5 rounded-2xl border border-amber-200 shadow-sm">
+        <p class="text-justify">
+          « أَكْتُبُ الأَعْدَادَ بِالْحُرُوفِ بِاسْتِعْمَالِ وَتَرْكِيبِ مُفْرَدَاتِ الأَعْدَادِ وَأُرَاعِي قِيمَةَ كُلِّ رَقْمٍ. »
+        </p>
+        <div class="border-t border-amber-200 pt-3 flex flex-wrap items-center justify-between gap-2 text-indigo-950 font-black">
+          <span>مِثَالٌ: <span class="text-blue-700 text-xl font-black">659</span>، نَقْرَأُ: <span class="text-emerald-700">سِتُّ مِائَةٍ وَتِسْعَةٌ وَخَمْسُونَ.</span></span>
+          <span class="ltr-math bg-indigo-50 border border-indigo-200 px-3 py-1 rounded-xl text-base text-indigo-800">
+            659 = 600 + 50 + 9
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- دفتر الأنشطة عنوان فاصل -->
+    <div class="text-center py-2">
+      <span class="bg-emerald-600 text-white font-black text-sm md:text-base px-6 py-2 rounded-full shadow-md tracking-wider">
+        📚 دَفْتَرُ الأَنْشِطَةِ صَفْحَة 10
+      </span>
+    </div>
+
+    <!-- 7. أتمرن (1) -->
+    <section id="sec-atamarane-1" class="bg-white rounded-3xl p-5 md:p-7 card-shadow border-2 border-emerald-200 locked-section transition-all">
+      <div class="flex items-center justify-between border-b pb-4 mb-5 border-emerald-100">
+        <div class="flex items-center gap-3">
+          <span class="bg-emerald-600 text-white px-3 py-1 rounded-full text-base font-bold shadow-sm">أَتَمَرَّنُ</span>
+          <span class="text-emerald-900 font-bold text-lg">1. كِتَابَةُ الْعَدَدِ بِالْحُرُوفِ أَوْ بِالأَرْقَامِ</span>
+        </div>
+      </div>
+
+      <p class="text-gray-800 font-semibold text-base mb-4">
+        أُكْمِلُ كِتَابَةَ الْعَدَدِ بِالْحُرُوفِ أَوْ بِالأَرْقَامِ:
+      </p>
+
+      <form id="form-atamarane-1" onsubmit="event.preventDefault(); validateAtamarane1();" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-200 flex flex-col justify-between">
+            <div class="text-center font-black text-2xl text-emerald-800 mb-3 bg-white py-2 rounded-xl shadow-xs border">
+              807
+            </div>
+            <input type="text" id="at1-807" class="w-full p-2.5 text-center font-bold border-2 border-gray-300 rounded-xl focus:border-emerald-500 focus:outline-none bg-white">
+          </div>
+
+          <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-200 flex flex-col justify-between">
+            <div class="text-center font-bold text-base text-emerald-900 mb-3 bg-white py-3 rounded-xl shadow-xs border">
+              سَبْعُ مِائَةٍ وَثَمَانِيَةٌ
+            </div>
+            <input type="text" id="at1-708" class="w-full p-2.5 text-center font-black text-xl border-2 border-gray-300 rounded-xl focus:border-emerald-500 focus:outline-none bg-white">
+          </div>
+
+          <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-200 flex flex-col justify-between">
+            <div class="text-center font-black text-2xl text-emerald-800 mb-3 bg-white py-2 rounded-xl shadow-xs border">
+              444
+            </div>
+            <input type="text" id="at1-444" class="w-full p-2.5 text-center font-bold border-2 border-gray-300 rounded-xl focus:border-emerald-500 focus:outline-none bg-white">
+          </div>
+        </div>
+
+        <div class="mt-4 flex justify-end">
+          <button type="submit" id="btn-at1" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-6 py-2.5 rounded-xl shadow-md transition active:scale-95">
+            تَحَقَّقْ ❯
+          </button>
+        </div>
+      </form>
+
+      <div id="atamarane1-eval" class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between hidden">
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-bold text-gray-700">تَقْيِيمُ المَحَطَّةِ:</span>
+          <span class="text-emerald-700 font-extrabold text-sm" id="atamarane1-correct">✓ 0 صَحِيح</span>
+          <span class="text-rose-700 font-extrabold text-sm" id="atamarane1-wrong">✗ 0 خَطَأ</span>
+        </div>
+        <span class="text-emerald-700 font-black text-sm">عَمَلٌ رَائِعٌ! وَاصِلِ التَّمَرُّنَ 👇</span>
+      </div>
+    </section>
+
+    <!-- 8. أتمرن (2) -->
+    <section id="sec-atamarane-2" class="bg-white rounded-3xl p-5 md:p-7 card-shadow border-2 border-emerald-200 locked-section transition-all">
+      <div class="flex items-center justify-between border-b pb-4 mb-5 border-emerald-100">
+        <div class="flex items-center gap-3">
+          <span class="bg-emerald-600 text-white px-3 py-1 rounded-full text-base font-bold shadow-sm">أَتَمَرَّنُ</span>
+          <span class="text-emerald-900 font-bold text-lg">2. كِتَابَةُ الْعَدَدِ الْمُمَثَّلِ بِالأَرْقَامِ</span>
+        </div>
+      </div>
+
+      <p class="text-gray-800 font-semibold text-base mb-4">
+        أُكْتُبْ الْعَدَدَ الْمُمَثَّلَ بِالأَرْقَامِ فِي كُلِّ حَالَةٍ:
+      </p>
+
+      <form id="form-atamarane-2" onsubmit="event.preventDefault(); validateAtamarane2();" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+          <div class="flex flex-col items-center p-4 bg-gray-50 rounded-2xl border border-gray-200">
+            <div class="w-full h-52 bg-white rounded-xl border border-amber-100 p-2 flex items-center justify-center overflow-hidden">
+              <svg viewBox="0 0 190 145" class="w-full h-full select-none">
+                <defs>
+                  <pattern id="grid10-a" width="2.4" height="2.4" patternUnits="userSpaceOnUse">
+                    <rect width="2.4" height="2.4" fill="#fef3c7" stroke="#d97706" stroke-width="0.3"/>
+                  </pattern>
+                  <pattern id="rod10-a" width="5.5" height="4.5" patternUnits="userSpaceOnUse">
+                    <rect width="5.5" height="4.5" fill="#d1fae5" stroke="#059669" stroke-width="0.3"/>
+                  </pattern>
+                </defs>
+                <g stroke="#b45309" stroke-width="0.8">
+                  <rect x="5" y="8" width="24" height="24" fill="url(#grid10-a)" />
+                  <rect x="33" y="8" width="24" height="24" fill="url(#grid10-a)" />
+                  <rect x="61" y="8" width="24" height="24" fill="url(#grid10-a)" />
+                  <rect x="5" y="37" width="24" height="24" fill="url(#grid10-a)" />
+                  <rect x="33" y="37" width="24" height="24" fill="url(#grid10-a)" />
+                  <rect x="61" y="37" width="24" height="24" fill="url(#grid10-a)" />
+                  <rect x="5" y="66" width="24" height="24" fill="url(#grid10-a)" />
+                </g>
+                <g stroke="#047857" stroke-width="0.8">
+                  <rect x="100" y="8" width="5.5" height="45" fill="url(#rod10-a)" />
+                  <rect x="110" y="8" width="5.5" height="45" fill="url(#rod10-a)" />
+                  <rect x="120" y="8" width="5.5" height="45" fill="url(#rod10-a)" />
+                </g>
+                <g fill="#fee2e2" stroke="#dc2626" stroke-width="0.6">
+                  <rect x="140" y="10" width="7" height="7" />
+                  <rect x="151" y="10" width="7" height="7" />
+                  <rect x="162" y="10" width="7" height="7" />
+                  <rect x="140" y="22" width="7" height="7" />
+                  <rect x="151" y="22" width="7" height="7" />
+                  <rect x="162" y="22" width="7" height="7" />
+                  <rect x="140" y="34" width="7" height="7" />
+                  <rect x="151" y="34" width="7" height="7" />
+                  <rect x="162" y="34" width="7" height="7" />
+                </g>
+              </svg>
+            </div>
+            <div class="mt-3 w-full">
+              <label class="block text-center text-xs font-bold text-gray-500 mb-1">الْعَدَدُ هُوَ:</label>
+              <input type="text" id="at2-739" maxlength="3" class="w-full p-2 text-center font-black text-xl border-2 border-gray-300 rounded-xl focus:border-emerald-500 focus:outline-none bg-white">
+            </div>
+          </div>
+
+          <div class="flex flex-col items-center p-4 bg-gray-50 rounded-2xl border border-gray-200">
+            <div class="w-full h-52 bg-white rounded-xl border border-amber-100 p-2 flex items-center justify-center overflow-hidden">
+              <svg viewBox="0 0 190 145" class="w-full h-full select-none">
+                <g stroke="#b45309" stroke-width="0.8">
+                  <rect x="15" y="10" width="28" height="28" fill="url(#grid10-a)" />
+                  <rect x="75" y="10" width="28" height="28" fill="url(#grid10-a)" />
+                  <rect x="45" y="42" width="28" height="28" fill="url(#grid10-a)" />
+                  <rect x="15" y="74" width="28" height="28" fill="url(#grid10-a)" />
+                  <rect x="75" y="74" width="28" height="28" fill="url(#grid10-a)" />
+                </g>
+                <g fill="#fee2e2" stroke="#dc2626" stroke-width="0.6">
+                  <rect x="135" y="30" width="9" height="9" />
+                  <rect x="152" y="30" width="9" height="9" />
+                  <rect x="143.5" y="48" width="9" height="9" />
+                  <rect x="135" y="66" width="9" height="9" />
+                  <rect x="152" y="66" width="9" height="9" />
+                </g>
+              </svg>
+            </div>
+            <div class="mt-3 w-full">
+              <label class="block text-center text-xs font-bold text-gray-500 mb-1">الْعَدَدُ هُوَ:</label>
+              <input type="text" id="at2-505" maxlength="3" class="w-full p-2 text-center font-black text-xl border-2 border-gray-300 rounded-xl focus:border-emerald-500 focus:outline-none bg-white">
+            </div>
+          </div>
+
+          <div class="flex flex-col items-center p-4 bg-gray-50 rounded-2xl border border-gray-200">
+            <div class="w-full h-52 bg-white rounded-xl border border-amber-100 p-2 flex items-center justify-center overflow-hidden">
+              <svg viewBox="0 0 190 145" class="w-full h-full select-none">
+                <g stroke="#b45309" stroke-width="0.8">
+                  <rect x="25" y="10" width="26" height="26" fill="url(#grid10-a)" />
+                  <rect x="55" y="10" width="26" height="26" fill="url(#grid10-a)" />
+                  <rect x="85" y="10" width="26" height="26" fill="url(#grid10-a)" />
+                  <rect x="25" y="40" width="26" height="26" fill="url(#grid10-a)" />
+                  <rect x="55" y="40" width="26" height="26" fill="url(#grid10-a)" />
+                  <rect x="85" y="40" width="26" height="26" fill="url(#grid10-a)" />
+                  <rect x="25" y="70" width="26" height="26" fill="url(#grid10-a)" />
+                  <rect x="55" y="70" width="26" height="26" fill="url(#grid10-a)" />
+                  <rect x="85" y="70" width="26" height="26" fill="url(#grid10-a)" />
+                </g>
+              </svg>
+            </div>
+            <div class="mt-3 w-full">
+              <label class="block text-center text-xs font-bold text-gray-500 mb-1">الْعَدَدُ هُوَ:</label>
+              <input type="text" id="at2-900" maxlength="3" class="w-full p-2 text-center font-black text-xl border-2 border-gray-300 rounded-xl focus:border-emerald-500 focus:outline-none bg-white">
+            </div>
+          </div>
+
+        </div>
+
+        <div class="mt-4 flex justify-end">
+          <button type="submit" id="btn-at2" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-6 py-2.5 rounded-xl shadow-md transition active:scale-95">
+            تَحَقَّقْ ❯
+          </button>
+        </div>
+      </form>
+
+      <div id="atamarane2-eval" class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between hidden">
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-bold text-gray-700">تَقْيِيمُ المَحَطَّةِ:</span>
+          <span class="text-emerald-700 font-extrabold text-sm" id="atamarane2-correct">✓ 0 صَحِيح</span>
+          <span class="text-rose-700 font-extrabold text-sm" id="atamarane2-wrong">✗ 0 خَطَأ</span>
+        </div>
+        <span class="text-emerald-700 font-black text-sm">أَبْدَعْتَ! نَحْوَ التَّمْرِينِ الثَّالِثِ 👇</span>
+      </div>
+    </section>
+
+    <!-- 9. أتمرن (3) -->
+    <section id="sec-atamarane-3" class="bg-white rounded-3xl p-5 md:p-7 card-shadow border-2 border-emerald-200 locked-section transition-all">
+      <div class="flex items-center justify-between border-b pb-4 mb-5 border-emerald-100">
+        <div class="flex items-center gap-3">
+          <span class="bg-emerald-600 text-white px-3 py-1 rounded-full text-base font-bold shadow-sm">أَتَمَرَّنُ</span>
+          <span class="text-emerald-900 font-bold text-lg">3. إِكْمَالُ الْجَدْوَلِ كَمَا فِي الْمِثَالِ</span>
+        </div>
+      </div>
+
+      <p class="text-gray-800 font-semibold text-base mb-4">
+        أُكْمِلُ كَمَا فِي الْمِثَالِ:
+      </p>
+
+      <div class="bg-emerald-50/70 border-2 border-emerald-200 rounded-2xl p-4 mb-6 text-sm md:text-base font-bold text-emerald-950">
+        <div class="text-xs font-black text-emerald-700 mb-2">⭐ الْمِثَالُ التَّوْضِيحِيُّ:</div>
+        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 text-center bg-white p-3 rounded-xl border border-emerald-200 shadow-sm items-center">
+          <div class="p-1 font-black text-xl text-blue-800">953</div>
+          <div class="p-1">تِسْعُ مِائَةٍ وَثَلَاثَةٌ وَخَمْسُونَ</div>
+          <div class="p-1 flex items-center justify-center gap-1.5">
+            <span class="bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-lg text-emerald-900 font-bold">3 و</span>
+            <span class="bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-lg text-emerald-900 font-bold">5 ع</span>
+            <span class="bg-emerald-50 border border-emerald-300 px-2 py-0.5 rounded-lg text-emerald-900 font-bold">9 م</span>
+          </div>
+          <div class="p-1 font-black ltr-math text-emerald-700">900 + 50 + 3</div>
+        </div>
+      </div>
+
+      <form id="form-atamarane-3" onsubmit="event.preventDefault(); validateAtamarane3();" class="space-y-6">
+        
+        <div class="p-4 bg-gray-50 rounded-2xl border border-gray-200 space-y-3">
+          <div class="flex items-center gap-2 font-black text-blue-900 text-lg">
+            <span>الْعَدَدُ: 104</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-gray-500 mb-1">بِالْحُرُوفِ:</label>
+              <input type="text" id="at3-w-104" class="w-full p-2 font-bold border rounded-xl text-center bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-500 mb-1">بِالرُّتَبِ (و / ع / م):</label>
+              <div class="flex items-center justify-center gap-1 bg-white p-1.5 rounded-xl border">
+                <input type="text" id="at3-u-104" maxlength="1" class="w-8 text-center font-bold border rounded focus:ring-1 focus:ring-emerald-500"><span class="text-xs font-bold">و</span>
+                <input type="text" id="at3-t-104" maxlength="1" class="w-8 text-center font-bold border rounded focus:ring-1 focus:ring-emerald-500"><span class="text-xs font-bold">ع</span>
+                <input type="text" id="at3-h-104" maxlength="1" class="w-8 text-center font-bold border rounded focus:ring-1 focus:ring-emerald-500"><span class="text-xs font-bold">م</span>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-500 mb-1">التَّفْكِيكُ الجمعي:</label>
+              <div class="ltr-math gap-1 bg-white p-1.5 rounded-xl border justify-center">
+                <input type="text" id="at3-add1-104" maxlength="3" class="w-14 text-center font-bold border rounded focus:ring-1 focus:ring-emerald-500">
+                <span>+</span>
+                <input type="text" id="at3-add2-104" maxlength="2" class="w-12 text-center font-bold border rounded focus:ring-1 focus:ring-emerald-500">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-gray-50 rounded-2xl border border-gray-200 space-y-3">
+          <div class="flex items-center gap-3 font-bold text-gray-700 text-sm">
+            <span>الْمُعْطَى فِي الْجَدْوَلِ:</span>
+            <div class="flex items-center gap-2">
+              <span class="bg-indigo-100 text-indigo-950 px-3 py-1 rounded-xl font-black text-base border border-indigo-200 shadow-xs">9 و</span>
+              <span class="bg-indigo-100 text-indigo-950 px-3 py-1 rounded-xl font-black text-base border border-indigo-200 shadow-xs">5 ع</span>
+              <span class="bg-indigo-100 text-indigo-950 px-3 py-1 rounded-xl font-black text-base border border-indigo-200 shadow-xs">3 م</span>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-gray-500 mb-1">الْعَدَدُ بِالأَرْقَامِ:</label>
+              <input type="text" id="at3-d-359" maxlength="3" class="w-full p-2 font-black text-xl border rounded-xl text-center bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-500 mb-1">بِالْحُرُوفِ:</label>
+              <input type="text" id="at3-w-359" class="w-full p-2 font-bold border rounded-xl text-center bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-500 mb-1">التَّفْكِيكُ الجمعي:</label>
+              <div class="ltr-math gap-1 bg-white p-1.5 rounded-xl border justify-center">
+                <input type="text" id="at3-add1-359" maxlength="3" class="w-14 text-center font-bold border rounded focus:ring-1 focus:ring-emerald-500">
+                <span>+</span>
+                <input type="text" id="at3-add2-359" maxlength="2" class="w-12 text-center font-bold border rounded focus:ring-1 focus:ring-emerald-500">
+                <span>+</span>
+                <input type="text" id="at3-add3-359" maxlength="1" class="w-10 text-center font-bold border rounded focus:ring-1 focus:ring-emerald-500">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 flex justify-end">
+          <button type="submit" id="btn-at3" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-6 py-2.5 rounded-xl shadow-md transition active:scale-95">
+            تَحَقَّقْ ❯
+          </button>
+        </div>
+      </form>
+
+      <div id="atamarane3-eval" class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between hidden">
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-bold text-gray-700">تَقْيِيمُ المَحَطَّةِ:</span>
+          <span class="text-emerald-700 font-extrabold text-sm" id="atamarane3-correct">✓ 0 صَحِيح</span>
+          <span class="text-rose-700 font-extrabold text-sm" id="atamarane3-wrong">✗ 0 خَطَأ</span>
+        </div>
+        <span class="text-emerald-700 font-black text-sm">وَاصِلْ نَحْوَ الصَّكَّيْنِ الْبَرِيدِيَّيْنِ 👇</span>
+      </div>
+    </section>
+
+    <!-- 10. أتمرن (4) -->
+    <section id="sec-atamarane-4" class="bg-white rounded-3xl p-5 md:p-7 card-shadow border-2 border-emerald-200 locked-section transition-all">
+      <div class="flex items-center justify-between border-b pb-4 mb-5 border-emerald-100">
+        <div class="flex items-center gap-3">
+          <span class="bg-emerald-600 text-white px-3 py-1 rounded-full text-base font-bold shadow-sm">أَتَمَرَّنُ</span>
+          <span class="text-emerald-900 font-bold text-lg">4. إِكْمَالُ مَلْءِ الصَّكَّيْنِ الْبَرِيدِيَّيْنِ (بَرِيدُ الْجَزَائِرِ)</span>
+        </div>
+      </div>
+
+      <p class="text-gray-800 font-semibold text-base mb-4 leading-relaxed">
+        أُكْمِلُ مَلْءَ الصَّكَّيْنِ الْبَرِيدِيَّيْنِ: اكْتُبِ الْمَبْلَغَ بِالأَرْقَامِ فِي الصَّكِّ الأَوَّلِ، وَبِالْحُرُوفِ فِي الصَّكِّ الثَّانِي:
+      </p>
+
+      <form id="form-atamarane-4" onsubmit="event.preventDefault(); validateAtamarane4();" class="space-y-8">
+        
+        <div class="relative w-full max-w-2xl mx-auto rounded-2xl overflow-hidden shadow-lg border-2 border-[#83a37d]">
+          <div class="relative w-full aspect-[16/9]">
+            <img src="cheque1.jpg" alt="صك بريدي 1" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.style.background='#ebf3ea'; this.style.display='none'; document.getElementById('cheque1-fallback').classList.remove('hidden');">
+            
+            <div id="cheque1-fallback" class="hidden absolute inset-0 p-4 flex flex-col justify-between bg-[#ebf3ea]">
+              <div class="flex justify-between items-center">
+                <span class="font-black text-blue-900">بَرِيدُ الْجَزَائِرِ ALGERIE POSTE</span>
+                <span class="text-xs font-bold text-gray-500">دج / DA</span>
+              </div>
+              <div class="text-right font-black text-lg text-blue-950 font-serif">
+                سَبْعُ مِائَةٍ وَخَمْسَةٌ وَتِسْعُونَ
+              </div>
+              <div class="text-xs text-gray-400">00799999000451351973</div>
+            </div>
+
+            <div class="absolute" style="top: 21%; right: 32%; width: 20%; height: 7.5%;">
+              <input type="text" id="at4-chk1-val" maxlength="3" class="w-full h-full text-center font-black text-lg sm:text-2xl text-blue-950 bg-white/95 rounded-lg border-2 border-amber-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 shadow-md">
+            </div>
+          </div>
+          <div class="bg-emerald-800 text-white text-xs font-bold p-2 text-center">
+            الصَّكُّ الأَوَّلُ: اكْتُبِ الْمَبْلَغَ (سَبْعُ مِائَةٍ وَخَمْسَةٌ وَتِسْعُونَ) بِالأَرْقَامِ فِي الْمُسْتَطِيلِ الأَعْلَى.
+          </div>
+        </div>
+
+        <div class="relative w-full max-w-2xl mx-auto rounded-2xl overflow-hidden shadow-lg border-2 border-[#83a37d]">
+          <div class="relative w-full aspect-[16/9]">
+            <img src="cheque2.jpg" alt="صك بريدي 2" class="w-full h-full object-cover" onerror="this.onerror=null; this.parentElement.style.background='#ebf3ea'; this.style.display='none'; document.getElementById('cheque2-fallback').classList.remove('hidden');">
+            
+            <div id="cheque2-fallback" class="hidden absolute inset-0 p-4 flex flex-col justify-between bg-[#ebf3ea]">
+              <div class="flex justify-between items-center">
+                <span class="font-black text-blue-900">بَرِيدُ الْجَزَائِرِ ALGERIE POSTE</span>
+                <span class="font-black text-xl text-blue-900">950 دج</span>
+              </div>
+              <div class="text-right text-xs text-gray-500">Payez contre ce chèque :</div>
+              <div class="text-xs text-gray-400">00799999000451351973</div>
+            </div>
+
+            <div class="absolute" style="top: 32%; left: 10%; width: 62%; height: 10%;">
+              <input type="text" id="at4-chk2-val" class="w-full h-full text-center sm:text-right px-2 font-black text-xs sm:text-base md:text-lg text-blue-950 bg-white/95 rounded-lg border-2 border-emerald-600 focus:outline-none focus:ring-2 focus:ring-blue-600 shadow-md">
+            </div>
+          </div>
+          <div class="bg-emerald-800 text-white text-xs font-bold p-2 text-center">
+            الصَّكُّ الثَّانِي: اكْتُبِ الْمَبْلَغَ (950 دج) بِالْحُرُوفِ عَلَى السَّطْرِ الْمُخَصَّصِ.
+          </div>
+        </div>
+
+        <div class="flex justify-end">
+          <button type="submit" id="btn-at4" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-6 py-2.5 rounded-xl shadow-md transition active:scale-95">
+            تَحَقَّقْ مِنَ الصَّكَّيْنِ ❯
+          </button>
+        </div>
+      </form>
+
+      <div id="atamarane4-eval" class="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between hidden">
+        <div class="flex items-center gap-3">
+          <span class="text-sm font-bold text-gray-700">تَقْيِيمُ المَحَطَّةِ:</span>
+          <span class="text-emerald-700 font-extrabold text-sm" id="atamarane4-correct">✓ 0 صَحِيح</span>
+          <span class="text-rose-700 font-extrabold text-sm" id="atamarane4-wrong">✗ 0 خَطَأ</span>
+        </div>
+        <span class="text-emerald-700 font-black text-sm">مُمْتَازٌ جِدًّا! إِلَى مَحَطَّةِ التَّحَدِّي "أَبْحَثُ" 👇</span>
+      </div>
+    </section>
+
+    <!-- 11. أبحث -->
+    <section id="sec-abhath" class="bg-white rounded-3xl p-5 md:p-7 card-shadow border-2 border-purple-200 locked-section transition-all">
+      <div class="flex items-center justify-between border-b pb-4 mb-5 border-purple-100">
+        <div class="flex items-center gap-3">
+          <span class="bg-purple-600 text-white px-3 py-1 rounded-full text-base font-bold shadow-sm">أَبْحَثُ</span>
+          <span class="text-purple-900 font-bold text-lg">تَحَدِّي الأَذْكِيَاءِ: تَرْقِيمُ الْكِتَابِ</span>
+        </div>
+      </div>
+
+      <div class="bg-purple-50 rounded-2xl p-4 border border-purple-200 mb-6 flex items-start gap-3">
+        <span class="text-3xl">🧐</span>
+        <div class="text-purple-950 font-bold leading-relaxed text-base">
+          عَدَدُ صَفَحَاتِ كِتَابِ أَيْمَن <span class="text-purple-700 font-black text-lg">130 صَفْحَةٍ</span>.<br>
+          أَرَادَ تَرْقِيمَهَا مِنْ <span class="font-black">1</span> إِلَى <span class="font-black">130</span>.<br>
+          <span class="text-rose-700 font-black text-lg">كَمْ مَرَّةً يَسْتَعْمِلُ أَيْمَنُ الرَّقْمَ (0)؟</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-lg mx-auto mb-4" id="abhath-choices">
+        <button type="button" onclick="chooseAbhath(13, this)" class="py-3 px-4 rounded-2xl border-2 border-purple-200 font-black text-xl hover:border-purple-600 hover:bg-purple-50 transition">13 مَرَّةً</button>
+        <button type="button" onclick="chooseAbhath(14, this)" class="py-3 px-4 rounded-2xl border-2 border-purple-200 font-black text-xl hover:border-purple-600 hover:bg-purple-50 transition">14 مَرَّةً</button>
+        <button type="button" onclick="chooseAbhath(23, this)" class="py-3 px-4 rounded-2xl border-2 border-purple-200 font-black text-xl hover:border-purple-600 hover:bg-purple-50 transition">23 مَرَّةً</button>
+        <button type="button" onclick="chooseAbhath(24, this)" class="py-3 px-4 rounded-2xl border-2 border-purple-200 font-black text-xl hover:border-purple-600 hover:bg-purple-50 transition">24 مَرَّةً</button>
+      </div>
+
+      <div id="abhath-explanation" class="hidden mt-4 p-4 rounded-2xl border bg-gray-50 text-sm leading-relaxed font-semibold"></div>
+    </section>
+
+    <!-- 12. لوحة التقييم الختامية -->
+    <section id="sec-final-eval" class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 md:p-8 card-shadow border-4 border-indigo-500/40 hidden">
+      <div class="text-center mb-6">
+        <span class="bg-indigo-600/50 text-indigo-200 text-xs font-bold px-4 py-1.5 rounded-full border border-indigo-400/30 uppercase tracking-widest">
+          بِطَاقَةُ التَّقْيِيمِ الشَّامِلَةِ لِلدَّرْسِ
+        </span>
+        <h2 class="text-2xl md:text-3xl font-black mt-2 text-white">النَّتِيجَةُ النِّهَائِيَّةُ لِلتِّلْمِيذِ</h2>
+        <p class="text-slate-300 text-xs md:text-sm mt-1">يُمْكِنُ لِلأُسْتَاذِ وَالْوَلِيِّ مُعَايَنَةُ كَافَّةِ التَّفَاصِيلِ وَالأَخْطَاءِ بِالتَّمْرِيرِ أَعْلَاهُ</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+        <div class="flex flex-col items-center justify-center">
+          <div class="relative w-40 h-40">
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="8" class="text-slate-700 fill-none" />
+              <circle id="final-circle-progress" cx="50" cy="50" r="42" stroke="#10b981" stroke-width="8" stroke-dasharray="264" stroke-dashoffset="264" stroke-linecap="round" class="fill-none transition-all duration-1000 ease-out" />
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span id="final-percent" class="text-3xl font-black text-white">0%</span>
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">مُعَدَّلُ النَّجَاحِ</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div class="bg-white/10 rounded-2xl p-3 border border-white/10 flex items-center justify-between">
+            <span class="text-slate-300 text-sm font-bold">الإِجَابَاتُ الصَّحِيحَةُ:</span>
+            <span id="final-correct-count" class="text-emerald-400 font-black text-xl">0</span>
+          </div>
+          <div class="bg-white/10 rounded-2xl p-3 border border-white/10 flex items-center justify-between">
+            <span class="text-slate-300 text-sm font-bold">الإِجَابَاتُ الْخَاطِئَةُ:</span>
+            <span id="final-wrong-count" class="text-rose-400 font-black text-xl">0</span>
+          </div>
+          <div class="bg-white/10 rounded-2xl p-3 border border-white/10 flex items-center justify-between">
+            <span class="text-slate-300 text-sm font-bold">مَجْمُوعُ الأَسْئِلَةِ:</span>
+            <span id="final-total-count" class="text-indigo-300 font-black text-xl">0</span>
+          </div>
+        </div>
+
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center flex flex-col justify-center items-center h-full">
+          <div id="final-badge-icon" class="text-5xl mb-2">🏆</div>
+          <div id="final-remark-title" class="text-lg font-black text-amber-300">مُمْتَازٌ يَا بَطَلُ!</div>
+          <p id="final-remark-desc" class="text-xs text-slate-300 mt-1 leading-relaxed">
+            أَحْسَنْتَ التَّعَامُلَ مَعَ الأَعْدَادِ مِنْ 0 إِلَى 999 بِالأَرْقَامِ وَالْحُرُوفِ وَالتَّفْكِيكِ.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-white/10 flex flex-wrap justify-center gap-4">
+        <button onclick="resetWholeLesson()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-8 py-3 rounded-2xl shadow-lg transition active:scale-95 flex items-center gap-2">
+          <span>🔄</span>
+          <span>إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</span>
+        </button>
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="bg-slate-700 hover:bg-slate-600 text-white font-bold px-6 py-3 rounded-2xl transition">
+          ⬆️ مُرَاجَعَةُ التَّمَارِينِ فِي الأَعْلَى
+        </button>
+        <button onclick="exitApp()" class="bg-red-700 hover:bg-red-600 text-white font-bold px-6 py-3 rounded-2xl transition">
+          🚪 خُرُوجٌ
+        </button>
+      </div>
+    </section>
+
+    <!-- زر العودة إلى الفهرس -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+  </main>
+
+  <!-- Web Audio API Synth & Logic Engine -->
+  <script>
+    // ========================================================
+    // 🛡️ قسم الحماية
+    // ========================================================
+    const CHANNEL_ID = "-1003910412986";  // ← قناة السنة الثالثة
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+
+    // ========================================================
+    // 🎯 قسم أنشطة الدرس
+    // ========================================================
+    let audioCtx = null;
+    let isMuted = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      document.getElementById('soundToggle').textContent = isMuted ? '🔇' : '🔊';
+    }
+
+    function playSound(type) {
+      if (isMuted) return;
+      try {
+        initAudio();
+        if (!audioCtx) return;
+        const now = audioCtx.currentTime;
+
+        if (type === 'correct') {
+          const notes = [523.25, 659.25, 783.99];
+          notes.forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+
+            gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.3);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(now + idx * 0.08);
+            osc.stop(now + idx * 0.08 + 0.3);
+          });
+        } else if (type === 'wrong') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(150, now);
+          osc.frequency.linearRampToValueAtTime(100, now + 0.25);
+
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === 'complete') {
+          const chords = [523.25, 659.25, 783.99, 1046.50];
+          chords.forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+
+            gain.gain.setValueAtTime(0.25, now + idx * 0.12);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.6);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(now + idx * 0.12);
+            osc.stop(now + idx * 0.12 + 0.6);
+          });
+        }
+      } catch (e) {
+        console.warn('Audio error:', e);
+      }
+    }
+
+    function normalizeArabic(text) {
+      if (!text) return "";
+      return text
+        .trim()
+        .replace(/[\u064B-\u065F\u0670]/g, "")
+        .replace(/[إأآٱ]/g, "ا")
+        .replace(/ة/g, "ه")
+        .replace(/ى/g, "ي")
+        .replace(/[\s\-_]+/g, " ")
+        .toLowerCase();
+    }
+
+    function matchesArabic(input, allowedList) {
+      const normInput = normalizeArabic(input);
+      const catSynonyms = ['قط', 'قطه', 'هر', 'هره'];
+      if (catSynonyms.includes(normInput) && allowedList.some(item => catSynonyms.includes(normalizeArabic(item)))) {
+        return true;
+      }
+      return allowedList.some(item => normalizeArabic(item) === normInput);
+    }
+
+    const scores = {
+      ak1: { correct: 0, wrong: 0, total: 6 },
+      ak2: { correct: 0, wrong: 0, total: 6 },
+      ond1: { correct: 0, wrong: 0, total: 4 },
+      ond2: { correct: 0, wrong: 0, total: 2 },
+      ond3: { correct: 0, wrong: 0, total: 2 },
+      at1: { correct: 0, wrong: 0, total: 3 },
+      at2: { correct: 0, wrong: 0, total: 3 },
+      at3: { correct: 0, wrong: 0, total: 2 },
+      at4: { correct: 0, wrong: 0, total: 2 },
+      abhath: { correct: 0, wrong: 0, total: 1 }
+    };
+
+    function unlockSection(sectionId) {
+      const el = document.getElementById(sectionId);
+      if (el) {
+        el.classList.remove('locked-section');
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    const ak1Pairs = [
+      { num: 435, words: "أَرْبَعُ مِائَةٍ وَخَمْسَةٌ وَثَلَاثُونَ" },
+      { num: 500, words: "خَمْسُ مِائَةٍ" },
+      { num: 8,   words: "ثَمَانِيَةٌ" },
+      { num: 65,  words: "خَمْسَةٌ وَسِتُّونَ" },
+      { num: 208, words: "مِئَتَانِ وَثَمَانِيَةٌ" },
+      { num: 990, words: "تِسْعُ مِائَةٍ وَتِسْعُونَ" }
+    ];
+
+    let ak1SelectedNum = null;
+    let ak1MatchesDone = 0;
+
+    function initAktachef1() {
+      const digitsCol = document.getElementById('aktachef1-digits');
+      const wordsCol = document.getElementById('aktachef1-words');
+      if (!digitsCol || !wordsCol) return;
+
+      digitsCol.innerHTML = '';
+      wordsCol.innerHTML = '';
+      ak1SelectedNum = null;
+      ak1MatchesDone = 0;
+      scores.ak1.correct = 0;
+      scores.ak1.wrong = 0;
+      document.getElementById('aktachef1-step').textContent = '1';
+      document.getElementById('aktachef1-eval').classList.add('hidden');
+
+      const shuffledNums = [...ak1Pairs].sort(() => 0.5 - Math.random());
+      const shuffledWords = [...ak1Pairs].sort(() => 0.5 - Math.random());
+
+      shuffledNums.forEach(item => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `ak1-btn-n-${item.num}`;
+        btn.className = 'w-full py-2.5 px-4 rounded-xl border-2 border-indigo-200 bg-white font-black text-xl text-indigo-900 shadow-xs hover:border-indigo-500 hover:bg-indigo-50 transition active:scale-95 cursor-pointer';
+        btn.textContent = item.num;
+        btn.onclick = () => selectAk1Num(item.num, btn);
+        digitsCol.appendChild(btn);
+      });
+
+      shuffledWords.forEach(item => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `ak1-btn-w-${item.num}`;
+        btn.className = 'w-full py-2.5 px-4 rounded-xl border-2 border-gray-200 bg-white font-bold text-sm text-gray-800 shadow-xs hover:border-blue-400 hover:bg-blue-50 transition active:scale-95 cursor-pointer';
+        btn.textContent = item.words;
+        btn.onclick = () => selectAk1Word(item.num, btn);
+        wordsCol.appendChild(btn);
+      });
+    }
+
+    function selectAk1Num(num, btn) {
+      if (btn.disabled) return;
+      document.querySelectorAll('#aktachef1-digits button').forEach(b => {
+        if (!b.disabled) b.classList.remove('ring-4', 'ring-amber-400', 'bg-amber-100');
+      });
+      ak1SelectedNum = num;
+      btn.classList.add('ring-4', 'ring-amber-400', 'bg-amber-100');
+    }
+
+    function selectAk1Word(wordNum, btn) {
+      if (btn.disabled) return;
+      if (ak1SelectedNum === null) {
+        playSound('wrong');
+        return;
+      }
+
+      const numBtn = document.getElementById(`ak1-btn-n-${ak1SelectedNum}`);
+      const isCorrect = (ak1SelectedNum === wordNum);
+
+      if (isCorrect) {
+        playSound('correct');
+        scores.ak1.correct++;
+        numBtn.classList.remove('ring-4', 'ring-amber-400', 'bg-amber-100');
+        numBtn.classList.add('correct-field');
+        btn.classList.add('correct-field');
+        numBtn.disabled = true;
+        btn.disabled = true;
+      } else {
+        playSound('wrong');
+        scores.ak1.wrong++;
+        numBtn.classList.remove('ring-4', 'ring-amber-400', 'bg-amber-100');
+        numBtn.classList.add('incorrect-field');
+        btn.classList.add('incorrect-field');
+        numBtn.disabled = true;
+        btn.disabled = true;
+      }
+
+      ak1SelectedNum = null;
+      ak1MatchesDone++;
+      document.getElementById('aktachef1-step').textContent = Math.min(6, ak1MatchesDone + 1);
+
+      if (ak1MatchesDone === 6) {
+        const evalBox = document.getElementById('aktachef1-eval');
+        document.getElementById('aktachef1-correct').textContent = `✓ ${scores.ak1.correct} صَحِيح`;
+        document.getElementById('aktachef1-wrong').textContent = `✗ ${scores.ak1.wrong} خَطَأ`;
+        evalBox.classList.remove('hidden');
+        unlockSection('sec-aktachef-2');
+      }
+    }
+
+    function validateAktachef2() {
+      const btn = document.getElementById('btn-ak2');
+      if (btn.disabled) return;
+
+      const items = [
+        { id: '137', u: '7', t: '3', h: '1' },
+        { id: '500', u: '0', t: '0', h: '5' },
+        { id: '8',   u: '8', t: '0', h: '0' },
+        { id: '65',  u: '5', t: '6', h: '0' },
+        { id: '208', u: '8', t: '0', h: '2' },
+        { id: '990', u: '0', t: '9', h: '9' }
+      ];
+
+      let correctCount = 0;
+      let wrongCount = 0;
+
+      items.forEach(item => {
+        const uEl = document.getElementById(`ak2-u-${item.id}`);
+        const tEl = document.getElementById(`ak2-t-${item.id}`);
+        const hEl = document.getElementById(`ak2-h-${item.id}`);
+
+        const isU = (uEl.value === item.u);
+        const isT = (tEl.value === item.t);
+        const isH = (hEl.value === item.h);
+
+        [uEl, tEl, hEl].forEach(el => el.disabled = true);
+
+        if (isU && isT && isH) {
+          correctCount++;
+          uEl.classList.add('correct-field');
+          tEl.classList.add('correct-field');
+          hEl.classList.add('correct-field');
+        } else {
+          wrongCount++;
+          if (!isU) uEl.classList.add('incorrect-field'); else uEl.classList.add('correct-field');
+          if (!isT) tEl.classList.add('incorrect-field'); else tEl.classList.add('correct-field');
+          if (!isH) hEl.classList.add('incorrect-field'); else hEl.classList.add('correct-field');
+        }
+      });
+
+      scores.ak2.correct = correctCount;
+      scores.ak2.wrong = wrongCount;
+
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'pointer-events-none');
+
+      if (correctCount >= 4) playSound('correct'); else playSound('wrong');
+
+      const evalBox = document.getElementById('aktachef2-eval');
+      document.getElementById('aktachef2-correct').textContent = `✓ ${correctCount} صَحِيح`;
+      document.getElementById('aktachef2-wrong').textContent = `✗ ${wrongCount} خَطَأ`;
+      evalBox.classList.remove('hidden');
+
+      unlockSection('sec-ondjiz-1');
+    }
+
+    function validateOndjiz1() {
+      const btn = document.getElementById('btn-ond1');
+      if (btn.disabled) return;
+
+      const f185 = document.getElementById('ond1-185');
+      const f705 = document.getElementById('ond1-705');
+      const f856 = document.getElementById('ond1-856');
+      const f911 = document.getElementById('ond1-911');
+
+      let c = 0, w = 0;
+
+      if (f185.value.trim() === '185') {
+        c++; f185.classList.add('correct-field');
+      } else {
+        w++; f185.classList.add('incorrect-field');
+      }
+
+      if (matchesArabic(f705.value, ['سبع مائة وخمسة', 'سبعمائة وخمسة', 'سبع مئة وخمسة', 'سبعمئة وخمسة'])) {
+        c++; f705.classList.add('correct-field');
+      } else {
+        w++; f705.classList.add('incorrect-field');
+      }
+
+      if (matchesArabic(f856.value, ['ثمان مائة وستة وخمسون', 'ثمانمائة وستة وخمسون', 'ثمان مئة وستة وخمسون', 'ثمانمئة وستة وخمسون'])) {
+        c++; f856.classList.add('correct-field');
+      } else {
+        w++; f856.classList.add('incorrect-field');
+      }
+
+      if (f911.value.trim() === '911') {
+        c++; f911.classList.add('correct-field');
+      } else {
+        w++; f911.classList.add('incorrect-field');
+      }
+
+      [f185, f705, f856, f911].forEach(f => f.disabled = true);
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'pointer-events-none');
+
+      scores.ond1.correct = c;
+      scores.ond1.wrong = w;
+
+      if (c >= 3) playSound('correct'); else playSound('wrong');
+
+      const evalBox = document.getElementById('ondjiz1-eval');
+      document.getElementById('ondjiz1-correct').textContent = `✓ ${c} صَحِيح`;
+      document.getElementById('ondjiz1-wrong').textContent = `✗ ${w} خَطَأ`;
+      evalBox.classList.remove('hidden');
+
+      unlockSection('sec-ondjiz-2');
+    }
+
+    function validateOndjiz2() {
+      const btn = document.getElementById('btn-ond2');
+      if (btn.disabled) return;
+
+      const u = document.getElementById('ond2-u');
+      const t = document.getElementById('ond2-t');
+      const h = document.getElementById('ond2-h');
+
+      const addH = document.getElementById('ond2-add-h');
+      const addT = document.getElementById('ond2-add-t');
+      const addU = document.getElementById('ond2-add-u');
+
+      let c = 0, w = 0;
+
+      const isPart1 = (u.value.trim() === '2' && t.value.trim() === '3' && h.value.trim() === '4');
+      [u, t, h].forEach(el => el.disabled = true);
+      if (isPart1) {
+        c++; [u, t, h].forEach(el => el.classList.add('correct-field'));
+      } else {
+        w++; [u, t, h].forEach(el => el.classList.add('incorrect-field'));
+      }
+
+      const isPart2 = (addH.value.trim() === '400' && addT.value.trim() === '30' && addU.value.trim() === '2');
+      [addH, addT, addU].forEach(el => el.disabled = true);
+      if (isPart2) {
+        c++; [addH, addT, addU].forEach(el => el.classList.add('correct-field'));
+      } else {
+        w++; [addH, addT, addU].forEach(el => el.classList.add('incorrect-field'));
+      }
+
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'pointer-events-none');
+
+      scores.ond2.correct = c;
+      scores.ond2.wrong = w;
+
+      if (c === 2) playSound('correct'); else playSound('wrong');
+
+      const evalBox = document.getElementById('ondjiz2-eval');
+      document.getElementById('ondjiz2-correct').textContent = `✓ ${c} صَحِيح`;
+      document.getElementById('ondjiz2-wrong').textContent = `✗ ${w} خَطَأ`;
+      evalBox.classList.remove('hidden');
+
+      unlockSection('sec-ondjiz-3');
+    }
+
+    let ond3Answered = { q1: false, q2: false };
+
+    function chooseOnd3(qNum, value, btn) {
+      if (qNum === 1 && ond3Answered.q1) return;
+      if (qNum === 2 && ond3Answered.q2) return;
+
+      const parent = (qNum === 1) ? document.getElementById('ond3-q1-choices') : document.getElementById('ond3-q2-choices');
+      const buttons = parent.querySelectorAll('button');
+
+      const isCorrect = (qNum === 1 && value === 703) || (qNum === 2 && value === 50);
+
+      buttons.forEach(b => {
+        b.disabled = true;
+        b.classList.add('opacity-70');
+      });
+
+      if (isCorrect) {
+        playSound('correct');
+        scores.ond3.correct++;
+        btn.classList.add('correct-field', '!opacity-100');
+      } else {
+        playSound('wrong');
+        scores.ond3.wrong++;
+        btn.classList.add('incorrect-field', '!opacity-100');
+        buttons.forEach(b => {
+          if ((qNum === 1 && b.textContent.includes('703')) || (qNum === 2 && b.textContent.trim() === '50')) {
+            b.classList.add('correct-field');
+          }
+        });
+      }
+
+      if (qNum === 1) ond3Answered.q1 = true;
+      if (qNum === 2) ond3Answered.q2 = true;
+
+      if (ond3Answered.q1 && ond3Answered.q2) {
+        const evalBox = document.getElementById('ondjiz3-eval');
+        document.getElementById('ondjiz3-correct').textContent = `✓ ${scores.ond3.correct} صَحِيح`;
+        document.getElementById('ondjiz3-wrong').textContent = `✗ ${scores.ond3.wrong} خَطَأ`;
+        evalBox.classList.remove('hidden');
+        unlockSection('sec-atamarane-1');
+      }
+    }
+
+    function validateAtamarane1() {
+      const btn = document.getElementById('btn-at1');
+      if (btn.disabled) return;
+
+      const f807 = document.getElementById('at1-807');
+      const f708 = document.getElementById('at1-708');
+      const f444 = document.getElementById('at1-444');
+
+      let c = 0, w = 0;
+
+      if (matchesArabic(f807.value, ['ثمان مائة وسبعة', 'ثمانمائة وسبعة', 'ثمان مئة وسبعة', 'ثمانمئة وسبعة'])) {
+        c++; f807.classList.add('correct-field');
+      } else {
+        w++; f807.classList.add('incorrect-field');
+      }
+
+      if (f708.value.trim() === '708') {
+        c++; f708.classList.add('correct-field');
+      } else {
+        w++; f708.classList.add('incorrect-field');
+      }
+
+      if (matchesArabic(f444.value, ['اربع مائة واربعة واربعون', 'اربعمائة واربعة واربعون', 'اربع مئة واربعة واربعون', 'اربعمئة واربعة واربعون'])) {
+        c++; f444.classList.add('correct-field');
+      } else {
+        w++; f444.classList.add('incorrect-field');
+      }
+
+      [f807, f708, f444].forEach(f => f.disabled = true);
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'pointer-events-none');
+
+      scores.at1.correct = c;
+      scores.at1.wrong = w;
+
+      if (c >= 2) playSound('correct'); else playSound('wrong');
+
+      const evalBox = document.getElementById('atamarane1-eval');
+      document.getElementById('atamarane1-correct').textContent = `✓ ${c} صَحِيح`;
+      document.getElementById('atamarane1-wrong').textContent = `✗ ${w} خَطَأ`;
+      evalBox.classList.remove('hidden');
+
+      unlockSection('sec-atamarane-2');
+    }
+
+    function validateAtamarane2() {
+      const btn = document.getElementById('btn-at2');
+      if (btn.disabled) return;
+
+      const f739 = document.getElementById('at2-739');
+      const f505 = document.getElementById('at2-505');
+      const f900 = document.getElementById('at2-900');
+
+      let c = 0, w = 0;
+
+      if (f739.value.trim() === '739') { c++; f739.classList.add('correct-field'); }
+      else { w++; f739.classList.add('incorrect-field'); }
+
+      if (f505.value.trim() === '505') { c++; f505.classList.add('correct-field'); }
+      else { w++; f505.classList.add('incorrect-field'); }
+
+      if (f900.value.trim() === '900') { c++; f900.classList.add('correct-field'); }
+      else { w++; f900.classList.add('incorrect-field'); }
+
+      [f739, f505, f900].forEach(f => f.disabled = true);
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'pointer-events-none');
+
+      scores.at2.correct = c;
+      scores.at2.wrong = w;
+
+      if (c >= 2) playSound('correct'); else playSound('wrong');
+
+      const evalBox = document.getElementById('atamarane2-eval');
+      document.getElementById('atamarane2-correct').textContent = `✓ ${c} صَحِيح`;
+      document.getElementById('atamarane2-wrong').textContent = `✗ ${w} خَطَأ`;
+      evalBox.classList.remove('hidden');
+
+      unlockSection('sec-atamarane-3');
+    }
+
+    function validateAtamarane3() {
+      const btn = document.getElementById('btn-at3');
+      if (btn.disabled) return;
+
+      const w104 = document.getElementById('at3-w-104');
+      const u104 = document.getElementById('at3-u-104');
+      const t104 = document.getElementById('at3-t-104');
+      const h104 = document.getElementById('at3-h-104');
+      const add1_104 = document.getElementById('at3-add1-104');
+      const add2_104 = document.getElementById('at3-add2-104');
+
+      const d359 = document.getElementById('at3-d-359');
+      const w359 = document.getElementById('at3-w-359');
+      const add1_359 = document.getElementById('at3-add1-359');
+      const add2_359 = document.getElementById('at3-add2-359');
+      const add3_359 = document.getElementById('at3-add3-359');
+
+      let c = 0, w = 0;
+
+      const okW104 = matchesArabic(w104.value, ['مائة واربعة', 'مئة واربعة']);
+      const okR104 = (u104.value.trim() === '4' && t104.value.trim() === '0' && h104.value.trim() === '1');
+      const okAdd104 = (
+        (add1_104.value.trim() === '100' && add2_104.value.trim() === '4') ||
+        (add1_104.value.trim() === '4' && add2_104.value.trim() === '100')
+      );
+
+      if (okW104 && okR104 && okAdd104) {
+        c++;
+        [w104, u104, t104, h104, add1_104, add2_104].forEach(el => el.classList.add('correct-field'));
+      } else {
+        w++;
+        if (!okW104) w104.classList.add('incorrect-field'); else w104.classList.add('correct-field');
+        if (!okR104) [u104, t104, h104].forEach(el => el.classList.add('incorrect-field')); else [u104, t104, h104].forEach(el => el.classList.add('correct-field'));
+        if (!okAdd104) [add1_104, add2_104].forEach(el => el.classList.add('incorrect-field')); else [add1_104, add2_104].forEach(el => el.classList.add('correct-field'));
+      }
+
+      const okD359 = (d359.value.trim() === '359');
+      const okW359 = matchesArabic(w359.value, ['ثلاث مائة وتسعة وخمسون', 'ثلاثمائة وتسعة وخمسون', 'ثلاث مئة وتسعة وخمسون', 'ثلاثمئة وتسعة وخمسون']);
+      const okAdd359 = (
+        add1_359.value.trim() === '300' &&
+        add2_359.value.trim() === '50' &&
+        add3_359.value.trim() === '9'
+      );
+
+      if (okD359 && okW359 && okAdd359) {
+        c++;
+        [d359, w359, add1_359, add2_359, add3_359].forEach(el => el.classList.add('correct-field'));
+      } else {
+        w++;
+        if (!okD359) d359.classList.add('incorrect-field'); else d359.classList.add('correct-field');
+        if (!okW359) w359.classList.add('incorrect-field'); else w359.classList.add('correct-field');
+        if (!okAdd359) [add1_359, add2_359, add3_359].forEach(el => el.classList.add('incorrect-field')); else [add1_359, add2_359, add3_359].forEach(el => el.classList.add('correct-field'));
+      }
+
+      const allInputs = [w104, u104, t104, h104, add1_104, add2_104, d359, w359, add1_359, add2_359, add3_359];
+      allInputs.forEach(el => el.disabled = true);
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'pointer-events-none');
+
+      scores.at3.correct = c;
+      scores.at3.wrong = w;
+
+      if (c === 2) playSound('correct'); else playSound('wrong');
+
+      const evalBox = document.getElementById('atamarane3-eval');
+      document.getElementById('atamarane3-correct').textContent = `✓ ${c} صَحِيح`;
+      document.getElementById('atamarane3-wrong').textContent = `✗ ${w} خَطَأ`;
+      evalBox.classList.remove('hidden');
+
+      unlockSection('sec-atamarane-4');
+    }
+
+    function validateAtamarane4() {
+      const btn = document.getElementById('btn-at4');
+      if (btn.disabled) return;
+
+      const chk1 = document.getElementById('at4-chk1-val');
+      const chk2 = document.getElementById('at4-chk2-val');
+
+      let c = 0, w = 0;
+
+      if (chk1.value.trim() === '795') {
+        c++; chk1.classList.add('correct-field');
+      } else {
+        w++; chk1.classList.add('incorrect-field');
+      }
+
+      const valid950 = [
+        'تسع مائة وخمسون',
+        'تسعمائة وخمسون',
+        'تسع مئة وخمسون',
+        'تسعمئة وخمسون',
+        'تسع مائة وخمسون دينارا',
+        'تسعمائة وخمسون دينارا',
+        'تسع مائة وخمسون دينار',
+        'تسعمائة وخمسون دينار',
+        'تسع مئة وخمسون دينارا',
+        'تسعمئة وخمسون دينارا'
+      ];
+
+      if (matchesArabic(chk2.value, valid950)) {
+        c++; chk2.classList.add('correct-field');
+      } else {
+        w++; chk2.classList.add('incorrect-field');
+      }
+
+      chk1.disabled = true;
+      chk2.disabled = true;
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'pointer-events-none');
+
+      scores.at4.correct = c;
+      scores.at4.wrong = w;
+
+      if (c === 2) playSound('correct'); else playSound('wrong');
+
+      const evalBox = document.getElementById('atamarane4-eval');
+      document.getElementById('atamarane4-correct').textContent = `✓ ${c} صَحِيح`;
+      document.getElementById('atamarane4-wrong').textContent = `✗ ${w} خَطَأ`;
+      evalBox.classList.remove('hidden');
+
+      unlockSection('sec-abhath');
+    }
+
+    let abhathAnswered = false;
+
+    function chooseAbhath(choice, btn) {
+      if (abhathAnswered) return;
+      abhathAnswered = true;
+
+      const buttons = document.querySelectorAll('#abhath-choices button');
+      buttons.forEach(b => {
+        b.disabled = true;
+        b.classList.add('opacity-60');
+      });
+
+      const exp = document.getElementById('abhath-explanation');
+      exp.classList.remove('hidden');
+
+      if (choice === 24) {
+        playSound('correct');
+        scores.abhath.correct = 1;
+        btn.classList.add('correct-field', '!opacity-100');
+        exp.className = 'mt-4 p-4 rounded-2xl border bg-emerald-50 text-emerald-900 border-emerald-300 text-sm leading-relaxed font-semibold';
+        exp.innerHTML = `
+          <div class="font-black text-base text-emerald-800 mb-1">🎉 إِجَابَةٌ عَبْقَرِيَّةٌ صَحِيحَةٌ! (24 مَرَّةً)</div>
+          <div>• مِنْ 1 إِلَى 99: يُوجَدُ الرَّقْمُ 0 فِي: (10، 20، 30، 40، 50، 60، 70، 80، 90) = <strong>9 مَرَّات</strong>.</div>
+          <div>• العَدَد 100: يَحْتَوِي عَلَى صِفْرَيْنِ = <strong>2 مَرَّتَان</strong>.</div>
+          <div>• مِنْ 101 إِلَى 109: كُلُّ عَدَدٍ فِيهِ صِفْرٌ فِي الْعَشَرَاتِ = <strong>9 مَرَّات</strong>.</div>
+          <div>• الأَعْدَاد (110، 120، 130): فِي كُلٍّ مِنْهَا صِفْرٌ = <strong>3 مَرَّات</strong>.</div>
+          <div class="mt-2 text-indigo-900 font-black">المَجْمُوعُ الإِجْمَالِيُّ = 9 + 2 + 9 + 3 = <span class="text-emerald-700 text-base">24 مَرَّةً</span>.</div>
+        `;
+      } else {
+        playSound('wrong');
+        scores.abhath.wrong = 1;
+        btn.classList.add('incorrect-field', '!opacity-100');
+        buttons.forEach(b => {
+          if (b.textContent.includes('24')) b.classList.add('correct-field');
+        });
+        exp.className = 'mt-4 p-4 rounded-2xl border bg-rose-50 text-rose-950 border-rose-300 text-sm leading-relaxed font-semibold';
+        exp.innerHTML = `
+          <div class="font-black text-base text-rose-800 mb-1">❌ الإِجَابَةُ الصَّحِيحَةُ هِيَ: 24 مَرَّةً.</div>
+          <div>• فِي الْعَشَرَاتِ (10 إِلَى 90): 9 مَرَّات.</div>
+          <div>• فِي الْمِائَةِ (100): صِفْرَانِ (2).</div>
+          <div>• فِي الْعَشَرَاتِ الْمُنْعَدِمَةِ (101 إِلَى 109): 9 مَرَّات.</div>
+          <div>• فِي الأَعْدَادِ (110، 120، 130): 3 مَرَّات.</div>
+          <div class="mt-1 font-black">المَجْمُوعُ = 9 + 2 + 9 + 3 = 24 مَرَّةً.</div>
+        `;
+      }
+
+      setTimeout(() => {
+        showFinalDashboard();
+      }, 700);
+    }
+
+    function showFinalDashboard() {
+      const dash = document.getElementById('sec-final-eval');
+      dash.classList.remove('hidden');
+
+      let totalCorrect = 0;
+      let totalWrong = 0;
+      let grandTotal = 0;
+
+      Object.values(scores).forEach(s => {
+        totalCorrect += s.correct;
+        totalWrong += s.wrong;
+        grandTotal += s.total;
+      });
+
+      const percentage = Math.round((totalCorrect / grandTotal) * 100);
+
+      document.getElementById('final-correct-count').textContent = totalCorrect;
+      document.getElementById('final-wrong-count').textContent = totalWrong;
+      document.getElementById('final-total-count').textContent = grandTotal;
+      document.getElementById('final-percent').textContent = `${percentage}%`;
+
+      const circle = document.getElementById('final-circle-progress');
+      const offset = 264 - (264 * percentage / 100);
+      circle.style.strokeDashoffset = offset;
+
+      const icon = document.getElementById('final-badge-icon');
+      const title = document.getElementById('final-remark-title');
+      const desc = document.getElementById('final-remark-desc');
+
+      if (percentage >= 85) {
+        circle.setAttribute('stroke', '#10b981');
+        icon.textContent = '🌟🏆🌟';
+        title.textContent = 'مُمْتَازٌ جِدًّا، عَبْقَرِيُّ الرِّيَاضِيَّاتِ!';
+        desc.textContent = 'تَحَكُّمٌ مُبْهِرٌ وَكَامِلٌ فِي قِرَاءَةِ، كِتَابَةِ، وَتَفْكِيكِ الأَعْدَادِ حَتَّى 999.';
+        playSound('complete');
+      } else if (percentage >= 60) {
+        circle.setAttribute('stroke', '#f59e0b');
+        icon.textContent = '👍🥈';
+        title.textContent = 'عَمَلٌ جَيِّدٌ وَمُوَفَّقٌ!';
+        desc.textContent = 'لَدَيْكَ فَهْمٌ رَائِعٌ، وَيُمْكِنُكَ تَحْقِيقُ الْعَلَامَةِ الْكَامِلَةِ بِمَزِيدٍ مِنَ التَّرْكِيزِ.';
+        playSound('correct');
+      } else {
+        circle.setAttribute('stroke', '#f43f5e');
+        icon.textContent = '💪📚';
+        title.textContent = 'يُوصَى بِمُرَاجَعَةِ الدَّرْسِ!';
+        desc.textContent = 'أَعِدِ الْمُحَاوَلَةَ وَتَمَعَّنْ فِي رُتَبِ الْوَحَدَاتِ وَالْعَشَرَاتِ وَالْمِئَاتِ.';
+        playSound('wrong');
+      }
+
+      dash.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function resetWholeLesson() {
+      document.querySelectorAll('form').forEach(f => f.reset());
+      
+      document.querySelectorAll('input, select, button').forEach(el => {
+        el.disabled = false;
+        el.classList.remove(
+          'correct-field', 'incorrect-field', 'opacity-50', 
+          'opacity-60', 'opacity-70', 'pointer-events-none',
+          'ring-4', 'ring-amber-400', 'bg-amber-100'
+        );
+      });
+
+      document.querySelectorAll('[id$="-eval"]').forEach(strip => {
+        strip.classList.add('hidden');
+      });
+      document.getElementById('sec-final-eval').classList.add('hidden');
+      document.getElementById('abhath-explanation').classList.add('hidden');
+
+      Object.keys(scores).forEach(key => {
+        scores[key].correct = 0;
+        scores[key].wrong = 0;
+      });
+
+      const sectionsToLock = [
+        'sec-aktachef-2', 'sec-ondjiz-1', 'sec-ondjiz-2', 
+        'sec-ondjiz-3', 'sec-atamarane-1', 'sec-atamarane-2', 
+        'sec-atamarane-3', 'sec-atamarane-4', 'sec-abhath'
+      ];
+      sectionsToLock.forEach(id => {
+        const sec = document.getElementById(id);
+        if (sec) sec.classList.add('locked-section');
+      });
+
+      ond3Answered = { q1: false, q2: false };
+      abhathAnswered = false;
+
+      initAktachef1();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function exitApp() {
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.close) {
+        window.Telegram.WebApp.close();
+      } else {
+        window.close();
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAktachef1);
+    } else {
+      initAktachef1();
+    }
+  </script>
+</body>
+</html>
