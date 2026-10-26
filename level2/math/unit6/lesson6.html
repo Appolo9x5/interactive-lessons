@@ -1,0 +1,1446 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مُقَارَنَةُ الْأَعْدَادِ مِنْ 0 إِلَى 29 - الرِّيَاضِيَّاتُ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- مكتبة Telegram WebApp (ضرورية للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f7fafc;
+      color: #2d3748;
+    }
+    .math-font {
+      font-family: 'Fredoka', monospace, sans-serif;
+      direction: ltr !important;
+      unicode-bidi: isolate;
+    }
+    .math-ltr {
+      direction: ltr !important;
+      text-align: center;
+    }
+    input[type="number"]::-webkit-inner-spin-button, 
+    input[type="number"]::-webkit-outer-spin-button { 
+      -webkit-appearance: none; 
+      margin: 0; 
+    }
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    .state-correct {
+      background-color: #dcfce7 !important;
+      border-color: #16a34a !important;
+      color: #15803d !important;
+      font-weight: bold;
+    }
+    .state-wrong {
+      background-color: #fee2e2 !important;
+      border-color: #dc2626 !important;
+      color: #b91c1c !important;
+      font-weight: bold;
+    }
+    .locked-section {
+      opacity: 0.45;
+      pointer-events: none;
+      filter: grayscale(40%);
+    }
+    .badge-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 9999px;
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: calc(100% - 32px);
+      max-width: 800px;
+      margin: 12px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-amber-50/70 via-emerald-50/40 to-sky-50/60 pb-16">
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="bg-white border-b-4 border-emerald-500 shadow-sm py-4 px-4 sticky top-0 z-30">
+    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="text-center sm:text-right">
+        <span class="inline-block bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full mb-1">
+          الْجُمْهُورِيَّةُ الْجَزَائِرِيَّةُ الدِّيمُقْرَاطِيَّةُ الشَّعْبِيَّةُ - وِزَارَةُ التَّرْبِيَةِ الْوَطَنِيَّةِ
+        </span>
+        <h1 class="text-xl sm:text-2xl font-black text-gray-800">
+          مُقَارَنَةُ الْأَعْدَادِ مِنْ 0 إِلَى 29
+        </h1>
+        <p class="text-xs text-gray-500 font-semibold">
+          كِتَابُ الرِّيَاضِيَّاتِ (ص 19) • دَفْتَرُ الأَنْشِطَةِ (ص 13) • السَّنَةُ الثَّانِيَةُ ابْتِدَائِي
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-xl shadow-inner text-sm font-bold">
+        <span class="text-emerald-700 flex items-center gap-1">
+          <span class="text-lg">✓</span> <span id="headerCorrectCount">0</span>
+        </span>
+        <span class="text-slate-300">|</span>
+        <span class="text-rose-700 flex items-center gap-1">
+          <span class="text-lg">✗</span> <span id="headerWrongCount">0</span>
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-4xl mx-auto px-4 mt-6 space-y-8">
+
+    <!-- ================= STAGE 1: أكتشف 1 ================= -->
+    <section id="stage-discover" class="bg-white rounded-2xl shadow-sm border-2 border-amber-300 overflow-hidden transition-all duration-300">
+      <div class="bg-gradient-to-r from-amber-500 to-amber-600 px-5 py-3 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="bg-white text-amber-600 rounded-lg w-7 h-7 flex items-center justify-center font-black text-sm">1</span>
+          <h2 class="text-lg font-bold">أَكْتَشِفُ (صَفْحَة 19)</h2>
+        </div>
+        <span class="text-xs bg-amber-400 text-amber-950 font-bold px-2 py-0.5 rounded-md">كِتَابُ التِّلْمِيذِ</span>
+      </div>
+
+      <div class="p-5 space-y-6">
+        <div class="bg-amber-50 border-r-4 border-amber-500 p-4 rounded-lg space-y-2 text-gray-800 leading-relaxed font-semibold text-sm sm:text-base">
+          <p>• <span class="text-amber-800 font-bold">قَالَ أَمِينُ:</span> «عَدَدُ حَبَّاتِ الْفَرَاوْلَةِ فِي الصَّحْنِ الْأَصْفَرِ أَصْغَرُ مِنْ عَدَدِهَا فِي الصَّحْنِ الرَّمَادِي». </p>
+          <p>• <span class="text-emerald-800 font-bold">قَالَ رَائِدُ:</span> «عَدَدُ حَبَّاتِ الْفَرَاوْلَةِ فِي الصَّحْنِ الْأَصْفَرِ أَكْبَرُ مِنْ عَدَدِهَا فِي الصَّحْنِ الرَّمَادِي». </p>
+          <p class="text-indigo-800 font-extrabold pt-1">مَنْ مِنْهُمَا عَلَى صَوَابٍ؟</p>
+        </div>
+
+        <div class="flex flex-col items-center justify-center bg-slate-50 border border-slate-200 rounded-xl p-4">
+          <div class="w-full max-w-xl relative flex justify-center">
+            <img id="strawberryImage" src="fraises.jpg" alt="صحن الفراولة الأصفر والرمادي" 
+                 class="max-w-full h-auto rounded-lg shadow-sm"
+                 onerror="handleImageFallback(this);">
+          </div>
+          <p class="text-xs text-gray-400 mt-2 font-medium">اسم الصورة المرجعية: fraises.jpg</p>
+        </div>
+
+        <div class="space-y-4">
+          <h3 class="font-bold text-gray-700 text-sm sm:text-base">
+            1- اكْتُبْ عَدَدَ حَبَّاتِ الْفَرَاوْلَةِ فِي كُلِّ صَحْنٍ ثُمَّ قَارِنْ بِالرَّمْزِ الْمُنَاسِبِ (&gt; أَوْ &lt;):
+          </h3>
+
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4 bg-amber-50/50 p-4 rounded-xl border border-amber-200">
+            <div class="flex items-center gap-3 math-ltr py-2 px-3 bg-white rounded-xl shadow-sm border border-slate-200">
+              
+              <div class="flex flex-col items-center">
+                <span class="text-xs text-amber-700 font-bold mb-1 font-sans">الصحن الأصفر</span>
+                <input id="dishYellowInput" type="number" min="0" max="29" placeholder="؟" 
+                       class="w-16 h-14 text-2xl math-font font-bold text-center border-2 border-amber-400 rounded-xl focus:ring-4 focus:ring-amber-200 outline-none transition">
+              </div>
+
+              <div class="flex flex-col items-center">
+                <span class="text-xs text-slate-500 font-bold mb-1 font-sans">الرمز</span>
+                <select id="dishCompareSign" 
+                        class="h-14 px-3 text-2xl font-bold text-center border-2 border-indigo-400 bg-white rounded-xl focus:ring-4 focus:ring-indigo-200 outline-none transition cursor-pointer">
+                  <option value="" selected disabled>؟</option>
+                  <option value=">">&gt;</option>
+                  <option value="<">&lt;</option>
+                </select>
+              </div>
+
+              <div class="flex flex-col items-center">
+                <span class="text-xs text-slate-600 font-bold mb-1 font-sans">الصحن الرمادي</span>
+                <input id="dishGreyInput" type="number" min="0" max="29" placeholder="؟" 
+                       class="w-16 h-14 text-2xl math-font font-bold text-center border-2 border-slate-400 rounded-xl focus:ring-4 focus:ring-slate-200 outline-none transition">
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <h4 class="font-bold text-gray-700 text-sm sm:text-base mb-2">2- مَنِ الَّذِي عَلَى صَوَابٍ؟</h4>
+            <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
+              <label class="flex items-center justify-center gap-2 p-3 border-2 border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50/50">
+                <input type="radio" name="correctChild" value="amin" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
+                <span class="font-bold text-gray-800">أَمِين</span>
+              </label>
+              <label class="flex items-center justify-center gap-2 p-3 border-2 border-slate-200 rounded-xl cursor-pointer hover:bg-slate-50 transition has-[:checked]:border-indigo-500 has-[:checked]:bg-indigo-50/50">
+                <input type="radio" name="correctChild" value="raed" class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
+                <span class="font-bold text-gray-800">رَائِد</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-slate-200 gap-3">
+          <div id="subScore-discover" class="text-sm font-bold text-slate-600 hidden"></div>
+          <button id="btnValidateDiscover" onclick="validateDiscoverStage()" 
+                  class="w-full sm:w-auto px-8 py-3 bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-extrabold rounded-xl shadow-md transition">
+            تَأْكِيدُ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 2: أُنجز 1 ================= -->
+    <section id="stage-injiz1" class="bg-white rounded-2xl shadow-sm border-2 border-emerald-300 overflow-hidden transition-all duration-300 locked-section">
+      <div class="bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-3 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="bg-white text-emerald-700 rounded-lg w-7 h-7 flex items-center justify-center font-black text-sm">2</span>
+          <h2 class="text-lg font-bold">أُنْجِزُ (1): أَكْمِلْ بِالْعَدَدِ الَّذِي يَسْبِقُ أَوْ يَلِي (صَفْحَة 19)</h2>
+        </div>
+        <span class="text-xs bg-emerald-400 text-emerald-950 font-bold px-2 py-0.5 rounded-md">كِتَابُ التِّلْمِيذِ</span>
+      </div>
+
+      <div class="p-5 space-y-6">
+        <p class="text-sm text-gray-700 font-semibold">
+          اِقْرَأِ الْمُتَبَايَنَةَ مِنَ الْيَسَارِ إِلَى الْيَمِينِ وَاكْتُبِ الْعَدَدَ الْمُنَاسِبَ فِي الْخَانَةِ:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-3 math-ltr">
+            <span class="math-font text-2xl font-bold text-slate-800">23</span>
+            <span class="text-2xl font-bold text-emerald-600">&lt;</span>
+            <input id="injiz1_item1" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-emerald-500">
+          </div>
+
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-3 math-ltr">
+            <span class="math-font text-2xl font-bold text-slate-800">8</span>
+            <span class="text-2xl font-bold text-emerald-600">&lt;</span>
+            <input id="injiz1_item2" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-emerald-500">
+          </div>
+
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-3 math-ltr">
+            <span class="math-font text-2xl font-bold text-slate-800">13</span>
+            <span class="text-2xl font-bold text-emerald-600">&lt;</span>
+            <input id="injiz1_item3" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-emerald-500">
+          </div>
+
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-3 math-ltr">
+            <input id="injiz1_item4" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-emerald-500">
+            <span class="text-2xl font-bold text-emerald-600">&lt;</span>
+            <span class="math-font text-2xl font-bold text-slate-800">8</span>
+          </div>
+
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-3 math-ltr">
+            <input id="injiz1_item5" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-emerald-500">
+            <span class="text-2xl font-bold text-emerald-600">&lt;</span>
+            <span class="math-font text-2xl font-bold text-slate-800">21</span>
+          </div>
+
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-3 math-ltr">
+            <input id="injiz1_item6" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-emerald-500">
+            <span class="text-2xl font-bold text-emerald-600">&lt;</span>
+            <span class="math-font text-2xl font-bold text-slate-800">17</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-slate-200 gap-3">
+          <div id="subScore-injiz1" class="text-sm font-bold text-slate-600 hidden"></div>
+          <button id="btnValidateInjiz1" onclick="validateInjiz1Stage()" 
+                  class="w-full sm:w-auto px-8 py-3 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold rounded-xl shadow-md transition">
+            تَأْكِيدُ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 3: أُنجز 2 ================= -->
+    <section id="stage-injiz2" class="bg-white rounded-2xl shadow-sm border-2 border-teal-300 overflow-hidden transition-all duration-300 locked-section">
+      <div class="bg-gradient-to-r from-teal-600 to-cyan-600 px-5 py-3 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="bg-white text-teal-700 rounded-lg w-7 h-7 flex items-center justify-center font-black text-sm">3</span>
+          <h2 class="text-lg font-bold">أُنْجِزُ (2): قَارِنْ بِأَحَدِ الرَّمْزَيْنِ &gt; أَوْ &lt; (صَفْحَة 19)</h2>
+        </div>
+        <span class="text-xs bg-teal-400 text-teal-950 font-bold px-2 py-0.5 rounded-md">كِتَابُ التِّلْمِيذِ</span>
+      </div>
+
+      <div class="p-5 space-y-6">
+        <p class="text-sm text-gray-700 font-semibold">
+          ضَعِ الرَّمْزَ الْمُنَاسِبَ (&gt; أَوْ &lt;) بَيْنَ كُلِّ عَدَدَيْنِ:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-2 math-ltr">
+            <span class="math-font text-2xl font-bold">13</span>
+            <select id="injiz2_item1" class="h-11 px-2 text-xl font-bold text-center border-2 border-slate-300 bg-white rounded-lg outline-none focus:border-teal-500">
+              <option value="" selected disabled>؟</option>
+              <option value=">">&gt;</option>
+              <option value="<">&lt;</option>
+            </select>
+            <span class="math-font text-2xl font-bold">7</span>
+          </div>
+
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-2 math-ltr">
+            <span class="math-font text-2xl font-bold">19</span>
+            <select id="injiz2_item2" class="h-11 px-2 text-xl font-bold text-center border-2 border-slate-300 bg-white rounded-lg outline-none focus:border-teal-500">
+              <option value="" selected disabled>؟</option>
+              <option value=">">&gt;</option>
+              <option value="<">&lt;</option>
+            </select>
+            <span class="math-font text-2xl font-bold">18</span>
+          </div>
+
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-2 math-ltr">
+            <span class="math-font text-2xl font-bold">14</span>
+            <select id="injiz2_item3" class="h-11 px-2 text-xl font-bold text-center border-2 border-slate-300 bg-white rounded-lg outline-none focus:border-teal-500">
+              <option value="" selected disabled>؟</option>
+              <option value=">">&gt;</option>
+              <option value="<">&lt;</option>
+            </select>
+            <span class="math-font text-2xl font-bold">17</span>
+          </div>
+
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-2 math-ltr">
+            <span class="math-font text-2xl font-bold">10</span>
+            <select id="injiz2_item4" class="h-11 px-2 text-xl font-bold text-center border-2 border-slate-300 bg-white rounded-lg outline-none focus:border-teal-500">
+              <option value="" selected disabled>؟</option>
+              <option value=">">&gt;</option>
+              <option value="<">&lt;</option>
+            </select>
+            <span class="math-font text-2xl font-bold">12</span>
+          </div>
+
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-2 math-ltr">
+            <span class="math-font text-2xl font-bold">6</span>
+            <select id="injiz2_item5" class="h-11 px-2 text-xl font-bold text-center border-2 border-slate-300 bg-white rounded-lg outline-none focus:border-teal-500">
+              <option value="" selected disabled>؟</option>
+              <option value=">">&gt;</option>
+              <option value="<">&lt;</option>
+            </select>
+            <span class="math-font text-2xl font-bold">8</span>
+          </div>
+
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-2 math-ltr">
+            <span class="math-font text-2xl font-bold">9</span>
+            <select id="injiz2_item6" class="h-11 px-2 text-xl font-bold text-center border-2 border-slate-300 bg-white rounded-lg outline-none focus:border-teal-500">
+              <option value="" selected disabled>؟</option>
+              <option value=">">&gt;</option>
+              <option value="<">&lt;</option>
+            </select>
+            <span class="math-font text-2xl font-bold">4</span>
+          </div>
+
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-2 math-ltr">
+            <span class="math-font text-2xl font-bold">13</span>
+            <select id="injiz2_item7" class="h-11 px-2 text-xl font-bold text-center border-2 border-slate-300 bg-white rounded-lg outline-none focus:border-teal-500">
+              <option value="" selected disabled>؟</option>
+              <option value=">">&gt;</option>
+              <option value="<">&lt;</option>
+            </select>
+            <span class="math-font text-2xl font-bold">7</span>
+          </div>
+
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-2 math-ltr">
+            <span class="math-font text-2xl font-bold">8</span>
+            <select id="injiz2_item8" class="h-11 px-2 text-xl font-bold text-center border-2 border-slate-300 bg-white rounded-lg outline-none focus:border-teal-500">
+              <option value="" selected disabled>؟</option>
+              <option value=">">&gt;</option>
+              <option value="<">&lt;</option>
+            </select>
+            <span class="math-font text-2xl font-bold">11</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-slate-200 gap-3">
+          <div id="subScore-injiz2" class="text-sm font-bold text-slate-600 hidden"></div>
+          <button id="btnValidateInjiz2" onclick="validateInjiz2Stage()" 
+                  class="w-full sm:w-auto px-8 py-3 bg-teal-600 hover:bg-teal-700 active:scale-95 text-white font-extrabold rounded-xl shadow-md transition">
+            تَأْكِيدُ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 4: تَعَلَّمْتُ ================= -->
+    <section id="stage-learned" class="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-2xl shadow-sm border-2 border-indigo-300 p-6 space-y-4 transition-all duration-300 locked-section">
+      <div class="flex items-center gap-3 border-b border-indigo-200 pb-3">
+        <span class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-xl font-black shadow-md">★</span>
+        <div>
+          <h2 class="text-xl font-extrabold text-indigo-950">تَعَلَّمْتُ</h2>
+          <p class="text-xs text-indigo-600 font-semibold">الْخُلَاصَةُ الْبِيدَاغُوجِيَّةُ الرَّسْمِيَّةُ (صَفْحَة 19)</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-gray-800 text-base sm:text-lg leading-relaxed font-semibold">
+        <p>
+          عِنْدَمَا أُقَارِنُ بَيْنَ عَدَدَيْنِ، أَسْتَعْمِلُ أَحَدَ الرَّمْزَيْنِ 
+          <span class="math-font font-black text-indigo-600 text-xl px-1.5 py-0.5 bg-white rounded-md border border-indigo-200">&gt;</span> 
+          أَوْ 
+          <span class="math-font font-black text-indigo-600 text-xl px-1.5 py-0.5 bg-white rounded-md border border-indigo-200">&lt;</span>.
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+          <div class="bg-white p-3.5 rounded-xl border border-indigo-200 shadow-sm flex flex-col gap-1">
+            <span class="text-sm text-indigo-800">لِكَيْ أُقَارِنَ بَيْنَ الْعَدَدِ 20 وَالْعَدَدِ 13:</span>
+            <div class="math-ltr text-xl font-black text-indigo-700">13 &lt; 20</div>
+            <span class="text-xs text-gray-600">وَأَقْرَأُ: <strong>13 أَصْغَرُ مِنْ 20</strong>.</span>
+          </div>
+
+          <div class="bg-white p-3.5 rounded-xl border border-indigo-200 shadow-sm flex flex-col gap-1">
+            <span class="text-sm text-indigo-800">أَوْ أَكْتُبُ:</span>
+            <div class="math-ltr text-xl font-black text-indigo-700">20 &gt; 13</div>
+            <span class="text-xs text-gray-600">وَأَقْرَأُ: <strong>20 أَكْبَرُ مِنْ 13</strong>.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-4 flex justify-end">
+        <button id="btnAcknowledgeLearned" onclick="unlockWorkbookStations()" 
+                class="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow transition flex items-center gap-2">
+          <span>فَهِمْتُ الْقَاعِدَةَ، أَنْتَقِلُ إِلَى دَفْتَرِ الأَنْشِطَةِ</span>
+          <span>←</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 5: أَتَمَرَّنُ 1 ================= -->
+    <section id="stage-tamarran1" class="bg-white rounded-2xl shadow-sm border-2 border-sky-300 overflow-hidden transition-all duration-300 locked-section">
+      <div class="bg-gradient-to-r from-sky-600 to-blue-600 px-5 py-3 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="bg-white text-sky-700 rounded-lg w-7 h-7 flex items-center justify-center font-black text-sm">4</span>
+          <h2 class="text-lg font-bold">أَتَمَرَّنُ (1): رَتِّبِ الْأَعْدَادَ مِنَ الْأَصْغَرِ إِلَى الْأَكْبَرِ (صَفْحَة 13)</h2>
+        </div>
+        <span class="text-xs bg-sky-300 text-sky-950 font-bold px-2 py-0.5 rounded-md">دَفْتَرُ الأَنْشِطَةِ</span>
+      </div>
+
+      <div class="p-5 space-y-6">
+        <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 bg-sky-50 p-3 rounded-xl border border-sky-200">
+          <span class="text-sm font-bold text-sky-900">الأَعْدَادُ الْمُعْطَاةُ:</span>
+          <span class="math-font text-xl font-bold bg-white px-3 py-1 rounded-lg border border-sky-200">17</span>
+          <span class="math-font text-xl font-bold bg-white px-3 py-1 rounded-lg border border-sky-200">25</span>
+          <span class="math-font text-xl font-bold bg-white px-3 py-1 rounded-lg border border-sky-200">8</span>
+          <span class="math-font text-xl font-bold bg-white px-3 py-1 rounded-lg border border-sky-200">21</span>
+          <span class="math-font text-xl font-bold bg-white px-3 py-1 rounded-lg border border-sky-200">13</span>
+        </div>
+
+        <p class="text-sm text-gray-700 font-semibold text-center">
+          اكْتُبِ الأَعْدَادَ فِي الْخَانَاتِ مُرَتَّبَةً مِنَ الأَصْغَرِ إِلَى الأَكْبَرِ (مِنَ الْيَسَارِ إِلَى الْيَمِينِ):
+        </p>
+
+        <div class="flex items-center justify-center gap-2 sm:gap-3 math-ltr flex-wrap bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <input id="sort_slot1" type="number" placeholder="؟" class="w-14 sm:w-16 h-14 text-center text-xl sm:text-2xl math-font font-bold border-2 border-slate-300 rounded-xl outline-none focus:border-sky-500">
+          <span class="text-xl font-bold text-sky-600">&lt;</span>
+          <input id="sort_slot2" type="number" placeholder="؟" class="w-14 sm:w-16 h-14 text-center text-xl sm:text-2xl math-font font-bold border-2 border-slate-300 rounded-xl outline-none focus:border-sky-500">
+          <span class="text-xl font-bold text-sky-600">&lt;</span>
+          <input id="sort_slot3" type="number" placeholder="؟" class="w-14 sm:w-16 h-14 text-center text-xl sm:text-2xl math-font font-bold border-2 border-slate-300 rounded-xl outline-none focus:border-sky-500">
+          <span class="text-xl font-bold text-sky-600">&lt;</span>
+          <input id="sort_slot4" type="number" placeholder="؟" class="w-14 sm:w-16 h-14 text-center text-xl sm:text-2xl math-font font-bold border-2 border-slate-300 rounded-xl outline-none focus:border-sky-500">
+          <span class="text-xl font-bold text-sky-600">&lt;</span>
+          <input id="sort_slot5" type="number" placeholder="؟" class="w-14 sm:w-16 h-14 text-center text-xl sm:text-2xl math-font font-bold border-2 border-slate-300 rounded-xl outline-none focus:border-sky-500">
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-slate-200 gap-3">
+          <div id="subScore-tamarran1" class="text-sm font-bold text-slate-600 hidden"></div>
+          <button id="btnValidateTamarran1" onclick="validateTamarran1Stage()" 
+                  class="w-full sm:w-auto px-8 py-3 bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-extrabold rounded-xl shadow-md transition">
+            تَأْكِيدُ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 6: أَتَمَرَّنُ 2 ================= -->
+    <section id="stage-tamarran2" class="bg-white rounded-2xl shadow-sm border-2 border-violet-300 overflow-hidden transition-all duration-300 locked-section">
+      <div class="bg-gradient-to-r from-violet-600 to-purple-600 px-5 py-3 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="bg-white text-violet-700 rounded-lg w-7 h-7 flex items-center justify-center font-black text-sm">5</span>
+          <h2 class="text-lg font-bold">أَتَمَرَّنُ (2): أَكْمِلْ كَمَا فِي الْمِثَالِ (صَفْحَة 13)</h2>
+        </div>
+        <span class="text-xs bg-violet-300 text-violet-950 font-bold px-2 py-0.5 rounded-md">دَفْتَرُ الأَنْشِطَةِ</span>
+      </div>
+
+      <div class="p-5 space-y-6">
+        <div class="bg-violet-50 p-4 rounded-xl border border-violet-200 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs bg-violet-600 text-white font-bold px-2 py-0.5 rounded-md">الْمِثَالُ:</span>
+            <span class="text-sm font-bold text-violet-900">حَصْرُ الْعَدَدِ بَيْنَ الَّذِي يَسْبِقُهُ وَالَّذِي يَلِيهِ:</span>
+          </div>
+          <div class="flex items-center gap-2 math-ltr bg-white px-4 py-1.5 rounded-lg border border-violet-300 shadow-inner">
+            <span class="math-font text-xl font-black text-slate-500">23</span>
+            <span class="math-font text-2xl font-black text-violet-700">24</span>
+            <span class="math-font text-xl font-black text-slate-500">25</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-center gap-2 math-ltr">
+            <input id="seq_12_prev" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-violet-500">
+            <div class="w-16 h-12 flex items-center justify-center bg-violet-100 text-violet-900 text-2xl math-font font-black rounded-lg border border-violet-300">12</div>
+            <input id="seq_12_next" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-violet-500">
+          </div>
+
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-center gap-2 math-ltr">
+            <input id="seq_23_prev" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-violet-500">
+            <div class="w-16 h-12 flex items-center justify-center bg-violet-100 text-violet-900 text-2xl math-font font-black rounded-lg border border-violet-300">23</div>
+            <input id="seq_23_next" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-violet-500">
+          </div>
+
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-center gap-2 math-ltr">
+            <input id="seq_18_prev" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-violet-500">
+            <div class="w-16 h-12 flex items-center justify-center bg-violet-100 text-violet-900 text-2xl math-font font-black rounded-lg border border-violet-300">18</div>
+            <input id="seq_18_next" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-violet-500">
+          </div>
+
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-center gap-2 math-ltr">
+            <input id="seq_10_prev" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-violet-500">
+            <div class="w-16 h-12 flex items-center justify-center bg-violet-100 text-violet-900 text-2xl math-font font-black rounded-lg border border-violet-300">10</div>
+            <input id="seq_10_next" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-violet-500">
+          </div>
+
+          <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 flex items-center justify-center gap-2 math-ltr md:col-span-2 md:max-w-xs md:mx-auto">
+            <input id="seq_19_prev" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-violet-500">
+            <div class="w-16 h-12 flex items-center justify-center bg-violet-100 text-violet-900 text-2xl math-font font-black rounded-lg border border-violet-300">19</div>
+            <input id="seq_19_next" type="number" placeholder="؟" class="w-16 h-12 text-center text-xl math-font font-bold border-2 border-slate-300 rounded-lg outline-none focus:border-violet-500">
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-slate-200 gap-3">
+          <div id="subScore-tamarran2" class="text-sm font-bold text-slate-600 hidden"></div>
+          <button id="btnValidateTamarran2" onclick="validateTamarran2Stage()" 
+                  class="w-full sm:w-auto px-8 py-3 bg-violet-600 hover:bg-violet-700 active:scale-95 text-white font-extrabold rounded-xl shadow-md transition">
+            تَأْكِيدُ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 7: أَتَمَرَّنُ 3 ================= -->
+    <section id="stage-tamarran3" class="bg-white rounded-2xl shadow-sm border-2 border-rose-300 overflow-hidden transition-all duration-300 locked-section">
+      <div class="bg-gradient-to-r from-rose-600 to-pink-600 px-5 py-3 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="bg-white text-rose-700 rounded-lg w-7 h-7 flex items-center justify-center font-black text-sm">6</span>
+          <h2 class="text-lg font-bold">أَتَمَرَّنُ (3): أَحِطْ أَكْبَرَ الْعَدَدَيْنِ (صَفْحَة 13)</h2>
+        </div>
+        <span class="text-xs bg-rose-300 text-rose-950 font-bold px-2 py-0.5 rounded-md">دَفْتَرُ الأَنْشِطَةِ</span>
+      </div>
+
+      <div class="p-5 space-y-6">
+        <p class="text-sm text-gray-700 font-semibold">
+          اِضْغَطْ عَلَى الْبِطَاقَةِ الَّتِي تَحْمِلُ الْعَدَدَ الْأَكْبَرَ فِي كُلِّ مَجْمُوعَةٍ:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center gap-3">
+            <span class="text-xs font-bold text-slate-500">الْمَجْمُوعَةُ 1</span>
+            <div class="flex gap-3">
+              <button type="button" onclick="selectBiggerNumber(1, 12, this)" 
+                      class="pair-1-btn w-16 h-16 rounded-2xl border-2 border-slate-300 bg-white hover:border-rose-400 text-2xl math-font font-black shadow-sm transition active:scale-90">
+                12
+              </button>
+              <button type="button" onclick="selectBiggerNumber(1, 21, this)" 
+                      class="pair-1-btn w-16 h-16 rounded-2xl border-2 border-slate-300 bg-white hover:border-rose-400 text-2xl math-font font-black shadow-sm transition active:scale-90">
+                21
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center gap-3">
+            <span class="text-xs font-bold text-slate-500">الْمَجْمُوعَةُ 2</span>
+            <div class="flex gap-3">
+              <button type="button" onclick="selectBiggerNumber(2, 17, this)" 
+                      class="pair-2-btn w-16 h-16 rounded-2xl border-2 border-slate-300 bg-white hover:border-rose-400 text-2xl math-font font-black shadow-sm transition active:scale-90">
+                17
+              </button>
+              <button type="button" onclick="selectBiggerNumber(2, 27, this)" 
+                      class="pair-2-btn w-16 h-16 rounded-2xl border-2 border-slate-300 bg-white hover:border-rose-400 text-2xl math-font font-black shadow-sm transition active:scale-90">
+                27
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col items-center gap-3">
+            <span class="text-xs font-bold text-slate-500">الْمَجْمُوعَةُ 3</span>
+            <div class="flex gap-3">
+              <button type="button" onclick="selectBiggerNumber(3, 25, this)" 
+                      class="pair-3-btn w-16 h-16 rounded-2xl border-2 border-slate-300 bg-white hover:border-rose-400 text-2xl math-font font-black shadow-sm transition active:scale-90">
+                25
+              </button>
+              <button type="button" onclick="selectBiggerNumber(3, 22, this)" 
+                      class="pair-3-btn w-16 h-16 rounded-2xl border-2 border-slate-300 bg-white hover:border-rose-400 text-2xl math-font font-black shadow-sm transition active:scale-90">
+                22
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-slate-200 gap-3">
+          <div id="subScore-tamarran3" class="text-sm font-bold text-slate-600 hidden"></div>
+          <button id="btnValidateTamarran3" onclick="validateTamarran3Stage()" 
+                  class="w-full sm:w-auto px-8 py-3 bg-rose-600 hover:bg-rose-700 active:scale-95 text-white font-extrabold rounded-xl shadow-md transition">
+            تَأْكِيدُ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 8: أَتَمَرَّنُ 4 ================= -->
+    <section id="stage-tamarran4" class="bg-white rounded-2xl shadow-sm border-2 border-amber-300 overflow-hidden transition-all duration-300 locked-section">
+      <div class="bg-gradient-to-r from-amber-600 to-yellow-600 px-5 py-3 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="bg-white text-amber-700 rounded-lg w-7 h-7 flex items-center justify-center font-black text-sm">7</span>
+          <h2 class="text-lg font-bold">أَتَمَرَّنُ (4): قَارِنْ بِاسْتِعْمَالِ أَحَدِ الرَّمْزَيْنِ &gt; أَوْ &lt; (صَفْحَة 13)</h2>
+        </div>
+        <span class="text-xs bg-amber-300 text-amber-950 font-bold px-2 py-0.5 rounded-md">دَفْتَرُ الأَنْشِطَةِ</span>
+      </div>
+
+      <div class="p-5 space-y-6">
+        <p class="text-sm text-gray-700 font-semibold">
+          ضَعِ الرَّمْزَ الْمُنَاسِبَ (&gt; أَوْ &lt;) بَيْنَ كُلِّ عَدَدَيْنِ:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-2 math-ltr">
+            <span class="math-font text-2xl font-bold">12</span>
+            <select id="tamarran4_item1" class="h-11 px-2 text-xl font-bold text-center border-2 border-slate-300 bg-white rounded-lg outline-none focus:border-amber-500">
+              <option value="" selected disabled>؟</option>
+              <option value=">">&gt;</option>
+              <option value="<">&lt;</option>
+            </select>
+            <span class="math-font text-2xl font-bold">18</span>
+          </div>
+
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-2 math-ltr">
+            <span class="math-font text-2xl font-bold">23</span>
+            <select id="tamarran4_item2" class="h-11 px-2 text-xl font-bold text-center border-2 border-slate-300 bg-white rounded-lg outline-none focus:border-amber-500">
+              <option value="" selected disabled>؟</option>
+              <option value=">">&gt;</option>
+              <option value="<">&lt;</option>
+            </select>
+            <span class="math-font text-2xl font-bold">15</span>
+          </div>
+
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-2 math-ltr">
+            <span class="math-font text-2xl font-bold">7</span>
+            <select id="tamarran4_item3" class="h-11 px-2 text-xl font-bold text-center border-2 border-slate-300 bg-white rounded-lg outline-none focus:border-amber-500">
+              <option value="" selected disabled>؟</option>
+              <option value=">">&gt;</option>
+              <option value="<">&lt;</option>
+            </select>
+            <span class="math-font text-2xl font-bold">27</span>
+          </div>
+
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-2 math-ltr">
+            <span class="math-font text-2xl font-bold">21</span>
+            <select id="tamarran4_item4" class="h-11 px-2 text-xl font-bold text-center border-2 border-slate-300 bg-white rounded-lg outline-none focus:border-amber-500">
+              <option value="" selected disabled>؟</option>
+              <option value=">">&gt;</option>
+              <option value="<">&lt;</option>
+            </select>
+            <span class="math-font text-2xl font-bold">18</span>
+          </div>
+
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-2 math-ltr">
+            <span class="math-font text-2xl font-bold">19</span>
+            <select id="tamarran4_item5" class="h-11 px-2 text-xl font-bold text-center border-2 border-slate-300 bg-white rounded-lg outline-none focus:border-amber-500">
+              <option value="" selected disabled>؟</option>
+              <option value=">">&gt;</option>
+              <option value="<">&lt;</option>
+            </select>
+            <span class="math-font text-2xl font-bold">29</span>
+          </div>
+
+          <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex items-center justify-center gap-2 math-ltr">
+            <span class="math-font text-2xl font-bold">13</span>
+            <select id="tamarran4_item6" class="h-11 px-2 text-xl font-bold text-center border-2 border-slate-300 bg-white rounded-lg outline-none focus:border-amber-500">
+              <option value="" selected disabled>؟</option>
+              <option value=">">&gt;</option>
+              <option value="<">&lt;</option>
+            </select>
+            <span class="math-font text-2xl font-bold">28</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-slate-200 gap-3">
+          <div id="subScore-tamarran4" class="text-sm font-bold text-slate-600 hidden"></div>
+          <button id="btnValidateTamarran4" onclick="validateTamarran4Stage()" 
+                  class="w-full sm:w-auto px-8 py-3 bg-amber-600 hover:bg-amber-700 active:scale-95 text-white font-extrabold rounded-xl shadow-md transition">
+            تَأْكِيدُ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 9: أَبْحَثُ ================= -->
+    <section id="stage-abhath" class="bg-white rounded-2xl shadow-sm border-2 border-emerald-400 overflow-hidden transition-all duration-300 locked-section">
+      <div class="bg-gradient-to-r from-emerald-700 to-green-700 px-5 py-3 text-white flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="bg-white text-emerald-800 rounded-lg w-7 h-7 flex items-center justify-center font-black text-sm">8</span>
+          <h2 class="text-lg font-bold">أَبْحَثُ: أَكْمِلِ الْمُتَتَالِيَتَيْنِ الْمُنْتَظَمَتَيْنِ لِلْأَعْدَادِ (صَفْحَة 13)</h2>
+        </div>
+        <span class="text-xs bg-emerald-300 text-emerald-950 font-bold px-2 py-0.5 rounded-md">دَفْتَرُ الأَنْشِطَةِ</span>
+      </div>
+
+      <div class="p-5 space-y-6">
+        <p class="text-sm text-gray-700 font-semibold">
+          اِكْتَشِفِ الْقَاعِدَةَ فِي كُلِّ شَرِيطٍ وَامْلَأِ الْخَانَاتِ الشَّاغِرَةَ بِالْعَدَدِ الْمُنَاسِبِ:
+        </p>
+
+        <div class="space-y-2">
+          <span class="text-xs font-bold text-emerald-900 bg-emerald-100 px-2 py-0.5 rounded">الشَّرِيطُ الأَوَّلُ (مِنَ الْيَسَارِ إِلَى الْيَمِينِ):</span>
+          <div class="overflow-x-auto pb-2" dir="ltr">
+            <div class="inline-flex items-center gap-1.5 math-ltr bg-emerald-50/60 p-3 rounded-xl border border-emerald-200">
+              <input id="seq1_ans1" type="number" placeholder="؟" class="w-12 h-12 text-center math-font font-black text-lg border-2 border-emerald-400 rounded-lg outline-none bg-white">
+              <span class="text-slate-400 font-bold">-</span>
+              <input id="seq1_ans2" type="number" placeholder="؟" class="w-12 h-12 text-center math-font font-black text-lg border-2 border-emerald-400 rounded-lg outline-none bg-white">
+              <span class="text-slate-400 font-bold">-</span>
+              <span class="w-12 h-12 flex items-center justify-center bg-white border border-emerald-300 rounded-lg math-font text-lg font-black text-gray-800">7</span>
+              <span class="text-slate-400 font-bold">-</span>
+              <span class="w-12 h-12 flex items-center justify-center bg-white border border-emerald-300 rounded-lg math-font text-lg font-black text-gray-800">9</span>
+              <span class="text-slate-400 font-bold">-</span>
+              <span class="w-12 h-12 flex items-center justify-center bg-white border border-emerald-300 rounded-lg math-font text-lg font-black text-gray-800">11</span>
+              <span class="text-slate-400 font-bold">-</span>
+              <input id="seq1_ans3" type="number" placeholder="؟" class="w-12 h-12 text-center math-font font-black text-lg border-2 border-emerald-400 rounded-lg outline-none bg-white">
+              <span class="text-slate-400 font-bold">-</span>
+              <input id="seq1_ans4" type="number" placeholder="؟" class="w-12 h-12 text-center math-font font-black text-lg border-2 border-emerald-400 rounded-lg outline-none bg-white">
+              <span class="text-slate-400 font-bold">-</span>
+              <input id="seq1_ans5" type="number" placeholder="؟" class="w-12 h-12 text-center math-font font-black text-lg border-2 border-emerald-400 rounded-lg outline-none bg-white">
+              <span class="text-slate-400 font-bold">-</span>
+              <span class="w-12 h-12 flex items-center justify-center bg-white border border-emerald-300 rounded-lg math-font text-lg font-black text-gray-800">19</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-2 pt-2">
+          <span class="text-xs font-bold text-emerald-900 bg-emerald-100 px-2 py-0.5 rounded">الشَّرِيطُ الثَّانِي (مِنَ الْيَسَارِ إِلَى الْيَمِينِ):</span>
+          <div class="overflow-x-auto pb-2" dir="ltr">
+            <div class="inline-flex items-center gap-1.5 math-ltr bg-emerald-50/60 p-3 rounded-xl border border-emerald-200">
+              <input id="seq2_ans1" type="number" placeholder="؟" class="w-12 h-12 text-center math-font font-black text-lg border-2 border-emerald-400 rounded-lg outline-none bg-white">
+              <span class="text-slate-400 font-bold">-</span>
+              <input id="seq2_ans2" type="number" placeholder="؟" class="w-12 h-12 text-center math-font font-black text-lg border-2 border-emerald-400 rounded-lg outline-none bg-white">
+              <span class="text-slate-400 font-bold">-</span>
+              <span class="w-12 h-12 flex items-center justify-center bg-white border border-emerald-300 rounded-lg math-font text-lg font-black text-gray-800">10</span>
+              <span class="text-slate-400 font-bold">-</span>
+              <span class="w-12 h-12 flex items-center justify-center bg-white border border-emerald-300 rounded-lg math-font text-lg font-black text-gray-800">13</span>
+              <span class="text-slate-400 font-bold">-</span>
+              <span class="w-12 h-12 flex items-center justify-center bg-white border border-emerald-300 rounded-lg math-font text-lg font-black text-gray-800">16</span>
+              <span class="text-slate-400 font-bold">-</span>
+              <input id="seq2_ans3" type="number" placeholder="؟" class="w-12 h-12 text-center math-font font-black text-lg border-2 border-emerald-400 rounded-lg outline-none bg-white">
+              <span class="text-slate-400 font-bold">-</span>
+              <input id="seq2_ans4" type="number" placeholder="؟" class="w-12 h-12 text-center math-font font-black text-lg border-2 border-emerald-400 rounded-lg outline-none bg-white">
+              <span class="text-slate-400 font-bold">-</span>
+              <input id="seq2_ans5" type="number" placeholder="؟" class="w-12 h-12 text-center math-font font-black text-lg border-2 border-emerald-400 rounded-lg outline-none bg-white">
+              <span class="text-slate-400 font-bold">-</span>
+              <span class="w-12 h-12 flex items-center justify-center bg-white border border-emerald-300 rounded-lg math-font text-lg font-black text-gray-800">28</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-slate-200 gap-3">
+          <div id="subScore-abhath" class="text-sm font-bold text-slate-600 hidden"></div>
+          <button id="btnValidateAbhath" onclick="validateAbhathStage()" 
+                  class="w-full sm:w-auto px-8 py-3 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold rounded-xl shadow-md transition">
+            تَأْكِيدُ الإِجَابَةِ وَإِنْهَاءُ الدَّرْسِ ✓
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= STAGE 10: الشَّاشَةُ الْخِتَامِيَّةُ ================= -->
+    <section id="finalSummarySection" class="hidden bg-white rounded-3xl shadow-lg border-4 border-emerald-500 p-6 sm:p-8 text-center space-y-6 transition-all duration-500">
+      <div class="inline-block bg-emerald-100 text-emerald-800 text-sm font-black px-4 py-1.5 rounded-full">
+        نَتِيجَةُ الدَّرْسِ الشَّامِلَةُ
+      </div>
+      
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-8">
+        <div class="relative w-44 h-44 flex items-center justify-center">
+          <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" stroke="#e2e8f0" stroke-width="12" fill="none" />
+            <circle id="finalCircleProgress" cx="60" cy="60" r="50" stroke="#10b981" stroke-width="12" fill="none"
+                    stroke-dasharray="314.16" stroke-dashoffset="314.16" stroke-linecap="round"
+                    class="transition-all duration-1000 ease-out" />
+          </svg>
+          <div class="absolute flex flex-col items-center">
+            <span id="finalScorePercent" class="text-3xl font-black text-gray-800 math-font">0%</span>
+            <span class="text-xs text-gray-400 font-bold">نِسْبَةُ النَّجَاحِ</span>
+          </div>
+        </div>
+
+        <div class="space-y-3 text-right max-w-xs w-full">
+          <div class="flex items-center justify-between p-3 bg-emerald-50 rounded-xl border border-emerald-200">
+            <span class="text-emerald-900 font-bold text-sm">الإِجَابَاتُ الصَّحِيحَةُ (✓):</span>
+            <span id="finalCorrectDisplay" class="math-font text-xl font-black text-emerald-600">0</span>
+          </div>
+
+          <div class="flex items-center justify-between p-3 bg-rose-50 rounded-xl border border-rose-200">
+            <span class="text-rose-900 font-bold text-sm">الإِجَابَاتُ الْخَاطِئَةُ (✗):</span>
+            <span id="finalWrongDisplay" class="math-font text-xl font-black text-rose-600">0</span>
+          </div>
+
+          <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-slate-800 font-bold text-sm">مَجْمُوعُ الْأَسْئِلَةِ:</span>
+            <span id="finalTotalDisplay" class="math-font text-xl font-black text-slate-700">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="finalRemarkBox" class="p-4 rounded-2xl bg-amber-50 border border-amber-200 max-w-xl mx-auto">
+        <h4 id="finalRemarkTitle" class="text-lg font-black text-amber-900 mb-1">مُمْتَازٌ! عَمَلٌ رَائِعٌ</h4>
+        <p id="finalRemarkText" class="text-sm font-semibold text-amber-800">
+          تَحَكُّمٌ مُمْتَازٌ فِي مُقَارَنَةِ وَتَرْتِيبِ وَحَصْرِ الأَعْدَادِ مِنْ 0 إِلَى 29.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-center gap-4 pt-4 border-t border-slate-100">
+        <button onclick="restartEntireLesson()" 
+                class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl shadow-md transition active:scale-95 flex items-center gap-2">
+          <span>🔄</span>
+          <span>إِعَادَةُ الْمُحَاوَلَةِ مِنَ الْبِدَايَةِ</span>
+        </button>
+        <button onclick="scrollPageToTop()" 
+                class="px-8 py-3 bg-slate-200 hover:bg-slate-300 text-slate-700 font-extrabold rounded-2xl transition active:scale-95">
+          <span>⬆ مُرَاجَعَةُ الأَخْطَاءِ فِي الأَعْلَى</span>
+        </button>
+        <button onclick="exitApp()" 
+                class="px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-2xl transition active:scale-95">
+          🚪 خُرُوجٌ
+        </button>
+      </div>
+    </section>
+
+    <!-- زر العودة إلى الفهرس -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+  </main>
+
+  <script>
+    // ========================================================
+    // 🛡️ قسم الحماية
+    // ========================================================
+    const CHANNEL_ID = "-1004461185731";  // ← قناة السنة الثانية
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+
+    // ========================================================
+    // 🎯 قسم أنشطة الدرس
+    // ========================================================
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, type, duration, delay = 0) {
+      setTimeout(() => {
+        try {
+          if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+          }
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+          gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start();
+          osc.stop(audioCtx.currentTime + duration);
+        } catch (e) {
+          console.warn("Audio Context blocked:", e);
+        }
+      }, delay);
+    }
+
+    function playSuccessSound() {
+      playTone(523.25, 'sine', 0.15, 0);
+      playTone(659.25, 'sine', 0.15, 120);
+      playTone(783.99, 'sine', 0.35, 240);
+    }
+
+    function playErrorSound() {
+      playTone(180, 'sawtooth', 0.15, 0);
+      playTone(130, 'sawtooth', 0.25, 120);
+    }
+
+    function playFanfare() {
+      playTone(523.25, 'triangle', 0.15, 0);
+      playTone(659.25, 'triangle', 0.15, 150);
+      playTone(783.99, 'triangle', 0.15, 300);
+      playTone(1046.50, 'triangle', 0.45, 450);
+    }
+
+    function handleImageFallback(imgElem) {
+      if (imgElem.dataset.triedPng !== 'true') {
+        imgElem.dataset.triedPng = 'true';
+        imgElem.src = 'fraises.png';
+        return;
+      }
+      const parent = imgElem.parentElement;
+      parent.innerHTML = `
+        <div class="w-full max-w-lg p-4 bg-amber-50 rounded-2xl border-2 border-dashed border-amber-300 flex flex-col items-center">
+          <div class="flex items-center justify-around w-full gap-4 py-2">
+            <div class="flex flex-col items-center p-3 bg-amber-100/70 border-2 border-amber-400 rounded-2xl">
+              <span class="text-xs font-bold text-amber-900 mb-1">الصحن الأصفر (أمين / رائد)</span>
+              <div class="flex flex-wrap justify-center gap-1 max-w-[120px] py-1">
+                <span class="text-2xl">🍓</span><span class="text-2xl">🍓</span><span class="text-2xl">🍓</span><span class="text-2xl">🍓</span>
+                <span class="text-2xl">🍓</span><span class="text-2xl">🍓</span><span class="text-2xl">🍓</span><span class="text-2xl">🍓</span>
+              </div>
+              <span class="text-xs font-bold text-amber-800 mt-1">8 حَبَّاتٍ</span>
+            </div>
+            <div class="flex flex-col items-center p-3 bg-slate-200/80 border-2 border-slate-400 rounded-2xl">
+              <span class="text-xs font-bold text-slate-800 mb-1">الصحن الرمادي</span>
+              <div class="flex flex-wrap justify-center gap-1 max-w-[120px] py-1">
+                <span class="text-2xl">🍓</span><span class="text-2xl">🍓</span><span class="text-2xl">🍓</span>
+                <span class="text-2xl">🍓</span><span class="text-2xl">🍓</span><span class="text-2xl">🍓</span>
+              </div>
+              <span class="text-xs font-bold text-slate-700 mt-1">6 أو 7 حَبَّاتٍ</span>
+            </div>
+          </div>
+          <span class="text-xs text-amber-700 font-semibold mt-2">تَمْثِيلٌ بَصَرِيٌّ بَدِيلٌ: الصَّحْنُ الأَصْفَرُ (8) وَالصَّحْنُ الرَّمَادِيُّ (6 / 7)</span>
+        </div>
+      `;
+    }
+
+    const stageScores = {
+      discover:   { correct: 0, total: 3, done: false },
+      injiz1:     { correct: 0, total: 6, done: false },
+      injiz2:     { correct: 0, total: 8, done: false },
+      tamarran1:  { correct: 0, total: 5, done: false },
+      tamarran2:  { correct: 0, total: 10, done: false },
+      tamarran3:  { correct: 0, total: 3, done: false },
+      tamarran4:  { correct: 0, total: 6, done: false },
+      abhath:     { correct: 0, total: 10, done: false }
+    };
+
+    function updateHeaderScoreDisplay() {
+      let totalCorrect = 0;
+      let totalAnswered = 0;
+      for (const key in stageScores) {
+        if (stageScores[key].done) {
+          totalCorrect += stageScores[key].correct;
+          totalAnswered += stageScores[key].total;
+        }
+      }
+      const totalWrong = totalAnswered - totalCorrect;
+      document.getElementById('headerCorrectCount').textContent = totalCorrect;
+      document.getElementById('headerWrongCount').textContent = totalWrong;
+    }
+
+    function unlockNextSection(sectionId) {
+      const sec = document.getElementById(sectionId);
+      if (sec) {
+        sec.classList.remove('locked-section');
+        setTimeout(() => {
+          sec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+      }
+    }
+
+    function applyInputState(inputElem, isCorrect) {
+      inputElem.disabled = true;
+      if (isCorrect) {
+        inputElem.classList.remove('state-wrong');
+        inputElem.classList.add('state-correct');
+      } else {
+        inputElem.classList.remove('state-correct');
+        inputElem.classList.add('state-wrong');
+      }
+    }
+
+    function showSubScore(elemId, correct, total) {
+      const box = document.getElementById(elemId);
+      const wrong = total - correct;
+      box.classList.remove('hidden');
+      box.innerHTML = `
+        <span class="inline-flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
+          <span class="text-emerald-700 font-black">✓ ${correct}</span>
+          <span class="text-slate-300">/</span>
+          <span class="text-rose-700 font-black">✗ ${wrong}</span>
+        </span>
+      `;
+    }
+
+    function validateDiscoverStage() {
+      const yellowVal = parseInt(document.getElementById('dishYellowInput').value, 10);
+      const signVal = document.getElementById('dishCompareSign').value;
+      const greyVal = parseInt(document.getElementById('dishGreyInput').value, 10);
+      const childSelected = document.querySelector('input[name="correctChild"]:checked');
+
+      let correctCount = 0;
+
+      const isYellowCorrect = (yellowVal === 8);
+      applyInputState(document.getElementById('dishYellowInput'), isYellowCorrect);
+      if (isYellowCorrect) correctCount++;
+
+      const isSignCorrect = (signVal === '>');
+      applyInputState(document.getElementById('dishCompareSign'), isSignCorrect);
+      if (isSignCorrect) correctCount++;
+
+      const isGreyCorrect = (greyVal === 6 || greyVal === 7);
+      applyInputState(document.getElementById('dishGreyInput'), isGreyCorrect);
+      if (isGreyCorrect) correctCount++;
+
+      const radios = document.querySelectorAll('input[name="correctChild"]');
+      radios.forEach(r => r.disabled = true);
+
+      if (childSelected) {
+        const parentLabel = childSelected.closest('label');
+        if (childSelected.value === 'raed') {
+          parentLabel.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900');
+        } else {
+          parentLabel.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-900');
+        }
+      }
+
+      stageScores.discover.correct = correctCount;
+      stageScores.discover.done = true;
+
+      if (correctCount >= 2) playSuccessSound(); else playErrorSound();
+
+      document.getElementById('btnValidateDiscover').disabled = true;
+      document.getElementById('btnValidateDiscover').classList.add('opacity-50', 'cursor-not-allowed');
+
+      showSubScore('subScore-discover', correctCount, 3);
+      updateHeaderScoreDisplay();
+      unlockNextSection('stage-injiz1');
+    }
+
+    function validateInjiz1Stage() {
+      const expected = [24, 9, 14, 7, 20, 16];
+      let correct = 0;
+
+      for (let i = 1; i <= 6; i++) {
+        const inp = document.getElementById(`injiz1_item${i}`);
+        const val = parseInt(inp.value, 10);
+        const isCorr = (val === expected[i - 1]);
+        applyInputState(inp, isCorr);
+        if (isCorr) correct++;
+      }
+
+      stageScores.injiz1.correct = correct;
+      stageScores.injiz1.done = true;
+
+      if (correct >= 4) playSuccessSound(); else playErrorSound();
+
+      document.getElementById('btnValidateInjiz1').disabled = true;
+      document.getElementById('btnValidateInjiz1').classList.add('opacity-50', 'cursor-not-allowed');
+
+      showSubScore('subScore-injiz1', correct, 6);
+      updateHeaderScoreDisplay();
+      unlockNextSection('stage-injiz2');
+    }
+
+    function validateInjiz2Stage() {
+      const expected = ['>', '>', '<', '<', '<', '>', '>', '<'];
+      let correct = 0;
+
+      for (let i = 1; i <= 8; i++) {
+        const sel = document.getElementById(`injiz2_item${i}`);
+        const isCorr = (sel.value === expected[i - 1]);
+        applyInputState(sel, isCorr);
+        if (isCorr) correct++;
+      }
+
+      stageScores.injiz2.correct = correct;
+      stageScores.injiz2.done = true;
+
+      if (correct >= 5) playSuccessSound(); else playErrorSound();
+
+      document.getElementById('btnValidateInjiz2').disabled = true;
+      document.getElementById('btnValidateInjiz2').classList.add('opacity-50', 'cursor-not-allowed');
+
+      showSubScore('subScore-injiz2', correct, 8);
+      updateHeaderScoreDisplay();
+      unlockNextSection('stage-learned');
+    }
+
+    function unlockWorkbookStations() {
+      document.getElementById('btnAcknowledgeLearned').disabled = true;
+      document.getElementById('btnAcknowledgeLearned').classList.add('opacity-60', 'cursor-not-allowed');
+      playSuccessSound();
+      unlockNextSection('stage-tamarran1');
+    }
+
+    function validateTamarran1Stage() {
+      const expected = [8, 13, 17, 21, 25];
+      let correct = 0;
+
+      for (let i = 1; i <= 5; i++) {
+        const inp = document.getElementById(`sort_slot${i}`);
+        const val = parseInt(inp.value, 10);
+        const isCorr = (val === expected[i - 1]);
+        applyInputState(inp, isCorr);
+        if (isCorr) correct++;
+      }
+
+      stageScores.tamarran1.correct = correct;
+      stageScores.tamarran1.done = true;
+
+      if (correct >= 3) playSuccessSound(); else playErrorSound();
+
+      document.getElementById('btnValidateTamarran1').disabled = true;
+      document.getElementById('btnValidateTamarran1').classList.add('opacity-50', 'cursor-not-allowed');
+
+      showSubScore('subScore-tamarran1', correct, 5);
+      updateHeaderScoreDisplay();
+      unlockNextSection('stage-tamarran2');
+    }
+
+    function validateTamarran2Stage() {
+      const items = [
+        { prevId: 'seq_12_prev', nextId: 'seq_12_next', expPrev: 11, expNext: 13 },
+        { prevId: 'seq_23_prev', nextId: 'seq_23_next', expPrev: 22, expNext: 24 },
+        { prevId: 'seq_18_prev', nextId: 'seq_18_next', expPrev: 17, expNext: 19 },
+        { prevId: 'seq_10_prev', nextId: 'seq_10_next', expPrev: 9, expNext: 11 },
+        { prevId: 'seq_19_prev', nextId: 'seq_19_next', expPrev: 18, expNext: 20 }
+      ];
+
+      let correct = 0;
+
+      items.forEach(it => {
+        const elPrev = document.getElementById(it.prevId);
+        const elNext = document.getElementById(it.nextId);
+
+        const vPrev = parseInt(elPrev.value, 10);
+        const vNext = parseInt(elNext.value, 10);
+
+        const isP = (vPrev === it.expPrev);
+        const isN = (vNext === it.expNext);
+
+        applyInputState(elPrev, isP);
+        applyInputState(elNext, isN);
+
+        if (isP) correct++;
+        if (isN) correct++;
+      });
+
+      stageScores.tamarran2.correct = correct;
+      stageScores.tamarran2.done = true;
+
+      if (correct >= 6) playSuccessSound(); else playErrorSound();
+
+      document.getElementById('btnValidateTamarran2').disabled = true;
+      document.getElementById('btnValidateTamarran2').classList.add('opacity-50', 'cursor-not-allowed');
+
+      showSubScore('subScore-tamarran2', correct, 10);
+      updateHeaderScoreDisplay();
+      unlockNextSection('stage-tamarran3');
+    }
+
+    const chosenPairs = { 1: null, 2: null, 3: null };
+
+    function selectBiggerNumber(pairNum, val, btnElem) {
+      if (stageScores.tamarran3.done) return;
+      chosenPairs[pairNum] = val;
+
+      const groupBtns = document.querySelectorAll(`.pair-${pairNum}-btn`);
+      groupBtns.forEach(b => {
+        b.classList.remove('bg-rose-500', 'text-white', 'border-rose-600', 'ring-4', 'ring-rose-200');
+        b.classList.add('bg-white');
+      });
+
+      btnElem.classList.remove('bg-white');
+      btnElem.classList.add('bg-rose-500', 'text-white', 'border-rose-600', 'ring-4', 'ring-rose-200');
+    }
+
+    function validateTamarran3Stage() {
+      const correctAnswers = { 1: 21, 2: 27, 3: 25 };
+      let correct = 0;
+
+      for (let p = 1; p <= 3; p++) {
+        const groupBtns = document.querySelectorAll(`.pair-${p}-btn`);
+        groupBtns.forEach(btn => {
+          btn.disabled = true;
+          const num = parseInt(btn.textContent.trim(), 10);
+          if (num === correctAnswers[p]) {
+            btn.classList.add('border-emerald-600', 'bg-emerald-100', 'text-emerald-900', 'font-black');
+          }
+        });
+
+        if (chosenPairs[p] === correctAnswers[p]) {
+          correct++;
+        }
+      }
+
+      stageScores.tamarran3.correct = correct;
+      stageScores.tamarran3.done = true;
+
+      if (correct >= 2) playSuccessSound(); else playErrorSound();
+
+      document.getElementById('btnValidateTamarran3').disabled = true;
+      document.getElementById('btnValidateTamarran3').classList.add('opacity-50', 'cursor-not-allowed');
+
+      showSubScore('subScore-tamarran3', correct, 3);
+      updateHeaderScoreDisplay();
+      unlockNextSection('stage-tamarran4');
+    }
+
+    function validateTamarran4Stage() {
+      const expected = ['<', '>', '<', '>', '<', '<'];
+      let correct = 0;
+
+      for (let i = 1; i <= 6; i++) {
+        const sel = document.getElementById(`tamarran4_item${i}`);
+        const isCorr = (sel.value === expected[i - 1]);
+        applyInputState(sel, isCorr);
+        if (isCorr) correct++;
+      }
+
+      stageScores.tamarran4.correct = correct;
+      stageScores.tamarran4.done = true;
+
+      if (correct >= 4) playSuccessSound(); else playErrorSound();
+
+      document.getElementById('btnValidateTamarran4').disabled = true;
+      document.getElementById('btnValidateTamarran4').classList.add('opacity-50', 'cursor-not-allowed');
+
+      showSubScore('subScore-tamarran4', correct, 6);
+      updateHeaderScoreDisplay();
+      unlockNextSection('stage-abhath');
+    }
+
+    function validateAbhathStage() {
+      const seq1Expected = [3, 5, 13, 15, 17];
+      const seq2Expected = [4, 7, 19, 22, 25];
+
+      let correct = 0;
+
+      for (let i = 1; i <= 5; i++) {
+        const inp = document.getElementById(`seq1_ans${i}`);
+        const val = parseInt(inp.value, 10);
+        const isCorr = (val === seq1Expected[i - 1]);
+        applyInputState(inp, isCorr);
+        if (isCorr) correct++;
+      }
+
+      for (let i = 1; i <= 5; i++) {
+        const inp = document.getElementById(`seq2_ans${i}`);
+        const val = parseInt(inp.value, 10);
+        const isCorr = (val === seq2Expected[i - 1]);
+        applyInputState(inp, isCorr);
+        if (isCorr) correct++;
+      }
+
+      stageScores.abhath.correct = correct;
+      stageScores.abhath.done = true;
+
+      document.getElementById('btnValidateAbhath').disabled = true;
+      document.getElementById('btnValidateAbhath').classList.add('opacity-50', 'cursor-not-allowed');
+
+      showSubScore('subScore-abhath', correct, 10);
+      updateHeaderScoreDisplay();
+
+      renderFinalReport();
+    }
+
+    function renderFinalReport() {
+      let totalCorrect = 0;
+      let totalQuestions = 0;
+
+      for (const k in stageScores) {
+        if (stageScores[k].done) {
+          totalCorrect += stageScores[k].correct;
+          totalQuestions += stageScores[k].total;
+        }
+      }
+
+      const totalWrong = totalQuestions - totalCorrect;
+      const percentage = Math.round((totalCorrect / totalQuestions) * 100);
+
+      const section = document.getElementById('finalSummarySection');
+      section.classList.remove('hidden');
+
+      document.getElementById('finalCorrectDisplay').textContent = totalCorrect;
+      document.getElementById('finalWrongDisplay').textContent = totalWrong;
+      document.getElementById('finalTotalDisplay').textContent = totalQuestions;
+      document.getElementById('finalScorePercent').textContent = `${percentage}%`;
+
+      const circle = document.getElementById('finalCircleProgress');
+      const circumference = 314.16;
+      const offset = circumference - (percentage / 100) * circumference;
+      setTimeout(() => {
+        circle.style.strokeDashoffset = offset;
+      }, 200);
+
+      const remarkTitle = document.getElementById('finalRemarkTitle');
+      const remarkText = document.getElementById('finalRemarkText');
+      const remarkBox = document.getElementById('finalRemarkBox');
+
+      if (percentage >= 85) {
+        remarkBox.className = "p-4 rounded-2xl bg-emerald-50 border border-emerald-300 max-w-xl mx-auto";
+        remarkTitle.className = "text-lg font-black text-emerald-900 mb-1";
+        remarkTitle.textContent = "🌟 مُمْتَازٌ! نَتِيجَةٌ بَاهِرَةٌ جِدًّا";
+        remarkText.textContent = "أَتْقَنْتَ مُقَارَنَةَ وَتَرْتِيبَ وَحَصْرَ الأَعْدَادِ مِنْ 0 إِلَى 29 بِاقْتِدَارٍ بَالِغٍ!";
+        playFanfare();
+      } else if (percentage >= 65) {
+        remarkBox.className = "p-4 rounded-2xl bg-amber-50 border border-amber-300 max-w-xl mx-auto";
+        remarkTitle.className = "text-lg font-black text-amber-900 mb-1";
+        remarkTitle.textContent = "👍 جَيِّدٌ جِدًّا! عَمَلٌ مُشَجِّعٌ";
+        remarkText.textContent = "أَدَاؤُكَ حَسَنٌ، وَبِقَلِيلٍ مِنَ التَّرْكِيزِ فِي اتِّجَاهِ الرَّمْزَيْنِ (> وَ <) سَتَحْصُلُ عَلَى الْعَلَامَةِ الْكَامِلَةِ.";
+        playSuccessSound();
+      } else {
+        remarkBox.className = "p-4 rounded-2xl bg-rose-50 border border-rose-300 max-w-xl mx-auto";
+        remarkTitle.className = "text-lg font-black text-rose-900 mb-1";
+        remarkTitle.textContent = "💪 يُوصَى بِمُرَاجَعَةِ الْقَاعِدَةِ";
+        remarkText.textContent = "يُمْكِنُكَ الصُّعُودُ لِلأَعْلَى لِمُعَايَنَةِ الأَخْطَاءِ، ثُمَّ الضَّغْطُ عَلَى إِعَادَةِ الْمُحَاوَلَةِ لِتَرْسِيخِ الْمَفَاهِيمِ.";
+        playErrorSound();
+      }
+
+      setTimeout(() => {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 400);
+    }
+
+    function scrollPageToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function restartEntireLesson() {
+      window.location.reload();
+    }
+
+    function exitApp() {
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.close) {
+        window.Telegram.WebApp.close();
+      } else {
+        window.close();
+      }
+    }
+  </script>
+</body>
+</html>
