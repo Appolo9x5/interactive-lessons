@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الرِّيَاضِيَّاتُ - السَّنَةُ الثَّالِثَةُ - الدَّرْسُ 06: الْجَمْعُ وَالطَّرْحُ (2)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- مكتبة Telegram WebApp (ضرورية للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 50%, #fef3c7 100%);
+      min-height: 100vh;
+    }
+    .math-ltr {
+      direction: ltr !important;
+      unicode-bidi: isolate;
+      font-family: 'Cairo', monospace, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .locked-section {
+      opacity: 0.45;
+      pointer-events: none;
+      filter: grayscale(0.85);
+      position: relative;
+      user-select: none;
+    }
+    .locked-section::after {
+      content: "🔒 أَكْمِلِ الْمَرْحَلَةَ السَّابِقَةَ لِفَتْحِ هَذَا التَّمْرِينِ";
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.92);
+      color: #fef08a;
+      padding: 6px 18px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      z-index: 20;
+      white-space: nowrap;
+    }
+    .correct-field {
+      background-color: #dcfce7 !important;
+      border-color: #16a34a !important;
+      color: #15803d !important;
+      font-weight: 900 !important;
+    }
+    .incorrect-field {
+      background-color: #fee2e2 !important;
+      border-color: #dc2626 !important;
+      color: #b91c1c !important;
+      font-weight: 900 !important;
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: calc(100% - 32px);
+      max-width: 800px;
+      margin: 12px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="p-3 sm:p-5 md:p-8 text-slate-800 antialiased selection:bg-emerald-200">
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <!-- الرأس العام للصفحة -->
+  <header class="max-w-4xl mx-auto mb-8 bg-white/95 backdrop-blur-md rounded-3xl p-5 md:p-7 shadow-xl border-2 border-emerald-400">
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b pb-4 border-emerald-100">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-emerald-600 rounded-2xl flex items-center justify-center text-white text-2xl shadow-md">
+          📐
+        </div>
+        <div>
+          <span class="text-xs font-bold bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full">السَّنَةُ الثَّالِثَةُ ابْتِدَائِيٌّ | الدَّرْسُ 06</span>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">الْجَمْعُ وَالطَّرْحُ (2)</h1>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="audio-toggle-btn" onclick="toggleMute()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold rounded-2xl border border-slate-300 transition flex items-center gap-2 cursor-pointer">
+          <span id="audio-icon">🔊</span>
+          <span id="audio-text">الصَّوْتُ: مُفَعَّلٌ</span>
+        </button>
+      </div>
+    </div>
+    
+    <!-- الحساب الذهني التقديمي -->
+    <div class="mt-4 p-4 bg-amber-50 rounded-2xl border-2 border-dashed border-amber-300 flex items-start gap-3">
+      <span class="text-2xl">🧠</span>
+      <div>
+        <h3 class="font-extrabold text-amber-900 text-sm md:text-base">حِسَابٌ ذِهْنِيٌّ:</h3>
+        <p class="text-xs md:text-sm text-amber-800 mt-0.5">
+          الْعَدُّ 5 بـ 5 تَصَاعُدِيًّا أَوْ تَنَازُلِيًّا بِدْءًا مِنْ عَدَدٍ مُعَيَّنٍ (مِثَال: 105، 110، 115... / 250، 245، 240...).
+        </p>
+      </div>
+    </div>
+
+    <!-- شريط الإرشاد -->
+    <div class="mt-3 text-xs text-slate-500 flex items-center justify-between px-2">
+      <span>📖 كِتَابُ الرِّيَاضِيَّاتِ ص 17 ⬅️ دَفْتَرُ الأَنْشِطَةِ ص 11</span>
+      <span class="text-emerald-700 font-bold">⚠️ إِجَابَةٌ وَاحِدَةٌ لِكُلِّ سُؤَالٍ ثُمَّ التَّأْكِيدُ</span>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto space-y-8">
+
+    <!-- ==================== الجزء 1: كتاب الرياضيات ==================== -->
+    <div class="flex items-center gap-3 my-4">
+      <div class="h-1 flex-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent"></div>
+      <span class="bg-emerald-600 text-white font-black text-sm px-5 py-1.5 rounded-full shadow-md">
+        الجُزْءُ الأَوَّلُ: كِتَابُ التِّلْمِيذِ (ص 17)
+      </span>
+      <div class="h-1 flex-1 bg-gradient-to-r from-transparent via-emerald-400 to-transparent"></div>
+    </div>
+
+    <!-- 1. أكتشف -->
+    <section id="sec-aktachef-1" class="bg-white rounded-3xl p-5 md:p-7 shadow-lg border-2 border-slate-200">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="bg-blue-600 text-white w-8 h-8 rounded-xl flex items-center justify-center font-black">1</span>
+          <h2 class="text-xl font-black text-slate-900">أَكْتَشِفُ:</h2>
+        </div>
+        <span class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">4 فَقَرَاتٍ</span>
+      </div>
+
+      <p class="text-slate-700 font-bold text-sm md:text-base leading-relaxed mb-4">
+        لَاحِظِ الِانْتِظَامَ فِي كُلِّ حَالَةٍ، ثُمَّ أَكْمِلْ كِتَابَةَ الأَعْدَادِ الْخَمْسَةِ الْمُوَالِيَةِ (مِنَ الْيَسَارِ إِلَى الْيَمِينِ):
+      </p>
+
+      <div class="space-y-5">
+        <!-- سؤال أ -->
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">أ</span>
+              <span class="text-xs md:text-sm font-bold text-indigo-900">نُضِيفُ 1 فِي كُلِّ مَرَّةٍ</span>
+            </div>
+            <button id="btn-akt-row-1" onclick="checkAktRow(1, [503, 504, 505, 506, 507])" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-1.5 rounded-xl text-xs sm:text-sm transition shadow cursor-pointer">تَحَقَّقْ مِنَ السَّطْرِ</button>
+          </div>
+          <div class="overflow-x-auto pb-2">
+            <div class="math-ltr gap-2 min-w-[560px]">
+              <span class="px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl font-bold text-slate-700">500</span>
+              <span class="text-slate-400">,</span>
+              <span class="px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl font-bold text-slate-700">501</span>
+              <span class="text-slate-400">,</span>
+              <span class="px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl font-bold text-slate-700">502</span>
+              <span class="text-slate-400 font-bold mx-1">➔</span>
+              <input type="number" id="inp-akt-1-1" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-1-2" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-1-3" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-1-4" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-1-5" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+            </div>
+          </div>
+        </div>
+
+        <!-- سؤال ب -->
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">ب</span>
+              <span class="text-xs md:text-sm font-bold text-indigo-900">نَطْرَحُ 10 فِي كُلِّ مَرَّةٍ</span>
+            </div>
+            <button id="btn-akt-row-2" onclick="checkAktRow(2, [844, 834, 824, 814, 804])" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-1.5 rounded-xl text-xs sm:text-sm transition shadow cursor-pointer">تَحَقَّقْ مِنَ السَّطْرِ</button>
+          </div>
+          <div class="overflow-x-auto pb-2">
+            <div class="math-ltr gap-2 min-w-[560px]">
+              <span class="px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl font-bold text-slate-700">874</span>
+              <span class="text-slate-400">,</span>
+              <span class="px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl font-bold text-slate-700">864</span>
+              <span class="text-slate-400">,</span>
+              <span class="px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl font-bold text-slate-700">854</span>
+              <span class="text-slate-400 font-bold mx-1">➔</span>
+              <input type="number" id="inp-akt-2-1" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-2-2" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-2-3" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-2-4" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-2-5" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+            </div>
+          </div>
+        </div>
+
+        <!-- سؤال ج -->
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">ج</span>
+              <span class="text-xs md:text-sm font-bold text-indigo-900">نَطْرَحُ 1 فِي كُلِّ مَرَّةٍ</span>
+            </div>
+            <button id="btn-akt-row-3" onclick="checkAktRow(3, [497, 496, 495, 494, 493])" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-1.5 rounded-xl text-xs sm:text-sm transition shadow cursor-pointer">تَحَقَّقْ مِنَ السَّطْرِ</button>
+          </div>
+          <div class="overflow-x-auto pb-2">
+            <div class="math-ltr gap-2 min-w-[560px]">
+              <span class="px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl font-bold text-slate-700">500</span>
+              <span class="text-slate-400">,</span>
+              <span class="px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl font-bold text-slate-700">499</span>
+              <span class="text-slate-400">,</span>
+              <span class="px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl font-bold text-slate-700">498</span>
+              <span class="text-slate-400 font-bold mx-1">➔</span>
+              <input type="number" id="inp-akt-3-1" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-3-2" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-3-3" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-3-4" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-3-5" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+            </div>
+          </div>
+        </div>
+
+        <!-- سؤال د -->
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold flex items-center justify-center">د</span>
+              <span class="text-xs md:text-sm font-bold text-indigo-900">نُضِيفُ 100 فِي كُلِّ مَرَّةٍ</span>
+            </div>
+            <button id="btn-akt-row-4" onclick="checkAktRow(4, [303, 403, 503, 603, 703])" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-4 py-1.5 rounded-xl text-xs sm:text-sm transition shadow cursor-pointer">تَحَقَّقْ مِنَ السَّطْرِ</button>
+          </div>
+          <div class="overflow-x-auto pb-2">
+            <div class="math-ltr gap-2 min-w-[560px]">
+              <span class="px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl font-bold text-slate-700">3</span>
+              <span class="text-slate-400">,</span>
+              <span class="px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl font-bold text-slate-700">103</span>
+              <span class="text-slate-400">,</span>
+              <span class="px-2.5 py-1.5 bg-white border border-slate-300 rounded-xl font-bold text-slate-700">203</span>
+              <span class="text-slate-400 font-bold mx-1">➔</span>
+              <input type="number" id="inp-akt-4-1" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-4-2" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-4-3" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-4-4" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+              <input type="number" id="inp-akt-4-5" placeholder="؟" class="w-16 sm:w-20 text-center font-black py-1.5 border-2 border-indigo-300 rounded-xl outline-none focus:border-indigo-600 bg-white">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="eval-sec-aktachef-1" class="mt-4 p-3 bg-slate-100 rounded-2xl flex items-center justify-between hidden">
+        <span class="font-bold text-sm text-slate-700">تَقْيِيمُ مَحَطَّةِ (أَكْتَشِفُ):</span>
+        <div class="flex gap-4 font-black">
+          <span class="text-emerald-600">صَحِيح: <span id="aktachef-1-c">0</span> ✓</span>
+          <span class="text-rose-600">خَاطِئ: <span id="aktachef-1-w">0</span> ✗</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. أنجز 1 -->
+    <section id="sec-onjez-1" class="bg-white rounded-3xl p-5 md:p-7 shadow-lg border-2 border-slate-200 locked-section">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="bg-emerald-600 text-white w-8 h-8 rounded-xl flex items-center justify-center font-black">2</span>
+          <h2 class="text-xl font-black text-slate-900">أُنْجِزُ (1):</h2>
+        </div>
+        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">أَنْجِزِ الْعَمَلِيَّاتِ التَّالِيَةَ</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>365</span>
+            <span>+</span>
+            <span>10</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-onjez1-1" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none">
+            <button onclick="checkInput('onjez1-1', 375, 'sec-onjez-1')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>643</span>
+            <span>+</span>
+            <span>100</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-onjez1-2" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none">
+            <button onclick="checkInput('onjez1-2', 743, 'sec-onjez-1')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>888</span>
+            <span>+</span>
+            <span>10</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-onjez1-3" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none">
+            <button onclick="checkInput('onjez1-3', 898, 'sec-onjez-1')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>56</span>
+            <span>+</span>
+            <span>100</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-onjez1-4" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none">
+            <button onclick="checkInput('onjez1-4', 156, 'sec-onjez-1')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="eval-sec-onjez-1" class="mt-4 p-3 bg-slate-100 rounded-2xl flex items-center justify-between hidden">
+        <span class="font-bold text-sm text-slate-700">تَقْيِيمُ أُنْجِزُ (1):</span>
+        <div class="flex gap-4 font-black">
+          <span class="text-emerald-600">صَحِيح: <span id="onjez-1-c">0</span> ✓</span>
+          <span class="text-rose-600">خَاطِئ: <span id="onjez-1-w">0</span> ✗</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. أنجز 2 -->
+    <section id="sec-onjez-2" class="bg-white rounded-3xl p-5 md:p-7 shadow-lg border-2 border-slate-200 locked-section">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="bg-emerald-600 text-white w-8 h-8 rounded-xl flex items-center justify-center font-black">3</span>
+          <h2 class="text-xl font-black text-slate-900">أُنْجِزُ (2):</h2>
+        </div>
+        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">أَنْجِزِ الْعَمَلِيَّاتِ التَّالِيَةَ (طَرْحٌ)</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>123</span>
+            <span>-</span>
+            <span>10</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-onjez2-1" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none">
+            <button onclick="checkInput('onjez2-1', 113, 'sec-onjez-2')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>651</span>
+            <span>-</span>
+            <span>10</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-onjez2-2" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none">
+            <button onclick="checkInput('onjez2-2', 641, 'sec-onjez-2')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>904</span>
+            <span>-</span>
+            <span>100</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-onjez2-3" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none">
+            <button onclick="checkInput('onjez2-3', 804, 'sec-onjez-2')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>723</span>
+            <span>-</span>
+            <span>100</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-onjez2-4" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none">
+            <button onclick="checkInput('onjez2-4', 623, 'sec-onjez-2')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="eval-sec-onjez-2" class="mt-4 p-3 bg-slate-100 rounded-2xl flex items-center justify-between hidden">
+        <span class="font-bold text-sm text-slate-700">تَقْيِيمُ أُنْجِزُ (2):</span>
+        <div class="flex gap-4 font-black">
+          <span class="text-emerald-600">صَحِيح: <span id="onjez-2-c">0</span> ✓</span>
+          <span class="text-rose-600">خَاطِئ: <span id="onjez-2-w">0</span> ✗</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. أنجز 3 -->
+    <section id="sec-onjez-3" class="bg-white rounded-3xl p-5 md:p-7 shadow-lg border-2 border-slate-200 locked-section">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="bg-emerald-600 text-white w-8 h-8 rounded-xl flex items-center justify-center font-black">4</span>
+          <h2 class="text-xl font-black text-slate-900">أُنْجِزُ (3):</h2>
+        </div>
+        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">انْقُلْ ثُمَّ أَكْمِلْ بِالْعَدَدِ الْمُنَاسِبِ</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-lg font-black text-slate-800 gap-2">
+            <span>908</span>
+            <span>+</span>
+            <input type="number" id="inp-onjez3-1" placeholder="؟" class="w-20 text-center text-lg font-black py-1 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none bg-white">
+            <span>=</span>
+            <span>918</span>
+          </div>
+          <button onclick="checkInput('onjez3-1', 10, 'sec-onjez-3')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+        </div>
+
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-lg font-black text-slate-800 gap-2">
+            <input type="number" id="inp-onjez3-2" placeholder="؟" class="w-20 text-center text-lg font-black py-1 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none bg-white">
+            <span>+</span>
+            <span>10</span>
+            <span>=</span>
+            <span>918</span>
+          </div>
+          <button onclick="checkInput('onjez3-2', 908, 'sec-onjez-3')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+        </div>
+
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-lg font-black text-slate-800 gap-2">
+            <span>647</span>
+            <span>+</span>
+            <input type="number" id="inp-onjez3-3" placeholder="؟" class="w-20 text-center text-lg font-black py-1 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none bg-white">
+            <span>=</span>
+            <span>747</span>
+          </div>
+          <button onclick="checkInput('onjez3-3', 100, 'sec-onjez-3')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+        </div>
+
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-lg font-black text-slate-800 gap-2">
+            <input type="number" id="inp-onjez3-4" placeholder="؟" class="w-20 text-center text-lg font-black py-1 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none bg-white">
+            <span>+</span>
+            <span>100</span>
+            <span>=</span>
+            <span>320</span>
+          </div>
+          <button onclick="checkInput('onjez3-4', 220, 'sec-onjez-3')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+        </div>
+      </div>
+
+      <div id="eval-sec-onjez-3" class="mt-4 p-3 bg-slate-100 rounded-2xl flex items-center justify-between hidden">
+        <span class="font-bold text-sm text-slate-700">تَقْيِيمُ أُنْجِزُ (3):</span>
+        <div class="flex gap-4 font-black">
+          <span class="text-emerald-600">صَحِيح: <span id="onjez-3-c">0</span> ✓</span>
+          <span class="text-rose-600">خَاطِئ: <span id="onjez-3-w">0</span> ✗</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. أنجز 4 -->
+    <section id="sec-onjez-4" class="bg-white rounded-3xl p-5 md:p-7 shadow-lg border-2 border-slate-200 locked-section">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="bg-emerald-600 text-white w-8 h-8 rounded-xl flex items-center justify-center font-black">5</span>
+          <h2 class="text-xl font-black text-slate-900">أُنْجِزُ (4):</h2>
+        </div>
+        <span class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">انْقُلْ ثُمَّ أَكْمِلْ بِالْعَدَدِ الْمُنَاسِبِ</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-lg font-black text-slate-800 gap-2">
+            <span>928</span>
+            <span>-</span>
+            <input type="number" id="inp-onjez4-1" placeholder="؟" class="w-20 text-center text-lg font-black py-1 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none bg-white">
+            <span>=</span>
+            <span>828</span>
+          </div>
+          <button onclick="checkInput('onjez4-1', 100, 'sec-onjez-4')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+        </div>
+
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-lg font-black text-slate-800 gap-2">
+            <input type="number" id="inp-onjez4-2" placeholder="؟" class="w-20 text-center text-lg font-black py-1 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none bg-white">
+            <span>-</span>
+            <span>10</span>
+            <span>=</span>
+            <span>657</span>
+          </div>
+          <button onclick="checkInput('onjez4-2', 667, 'sec-onjez-4')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+        </div>
+
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-lg font-black text-slate-800 gap-2">
+            <span>747</span>
+            <span>-</span>
+            <input type="number" id="inp-onjez4-3" placeholder="؟" class="w-20 text-center text-lg font-black py-1 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none bg-white">
+            <span>=</span>
+            <span>737</span>
+          </div>
+          <button onclick="checkInput('onjez4-3', 10, 'sec-onjez-4')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+        </div>
+
+        <div class="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-100 flex items-center justify-between">
+          <div class="math-ltr text-lg font-black text-slate-800 gap-2">
+            <input type="number" id="inp-onjez4-4" placeholder="؟" class="w-20 text-center text-lg font-black py-1 border-2 border-emerald-300 rounded-xl focus:border-emerald-600 outline-none bg-white">
+            <span>-</span>
+            <span>100</span>
+            <span>=</span>
+            <span>576</span>
+          </div>
+          <button onclick="checkInput('onjez4-4', 676, 'sec-onjez-4')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+        </div>
+      </div>
+
+      <div id="eval-sec-onjez-4" class="mt-4 p-3 bg-slate-100 rounded-2xl flex items-center justify-between hidden">
+        <span class="font-bold text-sm text-slate-700">تَقْيِيمُ أُنْجِزُ (4):</span>
+        <div class="flex gap-4 font-black">
+          <span class="text-emerald-600">صَحِيح: <span id="onjez-4-c">0</span> ✓</span>
+          <span class="text-rose-600">خَاطِئ: <span id="onjez-4-w">0</span> ✗</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- بطاقة تعلمت -->
+    <section class="bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-white rounded-3xl p-6 md:p-8 shadow-xl relative overflow-hidden">
+      <div class="absolute -left-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-3xl">💡</span>
+        <h2 class="text-2xl md:text-3xl font-black tracking-wide">تَعَلَّمْتُ</h2>
+      </div>
+      <p class="text-lg md:text-xl font-bold leading-relaxed mb-4">
+        تَعَلَّمْتُ الْعَدَّ بِإِضَافَةِ أَوْ طَرْحِ <span class="bg-white/20 px-2 py-0.5 rounded-lg">1</span> أَوْ <span class="bg-white/20 px-2 py-0.5 rounded-lg">10</span> أَوْ <span class="bg-white/20 px-2 py-0.5 rounded-lg">100</span>.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-slate-900">
+        <div class="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-md border border-amber-200">
+          <span class="font-black text-amber-900 block mb-1">مِثَالٌ (بِإِضَافَةِ 100):</span>
+          <div class="math-ltr text-lg font-black text-indigo-900 gap-2">
+            <span>104</span><span>,</span>
+            <span>204</span><span>,</span>
+            <span>304</span><span>,</span>
+            <span>...</span>
+          </div>
+        </div>
+        <div class="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-md border border-amber-200">
+          <span class="font-black text-amber-900 block mb-1">مِثَالٌ (بِطَرْحِ 10):</span>
+          <div class="math-ltr text-lg font-black text-indigo-900 gap-2">
+            <span>983</span><span>,</span>
+            <span>973</span><span>,</span>
+            <span>963</span><span>,</span>
+            <span>...</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== الجزء 2: دفتر الأنشطة ==================== -->
+    <div class="flex items-center gap-3 my-4">
+      <div class="h-1 flex-1 bg-gradient-to-r from-transparent via-indigo-400 to-transparent"></div>
+      <span class="bg-indigo-600 text-white font-black text-sm px-5 py-1.5 rounded-full shadow-md">
+        الجُزْءُ الثَّانِي: دَفْتَرُ الأَنْشِطَةِ (ص 11)
+      </span>
+      <div class="h-1 flex-1 bg-gradient-to-r from-transparent via-indigo-400 to-transparent"></div>
+    </div>
+
+    <!-- 6. أتمرن 1 -->
+    <section id="sec-atamarane-1" class="bg-white rounded-3xl p-5 md:p-7 shadow-lg border-2 border-slate-200 locked-section">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="bg-indigo-600 text-white w-8 h-8 rounded-xl flex items-center justify-center font-black">6</span>
+          <h2 class="text-xl font-black text-slate-900">أَتَمَرَّنُ (1):</h2>
+        </div>
+        <span class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">اخْتَرِ الْعِبَارَةَ الْمُنَاسِبَةَ</span>
+      </div>
+
+      <p class="text-slate-700 font-bold text-sm md:text-base leading-relaxed mb-4">
+        فِي كُلِّ حَالَةٍ، لِلِانْتِقَالِ مِنْ عَدَدٍ إِلَى الْعَدَدِ الْمُوَالِي، اخْتَرْ:
+        <span class="text-indigo-600">«أُضِيفُ 1»</span>، <span class="text-indigo-600">«أُضِيفُ 100»</span>، أَوْ <span class="text-indigo-600">«أَطْرَحُ 100»</span>:
+      </p>
+
+      <div class="space-y-4">
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200" id="card-atm1-1">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="math-ltr text-lg font-black text-indigo-900 gap-1">
+              <span>325</span><span>,</span>
+              <span>326</span><span>,</span>
+              <span>327</span><span>...</span>
+            </div>
+            <div class="flex flex-wrap gap-2" id="btn-group-atm1-1">
+              <button onclick="selectOption('atm1-1', 'أُضِيفُ 1', 'أُضِيفُ 1', this, 'sec-atamarane-1')" class="px-3.5 py-1.5 rounded-xl border-2 border-indigo-200 font-bold text-sm bg-white hover:bg-indigo-50 transition cursor-pointer">أُضِيفُ 1</button>
+              <button onclick="selectOption('atm1-1', 'أُضِيفُ 100', 'أُضِيفُ 1', this, 'sec-atamarane-1')" class="px-3.5 py-1.5 rounded-xl border-2 border-indigo-200 font-bold text-sm bg-white hover:bg-indigo-50 transition cursor-pointer">أُضِيفُ 100</button>
+              <button onclick="selectOption('atm1-1', 'أَطْرَحُ 100', 'أُضِيفُ 1', this, 'sec-atamarane-1')" class="px-3.5 py-1.5 rounded-xl border-2 border-indigo-200 font-bold text-sm bg-white hover:bg-indigo-50 transition cursor-pointer">أَطْرَحُ 100</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200" id="card-atm1-2">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="math-ltr text-lg font-black text-indigo-900 gap-1">
+              <span>946</span><span>,</span>
+              <span>846</span><span>,</span>
+              <span>746</span><span>...</span>
+            </div>
+            <div class="flex flex-wrap gap-2" id="btn-group-atm1-2">
+              <button onclick="selectOption('atm1-2', 'أُضِيفُ 1', 'أَطْرَحُ 100', this, 'sec-atamarane-1')" class="px-3.5 py-1.5 rounded-xl border-2 border-indigo-200 font-bold text-sm bg-white hover:bg-indigo-50 transition cursor-pointer">أُضِيفُ 1</button>
+              <button onclick="selectOption('atm1-2', 'أُضِيفُ 100', 'أَطْرَحُ 100', this, 'sec-atamarane-1')" class="px-3.5 py-1.5 rounded-xl border-2 border-indigo-200 font-bold text-sm bg-white hover:bg-indigo-50 transition cursor-pointer">أُضِيفُ 100</button>
+              <button onclick="selectOption('atm1-2', 'أَطْرَحُ 100', 'أَطْرَحُ 100', this, 'sec-atamarane-1')" class="px-3.5 py-1.5 rounded-xl border-2 border-indigo-200 font-bold text-sm bg-white hover:bg-indigo-50 transition cursor-pointer">أَطْرَحُ 100</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200" id="card-atm1-3">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="math-ltr text-lg font-black text-indigo-900 gap-1">
+              <span>110</span><span>,</span>
+              <span>210</span><span>,</span>
+              <span>310</span><span>...</span>
+            </div>
+            <div class="flex flex-wrap gap-2" id="btn-group-atm1-3">
+              <button onclick="selectOption('atm1-3', 'أُضِيفُ 1', 'أُضِيفُ 100', this, 'sec-atamarane-1')" class="px-3.5 py-1.5 rounded-xl border-2 border-indigo-200 font-bold text-sm bg-white hover:bg-indigo-50 transition cursor-pointer">أُضِيفُ 1</button>
+              <button onclick="selectOption('atm1-3', 'أُضِيفُ 100', 'أُضِيفُ 100', this, 'sec-atamarane-1')" class="px-3.5 py-1.5 rounded-xl border-2 border-indigo-200 font-bold text-sm bg-white hover:bg-indigo-50 transition cursor-pointer">أُضِيفُ 100</button>
+              <button onclick="selectOption('atm1-3', 'أَطْرَحُ 100', 'أُضِيفُ 100', this, 'sec-atamarane-1')" class="px-3.5 py-1.5 rounded-xl border-2 border-indigo-200 font-bold text-sm bg-white hover:bg-indigo-50 transition cursor-pointer">أَطْرَحُ 100</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="eval-sec-atamarane-1" class="mt-4 p-3 bg-slate-100 rounded-2xl flex items-center justify-between hidden">
+        <span class="font-bold text-sm text-slate-700">تَقْيِيمُ أَتَمَرَّنُ (1):</span>
+        <div class="flex gap-4 font-black">
+          <span class="text-emerald-600">صَحِيح: <span id="atamarane-1-c">0</span> ✓</span>
+          <span class="text-rose-600">خَاطِئ: <span id="atamarane-1-w">0</span> ✗</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. أتمرن 2 -->
+    <section id="sec-atamarane-2" class="bg-white rounded-3xl p-5 md:p-7 shadow-lg border-2 border-slate-200 locked-section">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="bg-indigo-600 text-white w-8 h-8 rounded-xl flex items-center justify-center font-black">7</span>
+          <h2 class="text-xl font-black text-slate-900">أَتَمَرَّنُ (2):</h2>
+        </div>
+        <span class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">أَكْمِلِ الْمُسَاوَيَاتِ</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>695</span>
+            <span>+</span>
+            <span>10</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-atm2-1" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-indigo-300 rounded-xl focus:border-indigo-600 outline-none">
+            <button onclick="checkInput('atm2-1', 705, 'sec-atamarane-2')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+        <div class="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>560</span>
+            <span>+</span>
+            <span>10</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-atm2-2" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-indigo-300 rounded-xl focus:border-indigo-600 outline-none">
+            <button onclick="checkInput('atm2-2', 570, 'sec-atamarane-2')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+        <div class="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>595</span>
+            <span>+</span>
+            <span>100</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-atm2-3" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-indigo-300 rounded-xl focus:border-indigo-600 outline-none">
+            <button onclick="checkInput('atm2-3', 695, 'sec-atamarane-2')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+        <div class="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>333</span>
+            <span>+</span>
+            <span>100</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-atm2-4" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-indigo-300 rounded-xl focus:border-indigo-600 outline-none">
+            <button onclick="checkInput('atm2-4', 433, 'sec-atamarane-2')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="eval-sec-atamarane-2" class="mt-4 p-3 bg-slate-100 rounded-2xl flex items-center justify-between hidden">
+        <span class="font-bold text-sm text-slate-700">تَقْيِيمُ أَتَمَرَّنُ (2):</span>
+        <div class="flex gap-4 font-black">
+          <span class="text-emerald-600">صَحِيح: <span id="atamarane-2-c">0</span> ✓</span>
+          <span class="text-rose-600">خَاطِئ: <span id="atamarane-2-w">0</span> ✗</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. أتمرن 3 -->
+    <section id="sec-atamarane-3" class="bg-white rounded-3xl p-5 md:p-7 shadow-lg border-2 border-slate-200 locked-section">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="bg-indigo-600 text-white w-8 h-8 rounded-xl flex items-center justify-center font-black">8</span>
+          <h2 class="text-xl font-black text-slate-900">أَتَمَرَّنُ (3):</h2>
+        </div>
+        <span class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">أَكْمِلِ الْمُسَاوَيَاتِ</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>954</span>
+            <span>-</span>
+            <span>10</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-atm3-1" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-indigo-300 rounded-xl focus:border-indigo-600 outline-none">
+            <button onclick="checkInput('atm3-1', 944, 'sec-atamarane-3')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+        <div class="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>206</span>
+            <span>-</span>
+            <span>10</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-atm3-2" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-indigo-300 rounded-xl focus:border-indigo-600 outline-none">
+            <button onclick="checkInput('atm3-2', 196, 'sec-atamarane-3')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+        <div class="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>595</span>
+            <span>+</span>
+            <span>100</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-atm3-3" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-indigo-300 rounded-xl focus:border-indigo-600 outline-none">
+            <button onclick="checkInput('atm3-3', 695, 'sec-atamarane-3')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+        <div class="p-4 bg-indigo-50/50 rounded-2xl border border-indigo-100 flex items-center justify-between">
+          <div class="math-ltr text-xl font-black text-slate-800 gap-2">
+            <span>103</span>
+            <span>-</span>
+            <span>100</span>
+            <span>=</span>
+          </div>
+          <div class="math-ltr gap-2">
+            <input type="number" id="inp-atm3-4" placeholder="؟" class="w-24 text-center text-lg font-black py-1.5 px-2 border-2 border-indigo-300 rounded-xl focus:border-indigo-600 outline-none">
+            <button onclick="checkInput('atm3-4', 3, 'sec-atamarane-3')" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-3 py-1.5 rounded-xl text-sm transition cursor-pointer">تَأْكِيدٌ</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="eval-sec-atamarane-3" class="mt-4 p-3 bg-slate-100 rounded-2xl flex items-center justify-between hidden">
+        <span class="font-bold text-sm text-slate-700">تَقْيِيمُ أَتَمَرَّنُ (3):</span>
+        <div class="flex gap-4 font-black">
+          <span class="text-emerald-600">صَحِيح: <span id="atamarane-3-c">0</span> ✓</span>
+          <span class="text-rose-600">خَاطِئ: <span id="atamarane-3-w">0</span> ✗</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. أتمرن 4 -->
+    <section id="sec-atamarane-4" class="bg-white rounded-3xl p-5 md:p-7 shadow-lg border-2 border-slate-200 locked-section">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="bg-indigo-600 text-white w-8 h-8 rounded-xl flex items-center justify-center font-black">9</span>
+          <h2 class="text-xl font-black text-slate-900">أَتَمَرَّنُ (4):</h2>
+        </div>
+        <span class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">مَسْأَلَةُ حَافِظَةِ أَيْمَنَ</span>
+      </div>
+
+      <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200">
+        <p class="text-slate-800 font-bold leading-relaxed text-base md:text-lg mb-3">
+          فِي حَافِظَةِ أَيْمَنَ <span class="math-ltr font-black text-indigo-900 bg-white px-2 py-0.5 rounded border border-amber-300">250 DA</span>. 
+          تَحَصَّلَ فِي <span class="text-amber-800 font-black">ثَلَاثِ مُنَاسَبَاتٍ</span> عَلَى <span class="math-ltr font-black text-indigo-900 bg-white px-2 py-0.5 rounded border border-amber-300">100 DA</span> فِي كُلِّ مَرَّةٍ.
+        </p>
+        <p class="text-indigo-950 font-black text-base md:text-lg mb-4">
+          ❓ مَا هُوَ الْمَبْلَغُ الَّذِي يَمْلِكُهُ أَيْمَنُ الآنَ؟
+        </p>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="text-slate-700 font-bold">يَمْلِكُ أَيْمَنُ:</span>
+          <div class="math-ltr bg-white border-2 border-indigo-400 rounded-2xl px-3 py-1 shadow-inner gap-2">
+            <input type="number" id="inp-atm4-1" placeholder="؟" class="w-28 text-center text-xl font-black outline-none text-indigo-900">
+            <span class="font-black text-slate-600 border-l pl-2 border-slate-300">DA</span>
+          </div>
+          <button onclick="checkInput('atm4-1', 550, 'sec-atamarane-4')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-2xl text-sm transition cursor-pointer">تَأْكِيدُ الإِجَابَةِ</button>
+        </div>
+      </div>
+
+      <div id="eval-sec-atamarane-4" class="mt-4 p-3 bg-slate-100 rounded-2xl flex items-center justify-between hidden">
+        <span class="font-bold text-sm text-slate-700">تَقْيِيمُ أَتَمَرَّنُ (4):</span>
+        <div class="flex gap-4 font-black">
+          <span class="text-emerald-600">صَحِيح: <span id="atamarane-4-c">0</span> ✓</span>
+          <span class="text-rose-600">خَاطِئ: <span id="atamarane-4-w">0</span> ✗</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10. أتمرن 5 -->
+    <section id="sec-atamarane-5" class="bg-white rounded-3xl p-5 md:p-7 shadow-lg border-2 border-slate-200 locked-section">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="bg-indigo-600 text-white w-8 h-8 rounded-xl flex items-center justify-center font-black">10</span>
+          <h2 class="text-xl font-black text-slate-900">أَتَمَرَّنُ (5):</h2>
+        </div>
+        <span class="text-xs font-bold text-indigo-700 bg-indigo-50 px-3 py-1 rounded-full">أَكْمِلِ الْحِسَابَ فِي السّلْسِلَةِ</span>
+      </div>
+
+      <p class="text-slate-700 font-bold text-sm md:text-base leading-relaxed mb-4">
+        انْطَلِقْ مِنَ الْعَدَدِ <span class="math-ltr font-black text-indigo-900 bg-indigo-50 px-2 py-0.5 rounded border">560</span> وَاحْسُبِ النَّتِيجَةَ فِي كُلِّ مَرْحَلَةٍ:
+      </p>
+
+      <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 overflow-x-auto">
+        <div class="math-ltr gap-2 min-w-[620px] py-2">
+          
+          <div class="w-16 h-14 bg-indigo-900 text-white rounded-2xl flex items-center justify-center font-black text-lg shadow">
+            560
+          </div>
+
+          <div class="flex flex-col items-center">
+            <span class="text-xs font-black text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full mb-1">+100</span>
+            <span class="text-slate-400 font-bold">➔</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-1">
+            <input type="number" id="inp-atm5-1" placeholder="؟" class="w-20 text-center text-lg font-black py-2 border-2 border-indigo-300 rounded-2xl focus:border-indigo-600 outline-none">
+            <button onclick="checkInput('atm5-1', 660, 'sec-atamarane-5')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-2 py-1 rounded-lg cursor-pointer">تَحَقَّقْ</button>
+          </div>
+
+          <div class="flex flex-col items-center">
+            <span class="text-xs font-black text-rose-600 bg-rose-100 px-2 py-0.5 rounded-full mb-1">-10</span>
+            <span class="text-slate-400 font-bold">➔</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-1">
+            <input type="number" id="inp-atm5-2" placeholder="؟" class="w-20 text-center text-lg font-black py-2 border-2 border-indigo-300 rounded-2xl focus:border-indigo-600 outline-none">
+            <button onclick="checkInput('atm5-2', 650, 'sec-atamarane-5')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-2 py-1 rounded-lg cursor-pointer">تَحَقَّقْ</button>
+          </div>
+
+          <div class="flex flex-col items-center">
+            <span class="text-xs font-black text-rose-600 bg-rose-100 px-2 py-0.5 rounded-full mb-1">-100</span>
+            <span class="text-slate-400 font-bold">➔</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-1">
+            <input type="number" id="inp-atm5-3" placeholder="؟" class="w-20 text-center text-lg font-black py-2 border-2 border-indigo-300 rounded-2xl focus:border-indigo-600 outline-none">
+            <button onclick="checkInput('atm5-3', 550, 'sec-atamarane-5')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-2 py-1 rounded-lg cursor-pointer">تَحَقَّقْ</button>
+          </div>
+
+          <div class="flex flex-col items-center">
+            <span class="text-xs font-black text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full mb-1">+10</span>
+            <span class="text-slate-400 font-bold">➔</span>
+          </div>
+
+          <div class="flex flex-col items-center gap-1">
+            <input type="number" id="inp-atm5-4" placeholder="؟" class="w-20 text-center text-lg font-black py-2 border-2 border-indigo-300 rounded-2xl focus:border-indigo-600 outline-none">
+            <button onclick="checkInput('atm5-4', 560, 'sec-atamarane-5')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-2 py-1 rounded-lg cursor-pointer">تَحَقَّقْ</button>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="eval-sec-atamarane-5" class="mt-4 p-3 bg-slate-100 rounded-2xl flex items-center justify-between hidden">
+        <span class="font-bold text-sm text-slate-700">تَقْيِيمُ أَتَمَرَّنُ (5):</span>
+        <div class="flex gap-4 font-black">
+          <span class="text-emerald-600">صَحِيح: <span id="atamarane-5-c">0</span> ✓</span>
+          <span class="text-rose-600">خَاطِئ: <span id="atamarane-5-w">0</span> ✗</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. أبحث -->
+    <section id="sec-abhath" class="bg-white rounded-3xl p-5 md:p-7 shadow-xl border-4 border-amber-400 locked-section">
+      <div class="flex items-center justify-between pb-3 mb-4 border-b border-amber-100">
+        <div class="flex items-center gap-2">
+          <span class="bg-amber-500 text-white w-8 h-8 rounded-xl flex items-center justify-center font-black">⭐</span>
+          <h2 class="text-xl font-black text-amber-950">أَبْحَثُ: قَفْزَةُ الأَرْنَبِ</h2>
+        </div>
+        <span class="text-xs font-bold text-amber-800 bg-amber-100 px-3 py-1 rounded-full">سُؤَالُ التَّحَدِّي الذَّكِيّ</span>
+      </div>
+
+      <div class="p-4 bg-amber-50/60 rounded-2xl border border-amber-200 mb-6">
+        <p class="text-slate-800 font-extrabold text-base md:text-lg leading-relaxed">
+          🐇 <span class="text-amber-900 underline decoration-amber-400">السُّؤَالُ:</span> مِنْ أَيِّ خَانَةٍ كَانَتْ انْطِلَاقَةُ قَفْزَةِ الأَرْنَبِ؟
+        </p>
+        <p class="text-xs md:text-sm text-slate-600 mt-1">
+          عُدَّ الْخَانَاتِ بِنَفْسِكَ: انْطَلَقَ الأَرْنَبُ قَبْلَ 10 خَانَاتٍ مِنَ الْمُرَبَّعِ <span class="font-black text-indigo-900 math-ltr">328</span>، اضْغَطْ عَلَى الْخَانَةِ الْمُنَاسِبَةِ فِي الشَّرِيطِ!
+        </p>
+      </div>
+
+      <div class="relative w-full overflow-x-auto pb-4 pt-8">
+        
+        <div class="relative w-[780px] h-12 mx-auto">
+          <div class="absolute left-[40px] right-[700px] -top-3">
+            <svg class="w-full h-12 overflow-visible" viewBox="0 0 660 40">
+              <defs>
+                <marker id="arrowhead" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+                  <polygon points="0 0, 7 3.5, 0 7" fill="#059669" />
+                </marker>
+              </defs>
+              <path d="M 30,30 Q 345,-15 630,30" fill="none" stroke="#059669" stroke-width="3" stroke-dasharray="6,4" marker-end="url(#arrowhead)"/>
+              <text x="330" y="8" fill="#047857" font-weight="900" font-size="16" text-anchor="middle" direction="ltr">+10</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="w-[780px] mx-auto math-ltr justify-between bg-slate-100 p-3 rounded-2xl border-2 border-slate-300">
+          
+          <button id="rabbit-cell-0" onclick="clickRabbitCell(0, 318)" class="w-14 h-16 rounded-xl border-2 border-slate-400 bg-white font-black text-base flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95 shadow cursor-pointer">
+            <span class="cell-val text-slate-400 text-lg"></span>
+          </button>
+          <button id="rabbit-cell-1" onclick="clickRabbitCell(1, 319)" class="w-14 h-16 rounded-xl border-2 border-slate-400 bg-white font-black text-base flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95 shadow cursor-pointer">
+            <span class="cell-val text-slate-400 text-lg"></span>
+          </button>
+          <button id="rabbit-cell-2" onclick="clickRabbitCell(2, 320)" class="w-14 h-16 rounded-xl border-2 border-slate-400 bg-white font-black text-base flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95 shadow cursor-pointer">
+            <span class="cell-val text-slate-400 text-lg"></span>
+          </button>
+          <button id="rabbit-cell-3" onclick="clickRabbitCell(3, 321)" class="w-14 h-16 rounded-xl border-2 border-slate-400 bg-white font-black text-base flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95 shadow cursor-pointer">
+            <span class="cell-val text-slate-400 text-lg"></span>
+          </button>
+          <button id="rabbit-cell-4" onclick="clickRabbitCell(4, 322)" class="w-14 h-16 rounded-xl border-2 border-slate-400 bg-white font-black text-base flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95 shadow cursor-pointer">
+            <span class="cell-val text-slate-400 text-lg"></span>
+          </button>
+          <button id="rabbit-cell-5" onclick="clickRabbitCell(5, 323)" class="w-14 h-16 rounded-xl border-2 border-slate-400 bg-white font-black text-base flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95 shadow cursor-pointer">
+            <span class="cell-val text-slate-400 text-lg"></span>
+          </button>
+          <button id="rabbit-cell-6" onclick="clickRabbitCell(6, 324)" class="w-14 h-16 rounded-xl border-2 border-slate-400 bg-white font-black text-base flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95 shadow cursor-pointer">
+            <span class="cell-val text-slate-400 text-lg"></span>
+          </button>
+          <button id="rabbit-cell-7" onclick="clickRabbitCell(7, 325)" class="w-14 h-16 rounded-xl border-2 border-slate-400 bg-white font-black text-base flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95 shadow cursor-pointer">
+            <span class="cell-val text-slate-400 text-lg"></span>
+          </button>
+          <button id="rabbit-cell-8" onclick="clickRabbitCell(8, 326)" class="w-14 h-16 rounded-xl border-2 border-slate-400 bg-white font-black text-base flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95 shadow cursor-pointer">
+            <span class="cell-val text-slate-400 text-lg"></span>
+          </button>
+          <button id="rabbit-cell-9" onclick="clickRabbitCell(9, 327)" class="w-14 h-16 rounded-xl border-2 border-slate-400 bg-white font-black text-base flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95 shadow cursor-pointer">
+            <span class="cell-val text-slate-400 text-lg"></span>
+          </button>
+
+          <div class="relative w-16 h-20 bg-indigo-950 text-white rounded-2xl border-4 border-amber-400 flex flex-col items-center justify-end pb-1 shadow-lg">
+            <div class="absolute -top-7 text-3xl animate-bounce">
+              🐇
+            </div>
+            <span class="text-[9px] text-amber-300 font-bold uppercase">الْوُصُولُ</span>
+            <span class="text-lg font-black text-white">328</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div id="rabbit-feedback" class="mt-4 p-4 rounded-2xl text-center font-black text-base hidden"></div>
+
+      <div id="eval-sec-abhath" class="mt-4 p-3 bg-slate-100 rounded-2xl flex items-center justify-between hidden">
+        <span class="font-bold text-sm text-slate-700">تَقْيِيمُ مَحَطَّةِ (أَبْحَثُ):</span>
+        <div class="flex gap-4 font-black">
+          <span class="text-emerald-600">صَحِيح: <span id="abhath-c">0</span> ✓</span>
+          <span class="text-rose-600">خَاطِئ: <span id="abhath-w">0</span> ✗</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- لوحة التقييم الختامية -->
+    <section id="sec-final-eval" class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 md:p-8 shadow-2xl border-4 border-indigo-500/40 hidden transition-all duration-700">
+      
+      <div class="text-center mb-6">
+        <span class="bg-indigo-600/50 text-indigo-200 text-xs font-bold px-4 py-1.5 rounded-full border border-indigo-400/30 uppercase tracking-widest">
+          بِطَاقَةُ التَّقْيِيمِ الشَّامِلَةِ لِلدَّرْسِ
+        </span>
+        <h2 class="text-2xl md:text-3xl font-black mt-2 text-white">النَّتِيجَةُ النِّهَائِيَّةُ لِلتِّلْمِيذِ</h2>
+        <p class="text-slate-300 text-xs md:text-sm mt-1">يُمْكِنُ لِلأُسْتَاذِ وَالْوَلِيِّ مُعَايَنَةُ كَافَّةِ التَّفَاصِيلِ وَالأَخْطَاءِ بِالتَّمْرِيرِ أَعْلَاهُ</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+        
+        <div class="flex flex-col items-center justify-center">
+          <div class="relative w-40 h-40">
+            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="8" class="text-slate-700 fill-none" />
+              <circle id="final-circle-progress" cx="50" cy="50" r="42" 
+                      stroke="#10b981" stroke-width="8" 
+                      stroke-dasharray="264" stroke-dashoffset="264" 
+                      stroke-linecap="round" 
+                      class="fill-none transition-all duration-1000 ease-out" />
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span id="final-percent" class="text-3xl font-black text-white">0%</span>
+              <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">مُعَدَّلُ النَّجَاحِ</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div class="bg-white/10 rounded-2xl p-3 border border-white/10 flex items-center justify-between">
+            <span class="text-slate-300 text-sm font-bold">الإِجَابَاتُ الصَّحِيحَةُ:</span>
+            <span id="final-correct-count" class="text-emerald-400 font-black text-xl">0</span>
+          </div>
+          <div class="bg-white/10 rounded-2xl p-3 border border-white/10 flex items-center justify-between">
+            <span class="text-slate-300 text-sm font-bold">الإِجَابَاتُ الْخَاطِئَةُ:</span>
+            <span id="final-wrong-count" class="text-rose-400 font-black text-xl">0</span>
+          </div>
+          <div class="bg-white/10 rounded-2xl p-3 border border-white/10 flex items-center justify-between">
+            <span class="text-slate-300 text-sm font-bold">مَجْمُوعُ الأَسْئِلَةِ:</span>
+            <span id="final-total-count" class="text-indigo-300 font-black text-xl">0</span>
+          </div>
+        </div>
+
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-4 text-center flex flex-col justify-center items-center h-full">
+          <div id="final-badge-icon" class="text-5xl mb-2">🏆</div>
+          <div id="final-remark-title" class="text-lg font-black text-amber-300">مُمْتَازٌ يَا بَطَلُ!</div>
+          <p id="final-remark-desc" class="text-xs text-slate-300 mt-1 leading-relaxed">
+            أَحْسَنْتَ التَّعَامُلَ مَعَ الْجَمْعِ وَالطَّرْحِ لِلْعَدَدِ 1 وَ 10 وَ 100.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-white/10 flex flex-wrap justify-center gap-4">
+        <button onclick="resetWholeLesson()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-8 py-3 rounded-2xl shadow-lg transition active:scale-95 flex items-center gap-2 cursor-pointer">
+          <span>🔄</span>
+          <span>إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</span>
+        </button>
+        <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="bg-slate-700 hover:bg-slate-600 text-white font-bold px-6 py-3 rounded-2xl transition cursor-pointer">
+          ⬆️ مُرَاجَعَةُ التَّمَارِينِ فِي الأَعْلَى
+        </button>
+        <button onclick="exitApp()" class="bg-red-700 hover:bg-red-600 text-white font-bold px-6 py-3 rounded-2xl transition cursor-pointer">
+          🚪 خُرُوجٌ
+        </button>
+      </div>
+    </section>
+
+    <!-- زر العودة إلى الفهرس -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+  </main>
+
+  <footer class="max-w-4xl mx-auto mt-10 text-center text-xs text-slate-500 pb-8 font-bold">
+    تَطْبِيقٌ تَعْلِيمِيٌّ رَقْمِيٌّ تَفَاعُلِيٌّ مُطَابِقٌ لِمِنْهَاجِ الْجُمْهُورِيَّةِ الْجَزَائِرِيَّةِ الدِّيمُقْرَاطِيَّةِ الشَّعْبِيَّةِ
+  </footer>
+
+  <script>
+    // ========================================================
+    // 🛡️ قسم الحماية
+    // ========================================================
+    const CHANNEL_ID = "-1003910412986";  // ← قناة السنة الثالثة
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+
+    // ========================================================
+    // 🎯 قسم أنشطة الدرس
+    // ========================================================
+    let audioCtx = null;
+    let isMuted = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      document.getElementById('audio-icon').textContent = isMuted ? '🔇' : '🔊';
+      document.getElementById('audio-text').textContent = isMuted ? 'الصَّوْتُ: مُعَطَّلٌ' : 'الصَّوْتُ: مُفَعَّلٌ';
+    }
+
+    function playSound(type) {
+      if (isMuted) return;
+      try {
+        initAudio();
+        if (!audioCtx) return;
+        const now = audioCtx.currentTime;
+
+        if (type === 'correct') {
+          const osc1 = audioCtx.createOscillator();
+          const osc2 = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc1.type = 'triangle';
+          osc2.type = 'sine';
+
+          osc1.frequency.setValueAtTime(523.25, now);
+          osc1.frequency.exponentialRampToValueAtTime(659.25, now + 0.15);
+
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+          osc1.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc1.start(now);
+          osc1.stop(now + 0.35);
+
+        } else if (type === 'wrong') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.exponentialRampToValueAtTime(164.81, now + 0.2);
+
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start(now);
+          osc.stop(now + 0.3);
+
+        } else if (type === 'complete') {
+          const chords = [523.25, 659.25, 783.99, 1046.50];
+          chords.forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+
+            gain.gain.setValueAtTime(0.22, now + idx * 0.1);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.5);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(now + idx * 0.1);
+            osc.stop(now + idx * 0.1 + 0.5);
+          });
+        }
+      } catch (e) {
+        console.warn('Audio API warning:', e);
+      }
+    }
+
+    const scores = {
+      'sec-aktachef-1': { correct: 0, wrong: 0, answered: 0, total: 4, next: 'sec-onjez-1', cId: 'aktachef-1-c', wId: 'aktachef-1-w' },
+      'sec-onjez-1':    { correct: 0, wrong: 0, answered: 0, total: 4, next: 'sec-onjez-2', cId: 'onjez-1-c',    wId: 'onjez-1-w' },
+      'sec-onjez-2':    { correct: 0, wrong: 0, answered: 0, total: 4, next: 'sec-onjez-3', cId: 'onjez-2-c',    wId: 'onjez-2-w' },
+      'sec-onjez-3':    { correct: 0, wrong: 0, answered: 0, total: 4, next: 'sec-onjez-4', cId: 'onjez-3-c',    wId: 'onjez-3-w' },
+      'sec-onjez-4':    { correct: 0, wrong: 0, answered: 0, total: 4, next: 'sec-atamarane-1', cId: 'onjez-4-c', wId: 'onjez-4-w' },
+      'sec-atamarane-1':{ correct: 0, wrong: 0, answered: 0, total: 3, next: 'sec-atamarane-2', cId: 'atamarane-1-c', wId: 'atamarane-1-w' },
+      'sec-atamarane-2':{ correct: 0, wrong: 0, answered: 0, total: 4, next: 'sec-atamarane-3', cId: 'atamarane-2-c', wId: 'atamarane-2-w' },
+      'sec-atamarane-3':{ correct: 0, wrong: 0, answered: 0, total: 4, next: 'sec-atamarane-4', cId: 'atamarane-3-c', wId: 'atamarane-3-w' },
+      'sec-atamarane-4':{ correct: 0, wrong: 0, answered: 0, total: 1, next: 'sec-atamarane-5', cId: 'atamarane-4-c', wId: 'atamarane-4-w' },
+      'sec-atamarane-5':{ correct: 0, wrong: 0, answered: 0, total: 4, next: 'sec-abhath',     cId: 'atamarane-5-c', wId: 'atamarane-5-w' },
+      'sec-abhath':     { correct: 0, wrong: 0, answered: 0, total: 1, next: null,               cId: 'abhath-c',        wId: 'abhath-w' }
+    };
+
+    function checkAktRow(rowNum, expectedArr) {
+      const btn = document.getElementById(`btn-akt-row-${rowNum}`);
+      if (!btn || btn.disabled) return;
+
+      let allFilled = true;
+      for (let i = 1; i <= 5; i++) {
+        const inp = document.getElementById(`inp-akt-${rowNum}-${i}`);
+        if (!inp.value.trim()) {
+          allFilled = false;
+          inp.classList.add('ring-2', 'ring-rose-400');
+          setTimeout(() => inp.classList.remove('ring-2', 'ring-rose-400'), 800);
+        }
+      }
+      if (!allFilled) return;
+
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'pointer-events-none');
+
+      let rowAllCorrect = true;
+      for (let i = 1; i <= 5; i++) {
+        const inp = document.getElementById(`inp-akt-${rowNum}-${i}`);
+        const userVal = parseInt(inp.value.trim(), 10);
+        const correctVal = expectedArr[i - 1];
+
+        inp.disabled = true;
+        if (userVal === correctVal) {
+          inp.classList.add('correct-field');
+        } else {
+          inp.classList.add('incorrect-field');
+          inp.title = `الإِجَابَةُ الصَّحِيحَةُ: ${correctVal}`;
+          rowAllCorrect = false;
+        }
+      }
+
+      const sec = scores['sec-aktachef-1'];
+      sec.answered++;
+
+      if (rowAllCorrect) {
+        sec.correct++;
+        playSound('correct');
+      } else {
+        sec.wrong++;
+        playSound('wrong');
+      }
+
+      updateSectionProgress('sec-aktachef-1');
+    }
+
+    function checkInput(fieldSuffix, expectedVal, sectionId) {
+      const inp = document.getElementById(`inp-${fieldSuffix}`);
+      if (!inp || inp.disabled) return;
+
+      const userVal = parseInt(inp.value.trim(), 10);
+      if (isNaN(userVal)) {
+        inp.classList.add('ring-2', 'ring-rose-400');
+        setTimeout(() => inp.classList.remove('ring-2', 'ring-rose-400'), 800);
+        return;
+      }
+
+      inp.disabled = true;
+      const parentContainer = inp.closest('.p-4');
+      const btn = parentContainer ? parentContainer.querySelector('button') : null;
+      if (btn) {
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'pointer-events-none');
+      }
+
+      const sec = scores[sectionId];
+      sec.answered++;
+
+      if (userVal === expectedVal) {
+        inp.classList.add('correct-field');
+        sec.correct++;
+        playSound('correct');
+      } else {
+        inp.classList.add('incorrect-field');
+        inp.title = `الإِجَابَةُ الصَّحِيحَةُ هِيَ: ${expectedVal}`;
+        sec.wrong++;
+        playSound('wrong');
+      }
+
+      updateSectionProgress(sectionId);
+    }
+
+    function selectOption(idPrefix, chosenVal, correctVal, clickedBtn, sectionId) {
+      const container = document.getElementById(`btn-group-${idPrefix}`);
+      if (!container) return;
+
+      const buttons = container.querySelectorAll('button');
+      buttons.forEach(b => {
+        b.disabled = true;
+        b.classList.add('pointer-events-none');
+      });
+
+      const sec = scores[sectionId];
+      sec.answered++;
+
+      if (chosenVal === correctVal) {
+        clickedBtn.classList.remove('bg-white');
+        clickedBtn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-700', 'shadow-md');
+        sec.correct++;
+        playSound('correct');
+      } else {
+        clickedBtn.classList.remove('bg-white');
+        clickedBtn.classList.add('bg-rose-600', 'text-white', 'border-rose-700');
+        buttons.forEach(b => {
+          if (b.textContent.trim() === correctVal) {
+            b.classList.add('bg-emerald-100', 'text-emerald-800', 'border-emerald-500', 'font-black');
+          }
+        });
+        sec.wrong++;
+        playSound('wrong');
+      }
+
+      updateSectionProgress(sectionId);
+    }
+
+    let abhathAnswered = false;
+
+    function clickRabbitCell(cellIndex, cellNumber) {
+      if (abhathAnswered) return;
+      abhathAnswered = true;
+
+      const sec = scores['sec-abhath'];
+      sec.answered = 1;
+
+      for (let i = 0; i <= 9; i++) {
+        const c = document.getElementById(`rabbit-cell-${i}`);
+        if (c) c.classList.add('pointer-events-none');
+      }
+
+      const clickedCell = document.getElementById(`rabbit-cell-${cellIndex}`);
+      const valSpan = clickedCell.querySelector('.cell-val');
+      const feedback = document.getElementById('rabbit-feedback');
+      feedback.classList.remove('hidden');
+
+      if (cellIndex === 0) {
+        clickedCell.classList.add('bg-emerald-500', 'border-emerald-600', 'text-white');
+        valSpan.textContent = '318';
+        valSpan.classList.add('text-white', 'text-lg', 'font-black');
+
+        feedback.className = 'mt-4 p-4 rounded-2xl text-center font-black text-base bg-emerald-100 text-emerald-800 border-2 border-emerald-400';
+        feedback.innerHTML = '🎉 أَحْسَنْتَ الْعَدَّ! انْطَلَقَ الأَرْنَبُ مِنَ الْخَانَةِ <span class="math-ltr font-black">318</span>، لِأَنَّ: <span class="math-ltr">328 - 10 = 318</span> (أَوْ <span class="math-ltr">318 + 10 = 328</span>).';
+
+        sec.correct = 1;
+        playSound('correct');
+      } else {
+        clickedCell.classList.add('bg-rose-500', 'border-rose-600', 'text-white');
+        valSpan.textContent = `${cellNumber}`;
+        valSpan.classList.add('text-white', 'text-lg', 'font-black');
+
+        const correctCell = document.getElementById('rabbit-cell-0');
+        correctCell.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-900', 'ring-4', 'ring-emerald-400');
+        correctCell.querySelector('.cell-val').textContent = '318';
+        correctCell.querySelector('.cell-val').classList.add('text-emerald-900', 'font-black');
+
+        feedback.className = 'mt-4 p-4 rounded-2xl text-center font-black text-base bg-rose-100 text-rose-800 border-2 border-rose-400';
+        feedback.innerHTML = `❌ إِجَابَةٌ غَيْرُ دَقِيقَةٍ. هَذِهِ هِيَ الْخَانَةُ <span class="math-ltr">${cellNumber}</span>. كَانَتِ انْطِلَاقَةُ الأَرْنَبِ قَبْلَ 10 مَرَبَّعَاتٍ عِنْدَ الْخَانَةِ <span class="math-ltr font-black">318</span> (<span class="math-ltr">328 - 10 = 318</span>).`;
+
+        sec.wrong = 1;
+        playSound('wrong');
+      }
+
+      updateSectionProgress('sec-abhath');
+    }
+
+    function updateSectionProgress(secId) {
+      const sec = scores[secId];
+      if (sec.answered === sec.total) {
+        const evalBox = document.getElementById(`eval-${secId}`);
+        if (evalBox) {
+          evalBox.classList.remove('hidden');
+          document.getElementById(sec.cId).textContent = sec.correct;
+          document.getElementById(sec.wId).textContent = sec.wrong;
+        }
+
+        if (sec.next) {
+          const nextSec = document.getElementById(sec.next);
+          if (nextSec) {
+            nextSec.classList.remove('locked-section');
+            setTimeout(() => {
+              nextSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 450);
+          }
+        } else {
+          setTimeout(showFinalDashboard, 700);
+        }
+      }
+    }
+
+    function showFinalDashboard() {
+      const dash = document.getElementById('sec-final-eval');
+      dash.classList.remove('hidden');
+
+      let totalCorrect = 0;
+      let totalWrong = 0;
+      let grandTotal = 0;
+
+      Object.values(scores).forEach(s => {
+        totalCorrect += s.correct;
+        totalWrong += s.wrong;
+        grandTotal += s.total;
+      });
+
+      const percentage = Math.round((totalCorrect / grandTotal) * 100);
+
+      document.getElementById('final-correct-count').textContent = totalCorrect;
+      document.getElementById('final-wrong-count').textContent = totalWrong;
+      document.getElementById('final-total-count').textContent = grandTotal;
+      document.getElementById('final-percent').textContent = `${percentage}%`;
+
+      const circle = document.getElementById('final-circle-progress');
+      const offset = 264 - (264 * percentage / 100);
+      circle.style.strokeDashoffset = offset;
+
+      const icon = document.getElementById('final-badge-icon');
+      const title = document.getElementById('final-remark-title');
+      const desc = document.getElementById('final-remark-desc');
+
+      if (percentage >= 85) {
+        circle.setAttribute('stroke', '#10b981');
+        icon.textContent = '🌟🏆🌟';
+        title.textContent = 'مُمْتَازٌ جِدًّا، عَبْقَرِيُّ الرِّيَاضِيَّاتِ!';
+        desc.textContent = 'تَحَكُّمٌ مُبْهِرٌ فِي الْعَدِّ وَالْحِسَابِ بِإِضَافَةِ وَطَرْحِ 1 وَ 10 وَ 100.';
+        playSound('complete');
+      } else if (percentage >= 60) {
+        circle.setAttribute('stroke', '#f59e0b');
+        icon.textContent = '👍🥈';
+        title.textContent = 'عَمَلٌ جَيِّدٌ وَمُوَفَّقٌ!';
+        desc.textContent = 'لَدَيْكَ اسْتِيعَابٌ مُمَيَّزٌ، وَيُمْكِنُكَ إِحْرَازُ الْعَلَامَةِ الْكَامِلَةِ بِمَزِيدٍ مِنَ التَّرْكِيزِ.';
+        playSound('correct');
+      } else {
+        circle.setAttribute('stroke', '#f43f5e');
+        icon.textContent = '💪📚';
+        title.textContent = 'يُوصَى بِمُرَاجَعَةِ الدَّرْسِ!';
+        desc.textContent = 'أَعِدِ الْمُحَاوَلَةَ وَتَمَعَّنْ جَيِّدًا فِي أَمْثِلَةِ بِطَاقَةِ (تَعَلَّمْتُ).';
+        playSound('wrong');
+      }
+
+      dash.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function resetWholeLesson() {
+      document.querySelectorAll('input').forEach(inp => {
+        inp.value = '';
+        inp.disabled = false;
+        inp.classList.remove('correct-field', 'incorrect-field');
+        inp.title = '';
+      });
+
+      document.querySelectorAll('button').forEach(btn => {
+        btn.disabled = false;
+        btn.classList.remove(
+          'opacity-50', 'pointer-events-none',
+          'bg-emerald-600', 'bg-rose-600', 'bg-emerald-100', 'bg-emerald-500', 'bg-rose-500',
+          'text-white', 'text-emerald-900', 'border-emerald-700', 'border-rose-700', 'border-emerald-500',
+          'ring-4', 'ring-emerald-400'
+        );
+      });
+
+      for (let i = 1; i <= 3; i++) {
+        const grp = document.getElementById(`btn-group-atm1-${i}`);
+        if (grp) {
+          grp.querySelectorAll('button').forEach(b => {
+            b.className = 'px-3.5 py-1.5 rounded-xl border-2 border-indigo-200 font-bold text-sm bg-white hover:bg-indigo-50 transition cursor-pointer';
+          });
+        }
+      }
+
+      abhathAnswered = false;
+      for (let i = 0; i <= 9; i++) {
+        const cell = document.getElementById(`rabbit-cell-${i}`);
+        if (cell) {
+          cell.className = 'w-14 h-16 rounded-xl border-2 border-slate-400 bg-white font-black text-base flex flex-col items-center justify-center transition-all hover:scale-105 active:scale-95 shadow cursor-pointer';
+          const span = cell.querySelector('.cell-val');
+          span.className = 'cell-val text-slate-400 text-lg';
+          span.textContent = '';
+        }
+      }
+      const rabbitFeedback = document.getElementById('rabbit-feedback');
+      if (rabbitFeedback) rabbitFeedback.classList.add('hidden');
+
+      Object.keys(scores).forEach(key => {
+        scores[key].correct = 0;
+        scores[key].wrong = 0;
+        scores[key].answered = 0;
+      });
+
+      document.querySelectorAll('[id^="eval-sec-"]').forEach(box => box.classList.add('hidden'));
+      document.getElementById('sec-final-eval').classList.add('hidden');
+
+      const allSections = [
+        'sec-onjez-1', 'sec-onjez-2', 'sec-onjez-3', 'sec-onjez-4',
+        'sec-atamarane-1', 'sec-atamarane-2', 'sec-atamarane-3', 'sec-atamarane-4', 'sec-atamarane-5',
+        'sec-abhath'
+      ];
+      allSections.forEach(id => {
+        const s = document.getElementById(id);
+        if (s) s.classList.add('locked-section');
+      });
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function exitApp() {
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.close) {
+        window.Telegram.WebApp.close();
+      } else {
+        window.close();
+      }
+    }
+
+    window.addEventListener('click', initAudio, { once: true });
+    window.addEventListener('keydown', initAudio, { once: true });
+  </script>
+</body>
+</html>
