@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الرِّيَاضِيَّاتُ - وَضْعِيَّاتٌ جَمْعِيَّةٌ وَ/أَوْ طَرْحِيَّةٌ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- مكتبة Telegram WebApp (ضرورية للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 100%);
+            min-height: 100vh;
+        }
+        .math-ltr {
+            direction: ltr !important;
+            unicode-bidi: isolate;
+        }
+        .correct-box {
+            background-color: #dcfce7 !important;
+            border-color: #2e7d32 !important;
+            color: #166534 !important;
+        }
+        .wrong-box {
+            background-color: #fee2e2 !important;
+            border-color: #c62828 !important;
+            color: #991b1b !important;
+        }
+        .locked-card {
+            opacity: 0.55;
+            filter: grayscale(85%);
+            pointer-events: none;
+            user-select: none;
+        }
+        .disabled-action {
+            pointer-events: none !important;
+            opacity: 0.65;
+        }
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; 
+            margin: 0; 
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس */
+        .btn-back-home {
+            display: block;
+            width: calc(100% - 24px);
+            max-width: 800px;
+            margin: 12px auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="p-3 sm:p-6 text-slate-800">
+
+    <!-- ========================================
+         نافذة قفل الاشتراك الإجباري
+         ======================================== -->
+    <div id="sub-lock-screen">
+        <div class="lock-box">
+            <div class="lock-icon">🔒</div>
+            <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+            <div class="lock-desc">
+                لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+            </div>
+            <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+                📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+            </a>
+            <button class="btn-check-sub" onclick="verifySubscription()">
+                ✅ تَأْكِيدُ الاِشْتِرَاكِ
+            </button>
+            <div id="sub-status-msg" class="sub-status-msg"></div>
+        </div>
+    </div>
+
+    <!-- الترويسة الرئيسية للدرس -->
+    <header class="max-w-4xl mx-auto mb-6 bg-white rounded-2xl shadow-md border-2 border-emerald-400 p-4 text-center">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b pb-2 mb-3 text-xs sm:text-sm font-bold text-slate-500">
+            <span class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full">الرِّيَاضِيَّاتُ – السَّنَةُ الثَّانِيَةُ ابْتِدَائِيٌّ</span>
+            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full">الدَّرْسُ 07 (ص 20 كِتَابِي + ص 14 نَشَاطَاتِي)</span>
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-emerald-700 tracking-wide">
+            وَضْعِيَّاتٌ جَمْعِيَّةٌ وَ/أَوْ طَرْحِيَّةٌ
+        </h1>
+    </header>
+
+    <main class="max-w-4xl mx-auto space-y-8">
+
+        <!-- ======================= 1. مَحَطَّةُ «أَكْتَشِفُ» ======================= -->
+        <section id="station-discover" class="bg-white rounded-2xl shadow-lg border-2 border-amber-300 overflow-hidden transition-all duration-300">
+            <div class="bg-amber-400 px-5 py-3 text-slate-900 flex justify-between items-center font-bold">
+                <span class="text-lg sm:text-xl">🌟 مَحَطَّةُ: أَكْتَشِفُ (كِتَابُ التِّلْمِيذِ ص 20)</span>
+                <span id="badge-discover" class="text-xs bg-white/80 px-2.5 py-1 rounded-full text-amber-900">قَيْدَ الإِنْجَازِ</span>
+            </div>
+
+            <div class="p-4 sm:p-6 space-y-6">
+                <!-- المسألة 1 -->
+                <div id="q-disc-1" class="p-4 rounded-xl border border-slate-200 bg-amber-50/50">
+                    <p class="text-base sm:text-lg font-bold leading-relaxed mb-4 text-slate-800">
+                        1 - تَمْلِكُ مَرْيَمُ 13 بِطَاقَةَ اِسْتِحْسَانٍ، وَتَحَصَّلَتْ خِلَالَ الْأُسْبُوعِ الْأَخِيرِ عَلَى 5 بِطَاقَاتِ اسْتِحْسَانٍ.<br>
+                        كَمْ بِطَاقَةً صَارَتْ عِنْدَ مَرْيَمَ الْآنَ؟
+                    </p>
+
+                    <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 math-ltr text-xl font-black my-4">
+                        <input id="ans-disc-1-n1" type="number" min="0" max="99" class="w-14 sm:w-16 h-12 text-center text-xl font-black border-2 border-amber-400 rounded-lg bg-white shadow-inner focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="؟">
+                        <span class="text-2xl text-emerald-600 font-black">+</span>
+                        <input id="ans-disc-1-n2" type="number" min="0" max="99" class="w-14 sm:w-16 h-12 text-center text-xl font-black border-2 border-amber-400 rounded-lg bg-white shadow-inner focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="؟">
+                        <span class="text-2xl font-black">=</span>
+                        <input id="ans-disc-1-res" type="number" min="0" max="99" class="w-14 sm:w-16 h-12 text-center text-xl font-black border-2 border-amber-400 rounded-lg bg-white shadow-inner focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="؟">
+                    </div>
+
+                    <div class="text-center text-base sm:text-lg font-bold text-slate-700 mt-2">
+                        صَارَ عِنْدَ مَرْيَمَ 
+                        <input id="ans-disc-1-txt" type="number" min="0" max="99" class="w-16 h-10 text-center font-black border-2 border-amber-400 rounded-lg bg-white inline-block mx-1" placeholder="؟">
+                        بِطَاقَةَ اسْتِحْسَانٍ.
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <button id="btn-disc-1" onclick="submitDisc1()" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-6 py-2 rounded-xl shadow-md transition active:scale-95">تَأْكِيدُ الإِجَابَةِ</button>
+                    </div>
+                </div>
+
+                <!-- المسألة 2 -->
+                <div id="q-disc-2" class="p-4 rounded-xl border border-slate-200 bg-amber-50/50">
+                    <p class="text-base sm:text-lg font-bold leading-relaxed mb-4 text-slate-800">
+                        2 - يَمْلِكُ أَمِينُ 20 قُرَيْصَةً. أَعْطَى لِصَدِيقِهِ أَيْمَنَ 8 قُرَيْصَاتٍ لِيُجْرِيَ بِهَا حِسَابَاتِهِ.<br>
+                        كَمْ قُرَيْصَةً صَارَتْ عِنْدَ أَمِينٍ الْآنَ؟
+                    </p>
+
+                    <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3 math-ltr text-xl font-black my-4">
+                        <input id="ans-disc-2-n1" type="number" min="0" max="99" class="w-14 sm:w-16 h-12 text-center text-xl font-black border-2 border-amber-400 rounded-lg bg-white shadow-inner focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="؟">
+                        <span class="text-2xl text-red-600 font-black">-</span>
+                        <input id="ans-disc-2-n2" type="number" min="0" max="99" class="w-14 sm:w-16 h-12 text-center text-xl font-black border-2 border-amber-400 rounded-lg bg-white shadow-inner focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="؟">
+                        <span class="text-2xl font-black">=</span>
+                        <input id="ans-disc-2-res" type="number" min="0" max="99" class="w-14 sm:w-16 h-12 text-center text-xl font-black border-2 border-amber-400 rounded-lg bg-white shadow-inner focus:outline-none focus:ring-2 focus:ring-amber-500" placeholder="؟">
+                    </div>
+
+                    <div class="text-center text-base sm:text-lg font-bold text-slate-700 mt-2">
+                        صَارَ عِنْدَ أَمِينٍ 
+                        <input id="ans-disc-2-txt" type="number" min="0" max="99" class="w-16 h-10 text-center font-black border-2 border-amber-400 rounded-lg bg-white inline-block mx-1" placeholder="؟">
+                        قُرَيْصَةً.
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <button id="btn-disc-2" onclick="submitDisc2()" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-6 py-2 rounded-xl shadow-md transition active:scale-95">تَأْكِيدُ الإِجَابَةِ</button>
+                    </div>
+                </div>
+
+                <div id="score-disc" class="hidden p-3 rounded-xl bg-slate-100 border border-slate-300 flex justify-around font-bold text-sm sm:text-base">
+                    <span class="text-emerald-700">الإِجَابَاتُ الصَّحِيحَةُ (✓): <span id="score-disc-ok">0</span></span>
+                    <span class="text-red-700">الإِجَابَاتُ الْخَاطِئَةُ (✗): <span id="score-disc-err">0</span></span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ======================= 2. مَحَطَّةُ «أُنْجِزُ» ======================= -->
+        <section id="station-onjez" class="bg-white rounded-2xl shadow-lg border-2 border-emerald-400 overflow-hidden transition-all duration-300 locked-card">
+            <div class="bg-emerald-500 px-5 py-3 text-white flex justify-between items-center font-bold">
+                <span class="text-lg sm:text-xl">⚙️ مَحَطَّةُ: أُنْجِزُ (كِتَابُ التِّلْمِيذِ ص 20)</span>
+                <span id="badge-onjez" class="text-xs bg-white/20 px-2.5 py-1 rounded-full">مُقْفَلٌ 🔒</span>
+            </div>
+
+            <div class="p-4 sm:p-6 space-y-6">
+                <div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-slate-700 text-sm sm:text-base font-medium">
+                    📌 لِحَلِّ هَاتَيْنِ الْمُشْكِلَتَيْنِ، يُمْكِنُكَ أَنْ تَسْتَعْمِلَ الْقُرَيْصَاتِ، أَوْ تَرْسُمَ الْبِطَاقَاتِ، أَوْ تَعُدَّ الْأَصَابِعَ أَوْ تَسْتَعْمِلَ <strong class="text-emerald-700">شَرِيطَ الْأَعْدَادِ</strong>.
+                </div>
+
+                <div class="flex justify-center items-center bg-slate-50 border-2 border-dashed border-emerald-300 p-3 rounded-2xl">
+                    <img id="img-onjez" src="1.jpg" alt="صورة العلب والكريات (الدرس 7)" class="max-h-80 w-auto rounded-lg shadow-sm object-contain" onerror="renderFallbackImage()">
+                </div>
+
+                <div class="bg-slate-100 p-3 rounded-2xl border-2 border-slate-300">
+                    <p class="text-xs font-bold text-slate-500 mb-2 text-center">شَرِيطُ الْأَعْدَادِ (مِنَ الْيَسَارِ إِلَى الْيَمِينِ):</p>
+                    <div class="math-ltr space-y-1 overflow-x-auto py-1">
+                        <div class="grid grid-cols-12 gap-1 text-center font-bold text-xs sm:text-sm">
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">1</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">2</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">3</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">4</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">5</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">6</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">7</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">8</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">9</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">10</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">11</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">12</span>
+                        </div>
+                        <div class="grid grid-cols-12 gap-1 text-center font-bold text-xs sm:text-sm">
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">13</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">14</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">15</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">16</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">17</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">18</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">19</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">20</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">21</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">22</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">23</span>
+                            <span class="bg-white border rounded py-1.5 shadow-xs text-slate-700">24</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="q-onj-1" class="p-4 rounded-xl border border-slate-200 bg-emerald-50/40">
+                    <p class="font-bold text-base sm:text-lg mb-2 text-slate-800">
+                        1 - أَحْسُبْ عَدَدَ الْكُرَيَّاتِ الَّتِي تَحْتَوِيهَا الْعُلْبَةُ الْخَضْرَاءُ. أَكْمِلِ الْحِسَابَ:
+                    </p>
+                    <div class="flex flex-wrap items-center justify-center gap-2 math-ltr text-lg sm:text-xl font-black my-3">
+                        <input id="ans-onj-1-n1" type="number" class="w-14 sm:w-16 h-11 text-center font-black border-2 border-emerald-400 rounded-lg bg-white" placeholder="؟">
+                        <span class="text-emerald-700 text-2xl font-black">+</span>
+                        <input id="ans-onj-1-n2" type="number" class="w-14 sm:w-16 h-11 text-center font-black border-2 border-emerald-400 rounded-lg bg-white" placeholder="؟">
+                        <span class="text-2xl font-black">=</span>
+                        <input id="ans-onj-1-res" type="number" class="w-14 sm:w-16 h-11 text-center font-black border-2 border-emerald-400 rounded-lg bg-white" placeholder="؟">
+                    </div>
+                    <div class="text-center font-bold text-slate-700">
+                        تَحْتَوِي الْعُلْبَةُ عَلَى 
+                        <input id="ans-onj-1-txt" type="number" class="w-16 h-10 text-center font-black border-2 border-emerald-400 rounded-lg bg-white inline-block mx-1" placeholder="؟">
+                        كُرَيَّةً.
+                    </div>
+                    <div class="mt-4 text-center">
+                        <button id="btn-onj-1" onclick="submitOnjez1()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2 rounded-xl shadow-md transition active:scale-95">تَأْكِيدُ الإِجَابَةِ</button>
+                    </div>
+                </div>
+
+                <div id="q-onj-2" class="p-4 rounded-xl border border-slate-200 bg-rose-50/40">
+                    <p class="font-bold text-base sm:text-lg mb-2 text-slate-800">
+                        2 - أُحْسُبْ عَدَدَ الْكُرَيَّاتِ الَّتِي تَحْتَوِيهَا الْعُلْبَةُ الْحَمْرَاءُ. أَكْمِلِ الْحِسَابَ:
+                    </p>
+                    <div class="flex flex-wrap items-center justify-center gap-2 math-ltr text-lg sm:text-xl font-black my-3">
+                        <input id="ans-onj-2-n1" type="number" class="w-14 sm:w-16 h-11 text-center font-black border-2 border-rose-400 rounded-lg bg-white" placeholder="؟">
+                        <span class="text-red-600 text-2xl font-black">-</span>
+                        <input id="ans-onj-2-n2" type="number" class="w-14 sm:w-16 h-11 text-center font-black border-2 border-rose-400 rounded-lg bg-white" placeholder="؟">
+                        <span class="text-2xl font-black">=</span>
+                        <input id="ans-onj-2-res" type="number" class="w-14 sm:w-16 h-11 text-center font-black border-2 border-rose-400 rounded-lg bg-white" placeholder="؟">
+                    </div>
+                    <div class="text-center font-bold text-slate-700">
+                        تَحْتَوِي الْعُلْبَةُ عَلَى 
+                        <input id="ans-onj-2-txt" type="number" class="w-16 h-10 text-center font-black border-2 border-rose-400 rounded-lg bg-white inline-block mx-1" placeholder="؟">
+                        كُرَيَّاتٍ.
+                    </div>
+                    <div class="mt-4 text-center">
+                        <button id="btn-onj-2" onclick="submitOnjez2()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-6 py-2 rounded-xl shadow-md transition active:scale-95">تَأْكِيدُ الإِجَابَةِ</button>
+                    </div>
+                </div>
+
+                <div id="score-onjez" class="hidden p-3 rounded-xl bg-slate-100 border border-slate-300 flex justify-around font-bold text-sm sm:text-base">
+                    <span class="text-emerald-700">الإِجَابَاتُ الصَّحِيحَةُ (✓): <span id="score-onjez-ok">0</span></span>
+                    <span class="text-red-700">الإِجَابَاتُ الْخَاطِئَةُ (✗): <span id="score-onjez-err">0</span></span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ======================= 3. بَطَاقَةُ «تَعَلَّمْتُ» ======================= -->
+        <section id="station-rules" class="bg-gradient-to-r from-amber-50 to-emerald-50 rounded-2xl shadow-md border-2 border-teal-400 p-5 sm:p-6 transition-all duration-300 locked-card">
+            <div class="flex items-center gap-2 mb-3">
+                <span class="text-2xl">💡</span>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-teal-800">تَعَلَّمْتُ</h2>
+            </div>
+            <div class="space-y-3 text-base sm:text-lg font-bold text-slate-800 leading-relaxed pr-2">
+                <p class="flex items-start gap-2">
+                    <span class="text-teal-600 font-black">●</span>
+                    <span>عِنْدَمَا أُضِيفُ الْكُرَيَّاتِ، أَسْتَعْمِلُ <span class="text-emerald-700 underline decoration-2">جَمْعَ الْأَعْدَادِ</span> لِأَجِدَ عَدَدَ كُلِّ الْكُرَيَّاتِ.</span>
+                </p>
+                <p class="flex items-start gap-2">
+                    <span class="text-teal-600 font-black">●</span>
+                    <span>عِنْدَمَا أَسْحَبُ الْكُرَيَّاتِ، أَسْتَعْمِلُ <span class="text-red-700 underline decoration-2">طَرْحَ الْأَعْدَادِ</span> لِأَجِدَ عَدَدَ الْكُرَيَّاتِ الْبَاقِيَةِ.</span>
+                </p>
+            </div>
+            <div class="mt-4 text-center">
+                <button id="btn-read-rule" onclick="unlockTamarano()" class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-6 py-2 rounded-xl shadow-md transition active:scale-95">قَرَأْتُ الْقَاعِدَةَ وَفَهِمْتُهَا 🚀</button>
+            </div>
+        </section>
+
+
+        <!-- ======================= 4. مَحَطَّةُ «أَتَمَرَّنُ» ======================= -->
+        <section id="station-tamarano" class="bg-white rounded-2xl shadow-lg border-2 border-indigo-400 overflow-hidden transition-all duration-300 locked-card">
+            <div class="bg-indigo-600 px-5 py-3 text-white flex justify-between items-center font-bold">
+                <span class="text-lg sm:text-xl">✏️ مَحَطَّةُ: أَتَمَرَّنُ (دَفْتَرُ الأَنْشِطَةِ ص 14)</span>
+                <span id="badge-tamarano" class="text-xs bg-white/20 px-2.5 py-1 rounded-full">مُقْفَلٌ 🔒</span>
+            </div>
+
+            <div class="p-4 sm:p-6 space-y-8">
+                <div id="q-tam-1" class="p-4 rounded-xl border border-slate-200 bg-indigo-50/30">
+                    <p class="font-bold text-base sm:text-lg text-slate-800 mb-2">
+                        1 - اصْطَادَتْ لَيْلَى 7 سَمَكَاتٍ، وَاصْطَادَ رَائِدٌ 8 سَمَكَاتٍ.<br>
+                        كَمْ سَمَكَةً اصْطَادَ رَائِدٌ وَلَيْلَى مَعًا؟
+                    </p>
+                    <p class="text-sm font-semibold text-slate-600 mb-3">اضْغَطْ عَلَى الِاخْتِيَارِ الْمُنَاسِبِ:</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 math-ltr max-w-md mx-auto my-3">
+                        <button id="opt-tam1-corr" onclick="selectTam1(true)" class="py-3 px-4 border-2 border-slate-300 rounded-xl font-black text-xl hover:bg-slate-100 transition shadow-sm">
+                            7 + 8 = 15
+                        </button>
+                        <button id="opt-tam1-wrg" onclick="selectTam1(false)" class="py-3 px-4 border-2 border-slate-300 rounded-xl font-black text-xl hover:bg-slate-100 transition shadow-sm">
+                            8 - 7 = 1
+                        </button>
+                    </div>
+
+                    <div id="tam1-phrase-box" class="hidden mt-4 text-center font-bold text-slate-800">
+                        اصْطَادَ رَائِدٌ وَلَيْلَى مَعًا 
+                        <input id="ans-tam1-txt" type="number" class="w-16 h-10 text-center font-black border-2 border-indigo-400 rounded-lg bg-white inline-block mx-1" placeholder="؟">
+                        سَمَكَةً.
+                        <div class="mt-3">
+                            <button id="btn-tam1-finish" onclick="submitTam1Finish()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-1.5 rounded-lg text-sm shadow">تَأْكِيدُ الْعِبَارَةِ</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="q-tam-2" class="p-4 rounded-xl border border-slate-200 bg-indigo-50/30">
+                    <p class="font-bold text-base sm:text-lg text-slate-800 mb-2">
+                        2 - قَطَفَتْ إِيمَانُ 9 حَبَّاتِ لَوْزٍ فِي الصَّبَاحِ وَ 5 حَبَّاتٍ بَعْدَ الظُّهْرِ.<br>
+                        كَمْ لَوْزَةً صَارَتْ عِنْدَ إِيمَانَ؟
+                    </p>
+                    <p class="text-sm font-semibold text-slate-600 mb-3">اضْغَطْ عَلَى الْعَمَلِيَّةِ الْمُنَاسِبَةِ:</p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 math-ltr max-w-xl mx-auto my-3">
+                        <button id="opt-tam2-corr" onclick="selectTam2('correct')" class="py-3 px-3 border-2 border-slate-300 rounded-xl font-black text-lg hover:bg-slate-100 transition shadow-sm flex items-center justify-center gap-1">
+                            <span>9 + 5 =</span>
+                            <span id="tam2-corr-placeholder" class="text-slate-400">....</span>
+                            <input id="tam2-math-input" type="number" class="hidden w-14 h-9 text-center font-black border border-emerald-500 rounded bg-white text-emerald-900" placeholder="؟">
+                        </button>
+
+                        <button id="opt-tam2-w1" onclick="selectTam2('w1')" class="py-3 px-3 border-2 border-slate-300 rounded-xl font-black text-lg hover:bg-slate-100 transition shadow-sm">
+                            9 - 5 = ....
+                        </button>
+
+                        <button id="opt-tam2-w2" onclick="selectTam2('w2')" class="py-3 px-3 border-2 border-slate-300 rounded-xl font-black text-lg hover:bg-slate-100 transition shadow-sm">
+                            5 + 9 = ....
+                        </button>
+                    </div>
+
+                    <div id="tam2-phrase-box" class="hidden mt-4 text-center font-bold text-slate-800">
+                        صَارَ عِنْدَ إِيمَانَ 
+                        <input id="ans-tam2-txt" type="number" class="w-16 h-10 text-center font-black border-2 border-indigo-400 rounded-lg bg-white inline-block mx-1" placeholder="؟">
+                        لَوْزَةً.
+                        <div class="mt-3">
+                            <button id="btn-tam2-finish" onclick="submitTam2Finish()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-1.5 rounded-lg text-sm shadow">تَأْكِيدُ النَّتِيجَةِ</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="q-tam-3" class="p-4 rounded-xl border border-slate-200 bg-indigo-50/30">
+                    <p class="font-bold text-base sm:text-lg text-slate-800 mb-3">
+                        3 - لَاحِظْ وَأَكْمِلْ كَمَا فِي الْمِثَالِ:
+                    </p>
+
+                    <div class="math-ltr flex justify-center items-center overflow-x-auto py-3">
+                        <div class="flex items-stretch border-2 border-amber-900/40 bg-white rounded-lg shadow-sm overflow-hidden h-14 sm:h-16">
+                            <div class="w-10 sm:w-12 border-r border-amber-900/30 bg-white"></div>
+                            
+                            <div class="w-14 sm:w-16 border-r border-amber-900/30 bg-[#e6cca8] flex items-center justify-center p-1">
+                                <input id="ans-tam3-num" type="number" class="w-full h-full rounded border border-amber-700/50 bg-[#faefe0] font-black text-xl text-center focus:outline-none focus:ring-2 focus:ring-amber-600" placeholder="...">
+                            </div>
+
+                            <div class="w-24 sm:w-32 border-r border-amber-900/30 bg-white"></div>
+
+                            <div class="w-14 sm:w-16 border-r border-amber-900/30 bg-[#e6cca8] font-black text-lg sm:text-xl text-slate-800 flex items-center justify-center">
+                                21
+                            </div>
+
+                            <div class="w-24 sm:w-32 border-r border-amber-900/30 bg-white"></div>
+
+                            <div class="w-14 sm:w-16 border-r border-amber-900/30 bg-[#e6cca8] font-black text-lg sm:text-xl text-slate-800 flex items-center justify-center">
+                                25
+                            </div>
+
+                            <div class="w-9 sm:w-11 border-r border-amber-900/30 bg-white"></div>
+                            <div class="w-9 sm:w-11 bg-white"></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <button id="btn-tam-3" onclick="submitTam3()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-2 rounded-xl shadow-md transition active:scale-95">تَأْكِيدُ الشَّرِيطِ</button>
+                    </div>
+                </div>
+
+                <div id="score-tamarano" class="hidden p-3 rounded-xl bg-slate-100 border border-slate-300 flex justify-around font-bold text-sm sm:text-base">
+                    <span class="text-emerald-700">الإِجَابَاتُ الصَّحِيحَةُ (✓): <span id="score-tamarano-ok">0</span></span>
+                    <span class="text-red-700">الإِجَابَاتُ الْخَاطِئَةُ (✗): <span id="score-tamarano-err">0</span></span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ======================= 5. مَحَطَّةُ «أَبْحَثُ» ======================= -->
+        <section id="station-abhath" class="bg-white rounded-2xl shadow-lg border-2 border-purple-400 overflow-hidden transition-all duration-300 locked-card">
+            <div class="bg-purple-600 px-5 py-3 text-white flex justify-between items-center font-bold">
+                <span class="text-lg sm:text-xl">🔍 مَحَطَّةُ: أَبْحَثُ (دَفْتَرُ الأَنْشِطَةِ ص 14)</span>
+                <span id="badge-abhath" class="text-xs bg-white/20 px-2.5 py-1 rounded-full">مُقْفَلٌ 🔒</span>
+            </div>
+
+            <div class="p-4 sm:p-6 space-y-6">
+                <p class="font-bold text-base sm:text-lg text-slate-800">
+                    لَاحِظِ الشَّبَكَةَ الْمُقَابِلَةَ (6 أَعْمِدَةٍ × 5 أُسْطُرٍ) ثُمَّ أَجِبْ:
+                </p>
+
+                <div class="flex justify-center my-3 math-ltr">
+                    <div id="grid-abhath" class="grid grid-cols-6 border-4 border-slate-700 shadow-lg rounded-md overflow-hidden bg-white w-full max-w-[320px] aspect-[6/5]"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div id="q-abh-1" class="p-4 rounded-xl border border-slate-200 bg-purple-50/50">
+                        <label class="block font-bold text-slate-800 mb-2">1 - مَا هُوَ عَدَدُ الْخَانَاتِ الْمُلَوَّنَةِ كُلِّهَا؟</label>
+                        <div class="text-base font-bold text-slate-700 my-2">
+                            عَدَدُ الْخَانَاتِ الْمُلَوَّنَةِ:
+                            <input id="ans-abh-1" type="number" class="w-16 h-10 text-center font-black border-2 border-purple-400 rounded-lg bg-white inline-block mx-2" placeholder="؟">
+                            خَانَةً.
+                        </div>
+                        <div class="mt-3 text-center">
+                            <button id="btn-abh-1" onclick="submitAbh1()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-5 py-1.5 rounded-lg text-sm shadow">تَأْكِيدُ السُّؤَالِ 1</button>
+                        </div>
+                    </div>
+
+                    <div id="q-abh-2" class="p-4 rounded-xl border border-slate-200 bg-purple-50/50">
+                        <label class="block font-bold text-slate-800 mb-2">2 - بِكُمْ يَزِيدُ عَدَدُ الْخَانَاتِ الْبُرْتُقَالِيَّةِ عَنْ عَدَدِ الْخَانَاتِ الْبَنَفْسَجِيَّةِ؟</label>
+                        <div class="text-base font-bold text-slate-700 my-2">
+                            يَزِيدُ بِـ:
+                            <input id="ans-abh-2" type="number" class="w-16 h-10 text-center font-black border-2 border-purple-400 rounded-lg bg-white inline-block mx-2" placeholder="؟">
+                            خَانَاتٍ.
+                        </div>
+                        <div class="mt-3 text-center">
+                            <button id="btn-abh-2" onclick="submitAbh2()" class="bg-purple-600 hover:bg-purple-700 text-white font-bold px-5 py-1.5 rounded-lg text-sm shadow">تَأْكِيدُ السُّؤَالِ 2</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="score-abhath" class="hidden p-3 rounded-xl bg-slate-100 border border-slate-300 flex justify-around font-bold text-sm sm:text-base">
+                    <span class="text-emerald-700">الإِجَابَاتُ الصَّحِيحَةُ (✓): <span id="score-abhath-ok">0</span></span>
+                    <span class="text-red-700">الإِجَابَاتُ الْخَاطِئَةُ (✗): <span id="score-abhath-err">0</span></span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ======================= 6. الشَّاشَةُ الْخِتَامِيَّةُ ======================= -->
+        <section id="final-summary-card" class="bg-white rounded-3xl shadow-xl border-4 border-emerald-500 p-6 sm:p-8 text-center transition-all duration-500 locked-card">
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-800 mb-4">🏆 نَتِيجَةُ التَّقْيِيمِ الْعَامِّ لِلدَّرْسِ</h2>
+            
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 my-6">
+                <div class="relative w-40 h-40">
+                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" stroke="#e2e8f0" stroke-width="10" fill="transparent" />
+                        <circle id="final-progress-circle" cx="50" cy="50" r="40" stroke="#10b981" stroke-width="10" stroke-linecap="round" fill="transparent" stroke-dasharray="251.2" stroke-dashoffset="251.2" class="transition-all duration-1000 ease-out" />
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span id="final-percentage-txt" class="text-3xl font-black text-slate-800">0%</span>
+                        <span class="text-xs font-bold text-slate-500">مُعَدَّلُ النَّجَاحِ</span>
+                    </div>
+                </div>
+
+                <div class="text-right space-y-2 font-bold text-base sm:text-lg">
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-black">✓</span>
+                        <span>مَجْمُوعُ الإِجَابَاتِ الصَّحِيحَةِ: <strong id="total-correct-txt" class="text-emerald-700 text-xl font-black">0</strong></span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="w-8 h-8 rounded-full bg-red-100 text-red-700 flex items-center justify-center font-black">✗</span>
+                        <span>مَجْمُوعُ الإِجَابَاتِ الْخَاطِئَةِ: <strong id="total-wrong-txt" class="text-red-700 text-xl font-black">0</strong></span>
+                    </div>
+                    <div class="p-3 mt-2 rounded-xl bg-slate-50 border border-slate-200 text-center">
+                        <span class="text-slate-600 text-sm">التَّقْدِيرُ التَّرْبَوِيُّ:</span>
+                        <p id="final-appreciation" class="text-lg font-black text-emerald-800 mt-1">ممتاز!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-4 mt-6 pt-4 border-t border-slate-200">
+                <button onclick="resetWholeLesson()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-8 py-3 rounded-2xl shadow-lg transition transform active:scale-95 flex items-center gap-2">
+                    <span>🔄</span>
+                    <span>إِعَادَةُ الْمُحَاوَلَةِ</span>
+                </button>
+                <button onclick="exitApplication()" class="bg-slate-600 hover:bg-slate-700 text-white font-black px-8 py-3 rounded-2xl shadow-lg transition transform active:scale-95 flex items-center gap-2">
+                    <span>🚪</span>
+                    <span>خُرُوجٌ</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- زر العودة إلى الفهرس -->
+        <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+    </main>
+
+    <footer class="max-w-4xl mx-auto text-center py-6 text-xs text-slate-500 font-semibold">
+        الجمهورية الجزائرية الديمقراطية الشعبية - منهاج الرياضيات - الطور الأول ابتدائي
+    </footer>
+
+    <script>
+        // ========================================================
+        // 🛡️ قسم الحماية
+        // ========================================================
+        const CHANNEL_ID = "-1004461185731";  // ← قناة السنة الثانية
+
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        async function verifySubscription() {
+            const statusMsg = document.getElementById('sub-status-msg');
+            statusMsg.style.color = "#0288d1";
+            statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+            let userId = null;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                userId = tg.initDataUnsafe.user.id;
+            }
+
+            if (!userId) {
+                statusMsg.style.color = "#e65100";
+                statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+                return;
+            }
+
+            try {
+                const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.isSubscribed) {
+                    statusMsg.style.color = "#2e7d32";
+                    statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                    setTimeout(() => {
+                        document.getElementById('sub-lock-screen').style.display = 'none';
+                    }, 600);
+                } else {
+                    statusMsg.style.color = "#c62828";
+                    statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+                }
+            } catch (error) {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+            }
+        }
+
+        window.addEventListener('load', () => {
+            verifySubscription();
+        });
+
+        // ========================================================
+        // 🎯 قسم أنشطة الدرس
+        // ========================================================
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const now = audioCtx.currentTime;
+
+            if (type === 'correct') {
+                const notes = [523.25, 659.25, 783.99];
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+                    gain.gain.setValueAtTime(0.2, now + idx * 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.25);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now + idx * 0.1);
+                    osc.stop(now + idx * 0.1 + 0.3);
+                });
+            } else if (type === 'wrong') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.exponentialRampToValueAtTime(140, now + 0.3);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.35);
+            }
+        }
+
+        const state = {
+            disc1: null,
+            disc2: null,
+            onj1: null,
+            onj2: null,
+            tam1: null,
+            tam2: null,
+            tam3: null,
+            abh1: null,
+            abh2: null
+        };
+
+        const baseRows = [
+            ['orange', 'white', 'orange', 'white', 'purple', 'orange'],
+            ['white', 'purple', 'white', 'orange', 'white', 'white'],
+            ['orange', 'white', 'orange', 'white', 'orange', 'white'],
+            ['purple', 'white', 'white', 'purple', 'white', 'orange'],
+            ['orange', 'white', 'orange', 'white', 'orange', 'white']
+        ];
+
+        const reversedAbhathLayout = baseRows.flatMap(row => [...row].reverse());
+
+        function initAbhathGrid() {
+            const grid = document.getElementById('grid-abhath');
+            grid.innerHTML = '';
+            reversedAbhathLayout.forEach((color) => {
+                const cell = document.createElement('div');
+                cell.className = 'border border-slate-600 transition-colors flex items-center justify-center';
+                if (color === 'orange') {
+                    cell.style.backgroundColor = '#ea580c';
+                } else if (color === 'purple') {
+                    cell.style.backgroundColor = '#7e22ce';
+                } else {
+                    cell.style.backgroundColor = '#ffffff';
+                }
+                grid.appendChild(cell);
+            });
+        }
+
+        function renderFallbackImage() {
+            const container = document.getElementById('img-onjez').parentElement;
+            container.innerHTML = `
+                <div class="w-full max-w-lg p-4 bg-white rounded-xl shadow-inner text-center">
+                    <p class="text-xs font-bold text-slate-400 mb-2">تمثيل توضيحي بديل (ملف الصورة المطلوب: 1.jpg)</p>
+                    <svg viewBox="0 0 500 220" class="w-full h-auto">
+                        <g transform="translate(40, 20)">
+                            <rect x="0" y="70" width="160" height="120" rx="12" fill="#22c55e" stroke="#15803d" stroke-width="4"/>
+                            <text x="80" y="145" font-size="34" font-weight="900" fill="#ffffff" text-anchor="middle">14</text>
+                            <circle cx="80" cy="20" r="28" fill="#38bdf8" stroke="#0284c7" stroke-width="3"/>
+                            <text x="80" y="29" font-size="22" font-weight="900" fill="#ffffff" text-anchor="middle">6</text>
+                            <path d="M 80 50 L 80 65" stroke="#15803d" stroke-width="4" />
+                            <text x="80" y="210" font-size="14" font-weight="bold" fill="#15803d" text-anchor="middle">الْعُلْبَةُ الْخَضْرَاءُ (نُضِيفُ 6)</text>
+                        </g>
+                        <g transform="translate(290, 20)">
+                            <rect x="0" y="70" width="160" height="120" rx="12" fill="#ef4444" stroke="#b91c1c" stroke-width="4"/>
+                            <text x="80" y="145" font-size="34" font-weight="900" fill="#ffffff" text-anchor="middle">11</text>
+                            <circle cx="80" cy="20" r="28" fill="#f43f5e" stroke="#be123c" stroke-width="3"/>
+                            <text x="80" y="29" font-size="22" font-weight="900" fill="#ffffff" text-anchor="middle">6</text>
+                            <path d="M 80 65 L 80 50" stroke="#b91c1c" stroke-width="4" />
+                            <text x="80" y="210" font-size="14" font-weight="bold" fill="#b91c1c" text-anchor="middle">الْعُلْبَةُ الْحَمْرَاءُ (نَسْحَبُ 6)</text>
+                        </g>
+                    </svg>
+                </div>
+            `;
+        }
+
+        function submitDisc1() {
+            const n1 = document.getElementById('ans-disc-1-n1').value.trim();
+            const n2 = document.getElementById('ans-disc-1-n2').value.trim();
+            const res = document.getElementById('ans-disc-1-res').value.trim();
+            const txtVal = document.getElementById('ans-disc-1-txt').value.trim();
+
+            if (!n1 || !n2 || !res || !txtVal) return;
+
+            const isCorrect = ((n1 === '13' && n2 === '5') || (n1 === '5' && n2 === '13')) && res === '18' && txtVal === '18';
+            state.disc1 = isCorrect;
+
+            const fields = [
+                document.getElementById('ans-disc-1-n1'),
+                document.getElementById('ans-disc-1-n2'),
+                document.getElementById('ans-disc-1-res'),
+                document.getElementById('ans-disc-1-txt')
+            ];
+            const btn = document.getElementById('btn-disc-1');
+
+            fields.forEach(f => f.disabled = true);
+            btn.classList.add('disabled-action');
+
+            if (isCorrect) {
+                playSound('correct');
+                fields.forEach(f => f.classList.add('correct-box'));
+            } else {
+                playSound('wrong');
+                fields.forEach(f => f.classList.add('wrong-box'));
+            }
+            checkDiscoverCompletion();
+        }
+
+        function submitDisc2() {
+            const n1 = document.getElementById('ans-disc-2-n1').value.trim();
+            const n2 = document.getElementById('ans-disc-2-n2').value.trim();
+            const res = document.getElementById('ans-disc-2-res').value.trim();
+            const txtVal = document.getElementById('ans-disc-2-txt').value.trim();
+
+            if (!n1 || !n2 || !res || !txtVal) return;
+
+            const isCorrect = (n1 === '20' && n2 === '8' && res === '12' && txtVal === '12');
+            state.disc2 = isCorrect;
+
+            const fields = [
+                document.getElementById('ans-disc-2-n1'),
+                document.getElementById('ans-disc-2-n2'),
+                document.getElementById('ans-disc-2-res'),
+                document.getElementById('ans-disc-2-txt')
+            ];
+            const btn = document.getElementById('btn-disc-2');
+
+            fields.forEach(f => f.disabled = true);
+            btn.classList.add('disabled-action');
+
+            if (isCorrect) {
+                playSound('correct');
+                fields.forEach(f => f.classList.add('correct-box'));
+            } else {
+                playSound('wrong');
+                fields.forEach(f => f.classList.add('wrong-box'));
+            }
+            checkDiscoverCompletion();
+        }
+
+        function checkDiscoverCompletion() {
+            if (state.disc1 !== null && state.disc2 !== null) {
+                const ok = (state.disc1 ? 1 : 0) + (state.disc2 ? 1 : 0);
+                const err = 2 - ok;
+                document.getElementById('score-disc-ok').innerText = ok;
+                document.getElementById('score-disc-err').innerText = err;
+                document.getElementById('score-disc').classList.remove('hidden');
+
+                const badge = document.getElementById('badge-discover');
+                badge.innerText = "مُكْتَمَلٌ ✓";
+                badge.className = "text-xs bg-emerald-700 text-white px-2.5 py-1 rounded-full";
+
+                unlockStation('station-onjez', 'badge-onjez');
+            }
+        }
+
+        function submitOnjez1() {
+            const n1 = document.getElementById('ans-onj-1-n1').value.trim();
+            const n2 = document.getElementById('ans-onj-1-n2').value.trim();
+            const res = document.getElementById('ans-onj-1-res').value.trim();
+            const txtVal = document.getElementById('ans-onj-1-txt').value.trim();
+
+            if (!n1 || !n2 || !res || !txtVal) return;
+
+            const isCorrect = ((n1 === '14' && n2 === '6') || (n1 === '6' && n2 === '14')) && res === '20' && txtVal === '20';
+            state.onj1 = isCorrect;
+
+            const fields = [
+                document.getElementById('ans-onj-1-n1'),
+                document.getElementById('ans-onj-1-n2'),
+                document.getElementById('ans-onj-1-res'),
+                document.getElementById('ans-onj-1-txt')
+            ];
+            const btn = document.getElementById('btn-onj-1');
+
+            fields.forEach(f => f.disabled = true);
+            btn.classList.add('disabled-action');
+
+            if (isCorrect) {
+                playSound('correct');
+                fields.forEach(f => f.classList.add('correct-box'));
+            } else {
+                playSound('wrong');
+                fields.forEach(f => f.classList.add('wrong-box'));
+            }
+            checkOnjezCompletion();
+        }
+
+        function submitOnjez2() {
+            const n1 = document.getElementById('ans-onj-2-n1').value.trim();
+            const n2 = document.getElementById('ans-onj-2-n2').value.trim();
+            const res = document.getElementById('ans-onj-2-res').value.trim();
+            const txtVal = document.getElementById('ans-onj-2-txt').value.trim();
+
+            if (!n1 || !n2 || !res || !txtVal) return;
+
+            const isCorrect = (n1 === '11' && n2 === '6' && res === '5' && txtVal === '5');
+            state.onj2 = isCorrect;
+
+            const fields = [
+                document.getElementById('ans-onj-2-n1'),
+                document.getElementById('ans-onj-2-n2'),
+                document.getElementById('ans-onj-2-res'),
+                document.getElementById('ans-onj-2-txt')
+            ];
+            const btn = document.getElementById('btn-onj-2');
+
+            fields.forEach(f => f.disabled = true);
+            btn.classList.add('disabled-action');
+
+            if (isCorrect) {
+                playSound('correct');
+                fields.forEach(f => f.classList.add('correct-box'));
+            } else {
+                playSound('wrong');
+                fields.forEach(f => f.classList.add('wrong-box'));
+            }
+            checkOnjezCompletion();
+        }
+
+        function checkOnjezCompletion() {
+            if (state.onj1 !== null && state.onj2 !== null) {
+                const ok = (state.onj1 ? 1 : 0) + (state.onj2 ? 1 : 0);
+                const err = 2 - ok;
+                document.getElementById('score-onjez-ok').innerText = ok;
+                document.getElementById('score-onjez-err').innerText = err;
+                document.getElementById('score-onjez').classList.remove('hidden');
+
+                const badge = document.getElementById('badge-onjez');
+                badge.innerText = "مُكْتَمَلٌ ✓";
+                badge.className = "text-xs bg-emerald-800 text-white px-2.5 py-1 rounded-full";
+
+                document.getElementById('station-rules').classList.remove('locked-card');
+            }
+        }
+
+        function unlockTamarano() {
+            const btn = document.getElementById('btn-read-rule');
+            btn.innerText = "تَمَّتِ الْقِرَاءَةُ ✓";
+            btn.classList.add('disabled-action');
+            unlockStation('station-tamarano', 'badge-tamarano');
+        }
+
+        function selectTam1(isCorrectChoice) {
+            const btnCorr = document.getElementById('opt-tam1-corr');
+            const btnWrg = document.getElementById('opt-tam1-wrg');
+
+            btnCorr.classList.add('disabled-action');
+            btnWrg.classList.add('disabled-action');
+
+            if (isCorrectChoice) {
+                playSound('correct');
+                btnCorr.classList.add('correct-box');
+                document.getElementById('tam1-phrase-box').classList.remove('hidden');
+            } else {
+                playSound('wrong');
+                btnWrg.classList.add('wrong-box');
+                state.tam1 = false;
+                checkTamaranoCompletion();
+            }
+        }
+
+        function submitTam1Finish() {
+            const txtVal = document.getElementById('ans-tam1-txt').value.trim();
+            if (!txtVal) return;
+
+            const isCorrect = (txtVal === '15');
+            state.tam1 = isCorrect;
+
+            const txtIn = document.getElementById('ans-tam1-txt');
+            const btn = document.getElementById('btn-tam1-finish');
+            txtIn.disabled = true;
+            btn.classList.add('disabled-action');
+
+            if (isCorrect) {
+                playSound('correct');
+                txtIn.classList.add('correct-box');
+            } else {
+                playSound('wrong');
+                txtIn.classList.add('wrong-box');
+            }
+            checkTamaranoCompletion();
+        }
+
+        function selectTam2(choice) {
+            const btnCorr = document.getElementById('opt-tam2-corr');
+            const btnW1 = document.getElementById('opt-tam2-w1');
+            const btnW2 = document.getElementById('opt-tam2-w2');
+
+            btnW1.classList.add('disabled-action');
+            btnW2.classList.add('disabled-action');
+
+            if (choice === 'correct') {
+                playSound('correct');
+                btnCorr.classList.add('correct-box');
+                document.getElementById('tam2-corr-placeholder').classList.add('hidden');
+                const mathIn = document.getElementById('tam2-math-input');
+                mathIn.classList.remove('hidden');
+                mathIn.focus();
+                document.getElementById('tam2-phrase-box').classList.remove('hidden');
+            } else {
+                playSound('wrong');
+                btnCorr.classList.add('disabled-action');
+                if (choice === 'w1') btnW1.classList.add('wrong-box');
+                if (choice === 'w2') btnW2.classList.add('wrong-box');
+                state.tam2 = false;
+                checkTamaranoCompletion();
+            }
+        }
+
+        function submitTam2Finish() {
+            const mathVal = document.getElementById('tam2-math-input').value.trim();
+            const txtVal = document.getElementById('ans-tam2-txt').value.trim();
+
+            if (!mathVal || !txtVal) return;
+
+            const isCorrect = (mathVal === '14' && txtVal === '14');
+            state.tam2 = isCorrect;
+
+            const mathIn = document.getElementById('tam2-math-input');
+            const txtIn = document.getElementById('ans-tam2-txt');
+            const btn = document.getElementById('btn-tam2-finish');
+
+            mathIn.disabled = true;
+            txtIn.disabled = true;
+            btn.classList.add('disabled-action');
+
+            if (isCorrect) {
+                playSound('correct');
+                mathIn.classList.add('correct-box');
+                txtIn.classList.add('correct-box');
+            } else {
+                playSound('wrong');
+                mathIn.classList.add('wrong-box');
+                txtIn.classList.add('wrong-box');
+            }
+            checkTamaranoCompletion();
+        }
+
+        function submitTam3() {
+            const val = document.getElementById('ans-tam3-num').value.trim();
+            if (!val) return;
+
+            const isCorrect = (val === '17');
+            state.tam3 = isCorrect;
+
+            const input = document.getElementById('ans-tam3-num');
+            const btn = document.getElementById('btn-tam-3');
+            input.disabled = true;
+            btn.classList.add('disabled-action');
+
+            if (isCorrect) {
+                playSound('correct');
+                input.classList.add('correct-box');
+            } else {
+                playSound('wrong');
+                input.classList.add('wrong-box');
+            }
+            checkTamaranoCompletion();
+        }
+
+        function checkTamaranoCompletion() {
+            if (state.tam1 !== null && state.tam2 !== null && state.tam3 !== null) {
+                const ok = (state.tam1 ? 1 : 0) + (state.tam2 ? 1 : 0) + (state.tam3 ? 1 : 0);
+                const err = 3 - ok;
+                document.getElementById('score-tamarano-ok').innerText = ok;
+                document.getElementById('score-tamarano-err').innerText = err;
+                document.getElementById('score-tamarano').classList.remove('hidden');
+
+                const badge = document.getElementById('badge-tamarano');
+                badge.innerText = "مُكْتَمَلٌ ✓";
+                badge.className = "text-xs bg-indigo-800 text-white px-2.5 py-1 rounded-full";
+
+                unlockStation('station-abhath', 'badge-abhath');
+            }
+        }
+
+        function submitAbh1() {
+            const val = document.getElementById('ans-abh-1').value.trim();
+            if (!val) return;
+
+            const isCorrect = (val === '15');
+            state.abh1 = isCorrect;
+
+            const input = document.getElementById('ans-abh-1');
+            const btn = document.getElementById('btn-abh-1');
+            input.disabled = true;
+            btn.classList.add('disabled-action');
+
+            if (isCorrect) {
+                playSound('correct');
+                input.classList.add('correct-box');
+            } else {
+                playSound('wrong');
+                input.classList.add('wrong-box');
+            }
+            checkAbhathCompletion();
+        }
+
+        function submitAbh2() {
+            const val = document.getElementById('ans-abh-2').value.trim();
+            if (!val) return;
+
+            const isCorrect = (val === '7');
+            state.abh2 = isCorrect;
+
+            const input = document.getElementById('ans-abh-2');
+            const btn = document.getElementById('btn-abh-2');
+            input.disabled = true;
+            btn.classList.add('disabled-action');
+
+            if (isCorrect) {
+                playSound('correct');
+                input.classList.add('correct-box');
+            } else {
+                playSound('wrong');
+                input.classList.add('wrong-box');
+            }
+            checkAbhathCompletion();
+        }
+
+        function checkAbhathCompletion() {
+            if (state.abh1 !== null && state.abh2 !== null) {
+                const ok = (state.abh1 ? 1 : 0) + (state.abh2 ? 1 : 0);
+                const err = 2 - ok;
+                document.getElementById('score-abhath-ok').innerText = ok;
+                document.getElementById('score-abhath-err').innerText = err;
+                document.getElementById('score-abhath').classList.remove('hidden');
+
+                const badge = document.getElementById('badge-abhath');
+                badge.innerText = "مُكْتَمَلٌ ✓";
+                badge.className = "text-xs bg-purple-800 text-white px-2.5 py-1 rounded-full";
+
+                renderFinalSummary();
+            }
+        }
+
+        function renderFinalSummary() {
+            const finalCard = document.getElementById('final-summary-card');
+            finalCard.classList.remove('locked-card');
+
+            let totalCorrect = 0;
+            let totalQuestions = 0;
+
+            for (const key in state) {
+                totalQuestions++;
+                if (state[key] === true) totalCorrect++;
+            }
+
+            const totalWrong = totalQuestions - totalCorrect;
+            const percentage = Math.round((totalCorrect / totalQuestions) * 100);
+
+            document.getElementById('total-correct-txt').innerText = totalCorrect;
+            document.getElementById('total-wrong-txt').innerText = totalWrong;
+            document.getElementById('final-percentage-txt').innerText = percentage + '%';
+
+            const circle = document.getElementById('final-progress-circle');
+            const circumference = 251.2;
+            const offset = circumference - (circumference * percentage) / 100;
+            circle.style.strokeDashoffset = offset;
+
+            const app = document.getElementById('final-appreciation');
+            if (percentage >= 85) {
+                circle.style.stroke = '#10b981';
+                app.innerText = 'مُمْتَازٌ! نَتِيجَةٌ رَائِعَةٌ وَتَمَكُّنٌ تَامٌّ مِنَ الْمَفَاهِيمِ 🌟';
+                app.className = 'text-lg font-black text-emerald-800 mt-1';
+            } else if (percentage >= 60) {
+                circle.style.stroke = '#f59e0b';
+                app.innerText = 'جَيِّدٌ جِدًّا! عَمَلٌ مُشَجِّعٌ مَعَ إِمْكَانِيَّةِ التَّحْسِينِ 👍';
+                app.className = 'text-lg font-black text-amber-700 mt-1';
+            } else {
+                circle.style.stroke = '#ef4444';
+                app.innerText = 'يُوصَى بِمُرَاجَعَةِ الدَّرْسِ وَإِعَادَةِ التَّطْبِيقِ مَعَ الْأُسْتَاذِ 💡';
+                app.className = 'text-lg font-black text-rose-700 mt-1';
+            }
+
+            finalCard.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function unlockStation(stationId, badgeId) {
+            const st = document.getElementById(stationId);
+            st.classList.remove('locked-card');
+            if (badgeId) {
+                const bdg = document.getElementById(badgeId);
+                bdg.innerText = "قَيْدَ الإِنْجَازِ";
+                bdg.className = "text-xs bg-white/30 text-white px-2.5 py-1 rounded-full";
+            }
+        }
+
+        function resetWholeLesson() {
+            window.location.reload();
+        }
+
+        function exitApplication() {
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.close) {
+                window.Telegram.WebApp.close();
+            } else {
+                window.close();
+            }
+        }
+
+        window.onload = function() {
+            initAbhathGrid();
+        };
+    </script>
+</body>
+</html>
