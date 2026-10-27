@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الرياضيات - السنة الأولى ابتدائي | الأعداد من 1 إلى 9</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- مكتبة Telegram WebApp (ضرورية للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .ltr-dir {
+            direction: ltr !important;
+            text-align: left;
+        }
+        .rtl-dir {
+            direction: rtl !important;
+            text-align: right;
+        }
+        .frozen {
+            pointer-events: none !important;
+            opacity: 0.85;
+        }
+        .lock-overlay {
+            background: rgba(243, 244, 246, 0.85);
+            backdrop-filter: blur(2px);
+        }
+        .pulse-subtle {
+            animation: pulseSubtle 2s infinite ease-in-out;
+        }
+        @keyframes pulseSubtle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        .correct-bg {
+            background-color: #dcfce7 !important;
+            border-color: #2e7d32 !important;
+        }
+        .incorrect-bg {
+            background-color: #fee2e2 !important;
+            border-color: #c62828 !important;
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس */
+        .btn-back-home {
+            display: block;
+            width: calc(100% - 32px);
+            max-width: 896px;
+            margin: 12px auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-amber-50 text-slate-800 min-h-screen pb-16">
+
+    <!-- ========================================
+         نافذة قفل الاشتراك الإجباري
+         ======================================== -->
+    <div id="sub-lock-screen">
+        <div class="lock-box">
+            <div class="lock-icon">🔒</div>
+            <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+            <div class="lock-desc">
+                لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+            </div>
+            <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel" id="channel-link">
+                📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+            </a>
+            <button class="btn-check-sub" onclick="verifySubscription()">
+                ✅ تَأْكِيدُ الاِشْتِرَاكِ
+            </button>
+            <div id="sub-status-msg" class="sub-status-msg"></div>
+        </div>
+    </div>
+
+    <!-- شريط الرأس والترويسة البيداغوجية -->
+    <header class="bg-gradient-to-r from-blue-600 via-indigo-600 to-sky-500 text-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="w-11 h-11 bg-white/20 rounded-2xl flex items-center justify-center font-black text-xl shadow-inner border border-white/30">
+                    ١-٩
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-black tracking-wide">الْأَعْدَادُ مِنْ 1 إِلَى 9</h1>
+                    <p class="text-xs text-sky-100 font-medium">السَّنَةُ الْأُولَى ابْتِدَائِيٌّ • مَادَّةُ الرِّيَاضِيَّاتِ (الدَّرْسُ 6)</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 text-xs bg-white/10 px-3 py-1.5 rounded-xl border border-white/20">
+                <span class="font-bold text-amber-200">الْكِتَابُ ص 17</span>
+                <span class="text-white/60">|</span>
+                <span class="font-bold text-sky-200">دَفْتَرُ الْأَنْشِطَةِ ص 10</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- الحاوية الرئيسية -->
+    <main class="max-w-4xl mx-auto px-4 py-6 space-y-8">
+
+        <!-- ======================= 1. مَحَطَّةُ: أَكْتَشِفُ ======================= -->
+        <section id="station-aktachef" class="relative bg-white rounded-3xl p-5 md:p-7 shadow-md border-2 border-slate-200 transition-all duration-300">
+            <div class="flex items-center justify-between border-b pb-3 mb-4">
+                <div class="flex items-center gap-2">
+                    <span class="px-3 py-1 bg-amber-500 text-white font-black text-sm rounded-xl shadow-sm">أَكْتَشِفُ</span>
+                    <span class="text-xs font-bold text-slate-500">كِتَابُ التِّلْمِيذِ ص 17</span>
+                </div>
+                <div id="aktachef-badge" class="hidden text-xs font-black px-2.5 py-1 rounded-lg"></div>
+            </div>
+
+            <div class="mb-5 bg-sky-50 p-4 rounded-2xl border border-sky-200">
+                <p class="text-slate-800 text-base md:text-lg font-bold leading-relaxed">
+                    « لَوّنْ بِالْأَحْمَرِ <span class="text-red-600 font-black">3</span> سَمَكَاتٍ، وَبِالْأَخْضَرِ مِثْلَهَا (<span class="text-green-600 font-black">3</span> سَمَكَاتٍ)، وَبِالْأَصْفَرِ بَقِيَّةَ السَّمَكَاتِ. »
+                </p>
+            </div>
+
+            <div class="flex items-center justify-center gap-4 mb-6 bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                <span class="text-sm font-black text-slate-700">اخْتَرْ لَوْنًا:</span>
+                <button type="button" onclick="selectColor('red')" id="btn-color-red" class="color-btn flex items-center gap-1.5 px-4 py-2 rounded-xl border-2 border-red-500 bg-red-100 text-red-700 font-bold transition transform active:scale-95">
+                    <span class="w-4 h-4 rounded-full bg-red-500"></span>
+                    <span>أَحْمَرُ</span>
+                </button>
+                <button type="button" onclick="selectColor('green')" id="btn-color-green" class="color-btn flex items-center gap-1.5 px-4 py-2 rounded-xl border-2 border-transparent bg-green-100 text-green-700 font-bold transition transform active:scale-95">
+                    <span class="w-4 h-4 rounded-full bg-green-500"></span>
+                    <span>أَخْضَرُ</span>
+                </button>
+                <button type="button" onclick="selectColor('yellow')" id="btn-color-yellow" class="color-btn flex items-center gap-1.5 px-4 py-2 rounded-xl border-2 border-transparent bg-amber-100 text-amber-700 font-bold transition transform active:scale-95">
+                    <span class="w-4 h-4 rounded-full bg-amber-400"></span>
+                    <span>أَصْفَرُ</span>
+                </button>
+            </div>
+
+            <div class="bg-gradient-to-b from-sky-100 to-blue-100 rounded-3xl p-5 border-2 border-sky-300 shadow-inner mb-6">
+                <div class="text-center text-xs font-bold text-sky-800 mb-3">اضْغَطْ عَلَى السَّمَكَةِ لِتَلْوِينِهَا بِاللَّوْنِ الْمُخْتَارِ:</div>
+                <div id="fish-grid" class="grid grid-cols-3 sm:grid-cols-5 gap-3 md:gap-4 justify-items-center"></div>
+            </div>
+
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <span class="text-base md:text-lg font-black text-slate-800">عَدَدُ السَّمَكَاتِ الصَّفْرَاءِ هُوَ:</span>
+                    <input type="number" id="aktachef-input" min="0" max="15" placeholder="؟" class="w-16 h-12 text-center text-xl font-black bg-white rounded-xl border-2 border-slate-300 focus:border-blue-500 focus:outline-none shadow-sm">
+                </div>
+                <button type="button" onclick="verifyAktachef()" id="btn-verify-aktachef" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-black text-base rounded-2xl shadow-md transition transform active:scale-95">
+                    تَأْكِيدُ الْإِجَابَةِ ✓
+                </button>
+            </div>
+
+            <div id="eval-aktachef" class="hidden mt-4 p-3 rounded-2xl font-bold text-sm flex items-center justify-between"></div>
+        </section>
+
+        <!-- ======================= 2. مَحَطَّةُ: أُنْجِزُ (1) ======================= -->
+        <section id="station-onjez1" class="relative bg-white rounded-3xl p-5 md:p-7 shadow-md border-2 border-slate-200 transition-all duration-300">
+            <div id="lock-onjez1" class="absolute inset-0 rounded-3xl lock-overlay z-20 flex flex-col items-center justify-center text-slate-500">
+                <svg class="w-12 h-12 mb-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <span class="font-black text-base">أَكْمِلِ الْمَحَطَّةَ السَّابِقَةَ لِفَتْحِ هَذَا التَّمْرِينِ</span>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-3 mb-4">
+                <div class="flex items-center gap-2">
+                    <span class="px-3 py-1 bg-indigo-600 text-white font-black text-sm rounded-xl shadow-sm">أُنْجِزُ (1)</span>
+                    <span class="text-xs font-bold text-slate-500">كِتَابُ التِّلْمِيذِ ص 17</span>
+                </div>
+                <div id="onjez1-badge" class="hidden text-xs font-black px-2.5 py-1 rounded-lg"></div>
+            </div>
+
+            <div class="mb-4 bg-sky-50 p-4 rounded-2xl border border-sky-200">
+                <p class="text-slate-800 text-base md:text-lg font-bold leading-relaxed">
+                    « اِرْبِطْ كُلَّ مَجْمُوعَةِ أَقْلَامٍ بِالْعَدَدِ وَالْأَصَابِعِ الْمُنَاسِبَةِ لَهَا. »
+                </p>
+                <p class="text-xs font-semibold text-slate-600 mt-1">طَرِيقَةُ الرَّبْطِ: اِضْغَطْ عَلَى مَجْمُوعَةِ الْأَقْلَامِ أَوَّلًا، ثُمَّ اضْغَطْ عَلَى بِطَاقَةِ الْعَدَدِ الْمُنَاسِبِ لَهَا.</p>
+            </div>
+
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xs font-black text-slate-500 mb-2">مَجْمُوعَاتُ الْأَقْلَامِ:</h3>
+                    <div id="pens-container" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                </div>
+
+                <div class="flex items-center justify-center">
+                    <span class="text-slate-400 font-bold text-xs bg-slate-100 px-4 py-1 rounded-full">ارْبِطْ مَعَ مَا يُنَاسِبُهَا فِي الْأَسْفَلِ ↓</span>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-black text-slate-500 mb-2">بِطَاقَاتُ الْأَعْدَادِ وَالْأَصَابِعِ:</h3>
+                    <div id="numbers-fingers-container" class="grid grid-cols-2 md:grid-cols-4 gap-3"></div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button type="button" onclick="verifyOnjez1()" id="btn-verify-onjez1" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-base rounded-2xl shadow-md transition transform active:scale-95">
+                    تَأْكِيدُ الرَّبْطِ ✓
+                </button>
+            </div>
+
+            <div id="eval-onjez1" class="hidden mt-4 p-3 rounded-2xl font-bold text-sm flex items-center justify-between"></div>
+        </section>
+
+        <!-- ======================= 3. مَحَطَّةُ: أُنْجِزُ (2) ======================= -->
+        <section id="station-onjez2" class="relative bg-white rounded-3xl p-5 md:p-7 shadow-md border-2 border-slate-200 transition-all duration-300">
+            <div id="lock-onjez2" class="absolute inset-0 rounded-3xl lock-overlay z-20 flex flex-col items-center justify-center text-slate-500">
+                <svg class="w-12 h-12 mb-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <span class="font-black text-base">أَكْمِلِ الْمَحَطَّةَ السَّابِقَةَ لِفَتْحِ هَذَا التَّمْرِينِ</span>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-3 mb-4">
+                <div class="flex items-center gap-2">
+                    <span class="px-3 py-1 bg-indigo-600 text-white font-black text-sm rounded-xl shadow-sm">أُنْجِزُ (2)</span>
+                    <span class="text-xs font-bold text-slate-500">كِتَابُ التِّلْمِيذِ ص 17</span>
+                </div>
+                <div id="onjez2-badge" class="hidden text-xs font-black px-2.5 py-1 rounded-lg"></div>
+            </div>
+
+            <div class="mb-5 bg-sky-50 p-4 rounded-2xl border border-sky-200">
+                <p class="text-slate-800 text-base md:text-lg font-bold leading-relaxed">
+                    « أَرْسُمْ (أَوْ أَنْقُرُ لِإِضَافَةِ) الْخُشَيْبَاتِ النَّاقِصَةَ لِلْوُصُولِ إِلَى الْعَدَدِ الْمَكْتُوبِ. »
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 ltr-dir">
+                <div id="stick-box-0" class="rtl-dir bg-amber-50/70 p-4 rounded-2xl border-2 border-amber-300 flex flex-col items-center">
+                    <div class="w-14 h-14 bg-amber-500 text-white font-black text-2xl rounded-2xl flex items-center justify-center shadow mb-3">9</div>
+                    <div class="text-xs font-bold text-slate-600 mb-2">اِضْغَطْ فِي الْإِطَارِ لِإِضَافَةِ خُشَيْبَاتٍ:</div>
+                    <div onclick="addStick(0)" class="w-full min-h-[100px] bg-white rounded-xl border-2 border-dashed border-amber-400 p-2 flex flex-wrap gap-2 items-center justify-center cursor-pointer hover:bg-amber-100/30 transition">
+                        <div id="sticks-container-0" class="flex flex-wrap gap-2 items-center justify-center"></div>
+                    </div>
+                    <div class="mt-2 text-xs font-black text-slate-600">الْخُشَيْبَاتُ حَالِيًّا: <span id="count-stick-0" class="text-amber-700 text-sm">4</span></div>
+                    <button type="button" onclick="undoStick(0)" class="mt-2 text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1 rounded-lg font-bold">تَرَاجُعْ ↶</button>
+                </div>
+
+                <div id="stick-box-1" class="rtl-dir bg-amber-50/70 p-4 rounded-2xl border-2 border-amber-300 flex flex-col items-center">
+                    <div class="w-14 h-14 bg-amber-500 text-white font-black text-2xl rounded-2xl flex items-center justify-center shadow mb-3">6</div>
+                    <div class="text-xs font-bold text-slate-600 mb-2">اِضْغَطْ فِي الْإِطَارِ لِإِضَافَةِ خُشَيْبَاتٍ:</div>
+                    <div onclick="addStick(1)" class="w-full min-h-[100px] bg-white rounded-xl border-2 border-dashed border-amber-400 p-2 flex flex-wrap gap-2 items-center justify-center cursor-pointer hover:bg-amber-100/30 transition">
+                        <div id="sticks-container-1" class="flex flex-wrap gap-2 items-center justify-center"></div>
+                    </div>
+                    <div class="mt-2 text-xs font-black text-slate-600">الْخُشَيْبَاتُ حَالِيًّا: <span id="count-stick-1" class="text-amber-700 text-sm">2</span></div>
+                    <button type="button" onclick="undoStick(1)" class="mt-2 text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1 rounded-lg font-bold">تَرَاجُعْ ↶</button>
+                </div>
+
+                <div id="stick-box-2" class="rtl-dir bg-amber-50/70 p-4 rounded-2xl border-2 border-amber-300 flex flex-col items-center">
+                    <div class="w-14 h-14 bg-amber-500 text-white font-black text-2xl rounded-2xl flex items-center justify-center shadow mb-3">8</div>
+                    <div class="text-xs font-bold text-slate-600 mb-2">اِضْغَطْ فِي الْإِطَارِ لِإِضَافَةِ خُشَيْبَاتٍ:</div>
+                    <div onclick="addStick(2)" class="w-full min-h-[100px] bg-white rounded-xl border-2 border-dashed border-amber-400 p-2 flex flex-wrap gap-2 items-center justify-center cursor-pointer hover:bg-amber-100/30 transition">
+                        <div id="sticks-container-2" class="flex flex-wrap gap-2 items-center justify-center"></div>
+                    </div>
+                    <div class="mt-2 text-xs font-black text-slate-600">الْخُشَيْبَاتُ حَالِيًّا: <span id="count-stick-2" class="text-amber-700 text-sm">3</span></div>
+                    <button type="button" onclick="undoStick(2)" class="mt-2 text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1 rounded-lg font-bold">تَرَاجُعْ ↶</button>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button type="button" onclick="verifyOnjez2()" id="btn-verify-onjez2" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-base rounded-2xl shadow-md transition transform active:scale-95">
+                    تَأْكِيدُ الْخُشَيْبَاتِ ✓
+                </button>
+            </div>
+
+            <div id="eval-onjez2" class="hidden mt-4 p-3 rounded-2xl font-bold text-sm flex items-center justify-between"></div>
+        </section>
+
+        <!-- ======================= 4. بِطَاقَةُ: تَعَلَّمْتُ ======================= -->
+        <section id="station-taalamtu" class="relative bg-gradient-to-r from-emerald-50 to-teal-50 rounded-3xl p-6 shadow-md border-2 border-emerald-300 transition-all duration-300">
+            <div id="lock-taalamtu" class="absolute inset-0 rounded-3xl lock-overlay z-20 flex flex-col items-center justify-center text-slate-500">
+                <svg class="w-12 h-12 mb-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <span class="font-black text-base">أَكْمِلِ الْمَحَطَّةَ السَّابِقَةَ لِفَتْحِ الْقَاعِدَةِ</span>
+            </div>
+
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 bg-emerald-600 text-white rounded-xl flex items-center justify-center text-xl font-black shadow">★</div>
+                <h2 class="text-xl font-black text-emerald-800">تَعَلَّمْتُ (قَاعِدَةُ الدَّرْسِ)</h2>
+            </div>
+            
+            <p class="text-base md:text-lg font-extrabold text-slate-800 mb-4 leading-relaxed">
+                « أَقْرَأُ الْأَعْدَادَ :
+            </p>
+
+            <div class="ltr-dir flex flex-wrap gap-2 md:gap-3 items-center justify-center py-2">
+                <button type="button" onclick="playNumberSound(1)" class="w-12 h-12 md:w-14 md:h-14 bg-white text-emerald-700 font-black text-2xl rounded-2xl border-2 border-emerald-400 shadow-sm hover:scale-110 active:scale-95 transition flex items-center justify-center">1</button>
+                <button type="button" onclick="playNumberSound(2)" class="w-12 h-12 md:w-14 md:h-14 bg-white text-emerald-700 font-black text-2xl rounded-2xl border-2 border-emerald-400 shadow-sm hover:scale-110 active:scale-95 transition flex items-center justify-center">2</button>
+                <button type="button" onclick="playNumberSound(3)" class="w-12 h-12 md:w-14 md:h-14 bg-white text-emerald-700 font-black text-2xl rounded-2xl border-2 border-emerald-400 shadow-sm hover:scale-110 active:scale-95 transition flex items-center justify-center">3</button>
+                <button type="button" onclick="playNumberSound(4)" class="w-12 h-12 md:w-14 md:h-14 bg-white text-emerald-700 font-black text-2xl rounded-2xl border-2 border-emerald-400 shadow-sm hover:scale-110 active:scale-95 transition flex items-center justify-center">4</button>
+                <button type="button" onclick="playNumberSound(5)" class="w-12 h-12 md:w-14 md:h-14 bg-white text-emerald-700 font-black text-2xl rounded-2xl border-2 border-emerald-400 shadow-sm hover:scale-110 active:scale-95 transition flex items-center justify-center">5</button>
+                <button type="button" onclick="playNumberSound(6)" class="w-12 h-12 md:w-14 md:h-14 bg-white text-emerald-700 font-black text-2xl rounded-2xl border-2 border-emerald-400 shadow-sm hover:scale-110 active:scale-95 transition flex items-center justify-center">6</button>
+                <button type="button" onclick="playNumberSound(7)" class="w-12 h-12 md:w-14 md:h-14 bg-white text-emerald-700 font-black text-2xl rounded-2xl border-2 border-emerald-400 shadow-sm hover:scale-110 active:scale-95 transition flex items-center justify-center">7</button>
+                <button type="button" onclick="playNumberSound(8)" class="w-12 h-12 md:w-14 md:h-14 bg-white text-emerald-700 font-black text-2xl rounded-2xl border-2 border-emerald-400 shadow-sm hover:scale-110 active:scale-95 transition flex items-center justify-center">8</button>
+                <button type="button" onclick="playNumberSound(9)" class="w-12 h-12 md:w-14 md:h-14 bg-white text-emerald-700 font-black text-2xl rounded-2xl border-2 border-emerald-400 shadow-sm hover:scale-110 active:scale-95 transition flex items-center justify-center">9</button>
+            </div>
+            
+            <div class="mt-4 flex justify-between items-center text-xs text-emerald-800 font-bold">
+                <span>(اِضْغَطْ عَلَى الْأَرْقَامِ لِسَمَاعِ نَغَمَاتِهَا الْمُمَيَّزَةِ)</span>
+                <button type="button" onclick="passTaalamtu()" id="btn-pass-taalamtu" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow font-black text-sm">
+                    حَفِظْتُهَا، انْتَقِلْ إِلَى دَفْتَرِ الْأَنْشِطَةِ ❯
+                </button>
+            </div>
+        </section>
+
+        <!-- ======================= 5. مَحَطَّةُ: أَتَمَرَّنُ (1) ======================= -->
+        <section id="station-atamarano1" class="relative bg-white rounded-3xl p-5 md:p-7 shadow-md border-2 border-slate-200 transition-all duration-300">
+            <div id="lock-atamarano1" class="absolute inset-0 rounded-3xl lock-overlay z-20 flex flex-col items-center justify-center text-slate-500">
+                <svg class="w-12 h-12 mb-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <span class="font-black text-base">أَكْمِلِ الْمَحَطَّةَ السَّابِقَةَ لِفَتْحِ هَذَا التَّمْرِينِ</span>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-3 mb-4">
+                <div class="flex items-center gap-2">
+                    <span class="px-3 py-1 bg-purple-600 text-white font-black text-sm rounded-xl shadow-sm">أَتَمَرَّنُ (1)</span>
+                    <span class="text-xs font-bold text-slate-500">دَفْتَرُ الْأَنْشِطَةِ ص 10</span>
+                </div>
+                <div id="atamarano1-badge" class="hidden text-xs font-black px-2.5 py-1 rounded-lg"></div>
+            </div>
+
+            <div class="mb-5 bg-sky-50 p-4 rounded-2xl border border-sky-200">
+                <p class="text-slate-800 text-base md:text-lg font-bold leading-relaxed">
+                    « ضَعِ الْإِشَارَةَ (<span class="text-purple-600 font-black">×</span>) فِي خَانَةِ كُلِّ بِطَاقَةٍ بِهَا <span class="text-purple-600 font-black">8</span> حَبَّاتِ فَاكِهَةٍ. »
+                </p>
+                <p class="text-xs font-bold text-slate-500 mt-1">(عُدَّ الْفَوَاكِهَ فِي كُلِّ بِطَاقَةٍ ثُمَّ اضْغَطْ عَلَى الْمُرَبَّعِ لِوَضْعِ أَوْ حَذْفِ الْعَلَامَةِ)</p>
+            </div>
+
+            <div id="fruits-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4"></div>
+
+            <div class="mt-6 flex justify-end">
+                <button type="button" onclick="verifyAtamarano1()" id="btn-verify-atamarano1" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-black text-base rounded-2xl shadow-md transition transform active:scale-95">
+                    تَأْكِيدُ الْإِجَابَةِ ✓
+                </button>
+            </div>
+
+            <div id="eval-atamarano1" class="hidden mt-4 p-3 rounded-2xl font-bold text-sm flex items-center justify-between"></div>
+        </section>
+
+        <!-- ======================= 6. مَحَطَّةُ: أَتَمَرَّنُ (2) ======================= -->
+        <section id="station-atamarano2" class="relative bg-white rounded-3xl p-5 md:p-7 shadow-md border-2 border-slate-200 transition-all duration-300">
+            <div id="lock-atamarano2" class="absolute inset-0 rounded-3xl lock-overlay z-20 flex flex-col items-center justify-center text-slate-500">
+                <svg class="w-12 h-12 mb-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <span class="font-black text-base">أَكْمِلِ الْمَحَطَّةَ السَّابِقَةَ لِفَتْحِ هَذَا التَّمْرِينِ</span>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-3 mb-4">
+                <div class="flex items-center gap-2">
+                    <span class="px-3 py-1 bg-purple-600 text-white font-black text-sm rounded-xl shadow-sm">أَتَمَرَّنُ (2)</span>
+                    <span class="text-xs font-bold text-slate-500">دَفْتَرُ الْأَنْشِطَةِ ص 10</span>
+                </div>
+                <div id="atamarano2-badge" class="hidden text-xs font-black px-2.5 py-1 rounded-lg"></div>
+            </div>
+
+            <div class="mb-5 bg-sky-50 p-4 rounded-2xl border border-sky-200">
+                <p class="text-slate-800 text-base md:text-lg font-bold leading-relaxed">
+                    « ضَعِ الْإِشَارَةَ (<span class="text-purple-600 font-black">×</span>) أَمَامَ الْعِبَارَةِ الصَّحِيحَةِ. »
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-pink-50/60 p-4 rounded-2xl border-2 border-pink-200 text-center">
+                    <span class="text-xs font-black text-pink-700 bg-pink-100 px-3 py-1 rounded-full">بِطَاقَةُ الْفَرَاشَاتِ</span>
+                    <div id="butterflies-container" class="grid grid-cols-3 gap-2 mt-3 justify-items-center"></div>
+                </div>
+
+                <div class="bg-yellow-50/60 p-4 rounded-2xl border-2 border-yellow-200 text-center">
+                    <span class="text-xs font-black text-amber-700 bg-amber-100 px-3 py-1 rounded-full">بِطَاقَةُ النَّحْلَاتِ</span>
+                    <div id="bees-container" class="grid grid-cols-4 gap-2 mt-3 justify-items-center"></div>
+                </div>
+            </div>
+
+            <div class="space-y-3 max-w-md mx-auto">
+                <label onclick="selectComparison(1)" id="choice-comp-1" class="flex items-center gap-3 p-4 bg-slate-50 hover:bg-slate-100 border-2 border-slate-300 rounded-2xl cursor-pointer transition">
+                    <div id="check-box-comp-1" class="w-8 h-8 rounded-xl border-2 border-slate-400 bg-white flex items-center justify-center font-black text-xl text-purple-600"></div>
+                    <span class="text-base font-bold text-slate-800">الْفَرَاشَاتُ أَكْثَرُ مِنَ النَّحْلَاتِ.</span>
+                </label>
+
+                <label onclick="selectComparison(2)" id="choice-comp-2" class="flex items-center gap-3 p-4 bg-slate-50 hover:bg-slate-100 border-2 border-slate-300 rounded-2xl cursor-pointer transition">
+                    <div id="check-box-comp-2" class="w-8 h-8 rounded-xl border-2 border-slate-400 bg-white flex items-center justify-center font-black text-xl text-purple-600"></div>
+                    <span class="text-base font-bold text-slate-800">الْفَرَاشَاتُ أَقَلُّ مِنَ النَّحْلَاتِ.</span>
+                </label>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button type="button" onclick="verifyAtamarano2()" id="btn-verify-atamarano2" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-black text-base rounded-2xl shadow-md transition transform active:scale-95">
+                    تَأْكِيدُ الْإِجَابَةِ ✓
+                </button>
+            </div>
+
+            <div id="eval-atamarano2" class="hidden mt-4 p-3 rounded-2xl font-bold text-sm flex items-center justify-between"></div>
+        </section>
+
+        <!-- ======================= 7. مَحَطَّةُ: أَتَمَرَّنُ (3) ======================= -->
+        <section id="station-atamarano3" class="relative bg-white rounded-3xl p-5 md:p-7 shadow-md border-2 border-slate-200 transition-all duration-300">
+            <div id="lock-atamarano3" class="absolute inset-0 rounded-3xl lock-overlay z-20 flex flex-col items-center justify-center text-slate-500">
+                <svg class="w-12 h-12 mb-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <span class="font-black text-base">أَكْمِلِ الْمَحَطَّةَ السَّابِقَةَ لِفَتْحِ هَذَا التَّمْرِينِ</span>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-3 mb-4">
+                <div class="flex items-center gap-2">
+                    <span class="px-3 py-1 bg-purple-600 text-white font-black text-sm rounded-xl shadow-sm">أَتَمَرَّنُ (3)</span>
+                    <span class="text-xs font-bold text-slate-500">دَفْتَرُ الْأَنْشِطَةِ ص 10</span>
+                </div>
+                <div id="atamarano3-badge" class="hidden text-xs font-black px-2.5 py-1 rounded-lg"></div>
+            </div>
+
+            <div class="mb-5 bg-sky-50 p-4 rounded-2xl border border-sky-200">
+                <p class="text-slate-800 text-base md:text-lg font-bold leading-relaxed">
+                    « أَحِطْ (أَوِ اضْغَطْ لِتَحْدِيدِ) دَجَاجَاتٍ بِقَدْرِ عَدَدِ الْأَرَانِبِ. »
+                </p>
+                <p class="text-xs font-bold text-slate-500 mt-1">(عُدَّ الْأَرَانِبَ أَوَّلًا، ثُمَّ اضْغَطْ عَلَى الدَّجَاجَاتِ لِتَحْدِيدِ نَفْسِ الْعَدَدِ)</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                <div class="bg-orange-50/70 p-4 rounded-2xl border-2 border-orange-200">
+                    <div class="text-center mb-2 font-black text-orange-800 text-sm">بِطَاقَةُ الْأَرَانِبِ:</div>
+                    <div id="rabbits-container" class="grid grid-cols-4 gap-2 justify-items-center"></div>
+                </div>
+
+                <div class="bg-amber-50/70 p-4 rounded-2xl border-2 border-amber-200">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-black text-amber-800 text-sm">بِطَاقَةُ الدَّجَاجَاتِ (اِضْغَطْ لِلتَّحْدِيدِ):</span>
+                        <span class="text-xs font-black bg-amber-200 text-amber-900 px-2 py-0.5 rounded-lg">الْمُحَدَّدُ: <span id="selected-chickens-count">0</span></span>
+                    </div>
+                    <div id="chickens-container" class="grid grid-cols-4 gap-2 justify-items-center"></div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button type="button" onclick="verifyAtamarano3()" id="btn-verify-atamarano3" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-black text-base rounded-2xl shadow-md transition transform active:scale-95">
+                    تَأْكِيدُ التَّحْدِيدِ ✓
+                </button>
+            </div>
+
+            <div id="eval-atamarano3" class="hidden mt-4 p-3 rounded-2xl font-bold text-sm flex items-center justify-between"></div>
+        </section>
+
+        <!-- ======================= 8. مَحَطَّةُ: أَبْحَثُ ======================= -->
+        <section id="station-abhath" class="relative bg-white rounded-3xl p-5 md:p-7 shadow-md border-2 border-slate-200 transition-all duration-300">
+            <div id="lock-abhath" class="absolute inset-0 rounded-3xl lock-overlay z-20 flex flex-col items-center justify-center text-slate-500">
+                <svg class="w-12 h-12 mb-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <span class="font-black text-base">أَكْمِلِ الْمَحَطَّةَ السَّابِقَةَ لِفَتْحِ هَذَا التَّمْرِينِ</span>
+            </div>
+
+            <div class="flex items-center justify-between border-b pb-3 mb-4">
+                <div class="flex items-center gap-2">
+                    <span class="px-3 py-1 bg-rose-600 text-white font-black text-sm rounded-xl shadow-sm">أَبْحَثُ</span>
+                    <span class="text-xs font-bold text-slate-500">دَفْتَرُ الْأَنْشِطَةِ ص 10</span>
+                </div>
+                <div id="abhath-badge" class="hidden text-xs font-black px-2.5 py-1 rounded-lg"></div>
+            </div>
+
+            <div class="mb-5 bg-sky-50 p-4 rounded-2xl border-2 border-sky-200">
+                <p class="text-slate-800 text-base md:text-lg font-bold leading-relaxed">
+                    « أَكْمِلْ كِتَابَةَ الْأَعْدَادِ عَلَى الشَّرِيطِ الْعَدَدِيِّ. »
+                </p>
+                <p class="text-xs font-bold text-slate-500 mt-1">يَبْدَأُ الشَّرِيطُ مِنَ الْيَسَارِ إِلَى الْيَمِينِ بِالْعَدَدِ (1) وَفِي الْوَسَطِ (5) وَفِي الْيَمِينِ (9).</p>
+            </div>
+
+            <div class="ltr-dir overflow-x-auto py-4">
+                <div class="flex items-center justify-center gap-2 min-w-[550px] p-4 bg-slate-100 rounded-2xl border-2 border-slate-300">
+                    <div class="w-12 h-14 bg-rose-600 text-white font-black text-2xl rounded-xl flex items-center justify-center shadow">1</div>
+                    <input type="number" id="tape-2" min="1" max="9" class="w-12 h-14 bg-white text-center font-black text-2xl rounded-xl border-2 border-slate-400 focus:border-rose-500 focus:outline-none shadow-inner">
+                    <input type="number" id="tape-3" min="1" max="9" class="w-12 h-14 bg-white text-center font-black text-2xl rounded-xl border-2 border-slate-400 focus:border-rose-500 focus:outline-none shadow-inner">
+                    <input type="number" id="tape-4" min="1" max="9" class="w-12 h-14 bg-white text-center font-black text-2xl rounded-xl border-2 border-slate-400 focus:border-rose-500 focus:outline-none shadow-inner">
+                    <div class="w-12 h-14 bg-rose-600 text-white font-black text-2xl rounded-xl flex items-center justify-center shadow">5</div>
+                    <input type="number" id="tape-6" min="1" max="9" class="w-12 h-14 bg-white text-center font-black text-2xl rounded-xl border-2 border-slate-400 focus:border-rose-500 focus:outline-none shadow-inner">
+                    <input type="number" id="tape-7" min="1" max="9" class="w-12 h-14 bg-white text-center font-black text-2xl rounded-xl border-2 border-slate-400 focus:border-rose-500 focus:outline-none shadow-inner">
+                    <input type="number" id="tape-8" min="1" max="9" class="w-12 h-14 bg-white text-center font-black text-2xl rounded-xl border-2 border-slate-400 focus:border-rose-500 focus:outline-none shadow-inner">
+                    <div class="w-12 h-14 bg-rose-600 text-white font-black text-2xl rounded-xl flex items-center justify-center shadow">9</div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <button type="button" onclick="verifyAbhath()" id="btn-verify-abhath" class="px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white font-black text-base rounded-2xl shadow-md transition transform active:scale-95">
+                    تَأْكِيدُ الشَّرِيطِ الْعَدَدِيِّ ✓
+                </button>
+            </div>
+
+            <div id="eval-abhath" class="hidden mt-4 p-3 rounded-2xl font-bold text-sm flex items-center justify-between"></div>
+        </section>
+
+        <!-- ======================= 9. الشَّاشَةُ الْخِتَامِيَّةُ ======================= -->
+        <section id="final-report" class="bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-indigo-200 transition-all duration-300">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl font-black text-slate-800">حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الشَّامِلُ</h2>
+                <p class="text-xs md:text-sm font-semibold text-slate-500 mt-1">تَقْيِيمُ كَافَّةِ مَحَطَّاتِ الْأَعْدَادِ مِنْ 1 إِلَى 9</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center justify-around gap-6 bg-slate-50 p-6 rounded-3xl border border-slate-200">
+                <div class="flex flex-col items-center">
+                    <div class="relative w-36 h-36">
+                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="42" stroke="#e2e8f0" stroke-width="12" fill="transparent"/>
+                            <circle id="final-progress-circle" cx="50" cy="50" r="42" stroke="#4f46e5" stroke-width="12" fill="transparent" stroke-dasharray="264" stroke-dashoffset="264" stroke-linecap="round" class="transition-all duration-1000"/>
+                        </svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center">
+                            <span id="final-percentage-text" class="text-3xl font-black text-indigo-700">0%</span>
+                            <span class="text-[10px] font-bold text-slate-400">نِسْبَةُ النَّجَاحِ</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-3 text-center md:text-right">
+                    <div class="flex items-center gap-4 justify-center md:justify-start">
+                        <div class="bg-emerald-100 border border-emerald-300 text-emerald-800 px-4 py-2 rounded-2xl flex items-center gap-2">
+                            <span class="text-lg font-black">✓ الصَّوَابُ:</span>
+                            <span id="final-correct-count" class="text-xl font-black">0</span>
+                        </div>
+                        <div class="bg-rose-100 border border-rose-300 text-rose-800 px-4 py-2 rounded-2xl flex items-center gap-2">
+                            <span class="text-lg font-black">✗ الْخَطَأُ:</span>
+                            <span id="final-wrong-count" class="text-xl font-black">0</span>
+                        </div>
+                    </div>
+
+                    <div id="final-pedagogical-note" class="text-base font-extrabold text-slate-700 bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+                        أَكْمِلِ التَّمَارِينَ أَعْلَاهُ لِعَرْضِ تَقْيِيمِكَ الْخِتَامِيِّ.
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 flex flex-wrap items-center justify-center gap-4">
+                <button type="button" onclick="restartApplication()" class="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-base rounded-2xl shadow-lg transition transform active:scale-95 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <span>إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</span>
+                </button>
+                <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="px-6 py-3.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-base rounded-2xl transition">
+                    الصُّعُودُ لِلْأَعْلَى وَمُعَايَنَةُ الْإِجَابَاتِ ↑
+                </button>
+                <button type="button" onclick="exitApp()" class="px-6 py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold text-base rounded-2xl transition">
+                    🚪 خُرُوجٌ
+                </button>
+            </div>
+        </section>
+
+        <!-- زر العودة إلى الفهرس -->
+        <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+    </main>
+
+    <!-- تذييل الصفحة -->
+    <footer class="text-center text-xs text-slate-500 py-4 font-bold">
+        تَطْبِيقُ الرِّيَاضِيَّاتِ التَّفَاعُلِيُّ - وِفْقَ الْمِنْهَاجِ الرَّسْمِيِّ لِوَزَارَةِ التَّرْبِيَةِ الْوَطَنِيَّةِ (الْجَزَائِرُ)
+    </footer>
+
+    <script>
+        // ========================================================
+        // 🛡️ قسم الحماية
+        // ========================================================
+        const CHANNEL_ID = "-1004456852024";  // ← قناة السنة الأولى
+
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        async function verifySubscription() {
+            const statusMsg = document.getElementById('sub-status-msg');
+            statusMsg.style.color = "#0288d1";
+            statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+            let userId = null;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                userId = tg.initDataUnsafe.user.id;
+            }
+
+            if (!userId) {
+                statusMsg.style.color = "#e65100";
+                statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+                return;
+            }
+
+            try {
+                const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.isSubscribed) {
+                    statusMsg.style.color = "#2e7d32";
+                    statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                    setTimeout(() => {
+                        document.getElementById('sub-lock-screen').style.display = 'none';
+                    }, 600);
+                } else {
+                    statusMsg.style.color = "#c62828";
+                    statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+                }
+            } catch (error) {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+            }
+        }
+
+        window.addEventListener('load', () => {
+            verifySubscription();
+        });
+
+        // ========================================================
+        // 🎯 قسم أنشطة الدرس
+        // ========================================================
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playSuccessSound() {
+            try {
+                const ctx = getAudioContext();
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.1);
+                osc.frequency.setValueAtTime(783.99, now + 0.2);
+                osc.frequency.setValueAtTime(1046.50, now + 0.3);
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.6);
+            } catch (e) { console.log(e); }
+        }
+
+        function playErrorSound() {
+            try {
+                const ctx = getAudioContext();
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.setValueAtTime(180, now + 0.15);
+
+                gain.gain.setValueAtTime(0.18, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.35);
+            } catch (e) { console.log(e); }
+        }
+
+        function playClickSound() {
+            try {
+                const ctx = getAudioContext();
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, now);
+
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } catch (e) { console.log(e); }
+        }
+
+        function playNumberSound(num) {
+            playClickSound();
+            try {
+                const ctx = getAudioContext();
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                const notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25, 587.33];
+                const freq = notes[num - 1] || 440;
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, now);
+
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.4);
+            } catch (e) { console.log(e); }
+        }
+
+        const APP_STATE = {
+            totalQuestions: 7,
+            correctCount: 0,
+            wrongCount: 0,
+            activeColor: 'red',
+            fishColors: Array(15).fill('white'),
+            onjez1_selectedPen: null,
+            onjez1_connections: {},
+            sticksData: [
+                { initial: 4, target: 9, current: 4 },
+                { initial: 2, target: 6, current: 2 },
+                { initial: 3, target: 8, current: 3 }
+            ],
+            atamarano1_selected: {},
+            atamarano2_selected: null,
+            atamarano3_selectedChickens: new Set()
+        };
+
+        function getFishSvg(color) {
+            let fillColor = '#ffffff';
+            let strokeColor = '#94a3b8';
+            if (color === 'red') { fillColor = '#ef4444'; strokeColor = '#b91c1c'; }
+            if (color === 'green') { fillColor = '#22c55e'; strokeColor = '#15803d'; }
+            if (color === 'yellow') { fillColor = '#facc15'; strokeColor = '#ca8a04'; }
+
+            return `
+            <svg class="w-12 h-10 md:w-14 md:h-12 drop-shadow cursor-pointer transition transform hover:scale-110 active:scale-95" viewBox="0 0 100 70">
+                <polygon points="15,35 0,15 0,55" fill="${fillColor}" stroke="${strokeColor}" stroke-width="4" stroke-linejoin="round" />
+                <ellipse cx="55" cy="35" rx="40" ry="25" fill="${fillColor}" stroke="${strokeColor}" stroke-width="4" />
+                <circle cx="75" cy="28" r="6" fill="#ffffff" />
+                <circle cx="77" cy="28" r="3" fill="#0f172a" />
+                <path d="M 45 35 Q 35 48 48 48" fill="none" stroke="${strokeColor}" stroke-width="3" stroke-linecap="round" />
+            </svg>`;
+        }
+
+        function getPenSvg(colorHex = '#3b82f6') {
+            return `
+            <svg class="w-7 h-14 md:w-8 md:h-16" viewBox="0 0 40 100">
+                <polygon points="20,0 5,25 35,25" fill="#fde047" stroke="#ca8a04" stroke-width="2"/>
+                <polygon points="20,0 15,10 25,10" fill="#1e293b" />
+                <rect x="5" y="25" width="30" height="65" rx="3" fill="${colorHex}" stroke="#1e293b" stroke-width="2"/>
+                <line x1="15" y1="25" x2="15" y2="90" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+                <rect x="5" y="90" width="30" height="10" rx="2" fill="#f43f5e" stroke="#9f1239" stroke-width="2"/>
+            </svg>`;
+        }
+
+        function getFingersSvg(number) {
+            const leftFingers = number - 5;
+
+            const hand5Svg = `
+            <svg class="w-12 h-14 text-amber-400 drop-shadow-sm inline-block" viewBox="0 0 80 90">
+                <path d="M20,50 L20,30 Q20,25 25,25 Q30,25 30,30 L30,45" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                <path d="M30,45 L30,20 Q30,15 35,15 Q40,15 40,20 L40,45" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                <path d="M40,45 L40,22 Q40,17 45,17 Q50,17 50,22 L50,48" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                <path d="M50,48 L50,30 Q50,25 55,25 Q60,25 60,30 L60,55" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                <path d="M22,50 Q10,50 12,58 Q14,64 22,62" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                <path d="M18,52 Q18,85 40,85 Q62,85 62,55 L60,52 Z" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+            </svg>`;
+
+            let otherHandSvg = '';
+            if (leftFingers === 1) {
+                otherHandSvg = `
+                <svg class="w-12 h-14 text-amber-400 drop-shadow-sm inline-block" viewBox="0 0 80 90">
+                    <path d="M45,45 L45,15 Q45,10 50,10 Q55,10 55,15 L55,50" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                    <rect x="25" y="45" width="22" height="15" rx="7" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                    <rect x="25" y="58" width="22" height="15" rx="7" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                    <path d="M35,55 Q35,68 48,68 Q58,68 58,52" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                    <path d="M22,55 Q22,85 45,85 Q62,85 62,55 Z" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                </svg>`;
+            } else if (leftFingers === 2) {
+                otherHandSvg = `
+                <svg class="w-12 h-14 text-amber-400 drop-shadow-sm inline-block" viewBox="0 0 80 90">
+                    <path d="M35,45 L35,16 Q35,11 40,11 Q45,11 45,16 L45,50" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                    <path d="M47,45 L47,15 Q47,10 52,10 Q57,10 57,15 L57,50" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                    <rect x="23" y="48" width="20" height="14" rx="7" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                    <path d="M20,55 Q20,85 45,85 Q62,85 62,55 Z" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                </svg>`;
+            } else if (leftFingers === 3) {
+                otherHandSvg = `
+                <svg class="w-12 h-14 text-amber-400 drop-shadow-sm inline-block" viewBox="0 0 80 90">
+                    <path d="M28,48 L28,20 Q28,15 33,15 Q38,15 38,20 L38,50" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                    <path d="M39,45 L39,15 Q39,10 44,10 Q49,10 49,15 L49,50" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                    <path d="M50,48 L50,18 Q50,13 55,13 Q60,13 60,18 L60,52" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                    <path d="M22,55 Q22,85 45,85 Q62,85 62,55 Z" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                </svg>`;
+            } else {
+                otherHandSvg = `
+                <svg class="w-12 h-14 text-amber-400 drop-shadow-sm inline-block" viewBox="0 0 80 90">
+                    <path d="M22,50 L22,25 Q22,20 27,20 Q32,20 32,25 L32,50" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                    <path d="M33,45 L33,17 Q33,12 38,12 Q43,12 43,17 L43,50" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                    <path d="M44,45 L44,18 Q44,13 49,13 Q54,13 54,18 L54,50" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                    <path d="M55,48 L55,24 Q55,19 60,19 Q65,19 65,24 L65,52" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                    <path d="M20,55 Q20,85 45,85 Q65,85 65,55 Z" fill="#fbbf24" stroke="#d97706" stroke-width="2"/>
+                </svg>`;
+            }
+
+            return `
+            <div class="flex items-center justify-center gap-1">
+                ${hand5Svg}
+                <span class="text-slate-800 font-black text-xl px-0.5">+</span>
+                ${otherHandSvg}
+            </div>
+            `;
+        }
+
+        function getStickSvg() {
+            return `
+            <div class="w-3.5 h-14 bg-gradient-to-b from-amber-700 via-amber-300 to-amber-200 rounded-sm border border-amber-800 shadow-sm flex flex-col justify-start items-center">
+                <div class="w-3.5 h-4 bg-red-600 rounded-t-sm shadow-inner"></div>
+            </div>`;
+        }
+
+        function getFruitSvg(type) {
+            if (type === 'apple') {
+                return `
+                <svg class="w-9 h-9" viewBox="0 0 64 64">
+                    <path d="M32 16 C30 8 36 4 36 4 C36 4 34 10 32 16" stroke="#15803d" stroke-width="4" stroke-linecap="round" fill="none"/>
+                    <path d="M32 16 C22 10 10 20 12 38 C14 52 24 58 32 60 C40 58 50 52 52 38 C54 20 42 10 32 16 Z" fill="#dc2626" stroke="#991b1b" stroke-width="2"/>
+                    <circle cx="24" cy="28" r="4" fill="#f87171" opacity="0.6"/>
+                </svg>`;
+            }
+            if (type === 'pear') {
+                return `
+                <svg class="w-9 h-9" viewBox="0 0 64 64">
+                    <path d="M32 14 C30 8 36 4 36 4" stroke="#78350f" stroke-width="3" stroke-linecap="round" fill="none"/>
+                    <path d="M32 14 C24 14 26 26 20 38 C14 50 20 60 32 60 C44 60 50 50 44 38 C38 26 40 14 32 14 Z" fill="#84cc16" stroke="#4d7c0f" stroke-width="2"/>
+                </svg>`;
+            }
+            if (type === 'orange') {
+                return `
+                <svg class="w-9 h-9" viewBox="0 0 64 64">
+                    <circle cx="32" cy="34" r="24" fill="#f97316" stroke="#c2410c" stroke-width="2"/>
+                    <path d="M32 10 C34 6 38 6 38 6" stroke="#15803d" stroke-width="3" stroke-linecap="round" fill="none"/>
+                    <ellipse cx="36" cy="8" rx="4" ry="2" fill="#22c55e"/>
+                    <circle cx="26" cy="26" r="1.5" fill="#ea580c"/>
+                    <circle cx="34" cy="40" r="1.5" fill="#ea580c"/>
+                </svg>`;
+            }
+            if (type === 'banana') {
+                return `
+                <svg class="w-9 h-9" viewBox="0 0 64 64">
+                    <path d="M12 50 C26 56 46 48 52 14 C52 14 46 22 36 28 C26 34 16 38 12 50 Z" fill="#eab308" stroke="#a16207" stroke-width="2"/>
+                    <polygon points="52,14 56,10 50,12" fill="#713f12"/>
+                </svg>`;
+            }
+        }
+
+        function getButterflySvg() {
+            return `
+            <svg class="w-10 h-10 drop-shadow" viewBox="0 0 64 64">
+                <ellipse cx="32" cy="32" rx="4" ry="16" fill="#475569"/>
+                <ellipse cx="18" cy="22" rx="14" ry="12" fill="#ec4899" stroke="#be185d" stroke-width="2"/>
+                <ellipse cx="46" cy="22" rx="14" ry="12" fill="#ec4899" stroke="#be185d" stroke-width="2"/>
+                <ellipse cx="22" cy="42" rx="10" ry="9" fill="#f472b6" stroke="#be185d" stroke-width="2"/>
+                <ellipse cx="42" cy="42" rx="10" ry="9" fill="#f472b6" stroke="#be185d" stroke-width="2"/>
+                <path d="M30 16 Q24 6 18 10" stroke="#475569" stroke-width="2" fill="none"/>
+                <path d="M34 16 Q40 6 46 10" stroke="#475569" stroke-width="2" fill="none"/>
+            </svg>`;
+        }
+
+        function getBeeSvg() {
+            return `
+            <svg class="w-10 h-10 drop-shadow" viewBox="0 0 64 64">
+                <ellipse cx="28" cy="20" rx="8" ry="14" fill="#bae6fd" stroke="#0284c7" stroke-width="1.5" transform="rotate(-20 28 20)"/>
+                <ellipse cx="36" cy="20" rx="8" ry="14" fill="#bae6fd" stroke="#0284c7" stroke-width="1.5" transform="rotate(20 36 20)"/>
+                <ellipse cx="32" cy="38" rx="16" ry="12" fill="#eab308" stroke="#ca8a04" stroke-width="2"/>
+                <line x1="26" y1="27" x2="26" y2="49" stroke="#1e293b" stroke-width="3"/>
+                <line x1="33" y1="26" x2="33" y2="50" stroke="#1e293b" stroke-width="3"/>
+                <line x1="40" y1="28" x2="40" y2="48" stroke="#1e293b" stroke-width="3"/>
+                <polygon points="16,38 12,36 12,40" fill="#0f172a"/>
+                <circle cx="48" cy="38" r="7" fill="#1e293b"/>
+                <circle cx="50" cy="36" r="2" fill="#ffffff"/>
+            </svg>`;
+        }
+
+        function getRabbitSvg() {
+            return `
+            <svg class="w-11 h-12 drop-shadow" viewBox="0 0 64 64">
+                <ellipse cx="26" cy="14" rx="5" ry="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+                <ellipse cx="26" cy="14" rx="2.5" ry="10" fill="#f472b6"/>
+                <ellipse cx="38" cy="14" rx="5" ry="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+                <ellipse cx="38" cy="14" rx="2.5" ry="10" fill="#f472b6"/>
+                <circle cx="32" cy="32" r="16" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+                <circle cx="27" cy="30" r="2" fill="#0f172a"/>
+                <circle cx="37" cy="30" r="2" fill="#0f172a"/>
+                <polygon points="32,34 30,32 34,32" fill="#f43f5e"/>
+                <line x1="20" y1="34" x2="28" y2="34" stroke="#94a3b8" stroke-width="1.5"/>
+                <line x1="36" y1="34" x2="44" y2="34" stroke="#94a3b8" stroke-width="1.5"/>
+            </svg>`;
+        }
+
+        function getChickenSvg(isSelected) {
+            const borderClass = isSelected ? 'border-4 border-amber-600 bg-amber-200 ring-4 ring-amber-400' : 'border border-slate-200 bg-white hover:bg-amber-50';
+            return `
+            <div class="p-1 rounded-2xl ${borderClass} cursor-pointer transition transform hover:scale-105 active:scale-95">
+                <svg class="w-11 h-12" viewBox="0 0 64 64">
+                    <circle cx="38" cy="14" r="4" fill="#ef4444"/>
+                    <circle cx="44" cy="15" r="3.5" fill="#ef4444"/>
+                    <ellipse cx="30" cy="38" rx="18" ry="14" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+                    <circle cx="40" cy="24" r="10" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+                    <polygon points="50,24 56,26 50,28" fill="#ea580c"/>
+                    <circle cx="43" cy="22" r="2" fill="#0f172a"/>
+                    <ellipse cx="28" cy="38" rx="9" ry="7" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+                    <line x1="26" y1="52" x2="26" y2="60" stroke="#ea580c" stroke-width="2"/>
+                    <line x1="34" y1="52" x2="34" y2="60" stroke="#ea580c" stroke-width="2"/>
+                </svg>
+            </div>`;
+        }
+
+        function initAktachef() {
+            const grid = document.getElementById('fish-grid');
+            grid.innerHTML = '';
+            for (let i = 0; i < 15; i++) {
+                const btn = document.createElement('div');
+                btn.id = `fish-${i}`;
+                btn.innerHTML = getFishSvg(APP_STATE.fishColors[i]);
+                btn.onclick = () => colorFish(i);
+                grid.appendChild(btn);
+            }
+        }
+
+        function selectColor(c) {
+            APP_STATE.activeColor = c;
+            playClickSound();
+            document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('ring-4', 'ring-offset-2', 'ring-slate-400'));
+            if (c === 'red') document.getElementById('btn-color-red').classList.add('ring-4', 'ring-offset-2', 'ring-red-400');
+            if (c === 'green') document.getElementById('btn-color-green').classList.add('ring-4', 'ring-offset-2', 'ring-green-400');
+            if (c === 'yellow') document.getElementById('btn-color-yellow').classList.add('ring-4', 'ring-offset-2', 'ring-amber-400');
+        }
+
+        function colorFish(index) {
+            playClickSound();
+            APP_STATE.fishColors[index] = APP_STATE.activeColor;
+            const fishDiv = document.getElementById(`fish-${index}`);
+            fishDiv.innerHTML = getFishSvg(APP_STATE.activeColor);
+        }
+
+        function verifyAktachef() {
+            const inputVal = parseInt(document.getElementById('aktachef-input').value.trim(), 10);
+            
+            const redCount = APP_STATE.fishColors.filter(c => c === 'red').length;
+            const greenCount = APP_STATE.fishColors.filter(c => c === 'green').length;
+            const yellowCount = APP_STATE.fishColors.filter(c => c === 'yellow').length;
+
+            const isColoringCorrect = (redCount === 3 && greenCount === 3 && yellowCount === 9);
+            const isNumberCorrect = (inputVal === 9);
+
+            const isCorrect = isColoringCorrect && isNumberCorrect;
+
+            document.getElementById('station-aktachef').classList.add('frozen');
+            document.getElementById('btn-verify-aktachef').disabled = true;
+
+            const badge = document.getElementById('aktachef-badge');
+            const evalBox = document.getElementById('eval-aktachef');
+            badge.classList.remove('hidden');
+            evalBox.classList.remove('hidden');
+
+            if (isCorrect) {
+                APP_STATE.correctCount++;
+                playSuccessSound();
+                document.getElementById('station-aktachef').classList.add('correct-bg');
+                badge.innerText = 'صَحِيحٌ ✓';
+                badge.className = 'text-xs font-black px-2.5 py-1 rounded-lg bg-emerald-600 text-white';
+                evalBox.className = 'mt-4 p-3 rounded-2xl font-bold text-sm bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center justify-between';
+                evalBox.innerHTML = `<span>إِجَابَةٌ رَائِعَةٌ! لَوَّنْتَ 3 بِالْأَحْمَرِ وَ 3 بِالْأَخْضَرِ وَ 9 بِالْأَصْفَرِ، وَكَتَبْتَ الْعَدَدَ الصَّحِيحَ (9).</span> <span class="font-black text-base">✓ 1 / 1</span>`;
+            } else {
+                APP_STATE.wrongCount++;
+                playErrorSound();
+                document.getElementById('station-aktachef').classList.add('incorrect-bg');
+                badge.innerText = 'خَاطِئٌ ✗';
+                badge.className = 'text-xs font-black px-2.5 py-1 rounded-lg bg-rose-600 text-white';
+                evalBox.className = 'mt-4 p-3 rounded-2xl font-bold text-sm bg-rose-100 text-rose-800 border border-rose-300 flex items-center justify-between';
+                evalBox.innerHTML = `<span>الْمَطْلُوبُ: 3 بِالْأَحْمَرِ، 3 بِالْأَخْضَرِ، وَالْبَاقِي (9 سَمَكَاتٍ) بِالْأَصْفَرِ. عَدَدُ الصَّفْرَاءِ هُوَ 9.</span> <span class="font-black text-base">✗ 0 / 1</span>`;
+            }
+
+            document.getElementById('lock-onjez1').classList.add('hidden');
+            document.getElementById('station-onjez1').scrollIntoView({ behavior: 'smooth' });
+            updateFinalReport();
+        }
+
+        const PENS_GROUPS = [
+            { id: 'p6', count: 6, color: '#2563eb' },
+            { id: 'p7', count: 7, color: '#16a34a' },
+            { id: 'p8', count: 8, color: '#d97706' },
+            { id: 'p9', count: 9, color: '#dc2626' }
+        ];
+
+        const CARDS_GROUPS = [
+            { id: 'c8', number: 8 },
+            { id: 'c6', number: 6 },
+            { id: 'c9', number: 9 },
+            { id: 'c7', number: 7 }
+        ];
+
+        function initOnjez1() {
+            const pensBox = document.getElementById('pens-container');
+            pensBox.innerHTML = '';
+            PENS_GROUPS.forEach(group => {
+                const div = document.createElement('div');
+                div.id = `group-${group.id}`;
+                div.className = 'p-3 bg-slate-50 border-2 border-slate-300 rounded-2xl cursor-pointer hover:border-indigo-400 transition text-center flex flex-col items-center justify-center';
+                div.onclick = () => selectOnjezPen(group.id);
+                
+                let pensHtml = `<div class="flex flex-wrap gap-1 justify-center items-center max-w-[130px] min-h-[70px]">`;
+                for (let k = 0; k < group.count; k++) {
+                    pensHtml += getPenSvg(group.color);
+                }
+                pensHtml += `</div>`;
+                div.innerHTML = pensHtml + `<div class="mt-2 text-xs font-bold text-slate-500" id="status-${group.id}">غَيْرُ مَرْبُوطٍ</div>`;
+                pensBox.appendChild(div);
+            });
+
+            const cardsBox = document.getElementById('numbers-fingers-container');
+            cardsBox.innerHTML = '';
+            CARDS_GROUPS.forEach(card => {
+                const cDiv = document.createElement('div');
+                cDiv.id = `card-${card.id}`;
+                cDiv.className = 'p-3 bg-white border-2 border-slate-300 rounded-2xl cursor-pointer hover:border-indigo-500 transition text-center flex flex-col items-center justify-between shadow-sm';
+                cDiv.onclick = () => connectOnjezCard(card.id);
+
+                cDiv.innerHTML = `
+                    <div class="w-12 h-12 bg-indigo-600 text-white font-black text-2xl rounded-2xl flex items-center justify-center shadow-md mb-2">
+                        ${card.number}
+                    </div>
+                    ${getFingersSvg(card.number)}
+                    <span class="text-[11px] font-bold text-slate-400 mt-2">أَصَابِع</span>
+                `;
+                cardsBox.appendChild(cDiv);
+            });
+        }
+
+        function selectOnjezPen(penId) {
+            playClickSound();
+            APP_STATE.onjez1_selectedPen = penId;
+            PENS_GROUPS.forEach(g => {
+                const el = document.getElementById(`group-${g.id}`);
+                if (g.id === penId) {
+                    el.classList.add('ring-4', 'ring-indigo-400', 'border-indigo-600', 'bg-indigo-50');
+                } else {
+                    el.classList.remove('ring-4', 'ring-indigo-400', 'border-indigo-600', 'bg-indigo-50');
+                }
+            });
+        }
+
+        function connectOnjezCard(cardId) {
+            if (!APP_STATE.onjez1_selectedPen) return;
+            playClickSound();
+
+            const penId = APP_STATE.onjez1_selectedPen;
+            APP_STATE.onjez1_connections[penId] = cardId;
+
+            const penEl = document.getElementById(`group-${penId}`);
+            const statusEl = document.getElementById(`status-${penId}`);
+            const cardNum = CARDS_GROUPS.find(c => c.id === cardId).number;
+            statusEl.innerHTML = `<span class="text-indigo-700 font-black">مَرْبُوطٌ بِـ (${cardNum}) ✓</span>`;
+            penEl.classList.remove('ring-4', 'ring-indigo-400');
+            APP_STATE.onjez1_selectedPen = null;
+        }
+
+        function verifyOnjez1() {
+            let isAllCorrect = true;
+            let answeredCount = 0;
+
+            PENS_GROUPS.forEach(group => {
+                const connectedCard = APP_STATE.onjez1_connections[group.id];
+                if (connectedCard) answeredCount++;
+                const correctCardId = `c${group.count}`;
+                if (connectedCard !== correctCardId) {
+                    isAllCorrect = false;
+                }
+            });
+
+            if (answeredCount < 4) return;
+
+            document.getElementById('station-onjez1').classList.add('frozen');
+            document.getElementById('btn-verify-onjez1').disabled = true;
+
+            const badge = document.getElementById('onjez1-badge');
+            const evalBox = document.getElementById('eval-onjez1');
+            badge.classList.remove('hidden');
+            evalBox.classList.remove('hidden');
+
+            if (isAllCorrect) {
+                APP_STATE.correctCount++;
+                playSuccessSound();
+                document.getElementById('station-onjez1').classList.add('correct-bg');
+                badge.innerText = 'صَحِيحٌ ✓';
+                badge.className = 'text-xs font-black px-2.5 py-1 rounded-lg bg-emerald-600 text-white';
+                evalBox.className = 'mt-4 p-3 rounded-2xl font-bold text-sm bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center justify-between';
+                evalBox.innerHTML = `<span>أَحْسَنْتَ! رَبَطْتَ كُلَّ مَجْمُوعَةِ أَقْلَامٍ بِالْعَدَدِ وَالْأَصَابِعِ الْمُطَابِقَةِ لَهَا.</span> <span class="font-black text-base">✓ 1 / 1</span>`;
+            } else {
+                APP_STATE.wrongCount++;
+                playErrorSound();
+                document.getElementById('station-onjez1').classList.add('incorrect-bg');
+                badge.innerText = 'خَاطِئٌ ✗';
+                badge.className = 'text-xs font-black px-2.5 py-1 rounded-lg bg-rose-600 text-white';
+                evalBox.className = 'mt-4 p-3 rounded-2xl font-bold text-sm bg-rose-100 text-rose-800 border border-rose-300 flex items-center justify-between';
+                evalBox.innerHTML = `<span>تَأَكَّدْ مِنْ عَدِّ الْأَقْلَامِ جَيِّدًا: 6، 7، 8، 9 وَمُطَابَقَتِهَا مَعَ عَدَدِ الْأَصَابِعِ.</span> <span class="font-black text-base">✗ 0 / 1</span>`;
+            }
+
+            document.getElementById('lock-onjez2').classList.add('hidden');
+            document.getElementById('station-onjez2').scrollIntoView({ behavior: 'smooth' });
+            updateFinalReport();
+        }
+
+        function renderSticks() {
+            APP_STATE.sticksData.forEach((item, idx) => {
+                const container = document.getElementById(`sticks-container-${idx}`);
+                const countSpan = document.getElementById(`count-stick-${idx}`);
+                container.innerHTML = '';
+                for (let i = 0; i < item.current; i++) {
+                    container.innerHTML += getStickSvg();
+                }
+                countSpan.innerText = item.current;
+            });
+        }
+
+        function addStick(idx) {
+            playClickSound();
+            if (APP_STATE.sticksData[idx].current < 15) {
+                APP_STATE.sticksData[idx].current++;
+                renderSticks();
+            }
+        }
+
+        function undoStick(idx) {
+            playClickSound();
+            if (APP_STATE.sticksData[idx].current > APP_STATE.sticksData[idx].initial) {
+                APP_STATE.sticksData[idx].current--;
+                renderSticks();
+            }
+        }
+
+        function verifyOnjez2() {
+            const c0 = APP_STATE.sticksData[0].current === 9;
+            const c1 = APP_STATE.sticksData[1].current === 6;
+            const c2 = APP_STATE.sticksData[2].current === 8;
+
+            const isAllCorrect = c0 && c1 && c2;
+
+            document.getElementById('station-onjez2').classList.add('frozen');
+            document.getElementById('btn-verify-onjez2').disabled = true;
+
+            const badge = document.getElementById('onjez2-badge');
+            const evalBox = document.getElementById('eval-onjez2');
+            badge.classList.remove('hidden');
+            evalBox.classList.remove('hidden');
+
+            if (isAllCorrect) {
+                APP_STATE.correctCount++;
+                playSuccessSound();
+                document.getElementById('station-onjez2').classList.add('correct-bg');
+                badge.innerText = 'صَحِيحٌ ✓';
+                badge.className = 'text-xs font-black px-2.5 py-1 rounded-lg bg-emerald-600 text-white';
+                evalBox.className = 'mt-4 p-3 rounded-2xl font-bold text-sm bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center justify-between';
+                evalBox.innerHTML = `<span>مُمْتَازٌ! اسْتَكْمَلْتَ عَدَدَ الْخُشَيْبَاتِ بِدِقَّةٍ (9 ، 6 ، 8).</span> <span class="font-black text-base">✓ 1 / 1</span>`;
+            } else {
+                APP_STATE.wrongCount++;
+                playErrorSound();
+                document.getElementById('station-onjez2').classList.add('incorrect-bg');
+                badge.innerText = 'خَاطِئٌ ✗';
+                badge.className = 'text-xs font-black px-2.5 py-1 rounded-lg bg-rose-600 text-white';
+                evalBox.className = 'mt-4 p-3 rounded-2xl font-bold text-sm bg-rose-100 text-rose-800 border border-rose-300 flex items-center justify-between';
+                evalBox.innerHTML = `<span>تَذَكَّرْ: الْبِطَاقَةُ 1 تَحْتَاجُ 9 خُشَيْبَاتٍ، وَالثَّانِيَةُ 6، وَالثَّالِثَةُ 8 خُشَيْبَاتٍ.</span> <span class="font-black text-base">✗ 0 / 1</span>`;
+            }
+
+            document.getElementById('lock-taalamtu').classList.add('hidden');
+            document.getElementById('station-taalamtu').scrollIntoView({ behavior: 'smooth' });
+            updateFinalReport();
+        }
+
+        function passTaalamtu() {
+            playSuccessSound();
+            document.getElementById('lock-atamarano1').classList.add('hidden');
+            document.getElementById('station-atamarano1').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        const FRUITS_CARDS = [
+            { id: 'f_pear', type: 'pear', count: 9, isEight: false, label: 'إِجَّاصٌ' },
+            { id: 'f_apple', type: 'apple', count: 8, isEight: true, label: 'تُفَّاحٌ' },
+            { id: 'f_banana', type: 'banana', count: 7, isEight: false, label: 'مَوْزٌ' },
+            { id: 'f_orange', type: 'orange', count: 8, isEight: true, label: 'بُرْتُقَالٌ' }
+        ];
+
+        function initAtamarano1() {
+            const grid = document.getElementById('fruits-grid');
+            grid.innerHTML = '';
+            FRUITS_CARDS.forEach((card, idx) => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'bg-slate-50 border-2 border-slate-300 rounded-2xl p-4 flex flex-col items-center justify-between shadow-sm';
+
+                let itemsHtml = `<div class="grid grid-cols-3 gap-1.5 justify-items-center mb-4 min-h-[120px] items-center">`;
+                for (let i = 0; i < card.count; i++) {
+                    itemsHtml += getFruitSvg(card.type);
+                }
+                itemsHtml += `</div>`;
+
+                const checkBtnHtml = `
+                <button type="button" onclick="toggleFruitCheck(${idx})" id="fruit-box-${idx}" class="w-12 h-12 rounded-xl border-2 border-slate-400 bg-white flex items-center justify-center font-black text-2xl text-purple-700 transition hover:bg-purple-50 active:scale-95 shadow-inner">
+                </button>`;
+
+                cardDiv.innerHTML = itemsHtml + checkBtnHtml;
+                grid.appendChild(cardDiv);
+            });
+        }
+
+        function toggleFruitCheck(idx) {
+            playClickSound();
+            APP_STATE.atamarano1_selected[idx] = !APP_STATE.atamarano1_selected[idx];
+            const btn = document.getElementById(`fruit-box-${idx}`);
+            btn.innerText = APP_STATE.atamarano1_selected[idx] ? '×' : '';
+            if (APP_STATE.atamarano1_selected[idx]) {
+                btn.classList.add('border-purple-600', 'bg-purple-100');
+            } else {
+                btn.classList.remove('border-purple-600', 'bg-purple-100');
+            }
+        }
+
+        function verifyAtamarano1() {
+            let isAllCorrect = true;
+            FRUITS_CARDS.forEach((card, idx) => {
+                const isChecked = !!APP_STATE.atamarano1_selected[idx];
+                if (card.isEight && !isChecked) isAllCorrect = false;
+                if (!card.isEight && isChecked) isAllCorrect = false;
+            });
+
+            document.getElementById('station-atamarano1').classList.add('frozen');
+            document.getElementById('btn-verify-atamarano1').disabled = true;
+
+            const badge = document.getElementById('atamarano1-badge');
+            const evalBox = document.getElementById('eval-atamarano1');
+            badge.classList.remove('hidden');
+            evalBox.classList.remove('hidden');
+
+            if (isAllCorrect) {
+                APP_STATE.correctCount++;
+                playSuccessSound();
+                document.getElementById('station-atamarano1').classList.add('correct-bg');
+                badge.innerText = 'صَحِيحٌ ✓';
+                badge.className = 'text-xs font-black px-2.5 py-1 rounded-lg bg-emerald-600 text-white';
+                evalBox.className = 'mt-4 p-3 rounded-2xl font-bold text-sm bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center justify-between';
+                evalBox.innerHTML = `<span>صَحِيحٌ! وَضَعْتَ الْعَلَامَةَ (×) تَحْتَ بِطَاقَتَيِ التُّفَّاحِ (8) وَالْبُرْتُقَالِ (8) فَقَطْ.</span> <span class="font-black text-base">✓ 1 / 1</span>`;
+            } else {
+                APP_STATE.wrongCount++;
+                playErrorSound();
+                document.getElementById('station-atamarano1').classList.add('incorrect-bg');
+                badge.innerText = 'خَاطِئٌ ✗';
+                badge.className = 'text-xs font-black px-2.5 py-1 rounded-lg bg-rose-600 text-white';
+                evalBox.className = 'mt-4 p-3 rounded-2xl font-bold text-sm bg-rose-100 text-rose-800 border border-rose-300 flex items-center justify-between';
+                evalBox.innerHTML = `<span>انْتَبِهْ: الْبِطَاقَاتُ الَّتِي بِهَا 8 فَاكِهَاتٍ هِيَ التُّفَّاحُ (8) وَالْبُرْتُقَالُ (8) فَقَطْ.</span> <span class="font-black text-base">✗ 0 / 1</span>`;
+            }
+
+            document.getElementById('lock-atamarano2').classList.add('hidden');
+            document.getElementById('station-atamarano2').scrollIntoView({ behavior: 'smooth' });
+            updateFinalReport();
+        }
+
+        function initAtamarano2() {
+            const bBox = document.getElementById('butterflies-container');
+            bBox.innerHTML = '';
+            for (let i = 0; i < 6; i++) {
+                bBox.innerHTML += getButterflySvg();
+            }
+
+            const beesBox = document.getElementById('bees-container');
+            beesBox.innerHTML = '';
+            for (let i = 0; i < 7; i++) {
+                beesBox.innerHTML += getBeeSvg();
+            }
+        }
+
+        function selectComparison(opt) {
+            playClickSound();
+            APP_STATE.atamarano2_selected = opt;
+            document.getElementById('check-box-comp-1').innerText = (opt === 1) ? '×' : '';
+            document.getElementById('check-box-comp-2').innerText = (opt === 2) ? '×' : '';
+
+            if (opt === 1) {
+                document.getElementById('choice-comp-1').classList.add('border-purple-600', 'bg-purple-50');
+                document.getElementById('choice-comp-2').classList.remove('border-purple-600', 'bg-purple-50');
+            } else {
+                document.getElementById('choice-comp-2').classList.add('border-purple-600', 'bg-purple-50');
+                document.getElementById('choice-comp-1').classList.remove('border-purple-600', 'bg-purple-50');
+            }
+        }
+
+        function verifyAtamarano2() {
+            if (!APP_STATE.atamarano2_selected) return;
+
+            const isCorrect = (APP_STATE.atamarano2_selected === 2);
+
+            document.getElementById('station-atamarano2').classList.add('frozen');
+            document.getElementById('btn-verify-atamarano2').disabled = true;
+
+            const badge = document.getElementById('atamarano2-badge');
+            const evalBox = document.getElementById('eval-atamarano2');
+            badge.classList.remove('hidden');
+            evalBox.classList.remove('hidden');
+
+            if (isCorrect) {
+                APP_STATE.correctCount++;
+                playSuccessSound();
+                document.getElementById('station-atamarano2').classList.add('correct-bg');
+                badge.innerText = 'صَحِيحٌ ✓';
+                badge.className = 'text-xs font-black px-2.5 py-1 rounded-lg bg-emerald-600 text-white';
+                evalBox.className = 'mt-4 p-3 rounded-2xl font-bold text-sm bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center justify-between';
+                evalBox.innerHTML = `<span>أَحْسَنْتَ! عَدَدُ الْفَرَاشَاتِ (6) أَقَلُّ مِنْ عَدَدِ النَّحْلَاتِ (7).</span> <span class="font-black text-base">✓ 1 / 1</span>`;
+            } else {
+                APP_STATE.wrongCount++;
+                playErrorSound();
+                document.getElementById('station-atamarano2').classList.add('incorrect-bg');
+                badge.innerText = 'خَاطِئٌ ✗';
+                badge.className = 'text-xs font-black px-2.5 py-1 rounded-lg bg-rose-600 text-white';
+                evalBox.className = 'mt-4 p-3 rounded-2xl font-bold text-sm bg-rose-100 text-rose-800 border border-rose-300 flex items-center justify-between';
+                evalBox.innerHTML = `<span>انْتَبِهْ: هُنَاكَ 6 فَرَاشَاتٍ وَ 7 نَحْلَاتٍ، إِذَنْ: الْفَرَاشَاتُ أَقَلُّ مِنَ النَّحْلَاتِ.</span> <span class="font-black text-base">✗ 0 / 1</span>`;
+            }
+
+            document.getElementById('lock-atamarano3').classList.add('hidden');
+            document.getElementById('station-atamarano3').scrollIntoView({ behavior: 'smooth' });
+            updateFinalReport();
+        }
+
+        function initAtamarano3() {
+            const rBox = document.getElementById('rabbits-container');
+            rBox.innerHTML = '';
+            for (let i = 0; i < 8; i++) {
+                rBox.innerHTML += getRabbitSvg();
+            }
+
+            renderChickens();
+        }
+
+        function renderChickens() {
+            const cBox = document.getElementById('chickens-container');
+            cBox.innerHTML = '';
+            for (let i = 0; i < 12; i++) {
+                const isSelected = APP_STATE.atamarano3_selectedChickens.has(i);
+                const item = document.createElement('div');
+                item.innerHTML = getChickenSvg(isSelected);
+                item.onclick = () => toggleChicken(i);
+                cBox.appendChild(item);
+            }
+            document.getElementById('selected-chickens-count').innerText = APP_STATE.atamarano3_selectedChickens.size;
+        }
+
+        function toggleChicken(i) {
+            playClickSound();
+            if (APP_STATE.atamarano3_selectedChickens.has(i)) {
+                APP_STATE.atamarano3_selectedChickens.delete(i);
+            } else {
+                APP_STATE.atamarano3_selectedChickens.add(i);
+            }
+            renderChickens();
+        }
+
+        function verifyAtamarano3() {
+            const count = APP_STATE.atamarano3_selectedChickens.size;
+            const isCorrect = (count === 8);
+
+            document.getElementById('station-atamarano3').classList.add('frozen');
+            document.getElementById('btn-verify-atamarano3').disabled = true;
+
+            const badge = document.getElementById('atamarano3-badge');
+            const evalBox = document.getElementById('eval-atamarano3');
+            badge.classList.remove('hidden');
+            evalBox.classList.remove('hidden');
+
+            if (isCorrect) {
+                APP_STATE.correctCount++;
+                playSuccessSound();
+                document.getElementById('station-atamarano3').classList.add('correct-bg');
+                badge.innerText = 'صَحِيحٌ ✓';
+                badge.className = 'text-xs font-black px-2.5 py-1 rounded-lg bg-emerald-600 text-white';
+                evalBox.className = 'mt-4 p-3 rounded-2xl font-bold text-sm bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center justify-between';
+                evalBox.innerHTML = `<span>إِجَابَةٌ نَمُوذَجِيَّةٌ! حَدَّدْتَ 8 دَجَاجَاتٍ بِقَدْرِ عَدَدِ الْأَرَانِبِ (8).</span> <span class="font-black text-base">✓ 1 / 1</span>`;
+            } else {
+                APP_STATE.wrongCount++;
+                playErrorSound();
+                document.getElementById('station-atamarano3').classList.add('incorrect-bg');
+                badge.innerText = 'خَاطِئٌ ✗';
+                badge.className = 'text-xs font-black px-2.5 py-1 rounded-lg bg-rose-600 text-white';
+                evalBox.className = 'mt-4 p-3 rounded-2xl font-bold text-sm bg-rose-100 text-rose-800 border border-rose-300 flex items-center justify-between';
+                evalBox.innerHTML = `<span>عَدَدُ الْأَرَانِبِ هُوَ 8، وَأَنْتَ حَدَّدْتَ (${count}) دَجَاجَاتٍ. الْمَطْلُوبُ 8 تَمَامًا.</span> <span class="font-black text-base">✗ 0 / 1</span>`;
+            }
+
+            document.getElementById('lock-abhath').classList.add('hidden');
+            document.getElementById('station-abhath').scrollIntoView({ behavior: 'smooth' });
+            updateFinalReport();
+        }
+
+        function verifyAbhath() {
+            const v2 = parseInt(document.getElementById('tape-2').value.trim(), 10);
+            const v3 = parseInt(document.getElementById('tape-3').value.trim(), 10);
+            const v4 = parseInt(document.getElementById('tape-4').value.trim(), 10);
+            const v6 = parseInt(document.getElementById('tape-6').value.trim(), 10);
+            const v7 = parseInt(document.getElementById('tape-7').value.trim(), 10);
+            const v8 = parseInt(document.getElementById('tape-8').value.trim(), 10);
+
+            const isCorrect = (v2 === 2 && v3 === 3 && v4 === 4 && v6 === 6 && v7 === 7 && v8 === 8);
+
+            document.getElementById('station-abhath').classList.add('frozen');
+            document.getElementById('btn-verify-abhath').disabled = true;
+
+            const badge = document.getElementById('abhath-badge');
+            const evalBox = document.getElementById('eval-abhath');
+            badge.classList.remove('hidden');
+            evalBox.classList.remove('hidden');
+
+            if (isCorrect) {
+                APP_STATE.correctCount++;
+                playSuccessSound();
+                document.getElementById('station-abhath').classList.add('correct-bg');
+                badge.innerText = 'صَحِيحٌ ✓';
+                badge.className = 'text-xs font-black px-2.5 py-1 rounded-lg bg-emerald-600 text-white';
+                evalBox.className = 'mt-4 p-3 rounded-2xl font-bold text-sm bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center justify-between';
+                evalBox.innerHTML = `<span>بَارَكَ اللَّهُ فِيكَ! الشَّرِيطُ الْعَدَدِيُّ صَحِيحٌ وَمُرَتَّبٌ كَامِلًا: (1 ، 2 ، 3 ، 4 ، 5 ، 6 ، 7 ، 8 ، 9).</span> <span class="font-black text-base">✓ 1 / 1</span>`;
+            } else {
+                APP_STATE.wrongCount++;
+                playErrorSound();
+                document.getElementById('station-abhath').classList.add('incorrect-bg');
+                badge.innerText = 'خَاطِئٌ ✗';
+                badge.className = 'text-xs font-black px-2.5 py-1 rounded-lg bg-rose-600 text-white';
+                evalBox.className = 'mt-4 p-3 rounded-2xl font-bold text-sm bg-rose-100 text-rose-800 border border-rose-300 flex items-center justify-between';
+                evalBox.innerHTML = `<span>تَرْتِيبُ الْأَعْدَادِ الصَّحِيحُ مِنَ الْيَسَارِ لِلْيَمِينِ: 1 ، 2 ، 3 ، 4 ، 5 ، 6 ، 7 ، 8 ، 9.</span> <span class="font-black text-base">✗ 0 / 1</span>`;
+            }
+
+            document.getElementById('final-report').scrollIntoView({ behavior: 'smooth' });
+            updateFinalReport();
+        }
+
+        function updateFinalReport() {
+            const completed = APP_STATE.correctCount + APP_STATE.wrongCount;
+            const rawPercentage = (APP_STATE.correctCount / APP_STATE.totalQuestions) * 100;
+            const percentage = completed > 0 ? Math.min(100, Math.max(0, Math.round(rawPercentage))) : 0;
+
+            document.getElementById('final-correct-count').innerText = APP_STATE.correctCount;
+            document.getElementById('final-wrong-count').innerText = APP_STATE.wrongCount;
+            document.getElementById('final-percentage-text').innerText = `${percentage}%`;
+
+            const circle = document.getElementById('final-progress-circle');
+            const circumference = 264;
+            const offset = circumference - (percentage / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+
+            if (percentage >= 80) {
+                circle.setAttribute('stroke', '#16a34a');
+            } else if (percentage >= 50) {
+                circle.setAttribute('stroke', '#eab308');
+            } else {
+                circle.setAttribute('stroke', '#dc2626');
+            }
+
+            const noteDiv = document.getElementById('final-pedagogical-note');
+            if (completed === APP_STATE.totalQuestions) {
+                if (percentage >= 80) {
+                    noteDiv.innerHTML = `<span class="text-emerald-700 font-black">مُمْتَازٌ جِدًّا!</span> أَتْقَنْتَ الْأَعْدَادَ مِنْ 1 إِلَى 9 تَمْيِيزًا وَعَدًّا وَتَرْتِيبًا بِامْتِيَازٍ.`;
+                } else if (percentage >= 50) {
+                    noteDiv.innerHTML = `<span class="text-amber-700 font-black">جَيِّدٌ جِدًّا!</span> لَدَيْكَ اسْتِيعَابٌ جَيِّدٌ، وَيُسْتَحْسَنُ التَّدَرُّبُ أَكْثَرَ عَلَى الْعَدِّ الدَّقِيقِ.`;
+                } else {
+                    noteDiv.innerHTML = `<span class="text-rose-700 font-black">يُوصَى بِمُرَاجَعَةِ الدَّرْسِ!</span> أَعِدِ الْمُحَاوَلَةَ لِلتَّعَرُّفِ أَكْثَرَ عَلَى الْأَعْدَادِ مِنْ 1 إِلَى 9.`;
+                }
+            }
+        }
+
+        function restartApplication() {
+            playClickSound();
+            window.location.reload();
+        }
+
+        function exitApp() {
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.close) {
+                window.Telegram.WebApp.close();
+            } else {
+                window.close();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            verifySubscription();
+            initAktachef();
+            selectColor('red');
+            initOnjez1();
+            renderSticks();
+            initAtamarano1();
+            initAtamarano2();
+            initAtamarano3();
+            updateFinalReport();
+        });
+    </script>
+</body>
+</html>
