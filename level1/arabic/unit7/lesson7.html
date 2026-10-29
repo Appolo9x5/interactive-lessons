@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>أَدَوَاتِي الْمَدْرَسِيَّةُ - السَّنَةُ الْأُولَى ابْتِدَائِيّ</title>
+  <!-- Google Fonts: Tajawal -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --primary: #1976d2;
+      --primary-dark: #0d47a1;
+      --success: #2e7d32;
+      --error: #c62828;
+      --bg: #f5f9fc;
+      --card-bg: #ffffff;
+      --text: #263238;
+      --text-muted: #546e7a;
+      --accent: #ff9800;
+    }
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .lesson-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      border-top: 6px solid var(--primary);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+    }
+    .page-badge {
+      background: linear-gradient(135deg, #ff9800, #f57c00);
+      color: white;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      box-shadow: 0 2px 6px rgba(255, 152, 0, 0.3);
+    }
+    .eval-badge {
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      background: #e3f2fd;
+      color: var(--primary-dark);
+    }
+    .lesson-text-box {
+      background-color: #fdfbf7;
+      border-right: 5px solid var(--accent);
+      border-radius: 12px;
+      padding: 16px;
+      line-height: 2.2;
+    }
+    .highlight-t {
+      color: #d81b60;
+      font-weight: 900;
+      background-color: #fce4ec;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+    .highlight-d {
+      color: #0288d1;
+      font-weight: 900;
+      background-color: #e1f5fe;
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+    .locked-section {
+      opacity: 0.55;
+      pointer-events: none;
+      filter: grayscale(80%);
+      position: relative;
+    }
+    .locked-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(2px);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+    .interactive-btn {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      user-select: none;
+    }
+    .interactive-btn:active {
+      transform: scale(0.96);
+    }
+    .btn-correct {
+      background-color: #2e7d32 !important;
+      color: white !important;
+      border-color: #1b5e20 !important;
+    }
+    .btn-wrong {
+      background-color: #c62828 !important;
+      color: white !important;
+      border-color: #b71c1c !important;
+      animation: shake 0.4s ease-in-out;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .quran-box {
+      background: #fbfbf4;
+      border: 3px double #d4af37;
+      border-radius: 16px;
+      line-height: 2.6;
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري (أُضيفت)
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس (أُضيف) */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      margin-top: 12px;
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    }
+  </style>
+</head>
+<body class="min-h-screen py-6 px-3 sm:px-6 md:px-10 max-w-5xl mx-auto">
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري (أُضيفت)
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <!-- الرأس الثابت وشريط التحكم -->
+  <header class="sticky top-2 z-50 bg-white/95 backdrop-blur-md rounded-2xl shadow-md p-4 mb-8 border border-blue-100 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center font-black text-2xl shadow-inner">
+        1
+      </div>
+      <div>
+        <h1 class="text-xl sm:text-2xl font-black text-blue-900 leading-tight">أَدَوَاتِي الْمَدْرَسِيَّةُ</h1>
+        <p class="text-xs sm:text-sm text-slate-500 font-medium">اللُّغَةُ الْعَرَبِيَّةُ • السَّنَةُ الْأُولَى ابْتِدَائِيّ</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="text-right hidden sm:block">
+        <span class="text-xs text-slate-400 font-bold block">مُعَدَّلُ الْإِنْجَازِ</span>
+        <span id="score-counter" class="text-base font-extrabold text-blue-700">0 / 0</span>
+      </div>
+      <button id="audio-toggle" class="p-3 bg-blue-50 text-blue-700 rounded-xl hover:bg-blue-100 transition flex items-center gap-2 font-bold text-sm" title="كتم/تشغيل المؤثرات الصوتية">
+        <span id="audio-icon">🔊</span>
+        <span class="hidden md:inline">الصَّوْتُ</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="space-y-10">
+
+    <!-- 1. المحطة الأولى: فهم المنطوق -->
+    <section id="station-1" class="lesson-card p-6 md:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="page-badge">الْمَحَطَّةُ 1</span>
+          <h2 class="text-lg md:text-xl font-black text-blue-950">فَهْمُ الْمَنْطُوقِ: فِي الْقِسْمِ</h2>
+        </div>
+        <span class="eval-badge" id="badge-st1">4 أَسْئِلَة</span>
+      </div>
+
+      <!-- مشهد المعلمة والتلاميذ -->
+      <div class="rounded-2xl overflow-hidden border-2 border-slate-100 mb-6 shadow-sm">
+        <img src="1.jpg" alt="المعلمة والتلاميذ في القسم" class="w-full max-h-96 object-cover object-center" onerror="this.src='https://placehold.co/900x450/e2e8f0/1e293b?text=صورة+المعلمة+والتلاميذ+في+القسم'">
+      </div>
+
+      <!-- مشغل السند الصوتي -->
+      <div class="bg-blue-50/80 rounded-2xl p-5 border border-blue-200 mb-8 text-center">
+        <p class="font-bold text-blue-900 mb-3 text-base sm:text-lg">🎧 اِسْتَمِعْ إِلَى النَّصِّ الْمَنْطُوقِ بِانْتِبَاهٍ ثُمَّ أَجِبْ عَنِ الْأَسْئِلَةِ:</p>
+        <audio controls class="w-full max-w-lg mx-auto shadow-sm rounded-lg" preload="metadata">
+          <source src="audio_comprehension.mp3" type="audio/mpeg">
+          متصفحك لا يدعم تشغيل الملفات الصوتية.
+        </audio>
+        <p class="text-xs text-blue-600 mt-2 font-medium">(احفظ الملف الصوتي في نفس المجلد باسم: <code class="bg-blue-100 px-2 py-0.5 rounded font-mono font-bold">audio_comprehension.mp3</code>)</p>
+      </div>
+
+      <!-- أسئلة الفهم -->
+      <div class="space-y-6" id="st1-questions">
+
+        <!-- س1 -->
+        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 question-box" data-qid="q1">
+          <p class="font-bold text-slate-800 text-base md:text-lg mb-4">1. أَيْنَ وَقَفَتِ الْمُعَلِّمَةُ؟ وَمَاذَا قَالَتْ لِلتَّلَامِيذِ؟</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 shuffle-container">
+            <button class="interactive-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-700 hover:border-blue-400 text-right" data-correct="true">
+              وَقَفَتْ عَلَى الْمِصْطَبَةِ، وَقَالَتْ: أَخْرِجُوا أَدَوَاتِكُمْ.
+            </button>
+            <button class="interactive-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-700 hover:border-blue-400 text-right" data-correct="false">
+              وَقَفَتْ عِنْدَ الْبَابِ، وَقَالَتْ: اُدْخُلُوا فِي هُدُوءٍ.
+            </button>
+          </div>
+          <div class="feedback-msg mt-3 text-sm font-bold hidden"></div>
+        </div>
+
+        <!-- س2 -->
+        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 question-box" data-qid="q2">
+          <p class="font-bold text-slate-800 text-base md:text-lg mb-4">2. مَا هِيَ الْأَدَوَاتُ الَّتِي وَضَعَهَا أَحْمَدُ عَلَى الْمِنْضَدَةِ؟</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 shuffle-container">
+            <button class="interactive-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-700 hover:border-blue-400 text-right" data-correct="false">
+              لُعْبَةٌ، كُرَةٌ، وَحِذَاءٌ رِيَاضِيٌّ.
+            </button>
+            <button class="interactive-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-700 hover:border-blue-400 text-right" data-correct="true">
+              كُرَّاسٌ، لَوْحَةٌ، أَوْرَاقٌ مُلَوَّنَةٌ، وَمِبْرَاةٌ.
+            </button>
+          </div>
+          <div class="feedback-msg mt-3 text-sm font-bold hidden"></div>
+        </div>
+
+        <!-- س3 -->
+        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 question-box" data-qid="q3">
+          <p class="font-bold text-slate-800 text-base md:text-lg mb-4">3. مَا الَّذِي كَانَ يَنْقُصُ بِلَالَ؟ وَمَاذَا رَدَّتْ عَلَيْهِ الْمُعَلِّمَةُ؟</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 shuffle-container">
+            <button class="interactive-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-700 hover:border-blue-400 text-right" data-correct="true">
+              كَانَ يَنْقُصُهُ أَوْرَاقٌ مُلَوَّنَةٌ، فَقَالَتْ: نَحْتَاجُ إِلَيْهَا الْيَوْمَ، أَحْضِرْهَا مَعَكَ غَدًا.
+            </button>
+            <button class="interactive-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-700 hover:border-blue-400 text-right" data-correct="false">
+              كَانَ يَنْقُصُهُ مِبْرَاةٌ، فَقَالَتْ: اِشْتَرِ مِبْرَاةً جَدِيدَةً الْآنَ.
+            </button>
+          </div>
+          <div class="feedback-msg mt-3 text-sm font-bold hidden"></div>
+        </div>
+
+        <!-- س4 -->
+        <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 question-box" data-qid="q4">
+          <p class="font-bold text-slate-800 text-base md:text-lg mb-4">4. هَلْ أَحْضَرَتْ هُدَى جَمِيعَ أَدَوَاتِهَا؟ وَمَاذَا قَالَتْ؟</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 shuffle-container">
+            <button class="interactive-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-700 hover:border-blue-400 text-right" data-correct="false">
+              لَا لَمْ تُحْضِرْهَا، وَقَالَتْ: نَسِيتُ مِحْفَظَتِي فِي الْبَيْتِ.
+            </button>
+            <button class="interactive-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-700 hover:border-blue-400 text-right" data-correct="true">
+              نَعَمْ أَحْضَرَتْ كُلَّ أَدَوَاتِهَا، وَقَالَتْ: "الْحَمْدُ لِلَّهِ".
+            </button>
+          </div>
+          <div class="feedback-msg mt-3 text-sm font-bold hidden"></div>
+        </div>
+
+      </div>
+
+      <div class="mt-8 text-center">
+        <button id="btn-next-st1" class="hidden px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-lg transition">
+          اَلِانْتِقَالُ إِلَى الْمَحَطَّةِ التَّالِيَةِ ➔
+        </button>
+      </div>
+    </section>
+
+
+    <!-- 2. المحطة الثانية: ص 36 أبني وأقرأ + أستعمل -->
+    <section id="station-2" class="lesson-card p-6 md:p-8 locked-section">
+      <div class="locked-overlay">
+        <span class="text-3xl mb-2">🔒</span>
+        <span class="font-bold text-slate-700">أَكْمِلِ الْمَحَطَّةَ السَّابِقَةَ لِفَتْحِ هَذَا الْقِسْمِ</span>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="page-badge">كِتَابُ الْقِرَاءَةِ • ص 36</span>
+          <h2 class="text-lg md:text-xl font-black text-blue-950">أَبْنِي وَأَقْرَأُ • أَسْتَعْمَلُ</h2>
+        </div>
+      </div>
+
+      <!-- نص أبني وأقرأ -->
+      <div class="mb-8">
+        <h3 class="text-md font-black text-amber-800 mb-3 flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
+          أَبْنِي وَأَقْرَأُ:
+        </h3>
+        <div class="lesson-text-box text-xl md:text-2xl font-bold text-slate-800 space-y-2">
+          <p>وَقَفَتِ الْمُعَلِّمَةُ عَلَى الْمِصْطَبَةِ .</p>
+          <p>وَقَالَتْ : أَخْرِجُوا أَدَوَاتِكُمْ يَا أَوْلَادِي .</p>
+        </div>
+      </div>
+
+      <!-- أستعمل: عندي، لي -->
+      <div class="mb-8">
+        <h3 class="text-md font-black text-blue-800 mb-3 flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-blue-500 inline-block"></span>
+          أَسْتَعْمَلُ (عِنْدِي / لِي):
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-5 bg-emerald-50 border-2 border-emerald-200 rounded-2xl flex items-center gap-3">
+            <span class="text-3xl">📘</span>
+            <div>
+              <span class="font-black text-emerald-900 block text-lg">عِنْدِي كُرَّاسٌ جَمِيلٌ .</span>
+              <span class="text-xs text-emerald-700 font-bold">اِسْتِعْمَالُ صِيغَةِ «عِنْدِي» لِلْمِلْكِيَّةِ</span>
+            </div>
+          </div>
+          <div class="p-5 bg-rose-50 border-2 border-rose-200 rounded-2xl flex items-center gap-3">
+            <span class="text-3xl">🖍️</span>
+            <div>
+              <span class="font-black text-rose-900 block text-lg">أَنَا لَيْسَ لِي أَقْلَامٌ مُلَوَّنَةٌ .</span>
+              <span class="text-xs text-rose-700 font-bold">اِسْتِعْمَالُ صِيغَةِ «لَيْسَ لِي» لِلنَّفْيِ</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- تمرين بسيط للتأكيد -->
+      <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 question-box" data-qid="q_st2_1">
+        <p class="font-bold text-slate-800 text-base md:text-lg mb-3">اخْتَرِ الصِّيغَةَ الْمُنَاسِبَةَ: «........ مِحْفَظَةٌ جَدِيدَةٌ» (لِإِثْبَاتِ الْمِلْكِيَّةِ):</p>
+        <div class="grid grid-cols-2 gap-3 shuffle-container max-w-md">
+          <button class="interactive-btn p-3.5 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-800 hover:border-blue-400" data-correct="true">
+            عِنْدِي
+          </button>
+          <button class="interactive-btn p-3.5 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-800 hover:border-blue-400" data-correct="false">
+            لَيْسَ لِي
+          </button>
+        </div>
+        <div class="feedback-msg mt-3 text-sm font-bold hidden"></div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <button id="btn-next-st2" class="hidden px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-lg transition">
+          اَلِانْتِقَالُ إِلَى حَرْفِ التَّاءِ (ص 37) ➔
+        </button>
+      </div>
+    </section>
+
+
+    <!-- 3. المحطة الثالثة: ص 37 أكتشف حرف التاء -->
+    <section id="station-3" class="lesson-card p-6 md:p-8 locked-section">
+      <div class="locked-overlay">
+        <span class="text-3xl mb-2">🔒</span>
+        <span class="font-bold text-slate-700">أَكْمِلِ الْمَحَطَّةَ السَّابِقَةَ لِفَتْحِ هَذَا الْقِسْمِ</span>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="page-badge">كِتَابُ الْقِرَاءَةِ • ص 37</span>
+          <h2 class="text-lg md:text-xl font-black text-blue-950">أَكْتَشِفُ حَرْفَ التَّاءِ ( ت )</h2>
+        </div>
+      </div>
+
+      <!-- الجملة المفتاحية -->
+      <div class="bg-amber-50/70 p-5 rounded-2xl border-2 border-amber-200 mb-6 text-center">
+        <p class="text-xs font-bold text-amber-700 mb-2">الجملة المفتاحية</p>
+        <p class="text-2xl md:text-3xl font-black text-slate-800">
+          <span class="highlight-t">تَـ</span>ـقِفُ مُعَلِّمَـ<span class="highlight-t">تُـ</span>ـنَا عَلَى الْمِصْطَبَـ<span class="highlight-t">ةِ</span>
+        </p>
+        <div class="flex justify-center gap-4 mt-4 font-black text-xl text-rose-700">
+          <span class="bg-white px-4 py-1.5 rounded-xl border border-rose-200">ت</span>
+          <span class="bg-white px-4 py-1.5 rounded-xl border border-rose-200">تـ</span>
+          <span class="bg-white px-4 py-1.5 rounded-xl border border-rose-200">ـتـ</span>
+          <span class="bg-white px-4 py-1.5 rounded-xl border border-rose-200">ـة</span>
+        </div>
+      </div>
+
+      <!-- أقرأ الكلمات التي فيها حرف التاء -->
+      <h3 class="font-black text-slate-800 text-base md:text-lg mb-4">أَقْرَأُ الْكَلِمَاتِ الَّتِي فِيهَا حَرْفُ التَّاءِ مَعَ الصُّوَرِ:</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white p-3 rounded-2xl border border-slate-200 text-center shadow-sm">
+          <img src="3.jpg" alt="تفاحة" class="w-full h-28 object-contain rounded-xl mb-2" onerror="this.src='https://placehold.co/200x200/fee2e2/991b1b?text=تفاحة'">
+          <span class="font-black text-lg block text-slate-800"><span class="highlight-t">تُـ</span>فَّاحَةٌ</span>
+        </div>
+        <div class="bg-white p-3 rounded-2xl border border-slate-200 text-center shadow-sm">
+          <img src="4.jpg" alt="كتاب" class="w-full h-28 object-contain rounded-xl mb-2" onerror="this.src='https://placehold.co/200x200/e0f2fe/0369a1?text=كتاب'">
+          <span class="font-black text-lg block text-slate-800">كِـ<span class="highlight-t">تَـ</span>ـابٌ</span>
+        </div>
+        <div class="bg-white p-3 rounded-2xl border border-slate-200 text-center shadow-sm">
+          <img src="5.jpg" alt="مبراة" class="w-full h-28 object-contain rounded-xl mb-2" onerror="this.src='https://placehold.co/200x200/fce7f3/9d174d?text=مبراة'">
+          <span class="font-black text-lg block text-slate-800">مِبْرَا<span class="highlight-t">ةٌ</span></span>
+        </div>
+        <div class="bg-white p-3 rounded-2xl border border-slate-200 text-center shadow-sm">
+          <img src="2.jpg" alt="تلميذ" class="w-full h-28 object-contain rounded-xl mb-2" onerror="this.src='https://placehold.co/200x200/fef3c7/92400e?text=تلميذ'">
+          <span class="font-black text-lg block text-slate-800"><span class="highlight-t">تِـ</span>لْمِيذٌ</span>
+        </div>
+      </div>
+
+      <!-- جدول أقرأ وأثبت للحرف -->
+      <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 mb-6">
+        <h4 class="font-black text-blue-900 mb-3 text-sm">أَقْرَأُ وَأُثَبِّتُ (حَرْفُ التَّاءِ بِالْحَرَكَاتِ):</h4>
+        <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center font-black text-lg">
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-rose-700">تَ</div>
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-rose-700">تُ</div>
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-rose-700">تِ</div>
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-rose-700">تَا</div>
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-rose-700">تُو</div>
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-rose-700">تِي</div>
+        </div>
+      </div>
+
+      <!-- سؤال التحقق للمحطة 3 -->
+      <div class="bg-blue-50/60 p-5 rounded-2xl border border-blue-200 question-box" data-qid="q_st3_1">
+        <p class="font-bold text-slate-800 text-base mb-3">كَيْفَ يُكْتَبُ حَرْفُ التَّاءِ فِي أَوَّلِ كَلِمَةِ «تُفَّاحَةٌ»؟</p>
+        <div class="grid grid-cols-3 gap-3 shuffle-container max-w-sm">
+          <button class="interactive-btn p-3 rounded-xl border-2 border-slate-200 bg-white font-black text-xl text-rose-700 hover:border-blue-400" data-correct="true">تـ</button>
+          <button class="interactive-btn p-3 rounded-xl border-2 border-slate-200 bg-white font-black text-xl text-slate-700 hover:border-blue-400" data-correct="false">ـتـ</button>
+          <button class="interactive-btn p-3 rounded-xl border-2 border-slate-200 bg-white font-black text-xl text-slate-700 hover:border-blue-400" data-correct="false">ـة</button>
+        </div>
+        <div class="feedback-msg mt-3 text-sm font-bold hidden"></div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <button id="btn-next-st3" class="hidden px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-lg transition">
+          اَلِانْتِقَالُ إِلَى حَرْفِ الدَّالِ (ص 38) ➔
+        </button>
+      </div>
+    </section>
+
+
+    <!-- 4. المحطة الرابعة: ص 38 أكتشف حرف الدال -->
+    <section id="station-4" class="lesson-card p-6 md:p-8 locked-section">
+      <div class="locked-overlay">
+        <span class="text-3xl mb-2">🔒</span>
+        <span class="font-bold text-slate-700">أَكْمِلِ الْمَحَطَّةَ السَّابِقَةَ لِفَتْحِ هَذَا الْقِسْمِ</span>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="page-badge">كِتَابُ الْقِرَاءَةِ • ص 38</span>
+          <h2 class="text-lg md:text-xl font-black text-blue-950">أَكْتَشِفُ حَرْفَ الدَّالِ ( د )</h2>
+        </div>
+      </div>
+
+      <!-- الجملة المفتاحية -->
+      <div class="bg-cyan-50/70 p-5 rounded-2xl border-2 border-cyan-200 mb-6 text-center">
+        <p class="text-xs font-bold text-cyan-700 mb-2">الجملة المفتاحية</p>
+        <p class="text-2xl md:text-3xl font-black text-slate-800">
+          أَخْرِجُوا أَدَوَا<span class="highlight-d">تِـ</span>كُمْ يَا أَوْلَا<span class="highlight-d">دُ</span>
+        </p>
+        <div class="flex justify-center gap-4 mt-4 font-black text-xl text-sky-700">
+          <span class="bg-white px-5 py-1.5 rounded-xl border border-sky-200">د</span>
+          <span class="bg-white px-5 py-1.5 rounded-xl border border-sky-200">ـد</span>
+        </div>
+      </div>
+
+      <!-- أقرأ الكلمات التي فيها حرف الدال -->
+      <h3 class="font-black text-slate-800 text-base md:text-lg mb-4">أَقْرَأُ الْكَلِمَاتِ الَّتِي فِيهَا حَرْفُ الدَّالِ مَعَ الصُّوَرِ:</h3>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white p-3 rounded-2xl border border-slate-200 text-center shadow-sm">
+          <img src="6.jpg" alt="دفتر" class="w-full h-28 object-contain rounded-xl mb-2" onerror="this.src='https://placehold.co/200x200/ccfbf1/0f766e?text=دفتر'">
+          <span class="font-black text-lg block text-slate-800"><span class="highlight-d">دَ</span>فْتَرٌ</span>
+        </div>
+        <div class="bg-white p-3 rounded-2xl border border-slate-200 text-center shadow-sm">
+          <img src="7.jpg" alt="مدير" class="w-full h-28 object-contain rounded-xl mb-2" onerror="this.src='https://placehold.co/200x200/e0e7ff/3730a3?text=مدير'">
+          <span class="font-black text-lg block text-slate-800">مُـ<span class="highlight-d">دِ</span>يرٌ</span>
+        </div>
+        <div class="bg-white p-3 rounded-2xl border border-slate-200 text-center shadow-sm">
+          <img src="8.jpg" alt="منضدة" class="w-full h-28 object-contain rounded-xl mb-2" onerror="this.src='https://placehold.co/200x200/fef3c7/78350f?text=منضدة'">
+          <span class="font-black text-lg block text-slate-800">مِنْضَـ<span class="highlight-d">دَ</span>ةٌ</span>
+        </div>
+        <div class="bg-white p-3 rounded-2xl border border-slate-200 text-center shadow-sm">
+          <img src="9.jpg" alt="مدرسة" class="w-full h-28 object-contain rounded-xl mb-2" onerror="this.src='https://placehold.co/200x200/dcfce7/166534?text=مدرسة'">
+          <span class="font-black text-lg block text-slate-800">مَـ<span class="highlight-d">دْ</span>رَسَةٌ</span>
+        </div>
+      </div>
+
+      <!-- جدول أقرأ وأثبت لحرف الدال -->
+      <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 mb-6">
+        <h4 class="font-black text-blue-900 mb-3 text-sm">أَقْرَأُ وَأُثَبِّتُ (حَرْفُ الدَّالِ بِالْحَرَكَاتِ):</h4>
+        <div class="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center font-black text-lg">
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-sky-700">دَ</div>
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-sky-700">دُ</div>
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-sky-700">دِ</div>
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-sky-700">دَا</div>
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-sky-700">دُو</div>
+          <div class="bg-white p-2.5 rounded-xl border border-slate-200 text-sky-700">دِي</div>
+        </div>
+      </div>
+
+      <!-- سؤال التحقق للمحطة 4 -->
+      <div class="bg-blue-50/60 p-5 rounded-2xl border border-blue-200 question-box" data-qid="q_st4_1">
+        <p class="font-bold text-slate-800 text-base mb-3">أَيْنَ يَقَعُ حَرْفُ الدَّالِ فِي كَلِمَةِ «مَدْرَسَةٌ»؟</p>
+        <div class="grid grid-cols-3 gap-3 shuffle-container max-w-sm">
+          <button class="interactive-btn p-3 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-800 hover:border-blue-400" data-correct="false">فِي الْأَوَّلِ</button>
+          <button class="interactive-btn p-3 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-800 hover:border-blue-400" data-correct="true">فِي الْوَسَطِ (ـدْ)</button>
+          <button class="interactive-btn p-3 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-800 hover:border-blue-400" data-correct="false">فِي الْآخِرِ</button>
+        </div>
+        <div class="feedback-msg mt-3 text-sm font-bold hidden"></div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <button id="btn-next-st4" class="hidden px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-lg transition">
+          اَلِانْتِقَالُ إِلَى سُورَةِ النَّاسِ (ص 39) ➔
+        </button>
+      </div>
+    </section>
+
+
+    <!-- 5. المحطة الخامسة: ص 39 أحب ديني - سورة الناس -->
+    <section id="station-5" class="lesson-card p-6 md:p-8 locked-section">
+      <div class="locked-overlay">
+        <span class="text-3xl mb-2">🔒</span>
+        <span class="font-bold text-slate-700">أَكْمِلِ الْمَحَطَّةَ السَّابِقَةَ لِفَتْحِ هَذَا الْقِسْمِ</span>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="page-badge">الْتَّرْبِيَةُ الْإِسْلَامِيَّةُ • ص 39</span>
+          <h2 class="text-lg md:text-xl font-black text-blue-950">أُحِبُّ دِينِي • سُورَةُ النَّاسِ</h2>
+        </div>
+      </div>
+
+      <!-- مشغل السورة -->
+      <div class="bg-amber-50/60 p-5 rounded-2xl border border-amber-200 mb-6 text-center">
+        <p class="font-bold text-amber-900 mb-3">📖 اسْتَمِعْ إِلَى تِلَاوَةِ سُورَةِ النَّاسِ الْمُبَارَكَةِ:</p>
+        <audio controls class="w-full max-w-lg mx-auto shadow-sm rounded-lg" preload="metadata">
+          <source src="surah_annas.mp3" type="audio/mpeg">
+          متصفحك لا يدعم تشغيل الصوتيات.
+        </audio>
+        <p class="text-xs text-amber-700 mt-2 font-medium">(احفظ الملف الصوتي للسورة باسم: <code class="bg-amber-100 px-2 py-0.5 rounded font-mono font-bold">surah_annas.mp3</code>)</p>
+      </div>
+
+      <!-- نص السورة الكريمة -->
+      <div class="quran-box p-6 md:p-8 text-center mb-6">
+        <p class="text-sm font-bold text-amber-800 mb-3">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</p>
+        <p class="text-xl md:text-2xl font-black text-slate-800 leading-loose">
+          قُلْ أَعُوذُ بِرَبِّ النَّاسِ ﴿١﴾ مَلِكِ النَّاسِ ﴿٢﴾ إِلَهِ النَّاسِ ﴿٣﴾ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ﴿٤﴾ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ﴿٥﴾ مِنَ الْجِنَّةِ وَالنَّاسِ ﴿٦﴾
+        </p>
+      </div>
+
+      <!-- أفهم -->
+      <div class="lesson-text-box mb-6 text-base md:text-lg font-bold text-slate-800">
+        <span class="text-amber-800 block mb-1">💡 أَفْهَمُ:</span>
+        « نَسْتَعِينُ دَائِمًا بِاللَّهِ، لِأَنَّهُ هُوَ الَّذِي يَحْمِينَا وَيَحْفَظُنَا . »
+      </div>
+
+      <!-- سؤال التحقق للمحطة 5 -->
+      <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 question-box" data-qid="q_st5_1">
+        <p class="font-bold text-slate-800 text-base mb-3">بِمَنْ نَسْتَعِينُ دَائِمًا لِيَحْمِيَنَا وَيَحْفَظَنَا كَمَا تَعَلَّمْنَا فِي سُورَةِ النَّاسِ؟</p>
+        <div class="grid grid-cols-2 gap-3 shuffle-container max-w-md">
+          <button class="interactive-btn p-3.5 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-800 hover:border-blue-400" data-correct="true">
+            نَسْتَعِينُ بِاللَّهِ تَعَالَى
+          </button>
+          <button class="interactive-btn p-3.5 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-800 hover:border-blue-400" data-correct="false">
+            نَسْتَعِينُ بِالْغُرَبَاءِ
+          </button>
+        </div>
+        <div class="feedback-msg mt-3 text-sm font-bold hidden"></div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <button id="btn-next-st5" class="hidden px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-lg transition">
+          اَلِانْتِقَالُ إِلَى دَفْتَرِ الْأَنْشِطَةِ (ص 16) ➔
+        </button>
+      </div>
+    </section>
+
+
+    <!-- 6. المحطة السادسة: كراس الأنشطة ص 16 أثبت 1 و 2 -->
+    <section id="station-6" class="lesson-card p-6 md:p-8 locked-section">
+      <div class="locked-overlay">
+        <span class="text-3xl mb-2">🔒</span>
+        <span class="font-bold text-slate-700">أَكْمِلِ الْمَحَطَّةَ السَّابِقَةَ لِفَتْحِ هَذَا الْقِسْمِ</span>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="page-badge">دَفْتَرُ الْأَنْشِطَةِ • ص 16</span>
+          <h2 class="text-lg md:text-xl font-black text-blue-950">أُثَبِّتُ (1) وَ أُثَبِّتُ (2)</h2>
+        </div>
+      </div>
+
+      <!-- أثبت 1: حرف التاء -->
+      <div class="mb-10" id="athbet-1-box">
+        <p class="font-black text-rose-800 text-base md:text-lg mb-2">
+          📌 أُثَبِّتُ (1): اِضْغَطْ عَلَى الْكَلِمَاتِ الَّتِي فِيهَا حَرْفُ التَّاءِ ( ت ):
+        </p>
+        <p class="text-xs text-slate-500 mb-4 font-bold">عِنْدَ اخْتِيَارِ الْكَلِمَةِ الصَّحِيحَةِ سَتَتَحَوَّلُ إِلَى الْأَخْضَرِ مَعَ تَمْيِيزِ حَرْفِ التَّاءِ.</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 shuffle-container" id="words-t-grid">
+          <!-- 8 كلمات: تلميذة، علم، هاتف، مفتاح، دفتر، بنت، خزانة، شجرة -->
+          <button class="interactive-btn word-t-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-black text-lg text-slate-800" data-has-t="true" data-word="تِلْمِيذَةٌ" data-highlight="<span class='highlight-t'>تِ</span>لْمِيذَ<span class='highlight-t'>ةٌ</span>">تِلْمِيذَةٌ</button>
+          <button class="interactive-btn word-t-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-black text-lg text-slate-800" data-has-t="false" data-word="عَلَمٌ">عَلَمٌ</button>
+          <button class="interactive-btn word-t-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-black text-lg text-slate-800" data-has-t="true" data-word="هَاتِفٌ" data-highlight="هَا<span class='highlight-t'>تِ</span>فٌ">هَاتِفٌ</button>
+          <button class="interactive-btn word-t-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-black text-lg text-slate-800" data-has-t="true" data-word="مِفْتَاحٌ" data-highlight="مِفْـ<span class='highlight-t'>تَ</span>ـاحٌ">مِفْتَاحٌ</button>
+          <button class="interactive-btn word-t-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-black text-lg text-slate-800" data-has-t="true" data-word="دَفْتَرٌ" data-highlight="دَفْـ<span class='highlight-t'>تَ</span>ـرٌ">دَفْتَرٌ</button>
+          <button class="interactive-btn word-t-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-black text-lg text-slate-800" data-has-t="true" data-word="بِنْتٌ" data-highlight="بِنْـ<span class='highlight-t'>تٌ</span>">بِنْتٌ</button>
+          <button class="interactive-btn word-t-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-black text-lg text-slate-800" data-has-t="true" data-word="خِزَانَةٌ" data-highlight="خِزَانَـ<span class='highlight-t'>ةٌ</span>">خِزَانَةٌ</button>
+          <button class="interactive-btn word-t-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-black text-lg text-slate-800" data-has-t="true" data-word="شَجَرَةٌ" data-highlight="شَجَر<span class='highlight-t'>ةٌ</span>">شَجَرَةٌ</button>
+        </div>
+        <div id="athbet1-feedback" class="mt-3 text-sm font-bold text-emerald-700 hidden"></div>
+      </div>
+
+      <!-- أثبت 2: حرف الدال -->
+      <div class="pt-6 border-t border-slate-200" id="athbet-2-box">
+        <p class="font-black text-sky-800 text-base md:text-lg mb-2">
+          📌 أُثَبِّتُ (2): اِضْغَطْ عَلَى الْكَلِمَاتِ الَّتِي فِيهَا حَرْفُ الدَّالِ ( د ):
+        </p>
+        <p class="text-xs text-slate-500 mb-4 font-bold">عِنْدَ اخْتِيَارِ الْكَلِمَةِ الصَّحِيحَةِ سَتَتَحَوَّلُ إِلَى الْأَخْضَرِ مَعَ تَمْيِيزِ حَرْفِ الدَّالِ.</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 shuffle-container" id="words-d-grid">
+          <!-- 6 كلمات: دمية، دار، مدور، دودة، وردة، كرسي -->
+          <button class="interactive-btn word-d-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-black text-lg text-slate-800" data-has-d="true" data-word="دُمْيَةٌ" data-highlight="<span class='highlight-d'>دُ</span>مْيَةٌ">دُمْيَةٌ</button>
+          <button class="interactive-btn word-d-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-black text-lg text-slate-800" data-has-d="true" data-word="دَارٌ" data-highlight="<span class='highlight-d'>دَ</span>ارٌ">دَارٌ</button>
+          <button class="interactive-btn word-d-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-black text-lg text-slate-800" data-has-d="true" data-word="مِدْوَرٌ" data-highlight="مِـ<span class='highlight-d'>دْ</span>وَرٌ">مِدْوَرٌ</button>
+          <button class="interactive-btn word-d-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-black text-lg text-slate-800" data-has-d="true" data-word="دُودَةٌ" data-highlight="<span class='highlight-d'>دُ</span>و<span class='highlight-d'>دَ</span>ةٌ">دُودَةٌ</button>
+          <button class="interactive-btn word-d-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-black text-lg text-slate-800" data-has-d="true" data-word="وَرْدَةٌ" data-highlight="وَرْ<span class='highlight-d'>دَ</span>ةٌ">وَرْدَةٌ</button>
+          <button class="interactive-btn word-d-btn p-4 rounded-xl border-2 border-slate-200 bg-white font-black text-lg text-slate-800" data-has-d="false" data-word="كُرْسِيٌّ">كُرْسِيٌّ</button>
+        </div>
+        <div id="athbet2-feedback" class="mt-3 text-sm font-bold text-emerald-700 hidden"></div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <button id="btn-next-st6" class="hidden px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-lg transition">
+          اَلِانْتِقَالُ إِلَى رُكْنِ «أَنْتِجُ» (ص 17) ➔
+        </button>
+      </div>
+    </section>
+
+
+    <!-- 7. المحطة السابعة: كراس الأنشطة ص 17 أنتج -->
+    <section id="station-7" class="lesson-card p-6 md:p-8 locked-section">
+      <div class="locked-overlay">
+        <span class="text-3xl mb-2">🔒</span>
+        <span class="font-bold text-slate-700">أَكْمِلِ الْمَحَطَّةَ السَّابِقَةَ لِفَتْحِ هَذَا الْقِسْمِ</span>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="page-badge">دَفْتَرُ الْأَنْشِطَةِ • ص 17</span>
+          <h2 class="text-lg md:text-xl font-black text-blue-950">أَنْتِجُ (إِتْمَامُ الْكَلِمَاتِ وَتَسْمِيَةُ الْأَدَوَاتِ)</h2>
+        </div>
+      </div>
+
+      <!-- الجزء 1: إتمام الحرف الناقص مع الصور -->
+      <div class="mb-10">
+        <p class="font-black text-slate-800 text-base md:text-lg mb-4">
+          ✏️ 1. أُكْمِلُ الْحَرْفَ النَّاقِصَ لِكُلِّ صُورَةٍ:
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 shuffle-container" id="fill-letter-grid">
+          
+          <!-- 1. قرد -->
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-center question-box" data-qid="q_prod_1">
+            <img src="11.jpg" alt="قرد" class="w-full h-32 object-contain rounded-xl mb-3" onerror="this.src='https://placehold.co/200x200/f3e8ff/6b21a8?text=قرد'">
+            <span class="font-black text-xl text-slate-800 block mb-3">قِـرْ......</span>
+            <div class="flex justify-center gap-2 shuffle-container">
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="true">دٌ</button>
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="false">تٌ</button>
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="false">رٌ</button>
+            </div>
+            <div class="feedback-msg mt-2 text-xs font-bold hidden"></div>
+          </div>
+
+          <!-- 2. تفاحة -->
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-center question-box" data-qid="q_prod_2">
+            <img src="3.jpg" alt="تفاحة" class="w-full h-32 object-contain rounded-xl mb-3" onerror="this.src='https://placehold.co/200x200/fee2e2/991b1b?text=تفاحة'">
+            <span class="font-black text-xl text-slate-800 block mb-3">......ـفَّاحَةٌ</span>
+            <div class="flex justify-center gap-2 shuffle-container">
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="true">تُـ</button>
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="false">دُ</button>
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="false">بُـ</button>
+            </div>
+            <div class="feedback-msg mt-2 text-xs font-bold hidden"></div>
+          </div>
+
+          <!-- 3. دمية -->
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-center question-box" data-qid="q_prod_3">
+            <img src="12.jpg" alt="دمية" class="w-full h-32 object-contain rounded-xl mb-3" onerror="this.src='https://placehold.co/200x200/fce7f3/9d174d?text=دمية'">
+            <span class="font-black text-xl text-slate-800 block mb-3">دُمْيَـ......</span>
+            <div class="flex justify-center gap-2 shuffle-container">
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="true">ـةٌ</button>
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="false">ـدٌ</button>
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="false">ـتْ</button>
+            </div>
+            <div class="feedback-msg mt-2 text-xs font-bold hidden"></div>
+          </div>
+
+          <!-- 4. دودة -->
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-center question-box" data-qid="q_prod_4">
+            <img src="14.jpg" alt="دودة" class="w-full h-32 object-contain rounded-xl mb-3" onerror="this.src='https://placehold.co/200x200/ecfdf5/047857?text=دودة'">
+            <span class="font-black text-xl text-slate-800 block mb-3">......ودَةٌ</span>
+            <div class="flex justify-center gap-2 shuffle-container">
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="true">دُ</button>
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="false">تُ</button>
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="false">رُ</button>
+            </div>
+            <div class="feedback-msg mt-2 text-xs font-bold hidden"></div>
+          </div>
+
+          <!-- 5. دار -->
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-center question-box" data-qid="q_prod_5">
+            <img src="16.jpg" alt="دار" class="w-full h-32 object-contain rounded-xl mb-3" onerror="this.src='https://placehold.co/200x200/fffbeb/b45309?text=دار'">
+            <span class="font-black text-xl text-slate-800 block mb-3">......ارٌ</span>
+            <div class="flex justify-center gap-2 shuffle-container">
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="true">دَ</button>
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="false">تَ</button>
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="false">مَ</button>
+            </div>
+            <div class="feedback-msg mt-2 text-xs font-bold hidden"></div>
+          </div>
+
+          <!-- 6. شجرة -->
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl text-center question-box" data-qid="q_prod_6">
+            <img src="17.jpg" alt="شجرة" class="w-full h-32 object-contain rounded-xl mb-3" onerror="this.src='https://placehold.co/200x200/f0fdf4/15803d?text=شجرة'">
+            <span class="font-black text-xl text-slate-800 block mb-3">شَجَرَ......</span>
+            <div class="flex justify-center gap-2 shuffle-container">
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="true">ةٌ</button>
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="false">دٌ</button>
+              <button class="interactive-btn px-4 py-2 bg-white border border-slate-300 rounded-xl font-black text-lg hover:border-blue-500" data-correct="false">تَ</button>
+            </div>
+            <div class="feedback-msg mt-2 text-xs font-bold hidden"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- الجزء 2: تسمية أدوات أحمد -->
+      <div class="pt-6 border-t border-slate-200 mb-10">
+        <p class="font-black text-slate-800 text-base md:text-lg mb-4">
+          🎒 2. أُسَمِّي الْأَدَوَاتِ الَّتِي اشْتَرَاهَا أَحْمَدُ مِنَ الْمَكْتَبَةِ:
+        </p>
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 shuffle-container" id="tools-naming-grid">
+
+          <!-- كتاب -->
+          <div class="p-3 bg-white border border-slate-200 rounded-2xl text-center question-box" data-qid="q_tool_1">
+            <img src="4.jpg" alt="كتاب" class="w-full h-24 object-contain rounded-lg mb-2" onerror="this.src='https://placehold.co/150x150/e0f2fe/0369a1?text=كتاب'">
+            <div class="space-y-1.5 shuffle-container">
+              <button class="interactive-btn w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700" data-correct="true">كِتَابٌ</button>
+              <button class="interactive-btn w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700" data-correct="false">دَفْتَرٌ</button>
+            </div>
+          </div>
+
+          <!-- لوحة -->
+          <div class="p-3 bg-white border border-slate-200 rounded-2xl text-center question-box" data-qid="q_tool_2">
+            <img src="13.jpg" alt="لوحة" class="w-full h-24 object-contain rounded-lg mb-2" onerror="this.src='https://placehold.co/150x150/dcfce7/166534?text=لوحة'">
+            <div class="space-y-1.5 shuffle-container">
+              <button class="interactive-btn w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700" data-correct="true">لَوْحَةٌ</button>
+              <button class="interactive-btn w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700" data-correct="false">طَاوِلَةٌ</button>
+            </div>
+          </div>
+
+          <!-- أقلام -->
+          <div class="p-3 bg-white border border-slate-200 rounded-2xl text-center question-box" data-qid="q_tool_3">
+            <img src="10.jpg" alt="أقلام" class="w-full h-24 object-contain rounded-lg mb-2" onerror="this.src='https://placehold.co/150x150/fef3c7/b45309?text=أقلام'">
+            <div class="space-y-1.5 shuffle-container">
+              <button class="interactive-btn w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700" data-correct="true">أَقْلَامٌ</button>
+              <button class="interactive-btn w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700" data-correct="false">فَرَاشِي</button>
+            </div>
+          </div>
+
+          <!-- مبراة -->
+          <div class="p-3 bg-white border border-slate-200 rounded-2xl text-center question-box" data-qid="q_tool_4">
+            <img src="5.jpg" alt="مبراة" class="w-full h-24 object-contain rounded-lg mb-2" onerror="this.src='https://placehold.co/150x150/fce7f3/9d174d?text=مبراة'">
+            <div class="space-y-1.5 shuffle-container">
+              <button class="interactive-btn w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700" data-correct="true">مِبْرَاةٌ</button>
+              <button class="interactive-btn w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700" data-correct="false">مِمْحَاةٌ</button>
+            </div>
+          </div>
+
+          <!-- مقلمة -->
+          <div class="p-3 bg-white border border-slate-200 rounded-2xl text-center question-box" data-qid="q_tool_5">
+            <img src="15.jpg" alt="مقلمة" class="w-full h-24 object-contain rounded-lg mb-2" onerror="this.src='https://placehold.co/150x150/f3e8ff/7e22ce?text=مقلمة'">
+            <div class="space-y-1.5 shuffle-container">
+              <button class="interactive-btn w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700" data-correct="true">مِقْلَمَةٌ</button>
+              <button class="interactive-btn w-full py-1.5 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-700" data-correct="false">مِحْفَظَةٌ</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- الجزء 3: أدوات أخرى تباع في المكتبة -->
+      <div class="pt-6 border-t border-slate-200">
+        <p class="font-black text-slate-800 text-base md:text-lg mb-2">
+          🏪 3. أَذْكُرُ أَدَوَاتٍ أُخْرَى تُبَاعُ فِي الْمَكْتَبَةِ:
+        </p>
+        <p class="text-xs text-slate-500 mb-4 font-bold">اِضْغَطْ فَقَطْ عَلَى الْأَشْيَاءِ الَّتِي تُبَاعُ فِي الْمَكْتَبَةِ:</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 shuffle-container" id="market-tools-grid">
+          <button class="interactive-btn market-tool-btn p-3.5 rounded-xl border-2 border-slate-200 bg-white font-black text-base text-slate-800" data-is-stationery="true">مِمْحَاةٌ</button>
+          <button class="interactive-btn market-tool-btn p-3.5 rounded-xl border-2 border-slate-200 bg-white font-black text-base text-slate-800" data-is-stationery="false">حِذَاءٌ</button>
+          <button class="interactive-btn market-tool-btn p-3.5 rounded-xl border-2 border-slate-200 bg-white font-black text-base text-slate-800" data-is-stationery="true">مِدْوَرٌ</button>
+          <button class="interactive-btn market-tool-btn p-3.5 rounded-xl border-2 border-slate-200 bg-white font-black text-base text-slate-800" data-is-stationery="false">خُبْزٌ</button>
+          <button class="interactive-btn market-tool-btn p-3.5 rounded-xl border-2 border-slate-200 bg-white font-black text-base text-slate-800" data-is-stationery="true">مِحْفَظَةٌ</button>
+          <button class="interactive-btn market-tool-btn p-3.5 rounded-xl border-2 border-slate-200 bg-white font-black text-base text-slate-800" data-is-stationery="false">كَعْكَةٌ</button>
+          <button class="interactive-btn market-tool-btn p-3.5 rounded-xl border-2 border-slate-200 bg-white font-black text-base text-slate-800" data-is-stationery="true">مِسْطَرَةٌ</button>
+          <button class="interactive-btn market-tool-btn p-3.5 rounded-xl border-2 border-slate-200 bg-white font-black text-base text-slate-800" data-is-stationery="false">جُبْنٌ</button>
+        </div>
+        <div id="market-feedback" class="mt-3 text-sm font-bold text-emerald-700 hidden"></div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <button id="btn-next-st7" class="hidden px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-lg transition">
+          اَلِانْتِقَالُ إِلَى أُدَعِّمُ وَأُقَوِّمُ (ص 18) ➔
+        </button>
+      </div>
+    </section>
+
+
+    <!-- 8. المحطة الثامنة: كراس الأنشطة ص 18 أدعم وأقوم -->
+    <section id="station-8" class="lesson-card p-6 md:p-8 locked-section">
+      <div class="locked-overlay">
+        <span class="text-3xl mb-2">🔒</span>
+        <span class="font-bold text-slate-700">أَكْمِلِ الْمَحَطَّةَ السَّابِقَةَ لِفَتْحِ هَذَا الْقِسْمِ</span>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="page-badge">دَفْتَرُ الْأَنْشِطَةِ • ص 18</span>
+          <h2 class="text-lg md:text-xl font-black text-blue-950">أُدَعِّمُ وَأُقَوِّمُ</h2>
+        </div>
+      </div>
+
+      <!-- تمرين 1: ربط المقاطع لتكوين كلمة -->
+      <div class="mb-10" id="match-syllables-box">
+        <p class="font-black text-slate-800 text-base md:text-lg mb-2">
+          🔗 1. أَرْبِطُ بَيْنَ الطَّرَفَيْنِ لِأُكَوِّنَ كَلِمَةً:
+        </p>
+        <p class="text-xs text-slate-500 mb-4 font-bold">اِضْغَطْ عَلَى الْمَقْطَعِ فِي الْيَمِينِ، ثُمَّ اضْغَطْ عَلَى الْمَقْطَعِ الْمُنَاسِبِ لَهُ فِي الْيَسَارِ:</p>
+        
+        <div class="grid grid-cols-2 gap-6 max-w-xl mx-auto">
+          <!-- الطرف الأول -->
+          <div class="space-y-3 shuffle-container" id="syllables-col-1">
+            <button class="interactive-btn syl-btn w-full p-3.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-black text-xl text-slate-800 text-center" data-pair="1" data-side="left">مِبْـ</button>
+            <button class="interactive-btn syl-btn w-full p-3.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-black text-xl text-slate-800 text-center" data-pair="2" data-side="left">مُدِيـ</button>
+            <button class="interactive-btn syl-btn w-full p-3.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-black text-xl text-slate-800 text-center" data-pair="3" data-side="left">بَا</button>
+            <button class="interactive-btn syl-btn w-full p-3.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-black text-xl text-slate-800 text-center" data-pair="4" data-side="left">تَمْـ</button>
+          </div>
+          <!-- الطرف الثاني (مبعثر) -->
+          <div class="space-y-3 shuffle-container" id="syllables-col-2">
+            <button class="interactive-btn syl-btn w-full p-3.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-black text-xl text-slate-800 text-center" data-pair="4" data-side="right">ـرَةٌ</button>
+            <button class="interactive-btn syl-btn w-full p-3.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-black text-xl text-slate-800 text-center" data-pair="1" data-side="right">ـرَاةٌ</button>
+            <button class="interactive-btn syl-btn w-full p-3.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-black text-xl text-slate-800 text-center" data-pair="2" data-side="right">ـرٌ</button>
+            <button class="interactive-btn syl-btn w-full p-3.5 bg-slate-50 border-2 border-slate-300 rounded-xl font-black text-xl text-slate-800 text-center" data-pair="3" data-side="right">بٌ</button>
+          </div>
+        </div>
+        <div id="match-feedback" class="mt-4 text-center text-sm font-bold text-emerald-700 hidden"></div>
+      </div>
+
+      <!-- تمرين 2: الضمائر (أنا، نحن، أنت، أنتِ) -->
+      <div class="pt-6 border-t border-slate-200">
+        <p class="font-black text-slate-800 text-base md:text-lg mb-2">
+          👥 2. أَضَعُ الضَّمِيرَ الْمُنَاسِبَ مَكَانَ النُّقَطِ: (أَنَا - نَحْنُ - أَنْتَ - أَنْتِ):
+        </p>
+        <p class="text-xs text-slate-500 mb-4 font-bold">اِضْغَطْ عَلَى الضَّمِيرِ أَوَّلًا، ثُمَّ اضْغَطْ عَلَى الْفَرَاغِ فِي الْجُمْلَةِ الْمُنَاسِبَةِ:</p>
+
+        <!-- بنك الضمائر -->
+        <div class="flex flex-wrap justify-center gap-3 mb-6 p-4 bg-blue-50/70 border border-blue-200 rounded-2xl shuffle-container" id="pronouns-bank">
+          <button class="interactive-btn pronoun-card px-6 py-2.5 bg-white border-2 border-blue-300 rounded-xl font-black text-lg text-blue-900 shadow-sm" data-pronoun="نَحْنُ">نَحْنُ</button>
+          <button class="interactive-btn pronoun-card px-6 py-2.5 bg-white border-2 border-blue-300 rounded-xl font-black text-lg text-blue-900 shadow-sm" data-pronoun="أَنْتَ">أَنْتَ</button>
+          <button class="interactive-btn pronoun-card px-6 py-2.5 bg-white border-2 border-blue-300 rounded-xl font-black text-lg text-blue-900 shadow-sm" data-pronoun="أَنَا">أَنَا</button>
+          <button class="interactive-btn pronoun-card px-6 py-2.5 bg-white border-2 border-blue-300 rounded-xl font-black text-lg text-blue-900 shadow-sm" data-pronoun="أَنْتِ">أَنْتِ</button>
+        </div>
+
+        <!-- الجمل: الفراغ أولاً على اليمين ثم نص الجملة -->
+        <div class="space-y-4 max-w-xl mx-auto shuffle-container" id="pronouns-sentences">
+          
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-start gap-4">
+            <div class="pronoun-slot w-28 h-11 border-2 border-dashed border-blue-400 bg-white rounded-xl flex items-center justify-center font-black text-blue-900 cursor-pointer flex-shrink-0" data-expected="نَحْنُ">
+              فَرَاغ
+            </div>
+            <span class="font-bold text-slate-800 text-base">نَلْبَسُ مَلَابِسَنَا .</span>
+          </div>
+
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-start gap-4">
+            <div class="pronoun-slot w-28 h-11 border-2 border-dashed border-blue-400 bg-white rounded-xl flex items-center justify-center font-black text-blue-900 cursor-pointer flex-shrink-0" data-expected="أَنْتَ">
+              فَرَاغ
+            </div>
+            <span class="font-bold text-slate-800 text-base">تُرَاجِعُ دُرُوسَكَ .</span>
+          </div>
+
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-start gap-4">
+            <div class="pronoun-slot w-28 h-11 border-2 border-dashed border-blue-400 bg-white rounded-xl flex items-center justify-center font-black text-blue-900 cursor-pointer flex-shrink-0" data-expected="أَنَا">
+              فَرَاغ
+            </div>
+            <span class="font-bold text-slate-800 text-base">أَرَاجِعُ دُرُوسِي .</span>
+          </div>
+
+          <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-start gap-4">
+            <div class="pronoun-slot w-28 h-11 border-2 border-dashed border-blue-400 bg-white rounded-xl flex items-center justify-center font-black text-blue-900 cursor-pointer flex-shrink-0" data-expected="أَنْتِ">
+              فَرَاغ
+            </div>
+            <span class="font-bold text-slate-800 text-base">تُحِبِّينَ أُمَّكِ كَثِيرًا .</span>
+          </div>
+
+        </div>
+        <div id="pronoun-feedback" class="mt-4 text-center text-sm font-bold text-emerald-700 hidden"></div>
+      </div>
+
+      <div class="mt-8 text-center">
+        <button id="btn-next-st8" class="hidden px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-lg transition">
+          اَلِانْتِقَالُ إِلَى التَّرْبِيَةِ الْإِسْلَامِيَّةِ (ص 19) ➔
+        </button>
+      </div>
+    </section>
+
+
+    <!-- 9. المحطة التاسعة: كراس الأنشطة ص 19 التربية الإسلامية -->
+    <section id="station-9" class="lesson-card p-6 md:p-8 locked-section">
+      <div class="locked-overlay">
+        <span class="text-3xl mb-2">🔒</span>
+        <span class="font-bold text-slate-700">أَكْمِلِ الْمَحَطَّةَ السَّابِقَةَ لِفَتْحِ هَذَا الْقِسْمِ</span>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="page-badge">دَفْتَرُ الْأَنْشِطَةِ • ص 19</span>
+          <h2 class="text-lg md:text-xl font-black text-blue-950">بِسْمِ اللَّهِ وَ الْحَمْدُ لِلَّهِ</h2>
+        </div>
+      </div>
+
+      <p class="font-black text-slate-800 text-base md:text-lg mb-2">
+        🤲 أَرْبِطُ كُلَّ جُمْلَةٍ بِمَا يُنَاسِبُهَا فِي الْجَدْوَلِ:
+      </p>
+      <p class="text-xs text-slate-500 mb-6 font-bold">اِضْغَطْ عَلَى الْجُمْلَةِ، ثُمَّ اضْغَطْ عَلَى الْعَمُودِ الْمُنَاسِبِ لَهَا (بِسْمِ اللَّهِ / الْحَمْدُ لِلَّهِ):</p>
+
+      <!-- الجمل المتاحة للتصنيف -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6 shuffle-container" id="dhikr-sentences-bank">
+        <button class="interactive-btn dhikr-item p-4 bg-white border-2 border-slate-300 rounded-2xl font-bold text-slate-800 text-right shadow-sm" data-key="bismillah" data-text="قَبْلَ أَنْ أَبْدَأَ عَمَلِي">
+          1. قَبْلَ أَنْ أَبْدَأَ عَمَلِي أَقُولُ :
+        </button>
+        <button class="interactive-btn dhikr-item p-4 bg-white border-2 border-slate-300 rounded-2xl font-bold text-slate-800 text-right shadow-sm" data-key="alhamdulillah" data-text="عِنْدَمَا أَعْطِسُ">
+          2. عِنْدَمَا أَعْطِسُ أَقُولُ :
+        </button>
+        <button class="interactive-btn dhikr-item p-4 bg-white border-2 border-slate-300 rounded-2xl font-bold text-slate-800 text-right shadow-sm" data-key="alhamdulillah" data-text="بَعْدَ أَنْ أُنْهِيَ عَمَلِي">
+          3. بَعْدَ أَنْ أُنْهِيَ عَمَلِي أَقُولُ :
+        </button>
+        <button class="interactive-btn dhikr-item p-4 bg-white border-2 border-slate-300 rounded-2xl font-bold text-slate-800 text-right shadow-sm" data-key="bismillah" data-text="قَبْلَ الْوُضُوءِ">
+          4. قَبْلَ الْوُضُوءِ أَقُولُ :
+        </button>
+      </div>
+
+      <!-- جدول العمودين -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- عمود: بسم الله -->
+        <div class="dhikr-column p-5 bg-emerald-50/70 border-2 border-emerald-300 rounded-2xl cursor-pointer" data-col="bismillah">
+          <div class="text-center pb-3 border-b-2 border-emerald-300 mb-4">
+            <span class="text-xl font-black text-emerald-900">بِسْمِ اللَّهِ</span>
+          </div>
+          <div class="items-target space-y-2.5 min-h-[140px]" id="col-bismillah-items">
+            <p class="placeholder-text text-center text-xs font-bold text-emerald-600/70 py-8">اِضْغَطْ هُنَا لِإِدْرَاجِ الْعِبَارَاتِ الَّتِي تَبْدَأُ بِـ "بِسْمِ اللَّهِ"</p>
+          </div>
+        </div>
+
+        <!-- عمود: الحمد لله -->
+        <div class="dhikr-column p-5 bg-amber-50/70 border-2 border-amber-300 rounded-2xl cursor-pointer" data-col="alhamdulillah">
+          <div class="text-center pb-3 border-b-2 border-amber-300 mb-4">
+            <span class="text-xl font-black text-amber-900">الْحَمْدُ لِلَّهِ</span>
+          </div>
+          <div class="items-target space-y-2.5 min-h-[140px]" id="col-alhamdulillah-items">
+            <p class="placeholder-text text-center text-xs font-bold text-amber-600/70 py-8">اِضْغَطْ هُنَا لِإِدْرَاجِ الْعِبَارَاتِ الَّتِي نَقُولُ فِيهَا "الْحَمْدُ لِلَّهِ"</p>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="dhikr-feedback" class="mt-4 text-center text-sm font-bold text-emerald-700 hidden"></div>
+
+      <div class="mt-8 text-center">
+        <button id="btn-show-final" class="hidden px-10 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-lg rounded-2xl shadow-xl transition transform hover:scale-105">
+          🎉 عَرْضُ التَّقْرِيرِ الْخِتَامِيِّ
+        </button>
+      </div>
+    </section>
+
+
+    <!-- 10. التقرير الختامي النهائي -->
+    <section id="final-report" class="lesson-card p-6 md:p-10 text-center border-t-8 border-emerald-500 hidden">
+      <div class="w-20 h-20 mx-auto mb-4 bg-emerald-100 text-emerald-700 rounded-full flex items-center justify-center text-4xl shadow-inner">
+        🏆
+      </div>
+      <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-2">أَحْسَنْتَ يَا بَطَلَ السَّنَةِ الْأُولَى!</h2>
+      <p class="text-slate-600 font-bold mb-6">لَقَدْ أَكْمَلْتَ جَمِيعَ مَحَطَّاتِ دَرْسِ «أَدَوَاتِي الْمَدْرَسِيَّةِ» بِنَجَاحٍ.</p>
+
+      <div class="max-w-xs mx-auto bg-slate-50 p-6 rounded-3xl border-2 border-slate-200 mb-6 shadow-sm">
+        <span class="text-xs font-bold text-slate-400 block mb-1">نِسْبَةُ التَّحْصِيلِ الْعَامَّةُ</span>
+        <div id="final-percentage" class="text-5xl font-black text-emerald-600 mb-2">100%</div>
+        <div id="final-counts" class="text-sm font-bold text-slate-600">✓ صحيحة: 0 | ✗ خاطئة: 0</div>
+      </div>
+
+      <p id="pedagogical-msg" class="text-lg font-black text-blue-900 mb-8 max-w-lg mx-auto">
+        مُمْتَازٌ جِدًّا! تَعَرَّفْتَ عَلَى أَدَوَاتِكَ وَأَتْقَنْتَ حَرْفَيِ التَّاءِ وَالدَّالِ بِتَفَوُّقٍ.
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-4">
+        <button onclick="location.reload()" class="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-xl shadow-md transition">
+          🔄 إِعَادَةُ الدَّرْسِ
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================
+       زر العودة إلى الفهرس (أُضيف)
+       ======================================== -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+  <footer class="mt-12 mb-6 text-center text-xs text-slate-400 font-bold">
+    تَطْبِيقٌ تَعْلِيمِيٌّ رَقْمِيٌّ مُطَابِقٌ لِمِنْهَاجِ اللُّغَةِ الْعَرَبِيَّةِ - الْجُمْهُورِيَّةُ الْجَزَائِرِيَّةُ الدِّيمُقْرَاطِيَّةُ الشَّعْبِيَّةُ
+  </footer>
+
+  <!-- ========================================
+       سكريبت الحماية (أُضيف)
+       ======================================== -->
+  <script>
+    // إعدادات القناة - السنة الأولى
+    const CHANNEL_ID = "-1004456852024";
+
+    // تهيئة Telegram WebApp
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+  </script>
+
+  <!-- ========================================
+       سكريبت الدرس الأصلي (كما هو دون تغيير)
+       ======================================== -->
+  <script>
+    /* ========================================================
+       1. محرك الصوتيات المدمج (Web Audio API)
+       ======================================================== */
+    const SoundEngine = {
+      enabled: true,
+      ctx: null,
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      },
+      playSuccess() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now); // C5
+        osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.1); // E5
+        osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.2); // G5
+        
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+        osc.start(now);
+        osc.stop(now + 0.35);
+      },
+      playError() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(260, now);
+        osc.frequency.setValueAtTime(200, now + 0.15);
+        
+        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+      },
+      playTap() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, now);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+        osc.start(now);
+        osc.stop(now + 0.05);
+      }
+    };
+
+    // التحكم في كتم الصوت
+    const audioBtn = document.getElementById('audio-toggle');
+    const audioIcon = document.getElementById('audio-icon');
+    audioBtn.addEventListener('click', () => {
+      SoundEngine.enabled = !SoundEngine.enabled;
+      audioIcon.textContent = SoundEngine.enabled ? '🔊' : '🔇';
+      audioBtn.classList.toggle('opacity-60', !SoundEngine.enabled);
+    });
+
+    /* ========================================================
+       2. حالة التطبيق ونظام النقاط المقيد بالسقف (Max 100%)
+       ======================================================== */
+    const State = {
+      correctAnswers: 0,
+      totalQuestions: 17, // عدد الأسئلة والأنشطة التقييمية بدقة تامة
+      answeredQuestions: new Set(),
+      station1Completed: 0,
+      
+      recordAnswer(qid, isCorrect) {
+        if (this.answeredQuestions.has(qid)) return;
+        this.answeredQuestions.add(qid);
+        if (isCorrect) {
+          this.correctAnswers++;
+          SoundEngine.playSuccess();
+        } else {
+          SoundEngine.playError();
+        }
+        this.updateHeaderScore();
+      },
+      
+      updateHeaderScore() {
+        const counterEl = document.getElementById('score-counter');
+        const boundedCorrect = Math.min(this.correctAnswers, this.totalQuestions);
+        counterEl.textContent = `${boundedCorrect} / ${this.totalQuestions}`;
+      },
+
+      unlockStation(stId) {
+        const st = document.getElementById(stId);
+        if (st) {
+          st.classList.remove('locked-section');
+          const overlay = st.querySelector('.locked-overlay');
+          if (overlay) overlay.remove();
+          st.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    };
+
+    // خوارزمية بعثرة الخيارات (Dynamic Shuffle)
+    function shuffleArray(container) {
+      if (!container) return;
+      const elements = Array.from(container.children);
+      for (let i = elements.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        container.appendChild(elements[j]);
+      }
+    }
+
+    document.querySelectorAll('.shuffle-container').forEach(c => shuffleArray(c));
+
+    /* ========================================================
+       3. تفعيل أسئلة الاختيار من متعدد العامة
+       ======================================================== */
+    function initMCQBoxes() {
+      document.querySelectorAll('.question-box').forEach(box => {
+        const qid = box.getAttribute('data-qid');
+        const buttons = box.querySelectorAll('button[data-correct]');
+        const feedback = box.querySelector('.feedback-msg');
+
+        buttons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (box.classList.contains('locked')) return;
+            box.classList.add('locked');
+            
+            const isCorrect = btn.getAttribute('data-correct') === 'true';
+            State.recordAnswer(qid, isCorrect);
+
+            if (isCorrect) {
+              btn.classList.add('btn-correct');
+              if (feedback) {
+                feedback.textContent = '✓ أَحْسَنْتَ! إِجَابَةٌ صَحِيحَةٌ.';
+                feedback.className = 'feedback-msg mt-3 text-sm font-bold text-emerald-700 block';
+              }
+            } else {
+              btn.classList.add('btn-wrong');
+              // إبراز الصحيحة
+              buttons.forEach(b => {
+                if (b.getAttribute('data-correct') === 'true') {
+                  b.classList.add('btn-correct');
+                }
+              });
+              if (feedback) {
+                feedback.textContent = '✗ إِجَابَةٌ خَاطِئَةٌ، تَأَمَّلِ الْإِجَابَةَ الصَّحِيحَةَ بِالْأَخْضَرِ.';
+                feedback.className = 'feedback-msg mt-3 text-sm font-bold text-rose-700 block';
+              }
+            }
+
+            // فحص إكمال المحطة 1
+            if (box.closest('#st1-questions')) {
+              State.station1Completed++;
+              if (State.station1Completed >= 4) {
+                document.getElementById('btn-next-st1').classList.remove('hidden');
+              }
+            }
+
+            // أزرار الانتقال للمحطات الفردية الأخرى
+            if (qid === 'q_st2_1') document.getElementById('btn-next-st2').classList.remove('hidden');
+            if (qid === 'q_st3_1') document.getElementById('btn-next-st3').classList.remove('hidden');
+            if (qid === 'q_st4_1') document.getElementById('btn-next-st4').classList.remove('hidden');
+            if (qid === 'q_st5_1') document.getElementById('btn-next-st5').classList.remove('hidden');
+          });
+        });
+      });
+    }
+
+    /* ========================================================
+       4. أزرار التنقل وفتح المحطات التتابعي
+       ======================================================== */
+    document.getElementById('btn-next-st1').addEventListener('click', () => State.unlockStation('station-2'));
+    document.getElementById('btn-next-st2').addEventListener('click', () => State.unlockStation('station-3'));
+    document.getElementById('btn-next-st3').addEventListener('click', () => State.unlockStation('station-4'));
+    document.getElementById('btn-next-st4').addEventListener('click', () => State.unlockStation('station-5'));
+    document.getElementById('btn-next-st5').addEventListener('click', () => State.unlockStation('station-6'));
+    document.getElementById('btn-next-st6').addEventListener('click', () => State.unlockStation('station-7'));
+    document.getElementById('btn-next-st7').addEventListener('click', () => State.unlockStation('station-8'));
+    document.getElementById('btn-next-st8').addEventListener('click', () => State.unlockStation('station-9'));
+
+    /* ========================================================
+       5. كراس الأنشطة ص 16: أثبت 1 (حرف التاء) وأثبت 2 (حرف الدال)
+       ======================================================== */
+    let athbet1Found = 0;
+    const totalAthbet1 = 7; // الكلمات التي فيها تاء
+    const athbet1Btns = document.querySelectorAll('.word-t-btn');
+    const athbet1Feedback = document.getElementById('athbet1-feedback');
+
+    athbet1Btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('locked')) return;
+        const hasT = btn.getAttribute('data-has-t') === 'true';
+        if (hasT) {
+          SoundEngine.playSuccess();
+          btn.classList.add('locked', 'bg-emerald-100', 'border-emerald-500', 'text-emerald-900');
+          btn.innerHTML = btn.getAttribute('data-highlight');
+          athbet1Found++;
+          if (athbet1Found >= totalAthbet1) {
+            athbet1Feedback.textContent = '✓ رَائِعٌ! وَجَدْتَ جَمِيعَ الْكَلِمَاتِ الَّتِي تَحْتَوِي عَلَى حَرْفِ التَّاءِ.';
+            athbet1Feedback.classList.remove('hidden');
+            checkAthbetComplete();
+          }
+        } else {
+          SoundEngine.playError();
+          btn.classList.add('btn-wrong');
+          setTimeout(() => btn.classList.remove('btn-wrong'), 500);
+        }
+      });
+    });
+
+    let athbet2Found = 0;
+    const totalAthbet2 = 5; // الكلمات التي فيها دال
+    const athbet2Btns = document.querySelectorAll('.word-d-btn');
+    const athbet2Feedback = document.getElementById('athbet2-feedback');
+
+    athbet2Btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('locked')) return;
+        const hasD = btn.getAttribute('data-has-d') === 'true';
+        if (hasD) {
+          SoundEngine.playSuccess();
+          btn.classList.add('locked', 'bg-sky-100', 'border-sky-500', 'text-sky-900');
+          btn.innerHTML = btn.getAttribute('data-highlight');
+          athbet2Found++;
+          if (athbet2Found >= totalAthbet2) {
+            athbet2Feedback.textContent = '✓ مُمْتَازٌ! وَجَدْتَ جَمِيعَ الْكَلِمَاتِ الَّتِي تَحْتَوِي عَلَى حَرْفِ الدَّالِ.';
+            athbet2Feedback.classList.remove('hidden');
+            checkAthbetComplete();
+          }
+        } else {
+          SoundEngine.playError();
+          btn.classList.add('btn-wrong');
+          setTimeout(() => btn.classList.remove('btn-wrong'), 500);
+        }
+      });
+    });
+
+    function checkAthbetComplete() {
+      if (athbet1Found >= totalAthbet1 && athbet2Found >= totalAthbet2) {
+        State.recordAnswer('q_athbet_all', true);
+        document.getElementById('btn-next-st6').classList.remove('hidden');
+      }
+    }
+
+    /* ========================================================
+       6. كراس الأنشطة ص 17: أنتج (أدوات المكتبة الإضافية)
+       ======================================================== */
+    let stationeryFound = 0;
+    const totalStationery = 4; // ممحاة، مدور، محفظة، مسطرة
+    const stationeryBtns = document.querySelectorAll('.market-tool-btn');
+    const stationeryFeedback = document.getElementById('market-feedback');
+
+    stationeryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('locked')) return;
+        const isStat = btn.getAttribute('data-is-stationery') === 'true';
+        if (isStat) {
+          SoundEngine.playSuccess();
+          btn.classList.add('locked', 'bg-emerald-600', 'border-emerald-700', 'text-white', 'shadow-md');
+          stationeryFound++;
+          if (stationeryFound >= totalStationery) {
+            stationeryFeedback.textContent = '✓ أَحْسَنْتَ! هَذِهِ هِيَ الْأَدَوَاتُ الَّتِي تُبَاعُ فِي الْمَكْتَبَةِ.';
+            stationeryFeedback.classList.remove('hidden');
+            State.recordAnswer('q_market_all', true);
+            checkProductionComplete();
+          }
+        } else {
+          SoundEngine.playError();
+          btn.classList.add('btn-wrong');
+          setTimeout(() => btn.classList.remove('btn-wrong'), 500);
+        }
+      });
+    });
+
+    function checkProductionComplete() {
+      // إظهار زر الانتقال إذا تم حل الأدوات
+      document.getElementById('btn-next-st7').classList.remove('hidden');
+    }
+
+    /* ========================================================
+       7. كراس الأنشطة ص 18: الربط بين المقاطع لتكوين كلمة
+       ======================================================== */
+    let selectedSyl = null;
+    let matchedSyllables = 0;
+    const totalSyllablePairs = 4;
+    const sylBtns = document.querySelectorAll('.syl-btn');
+    const matchFeedback = document.getElementById('match-feedback');
+
+    sylBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('locked')) return;
+        SoundEngine.playTap();
+
+        if (!selectedSyl) {
+          // أول طرف يتم اختياره
+          selectedSyl = btn;
+          btn.classList.add('border-blue-600', 'bg-blue-100');
+        } else {
+          // الطرف الثاني
+          if (selectedSyl === btn) {
+            // إلغاء الاختيار
+            btn.classList.remove('border-blue-600', 'bg-blue-100');
+            selectedSyl = null;
+            return;
+          }
+
+          const isOppositeSides = selectedSyl.getAttribute('data-side') !== btn.getAttribute('data-side');
+          const isSamePair = selectedSyl.getAttribute('data-pair') === btn.getAttribute('data-pair');
+
+          if (isOppositeSides && isSamePair) {
+            // ربط صحيح! تلوين الطرفين بالأخضر
+            SoundEngine.playSuccess();
+            selectedSyl.classList.remove('border-blue-600', 'bg-blue-100');
+            selectedSyl.classList.add('locked', 'bg-emerald-600', 'border-emerald-700', 'text-white', 'shadow-sm');
+            btn.classList.add('locked', 'bg-emerald-600', 'border-emerald-700', 'text-white', 'shadow-sm');
+            matchedSyllables++;
+            selectedSyl = null;
+
+            if (matchedSyllables >= totalSyllablePairs) {
+              matchFeedback.textContent = '✓ رَائِعٌ! كَوَّنْتَ جَمِيعَ الْكَلِمَاتِ: (مِبْرَاةٌ / مُدِيرٌ / بَابٌ / تَمْرَةٌ)';
+              matchFeedback.classList.remove('hidden');
+              State.recordAnswer('q_match_syllables', true);
+              checkSt8Complete();
+            }
+          } else {
+            // خطأ
+            SoundEngine.playError();
+            btn.classList.add('btn-wrong');
+            selectedSyl.classList.add('btn-wrong');
+            setTimeout(() => {
+              btn.classList.remove('btn-wrong');
+              if (selectedSyl) {
+                selectedSyl.classList.remove('btn-wrong', 'border-blue-600', 'bg-blue-100');
+                selectedSyl = null;
+              }
+            }, 450);
+          }
+        }
+      });
+    });
+
+    /* ========================================================
+       8. كراس الأنشطة ص 18: تمرين الضمائر (نقر الضمير ثم الفراغ)
+       ======================================================== */
+    let selectedPronoun = null;
+    let filledPronouns = 0;
+    const totalPronouns = 4;
+    const pronounCards = document.querySelectorAll('.pronoun-card');
+    const pronounSlots = document.querySelectorAll('.pronoun-slot');
+    const pronounFeedback = document.getElementById('pronoun-feedback');
+
+    pronounCards.forEach(card => {
+      card.addEventListener('click', () => {
+        if (card.classList.contains('locked')) return;
+        SoundEngine.playTap();
+        pronounCards.forEach(c => c.classList.remove('border-amber-500', 'bg-amber-100', 'ring-2', 'ring-amber-400'));
+        selectedPronoun = card;
+        card.classList.add('border-amber-500', 'bg-amber-100', 'ring-2', 'ring-amber-400');
+      });
+    });
+
+    pronounSlots.forEach(slot => {
+      slot.addEventListener('click', () => {
+        if (slot.classList.contains('locked')) return;
+        if (!selectedPronoun) {
+          SoundEngine.playError();
+          slot.classList.add('btn-wrong');
+          setTimeout(() => slot.classList.remove('btn-wrong'), 300);
+          return;
+        }
+
+        const expected = slot.getAttribute('data-expected');
+        const chosen = selectedPronoun.getAttribute('data-pronoun');
+
+        if (expected === chosen) {
+          SoundEngine.playSuccess();
+          slot.textContent = chosen;
+          slot.classList.remove('border-dashed', 'border-blue-400', 'bg-white');
+          slot.classList.add('locked', 'bg-emerald-100', 'border-emerald-500', 'text-emerald-900', 'border-solid');
+          
+          selectedPronoun.classList.add('locked', 'opacity-40', 'pointer-events-none');
+          selectedPronoun.classList.remove('border-amber-500', 'bg-amber-100', 'ring-2', 'ring-amber-400');
+          selectedPronoun = null;
+          filledPronouns++;
+
+          if (filledPronouns >= totalPronouns) {
+            pronounFeedback.textContent = '✓ أَحْسَنْتَ! وَضَعْتَ جَمِيعَ الضَّمَائِرِ فِي أَمَاكِنِهَا الْمُنَاسِبَةِ.';
+            pronounFeedback.classList.remove('hidden');
+            State.recordAnswer('q_pronouns_all', true);
+            checkSt8Complete();
+          }
+        } else {
+          SoundEngine.playError();
+          slot.classList.add('btn-wrong');
+          setTimeout(() => slot.classList.remove('btn-wrong'), 450);
+        }
+      });
+    });
+
+    function checkSt8Complete() {
+      if (matchedSyllables >= totalSyllablePairs && filledPronouns >= totalPronouns) {
+        document.getElementById('btn-next-st8').classList.remove('hidden');
+      }
+    }
+
+    /* ========================================================
+       9. كراس الأنشطة ص 19: تصنيف جمل بسم الله والحمد لله
+       ======================================================== */
+    let selectedDhikr = null;
+    let placedDhikrCount = 0;
+    const totalDhikr = 4;
+    const dhikrItems = document.querySelectorAll('.dhikr-item');
+    const dhikrColumns = document.querySelectorAll('.dhikr-column');
+    const dhikrFeedback = document.getElementById('dhikr-feedback');
+    const btnShowFinal = document.getElementById('btn-show-final');
+
+    dhikrItems.forEach(item => {
+      item.addEventListener('click', () => {
+        if (item.classList.contains('locked')) return;
+        SoundEngine.playTap();
+        dhikrItems.forEach(d => d.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-50'));
+        selectedDhikr = item;
+        item.classList.add('ring-2', 'ring-blue-500', 'bg-blue-50');
+      });
+    });
+
+    dhikrColumns.forEach(col => {
+      col.addEventListener('click', () => {
+        if (!selectedDhikr) return;
+        const colKey = col.getAttribute('data-col');
+        const itemKey = selectedDhikr.getAttribute('data-key');
+        const itemText = selectedDhikr.getAttribute('data-text');
+
+        if (colKey === itemKey) {
+          SoundEngine.playSuccess();
+          const targetContainer = col.querySelector('.items-target');
+          const placeholder = targetContainer.querySelector('.placeholder-text');
+          if (placeholder) placeholder.remove();
+
+          const card = document.createElement('div');
+          card.className = 'p-3 bg-white rounded-xl border border-slate-200 font-bold text-slate-800 text-sm shadow-sm flex items-center justify-between';
+          card.innerHTML = `<span>${itemText}</span> <span class="text-emerald-600 font-black">✓</span>`;
+          targetContainer.appendChild(card);
+
+          selectedDhikr.classList.add('locked', 'opacity-30', 'pointer-events-none');
+          selectedDhikr.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-50');
+          selectedDhikr = null;
+          placedDhikrCount++;
+
+          if (placedDhikrCount >= totalDhikr) {
+            dhikrFeedback.textContent = '✓ بَارَكَ اللَّهُ فِيكَ! صَنَّفْتَ كُلَّ الْعِبَارَاتِ فِي مَكَانِهَا الصَّحِيحِ.';
+            dhikrFeedback.classList.remove('hidden');
+            State.recordAnswer('q_dhikr_all', true);
+            btnShowFinal.classList.remove('hidden');
+          }
+        } else {
+          SoundEngine.playError();
+          col.classList.add('btn-wrong');
+          setTimeout(() => col.classList.remove('btn-wrong'), 450);
+        }
+      });
+    });
+
+    /* ========================================================
+       10. عرض التقرير الختامي المقيد بالسقف (Max 100%)
+       ======================================================== */
+    btnShowFinal.addEventListener('click', () => {
+      SoundEngine.playSuccess();
+      const report = document.getElementById('final-report');
+      report.classList.remove('hidden');
+
+      // تطبيق خوارزمية السقف القياسية
+      let totalC = State.correctAnswers;
+      let totalQ = State.totalQuestions;
+      totalC = Math.min(totalC, totalQ);
+
+      let pct = totalQ > 0 ? Math.round((totalC / totalQ) * 100) : 0;
+      pct = Math.min(Math.max(pct, 0), 100);
+
+      document.getElementById('final-percentage').textContent = `${pct}%`;
+      document.getElementById('final-counts').textContent = `✓ صحيحة: ${totalC} | ✗ خاطئة: ${Math.max(0, totalQ - totalC)}`;
+
+      const msgEl = document.getElementById('pedagogical-msg');
+      if (pct >= 85) {
+        msgEl.textContent = '🌟 مُمْتَازٌ جِدًّا يَا بَطَلَ! أَنْتَ تِلْمِيذٌ نَجِيبٌ وَتَعَرَّفْتَ عَلَى أَدَوَاتِكَ وَحَرْفَيِ التَّاءِ وَالدَّالِ بِتَفَوُّقٍ.';
+      } else if (pct >= 60) {
+        msgEl.textContent = '👍 جَيِّدٌ جِدًّا! لَقَدْ بَذَلْتَ جُهْدًا رَائِعًا، أَعِدِ الدَّرْسَ لِتُحَقِّقَ الْعَلَامَةَ الْكَامِلَةَ.';
+      } else {
+        msgEl.textContent = '💪 حَاوَلْتَ جَيِّدًا! أَعِدِ الدَّرْسَ مَرَّةً أُخْرَى مَعَ تَرْكِيزٍ أَكْبَرَ عَلَى الْحُرُوفِ.';
+      }
+
+      report.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // التهيئة الابتدائية عند تحميل الصفحة
+    window.addEventListener('load', () => {
+      initMCQBoxes();
+      State.updateHeaderScore();
+    });
+  </script>
+</body>
+</html>
