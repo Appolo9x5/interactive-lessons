@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تَعْيِينُ مَوْقِعٍ فِي الْفَضَاءِ (2) - الرِّيَاضِيَّاتُ السَّنَةُ الْأُولَى ابْتِدَائِيّ</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Cairo & Fredoka for friendly kids Arabic typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    * {
+      font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: linear-gradient(135deg, #e0f2fe 0%, #fef3c7 50%, #f0fdf4 100%);
+      min-height: 100vh;
+    }
+
+    /* Direction utilities for Math inputs */
+    .math-ltr {
+      direction: ltr !important;
+      text-align: center;
+    }
+
+    /* Locked Station Overlay */
+    .station-locked {
+      opacity: 0.55;
+      filter: grayscale(40%);
+      pointer-events: none;
+      position: relative;
+    }
+    .station-locked::after {
+      content: '🔒 هَذِهِ الْمَحَطَّةُ مُقْفَلَةٌ حَتَّى تُنْهِيَ الْمَحَطَّةَ السَّابِقَةَ';
+      position: absolute;
+      top: 1rem;
+      left: 1rem;
+      right: 1rem;
+      background: rgba(30, 41, 59, 0.92);
+      color: #fef08a;
+      font-weight: bold;
+      text-align: center;
+      padding: 0.65rem;
+      border-radius: 0.75rem;
+      font-size: 0.95rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      z-index: 30;
+    }
+
+    /* Card active state */
+    .station-active {
+      box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.25), 0 8px 10px -6px rgba(59, 130, 246, 0.2);
+      border: 3px solid #3b82f6;
+    }
+
+    /* Interactive Spot styling */
+    .spot-btn {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+    .spot-btn:hover {
+      transform: scale(1.18);
+    }
+
+    /* Color picker item */
+    .color-pill {
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .color-pill.active {
+      transform: scale(1.1);
+      box-shadow: 0 0 0 4px #1e293b;
+    }
+
+    /* Pulse animation for active clickable areas */
+    @keyframes subtle-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+    .hint-pulse {
+      animation: subtle-pulse 2s infinite;
+    }
+
+    /* Custom Checkbox radio tile */
+    .choice-box {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .choice-box:hover {
+      transform: translateY(-2px);
+    }
+    .choice-box.selected {
+      background-color: #3b82f6;
+      color: white;
+      border-color: #1d4ed8;
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري (أُضيفت)
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس (أُضيف) */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      margin-top: 12px;
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    }
+  </style>
+</head>
+<body class="text-slate-800 p-3 sm:p-6 lg:p-8">
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري (أُضيفت)
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <!-- Header Section -->
+  <header class="max-w-4xl mx-auto mb-8 bg-white/90 backdrop-blur rounded-3xl p-5 sm:p-7 shadow-lg border-2 border-amber-200">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-amber-100 pb-4">
+      <div class="flex items-center gap-3">
+        <span class="w-12 h-12 rounded-2xl bg-amber-500 text-white font-extrabold text-2xl flex items-center justify-center shadow-md">١</span>
+        <div>
+          <span class="text-xs sm:text-sm font-bold text-amber-700 bg-amber-100 px-3 py-1 rounded-full">الرِّيَاضِيَّاتُ – السَّنَةُ الْأُولَى ابْتِدَائِيّ (الدَّرْسُ 7)</span>
+          <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">تَعْيِينُ مَوْقِعٍ فِي الْفَضَاءِ (2)</h1>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-2xl border border-blue-200 text-blue-800 text-sm font-bold">
+        <span>📖 كِتَابُ التِّلْمِيذِ ص 18</span>
+        <span>•</span>
+        <span>📑 دَفْتَرُ الأَنْشِطَةِ ص 11</span>
+      </div>
+    </div>
+    <div class="mt-3 flex items-center justify-between text-xs sm:text-sm text-slate-600 font-semibold">
+      <span>🎯 الْمَفَاهِيمُ: فَوْقَ / تَحْتَ / عَلَى / أَعْلَى / أَسْفَل</span>
+      <span id="global-step-badge" class="bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-bold">الْمَحَطَّةُ 1 مِنْ 5</span>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="max-w-4xl mx-auto space-y-8">
+
+    <!-- ========================================== -->
+    <!-- المحطة 1: أكتشف 1 (كتاب ص 18) -->
+    <!-- ========================================== -->
+    <section id="station-1" class="station-card station-active bg-white rounded-3xl p-5 sm:p-7 shadow-md transition-all">
+      <div class="flex items-center justify-between gap-2 mb-4 border-b pb-3">
+        <div class="flex items-center gap-3">
+          <span class="bg-indigo-600 text-white text-base font-bold px-3 py-1.5 rounded-xl">أَكْتَشِفُ (1)</span>
+          <span class="text-xs sm:text-sm text-slate-500">كِتَابُ التِّلْمِيذِ صَفْحَة 18</span>
+        </div>
+        <span class="text-xs bg-slate-100 text-slate-600 font-bold px-3 py-1 rounded-full">مُحَاوَلَةٌ وَاحِدَةٌ</span>
+      </div>
+
+      <div class="bg-indigo-50 border-r-4 border-indigo-600 p-4 rounded-xl mb-5 space-y-2 text-sm sm:text-base leading-relaxed">
+        <p class="font-bold text-indigo-950">📋 التَّعْلِيمَاتُ:</p>
+        <ul class="list-disc list-inside space-y-1 text-slate-700">
+          <li>لَوّنْ <span class="font-bold text-blue-600">بِالأَزْرَقِ</span> كُلَّ طِفْلٍ <span class="font-bold underline decoration-blue-500">فَوْقَ</span> لُعْبَةٍ.</li>
+          <li>لَوّنْ <span class="font-bold text-amber-800">بِالْبُنِّيِّ</span> الطِّفْلَ الَّذِي <span class="font-bold underline decoration-amber-700">تَحْتَ</span> لُعْبَةٍ.</li>
+          <li>لَوّنْ <span class="font-bold text-rose-600">بِالأَحْمَرِ</span> الْكُرَةَ الَّتِي <span class="font-bold underline decoration-rose-500">عَلَى</span> الْمَقْعَدِ.</li>
+          <li>لَوّنْ <span class="font-bold text-emerald-600">بِالأَخْضَرِ</span> الْكُرَةَ الَّتِي <span class="font-bold underline decoration-emerald-500">أَسْفَلَهُ</span>.</li>
+        </ul>
+      </div>
+
+      <div class="mb-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+        <p class="text-xs sm:text-sm font-bold text-slate-700 mb-2.5">🎨 اخْتَرِ اللَّوْنَ أَوَّلًا، ثُمَّ انْقُرْ عَلَى الْبِطَاقَةِ الْمُشِيرَةِ لِلْعُنْصُرِ فِي الصُّورَةِ:</p>
+        <div class="flex flex-wrap items-center gap-2 sm:gap-4">
+          <button type="button" onclick="selectColorStation1('blue')" id="pal-blue" class="color-pill active flex items-center gap-2 bg-blue-600 text-white font-bold px-4 py-2 rounded-xl shadow">
+            <span class="w-4 h-4 rounded-full bg-white border border-blue-700"></span>
+            <span>أَزْرَق (فَوْقَ لُعْبَة)</span>
+          </button>
+          <button type="button" onclick="selectColorStation1('brown')" id="pal-brown" class="color-pill flex items-center gap-2 bg-[#8d5b4c] text-white font-bold px-4 py-2 rounded-xl shadow">
+            <span class="w-4 h-4 rounded-full bg-white border border-amber-900"></span>
+            <span>بُنِّيّ (تَحْتَ لُعْبَة)</span>
+          </button>
+          <button type="button" onclick="selectColorStation1('red')" id="pal-red" class="color-pill flex items-center gap-2 bg-rose-600 text-white font-bold px-4 py-2 rounded-xl shadow">
+            <span class="w-4 h-4 rounded-full bg-white border border-rose-800"></span>
+            <span>أَحْمَر (عَلَى الْمَقْعَد)</span>
+          </button>
+          <button type="button" onclick="selectColorStation1('green')" id="pal-green" class="color-pill flex items-center gap-2 bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl shadow">
+            <span class="w-4 h-4 rounded-full bg-white border border-emerald-800"></span>
+            <span>أَخْضَر (أَسْفَلَ الْمَقْعَد)</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="relative w-full overflow-hidden rounded-2xl border-4 border-slate-200 bg-slate-100 shadow-inner">
+        <img src="1.jpg" alt="أكتشف 1: أطفال يلعبون وكرتان على المقعد وأسفله" class="w-full h-auto block object-cover" onerror="this.onerror=null; this.src='https://placehold.co/1000x560/e0f2fe/1e3a8a?text=%D8%B5%D9%88%D8%B1%D8%A9+1.jpg+%D8%A3%D8%B7%D9%81%D8%A7%D9%84+%D9%8A%D9%84%D8%B9%D8%A8%D9%88%D9%86';">
+
+        <button type="button" id="s1-spot-swing" onclick="applyColorStation1('swing')" class="spot-btn absolute w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white shadow-xl flex items-center justify-center font-black text-white text-xs sm:text-sm bg-slate-400 hint-pulse" style="top: 25%; left: 28%;" title="الطفلة على الأرجوحة"><span>؟</span></button>
+        <button type="button" id="s1-spot-horse" onclick="applyColorStation1('horse')" class="spot-btn absolute w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white shadow-xl flex items-center justify-center font-black text-white text-xs sm:text-sm bg-slate-400 hint-pulse" style="top: 25%; left: 59%;" title="الطفل على الحصان"><span>؟</span></button>
+        <button type="button" id="s1-spot-slider" onclick="applyColorStation1('slider')" class="spot-btn absolute w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white shadow-xl flex items-center justify-center font-black text-white text-xs sm:text-sm bg-slate-400 hint-pulse" style="top: 55%; left: 66%;" title="الطفل فوق الزحليقة"><span>؟</span></button>
+        <button type="button" id="s1-spot-under" onclick="applyColorStation1('under')" class="spot-btn absolute w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white shadow-xl flex items-center justify-center font-black text-white text-xs sm:text-sm bg-slate-400 hint-pulse" style="top: 53%; left: 37%;" title="الطفلة الجالسة تحت اللعبة"><span>؟</span></button>
+        <button type="button" id="s1-spot-ball-on" onclick="applyColorStation1('ball-on')" class="spot-btn absolute w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white shadow-xl flex items-center justify-center font-black text-white text-xs sm:text-sm bg-slate-400 hint-pulse" style="top: 61%; left: 19%;" title="الكرة على المقعد"><span>؟</span></button>
+        <button type="button" id="s1-spot-ball-under" onclick="applyColorStation1('ball-under')" class="spot-btn absolute w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white shadow-xl flex items-center justify-center font-black text-white text-xs sm:text-sm bg-slate-400 hint-pulse" style="top: 77%; left: 15%;" title="الكرة أسفل المقعد"><span>؟</span></button>
+      </div>
+
+      <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <button type="button" id="s1-submit" onclick="submitStation1()" class="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-black text-lg rounded-2xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2">
+          <span>تَأْكِيدُ الإِجَابَةِ</span>
+          <span>✓</span>
+        </button>
+        <div id="s1-status" class="text-sm font-bold text-slate-500">لَوّنِ الْبِطَاقَاتِ السِّتَّ قَبْلَ التَّأْكِيدِ.</div>
+      </div>
+
+      <div id="s1-feedback" class="mt-4 hidden p-4 rounded-2xl bg-slate-100 border text-sm sm:text-base font-bold flex items-center justify-between">
+        <span id="s1-feedback-text"></span>
+        <div class="flex items-center gap-3">
+          <span class="text-emerald-700 bg-emerald-100 px-3 py-1 rounded-xl" id="s1-score-correct">✓ 0</span>
+          <span class="text-rose-700 bg-rose-100 px-3 py-1 rounded-xl" id="s1-score-wrong">✗ 0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- المحطة 2: أُنجز (كتاب ص 18) -->
+    <!-- ========================================== -->
+    <section id="station-2" class="station-card station-locked bg-white rounded-3xl p-5 sm:p-7 shadow-md transition-all">
+      <div class="flex items-center justify-between gap-2 mb-4 border-b pb-3">
+        <div class="flex items-center gap-3">
+          <span class="bg-amber-600 text-white text-base font-bold px-3 py-1.5 rounded-xl">أُنْجِزُ</span>
+          <span class="text-xs sm:text-sm text-slate-500">كِتَابُ التِّلْمِيذِ صَفْحَة 18</span>
+        </div>
+        <span class="text-xs bg-slate-100 text-slate-600 font-bold px-3 py-1 rounded-full">مُحَاوَلَةٌ وَاحِدَةٌ</span>
+      </div>
+
+      <div class="bg-amber-50 border-r-4 border-amber-600 p-4 rounded-xl mb-5 text-sm sm:text-base font-bold text-amber-950">
+        📋 ضَعِ الإِشَارَةَ (×) دَاخِلَ الْخَانَةِ الْمُنَاسِبَةِ:
+      </div>
+
+      <div class="mb-6 rounded-2xl overflow-hidden border-4 border-slate-200 bg-slate-100 shadow-inner">
+        <img src="2.jpg" alt="أنجز: الشجرة والطيور" class="w-full h-auto block object-cover max-h-[420px] mx-auto" onerror="this.onerror=null; this.src='https://placehold.co/1000x560/fef3c7/78350f?text=%D8%B5%D9%88%D8%B1%D8%A9+2.jpg+%D8%A7%D9%84%D8%B4%D8%AC%D8%B1%D8%A9+%D9%88%D8%A7%D9%84%D8%B7%D9%8A%D9%88%D8%B1';">
+      </div>
+
+      <div class="space-y-6">
+        <div id="q2-1-container" class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+          <p class="font-bold text-base sm:text-lg text-slate-800 mb-3">• عَدَدُ الطُّيُورِ <span class="text-amber-800 underline">أَسْفَلَ</span> الشَّجَرَةِ هُوَ:</p>
+          <div class="flex items-center gap-3 sm:gap-6">
+            <button type="button" onclick="selectQ2Option(1, '4')" id="q2-1-opt-4" class="q2-opt choice-box flex-1 py-3 px-4 rounded-xl border-2 border-slate-300 font-extrabold text-lg sm:text-xl text-center bg-white">4</button>
+            <button type="button" onclick="selectQ2Option(1, '1')" id="q2-1-opt-1" class="q2-opt choice-box flex-1 py-3 px-4 rounded-xl border-2 border-slate-300 font-extrabold text-lg sm:text-xl text-center bg-white">1</button>
+            <button type="button" onclick="selectQ2Option(1, '2')" id="q2-1-opt-2" class="q2-opt choice-box flex-1 py-3 px-4 rounded-xl border-2 border-slate-300 font-extrabold text-lg sm:text-xl text-center bg-white">2</button>
+          </div>
+        </div>
+
+        <div id="q2-2-container" class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+          <p class="font-bold text-base sm:text-lg text-slate-800 mb-3">• عَدَدُ الطُّيُورِ <span class="text-emerald-700 underline">عَلَى</span> الشَّجَرَةِ هُوَ:</p>
+          <div class="flex items-center gap-3 sm:gap-6">
+            <button type="button" onclick="selectQ2Option(2, '3')" id="q2-2-opt-3" class="q2-opt choice-box flex-1 py-3 px-4 rounded-xl border-2 border-slate-300 font-extrabold text-lg sm:text-xl text-center bg-white">3</button>
+            <button type="button" onclick="selectQ2Option(2, '4')" id="q2-2-opt-4" class="q2-opt choice-box flex-1 py-3 px-4 rounded-xl border-2 border-slate-300 font-extrabold text-lg sm:text-xl text-center bg-white">4</button>
+            <button type="button" onclick="selectQ2Option(2, '2')" id="q2-2-opt-2" class="q2-opt choice-box flex-1 py-3 px-4 rounded-xl border-2 border-slate-300 font-extrabold text-lg sm:text-xl text-center bg-white">2</button>
+          </div>
+        </div>
+
+        <div id="q2-3-container" class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+          <p class="font-bold text-base sm:text-lg text-slate-800 mb-3">• عَدَدُ الطُّيُورِ <span class="text-sky-700 underline">أَعْلَى</span> الشَّجَرَةِ هُوَ:</p>
+          <div class="flex items-center gap-3 sm:gap-6">
+            <button type="button" onclick="selectQ2Option(3, '2')" id="q2-3-opt-2" class="q2-opt choice-box flex-1 py-3 px-4 rounded-xl border-2 border-slate-300 font-extrabold text-lg sm:text-xl text-center bg-white">2</button>
+            <button type="button" onclick="selectQ2Option(3, '4')" id="q2-3-opt-4" class="q2-opt choice-box flex-1 py-3 px-4 rounded-xl border-2 border-slate-300 font-extrabold text-lg sm:text-xl text-center bg-white">4</button>
+            <button type="button" onclick="selectQ2Option(3, '1')" id="q2-3-opt-1" class="q2-opt choice-box flex-1 py-3 px-4 rounded-xl border-2 border-slate-300 font-extrabold text-lg sm:text-xl text-center bg-white">1</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <button type="button" id="s2-submit" onclick="submitStation2()" class="w-full sm:w-auto px-8 py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-black text-lg rounded-2xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2">
+          <span>تَأْكِيدُ الإِجَابَةِ</span>
+          <span>✓</span>
+        </button>
+        <div id="s2-status" class="text-sm font-bold text-slate-500">اخْتَرْ إِجَابَةً لِكُلِّ سُؤَالٍ ثُمَّ أَكِّدْ.</div>
+      </div>
+
+      <div id="s2-feedback" class="mt-4 hidden p-4 rounded-2xl bg-slate-100 border text-sm sm:text-base font-bold flex items-center justify-between">
+        <span id="s2-feedback-text"></span>
+        <div class="flex items-center gap-3">
+          <span class="text-emerald-700 bg-emerald-100 px-3 py-1 rounded-xl" id="s2-score-correct">✓ 0</span>
+          <span class="text-rose-700 bg-rose-100 px-3 py-1 rounded-xl" id="s2-score-wrong">✗ 0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- بطاقة تَعَلَّمْتُ -->
+    <section id="station-learned" class="hidden bg-gradient-to-r from-emerald-500 via-teal-600 to-cyan-600 text-white rounded-3xl p-6 sm:p-8 shadow-xl border-4 border-emerald-300">
+      <div class="flex items-center gap-3 mb-3">
+        <span class="text-3xl">🌟</span>
+        <h2 class="text-2xl font-black">تَعَلَّمْتُ</h2>
+      </div>
+      <p class="text-lg sm:text-xl font-bold leading-relaxed bg-white/10 p-5 rounded-2xl backdrop-blur">
+        «يُمْكِنُنِي تَحْدِيدُ مَوْقِعِ شَيْءٍ بِالنِّسْبَةِ إِلَى آخَرَ بِاسْتِعْمَالِ مُفْرَدَاتٍ مِثْلَ: <span class="text-amber-250 underline font-black">فَوْقَ</span>، <span class="text-amber-250 underline font-black">تَحْتَ</span>، <span class="text-amber-250 underline font-black">عَلَى</span>، <span class="text-amber-250 underline font-black">أَعْلَى</span>، <span class="text-amber-250 underline font-black">أَسْفَلَ</span>.»
+      </p>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- المحطة 3: أتمرن 1 -->
+    <!-- ========================================== -->
+    <section id="station-3" class="station-card station-locked bg-white rounded-3xl p-5 sm:p-7 shadow-md transition-all">
+      <div class="flex items-center justify-between gap-2 mb-4 border-b pb-3">
+        <div class="flex items-center gap-3">
+          <span class="bg-cyan-600 text-white text-base font-bold px-3 py-1.5 rounded-xl">أَتَمَرَّنُ (1)</span>
+          <span class="text-xs sm:text-sm text-slate-500">دَفْتَرُ الأَنْشِطَةِ صَفْحَة 11</span>
+        </div>
+        <span class="text-xs bg-slate-100 text-slate-600 font-bold px-3 py-1 rounded-full">مُحَاوَلَةٌ وَاحِدَةٌ</span>
+      </div>
+
+      <div class="bg-cyan-50 border-r-4 border-cyan-600 p-4 rounded-xl mb-5 text-sm sm:text-base font-bold text-cyan-950">
+        📋 لَوّنِ الْبِطَاقَةَ الْمُنَاسِبَةَ:
+      </div>
+
+      <div class="mb-6 rounded-2xl overflow-hidden border-4 border-slate-200 bg-slate-100 shadow-inner max-w-md mx-auto">
+        <img src="3.jpg" alt="أتمرن 1: البنت والولد" class="w-full h-auto block object-cover" onerror="this.onerror=null; this.src='https://placehold.co/800x600/cffafe/0e7490?text=%D8%B5%D9%88%D8%B1%D8%A9+3.jpg+%D8%A7%D9%84%D8%A8%D9%86%D8%AA+%D9%88%D8%A7%D9%84%D9%88%D9%84%D8%AF';">
+      </div>
+
+      <div class="space-y-5 max-w-xl mx-auto">
+        <div id="s3-row-girl" class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3">
+          <span class="font-extrabold text-base sm:text-lg text-slate-800">الْبِنْتُ</span>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="selectCardS3('girl', 'fawqa')" id="s3-girl-fawqa" class="s3-card px-5 py-2.5 rounded-xl border-2 border-slate-300 font-extrabold text-base bg-white shadow-sm transition">فَوْقَ</button>
+            <button type="button" onclick="selectCardS3('girl', 'tahta')" id="s3-girl-tahta" class="s3-card px-5 py-2.5 rounded-xl border-2 border-slate-300 font-extrabold text-base bg-white shadow-sm transition">تَحْتَ</button>
+          </div>
+          <span class="font-extrabold text-base sm:text-lg text-slate-800">الْمَقْعَدِ.</span>
+        </div>
+
+        <div id="s3-row-boy" class="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3">
+          <span class="font-extrabold text-base sm:text-lg text-slate-800">الْوَلَدُ</span>
+          <div class="flex items-center gap-2">
+            <button type="button" onclick="selectCardS3('boy', 'fawqa')" id="s3-boy-fawqa" class="s3-card px-5 py-2.5 rounded-xl border-2 border-slate-300 font-extrabold text-base bg-white shadow-sm transition">فَوْقَ</button>
+            <button type="button" onclick="selectCardS3('boy', 'tahta')" id="s3-boy-tahta" class="s3-card px-5 py-2.5 rounded-xl border-2 border-slate-300 font-extrabold text-base bg-white shadow-sm transition">تَحْتَ</button>
+          </div>
+          <span class="font-extrabold text-base sm:text-lg text-slate-800">الطَّاوِلَةِ.</span>
+        </div>
+      </div>
+
+      <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <button type="button" id="s3-submit" onclick="submitStation3()" class="w-full sm:w-auto px-8 py-3.5 bg-cyan-600 hover:bg-cyan-700 text-white font-black text-lg rounded-2xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2">
+          <span>تَأْكِيدُ الإِجَابَةِ</span>
+          <span>✓</span>
+        </button>
+        <div id="s3-status" class="text-sm font-bold text-slate-500">لَوّنِ الْبِطَاقَةَ الصَّحِيحَةَ فِي كُلِّ جُمْلَةٍ.</div>
+      </div>
+
+      <div id="s3-feedback" class="mt-4 hidden p-4 rounded-2xl bg-slate-100 border text-sm sm:text-base font-bold flex items-center justify-between">
+        <span id="s3-feedback-text"></span>
+        <div class="flex items-center gap-3">
+          <span class="text-emerald-700 bg-emerald-100 px-3 py-1 rounded-xl" id="s3-score-correct">✓ 0</span>
+          <span class="text-rose-700 bg-rose-100 px-3 py-1 rounded-xl" id="s3-score-wrong">✗ 0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- المحطة 4: أتمرن 2 -->
+    <!-- ========================================== -->
+    <section id="station-4" class="station-card station-locked bg-white rounded-3xl p-5 sm:p-7 shadow-md transition-all">
+      <div class="flex items-center justify-between gap-2 mb-4 border-b pb-3">
+        <div class="flex items-center gap-3">
+          <span class="bg-emerald-600 text-white text-base font-bold px-3 py-1.5 rounded-xl">أَتَمَرَّنُ (2)</span>
+          <span class="text-xs sm:text-sm text-slate-500">دَفْتَرُ الأَنْشِطَةِ صَفْحَة 11</span>
+        </div>
+        <span class="text-xs bg-slate-100 text-slate-600 font-bold px-3 py-1 rounded-full">مُحَاوَلَةٌ وَاحِدَةٌ</span>
+      </div>
+
+      <div class="bg-emerald-50 border-r-4 border-emerald-600 p-4 rounded-xl mb-5 space-y-2 text-sm sm:text-base font-bold text-emerald-950">
+        <p>📋 هَذِهِ صُورَةٌ لِلْعَائِلَةِ فِي إِطَارٍ:</p>
+        <ul class="list-disc list-inside font-semibold space-y-1 text-slate-700">
+          <li>لَوّنْ <span class="font-bold text-emerald-600">بِالأَخْضَرِ</span> الشَّرِيطَ الْمَوْجُودَ <span class="font-bold underline decoration-emerald-500">أَعْلَى</span> الإِطَارِ.</li>
+          <li>لَوّنْ <span class="font-bold text-rose-600">بِالأَحْمَرِ</span> الشَّرِيطَ الْمَوْجُودَ <span class="font-bold underline decoration-rose-500">أَسْفَلَ</span> الإِطَارِ.</li>
+        </ul>
+      </div>
+
+      <div class="mb-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+        <p class="text-xs sm:text-sm font-bold text-slate-700 mb-2">🎨 اخْتَرِ اللَّوْنَ أَوَّلًا، ثُمَّ انْقُرْ عَلَى الشَّرِيطِ الْمُنَاسِبِ:</p>
+        <div class="flex items-center gap-3">
+          <button type="button" onclick="selectColorStation4('green')" id="pal4-green" class="color-pill active flex items-center gap-2 bg-emerald-600 text-white font-bold px-4 py-2 rounded-xl shadow">
+            <span class="w-4 h-4 rounded-full bg-white border border-emerald-800"></span>
+            <span>أَخْضَر</span>
+          </button>
+          <button type="button" onclick="selectColorStation4('red')" id="pal4-red" class="color-pill flex items-center gap-2 bg-rose-600 text-white font-bold px-4 py-2 rounded-xl shadow">
+            <span class="w-4 h-4 rounded-full bg-white border border-rose-800"></span>
+            <span>أَحْمَر</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="max-w-xl mx-auto bg-amber-100 p-4 rounded-3xl border-4 border-amber-800 shadow-xl">
+        <div onclick="paintStrip('top')" id="strip-top" class="w-full py-4 text-center font-extrabold text-sm sm:text-base rounded-xl border-2 border-dashed border-slate-400 bg-white text-slate-600 cursor-pointer transition-all hover:border-slate-700 shadow-sm mb-3">
+          انْقُرْ لِتَلْوِينِ الشَّرِيطِ أَعْلَى الصُّورَةِ
+        </div>
+
+        <div class="rounded-xl overflow-hidden border-2 border-amber-900 bg-white shadow-inner">
+          <img src="4.jpg" alt="أتمرن 2: العائلة في إطار" class="w-full h-auto block object-cover" onerror="this.onerror=null; this.src='https://placehold.co/900x520/fef3c7/78350f?text=%D8%B5%D9%88%D8%B1%D8%A9+4.jpg+%D8%A7%D9%84%D8%B9%D8%A7%D8%A6%D9%84%D8%A9';">
+        </div>
+
+        <div onclick="paintStrip('bottom')" id="strip-bottom" class="w-full py-4 text-center font-extrabold text-sm sm:text-base rounded-xl border-2 border-dashed border-slate-400 bg-white text-slate-600 cursor-pointer transition-all hover:border-slate-700 shadow-sm mt-3">
+          انْقُرْ لِتَلْوِينِ الشَّرِيطِ أَسْفَلَ الصُّورَةِ
+        </div>
+      </div>
+
+      <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <button type="button" id="s4-submit" onclick="submitStation4()" class="w-full sm:w-auto px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-lg rounded-2xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2">
+          <span>تَأْكِيدُ الإِجَابَةِ</span>
+          <span>✓</span>
+        </button>
+        <div id="s4-status" class="text-sm font-bold text-slate-500">لَوّنِ الشَّرِيطَيْنِ قَبْلَ التَّأْكِيدِ.</div>
+      </div>
+
+      <div id="s4-feedback" class="mt-4 hidden p-4 rounded-2xl bg-slate-100 border text-sm sm:text-base font-bold flex items-center justify-between">
+        <span id="s4-feedback-text"></span>
+        <div class="flex items-center gap-3">
+          <span class="text-emerald-700 bg-emerald-100 px-3 py-1 rounded-xl" id="s4-score-correct">✓ 0</span>
+          <span class="text-rose-700 bg-rose-100 px-3 py-1 rounded-xl" id="s4-score-wrong">✗ 0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- المحطة 5: أبحث -->
+    <!-- ========================================== -->
+    <section id="station-5" class="station-card station-locked bg-white rounded-3xl p-5 sm:p-7 shadow-md transition-all">
+      <div class="flex items-center justify-between gap-2 mb-4 border-b pb-3">
+        <div class="flex items-center gap-3">
+          <span class="bg-purple-600 text-white text-base font-bold px-3 py-1.5 rounded-xl">أَبْحَثُ</span>
+          <span class="text-xs sm:text-sm text-slate-500">دَفْتَرُ الأَنْشِطَةِ صَفْحَة 11</span>
+        </div>
+        <span class="text-xs bg-slate-100 text-slate-600 font-bold px-3 py-1 rounded-full">مُحَاوَلَةٌ وَاحِدَةٌ</span>
+      </div>
+
+      <div class="relative w-full rounded-2xl overflow-hidden border-4 border-slate-200 bg-slate-100 shadow-inner mb-6">
+        <img src="5.jpg" alt="أبحث: القارورات والعلب" class="w-full h-auto block object-cover" onerror="this.onerror=null; this.src='https://placehold.co/1000x560/f3e8ff/581c87?text=%D8%B5%D9%88%D8%B1%D8%A9+5.jpg+%D8%A7%D9%84%D9%82%D8%A7%D8%B1%D9%88%D8%B1%D8%A7%D8%AA+%D9%88%D8%A7%D9%84%D8%B9%D9%84%D8%A8';">
+
+        <button type="button" onclick="paintBottleBadge(1)" id="bottle-badge-1" class="spot-btn absolute w-9 h-9 sm:w-11 sm:h-11 rounded-2xl border-2 border-white shadow-xl flex items-center justify-center font-black text-white text-xs sm:text-base bg-slate-400 hint-pulse" style="top: 14%; left: 26%;" title="القارورة 1">1</button>
+        <button type="button" onclick="paintBottleBadge(2)" id="bottle-badge-2" class="spot-btn absolute w-9 h-9 sm:w-11 sm:h-11 rounded-2xl border-2 border-white shadow-xl flex items-center justify-center font-black text-white text-xs sm:text-base bg-slate-400 hint-pulse" style="top: 14%; left: 38%;" title="القارورة 2">2</button>
+        <button type="button" onclick="paintBottleBadge(3)" id="bottle-badge-3" class="spot-btn absolute w-9 h-9 sm:w-11 sm:h-11 rounded-2xl border-2 border-white shadow-xl flex items-center justify-center font-black text-white text-xs sm:text-base bg-slate-400 hint-pulse" style="top: 14%; left: 50%;" title="القارورة 3">3</button>
+        <button type="button" onclick="paintBottleBadge(4)" id="bottle-badge-4" class="spot-btn absolute w-9 h-9 sm:w-11 sm:h-11 rounded-2xl border-2 border-white shadow-xl flex items-center justify-center font-black text-white text-xs sm:text-base bg-slate-400 hint-pulse" style="top: 14%; left: 61%;" title="القارورة 4">4</button>
+        <button type="button" onclick="paintBottleBadge(5)" id="bottle-badge-5" class="spot-btn absolute w-9 h-9 sm:w-11 sm:h-11 rounded-2xl border-2 border-white shadow-xl flex items-center justify-center font-black text-white text-xs sm:text-base bg-slate-400 hint-pulse" style="top: 14%; left: 73%;" title="القارورة 5">5</button>
+      </div>
+
+      <div class="bg-purple-50 border-r-4 border-purple-600 p-4 rounded-2xl mb-4 space-y-3">
+        <p class="font-black text-purple-950 text-base">١. لَوّنِ الْبِطَاقَةَ الْمُنَاسِبَةَ وَاكْتُبِ الْعَدَدَ الْمُنَاسِبَ:</p>
+        
+        <div class="space-y-4">
+          <div class="p-4 rounded-xl bg-white border border-purple-200 flex flex-wrap items-center justify-between gap-3">
+            <span class="font-extrabold text-base text-slate-800">الْقَارُورَاتُ</span>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="selectCardS5('bottles', 'ala')" id="s5-bottles-ala" class="s5-card px-4 py-2 rounded-xl border-2 border-slate-300 font-bold bg-white transition">عَلَى</button>
+              <button type="button" onclick="selectCardS5('bottles', 'tahta')" id="s5-bottles-tahta" class="s5-card px-4 py-2 rounded-xl border-2 border-slate-300 font-bold bg-white transition">تَحْتَ</button>
+            </div>
+            <span class="font-extrabold text-base text-slate-800">الرَّفِّ وَعَدَدُهَا:</span>
+            <input type="text" id="s5-bottles-count" maxlength="2" placeholder="؟" class="math-ltr w-16 h-11 text-center font-black text-xl rounded-xl border-2 border-slate-300 focus:border-purple-600 focus:outline-none bg-slate-50">
+          </div>
+
+          <div class="p-4 rounded-xl bg-white border border-purple-200 flex flex-wrap items-center justify-between gap-3">
+            <span class="font-extrabold text-base text-slate-800">الْعُلَبُ</span>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="selectCardS5('boxes', 'ala')" id="s5-boxes-ala" class="s5-card px-4 py-2 rounded-xl border-2 border-slate-300 font-bold bg-white transition">عَلَى</button>
+              <button type="button" onclick="selectCardS5('boxes', 'tahta')" id="s5-boxes-tahta" class="s5-card px-4 py-2 rounded-xl border-2 border-slate-300 font-bold bg-white transition">تَحْتَ</button>
+            </div>
+            <span class="font-extrabold text-base text-slate-800">الرَّفِّ وَعَدَدُهَا:</span>
+            <input type="text" id="s5-boxes-count" maxlength="2" placeholder="؟" class="math-ltr w-16 h-11 text-center font-black text-xl rounded-xl border-2 border-slate-300 focus:border-purple-600 focus:outline-none bg-slate-50">
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-indigo-50 border-r-4 border-indigo-600 p-4 rounded-2xl mb-6 space-y-3">
+        <p class="font-black text-indigo-950 text-base">٢. تَلْوِينُ بَطَاقَاتِ الْقَارُورَاتِ:</p>
+        <ul class="list-disc list-inside text-sm text-slate-700 font-semibold space-y-1">
+          <li>لَوّنْ <span class="font-bold text-rose-600">بِالأَحْمَرِ</span> الْقَارُورَاتِ الَّتِي <span class="font-bold underline decoration-rose-500">فَوْقَ</span> الْعُلَبِ الْخَضْرَاءِ.</li>
+          <li>لَوّنْ <span class="font-bold text-blue-600">بِالأَزْرَقِ</span> الْقَارُورَةَ الَّتِي <span class="font-bold underline decoration-blue-500">لَا تُوجَدُ تَحْتَهَا عُلْبَةٌ</span>.</li>
+        </ul>
+
+        <div class="flex flex-wrap items-center gap-3 pt-2">
+          <button type="button" onclick="selectColorStation5('red')" id="pal5-red" class="color-pill active flex items-center gap-2 bg-rose-600 text-white font-bold px-4 py-2 rounded-xl shadow">
+            <span class="w-4 h-4 rounded-full bg-white border border-rose-800"></span>
+            <span>أَحْمَر (فَوْقَ الْعُلَبِ الْخَضْرَاءِ)</span>
+          </button>
+          <button type="button" onclick="selectColorStation5('blue')" id="pal5-blue" class="color-pill flex items-center gap-2 bg-blue-600 text-white font-bold px-4 py-2 rounded-xl shadow">
+            <span class="w-4 h-4 rounded-full bg-white border border-blue-800"></span>
+            <span>أَزْرَق (لَا تُوجَدُ تَحْتَهَا عُلْبَة)</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <button type="button" id="s5-submit" onclick="submitStation5()" class="w-full sm:w-auto px-8 py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-black text-lg rounded-2xl shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2">
+          <span>تَأْكِيدُ الإِجَابَةِ</span>
+          <span>✓</span>
+        </button>
+        <div id="s5-status" class="text-sm font-bold text-slate-500">أَكْمِلِ الْجُزْأَيْنِ مَعًا ثُمَّ أَكِّدْ.</div>
+      </div>
+
+      <div id="s5-feedback" class="mt-4 hidden p-4 rounded-2xl bg-slate-100 border text-sm sm:text-base font-bold flex items-center justify-between">
+        <span id="s5-feedback-text"></span>
+        <div class="flex items-center gap-3">
+          <span class="text-emerald-700 bg-emerald-100 px-3 py-1 rounded-xl" id="s5-score-correct">✓ 0</span>
+          <span class="text-rose-700 bg-rose-100 px-3 py-1 rounded-xl" id="s5-score-wrong">✗ 0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- الشاشة الختامية: التقييم العام -->
+    <!-- ========================================== -->
+    <section id="final-summary-card" class="hidden bg-white rounded-3xl p-6 sm:p-10 shadow-2xl border-4 border-amber-300">
+      <div class="text-center mb-8">
+        <span class="text-4xl">🏆</span>
+        <h2 class="text-3xl font-black text-slate-900 mt-2">نَتِيجَةُ التَّقْيِيمِ النِّهَائِيِّ</h2>
+        <p class="text-slate-500 font-semibold text-sm mt-1">تَقْيِيمٌ شَامِلٌ لِكُلِّ مَحَطَّاتِ الدَّرْسِ</p>
+      </div>
+
+      <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14">
+        <div class="relative w-44 h-44 flex items-center justify-center">
+          <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" stroke="#f1f5f9" stroke-width="12" fill="none" />
+            <circle id="final-circle-bar" cx="60" cy="60" r="50" stroke="#3b82f6" stroke-width="12" stroke-dasharray="314.16" stroke-dashoffset="314.16" stroke-linecap="round" fill="none" class="transition-all duration-1000 ease-out" />
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+            <span id="final-percentage-text" class="text-4xl font-black text-slate-900 math-ltr">0%</span>
+            <span class="text-xs font-bold text-slate-500">نِسْبَةُ النَّجَاحِ</span>
+          </div>
+        </div>
+
+        <div class="space-y-4 text-center md:text-right">
+          <div class="flex items-center justify-center md:justify-start gap-4">
+            <div class="bg-emerald-100 text-emerald-800 px-5 py-3 rounded-2xl font-black text-lg border border-emerald-300">
+              <span>الإِجَابَاتُ الصَّحِيحَةُ (✓): </span>
+              <span id="final-correct-count" class="text-2xl mr-1">0</span>
+            </div>
+            <div class="bg-rose-100 text-rose-800 px-5 py-3 rounded-2xl font-black text-lg border border-rose-300">
+              <span>الإِجَابَاتُ الْخَاطِئَةُ (✗): </span>
+              <span id="final-wrong-count" class="text-2xl mr-1">0</span>
+            </div>
+          </div>
+
+          <div id="pedagogical-note" class="p-4 rounded-2xl text-base sm:text-lg font-black bg-blue-50 text-blue-900 border border-blue-200"></div>
+          <p class="text-xs text-slate-400 font-semibold">
+            * يُمْكِنُ لِلأُسْتَاذِ أَوْ الْوَلِيِّ التَّمْرِيرَ لِلأَعْلَى لِمُعَايَنَةِ تَفَاصِيلِ الإِجَابَاتِ وَتَصْحِيحِ الأَخْطَاءِ.
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-8 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-center gap-4">
+        <button type="button" onclick="restartApplication()" class="px-8 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-lg rounded-2xl shadow-lg transition-transform active:scale-95 flex items-center gap-2">
+          <span>🔄 إِعَادَةُ الْمُحَاوَلَةِ</span>
+        </button>
+        <button type="button" onclick="exitLesson()" class="px-8 py-3.5 bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold text-lg rounded-2xl shadow transition-transform active:scale-95 flex items-center gap-2">
+          <span>🚪 خُرُوجٌ</span>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================
+       زر العودة إلى الفهرس (أُضيف)
+       ======================================== -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+  <!-- Notification Toast -->
+  <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white font-bold px-6 py-3 rounded-2xl shadow-2xl transition-all duration-300 opacity-0 pointer-events-none z-50 text-sm sm:text-base border border-slate-700 text-center max-w-md w-11/12"></div>
+
+  <!-- ========================================
+       سكريبت الحماية (أُضيف)
+       ======================================== -->
+  <script>
+    // إعدادات القناة - السنة الأولى
+    const CHANNEL_ID = "-1004456852024";
+
+    // تهيئة Telegram WebApp
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+  </script>
+
+  <!-- ========================================
+       سكريبت الدرس الأصلي (كما هو دون تغيير)
+       ======================================== -->
+  <script>
+    /* 1. WEB AUDIO API SYNTHESIS */
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTone(freq, type, duration, delay = 0) {
+      setTimeout(() => {
+        try {
+          if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+          }
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          
+          gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start();
+          osc.stop(audioCtx.currentTime + duration);
+        } catch (e) {
+          console.error("Audio error: ", e);
+        }
+      }, delay * 1000);
+    }
+
+    function playSuccessSound() {
+      playTone(523.25, 'triangle', 0.2, 0);
+      playTone(659.25, 'triangle', 0.25, 0.12);
+      playTone(783.99, 'triangle', 0.4, 0.24);
+      playTone(1046.50, 'triangle', 0.5, 0.38);
+    }
+
+    function playErrorSound() {
+      playTone(311.13, 'sawtooth', 0.25, 0);
+      playTone(277.18, 'sawtooth', 0.35, 0.2);
+    }
+
+    function playTapSound() {
+      playTone(440, 'sine', 0.08, 0);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.remove('opacity-0', 'pointer-events-none');
+      toast.classList.add('opacity-100');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100');
+        toast.classList.add('opacity-0', 'pointer-events-none');
+      }, 3000);
+    }
+
+    /* 2. GLOBAL SCORING */
+    let totalScore = {
+      s1: { correct: 0, wrong: 0, done: false },
+      s2: { correct: 0, wrong: 0, done: false },
+      s3: { correct: 0, wrong: 0, done: false },
+      s4: { correct: 0, wrong: 0, done: false },
+      s5: { correct: 0, wrong: 0, done: false }
+    };
+
+    function unlockStation(stationId, badgeText) {
+      const station = document.getElementById(stationId);
+      if (station) {
+        station.classList.remove('station-locked');
+        station.classList.add('station-active');
+        station.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      if (badgeText) {
+        document.getElementById('global-step-badge').textContent = badgeText;
+      }
+    }
+
+    /* 3. STATION 1 */
+    let s1SelectedColor = 'blue';
+    const s1Answers = {
+      swing: null, horse: null, slider: null,
+      under: null, 'ball-on': null, 'ball-under': null
+    };
+    const s1CorrectMap = {
+      swing: 'blue', horse: 'blue', slider: 'blue',
+      under: 'brown', 'ball-on': 'red', 'ball-under': 'green'
+    };
+    const colorStyles = {
+      blue: { bg: '#2563eb', border: '#1d4ed8', text: 'أَزْرَق' },
+      brown: { bg: '#8d5b4c', border: '#5c3a2f', text: 'بُنِّيّ' },
+      red: { bg: '#dc2626', border: '#b91c1c', text: 'أَحْمَر' },
+      green: { bg: '#16a34a', border: '#15803d', text: 'أَخْضَر' }
+    };
+
+    function selectColorStation1(color) {
+      playTapSound();
+      s1SelectedColor = color;
+      ['blue', 'brown', 'red', 'green'].forEach(c => {
+        document.getElementById(`pal-${c}`).classList.remove('active');
+      });
+      document.getElementById(`pal-${color}`).classList.add('active');
+    }
+
+    function applyColorStation1(spotKey) {
+      if (totalScore.s1.done) return;
+      playTapSound();
+      s1Answers[spotKey] = s1SelectedColor;
+      const spot = document.getElementById(`s1-spot-${spotKey}`);
+      spot.style.backgroundColor = colorStyles[s1SelectedColor].bg;
+      spot.style.borderColor = '#ffffff';
+      spot.innerHTML = '●';
+      spot.classList.remove('bg-slate-400');
+    }
+
+    function submitStation1() {
+      const uncolored = Object.values(s1Answers).some(val => val === null);
+      if (uncolored) {
+        showToast("⚠️ يُرْجَى تَلْوِينُ جَمِيعِ الْبِطَاقَاتِ السِّتِّ فِي الصُّورَةِ أَوَّلًا!");
+        playErrorSound();
+        return;
+      }
+
+      totalScore.s1.done = true;
+      let correct = 0;
+      let wrong = 0;
+
+      Object.keys(s1CorrectMap).forEach(key => {
+        const spot = document.getElementById(`s1-spot-${key}`);
+        spot.style.pointerEvents = 'none';
+        spot.classList.remove('hint-pulse');
+
+        if (s1Answers[key] === s1CorrectMap[key]) {
+          correct++;
+          spot.style.boxShadow = '0 0 0 4px #2e7d32';
+          spot.innerHTML = '✓';
+        } else {
+          wrong++;
+          spot.style.boxShadow = '0 0 0 4px #c62828';
+          spot.innerHTML = '✗';
+        }
+      });
+
+      document.querySelectorAll('#station-1 .color-pill').forEach(b => b.style.pointerEvents = 'none');
+      const submitBtn = document.getElementById('s1-submit');
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+      totalScore.s1.correct = correct;
+      totalScore.s1.wrong = wrong;
+
+      const fb = document.getElementById('s1-feedback');
+      fb.classList.remove('hidden');
+      document.getElementById('s1-score-correct').textContent = `✓ ${correct}`;
+      document.getElementById('s1-score-wrong').textContent = `✗ ${wrong}`;
+      
+      if (correct === 6) {
+        playSuccessSound();
+        document.getElementById('s1-feedback-text').innerHTML = `<span class="text-emerald-700">رَائِعٌ جِدًّا! تَمَّ تَعْيِينُ الْمَوَاقِعِ بِدِقَّةٍ تَامَّةٍ.</span>`;
+      } else {
+        playErrorSound();
+        document.getElementById('s1-feedback-text').innerHTML = `<span class="text-rose-700">تَمَّ التَّسْجِيلُ، تَابِعِ التَّرْكِيزَ فِي الْمَحَطَّةِ التَّالِيَةِ.</span>`;
+      }
+
+      document.getElementById('s1-status').textContent = 'تَمَّ تَأْكِيدُ الْمَحَطَّةِ 1.';
+      unlockStation('station-2', 'الْمَحَطَّةُ 2 مِنْ 5');
+    }
+
+    /* 4. STATION 2 */
+    const s2Answers = { 1: null, 2: null, 3: null };
+    const s2CorrectMap = { 1: '1', 2: '4', 3: '2' };
+
+    function selectQ2Option(qNum, value) {
+      if (totalScore.s2.done) return;
+      playTapSound();
+      s2Answers[qNum] = value;
+      const container = document.getElementById(`q2-${qNum}-container`);
+      container.querySelectorAll('.q2-opt').forEach(btn => btn.classList.remove('selected'));
+      document.getElementById(`q2-${qNum}-opt-${value}`).classList.add('selected');
+    }
+
+    function submitStation2() {
+      if (!s2Answers[1] || !s2Answers[2] || !s2Answers[3]) {
+        showToast("⚠️ يُرْجَى الإِجَابَةُ عَلَى جَمِيعِ الأَسْئِلَةِ الثَّلَاثَةِ!");
+        playErrorSound();
+        return;
+      }
+
+      totalScore.s2.done = true;
+      let correct = 0;
+      let wrong = 0;
+
+      [1, 2, 3].forEach(qNum => {
+        const selectedVal = s2Answers[qNum];
+        const correctVal = s2CorrectMap[qNum];
+        const container = document.getElementById(`q2-${qNum}-container`);
+        
+        container.querySelectorAll('.q2-opt').forEach(b => {
+          b.style.pointerEvents = 'none';
+          b.classList.remove('selected');
+        });
+
+        const selectedBtn = document.getElementById(`q2-${qNum}-opt-${selectedVal}`);
+        const correctBtn = document.getElementById(`q2-${qNum}-opt-${correctVal}`);
+
+        if (selectedVal === correctVal) {
+          correct++;
+          selectedBtn.style.backgroundColor = '#2e7d32';
+          selectedBtn.style.color = '#ffffff';
+          selectedBtn.style.borderColor = '#1b5e20';
+          selectedBtn.innerHTML = `${selectedVal} ✓`;
+        } else {
+          wrong++;
+          selectedBtn.style.backgroundColor = '#c62828';
+          selectedBtn.style.color = '#ffffff';
+          selectedBtn.style.borderColor = '#b71c1c';
+          selectedBtn.innerHTML = `${selectedVal} ✗`;
+          correctBtn.style.borderColor = '#2e7d32';
+          correctBtn.style.borderWidth = '3px';
+        }
+      });
+
+      const submitBtn = document.getElementById('s2-submit');
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+      totalScore.s2.correct = correct;
+      totalScore.s2.wrong = wrong;
+
+      const fb = document.getElementById('s2-feedback');
+      fb.classList.remove('hidden');
+      document.getElementById('s2-score-correct').textContent = `✓ ${correct}`;
+      document.getElementById('s2-score-wrong').textContent = `✗ ${wrong}`;
+
+      if (correct === 3) {
+        playSuccessSound();
+        document.getElementById('s2-feedback-text').innerHTML = `<span class="text-emerald-700">إِجَابَاتٌ نَمُوذَجِيَّةٌ كَامِلَةٌ! أَحْسَنْتَ.</span>`;
+      } else {
+        playErrorSound();
+        document.getElementById('s2-feedback-text').innerHTML = `<span class="text-rose-700">تَمَّ التَّسْجِيلُ، لَاحِظِ الإِجَابَاتِ الصَّحِيحَةَ بِالأَخْضَرِ.</span>`;
+      }
+
+      document.getElementById('s2-status').textContent = 'تَمَّ تَأْكِيدُ الْمَحَطَّةِ 2.';
+      document.getElementById('station-learned').classList.remove('hidden');
+      unlockStation('station-3', 'الْمَحَطَّةُ 3 مِنْ 5');
+    }
+
+    /* 5. STATION 3 */
+    const s3Answers = { girl: null, boy: null };
+    const s3CorrectMap = { girl: 'fawqa', boy: 'tahta' };
+
+    function selectCardS3(person, choice) {
+      if (totalScore.s3.done) return;
+      playTapSound();
+      s3Answers[person] = choice;
+
+      const row = document.getElementById(`s3-row-${person}`);
+      row.querySelectorAll('.s3-card').forEach(c => {
+        c.classList.remove('bg-cyan-600', 'text-white', 'border-cyan-800');
+        c.classList.add('bg-white', 'text-slate-800', 'border-slate-300');
+      });
+
+      const selected = document.getElementById(`s3-${person}-${choice}`);
+      selected.classList.remove('bg-white', 'text-slate-800', 'border-slate-300');
+      selected.classList.add('bg-cyan-600', 'text-white', 'border-cyan-800');
+    }
+
+    function submitStation3() {
+      if (!s3Answers.girl || !s3Answers.boy) {
+        showToast("⚠️ يُرْجَى تَلْوِينُ بَطَاقَةٍ لِكُلِّ جُمْلَةٍ!");
+        playErrorSound();
+        return;
+      }
+
+      totalScore.s3.done = true;
+      let correct = 0;
+      let wrong = 0;
+
+      ['girl', 'boy'].forEach(person => {
+        const userChoice = s3Answers[person];
+        const correctChoice = s3CorrectMap[person];
+        const userBtn = document.getElementById(`s3-${person}-${userChoice}`);
+        const correctBtn = document.getElementById(`s3-${person}-${correctChoice}`);
+
+        const row = document.getElementById(`s3-row-${person}`);
+        row.querySelectorAll('.s3-card').forEach(b => { b.style.pointerEvents = 'none'; });
+
+        if (userChoice === correctChoice) {
+          correct++;
+          userBtn.style.backgroundColor = '#2e7d32';
+          userBtn.style.color = '#ffffff';
+          userBtn.style.borderColor = '#1b5e20';
+          userBtn.innerHTML += ' ✓';
+        } else {
+          wrong++;
+          userBtn.style.backgroundColor = '#c62828';
+          userBtn.style.color = '#ffffff';
+          userBtn.style.borderColor = '#b71c1c';
+          userBtn.innerHTML += ' ✗';
+          correctBtn.style.borderColor = '#2e7d32';
+          correctBtn.style.borderWidth = '3px';
+        }
+      });
+
+      const submitBtn = document.getElementById('s3-submit');
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+      totalScore.s3.correct = correct;
+      totalScore.s3.wrong = wrong;
+
+      const fb = document.getElementById('s3-feedback');
+      fb.classList.remove('hidden');
+      document.getElementById('s3-score-correct').textContent = `✓ ${correct}`;
+      document.getElementById('s3-score-wrong').textContent = `✗ ${wrong}`;
+
+      if (correct === 2) {
+        playSuccessSound();
+        document.getElementById('s3-feedback-text').innerHTML = `<span class="text-emerald-700">عَمَلٌ مُمْتَازٌ! إِجَابَتَانِ صَحِيحَتَانِ.</span>`;
+      } else {
+        playErrorSound();
+        document.getElementById('s3-feedback-text').innerHTML = `<span class="text-rose-700">تَمَّ التَّسْجِيلُ، انْتَقِلْ إِلَى الْمَحَطَّةِ الْمُوَالِيَةِ.</span>`;
+      }
+
+      document.getElementById('s3-status').textContent = 'تَمَّ تَأْكِيدُ الْمَحَطَّةِ 3.';
+      unlockStation('station-4', 'الْمَحَطَّةُ 4 مِنْ 5');
+    }
+
+    /* 6. STATION 4 */
+    let s4SelectedColor = 'green';
+    const s4Strips = { top: null, bottom: null };
+    const s4CorrectMap = { top: 'green', bottom: 'red' };
+
+    function selectColorStation4(color) {
+      playTapSound();
+      s4SelectedColor = color;
+      ['green', 'red'].forEach(c => document.getElementById(`pal4-${c}`).classList.remove('active'));
+      document.getElementById(`pal4-${color}`).classList.add('active');
+    }
+
+    function paintStrip(position) {
+      if (totalScore.s4.done) return;
+      playTapSound();
+      s4Strips[position] = s4SelectedColor;
+      const el = document.getElementById(`strip-${position}`);
+      
+      if (s4SelectedColor === 'green') {
+        el.style.backgroundColor = '#16a34a';
+        el.style.color = '#ffffff';
+        el.style.borderColor = '#15803d';
+        el.textContent = 'شَرِيطٌ مُلَوَّنٌ بِالأَخْضَرِ';
+      } else {
+        el.style.backgroundColor = '#dc2626';
+        el.style.color = '#ffffff';
+        el.style.borderColor = '#b91c1c';
+        el.textContent = 'شَرِيطٌ مُلَوَّنٌ بِالأَحْمَرِ';
+      }
+    }
+
+    function submitStation4() {
+      if (!s4Strips.top || !s4Strips.bottom) {
+        showToast("⚠️ يُرْجَى تَلْوِينُ الشَّرِيطِ أَعْلَى وَالشَّرِيطِ أَسْفَلَ الإِطَارِ!");
+        playErrorSound();
+        return;
+      }
+
+      totalScore.s4.done = true;
+      let correct = 0;
+      let wrong = 0;
+
+      ['top', 'bottom'].forEach(pos => {
+        const el = document.getElementById(`strip-${pos}`);
+        el.style.pointerEvents = 'none';
+
+        if (s4Strips[pos] === s4CorrectMap[pos]) {
+          correct++;
+          el.style.backgroundColor = '#2e7d32';
+          el.style.borderColor = '#1b5e20';
+          el.innerHTML = (pos === 'top' ? 'أَعْلَى الإِطَارِ (صَحِيحٌ ✓)' : 'أَسْفَلَ الإِطَارِ (صَحِيحٌ ✓)');
+        } else {
+          wrong++;
+          el.style.backgroundColor = '#c62828';
+          el.style.borderColor = '#b71c1c';
+          el.innerHTML = (pos === 'top' ? 'أَعْلَى الإِطَارِ (خَاطِئٌ ✗)' : 'أَسْفَلَ الإِطَارِ (خَاطِئٌ ✗)');
+        }
+      });
+
+      document.querySelectorAll('#station-4 .color-pill').forEach(b => b.style.pointerEvents = 'none');
+      const submitBtn = document.getElementById('s4-submit');
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+      totalScore.s4.correct = correct;
+      totalScore.s4.wrong = wrong;
+
+      const fb = document.getElementById('s4-feedback');
+      fb.classList.remove('hidden');
+      document.getElementById('s4-score-correct').textContent = `✓ ${correct}`;
+      document.getElementById('s4-score-wrong').textContent = `✗ ${wrong}`;
+
+      if (correct === 2) {
+        playSuccessSound();
+        document.getElementById('s4-feedback-text').innerHTML = `<span class="text-emerald-700">مُمْتَازٌ! تَمَّ تَمْيِيزُ أَعْلَى وَأَسْفَلَ بِإِتْقَانٍ.</span>`;
+      } else {
+        playErrorSound();
+        document.getElementById('s4-feedback-text').innerHTML = `<span class="text-rose-700">تَمَّ التَّسْجِيلُ، انْتَقِلْ إِلَى مَحَطَّةِ أَبْحَثُ.</span>`;
+      }
+
+      document.getElementById('s4-status').textContent = 'تَمَّ تَأْكِيدُ الْمَحَطَّةِ 4.';
+      unlockStation('station-5', 'الْمَحَطَّةُ 5 مِنْ 5 (الأَخِيرَةُ)');
+    }
+
+    /* 7. STATION 5 */
+    const s5Cards = { bottles: null, boxes: null };
+    let s5SelectedColor = 'red';
+    const s5BottleBadges = { 1: null, 2: null, 3: null, 4: null, 5: null };
+
+    function selectCardS5(item, val) {
+      if (totalScore.s5.done) return;
+      playTapSound();
+      s5Cards[item] = val;
+
+      ['ala', 'tahta'].forEach(t => {
+        const btn = document.getElementById(`s5-${item}-${t}`);
+        btn.classList.remove('bg-purple-600', 'text-white', 'border-purple-800');
+        btn.classList.add('bg-white', 'text-slate-800', 'border-slate-300');
+      });
+
+      const active = document.getElementById(`s5-${item}-${val}`);
+      active.classList.remove('bg-white', 'text-slate-800', 'border-slate-300');
+      active.classList.add('bg-purple-600', 'text-white', 'border-purple-800');
+    }
+
+    function selectColorStation5(color) {
+      playTapSound();
+      s5SelectedColor = color;
+      ['red', 'blue'].forEach(c => document.getElementById(`pal5-${c}`).classList.remove('active'));
+      document.getElementById(`pal5-${color}`).classList.add('active');
+    }
+
+    function paintBottleBadge(bottleNum) {
+      if (totalScore.s5.done) return;
+      playTapSound();
+      s5BottleBadges[bottleNum] = s5SelectedColor;
+      const badge = document.getElementById(`bottle-badge-${bottleNum}`);
+      if (s5SelectedColor === 'red') {
+        badge.style.backgroundColor = '#dc2626';
+        badge.style.borderColor = '#b91c1c';
+        badge.innerHTML = `${bottleNum}`;
+      } else {
+        badge.style.backgroundColor = '#2563eb';
+        badge.style.borderColor = '#1d4ed8';
+        badge.innerHTML = `${bottleNum}`;
+      }
+    }
+
+    function submitStation5() {
+      const countBottlesVal = document.getElementById('s5-bottles-count').value.trim();
+      const countBoxesVal = document.getElementById('s5-boxes-count').value.trim();
+
+      if (!s5Cards.bottles || !s5Cards.boxes || countBottlesVal === '' || countBoxesVal === '') {
+        showToast("⚠️ يُرْجَى اخْتِيَارُ بَطَاقَةٍ وَكِتَابَةُ الْعَدَدِ فِي الْجُزْءِ الأَوَّلِ!");
+        playErrorSound();
+        return;
+      }
+
+      if (!s5BottleBadges[1] && !s5BottleBadges[3] && !s5BottleBadges[4]) {
+        showToast("⚠️ يُرْجَى تَلْوِينُ بَطَاقَاتِ الْقَارُورَاتِ الْمَطْلُوبَةِ فِي الصُّورَةِ!");
+        playErrorSound();
+        return;
+      }
+
+      totalScore.s5.done = true;
+      let correct = 0;
+      let wrong = 0;
+
+      const cardBottlesAla = document.getElementById('s5-bottles-ala');
+      const cardBottlesTahta = document.getElementById('s5-bottles-tahta');
+      cardBottlesAla.style.pointerEvents = 'none';
+      cardBottlesTahta.style.pointerEvents = 'none';
+
+      if (s5Cards.bottles === 'ala') {
+        correct++;
+        cardBottlesAla.style.backgroundColor = '#2e7d32';
+        cardBottlesAla.style.color = '#fff';
+        cardBottlesAla.innerHTML += ' ✓';
+      } else {
+        wrong++;
+        cardBottlesTahta.style.backgroundColor = '#c62828';
+        cardBottlesTahta.style.color = '#fff';
+        cardBottlesTahta.innerHTML += ' ✗';
+        cardBottlesAla.style.borderColor = '#2e7d32';
+        cardBottlesAla.style.borderWidth = '3px';
+      }
+
+      const inputBottles = document.getElementById('s5-bottles-count');
+      inputBottles.disabled = true;
+      if (countBottlesVal === '5' || countBottlesVal === '٥') {
+        correct++;
+        inputBottles.style.backgroundColor = '#dcfce7';
+        inputBottles.style.borderColor = '#2e7d32';
+        inputBottles.style.color = '#14532d';
+      } else {
+        wrong++;
+        inputBottles.style.backgroundColor = '#fee2e2';
+        inputBottles.style.borderColor = '#c62828';
+        inputBottles.style.color = '#7f1d1d';
+      }
+
+      const cardBoxesAla = document.getElementById('s5-boxes-ala');
+      const cardBoxesTahta = document.getElementById('s5-boxes-tahta');
+      cardBoxesAla.style.pointerEvents = 'none';
+      cardBoxesTahta.style.pointerEvents = 'none';
+
+      if (s5Cards.boxes === 'tahta') {
+        correct++;
+        cardBoxesTahta.style.backgroundColor = '#2e7d32';
+        cardBoxesTahta.style.color = '#fff';
+        cardBoxesTahta.innerHTML += ' ✓';
+      } else {
+        wrong++;
+        cardBoxesAla.style.backgroundColor = '#c62828';
+        cardBoxesAla.style.color = '#fff';
+        cardBoxesAla.innerHTML += ' ✗';
+        cardBoxesTahta.style.borderColor = '#2e7d32';
+        cardBoxesTahta.style.borderWidth = '3px';
+      }
+
+      const inputBoxes = document.getElementById('s5-boxes-count');
+      inputBoxes.disabled = true;
+      if (countBoxesVal === '4' || countBoxesVal === '٤') {
+        correct++;
+        inputBoxes.style.backgroundColor = '#dcfce7';
+        inputBoxes.style.borderColor = '#2e7d32';
+        inputBoxes.style.color = '#14532d';
+      } else {
+        wrong++;
+        inputBoxes.style.backgroundColor = '#fee2e2';
+        inputBoxes.style.borderColor = '#c62828';
+        inputBoxes.style.color = '#7f1d1d';
+      }
+
+      [1, 3].forEach(bNum => {
+        const badge = document.getElementById(`bottle-badge-${bNum}`);
+        badge.style.pointerEvents = 'none';
+        badge.classList.remove('hint-pulse');
+        if (s5BottleBadges[bNum] === 'red') {
+          correct++;
+          badge.style.boxShadow = '0 0 0 3px #2e7d32';
+        } else {
+          wrong++;
+          badge.style.boxShadow = '0 0 0 3px #c62828';
+        }
+      });
+
+      const badge4 = document.getElementById('bottle-badge-4');
+      badge4.style.pointerEvents = 'none';
+      badge4.classList.remove('hint-pulse');
+      if (s5BottleBadges[4] === 'blue') {
+        correct++;
+        badge4.style.boxShadow = '0 0 0 3px #2e7d32';
+      } else {
+        wrong++;
+        badge4.style.boxShadow = '0 0 0 3px #c62828';
+      }
+
+      [2, 5].forEach(bNum => {
+        document.getElementById(`bottle-badge-${bNum}`).style.pointerEvents = 'none';
+      });
+      document.querySelectorAll('#station-5 .color-pill').forEach(b => b.style.pointerEvents = 'none');
+
+      const submitBtn = document.getElementById('s5-submit');
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+      totalScore.s5.correct = correct;
+      totalScore.s5.wrong = wrong;
+
+      const fb = document.getElementById('s5-feedback');
+      fb.classList.remove('hidden');
+      document.getElementById('s5-score-correct').textContent = `✓ ${correct}`;
+      document.getElementById('s5-score-wrong').textContent = `✗ ${wrong}`;
+
+      if (wrong === 0) {
+        playSuccessSound();
+        document.getElementById('s5-feedback-text').innerHTML = `<span class="text-emerald-700">بَرَاعَةٌ فَائِقَةٌ! كُلُّ إِجَابَاتِ أَبْحَثُ صَحِيحَةٌ.</span>`;
+      } else {
+        playErrorSound();
+        document.getElementById('s5-feedback-text').innerHTML = `<span class="text-rose-700">تَمَّ تَسْجِيلُ إِجَابَاتِكَ، انْظُرِ التَّقْيِيمَ الْعَامَّ بِالأَسْفَلِ.</span>`;
+      }
+
+      document.getElementById('s5-status').textContent = 'تَمَّ تَأْكِيدُ الْمَحَطَّةِ 5.';
+      renderFinalAssessment();
+    }
+
+    /* 8. FINAL ASSESSMENT */
+    function renderFinalAssessment() {
+      const summaryCard = document.getElementById('final-summary-card');
+      summaryCard.classList.remove('hidden');
+
+      let grandCorrect = 0;
+      let grandWrong = 0;
+
+      Object.values(totalScore).forEach(st => {
+        grandCorrect += st.correct;
+        grandWrong += st.wrong;
+      });
+
+      const totalItems = grandCorrect + grandWrong;
+      const percentage = totalItems > 0 ? Math.round((grandCorrect / totalItems) * 100) : 0;
+
+      document.getElementById('final-correct-count').textContent = grandCorrect;
+      document.getElementById('final-wrong-count').textContent = grandWrong;
+      document.getElementById('final-percentage-text').textContent = `${percentage}%`;
+
+      const circleBar = document.getElementById('final-circle-bar');
+      const circumference = 2 * Math.PI * 50;
+      const offset = circumference - (circumference * percentage / 100);
+      circleBar.style.strokeDashoffset = offset;
+
+      if (percentage >= 80) {
+        circleBar.setAttribute('stroke', '#16a34a');
+      } else if (percentage >= 50) {
+        circleBar.setAttribute('stroke', '#d97706');
+      } else {
+        circleBar.setAttribute('stroke', '#dc2626');
+      }
+
+      const noteEl = document.getElementById('pedagogical-note');
+      if (percentage >= 90) {
+        noteEl.className = 'p-4 rounded-2xl text-base sm:text-lg font-black bg-emerald-50 text-emerald-900 border border-emerald-300';
+        noteEl.innerHTML = '🌟 مُمْتَازٌ جِدًّا! اسْتِيعَابٌ بَاهِرٌ لِمَفَاهِيمِ الْفَضَاءِ (فَوْقَ، تَحْتَ، عَلَى، أَعْلَى، أَسْفَلَ).';
+      } else if (percentage >= 70) {
+        noteEl.className = 'p-4 rounded-2xl text-base sm:text-lg font-black bg-blue-50 text-blue-900 border border-blue-300';
+        noteEl.innerHTML = '👏 جَيِّدٌ جِدًّا! تَحَكُّمٌ طَيِّبٌ فِي مَوَاقِعِ الأَشْيَاءِ مَعَ بَعْضِ التَّفَاصِيلِ الْبَسِيطَةِ.';
+      } else if (percentage >= 50) {
+        noteEl.className = 'p-4 rounded-2xl text-base sm:text-lg font-black bg-amber-50 text-amber-900 border border-amber-300';
+        noteEl.innerHTML = '👍 مُتَوَسِّطٌ، يُوصَى بِمُرَاجَعَةِ مَفْهُومَيْ (عَلَى / فَوْقَ) وَ(تَحْتَ / أَسْفَلَ) مَعَ الأُسْتَاذِ.';
+      } else {
+        noteEl.className = 'p-4 rounded-2xl text-base sm:text-lg font-black bg-rose-50 text-rose-900 border border-rose-300';
+        noteEl.innerHTML = '⚠️ يُوصَى بِمُرَاجَعَةِ الدَّرْسِ وَإِعَادَةِ الْمُحَاوَلَةِ لِتَرْسِيخِ الْمَفَاهِيمِ.';
+      }
+
+      setTimeout(() => {
+        summaryCard.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
+
+    function restartApplication() {
+      playTapSound();
+      location.reload();
+    }
+
+    function exitLesson() {
+      playTapSound();
+      showToast("تم الانتهاء من الحصة. عمل رائع!");
+    }
+  </script>
+</body>
+</html>
