@@ -1,0 +1,2232 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الْجَمْعُ وَالطَّرْحُ (3) - السَّنَةُ الثَّالِثَةُ ابْتِدَائِيّ</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cairo & Amiri -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f0fdf4;
+            color: #1e293b;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .math-font {
+            font-family: 'Amiri', 'Cairo', serif;
+            direction: ltr;
+            unicode-bidi: isolate;
+        }
+        /* Custom Input styles */
+        .math-input {
+            width: 58px;
+            height: 40px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 800;
+            border: 2px solid #94a3b8;
+            border-radius: 8px;
+            background-color: #ffffff;
+            transition: all 0.2s;
+            color: #0f172a;
+        }
+        .math-input.sm-input {
+            width: 48px;
+            height: 36px;
+            font-size: 1.05rem;
+        }
+        .math-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        .math-input.correct {
+            border-color: #2e7d32 !important;
+            background-color: #e8f5e9 !important;
+            color: #1b5e20 !important;
+        }
+        .math-input.incorrect {
+            border-color: #c62828 !important;
+            background-color: #ffebee !important;
+            color: #b71c1c !important;
+        }
+        .step-locked {
+            opacity: 0.45;
+            pointer-events: none;
+            filter: grayscale(80%);
+            user-select: none;
+        }
+        .locked-station {
+            opacity: 0.45;
+            pointer-events: none;
+            filter: grayscale(85%);
+            user-select: none;
+        }
+        .correction-badge {
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #b71c1c;
+            background-color: #fee2e2;
+            border: 1px solid #f87171;
+            border-radius: 6px;
+            padding: 1px 6px;
+            margin-top: 3px;
+            display: inline-block;
+            direction: ltr;
+        }
+        .svg-container {
+            width: 100%;
+            overflow-x: auto;
+            direction: ltr;
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري (أُضيفت)
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس (أُضيف) */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            margin-top: 12px;
+            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+        }
+    </style>
+</head>
+<body class="p-2 sm:p-4 md:p-6 lg:p-8 min-h-screen">
+
+    <!-- ========================================
+         نافذة قفل الاشتراك الإجباري (أُضيفت)
+         ======================================== -->
+    <div id="sub-lock-screen">
+        <div class="lock-box">
+            <div class="lock-icon">🔒</div>
+            <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+            <div class="lock-desc">
+                لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+            </div>
+            <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+                📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+            </a>
+            <button class="btn-check-sub" onclick="verifySubscription()">
+                ✅ تَأْكِيدُ الاِشْتِرَاكِ
+            </button>
+            <div id="sub-status-msg" class="sub-status-msg"></div>
+        </div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="max-w-5xl mx-auto bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 text-white p-5 rounded-3xl shadow-xl mb-8 relative overflow-hidden border-4 border-white">
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="text-center md:text-right">
+                <span class="inline-block bg-white/20 text-yellow-300 px-3 py-1 rounded-full text-sm font-bold mb-1">
+                    الْمَنْهَاجُ الدِّرَاسِيُّ الْجَزَائِرِيُّ • السَّنَةُ الثَّالِثَةُ ابْتِدَائِيّ
+                </span>
+                <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-wide drop-shadow">
+                    الدَّرْسُ 08: الْجَمْعُ وَالطَّرْحُ (الجزء 3)
+                </h1>
+                <p class="text-emerald-100 text-sm sm:text-base mt-1 font-medium">
+                    كِتَابُ الرِّيَاضِيَّاتِ (ص 19) • دَفْتَرُ الأَنْشِطَةِ (ص 13)
+                </p>
+            </div>
+            <!-- Audio Toggle & Quick Status -->
+            <div class="flex items-center gap-3 bg-white/10 p-2.5 rounded-2xl backdrop-blur-sm border border-white/20">
+                <div class="text-center px-2">
+                    <span class="text-xs block text-emerald-200">الْوَضْعُ التَّفَاعُلِيُّ</span>
+                    <span class="text-sm font-black text-white">تَحَقُّقٌ فَوْرِيٌّ لِكُلِّ عَمَلِيَّةٍ</span>
+                </div>
+                <button id="soundToggle" onclick="toggleAudio()" class="bg-yellow-400 hover:bg-yellow-300 text-slate-900 p-2.5 rounded-xl font-bold transition flex items-center gap-1 shadow">
+                    <span id="soundIcon">🔊</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto space-y-8" id="stationsContainer">
+
+        <!-- ==========================================
+             المحطة 1: أَكْتَشِفُ (كتاب ص 19)
+        =========================================== -->
+        <section id="station-1" class="bg-white rounded-3xl p-5 sm:p-7 shadow-lg border-2 border-emerald-100 transition-all duration-300">
+            <div class="flex items-center justify-between border-b pb-3 mb-6 border-slate-100">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-2xl bg-amber-500 text-white font-black text-xl flex items-center justify-center shadow">1</span>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-800">أَكْتَشِفُ (كِتَابُ التِّلْمِيذِ ص 19)</h2>
+                        <p class="text-xs sm:text-sm text-slate-500 font-semibold">تَعَلُّمُ الْحِسَابِ بِاسْتِعْمَالِ الشَّرِيطِ الْعَدَدِيِّ وَالتَّفْكِيكِ</p>
+                    </div>
+                </div>
+                <span class="text-xs bg-amber-100 text-amber-800 font-bold px-3 py-1.5 rounded-xl">النَّشَاطُ الرَّئِيسِيُّ</span>
+            </div>
+
+            <!-- الجزء الأول: حساب 86 + 35 -->
+            <div class="mb-8 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                <div class="bg-emerald-600 text-white px-4 py-1.5 rounded-xl text-base font-bold inline-block mb-4 shadow-sm">
+                    حِسَابُ: <span class="math-font font-bold">86 + 35</span>
+                </div>
+
+                <!-- 1. حساب أيمن: 86 + 35 -->
+                <div id="step_aktachef_1" class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200 mb-6">
+                    <div class="flex items-center gap-2 mb-2 text-slate-700 font-bold">
+                        <span class="text-emerald-700">👦</span>
+                        <span>لَاحِظْ ثُمَّ أَكْمِلْ حِسَابَ أَيْمَنَ:</span>
+                    </div>
+                    <div class="bg-amber-50 text-amber-900 border-r-4 border-amber-500 p-2.5 rounded-l-xl text-sm mb-4 font-semibold">
+                        «أَحْسُبُ بِالتَّقَدُّمِ أَوْ بِالتَّأَخُّرِ عَلَى الشَّرِيطِ الْعَدَدِيِّ»
+                    </div>
+
+                    <!-- رسم شريط أيمن 86 + 35 مع رؤوس أسهم مرتفعة وخانات مدمجة -->
+                    <div class="relative bg-slate-50 py-4 px-2 rounded-xl border border-slate-200 mb-4 overflow-x-auto">
+                        <div class="min-w-[500px] relative h-36">
+                            <svg viewBox="0 0 500 110" class="w-full h-full">
+                                <line x1="30" y1="85" x2="470" y2="85" stroke="#334155" stroke-width="3" />
+                                <polygon points="476,85 464,79 464,91" fill="#334155" />
+                                
+                                <!-- النقطة 1: 86 -->
+                                <circle cx="70" cy="85" r="5" fill="#0f766e" />
+                                <text x="70" y="105" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f766e">86</text>
+                                
+                                <!-- القوس 1: +30 مع رأس سهم واضح ومرتفع قليلاً -->
+                                <path d="M 70,78 Q 170,12 262,72" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="4" />
+                                <polygon points="266,75 253,69 260,80" fill="#2563eb" />
+                                <text x="170" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#2563eb">+30</text>
+
+                                <!-- النقطة 2: 116 -->
+                                <circle cx="270" cy="85" r="5" fill="#0f766e" />
+                                <text x="270" y="105" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f766e">116</text>
+
+                                <!-- القوس 2: +5 مع رأس سهم واضح ومرتفع -->
+                                <path d="M 270,78 Q 350,18 422,72" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="4" />
+                                <polygon points="426,75 413,69 420,80" fill="#dc2626" />
+
+                                <!-- النقطة 3 -->
+                                <circle cx="430" cy="85" r="5" fill="#b91c1c" />
+                            </svg>
+                            <!-- خانة القفزة +5 وخانة الوصول -->
+                            <div class="absolute top-3 left-[66%] -translate-x-1/2 flex flex-col items-center">
+                                <span class="text-xs text-rose-600 font-bold mb-0.5">+</span>
+                                <input type="text" id="q_1_1_jump" class="math-input sm-input" placeholder="قفزة" maxlength="2" data-ans="5">
+                                <span id="corr_q_1_1_jump" class="hidden correction-badge">5</span>
+                            </div>
+                            <div class="absolute top-[72px] left-[86%] -translate-x-1/2 flex flex-col items-center">
+                                <input type="text" id="q_1_1_strip" class="math-input sm-input" placeholder="؟" maxlength="3" data-ans="121">
+                                <span id="corr_q_1_1_strip" class="hidden correction-badge">121</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-4 bg-emerald-50/50 p-3.5 rounded-xl border border-emerald-100">
+                        <div class="flex items-center gap-2 math-font text-lg font-bold">
+                            <span>86 + 35 =</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_1_1_res" class="math-input" placeholder="؟" maxlength="3" data-ans="121">
+                                <span id="corr_q_1_1_res" class="hidden correction-badge">121</span>
+                            </div>
+                        </div>
+                        <button onclick="checkStep('step_aktachef_1', 'step_aktachef_2')" class="step-check-btn px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow transition">
+                            تَحَقَّقْ مِنَ الْعَمَلِيَّةِ ✓
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. حساب مريم: 86 + 35 -->
+                <div id="step_aktachef_2" class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200 step-locked">
+                    <div class="flex items-center gap-2 mb-2 text-slate-700 font-bold">
+                        <span class="text-pink-600">👧</span>
+                        <span>لَاحِظْ ثُمَّ أَكْمِلْ حِسَابَ مَرْيَمَ:</span>
+                    </div>
+                    <div class="bg-pink-50 text-pink-900 border-r-4 border-pink-500 p-2.5 rounded-l-xl text-sm mb-4 font-semibold">
+                        «أَحْسُبُ بِاسْتِعْمَالِ تَفْكِيكِ أَحَدِ الْعَدَدَيْنِ أَوْ كِلَيْهِمَا دُونَ أَنْ أَنْسَى الْعَشَرَاتِ الْجَدِيدَةَ»
+                    </div>
+
+                    <!-- مخطط تفكيك مريم مع خانات فارغة -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4 math-font text-base sm:text-lg">
+                        <div class="flex flex-wrap items-center justify-center gap-2">
+                            <span>86 + 35 = 80 + </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_1_2_d1" class="math-input sm-input" placeholder="-" maxlength="2" data-ans="6">
+                                <span id="corr_q_1_2_d1" class="hidden correction-badge">6</span>
+                            </div>
+                            <span>+ 30 + </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_1_2_d2" class="math-input sm-input" placeholder="-" maxlength="2" data-ans="5">
+                                <span id="corr_q_1_2_d2" class="hidden correction-badge">5</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-center gap-2">
+                            <span>86 + 35 = </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_1_2_s1" class="math-input" placeholder="عشرات" maxlength="3" data-ans="110">
+                                <span id="corr_q_1_2_s1" class="hidden correction-badge">110</span>
+                            </div>
+                            <span>+</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_1_2_s2" class="math-input" placeholder="وحدات" maxlength="2" data-ans="11">
+                                <span id="corr_q_1_2_s2" class="hidden correction-badge">11</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center gap-2 text-xl font-black">
+                            <span>86 + 35 = </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_1_2_tot" class="math-input" placeholder="النتيجة" maxlength="3" data-ans="121">
+                                <span id="corr_q_1_2_tot" class="hidden correction-badge">121</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex justify-end">
+                        <button onclick="checkStep('step_aktachef_2', 'step_aktachef_3')" class="step-check-btn px-5 py-2.5 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-xl shadow transition">
+                            تَحَقَّقْ مِنَ الْعَمَلِيَّةِ ✓
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- الجزء الثاني: حساب 92 - 23 -->
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 mb-6">
+                <div class="bg-cyan-700 text-white px-4 py-1.5 rounded-xl text-base font-bold inline-block mb-4 shadow-sm">
+                    حِسَابُ: <span class="math-font font-bold">92 - 23</span>
+                </div>
+
+                <!-- 1. احسب مثل أيمن (الطرح بالشريط العددي) -->
+                <div id="step_aktachef_3" class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200 mb-6 step-locked">
+                    <div class="flex items-center gap-2 mb-2 text-slate-700 font-bold">
+                        <span class="text-emerald-700">👦</span>
+                        <span>اِحْسُبْ مِثْلَ أَيْمَنَ (التَّنَقُّلُ عَلَى الشَّرِيطِ):</span>
+                    </div>
+
+                    <!-- شريط 1: الرجوع إلى الخلف (-20 ثم -3) مطابق للمنهاج -->
+                    <p class="text-xs font-bold text-slate-500 mb-2">الطَّرِيقَةُ (1): التَّرَاجُعُ إِلَى الْخَلْفِ</p>
+                    <div class="relative bg-slate-50 py-3 px-2 rounded-xl border border-slate-200 mb-4 overflow-x-auto">
+                        <div class="min-w-[500px] relative h-36">
+                            <svg viewBox="0 0 500 110" class="w-full h-full">
+                                <line x1="30" y1="85" x2="470" y2="85" stroke="#334155" stroke-width="3" />
+                                <polygon points="476,85 464,79 464,91" fill="#334155" />
+                                
+                                <circle cx="430" cy="85" r="5" fill="#0f766e" />
+                                <text x="430" y="105" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f766e">92</text>
+                                
+                                <!-- قفزة التراجع الأولى -20 مع رأس سهم متجه لليسار مرتفع عن النقطة -->
+                                <path d="M 430,78 Q 325,12 228,72" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="4" />
+                                <polygon points="224,75 237,79 231,69" fill="#2563eb" />
+                                <text x="325" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#2563eb">-20</text>
+
+                                <circle cx="220" cy="85" r="5" fill="#0f766e" />
+                                <text x="220" y="105" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f766e">72</text>
+
+                                <!-- قفزة التراجع الثانية -3 مع رأس سهم متجه لليسار ومرتفع -->
+                                <path d="M 220,78 Q 145,18 78,72" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="4" />
+                                <polygon points="74,75 87,79 81,69" fill="#dc2626" />
+
+                                <circle cx="70" cy="85" r="5" fill="#b91c1c" />
+                            </svg>
+                            <!-- خانة القفزة -3 وخانة الوصول على الشريط -->
+                            <div class="absolute top-3 left-[28%] -translate-x-1/2 flex flex-col items-center">
+                                <span class="text-xs text-rose-600 font-bold mb-0.5">-</span>
+                                <input type="text" id="q_1_3_jump" class="math-input sm-input" placeholder="قفزة" maxlength="2" data-ans="3">
+                                <span id="corr_q_1_3_jump" class="hidden correction-badge">3</span>
+                            </div>
+                            <div class="absolute top-[72px] left-[14%] -translate-x-1/2 flex flex-col items-center">
+                                <input type="text" id="q_1_3_pos" class="math-input sm-input" placeholder="؟" maxlength="3" data-ans="69">
+                                <span id="corr_q_1_3_pos" class="hidden correction-badge">69</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- شريط 2: التقدم من 23 إلى 92 -->
+                    <p class="text-xs font-bold text-slate-500 mb-2">الطَّرِيقَةُ (2): التَّقَدُّمُ مِنَ الصَّغِيرِ إِلَى الْكَبِيرِ (حِسَابُ الْفَرْقِ)</p>
+                    <div class="relative bg-slate-50 py-3 px-2 rounded-xl border border-slate-200 mb-4 overflow-x-auto">
+                        <div class="min-w-[500px] relative h-36">
+                            <svg viewBox="0 0 500 110" class="w-full h-full">
+                                <line x1="30" y1="85" x2="470" y2="85" stroke="#334155" stroke-width="3" />
+                                <polygon points="476,85 464,79 464,91" fill="#334155" />
+                                
+                                <circle cx="70" cy="85" r="5" fill="#0f766e" />
+                                <text x="70" y="105" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f766e">23</text>
+                                
+                                <!-- قفزة +60 لليمين -->
+                                <path d="M 70,78 Q 210,12 342,72" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-dasharray="4" />
+                                <polygon points="346,75 333,69 340,80" fill="#16a34a" />
+                                <text x="210" y="30" text-anchor="middle" font-size="15" font-weight="bold" fill="#16a34a">+60</text>
+
+                                <circle cx="350" cy="85" r="5" fill="#0f766e" />
+                                <text x="350" y="105" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f766e">83</text>
+
+                                <!-- قفزة +9 لليمين -->
+                                <path d="M 350,78 Q 390,20 422,72" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="4" />
+                                <polygon points="426,75 413,69 420,80" fill="#2563eb" />
+                                <text x="390" y="34" text-anchor="middle" font-size="14" font-weight="bold" fill="#2563eb">+9</text>
+
+                                <circle cx="430" cy="85" r="5" fill="#0f766e" />
+                                <text x="430" y="105" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f766e">92</text>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between gap-4 bg-amber-50 p-3.5 rounded-xl border border-amber-200">
+                        <div class="flex items-center gap-2 math-font text-lg font-bold">
+                            <span>92 - 23 =</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_1_3_res" class="math-input text-center" placeholder="؟" maxlength="3" data-ans="69">
+                                <span id="corr_q_1_3_res" class="hidden correction-badge">69</span>
+                            </div>
+                        </div>
+                        <button onclick="checkStep('step_aktachef_3', 'step_aktachef_4')" class="step-check-btn px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl shadow transition">
+                            تَحَقَّقْ مِنَ الْعَمَلِيَّةِ ✓
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. احسب مثل مريم: 92 - 23 -->
+                <div id="step_aktachef_4" class="bg-white p-4 sm:p-5 rounded-2xl shadow-sm border border-slate-200 step-locked">
+                    <div class="flex items-center gap-2 mb-2 text-slate-700 font-bold">
+                        <span class="text-pink-600">👧</span>
+                        <span>اِحْسُبْ مِثْلَ مَرْيَمَ (تَفْكِيكُ الْعَدَدِ الْمَطْرُوحِ):</span>
+                    </div>
+
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4 math-font text-base sm:text-lg">
+                        <div class="flex flex-wrap items-center justify-center gap-2">
+                            <span>92 - 23 = 92 - 20 - </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_1_4_d1" class="math-input sm-input" placeholder="-" maxlength="2" data-ans="3">
+                                <span id="corr_q_1_4_d1" class="hidden correction-badge">3</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-center gap-2">
+                            <span>92 - 23 = </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_1_4_s1" class="math-input" placeholder="-" maxlength="2" data-ans="72">
+                                <span id="corr_q_1_4_s1" class="hidden correction-badge">72</span>
+                            </div>
+                            <span>-</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_1_4_s2" class="math-input sm-input" placeholder="-" maxlength="2" data-ans="3">
+                                <span id="corr_q_1_4_s2" class="hidden correction-badge">3</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center gap-2 text-xl font-black">
+                            <span>92 - 23 = </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_1_4_tot" class="math-input" placeholder="النتيجة" maxlength="3" data-ans="69">
+                                <span id="corr_q_1_4_tot" class="hidden correction-badge">69</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex justify-end">
+                        <button onclick="checkStep('step_aktachef_4', 'station-2')" class="step-check-btn px-5 py-2.5 bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-xl shadow transition">
+                            تَحَقَّقْ وَانْتَقِلْ إِلَى أُنْجِزُ ➔
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             المحطة 2: أُنْجِزُ (كتاب ص 19)
+        =========================================== -->
+        <section id="station-2" class="bg-white rounded-3xl p-5 sm:p-7 shadow-lg border-2 border-emerald-100 locked-station transition-all duration-300">
+            <div class="flex items-center justify-between border-b pb-3 mb-6 border-slate-100">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-2xl bg-teal-500 text-white font-black text-xl flex items-center justify-center shadow">2</span>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-800">أُنْجِزُ (كِتَابُ التِّلْمِيذِ ص 19)</h2>
+                        <p class="text-xs sm:text-sm text-slate-500 font-semibold">بِنَاءُ الشَّرِيطِ وَالتَّفْكِيكِ الْمَرْحَلِيِّ بِالْكَامِلِ</p>
+                    </div>
+                </div>
+                <span class="text-xs bg-teal-100 text-teal-800 font-bold px-3 py-1.5 rounded-xl">تَمَارِينُ التَّثْبِيتِ</span>
+            </div>
+
+            <!-- 1. أحسب باستعمال التنقل على الشريط العددي (شكل فارغ مع خانات داخلية) -->
+            <div class="mb-8">
+                <h3 class="font-extrabold text-lg text-slate-800 mb-4 flex items-center gap-2">
+                    <span class="text-teal-600">▪</span>
+                    <span>1. احْسُبْ بِاسْتِعْمَالِ التَّنَقُّلِ عَلَى الشَّرِيطِ الْعَدَدِيِّ (امْلأْ كَافَّةَ مَعَالِمِ الشَّرِيطِ):</span>
+                </h3>
+
+                <div class="space-y-6">
+                    <!-- عملية 1: 63 + 94 -->
+                    <div id="step_onjez_1" class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-slate-700">عَمَلِيَّةُ الْجَمْعِ:</span>
+                            <span class="math-font font-black text-emerald-700 text-xl">63 + 94</span>
+                        </div>
+                        <div class="relative bg-white p-3 rounded-xl border border-slate-200 mb-3 overflow-x-auto">
+                            <div class="min-w-[460px] relative h-32">
+                                <svg viewBox="0 0 460 100" class="w-full h-full">
+                                    <line x1="20" y1="75" x2="440" y2="75" stroke="#475569" stroke-width="2.5" />
+                                    <polygon points="446,75 435,70 435,80" fill="#475569" />
+                                    <!-- قفزة 1 -->
+                                    <path d="M 60,68 Q 170,15 260,65" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="263,68 252,61 258,72" fill="#2563eb" />
+                                    <!-- قفزة 2 -->
+                                    <path d="M 270,68 Q 335,22 390,65" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="393,68 382,61 388,72" fill="#dc2626" />
+                                    <!-- نقاط التدريج -->
+                                    <circle cx="60" cy="75" r="4.5" fill="#0f766e" />
+                                    <circle cx="270" cy="75" r="4.5" fill="#0f766e" />
+                                    <circle cx="400" cy="75" r="4.5" fill="#b91c1c" />
+                                </svg>
+                                <!-- خانات القفزات والنقاط -->
+                                <div class="absolute top-1 left-[36%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-blue-600">+</span>
+                                    <input type="text" id="q_2_1_1_j1" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="90">
+                                    <span id="corr_q_2_1_1_j1" class="hidden correction-badge">+90</span>
+                                </div>
+                                <div class="absolute top-2 left-[72%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-rose-600">+</span>
+                                    <input type="text" id="q_2_1_1_j2" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="4">
+                                    <span id="corr_q_2_1_1_j2" class="hidden correction-badge">+4</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[13%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_1_p1" class="math-input sm-input" placeholder="البداية" maxlength="3" data-ans="63">
+                                    <span id="corr_q_2_1_1_p1" class="hidden correction-badge">63</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[58%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_1_p2" class="math-input sm-input" placeholder="مرحلي" maxlength="3" data-ans="153">
+                                    <span id="corr_q_2_1_1_p2" class="hidden correction-badge">153</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[87%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_1_p3" class="math-input sm-input" placeholder="الوصول" maxlength="3" data-ans="157">
+                                    <span id="corr_q_2_1_1_p3" class="hidden correction-badge">157</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-xl border border-slate-200">
+                            <div class="flex items-center gap-2 math-font font-bold">
+                                <span>63 + 94 =</span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_2_1_1_tot" class="math-input" placeholder="الناتج" maxlength="3" data-ans="157">
+                                    <span id="corr_q_2_1_1_tot" class="hidden correction-badge">157</span>
+                                </div>
+                            </div>
+                            <button onclick="checkStep('step_onjez_1', 'step_onjez_2')" class="step-check-btn px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl transition">
+                                تَحَقَّقْ مِنَ الشَّرِيطِ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- عملية 2: 57 + 61 -->
+                    <div id="step_onjez_2" class="bg-slate-50 p-4 rounded-2xl border border-slate-200 step-locked">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-slate-700">عَمَلِيَّةُ الْجَمْعِ:</span>
+                            <span class="math-font font-black text-emerald-700 text-xl">57 + 61</span>
+                        </div>
+                        <div class="relative bg-white p-3 rounded-xl border border-slate-200 mb-3 overflow-x-auto">
+                            <div class="min-w-[460px] relative h-32">
+                                <svg viewBox="0 0 460 100" class="w-full h-full">
+                                    <line x1="20" y1="75" x2="440" y2="75" stroke="#475569" stroke-width="2.5" />
+                                    <polygon points="446,75 435,70 435,80" fill="#475569" />
+                                    <path d="M 60,68 Q 170,15 260,65" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="263,68 252,61 258,72" fill="#2563eb" />
+                                    <path d="M 270,68 Q 335,22 390,65" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="393,68 382,61 388,72" fill="#dc2626" />
+                                    <circle cx="60" cy="75" r="4.5" fill="#0f766e" />
+                                    <circle cx="270" cy="75" r="4.5" fill="#0f766e" />
+                                    <circle cx="400" cy="75" r="4.5" fill="#b91c1c" />
+                                </svg>
+                                <div class="absolute top-1 left-[36%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-blue-600">+</span>
+                                    <input type="text" id="q_2_1_2_j1" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="60">
+                                    <span id="corr_q_2_1_2_j1" class="hidden correction-badge">+60</span>
+                                </div>
+                                <div class="absolute top-2 left-[72%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-rose-600">+</span>
+                                    <input type="text" id="q_2_1_2_j2" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="1">
+                                    <span id="corr_q_2_1_2_j2" class="hidden correction-badge">+1</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[13%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_2_p1" class="math-input sm-input" placeholder="البداية" maxlength="3" data-ans="57">
+                                    <span id="corr_q_2_1_2_p1" class="hidden correction-badge">57</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[58%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_2_p2" class="math-input sm-input" placeholder="مرحلي" maxlength="3" data-ans="117">
+                                    <span id="corr_q_2_1_2_p2" class="hidden correction-badge">117</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[87%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_2_p3" class="math-input sm-input" placeholder="الوصول" maxlength="3" data-ans="118">
+                                    <span id="corr_q_2_1_2_p3" class="hidden correction-badge">118</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-xl border border-slate-200">
+                            <div class="flex items-center gap-2 math-font font-bold">
+                                <span>57 + 61 =</span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_2_1_2_tot" class="math-input" placeholder="الناتج" maxlength="3" data-ans="118">
+                                    <span id="corr_q_2_1_2_tot" class="hidden correction-badge">118</span>
+                                </div>
+                            </div>
+                            <button onclick="checkStep('step_onjez_2', 'step_onjez_3')" class="step-check-btn px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl transition">
+                                تَحَقَّقْ مِنَ الشَّرِيطِ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- عملية 3: 53 + 41 -->
+                    <div id="step_onjez_3" class="bg-slate-50 p-4 rounded-2xl border border-slate-200 step-locked">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-slate-700">عَمَلِيَّةُ الْجَمْعِ:</span>
+                            <span class="math-font font-black text-emerald-700 text-xl">53 + 41</span>
+                        </div>
+                        <div class="relative bg-white p-3 rounded-xl border border-slate-200 mb-3 overflow-x-auto">
+                            <div class="min-w-[460px] relative h-32">
+                                <svg viewBox="0 0 460 100" class="w-full h-full">
+                                    <line x1="20" y1="75" x2="440" y2="75" stroke="#475569" stroke-width="2.5" />
+                                    <polygon points="446,75 435,70 435,80" fill="#475569" />
+                                    <path d="M 60,68 Q 170,15 260,65" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="263,68 252,61 258,72" fill="#2563eb" />
+                                    <path d="M 270,68 Q 335,22 390,65" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="393,68 382,61 388,72" fill="#dc2626" />
+                                    <circle cx="60" cy="75" r="4.5" fill="#0f766e" />
+                                    <circle cx="270" cy="75" r="4.5" fill="#0f766e" />
+                                    <circle cx="400" cy="75" r="4.5" fill="#b91c1c" />
+                                </svg>
+                                <div class="absolute top-1 left-[36%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-blue-600">+</span>
+                                    <input type="text" id="q_2_1_3_j1" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="40">
+                                    <span id="corr_q_2_1_3_j1" class="hidden correction-badge">+40</span>
+                                </div>
+                                <div class="absolute top-2 left-[72%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-rose-600">+</span>
+                                    <input type="text" id="q_2_1_3_j2" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="1">
+                                    <span id="corr_q_2_1_3_j2" class="hidden correction-badge">+1</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[13%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_3_p1" class="math-input sm-input" placeholder="البداية" maxlength="3" data-ans="53">
+                                    <span id="corr_q_2_1_3_p1" class="hidden correction-badge">53</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[58%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_3_p2" class="math-input sm-input" placeholder="مرحلي" maxlength="3" data-ans="93">
+                                    <span id="corr_q_2_1_3_p2" class="hidden correction-badge">93</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[87%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_3_p3" class="math-input sm-input" placeholder="الوصول" maxlength="3" data-ans="94">
+                                    <span id="corr_q_2_1_3_p3" class="hidden correction-badge">94</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-xl border border-slate-200">
+                            <div class="flex items-center gap-2 math-font font-bold">
+                                <span>53 + 41 =</span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_2_1_3_tot" class="math-input" placeholder="الناتج" maxlength="3" data-ans="94">
+                                    <span id="corr_q_2_1_3_tot" class="hidden correction-badge">94</span>
+                                </div>
+                            </div>
+                            <button onclick="checkStep('step_onjez_3', 'step_onjez_4')" class="step-check-btn px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl transition">
+                                تَحَقَّقْ مِنَ الشَّرِيطِ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- عملية 4: 39 - 18 (تراجع لليسار) -->
+                    <div id="step_onjez_4" class="bg-slate-50 p-4 rounded-2xl border border-slate-200 step-locked">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-slate-700">عَمَلِيَّةُ الطَّرْحِ (تَرَاجُعٌ):</span>
+                            <span class="math-font font-black text-cyan-800 text-xl">39 - 18</span>
+                        </div>
+                        <div class="relative bg-white p-3 rounded-xl border border-slate-200 mb-3 overflow-x-auto">
+                            <div class="min-w-[460px] relative h-32">
+                                <svg viewBox="0 0 460 100" class="w-full h-full">
+                                    <line x1="20" y1="75" x2="440" y2="75" stroke="#475569" stroke-width="2.5" />
+                                    <polygon points="446,75 435,70 435,80" fill="#475569" />
+                                    <!-- تراجع 1 لليسار -->
+                                    <path d="M 400,68 Q 295,15 190,65" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="187,68 198,72 192,61" fill="#2563eb" />
+                                    <!-- تراجع 2 لليسار -->
+                                    <path d="M 180,68 Q 120,22 65,65" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="62,68 73,72 67,61" fill="#dc2626" />
+                                    <circle cx="400" cy="75" r="4.5" fill="#0f766e" />
+                                    <circle cx="180" cy="75" r="4.5" fill="#0f766e" />
+                                    <circle cx="60" cy="75" r="4.5" fill="#b91c1c" />
+                                </svg>
+                                <div class="absolute top-1 left-[64%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-blue-600">-</span>
+                                    <input type="text" id="q_2_1_4_j1" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="10">
+                                    <span id="corr_q_2_1_4_j1" class="hidden correction-badge">-10</span>
+                                </div>
+                                <div class="absolute top-2 left-[26%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-rose-600">-</span>
+                                    <input type="text" id="q_2_1_4_j2" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="8">
+                                    <span id="corr_q_2_1_4_j2" class="hidden correction-badge">-8</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[87%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_4_p1" class="math-input sm-input" placeholder="البداية" maxlength="3" data-ans="39">
+                                    <span id="corr_q_2_1_4_p1" class="hidden correction-badge">39</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[39%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_4_p2" class="math-input sm-input" placeholder="مرحلي" maxlength="3" data-ans="29">
+                                    <span id="corr_q_2_1_4_p2" class="hidden correction-badge">29</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[13%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_4_p3" class="math-input sm-input" placeholder="الوصول" maxlength="3" data-ans="21">
+                                    <span id="corr_q_2_1_4_p3" class="hidden correction-badge">21</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-xl border border-slate-200">
+                            <div class="flex items-center gap-2 math-font font-bold">
+                                <span>39 - 18 =</span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_2_1_4_tot" class="math-input" placeholder="الناتج" maxlength="3" data-ans="21">
+                                    <span id="corr_q_2_1_4_tot" class="hidden correction-badge">21</span>
+                                </div>
+                            </div>
+                            <button onclick="checkStep('step_onjez_4', 'step_onjez_5')" class="step-check-btn px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl transition">
+                                تَحَقَّقْ مِنَ الشَّرِيطِ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- عملية 5: 60 - 13 (تراجع لليسار) -->
+                    <div id="step_onjez_5" class="bg-slate-50 p-4 rounded-2xl border border-slate-200 step-locked">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-slate-700">عَمَلِيَّةُ الطَّرْحِ (تَرَاجُعٌ):</span>
+                            <span class="math-font font-black text-cyan-800 text-xl">60 - 13</span>
+                        </div>
+                        <div class="relative bg-white p-3 rounded-xl border border-slate-200 mb-3 overflow-x-auto">
+                            <div class="min-w-[460px] relative h-32">
+                                <svg viewBox="0 0 460 100" class="w-full h-full">
+                                    <line x1="20" y1="75" x2="440" y2="75" stroke="#475569" stroke-width="2.5" />
+                                    <polygon points="446,75 435,70 435,80" fill="#475569" />
+                                    <path d="M 400,68 Q 295,15 190,65" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="187,68 198,72 192,61" fill="#2563eb" />
+                                    <path d="M 180,68 Q 120,22 65,65" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="62,68 73,72 67,61" fill="#dc2626" />
+                                    <circle cx="400" cy="75" r="4.5" fill="#0f766e" />
+                                    <circle cx="180" cy="75" r="4.5" fill="#0f766e" />
+                                    <circle cx="60" cy="75" r="4.5" fill="#b91c1c" />
+                                </svg>
+                                <div class="absolute top-1 left-[64%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-blue-600">-</span>
+                                    <input type="text" id="q_2_1_5_j1" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="10">
+                                    <span id="corr_q_2_1_5_j1" class="hidden correction-badge">-10</span>
+                                </div>
+                                <div class="absolute top-2 left-[26%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-rose-600">-</span>
+                                    <input type="text" id="q_2_1_5_j2" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="3">
+                                    <span id="corr_q_2_1_5_j2" class="hidden correction-badge">-3</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[87%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_5_p1" class="math-input sm-input" placeholder="البداية" maxlength="3" data-ans="60">
+                                    <span id="corr_q_2_1_5_p1" class="hidden correction-badge">60</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[39%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_5_p2" class="math-input sm-input" placeholder="مرحلي" maxlength="3" data-ans="50">
+                                    <span id="corr_q_2_1_5_p2" class="hidden correction-badge">50</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[13%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_5_p3" class="math-input sm-input" placeholder="الوصول" maxlength="3" data-ans="47">
+                                    <span id="corr_q_2_1_5_p3" class="hidden correction-badge">47</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-xl border border-slate-200">
+                            <div class="flex items-center gap-2 math-font font-bold">
+                                <span>60 - 13 =</span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_2_1_5_tot" class="math-input" placeholder="الناتج" maxlength="3" data-ans="47">
+                                    <span id="corr_q_2_1_5_tot" class="hidden correction-badge">47</span>
+                                </div>
+                            </div>
+                            <button onclick="checkStep('step_onjez_5', 'step_onjez_6')" class="step-check-btn px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl transition">
+                                تَحَقَّقْ مِنَ الشَّرِيطِ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- عملية 6: 95 - 22 (تراجع لليسار) -->
+                    <div id="step_onjez_6" class="bg-slate-50 p-4 rounded-2xl border border-slate-200 step-locked">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="font-bold text-slate-700">عَمَلِيَّةُ الطَّرْحِ (تَرَاجُعٌ):</span>
+                            <span class="math-font font-black text-cyan-800 text-xl">95 - 22</span>
+                        </div>
+                        <div class="relative bg-white p-3 rounded-xl border border-slate-200 mb-3 overflow-x-auto">
+                            <div class="min-w-[460px] relative h-32">
+                                <svg viewBox="0 0 460 100" class="w-full h-full">
+                                    <line x1="20" y1="75" x2="440" y2="75" stroke="#475569" stroke-width="2.5" />
+                                    <polygon points="446,75 435,70 435,80" fill="#475569" />
+                                    <path d="M 400,68 Q 295,15 190,65" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="187,68 198,72 192,61" fill="#2563eb" />
+                                    <path d="M 180,68 Q 120,22 65,65" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="62,68 73,72 67,61" fill="#dc2626" />
+                                    <circle cx="400" cy="75" r="4.5" fill="#0f766e" />
+                                    <circle cx="180" cy="75" r="4.5" fill="#0f766e" />
+                                    <circle cx="60" cy="75" r="4.5" fill="#b91c1c" />
+                                </svg>
+                                <div class="absolute top-1 left-[64%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-blue-600">-</span>
+                                    <input type="text" id="q_2_1_6_j1" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="20">
+                                    <span id="corr_q_2_1_6_j1" class="hidden correction-badge">-20</span>
+                                </div>
+                                <div class="absolute top-2 left-[26%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-rose-600">-</span>
+                                    <input type="text" id="q_2_1_6_j2" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="2">
+                                    <span id="corr_q_2_1_6_j2" class="hidden correction-badge">-2</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[87%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_6_p1" class="math-input sm-input" placeholder="البداية" maxlength="3" data-ans="95">
+                                    <span id="corr_q_2_1_6_p1" class="hidden correction-badge">95</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[39%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_6_p2" class="math-input sm-input" placeholder="مرحلي" maxlength="3" data-ans="75">
+                                    <span id="corr_q_2_1_6_p2" class="hidden correction-badge">75</span>
+                                </div>
+                                <div class="absolute top-[68px] left-[13%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_2_1_6_p3" class="math-input sm-input" placeholder="الوصول" maxlength="3" data-ans="73">
+                                    <span id="corr_q_2_1_6_p3" class="hidden correction-badge">73</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-3 rounded-xl border border-slate-200">
+                            <div class="flex items-center gap-2 math-font font-bold">
+                                <span>95 - 22 =</span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_2_1_6_tot" class="math-input" placeholder="الناتج" maxlength="3" data-ans="73">
+                                    <span id="corr_q_2_1_6_tot" class="hidden correction-badge">73</span>
+                                </div>
+                            </div>
+                            <button onclick="checkStep('step_onjez_6', 'step_onjez_dec_1')" class="step-check-btn px-5 py-2 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl transition">
+                                تَحَقَّقْ وَانْتَقِلْ لِلتَّفْكِيكِ ➔
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. أحسب باستعمال التفكيك والتجميع (خانات فارغة بالكامل دون إجابات وسيطة مسبقة) -->
+            <div class="mb-6 pt-4 border-t border-slate-200">
+                <h3 class="font-extrabold text-lg text-slate-800 mb-4 flex items-center gap-2">
+                    <span class="text-teal-600">▪</span>
+                    <span>2. احْسُبْ بِاسْتِعْمَالِ التَّفْكِيكِ وَالتَّجْمِيعِ (امْلأْ كَافَّةَ الْخَانَاتِ بِنَفْسِكَ):</span>
+                </h3>
+
+                <div class="space-y-4">
+                    <!-- تفكيك: 63 + 94 -->
+                    <div id="step_onjez_dec_1" class="p-4 bg-slate-50 rounded-xl border border-slate-200 math-font step-locked">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-black text-slate-800">63 + 94:</span>
+                            <span class="text-xs text-slate-500 font-sans font-bold">تَفْكِيكُ الْعَشَرَاتِ وَالْوَحَدَاتِ</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 text-base">
+                            <span>= (</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_1_d1" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="60">
+                                <span id="corr_q_2_2_1_d1" class="hidden correction-badge">60</span>
+                            </div>
+                            <span>+</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_1_d2" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="90">
+                                <span id="corr_q_2_2_1_d2" class="hidden correction-badge">90</span>
+                            </div>
+                            <span>) + (</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_1_u1" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="3">
+                                <span id="corr_q_2_2_1_u1" class="hidden correction-badge">3</span>
+                            </div>
+                            <span>+</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_1_u2" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="4">
+                                <span id="corr_q_2_2_1_u2" class="hidden correction-badge">4</span>
+                            </div>
+                            <span>) = </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_1_s1" class="math-input" placeholder="مجموع ع" maxlength="3" data-ans="150">
+                                <span id="corr_q_2_2_1_s1" class="hidden correction-badge">150</span>
+                            </div>
+                            <span>+</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_1_s2" class="math-input sm-input" placeholder="مجموع و" maxlength="2" data-ans="7">
+                                <span id="corr_q_2_2_1_s2" class="hidden correction-badge">7</span>
+                            </div>
+                            <span>=</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_1_tot" class="math-input" placeholder="الناتج" maxlength="3" data-ans="157">
+                                <span id="corr_q_2_2_1_tot" class="hidden correction-badge">157</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 flex justify-end">
+                            <button onclick="checkStep('step_onjez_dec_1', 'step_onjez_dec_2')" class="step-check-btn px-4 py-1.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-lg transition text-sm">
+                                تَحَقَّقْ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- تفكيك: 57 + 61 -->
+                    <div id="step_onjez_dec_2" class="p-4 bg-slate-50 rounded-xl border border-slate-200 math-font step-locked">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-black text-slate-800">57 + 61:</span>
+                            <span class="text-xs text-slate-500 font-sans font-bold">تَفْكِيكُ الْعَشَرَاتِ وَالْوَحَدَاتِ</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 text-base">
+                            <span>= (</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_2_d1" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="50">
+                                <span id="corr_q_2_2_2_d1" class="hidden correction-badge">50</span>
+                            </div>
+                            <span>+</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_2_d2" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="60">
+                                <span id="corr_q_2_2_2_d2" class="hidden correction-badge">60</span>
+                            </div>
+                            <span>) + (</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_2_u1" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="7">
+                                <span id="corr_q_2_2_2_u1" class="hidden correction-badge">7</span>
+                            </div>
+                            <span>+</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_2_u2" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="1">
+                                <span id="corr_q_2_2_2_u2" class="hidden correction-badge">1</span>
+                            </div>
+                            <span>) = </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_2_s1" class="math-input" placeholder="مجموع ع" maxlength="3" data-ans="110">
+                                <span id="corr_q_2_2_2_s1" class="hidden correction-badge">110</span>
+                            </div>
+                            <span>+</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_2_s2" class="math-input sm-input" placeholder="مجموع و" maxlength="2" data-ans="8">
+                                <span id="corr_q_2_2_2_s2" class="hidden correction-badge">8</span>
+                            </div>
+                            <span>=</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_2_tot" class="math-input" placeholder="الناتج" maxlength="3" data-ans="118">
+                                <span id="corr_q_2_2_2_tot" class="hidden correction-badge">118</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 flex justify-end">
+                            <button onclick="checkStep('step_onjez_dec_2', 'step_onjez_dec_3')" class="step-check-btn px-4 py-1.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-lg transition text-sm">
+                                تَحَقَّقْ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- تفكيك: 53 + 41 -->
+                    <div id="step_onjez_dec_3" class="p-4 bg-slate-50 rounded-xl border border-slate-200 math-font step-locked">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-black text-slate-800">53 + 41:</span>
+                            <span class="text-xs text-slate-500 font-sans font-bold">تَفْكِيكُ الْعَشَرَاتِ وَالْوَحَدَاتِ</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 text-base">
+                            <span>= (</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_3_d1" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="50">
+                                <span id="corr_q_2_2_3_d1" class="hidden correction-badge">50</span>
+                            </div>
+                            <span>+</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_3_d2" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="40">
+                                <span id="corr_q_2_2_3_d2" class="hidden correction-badge">40</span>
+                            </div>
+                            <span>) + (</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_3_u1" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="3">
+                                <span id="corr_q_2_2_3_u1" class="hidden correction-badge">3</span>
+                            </div>
+                            <span>+</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_3_u2" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="1">
+                                <span id="corr_q_2_2_3_u2" class="hidden correction-badge">1</span>
+                            </div>
+                            <span>) = </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_3_s1" class="math-input" placeholder="مجموع ع" maxlength="2" data-ans="90">
+                                <span id="corr_q_2_2_3_s1" class="hidden correction-badge">90</span>
+                            </div>
+                            <span>+</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_3_s2" class="math-input sm-input" placeholder="مجموع و" maxlength="2" data-ans="4">
+                                <span id="corr_q_2_2_3_s2" class="hidden correction-badge">4</span>
+                            </div>
+                            <span>=</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_3_tot" class="math-input" placeholder="الناتج" maxlength="2" data-ans="94">
+                                <span id="corr_q_2_2_3_tot" class="hidden correction-badge">94</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 flex justify-end">
+                            <button onclick="checkStep('step_onjez_dec_3', 'step_onjez_dec_4')" class="step-check-btn px-4 py-1.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-lg transition text-sm">
+                                تَحَقَّقْ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- تفكيك طرح: 39 - 18 -->
+                    <div id="step_onjez_dec_4" class="p-4 bg-slate-50 rounded-xl border border-slate-200 math-font step-locked">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-black text-slate-800">39 - 18:</span>
+                            <span class="text-xs text-slate-500 font-sans font-bold">تَفْكِيكُ الْعَدَدِ الْمَطْرُوحِ</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 text-base">
+                            <span>= 39 - </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_4_d1" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="10">
+                                <span id="corr_q_2_2_4_d1" class="hidden correction-badge">10</span>
+                            </div>
+                            <span>-</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_4_u1" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="8">
+                                <span id="corr_q_2_2_4_u1" class="hidden correction-badge">8</span>
+                            </div>
+                            <span>= </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_4_s1" class="math-input sm-input" placeholder="طرح ع" maxlength="2" data-ans="29">
+                                <span id="corr_q_2_2_4_s1" class="hidden correction-badge">29</span>
+                            </div>
+                            <span>-</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_4_s2" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="8">
+                                <span id="corr_q_2_2_4_s2" class="hidden correction-badge">8</span>
+                            </div>
+                            <span>=</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_4_tot" class="math-input" placeholder="الناتج" maxlength="2" data-ans="21">
+                                <span id="corr_q_2_2_4_tot" class="hidden correction-badge">21</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 flex justify-end">
+                            <button onclick="checkStep('step_onjez_dec_4', 'step_onjez_dec_5')" class="step-check-btn px-4 py-1.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-lg transition text-sm">
+                                تَحَقَّقْ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- تفكيك طرح: 60 - 13 -->
+                    <div id="step_onjez_dec_5" class="p-4 bg-slate-50 rounded-xl border border-slate-200 math-font step-locked">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-black text-slate-800">60 - 13:</span>
+                            <span class="text-xs text-slate-500 font-sans font-bold">تَفْكِيكُ الْعَدَدِ الْمَطْرُوحِ</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 text-base">
+                            <span>= 60 - </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_5_d1" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="10">
+                                <span id="corr_q_2_2_5_d1" class="hidden correction-badge">10</span>
+                            </div>
+                            <span>-</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_5_u1" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="3">
+                                <span id="corr_q_2_2_5_u1" class="hidden correction-badge">3</span>
+                            </div>
+                            <span>= </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_5_s1" class="math-input sm-input" placeholder="طرح ع" maxlength="2" data-ans="50">
+                                <span id="corr_q_2_2_5_s1" class="hidden correction-badge">50</span>
+                            </div>
+                            <span>-</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_5_s2" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="3">
+                                <span id="corr_q_2_2_5_s2" class="hidden correction-badge">3</span>
+                            </div>
+                            <span>=</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_5_tot" class="math-input" placeholder="الناتج" maxlength="2" data-ans="47">
+                                <span id="corr_q_2_2_5_tot" class="hidden correction-badge">47</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 flex justify-end">
+                            <button onclick="checkStep('step_onjez_dec_5', 'step_onjez_dec_6')" class="step-check-btn px-4 py-1.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-lg transition text-sm">
+                                تَحَقَّقْ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- تفكيك طرح: 95 - 22 -->
+                    <div id="step_onjez_dec_6" class="p-4 bg-slate-50 rounded-xl border border-slate-200 math-font step-locked">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-black text-slate-800">95 - 22:</span>
+                            <span class="text-xs text-slate-500 font-sans font-bold">تَفْكِيكُ الْعَدَدِ الْمَطْرُوحِ</span>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2 text-base">
+                            <span>= 95 - </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_6_d1" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="20">
+                                <span id="corr_q_2_2_6_d1" class="hidden correction-badge">20</span>
+                            </div>
+                            <span>-</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_6_u1" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="2">
+                                <span id="corr_q_2_2_6_u1" class="hidden correction-badge">2</span>
+                            </div>
+                            <span>= </span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_6_s1" class="math-input sm-input" placeholder="طرح ع" maxlength="2" data-ans="75">
+                                <span id="corr_q_2_2_6_s1" class="hidden correction-badge">75</span>
+                            </div>
+                            <span>-</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_6_s2" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="2">
+                                <span id="corr_q_2_2_6_s2" class="hidden correction-badge">2</span>
+                            </div>
+                            <span>=</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_2_2_6_tot" class="math-input" placeholder="الناتج" maxlength="2" data-ans="73">
+                                <span id="corr_q_2_2_6_tot" class="hidden correction-badge">73</span>
+                            </div>
+                        </div>
+                        <div class="mt-3 flex justify-end">
+                            <button onclick="checkStep('step_onjez_dec_6', 'station-3')" class="step-check-btn px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl shadow transition">
+                                تَحَقَّقْ وَانْتَقِلْ إِلَى «تَعَلَّمْتُ» ➔
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             المحطة 3: تَعَلَّمْتُ (كتاب ص 19)
+        =========================================== -->
+        <section id="station-3" class="bg-gradient-to-br from-amber-50 to-orange-50 rounded-3xl p-5 sm:p-7 shadow-lg border-2 border-amber-300 locked-station transition-all duration-300">
+            <div class="flex items-center justify-between border-b pb-3 mb-6 border-amber-200">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-2xl bg-amber-600 text-white font-black text-xl flex items-center justify-center shadow">3</span>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-black text-amber-900">تَعَلَّمْتُ (كِتَابُ التِّلْمِيذِ ص 19)</h2>
+                        <p class="text-xs sm:text-sm text-amber-700 font-semibold">الْخُلَاصَةُ الْبِيدَاغُوجِيَّةُ الْمُعْتَمَدَةُ فِي الْمِنْهَاجِ</p>
+                    </div>
+                </div>
+                <span class="text-xs bg-amber-200 text-amber-900 font-extrabold px-3 py-1.5 rounded-xl">قَاعِدَةٌ ذَهَبِيَّةٌ</span>
+            </div>
+
+            <div class="text-base sm:text-lg text-slate-800 font-semibold leading-relaxed space-y-6">
+                <div class="bg-white/80 backdrop-blur p-4 rounded-2xl border border-amber-200 text-center font-bold text-amber-900 text-lg">
+                    «تُوجَدُ عِدَّةُ طُرُقٍ لِلْجَمْعِ أَوْ لِلطَّرْحِ أُفُقِيًّا»
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- عمود الجمع -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-amber-200 space-y-3">
+                        <div class="text-emerald-800 font-black text-lg border-b pb-2 flex justify-between items-center">
+                            <span>• لِلْجَمْعِ أُفُقِيًّا:</span>
+                            <span class="math-font text-xl">43 + 28 = 71</span>
+                        </div>
+                        <p class="text-sm text-slate-600 font-bold">يُمْكِنُ أَنْ نَحْسُبَ بِاسْتِعْمَالِ:</p>
+                        
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-sm">
+                            <span class="font-black text-slate-700 block mb-1">1) التَّفْكِيكَ وَالتَّجْمِيعَ:</span>
+                            <div class="math-font text-slate-800 space-y-1">
+                                <div>43 + 28 = 40 + 3 + 20 + 8</div>
+                                <div>= 60 + 11 = 71</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-sm">
+                            <span class="font-black text-slate-700 block mb-1">2) التَّقَدُّمَ عَلَى الشَّرِيطِ الْعَدَدِيِّ:</span>
+                            <div class="svg-container my-1">
+                                <svg viewBox="0 0 300 70" class="w-full h-auto">
+                                    <line x1="20" y1="52" x2="280" y2="52" stroke="#334155" stroke-width="2" />
+                                    <polygon points="284,52 274,48 274,56" fill="#334155" />
+                                    <circle cx="40" cy="52" r="3.5" fill="#0f766e" />
+                                    <text x="40" y="66" text-anchor="middle" font-size="11" font-weight="bold">43</text>
+                                    <path d="M 40,46 Q 130,12 216,46" fill="none" stroke="#2563eb" stroke-width="2" />
+                                    <polygon points="219,48 210,43 214,52" fill="#2563eb" />
+                                    <text x="130" y="24" text-anchor="middle" font-size="11" font-weight="bold" fill="#2563eb">+20</text>
+                                    <circle cx="220" cy="52" r="3.5" fill="#0f766e" />
+                                    <text x="220" y="66" text-anchor="middle" font-size="11" font-weight="bold">63</text>
+                                    <path d="M 220,46 Q 245,18 266,46" fill="none" stroke="#dc2626" stroke-width="2" />
+                                    <polygon points="269,48 260,43 264,52" fill="#dc2626" />
+                                    <text x="245" y="26" text-anchor="middle" font-size="10" font-weight="bold" fill="#dc2626">+8</text>
+                                    <circle cx="270" cy="52" r="3.5" fill="#dc2626" />
+                                    <text x="270" y="66" text-anchor="middle" font-size="11" font-weight="bold" fill="#dc2626">71</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- عمود الطرح -->
+                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-amber-200 space-y-3">
+                        <div class="text-cyan-800 font-black text-lg border-b pb-2 flex justify-between items-center">
+                            <span>• لِلطَّرْحِ أُفُقِيًّا:</span>
+                            <span class="math-font text-xl">69 - 37 = 32</span>
+                        </div>
+                        <p class="text-sm text-slate-600 font-bold">يُمْكِنُ أَنْ نَحْسُبَ بِاسْتِعْمَالِ:</p>
+                        
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-sm">
+                            <span class="font-black text-slate-700 block mb-1">1) التَّفْكِيكَ:</span>
+                            <div class="math-font text-slate-800 space-y-1">
+                                <div>69 - 37 = 69 - 30 - 7</div>
+                                <div>= 39 - 7 = 32</div>
+                            </div>
+                        </div>
+
+                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-sm">
+                            <span class="font-black text-slate-700 block mb-1">2) الشَّرِيطَ الْعَدَدِيَّ (تَرَاجُعٌ):</span>
+                            <div class="svg-container my-1">
+                                <svg viewBox="0 0 300 70" class="w-full h-auto">
+                                    <line x1="20" y1="52" x2="280" y2="52" stroke="#334155" stroke-width="2" />
+                                    <polygon points="284,52 274,48 274,56" fill="#334155" />
+                                    <circle cx="270" cy="52" r="3.5" fill="#0f766e" />
+                                    <text x="270" y="66" text-anchor="middle" font-size="11" font-weight="bold">69</text>
+                                    <path d="M 270,46 Q 185,12 104,46" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="101,48 110,43 106,52" fill="#2563eb" />
+                                    <text x="185" y="24" text-anchor="middle" font-size="11" font-weight="bold" fill="#2563eb">-30</text>
+                                    <circle cx="100" cy="52" r="3.5" fill="#0f766e" />
+                                    <text x="100" y="66" text-anchor="middle" font-size="11" font-weight="bold">39</text>
+                                    <path d="M 100,46 Q 70,20 44,46" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="41,48 50,43 46,52" fill="#dc2626" />
+                                    <text x="70" y="27" text-anchor="middle" font-size="10" font-weight="bold" fill="#dc2626">-7</text>
+                                    <circle cx="40" cy="52" r="3.5" fill="#dc2626" />
+                                    <text x="40" y="66" text-anchor="middle" font-size="11" font-weight="bold" fill="#dc2626">32</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-amber-200 flex justify-end">
+                <button onclick="readTaalamto()" id="btn-submit-3" class="w-full sm:w-auto px-8 py-3 bg-amber-600 hover:bg-amber-700 text-white font-black text-lg rounded-2xl shadow-md transition transform active:scale-95 flex items-center justify-center gap-2">
+                    <span>قَرَأْتُ الْقَاعِدَةَ وَفَهِمْتُهَا، انْتَقِلْ إِلَى «أَتَمَرَّنُ»</span>
+                    <span>➔</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             المحطة 4: أَتَمَرَّنُ (دفتر الأنشطة ص 13)
+        =========================================== -->
+        <section id="station-4" class="bg-white rounded-3xl p-5 sm:p-7 shadow-lg border-2 border-emerald-100 locked-station transition-all duration-300">
+            <div class="flex items-center justify-between border-b pb-3 mb-6 border-slate-100">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-2xl bg-indigo-600 text-white font-black text-xl flex items-center justify-center shadow">4</span>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-800">أَتَمَرَّنُ (دَفْتَرُ الأَنْشِطَةِ ص 13)</h2>
+                        <p class="text-xs sm:text-sm text-slate-500 font-semibold">تَمَارِينُ التَّدْرِيبِ وَالْقِيَاسِ الْفَرْدِيِّ</p>
+                    </div>
+                </div>
+                <span class="text-xs bg-indigo-100 text-indigo-800 font-bold px-3 py-1.5 rounded-xl">دَفْتَرُ الأَنْشِطَةِ</span>
+            </div>
+
+            <!-- تمرين 1 + 2: جدول الخانات -->
+            <div class="mb-8">
+                <h3 class="font-extrabold text-base sm:text-lg text-slate-800 mb-3 flex items-center gap-2">
+                    <span class="text-indigo-600">■</span>
+                    <span>التَّمْرِينَانِ (1) وَ (2): التَّنَقُّلُ فِي لُعْبَةِ الْخَانَاتِ</span>
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                    <!-- تمرين 1: مريم -->
+                    <div id="step_atmaran_1" class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 font-black text-slate-800 mb-2">
+                                <span class="w-7 h-7 bg-pink-100 text-pink-700 rounded-lg flex items-center justify-center text-sm font-black">1</span>
+                                <span>مَوْقِعُ مَرْيَمَ:</span>
+                            </div>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                «تَتَوَاجَدُ مَرْيَمُ عَلَى الْخَانَةِ <span class="font-bold text-slate-900">56</span>. تَتَقَدَّمُ بِـ <span class="font-bold text-slate-900">17</span> خَانَةً. أَوْجِدْ رَقْمَ الْخَانَةِ الَّتِي تَكُونُ عَلَيْهَا مَرْيَمُ.»
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 math-font">
+                            <span class="text-sm font-bold text-slate-600">56 + 17 =</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_4_1" class="math-input" placeholder="؟" maxlength="3" data-ans="73">
+                                <span id="corr_q_4_1" class="hidden correction-badge">73</span>
+                            </div>
+                            <button onclick="checkStep('step_atmaran_1', 'step_atmaran_2')" class="step-check-btn px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs">
+                                تَحَقَّقْ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- تمرين 2: حمزة -->
+                    <div id="step_atmaran_2" class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between step-locked">
+                        <div>
+                            <div class="flex items-center gap-2 font-black text-slate-800 mb-2">
+                                <span class="w-7 h-7 bg-blue-100 text-blue-700 rounded-lg flex items-center justify-center text-sm font-black">2</span>
+                                <span>مَوْقِعُ حَمْزَةَ:</span>
+                            </div>
+                            <p class="text-sm text-slate-600 leading-relaxed">
+                                «يَتَوَاجَدُ حَمْزَةُ عَلَى الْخَانَةِ <span class="font-bold text-slate-900">124</span>. يَتَأَخَّرُ بِـ <span class="font-bold text-slate-900">9</span> خَانَاتٍ. أَوْجِدْ رَقْمَ الْخَانَةِ الَّتِي يَكُونُ عَلَيْهَا حَمْزَةُ.»
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 math-font">
+                            <span class="text-sm font-bold text-slate-600">124 - 9 =</span>
+                            <div class="flex flex-col items-center">
+                                <input type="text" id="q_4_2" class="math-input" placeholder="؟" maxlength="3" data-ans="115">
+                                <span id="corr_q_4_2" class="hidden correction-badge">115</span>
+                            </div>
+                            <button onclick="checkStep('step_atmaran_2', 'step_atmaran_strip_1')" class="step-check-btn px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs">
+                                تَحَقَّقْ ✓
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تمرين 3: أحسب باستعمال الشريط العددي (شكل فارغ وخانات إدخال للتحكم بالطريقة) -->
+            <div class="mb-8 pt-4 border-t border-slate-200">
+                <h3 class="font-extrabold text-base sm:text-lg text-slate-800 mb-3 flex items-center gap-2">
+                    <span class="text-indigo-600">■</span>
+                    <span>(3) أَحْسُبُ بِاسْتِعْمَالِ التَّنَقُّلِ عَلَى الشَّرِيطِ الْعَدَدِيِّ (أَدْخِلِ الْقَفَزَاتِ وَالنِّقَاطَ):</span>
+                </h3>
+
+                <div class="space-y-4">
+                    <!-- 63 + 14 -->
+                    <div id="step_atmaran_strip_1" class="bg-slate-50 p-4 rounded-xl border border-slate-200 step-locked">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-sm text-slate-700">تَقَدُّمٌ لِلْيَمِينِ:</span>
+                            <span class="math-font font-black text-indigo-700 text-lg">63 + 14</span>
+                        </div>
+                        <div class="relative bg-white p-2 rounded-lg border border-slate-100 mb-2 overflow-x-auto">
+                            <div class="min-w-[420px] relative h-28">
+                                <svg viewBox="0 0 420 85" class="w-full h-full">
+                                    <line x1="20" y1="62" x2="400" y2="62" stroke="#475569" stroke-width="2" />
+                                    <polygon points="405,62 395,58 395,66" fill="#475569" />
+                                    <path d="M 50,56 Q 160,12 250,53" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="253,56 242,50 248,60" fill="#2563eb" />
+                                    <path d="M 260,56 Q 320,18 360,53" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="363,56 352,50 358,60" fill="#dc2626" />
+                                    <circle cx="50" cy="62" r="4" fill="#0f766e" />
+                                    <circle cx="260" cy="62" r="4" fill="#0f766e" />
+                                    <circle cx="370" cy="62" r="4" fill="#b91c1c" />
+                                </svg>
+                                <div class="absolute top-0 left-[35%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-blue-600">+</span>
+                                    <input type="text" id="q_4_3_1_j1" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="10">
+                                    <span id="corr_q_4_3_1_j1" class="hidden correction-badge">+10</span>
+                                </div>
+                                <div class="absolute top-1 left-[73%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-rose-600">+</span>
+                                    <input type="text" id="q_4_3_1_j2" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="4">
+                                    <span id="corr_q_4_3_1_j2" class="hidden correction-badge">+4</span>
+                                </div>
+                                <div class="absolute top-[56px] left-[12%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_4_3_1_p1" class="math-input sm-input" placeholder="البداية" maxlength="3" data-ans="63">
+                                    <span id="corr_q_4_3_1_p1" class="hidden correction-badge">63</span>
+                                </div>
+                                <div class="absolute top-[56px] left-[61%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_4_3_1_p2" class="math-input sm-input" placeholder="مرحلي" maxlength="3" data-ans="73">
+                                    <span id="corr_q_4_3_1_p2" class="hidden correction-badge">73</span>
+                                </div>
+                                <div class="absolute top-[56px] left-[88%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_4_3_1_p3" class="math-input sm-input" placeholder="الوصول" maxlength="3" data-ans="77">
+                                    <span id="corr_q_4_3_1_p3" class="hidden correction-badge">77</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 math-font">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-bold">63 + 14 =</span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_3_1_tot" class="math-input" placeholder="؟" maxlength="3" data-ans="77">
+                                    <span id="corr_q_4_3_1_tot" class="hidden correction-badge">77</span>
+                                </div>
+                            </div>
+                            <button onclick="checkStep('step_atmaran_strip_1', 'step_atmaran_strip_2')" class="step-check-btn px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs">
+                                تَحَقَّقْ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 96 + 39 -->
+                    <div id="step_atmaran_strip_2" class="bg-slate-50 p-4 rounded-xl border border-slate-200 step-locked">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-sm text-slate-700">تَقَدُّمٌ لِلْيَمِينِ:</span>
+                            <span class="math-font font-black text-indigo-700 text-lg">96 + 39</span>
+                        </div>
+                        <div class="relative bg-white p-2 rounded-lg border border-slate-100 mb-2 overflow-x-auto">
+                            <div class="min-w-[420px] relative h-28">
+                                <svg viewBox="0 0 420 85" class="w-full h-full">
+                                    <line x1="20" y1="62" x2="400" y2="62" stroke="#475569" stroke-width="2" />
+                                    <polygon points="405,62 395,58 395,66" fill="#475569" />
+                                    <path d="M 50,56 Q 160,12 250,53" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="253,56 242,50 248,60" fill="#2563eb" />
+                                    <path d="M 260,56 Q 320,18 360,53" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="363,56 352,50 358,60" fill="#dc2626" />
+                                    <circle cx="50" cy="62" r="4" fill="#0f766e" />
+                                    <circle cx="260" cy="62" r="4" fill="#0f766e" />
+                                    <circle cx="370" cy="62" r="4" fill="#b91c1c" />
+                                </svg>
+                                <div class="absolute top-0 left-[35%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-blue-600">+</span>
+                                    <input type="text" id="q_4_3_2_j1" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="30">
+                                    <span id="corr_q_4_3_2_j1" class="hidden correction-badge">+30</span>
+                                </div>
+                                <div class="absolute top-1 left-[73%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-rose-600">+</span>
+                                    <input type="text" id="q_4_3_2_j2" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="9">
+                                    <span id="corr_q_4_3_2_j2" class="hidden correction-badge">+9</span>
+                                </div>
+                                <div class="absolute top-[56px] left-[12%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_4_3_2_p1" class="math-input sm-input" placeholder="البداية" maxlength="3" data-ans="96">
+                                    <span id="corr_q_4_3_2_p1" class="hidden correction-badge">96</span>
+                                </div>
+                                <div class="absolute top-[56px] left-[61%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_4_3_2_p2" class="math-input sm-input" placeholder="مرحلي" maxlength="3" data-ans="126">
+                                    <span id="corr_q_4_3_2_p2" class="hidden correction-badge">126</span>
+                                </div>
+                                <div class="absolute top-[56px] left-[88%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_4_3_2_p3" class="math-input sm-input" placeholder="الوصول" maxlength="3" data-ans="135">
+                                    <span id="corr_q_4_3_2_p3" class="hidden correction-badge">135</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 math-font">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-bold">96 + 39 =</span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_3_2_tot" class="math-input" placeholder="؟" maxlength="3" data-ans="135">
+                                    <span id="corr_q_4_3_2_tot" class="hidden correction-badge">135</span>
+                                </div>
+                            </div>
+                            <button onclick="checkStep('step_atmaran_strip_2', 'step_atmaran_strip_3')" class="step-check-btn px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs">
+                                تَحَقَّقْ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 67 - 14 (تراجع لليسار) -->
+                    <div id="step_atmaran_strip_3" class="bg-slate-50 p-4 rounded-xl border border-slate-200 step-locked">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-sm text-slate-700">تَرَاجُعٌ لِلْيَسَارِ:</span>
+                            <span class="math-font font-black text-cyan-800 text-lg">67 - 14</span>
+                        </div>
+                        <div class="relative bg-white p-2 rounded-lg border border-slate-100 mb-2 overflow-x-auto">
+                            <div class="min-w-[420px] relative h-28">
+                                <svg viewBox="0 0 420 85" class="w-full h-full">
+                                    <line x1="20" y1="62" x2="400" y2="62" stroke="#475569" stroke-width="2" />
+                                    <polygon points="405,62 395,58 395,66" fill="#475569" />
+                                    <path d="M 370,56 Q 260,12 170,53" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="167,56 178,60 172,50" fill="#2563eb" />
+                                    <path d="M 160,56 Q 100,18 60,53" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="57,56 68,60 62,50" fill="#dc2626" />
+                                    <circle cx="370" cy="62" r="4" fill="#0f766e" />
+                                    <circle cx="160" cy="62" r="4" fill="#0f766e" />
+                                    <circle cx="50" cy="62" r="4" fill="#b91c1c" />
+                                </svg>
+                                <div class="absolute top-0 left-[63%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-blue-600">-</span>
+                                    <input type="text" id="q_4_3_3_j1" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="10">
+                                    <span id="corr_q_4_3_3_j1" class="hidden correction-badge">-10</span>
+                                </div>
+                                <div class="absolute top-1 left-[25%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-rose-600">-</span>
+                                    <input type="text" id="q_4_3_3_j2" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="4">
+                                    <span id="corr_q_4_3_3_j2" class="hidden correction-badge">-4</span>
+                                </div>
+                                <div class="absolute top-[56px] left-[88%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_4_3_3_p1" class="math-input sm-input" placeholder="البداية" maxlength="3" data-ans="67">
+                                    <span id="corr_q_4_3_3_p1" class="hidden correction-badge">67</span>
+                                </div>
+                                <div class="absolute top-[56px] left-[38%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_4_3_3_p2" class="math-input sm-input" placeholder="مرحلي" maxlength="3" data-ans="57">
+                                    <span id="corr_q_4_3_3_p2" class="hidden correction-badge">57</span>
+                                </div>
+                                <div class="absolute top-[56px] left-[12%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_4_3_3_p3" class="math-input sm-input" placeholder="الوصول" maxlength="3" data-ans="53">
+                                    <span id="corr_q_4_3_3_p3" class="hidden correction-badge">53</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 math-font">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-bold">67 - 14 =</span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_3_3_tot" class="math-input" placeholder="؟" maxlength="3" data-ans="53">
+                                    <span id="corr_q_4_3_3_tot" class="hidden correction-badge">53</span>
+                                </div>
+                            </div>
+                            <button onclick="checkStep('step_atmaran_strip_3', 'step_atmaran_strip_4')" class="step-check-btn px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs">
+                                تَحَقَّقْ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 83 - 8 (تراجع لليسار) -->
+                    <div id="step_atmaran_strip_4" class="bg-slate-50 p-4 rounded-xl border border-slate-200 step-locked">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-bold text-sm text-slate-700">تَرَاجُعٌ لِلْيَسَارِ:</span>
+                            <span class="math-font font-black text-cyan-800 text-lg">83 - 8</span>
+                        </div>
+                        <div class="relative bg-white p-2 rounded-lg border border-slate-100 mb-2 overflow-x-auto">
+                            <div class="min-w-[420px] relative h-28">
+                                <svg viewBox="0 0 420 85" class="w-full h-full">
+                                    <line x1="20" y1="62" x2="400" y2="62" stroke="#475569" stroke-width="2" />
+                                    <polygon points="405,62 395,58 395,66" fill="#475569" />
+                                    <path d="M 370,56 Q 260,12 170,53" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="167,56 178,60 172,50" fill="#2563eb" />
+                                    <path d="M 160,56 Q 100,18 60,53" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="3" />
+                                    <polygon points="57,56 68,60 62,50" fill="#dc2626" />
+                                    <circle cx="370" cy="62" r="4" fill="#0f766e" />
+                                    <circle cx="160" cy="62" r="4" fill="#0f766e" />
+                                    <circle cx="50" cy="62" r="4" fill="#b91c1c" />
+                                </svg>
+                                <div class="absolute top-0 left-[63%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-blue-600">-</span>
+                                    <input type="text" id="q_4_3_4_j1" class="math-input sm-input" placeholder="-" maxlength="2" data-ans="3">
+                                    <span id="corr_q_4_3_4_j1" class="hidden correction-badge">-3</span>
+                                </div>
+                                <div class="absolute top-1 left-[25%] -translate-x-1/2 flex flex-col items-center">
+                                    <span class="text-xs font-bold text-rose-600">-</span>
+                                    <input type="text" id="q_4_3_4_j2" class="math-input sm-input" placeholder="-" maxlength="2" data-ans="5">
+                                    <span id="corr_q_4_3_4_j2" class="hidden correction-badge">-5</span>
+                                </div>
+                                <div class="absolute top-[56px] left-[88%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_4_3_4_p1" class="math-input sm-input" placeholder="البداية" maxlength="3" data-ans="83">
+                                    <span id="corr_q_4_3_4_p1" class="hidden correction-badge">83</span>
+                                </div>
+                                <div class="absolute top-[56px] left-[38%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_4_3_4_p2" class="math-input sm-input" placeholder="مرحلي" maxlength="3" data-ans="80">
+                                    <span id="corr_q_4_3_4_p2" class="hidden correction-badge">80</span>
+                                </div>
+                                <div class="absolute top-[56px] left-[12%] -translate-x-1/2 flex flex-col items-center">
+                                    <input type="text" id="q_4_3_4_p3" class="math-input sm-input" placeholder="الوصول" maxlength="3" data-ans="75">
+                                    <span id="corr_q_4_3_4_p3" class="hidden correction-badge">75</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center justify-between gap-3 math-font">
+                            <div class="flex items-center gap-2">
+                                <span class="text-sm font-bold">83 - 8 =</span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_3_4_tot" class="math-input" placeholder="؟" maxlength="3" data-ans="75">
+                                    <span id="corr_q_4_3_4_tot" class="hidden correction-badge">75</span>
+                                </div>
+                            </div>
+                            <button onclick="checkStep('step_atmaran_strip_4', 'step_atmaran_dec_1')" class="step-check-btn px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs">
+                                تَحَقَّقْ وَانْتَقِلْ لِلتَّفْكِيكِ ➔
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تمرين 4: أحسب باستعمال التفكيك (خانات فارغة للمرحلتين الأولى والثانية) -->
+            <div class="mb-8 pt-4 border-t border-slate-200">
+                <h3 class="font-extrabold text-base sm:text-lg text-slate-800 mb-3 flex items-center gap-2">
+                    <span class="text-indigo-600">■</span>
+                    <span>(4) أَحْسُبُ بِاسْتِعْمَالِ التَّفْكِيكِ (امْلأْ جَمِيعَ الْخَانَاتِ الِانْتِقَالِيَّةِ):</span>
+                </h3>
+
+                <div class="space-y-3">
+                    <!-- 67 - 14 -->
+                    <div id="step_atmaran_dec_1" class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 math-font step-locked">
+                        <div class="flex flex-wrap items-center justify-between gap-2 text-base">
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span class="font-bold">67 - 14 = 67 - </span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_4_1_d" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="10">
+                                    <span id="corr_q_4_4_1_d" class="hidden correction-badge">10</span>
+                                </div>
+                                <span>-</span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_4_1_u" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="4">
+                                    <span id="corr_q_4_4_1_u" class="hidden correction-badge">4</span>
+                                </div>
+                                <span>= </span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_4_1_s" class="math-input sm-input" placeholder="طرح ع" maxlength="2" data-ans="57">
+                                    <span id="corr_q_4_4_1_s" class="hidden correction-badge">57</span>
+                                </div>
+                                <span>- 4 = </span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_4_1_tot" class="math-input" placeholder="النتيجة" maxlength="2" data-ans="53">
+                                    <span id="corr_q_4_4_1_tot" class="hidden correction-badge">53</span>
+                                </div>
+                            </div>
+                            <button onclick="checkStep('step_atmaran_dec_1', 'step_atmaran_dec_2')" class="step-check-btn px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs">
+                                تَحَقَّقْ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 83 - 24 -->
+                    <div id="step_atmaran_dec_2" class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 math-font step-locked">
+                        <div class="flex flex-wrap items-center justify-between gap-2 text-base">
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span class="font-bold">83 - 24 = 83 - </span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_4_2_d" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="20">
+                                    <span id="corr_q_4_4_2_d" class="hidden correction-badge">20</span>
+                                </div>
+                                <span>-</span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_4_2_u" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="4">
+                                    <span id="corr_q_4_4_2_u" class="hidden correction-badge">4</span>
+                                </div>
+                                <span>= </span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_4_2_s" class="math-input sm-input" placeholder="طرح ع" maxlength="2" data-ans="63">
+                                    <span id="corr_q_4_4_2_s" class="hidden correction-badge">63</span>
+                                </div>
+                                <span>- 4 = </span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_4_2_tot" class="math-input" placeholder="النتيجة" maxlength="2" data-ans="59">
+                                    <span id="corr_q_4_4_2_tot" class="hidden correction-badge">59</span>
+                                </div>
+                            </div>
+                            <button onclick="checkStep('step_atmaran_dec_2', 'step_atmaran_dec_3')" class="step-check-btn px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs">
+                                تَحَقَّقْ ✓
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 177 - 26 -->
+                    <div id="step_atmaran_dec_3" class="p-3.5 bg-slate-50 rounded-xl border border-slate-200 math-font step-locked">
+                        <div class="flex flex-wrap items-center justify-between gap-2 text-base">
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span class="font-bold">177 - 26 = 177 - </span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_4_3_d" class="math-input sm-input" placeholder="عشرات" maxlength="2" data-ans="20">
+                                    <span id="corr_q_4_4_3_d" class="hidden correction-badge">20</span>
+                                </div>
+                                <span>-</span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_4_3_u" class="math-input sm-input" placeholder="وحدات" maxlength="2" data-ans="6">
+                                    <span id="corr_q_4_4_3_u" class="hidden correction-badge">6</span>
+                                </div>
+                                <span>= </span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_4_3_s" class="math-input" placeholder="طرح ع" maxlength="3" data-ans="157">
+                                    <span id="corr_q_4_4_3_s" class="hidden correction-badge">157</span>
+                                </div>
+                                <span>- 6 = </span>
+                                <div class="flex flex-col items-center">
+                                    <input type="text" id="q_4_4_3_tot" class="math-input" placeholder="النتيجة" maxlength="3" data-ans="151">
+                                    <span id="corr_q_4_4_3_tot" class="hidden correction-badge">151</span>
+                                </div>
+                            </div>
+                            <button onclick="checkStep('step_atmaran_dec_3', 'step_atmaran_5')" class="step-check-btn px-4 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs">
+                                تَحَقَّقْ وَانْتَقِلْ لِلتَّمْرِينِ (5) ➔
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تمرين 5: شريط أيمن 169 - 81 -->
+            <div id="step_atmaran_5" class="mb-6 pt-4 border-t border-slate-200 step-locked">
+                <h3 class="font-extrabold text-base sm:text-lg text-slate-800 mb-2 flex items-center gap-2">
+                    <span class="text-indigo-600">■</span>
+                    <span>(5) حِسَابُ أَيْمَنَ لِلْعَمَلِيَّةِ: <span class="math-font font-bold">169 - 81</span></span>
+                </h3>
+                <p class="text-sm text-slate-600 mb-3">«رَسَمَ شَرِيطًا عَدَدِيًّا وَعَلَّمَ عَلَيْهِ الْعَدَدَيْنِ 169 وَ 81. أَكْمِلِ الْفَرَاغَاتِ»</p>
+
+                <div class="relative bg-slate-50 p-4 rounded-xl border border-slate-200 mb-4 overflow-x-auto">
+                    <div class="min-w-[500px] relative h-36">
+                        <svg viewBox="0 0 500 115" class="w-full h-full">
+                            <line x1="25" y1="80" x2="475" y2="80" stroke="#334155" stroke-width="3" />
+                            <polygon points="480,80 470,75 470,85" fill="#334155" />
+                            
+                            <!-- 81 -->
+                            <circle cx="50" cy="80" r="5" fill="#0f766e" />
+                            <text x="50" y="102" text-anchor="middle" font-size="14" font-weight="bold">81</text>
+                            
+                            <!-- jump 1: +19 -->
+                            <path d="M 50,73 Q 105,20 162,70" fill="none" stroke="#2563eb" stroke-width="2.5" stroke-dasharray="3" />
+                            <polygon points="166,73 155,68 160,78" fill="#2563eb" />
+                            
+                            <!-- 100 -->
+                            <circle cx="170" cy="80" r="5" fill="#0f766e" />
+                            <text x="170" y="102" text-anchor="middle" font-size="14" font-weight="bold">100</text>
+
+                            <!-- jump 2: +60 -->
+                            <path d="M 170,73 Q 260,15 342,70" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-dasharray="3" />
+                            <polygon points="346,73 335,68 340,78" fill="#16a34a" />
+                            
+                            <!-- 160 -->
+                            <circle cx="350" cy="80" r="5" fill="#0f766e" />
+                            <text x="350" y="102" text-anchor="middle" font-size="14" font-weight="bold">160</text>
+
+                            <!-- jump 3: +9 -->
+                            <path d="M 350,73 Q 395,28 432,70" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="3" />
+                            <polygon points="436,73 425,68 430,78" fill="#dc2626" />
+                            
+                            <!-- 169 -->
+                            <circle cx="440" cy="80" r="5" fill="#0f766e" />
+                            <text x="440" y="102" text-anchor="middle" font-size="14" font-weight="bold">169</text>
+                        </svg>
+                        <!-- خانات قفزات أيمن على الشريط -->
+                        <div class="absolute top-2 left-[21%] -translate-x-1/2 flex flex-col items-center">
+                            <span class="text-xs font-bold text-blue-600">+</span>
+                            <input type="text" id="q_4_5_j1" class="math-input sm-input" placeholder="قفزة 1" maxlength="2" data-ans="19">
+                            <span id="corr_q_4_5_j1" class="hidden correction-badge">+19</span>
+                        </div>
+                        <div class="absolute top-1 left-[51%] -translate-x-1/2 flex flex-col items-center">
+                            <span class="text-xs font-bold text-green-600">+</span>
+                            <input type="text" id="q_4_5_j2" class="math-input sm-input" placeholder="قفزة 2" maxlength="2" data-ans="60">
+                            <span id="corr_q_4_5_j2" class="hidden correction-badge">+60</span>
+                        </div>
+                        <div class="absolute top-3 left-[78%] -translate-x-1/2 flex flex-col items-center">
+                            <span class="text-xs font-bold text-rose-600">+</span>
+                            <input type="text" id="q_4_5_j3" class="math-input sm-input" placeholder="قفزة 3" maxlength="2" data-ans="9">
+                            <span id="corr_q_4_5_j3" class="hidden correction-badge">+9</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-indigo-50 p-4 rounded-xl border border-indigo-200 math-font flex flex-wrap items-center justify-between gap-3 text-lg font-black">
+                    <div class="flex items-center gap-2">
+                        <span>169 - 81 = 19 + 60 + 9 =</span>
+                        <div class="flex flex-col items-center">
+                            <input type="text" id="q_4_5_tot" class="math-input" placeholder="النتيجة" maxlength="3" data-ans="88">
+                            <span id="corr_q_4_4_tot" class="hidden correction-badge">88</span>
+                        </div>
+                    </div>
+                    <button onclick="checkStep('step_atmaran_5', 'station-5')" class="step-check-btn px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow transition">
+                        تَحَقَّقْ وَانْتَقِلْ إِلَى «أَبْحَثُ» ➔
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             المحطة 5: أَبْحَثُ (دفتر الأنشطة ص 13)
+        =========================================== -->
+        <section id="station-5" class="bg-white rounded-3xl p-5 sm:p-7 shadow-lg border-2 border-emerald-100 locked-station transition-all duration-300">
+            <div class="flex items-center justify-between border-b pb-3 mb-6 border-slate-100">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-2xl bg-rose-500 text-white font-black text-xl flex items-center justify-center shadow">5</span>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-800">أَبْحَثُ (دَفْتَرُ الأَنْشِطَةِ ص 13)</h2>
+                        <p class="text-xs sm:text-sm text-slate-500 font-semibold">مَسْأَلَةُ سِبَاقِ الدَّرَّاجَاتِ (تَفْكِيرٌ حِسَابِيٌّ)</p>
+                    </div>
+                </div>
+                <span class="text-xs bg-rose-100 text-rose-800 font-bold px-3 py-1.5 rounded-xl">مَسْأَلَةُ التَّحَدِّي</span>
+            </div>
+
+            <div id="step_abhath" class="bg-gradient-to-r from-rose-50 to-orange-50 p-5 rounded-2xl border border-rose-200 mb-6">
+                <!-- رسم بيداغوجي لسياق المسألة -->
+                <div class="svg-container bg-white p-3 rounded-xl border border-rose-200 mb-4">
+                    <svg viewBox="0 0 500 100" class="w-full max-w-xl mx-auto h-auto">
+                        <line x1="20" y1="70" x2="480" y2="70" stroke="#64748b" stroke-width="4" />
+                        <rect x="420" y="20" width="10" height="50" fill="#334155" />
+                        <rect x="430" y="20" width="10" height="10" fill="#000" />
+                        <rect x="440" y="20" width="10" height="10" fill="#fff" />
+                        <rect x="430" y="30" width="10" height="10" fill="#fff" />
+                        <rect x="440" y="30" width="10" height="10" fill="#000" />
+                        <text x="435" y="15" text-anchor="middle" font-size="11" font-weight="bold" fill="#334155">الْوُصُول</text>
+
+                        <text x="320" y="55" font-size="28">🚴🚴🚴</text>
+                        <text x="340" y="88" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f766e">127 وَصَلُوا</text>
+
+                        <text x="120" y="55" font-size="28" opacity="0.6">🚴</text>
+                        <text x="120" y="88" text-anchor="middle" font-size="12" font-weight="bold" fill="#e11d48">13 انْسَحَبُوا</text>
+                    </svg>
+                </div>
+
+                <div class="text-base sm:text-lg text-slate-800 font-bold leading-relaxed space-y-2">
+                    <p>
+                        «فِي سِبَاقٍ لِلدَّرَّاجَاتِ، وَصَلَ <span class="text-emerald-700 font-extrabold text-xl">127</span> دَرَّاجًا، وَانْسَحَبَ مِنَ السَّبَاقِ <span class="text-rose-600 font-extrabold text-xl">13</span> دَرَّاجًا.»
+                    </p>
+                    <p class="text-indigo-900 font-black">
+                        كَمْ كَانَ عَدَدُ الدَّرَّاجِينَ عِنْدَ الانْطِلَاقِ؟
+                    </p>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-rose-200/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="math-font text-lg font-bold flex items-center gap-2">
+                        <span>127 + 13 =</span>
+                        <div class="flex flex-col items-center">
+                            <input type="text" id="q_5_res" class="math-input text-center" placeholder="؟" maxlength="3" data-ans="140">
+                            <span id="corr_q_5_res" class="hidden correction-badge">140</span>
+                        </div>
+                    </div>
+                    <div class="text-slate-700 font-bold text-base flex items-center gap-2">
+                        <span>كَانَ عَدَدُ الدَّرَّاجِينَ عِنْدَ الانْطِلَاقِ:</span>
+                        <span id="final_riders_label" class="text-emerald-700 font-black text-xl">...</span>
+                        <span>دَرَّاجًا.</span>
+                    </div>
+                    <button onclick="checkStep('step_abhath', 'final_summary')" class="step-check-btn px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl shadow transition">
+                        تَحَقَّقْ وَاعْرِضِ التَّقْيِيمَ النِّهَائِيَّ ★
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             الشاشة الختامية: التقييم العام (مثبتة أسفل التمارين طبقاً للميثاق)
+        =========================================== -->
+        <section id="finalSummarySection" class="hidden bg-white rounded-3xl p-6 sm:p-8 shadow-2xl border-4 border-emerald-500 mt-10 transition-all">
+            <div class="text-center mb-6">
+                <span class="inline-block px-4 py-1.5 bg-emerald-100 text-emerald-800 font-extrabold rounded-full text-sm mb-2">
+                    نِهَايَةُ الدَّرْسِ وَحَصِيلَةُ التَّقْيِيمِ
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-black text-slate-800">تَقْرِيرُ الإِنْجَازِ الْعَامِّ</h2>
+                <p class="text-sm text-slate-500 font-semibold mt-1">يُمْكِنُكَ الصُّعُودُ لِلأَعْلَى لِمُعَايَنَةِ الإِجَابَاتِ وَالتَّصْحِيحِ النَّمُوذَجِيِّ لِكُلِّ خَطَأٍ</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center justify-around gap-8 py-6 bg-slate-50 rounded-2xl border border-slate-200">
+                <div class="relative w-44 h-44 flex items-center justify-center">
+                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" stroke="#e2e8f0" stroke-width="8" fill="transparent" />
+                        <circle id="finalCircleProgress" cx="50" cy="50" r="40" stroke="#10b981" stroke-width="8" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round" fill="transparent" class="transition-all duration-1000" />
+                    </svg>
+                    <div class="absolute flex flex-col items-center justify-center text-center">
+                        <span id="finalPercentText" class="text-3xl font-black text-slate-800">0%</span>
+                        <span class="text-xs font-bold text-slate-500">نِسْبَةُ النَّجَاحِ</span>
+                    </div>
+                </div>
+
+                <div class="space-y-4 text-center md:text-right max-w-md">
+                    <div class="flex items-center justify-center md:justify-start gap-4">
+                        <div class="bg-emerald-100 text-emerald-800 px-4 py-2 rounded-xl font-black text-base flex items-center gap-1.5 border border-emerald-200">
+                            <span>الصَّوَابُ (✓):</span>
+                            <span id="finalCorrectCount" class="text-xl">0</span>
+                        </div>
+                        <div class="bg-rose-100 text-rose-800 px-4 py-2 rounded-xl font-black text-base flex items-center gap-1.5 border border-rose-200">
+                            <span>الْخَطَأُ (✗):</span>
+                            <span id="finalIncorrectCount" class="text-xl">0</span>
+                        </div>
+                    </div>
+
+                    <div id="pedagogicalNoteBox" class="p-4 rounded-xl font-bold text-base border">
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 pt-6 border-t border-slate-200">
+                <button onclick="resetApplication()" class="w-full sm:w-auto px-8 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-2xl shadow-lg transition flex items-center justify-center gap-2">
+                    <span>🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</span>
+                </button>
+                <button onclick="exitApplication()" class="w-full sm:w-auto px-8 py-3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold rounded-2xl transition flex items-center justify-center gap-2">
+                    <span>خُرُوجٌ</span>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================
+         زر العودة إلى الفهرس (أُضيف)
+         ======================================== -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+    <!-- Footer -->
+    <footer class="max-w-5xl mx-auto mt-12 mb-6 text-center text-slate-400 text-xs font-semibold">
+        تَطْبِيقٌ تَعْلِيمِيٌّ رَقْمِيٌّ مُطَابِقٌ لِمِنْهَاجِ الْجِيلِ الثَّانِي • وِزَارَةُ التَّرْبِيَةِ الْوَطَنِيَّةِ الْجَزَائِرِيَّةِ
+    </footer>
+
+    <!-- ========================================
+         سكريبت الحماية (أُضيف)
+         ======================================== -->
+    <script>
+        // إعدادات القناة - السنة الثالثة
+        const CHANNEL_ID = "-1003910412986";
+
+        // تهيئة Telegram WebApp
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        async function verifySubscription() {
+            const statusMsg = document.getElementById('sub-status-msg');
+            statusMsg.style.color = "#0288d1";
+            statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+            let userId = null;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                userId = tg.initDataUnsafe.user.id;
+            }
+
+            if (!userId) {
+                statusMsg.style.color = "#e65100";
+                statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+                return;
+            }
+
+            try {
+                const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.isSubscribed) {
+                    statusMsg.style.color = "#2e7d32";
+                    statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                    setTimeout(() => {
+                        document.getElementById('sub-lock-screen').style.display = 'none';
+                    }, 600);
+                } else {
+                    statusMsg.style.color = "#c62828";
+                    statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+                }
+            } catch (error) {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+            }
+        }
+
+        window.addEventListener('load', () => {
+            verifySubscription();
+        });
+    </script>
+
+    <!-- ========================================
+         سكريبت الدرس الأصلي (كما هو دون تغيير)
+         ======================================== -->
+    <script>
+        /* ============================================================
+           1. Web Audio API
+        ============================================================ */
+        let audioCtx = null;
+        let isSoundEnabled = true;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function toggleAudio() {
+            isSoundEnabled = !isSoundEnabled;
+            document.getElementById('soundIcon').innerText = isSoundEnabled ? '🔊' : '🔇';
+        }
+
+        function playSound(type) {
+            if (!isSoundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                const now = ctx.currentTime;
+
+                if (type === 'correct') {
+                    const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+                    notes.forEach((freq, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                        gain.gain.setValueAtTime(0.2, now + idx * 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.22);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.08);
+                        osc.stop(now + idx * 0.08 + 0.22);
+                    });
+                } else if (type === 'wrong') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(196, now);
+                    osc.frequency.setValueAtTime(146.83, now + 0.12);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'complete') {
+                    const chord = [440, 554.37, 659.25, 880];
+                    chord.forEach((freq) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, now);
+                        gain.gain.setValueAtTime(0.15, now);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now);
+                        osc.stop(now + 0.8);
+                    });
+                }
+            } catch (e) {
+                console.error("Audio error: ", e);
+            }
+        }
+
+        /* ============================================================
+           2. آليات التقييم الفردي لكل خطوة/عملية
+        ============================================================ */
+        const globalResults = {
+            totalCorrect: 0,
+            totalIncorrect: 0
+        };
+
+        function checkStep(currentStepId, nextTargetId) {
+            getAudioContext();
+
+            const stepEl = document.getElementById(currentStepId);
+            if (!stepEl) return;
+
+            const inputs = stepEl.querySelectorAll('input.math-input');
+            let hasWrong = false;
+
+            inputs.forEach(input => {
+                const expected = input.getAttribute('data-ans').trim();
+                const userVal = input.value.trim();
+
+                if (userVal === expected) {
+                    input.classList.add('correct');
+                    globalResults.totalCorrect++;
+                } else {
+                    input.classList.add('incorrect');
+                    globalResults.totalIncorrect++;
+                    hasWrong = true;
+
+                    // إظهار بطاقة التصحيح المباشرة
+                    const corrBadge = document.getElementById(`corr_${input.id}`);
+                    if (corrBadge) {
+                        corrBadge.classList.remove('hidden');
+                    }
+                }
+
+                // تجميد الإدخال
+                input.disabled = true;
+                input.readOnly = true;
+                input.style.pointerEvents = 'none';
+            });
+
+            // تجميد زر الخطوة
+            const btn = stepEl.querySelector('button.step-check-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'pointer-events-none');
+            }
+
+            // تحديث نص دراجي البداية إذا كانت المحطة 5
+            if (currentStepId === 'step_abhath') {
+                const finalLabel = document.getElementById('final_riders_label');
+                finalLabel.innerText = "140";
+            }
+
+            // مؤثر صوتي للخطوة
+            if (hasWrong) {
+                playSound('wrong');
+            } else {
+                playSound('correct');
+            }
+
+            // فتح الخطوة أو المحطة التالية
+            if (nextTargetId === 'final_summary') {
+                showFinalSummary();
+            } else {
+                const nextEl = document.getElementById(nextTargetId);
+                if (nextEl) {
+                    nextEl.classList.remove('step-locked', 'locked-station');
+                    setTimeout(() => {
+                        nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 250);
+                }
+            }
+        }
+
+        function readTaalamto() {
+            playSound('correct');
+            const btn = document.getElementById('btn-submit-3');
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'pointer-events-none');
+
+            const nextSt = document.getElementById('station-4');
+            nextSt.classList.remove('locked-station');
+            setTimeout(() => {
+                nextSt.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 250);
+        }
+
+        function showFinalSummary() {
+            playSound('complete');
+            const summarySec = document.getElementById('finalSummarySection');
+            summarySec.classList.remove('hidden');
+
+            const total = globalResults.totalCorrect + globalResults.totalIncorrect;
+            const percentage = total > 0 ? Math.round((globalResults.totalCorrect / total) * 100) : 100;
+
+            document.getElementById('finalCorrectCount').innerText = globalResults.totalCorrect;
+            document.getElementById('finalIncorrectCount').innerText = globalResults.totalIncorrect;
+            document.getElementById('finalPercentText').innerText = `${percentage}%`;
+
+            const circle = document.getElementById('finalCircleProgress');
+            const circumference = 2 * Math.PI * 40; // ~251.2
+            const offset = circumference - (percentage / 100) * circumference;
+            circle.style.strokeDasharray = `${circumference}`;
+            circle.style.strokeDashoffset = `${offset}`;
+
+            const noteBox = document.getElementById('pedagogicalNoteBox');
+            if (percentage >= 85) {
+                circle.setAttribute('stroke', '#10b981');
+                noteBox.className = 'p-4 rounded-xl font-bold text-base border bg-emerald-50 text-emerald-900 border-emerald-300';
+                noteBox.innerHTML = `
+                    <p class="text-lg">🌟 مُمْتَازٌ وَبَارِكْ اللَّهُ فِيكَ!</p>
+                    <p class="text-sm font-semibold mt-1">تَحَكُّمٌ رَائِعٌ فِي مَلْءِ الشَّرِيطِ الْعَدَدِيِّ وَالتَّفْكِيكِ الْمَرْحَلِيِّ لِلأَعْدَادِ.</p>
+                `;
+            } else if (percentage >= 60) {
+                circle.setAttribute('stroke', '#f59e0b');
+                noteBox.className = 'p-4 rounded-xl font-bold text-base border bg-amber-50 text-amber-900 border-amber-300';
+                noteBox.innerHTML = `
+                    <p class="text-lg">👍 جَيِّدٌ، وَاصِلِ التَّدَرُّبَ!</p>
+                    <p class="text-sm font-semibold mt-1">تَأَمَّلِ التَّصْحِيحَ النَّمُوذَجِيَّ فِي الْخَانَاتِ الَّتِي أَخْطَأْتَ فِيهَا لِتَتَمَكَّنَ أَكْثَرَ مِنَ الطَّرِيقَةِ.</p>
+                `;
+            } else {
+                circle.setAttribute('stroke', '#ef4444');
+                noteBox.className = 'p-4 rounded-xl font-bold text-base border bg-rose-50 text-rose-900 border-rose-300';
+                noteBox.innerHTML = `
+                    <p class="text-lg">⚠️ يُوصَى بِمُرَاجَعَةِ الدَّرْسِ</p>
+                    <p class="text-sm font-semibold mt-1">عَايِنِ الإِجَابَاتِ الصَّحِيحَةَ الْمُوَضَّحَةَ بِاللَّوْنِ الأَحْمَرِ وَأَعِدِ الْمُحَاوَلَةَ لِتَثْبِيتِ الْقَاعِدَةِ.</p>
+                `;
+            }
+
+            setTimeout(() => {
+                summarySec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+        }
+
+        /* ============================================================
+           3. إعادة المحاولة والخروج
+        ============================================================ */
+        function resetApplication() {
+            const inputs = document.querySelectorAll('input.math-input');
+            inputs.forEach(input => {
+                input.value = '';
+                input.disabled = false;
+                input.readOnly = false;
+                input.style.pointerEvents = 'auto';
+                input.classList.remove('correct', 'incorrect');
+            });
+
+            // إخفاء بطاقات التصحيح
+            document.querySelectorAll('.correction-badge').forEach(b => b.classList.add('hidden'));
+
+            // إعادة تفعيل كافة الأزرار
+            document.querySelectorAll('button.step-check-btn').forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'pointer-events-none');
+            });
+            const btn3 = document.getElementById('btn-submit-3');
+            if (btn3) {
+                btn3.disabled = false;
+                btn3.classList.remove('opacity-50', 'pointer-events-none');
+            }
+
+            // إعادة القفل للخطوات والمحطات
+            const lockStepIds = [
+                'step_aktachef_2', 'step_aktachef_3', 'step_aktachef_4',
+                'step_onjez_2', 'step_onjez_3', 'step_onjez_4', 'step_onjez_5', 'step_onjez_6',
+                'step_onjez_dec_1', 'step_onjez_dec_2', 'step_onjez_dec_3', 'step_onjez_dec_4', 'step_onjez_dec_5', 'step_onjez_dec_6',
+                'step_atmaran_2', 'step_atmaran_strip_1', 'step_atmaran_strip_2', 'step_atmaran_strip_3', 'step_atmaran_strip_4',
+                'step_atmaran_dec_1', 'step_atmaran_dec_2', 'step_atmaran_dec_3', 'step_atmaran_5'
+            ];
+            lockStepIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('step-locked');
+            });
+
+            for (let i = 2; i <= 5; i++) {
+                const st = document.getElementById(`station-${i}`);
+                if (st) st.classList.add('locked-station');
+            }
+
+            document.getElementById('finalSummarySection').classList.add('hidden');
+            document.getElementById('final_riders_label').innerText = '...';
+
+            globalResults.totalCorrect = 0;
+            globalResults.totalIncorrect = 0;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function exitApplication() {
+            const noteBox = document.getElementById('pedagogicalNoteBox');
+            noteBox.innerHTML = `
+                <div class="text-center py-2 text-slate-800">
+                    <p class="text-xl font-black">أَحْسَنْتَ يَا بَطَلَ الرِّيَاضِيَّاتِ! 🌟</p>
+                    <p class="text-sm font-bold mt-1">تَمَّ حِفْظُ نَتِيجَتِكَ بِنَجَاحٍ. نَتَمَنَّى لَكَ دَوَامَ التَّفَوُّقِ فِي مَسَارِكَ الدِّرَاسِيِّ.</p>
+                </div>
+            `;
+        }
+
+        document.addEventListener('input', (e) => {
+            if (e.target.classList.contains('math-input')) {
+                const max = parseInt(e.target.getAttribute('maxlength') || '10');
+                if (e.target.value.length >= max) {
+                    const currentContainer = e.target.closest('.step-locked, [id^="step_"], section');
+                    if (currentContainer) {
+                        const inputs = Array.from(currentContainer.querySelectorAll('input.math-input:not([disabled])'));
+                        const currentIndex = inputs.indexOf(e.target);
+                        if (currentIndex > -1 && currentIndex + 1 < inputs.length) {
+                            inputs[currentIndex + 1].focus();
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
