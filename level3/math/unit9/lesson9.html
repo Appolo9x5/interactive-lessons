@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دَرْسُ الرِّيَاضِيَّاتِ: نَقْلُ شَكْلٍ عَلَى مَرْصُوفَةٍ</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- خط تجوال وخط مخصص للأطفال والقراءة البيداغوجية الواضحة -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            font-family: 'Tajawal', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .ltr {
+            direction: ltr;
+            unicode-bidi: isolate;
+        }
+        .snap-grid-canvas {
+            touch-action: none;
+        }
+        .locked-station {
+            opacity: 0.45;
+            pointer-events: none;
+            filter: grayscale(80%);
+        }
+        .correct-bg {
+            background-color: #e8f5e9 !important;
+            border-color: #2e7d32 !important;
+            color: #2e7d32 !important;
+        }
+        .incorrect-bg {
+            background-color: #ffebee !important;
+            border-color: #c62828 !important;
+            color: #c62828 !important;
+        }
+        .correct-badge {
+            background-color: #2e7d32;
+            color: white;
+        }
+        .incorrect-badge {
+            background-color: #c62828;
+            color: white;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري (أُضيفت)
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس (أُضيف) */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            margin-top: 12px;
+            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col items-center p-3 md:p-6">
+
+    <!-- ========================================
+         نافذة قفل الاشتراك الإجباري (أُضيفت)
+         ======================================== -->
+    <div id="sub-lock-screen">
+        <div class="lock-box">
+            <div class="lock-icon">🔒</div>
+            <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+            <div class="lock-desc">
+                لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+            </div>
+            <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+                📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+            </a>
+            <button class="btn-check-sub" onclick="verifySubscription()">
+                ✅ تَأْكِيدُ الاِشْتِرَاكِ
+            </button>
+            <div id="sub-status-msg" class="sub-status-msg"></div>
+        </div>
+    </div>
+
+    <!-- شريط الرأس والترويسة البيداغوجية -->
+    <header class="w-full max-w-5xl bg-white rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6 mb-6">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl font-black shadow-md shadow-indigo-100">
+                    09
+                </div>
+                <div>
+                    <span class="inline-block bg-indigo-100 text-indigo-700 text-xs px-2.5 py-1 rounded-full font-bold mb-1">
+                        السَّنَةُ الثَّالِثَةُ ابْتِدَائِيّ • الْمِنْهَاجُ الْجَزَائِرِيُّ
+                    </span>
+                    <h1 class="text-xl md:text-2xl font-black text-slate-800 tracking-tight">
+                        نَقْلُ شَكْلٍ عَلَى مَرْصُوفَةٍ
+                    </h1>
+                </div>
+            </div>
+
+            <!-- معلومات الإنجاز -->
+            <div class="flex items-center gap-3 bg-slate-100 px-4 py-2 rounded-xl text-sm font-bold text-slate-700">
+                <span>تَقَدُّمُ الدَّرْسِ:</span>
+                <span id="overall-progress-text" class="text-indigo-600 font-extrabold text-base">0%</span>
+                <div class="w-24 bg-slate-200 h-2.5 rounded-full overflow-hidden">
+                    <div id="overall-progress-bar" class="bg-indigo-600 h-full w-0 transition-all duration-300"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- الحاوية الرئيسية للأنشطة -->
+    <main class="w-full max-w-5xl space-y-8" id="lesson-container">
+
+        <!-- ======================= 1. مَحَطَّةُ أَكْتَشِفُ ======================= -->
+        <section id="station-discover" class="bg-white rounded-3xl p-5 md:p-8 shadow-sm border border-slate-200 transition-all">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+                <div class="flex items-center gap-3">
+                    <span class="w-3.5 h-8 bg-sky-500 rounded-full inline-block"></span>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-800">
+                        أَكْتَشِفُ
+                    </h2>
+                </div>
+                <span class="text-xs md:text-sm font-semibold bg-sky-50 text-sky-700 px-3 py-1 rounded-lg">
+                    الْمَرْصُوفَةُ وَالتَّطَابُقُ
+                </span>
+            </div>
+
+            <div class="bg-sky-50 border-r-4 border-sky-500 p-4 rounded-xl mb-6">
+                <p class="font-bold text-slate-800 text-base md:text-lg">
+                    التَّعْلِيمَةُ: انْقُلْ كُلًّا مِنَ الشَّكْلَيْنِ عَلَى وَرَقَةٍ مَرْصُوفَةٍ بِدِقَّةٍ، انْقُرْ عَلَى عُقَدِ الْمَرْصُوفَةِ لِتَوْصِيلِ الْخُطُوطِ (مِيزَةُ الِالْتِصَاقِ الْمَغْنَاطِيسِيِّ).
+                </p>
+            </div>
+
+            <!-- النشاط 1-1: الشكل (1) شكل النجم المضلع -->
+            <div class="mb-10 bg-slate-50 p-4 md:p-6 rounded-2xl border border-slate-200" id="discover-task1-box">
+                <h3 class="font-extrabold text-slate-700 text-lg mb-3 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-sky-600 text-white flex items-center justify-center text-xs">1</span>
+                    نَقْلُ الشَّكْلِ (1):
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <!-- النموذج الأصلي -->
+                    <div class="flex flex-col items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="font-bold text-sm text-slate-500 mb-2">النَّمُوذَجُ الأَصْلِيُّ (الشَّكْلُ 1)</span>
+                        <svg id="svg-model-1" class="border border-slate-300 rounded-lg bg-white" width="280" height="280" viewBox="0 0 280 280"></svg>
+                    </div>
+
+                    <!-- مرصوفة التلميذ التفاعلية -->
+                    <div class="flex flex-col items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between w-full mb-2 px-2">
+                            <span class="font-bold text-sm text-indigo-700">مَرْصُوفَتُكَ لِلرَّسْمِ</span>
+                            <div class="flex items-center gap-2">
+                                <button type="button" onclick="undoGrid('grid1')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 rounded-md font-bold text-slate-600 transition">تَرَاجُعْ ↩</button>
+                                <button type="button" onclick="clearGrid('grid1')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-md font-bold transition">مَسْحٌ 🗑</button>
+                            </div>
+                        </div>
+                        <svg id="svg-user-1" class="snap-grid-canvas border border-slate-300 rounded-lg bg-white cursor-crosshair shadow-inner" width="280" height="280" viewBox="0 0 280 280"></svg>
+                        <p class="text-xs text-slate-500 mt-2 text-center">انقر على الأركان (التقاطعات) لوضع النقاط وربط الأضلاع</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex flex-col md:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-200">
+                    <div id="feedback-grid1" class="text-sm font-bold min-h-[24px]"></div>
+                    <button type="button" id="btn-validate-grid1" onclick="validateDiscover1()" class="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-extrabold rounded-xl shadow-md transition w-full md:w-auto">
+                        تَحَقَّقْ مِنَ الشَّكْلِ (1)
+                    </button>
+                </div>
+            </div>
+
+            <!-- النشاط 1-2: الشكل (2) وجه الثعلب/القط -->
+            <div class="bg-slate-50 p-4 md:p-6 rounded-2xl border border-slate-200 locked-station" id="discover-task2-box">
+                <h3 class="font-extrabold text-slate-700 text-lg mb-3 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-sky-600 text-white flex items-center justify-center text-xs">2</span>
+                    نَقْلُ الشَّكْلِ (2):
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <!-- النموذج الأصلي -->
+                    <div class="flex flex-col items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <span class="font-bold text-sm text-slate-500 mb-2">النَّمُوذَجُ الأَصْلِيُّ (الشَّكْلُ 2)</span>
+                        <svg id="svg-model-2" class="border border-slate-300 rounded-lg bg-white" width="280" height="280" viewBox="0 0 280 280"></svg>
+                    </div>
+
+                    <!-- مرصوفة التلميذ -->
+                    <div class="flex flex-col items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between w-full mb-2 px-2">
+                            <span class="font-bold text-sm text-indigo-700">مَرْصُوفَتُكَ لِلرَّسْمِ</span>
+                            <div class="flex items-center gap-2">
+                                <button type="button" onclick="undoGrid('grid2')" class="px-2.5 py-1 text-xs bg-slate-100 hover:bg-slate-200 rounded-md font-bold text-slate-600 transition">تَرَاجُعْ ↩</button>
+                                <button type="button" onclick="clearGrid('grid2')" class="px-2.5 py-1 text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-md font-bold transition">مَسْحٌ 🗑</button>
+                            </div>
+                        </div>
+                        <svg id="svg-user-2" class="snap-grid-canvas border border-slate-300 rounded-lg bg-white cursor-crosshair shadow-inner" width="280" height="280" viewBox="0 0 280 280"></svg>
+                        <p class="text-xs text-slate-500 mt-2 text-center">ارسم محيط الوجه والأجزاء الداخلية (العينان والأنف)</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex flex-col md:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-200">
+                    <div id="feedback-grid2" class="text-sm font-bold min-h-[24px]"></div>
+                    <button type="button" id="btn-validate-grid2" onclick="validateDiscover2()" class="px-6 py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-extrabold rounded-xl shadow-md transition w-full md:w-auto">
+                        تَحَقَّقْ مِنَ الشَّكْلِ (2)
+                    </button>
+                </div>
+            </div>
+
+            <!-- ملخص محطة أكتشف -->
+            <div id="summary-discover" class="mt-6 p-4 rounded-xl bg-slate-100 border border-slate-200 hidden flex items-center justify-between">
+                <span class="font-extrabold text-slate-700">نَتِيجَةُ مَحَطَّةِ (أَكْتَشِفُ):</span>
+                <div class="flex gap-4 font-bold text-sm">
+                    <span class="text-green-700">✓ الصَّوَابُ: <span id="discover-correct">0</span></span>
+                    <span class="text-rose-700">✗ الْخَطَأُ: <span id="discover-wrong">0</span></span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ======================= 2. مَحَطَّةُ أُنْجِزُ ======================= -->
+        <section id="station-practice" class="bg-white rounded-3xl p-5 md:p-8 shadow-sm border border-slate-200 locked-station transition-all">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+                <div class="flex items-center gap-3">
+                    <span class="w-3.5 h-8 bg-emerald-500 rounded-full inline-block"></span>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-800">
+                        أُنْجِزُ
+                    </h2>
+                </div>
+                <span class="text-xs md:text-sm font-semibold bg-emerald-50 text-emerald-700 px-3 py-1 rounded-lg">
+                    مَفْهُومُ التَّكْبِيرِ إِلَى الضِّعْفِ
+                </span>
+            </div>
+
+            <div class="bg-emerald-50 border-r-4 border-emerald-500 p-4 rounded-xl mb-6">
+                <p class="font-bold text-slate-800 text-base md:text-lg">
+                    سَنَدُ النَّشَاطِ: لِتَكْبِيرِ أَضْلَاعِ الرُّبَاعِيِّ إِلَى الضِّعْفِ، شَرَعَ كُلٌّ مِنْ رَائِدٍ وَأُخْتِهِ بِتَكْبِيرِ نَفْسِ الضِّلْعِ مِنْهُ.
+                </p>
+            </div>
+
+            <!-- عرض طريقتي رائد وأخته بالمقارنة مع المرصوفة الأساسية لكل منهما -->
+            <div class="space-y-8 mb-8">
+                <!-- طريقة رائد: نفس عدد المربعات مع مضاعفة حجم المربع -->
+                <div class="border border-slate-200 rounded-2xl p-5 bg-slate-50">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-lg font-black text-sm">طَرِيقَةُ رَائِد</span>
+                        <span class="text-xs text-slate-500 font-semibold">(نَفْسُ عَدَدِ الْمُرَبَّعَاتِ مَعَ مُضَاعَفَةِ حَجْمِ كُلِّ مُرَبَّعٍ)</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                        <div class="flex flex-col items-center bg-white p-3 rounded-xl border border-slate-200">
+                            <span class="text-xs font-bold text-slate-600 mb-1">الْمَرْصُوفَةُ الأَسَاسِيَّةُ (مُرَبَّعَاتٌ عَمُودِيَّةٌ عَادِيَّةٌ)</span>
+                            <svg id="svg-raid-base" class="border border-slate-300 rounded bg-white" width="180" height="180" viewBox="0 0 180 180"></svg>
+                            <span class="text-[11px] text-slate-500 mt-1">الضِّلْعُ يَشْغَلُ خَانَتَيْنِ (2 مربعات)</span>
+                        </div>
+                        <div class="flex flex-col items-center bg-white p-3 rounded-xl border border-slate-200">
+                            <span class="text-xs font-bold text-indigo-700 mb-1">مَرْصُوفَةُ رَائِد (نَفْسُ عَدَدِ الْخَانَاتِ لَكِنْ بِحَجْمٍ مُضَاعَفٍ)</span>
+                            <svg id="svg-raid-scaled" class="border border-slate-300 rounded bg-white" width="220" height="220" viewBox="0 0 220 220"></svg>
+                            <span class="text-[11px] text-indigo-600 font-bold mt-1">رَسَمَ خَانَتَيْنِ أَيْضًا فَتَضَاعَفَ طُولُ الضِّلْعِ تِلْقَائِيًّا!</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- طريقة أخته: نفس حجم المربعات مع مضاعفة عدد المربعات -->
+                <div class="border border-slate-200 rounded-2xl p-5 bg-slate-50">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-lg font-black text-sm">طَرِيقَةُ أُخْتِهِ</span>
+                        <span class="text-xs text-slate-500 font-semibold">(نَفْسُ حَجْمِ الْمُرَبَّعَاتِ مَعَ مُضَاعَفَةِ عَدَدِ الْخَانَاتِ)</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                        <div class="flex flex-col items-center bg-white p-3 rounded-xl border border-slate-200">
+                            <span class="text-xs font-bold text-slate-600 mb-1">الْمَرْصُوفَةُ الأَسَاسِيَّةُ (نَفْسُ الشَّكْلِ الأَصْلِيِّ)</span>
+                            <svg id="svg-sister-base" class="border border-slate-300 rounded bg-white" width="180" height="180" viewBox="0 0 180 180"></svg>
+                            <span class="text-[11px] text-slate-500 mt-1">طُولُ الضِّلْعِ الأَصْلِيِّ = 2 خَانَة</span>
+                        </div>
+                        <div class="flex flex-col items-center bg-white p-3 rounded-xl border border-slate-200">
+                            <span class="text-xs font-bold text-emerald-700 mb-1">مَرْصُوفَةُ أُخْتِهِ (نَفْسُ التَّسْطِيرِ مَعَ مُضَاعَفَةِ الْخَانَاتِ)</span>
+                            <svg id="svg-sister-scaled" class="border border-slate-300 rounded bg-white" width="240" height="200" viewBox="0 0 240 200"></svg>
+                            <span class="text-[11px] text-emerald-600 font-bold mt-1">رَسَمَتْ ضِلْعًا يَشْغَلُ 4 خَانَاتٍ (الضِّعْف)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- الأسئلة البيداغوجية لمرحلة أنجز -->
+            <div class="space-y-6">
+                <!-- سؤال 1: ماذا فعل رائد؟ -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200" id="box-q-raid">
+                    <p class="font-bold text-slate-800 mb-3 text-sm md:text-base">
+                        1. مَاذَا فَعَلَ رَائِدٌ لِتَكْبِيرِ الشَّكْلِ؟
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="opts-q-raid">
+                        <button type="button" onclick="selectChoice('q_raid', 0)" class="choice-btn text-right p-3 rounded-lg border-2 border-slate-200 bg-white font-medium hover:border-emerald-400 transition">
+                            أ) رَسَمَ عَلَى نَفْسِ الْمَرْصُوفَةِ وَضَاعَفَ عَدَدَ الْخَانَاتِ.
+                        </button>
+                        <button type="button" onclick="selectChoice('q_raid', 1)" class="choice-btn text-right p-3 rounded-lg border-2 border-slate-200 bg-white font-medium hover:border-emerald-400 transition">
+                            ب) اسْتَعْمَلَ مَرْصُوفَةً مُكَبَّرَةً (حَجْمُ مُرَبَّعَاتِهَا مُضَاعَفٌ) وَرَسَمَ بِنَفْسِ عَدَدِ الْخَانَاتِ.
+                        </button>
+                    </div>
+                </div>
+
+                <!-- سؤال 2: ماذا فعلت أخته؟ -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200" id="box-q-sister">
+                    <p class="font-bold text-slate-800 mb-3 text-sm md:text-base">
+                        2. مَاذَا فَعَلَتْ أُخْتُهُ لِتَكْبِيرِ الشَّكْلِ؟
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="opts-q-sister">
+                        <button type="button" onclick="selectChoice('q_sister', 0)" class="choice-btn text-right p-3 rounded-lg border-2 border-slate-200 bg-white font-medium hover:border-emerald-400 transition">
+                            أ) فِي نَفْسِ الْمَرْصُوفَةِ، كَبَّرَتْ كُلَّ ضِلْعٍ بِمُضَاعَفَةِ عَدَدِ الْخَانَاتِ (الضِّعْفُ: 2 ← 4 خَانَاتٍ).
+                        </button>
+                        <button type="button" onclick="selectChoice('q_sister', 1)" class="choice-btn text-right p-3 rounded-lg border-2 border-slate-200 bg-white font-medium hover:border-emerald-400 transition">
+                            ب) اسْتَعْمَلَتْ مَرْصُوفَةً أَصْغَرَ بِنِصْفِ عَدَدِ الْمُرَبَّعَاتِ.
+                        </button>
+                    </div>
+                </div>
+
+                <!-- سؤال 3: التطبيق بالرسم بطريقة أخت رائد -->
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200" id="box-q-draw-sister">
+                    <p class="font-bold text-slate-800 mb-3 text-sm md:text-base">
+                        3. اُرْسُمْ عَلَى الْمَرْصُوفَةِ تَكْبِيرًا لِهَذَا الرُّبَاعِيِّ بِطَرِيقَةِ أُخْتِ رَائِد (مُضَاعَفَةُ أَضْلَاعِ الشَّكْلِ عَلَى مَرْصُوفَةٍ وَاسِعَةٍ):
+                    </p>
+                    <div class="flex flex-col items-center">
+                        <div class="flex items-center justify-between w-full max-w-md mb-2 px-2">
+                            <span class="text-xs font-bold text-slate-600">الأَضْلَاعُ تُضَاعَفُ: الْعَمُودِيُّ 4 خَانَاتٍ، وَالأُفُقِيُّ 4 خَانَاتٍ</span>
+                            <div class="flex gap-2">
+                                <button type="button" onclick="undoGrid('grid_quad')" class="px-2 py-1 text-xs bg-slate-100 hover:bg-slate-200 rounded font-bold">تَرَاجُعْ</button>
+                                <button type="button" onclick="clearGrid('grid_quad')" class="px-2 py-1 text-xs bg-rose-50 text-rose-600 rounded font-bold">مَسْحٌ</button>
+                            </div>
+                        </div>
+                        <svg id="svg-user-quad" class="snap-grid-canvas border border-slate-300 rounded-lg bg-white cursor-crosshair shadow-sm" width="300" height="270" viewBox="0 0 300 270"></svg>
+                    </div>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-200">
+                    <div id="feedback-onjez" class="text-sm font-bold min-h-[24px]"></div>
+                    <button type="button" id="btn-validate-onjez" onclick="validateOnjez()" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl shadow-md transition w-full md:w-auto">
+                        تَأْكِيدُ إِجَابَاتِ «أُنْجِزُ»
+                    </button>
+                </div>
+            </div>
+
+            <!-- ملخص أنجز -->
+            <div id="summary-onjez" class="mt-6 p-4 rounded-xl bg-slate-100 border border-slate-200 hidden flex items-center justify-between">
+                <span class="font-extrabold text-slate-700">نَتِيجَةُ مَحَطَّةِ (أُنْجِزُ):</span>
+                <div class="flex gap-4 font-bold text-sm">
+                    <span class="text-green-700">✓ الصَّوَابُ: <span id="onjez-correct">0</span></span>
+                    <span class="text-rose-700">✗ الْخَطَأُ: <span id="onjez-wrong">0</span></span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ======================= 3. بِطَاقَةُ تَعَلَّمْتُ ======================= -->
+        <section id="station-rule" class="bg-gradient-to-l from-amber-50 to-orange-50 border-2 border-amber-300 rounded-3xl p-6 md:p-8 shadow-sm locked-station transition-all">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-black text-xl shadow">
+                    💡
+                </div>
+                <h2 class="text-xl md:text-2xl font-black text-amber-900">
+                    تَعَلَّمْتُ (الْقَاعِدَةُ النَّمُوذَجِيَّةُ)
+                </h2>
+            </div>
+            
+            <div class="bg-white/80 backdrop-blur-sm p-5 md:p-6 rounded-2xl border border-amber-200 shadow-sm leading-relaxed text-slate-800 text-base md:text-lg font-bold">
+                « لِتَكْبِيرِ شَكْلٍ عَلَى مَرْصُوفَةٍ حَسَبَ نَمُوذَجٍ مُعْطًى، أَسْتَعْمِلُ مَرْصُوفَةً مُكَبَّرَةً بِالقَدْرِ المَطْلُوبِ (الضِّعْفُ، ثَلَاثَةُ أَضْعَافٍ، ...) وَأَرْسُمُ كُلَّ ضِلْعٍ مِنَ الشَّكْلِ بِعَدَدِ الخَانَاتِ الَّتِي يَحْتَلُّهَا. أَمَّا فِي نَفْسِ المَرْصُوفَةِ فَأُكَبِّرُ كُلَّ ضِلْعٍ بِالقَدْرِ المَطْلُوبِ. »
+            </div>
+
+            <div class="mt-5 text-left">
+                <button type="button" id="btn-understood-rule" onclick="proceedToAtamaran()" class="px-6 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-extrabold rounded-xl shadow transition">
+                    فَهِمْتُ الْقَاعِدَةَ، أَنْتَقِلُ إِلَى «أَتَمَرَّنُ» ⬅
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ======================= 4. مَحَطَّةُ أَتَمَرَّنُ ======================= -->
+        <section id="station-atamaran" class="bg-white rounded-3xl p-5 md:p-8 shadow-sm border border-slate-200 locked-station transition-all">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+                <div class="flex items-center gap-3">
+                    <span class="w-3.5 h-8 bg-indigo-500 rounded-full inline-block"></span>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-800">
+                        أَتَمَرَّنُ
+                    </h2>
+                </div>
+                <span class="text-xs md:text-sm font-semibold bg-indigo-50 text-indigo-700 px-3 py-1 rounded-lg">
+                    دَفْتَرُ الأَنْشِطَةِ ص 14
+                </span>
+            </div>
+
+            <!-- التمرين 1 -->
+            <div class="bg-slate-50 p-4 md:p-6 rounded-2xl border border-slate-200 mb-8" id="box-atamaran-1">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="font-black text-slate-800 text-base md:text-lg flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs">1</span>
+                        انْقُلِ النَّمُوذَجَ عَلَى الْمَرْصُوفَةِ انْطِلَاقًا مِنَ النُّقْطَةِ الْحَمْرَاءِ (لِتَكْبِيرِهِ بِطَرِيقَةِ أُخْتِ رَائِد):
+                    </h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                    <!-- المرصوفة الأساسية 5x5 -->
+                    <div class="flex flex-col items-center bg-white p-3 rounded-xl border border-slate-200">
+                        <span class="text-xs font-extrabold text-slate-500 mb-2">الْمَرْصُوفَةُ الأَسَاسِيَّةُ (الْحَجْمُ الأَصْلِيُّ 5 × 5 خَانَاتٍ)</span>
+                        <svg id="svg-atamaran1-model" class="border border-slate-300 rounded-lg bg-white" width="180" height="180" viewBox="0 0 180 180"></svg>
+                    </div>
+
+                    <!-- مرصوفة النقل والتكبير 10x10 مع النقطة الحمراء -->
+                    <div class="flex flex-col items-center bg-white p-3 rounded-xl border border-slate-200">
+                        <div class="flex items-center justify-between w-full mb-2 px-2">
+                            <span class="text-xs font-bold text-rose-600 flex items-center gap-1">
+                                <span class="w-2.5 h-2.5 rounded-full bg-rose-600 inline-block"></span> ابْدَأْ مِنَ النُّقْطَةِ الْحَمْرَاءِ (مَرْصُوفَةٌ 10 × 10)
+                            </span>
+                            <div class="flex gap-2">
+                                <button type="button" onclick="undoGrid('grid_at1')" class="px-2 py-0.5 text-xs bg-slate-100 rounded font-bold">تَرَاجُعْ</button>
+                                <button type="button" onclick="clearGrid('grid_at1')" class="px-2 py-0.5 text-xs bg-rose-50 text-rose-600 rounded font-bold">مَسْحٌ</button>
+                            </div>
+                        </div>
+                        <svg id="svg-atamaran1-user" class="snap-grid-canvas border border-slate-300 rounded-lg bg-white cursor-crosshair shadow-inner" width="280" height="280" viewBox="0 0 280 280"></svg>
+                    </div>
+                </div>
+
+                <!-- سؤال الإكمال المرافق للتمرين 1 -->
+                <div class="mt-4 p-3 bg-white rounded-xl border border-slate-200">
+                    <p class="font-bold text-slate-800 text-sm md:text-base mb-2">
+                        أَكْمِلْ بِمَا يُنَاسِبُ: (تَكْبِيرٌ ، تَصْغِيرٌ)
+                    </p>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span class="font-semibold text-slate-700">« الشَّكْلُ النَّاتِجُ هُوَ</span>
+                        <div class="flex gap-2" id="opts-at1-type">
+                            <button type="button" onclick="selectChoice('at1_type', 'takbir')" class="choice-btn px-4 py-1.5 rounded-lg border-2 border-slate-200 bg-slate-50 font-extrabold hover:border-indigo-400">تَكْبِيرٌ</button>
+                            <button type="button" onclick="selectChoice('at1_type', 'tasghir')" class="choice-btn px-4 py-1.5 rounded-lg border-2 border-slate-200 bg-slate-50 font-extrabold hover:border-indigo-400">تَصْغِيرٌ</button>
+                        </div>
+                        <span class="font-semibold text-slate-700">لِلْنَمُوذَجِ »</span>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex flex-col md:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-200">
+                    <div id="feedback-at1" class="text-sm font-bold min-h-[24px]"></div>
+                    <button type="button" id="btn-validate-at1" onclick="validateAtamaran1()" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow transition w-full md:w-auto">
+                        تَحَقَّقْ مِنَ التَّمْرِينِ (1)
+                    </button>
+                </div>
+            </div>
+
+            <!-- التمرين 2 -->
+            <div class="bg-slate-50 p-4 md:p-6 rounded-2xl border border-slate-200 locked-station" id="box-atamaran-2">
+                <h3 class="font-black text-slate-800 text-base md:text-lg mb-3 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-indigo-600 text-white flex items-center justify-center text-xs">2</span>
+                    يَقُولُ رَائِدُ: أَنَّ مَا رَسَمَهُ هُوَ بِدَايَةُ تَكْبِيرٍ لِلنَّمُوذَجِ حَيْثُ كُلُّ ضِلْعٍ هُوَ ضِعْفُ مَثِيلِهِ فِي النَّمُوذَجِ.
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center mb-4">
+                    <!-- نموذج المضلع العظمي الأصفر الأصلي 4x6 -->
+                    <div class="flex flex-col items-center bg-white p-3 rounded-xl border border-slate-200">
+                        <span class="text-xs font-bold text-slate-500 mb-1">الْمَرْصُوفَةُ الأَسَاسِيَّةُ (الشَّكْلُ الأَصْلِيُّ - الضِّلْعُ 4 خَانَاتٍ)</span>
+                        <svg id="svg-at2-model" class="border border-slate-300 rounded bg-white" width="160" height="220" viewBox="0 0 160 220"></svg>
+                    </div>
+
+                    <!-- بداية رسم رائد مع مرصوفة النقل المضاعفة 10x12 -->
+                    <div class="flex flex-col items-center bg-white p-3 rounded-xl border border-slate-200">
+                        <span class="text-xs font-bold text-slate-500 mb-1">مَرْصُوفَةُ النَّقْلِ الْمُضَاعَفَةُ (بِدَايَةُ رَسْمِ رَائِدٍ: ضِلْعٌ 8 خَانَاتٍ)</span>
+                        <svg id="svg-at2-raid" class="border border-slate-300 rounded bg-white" width="220" height="260" viewBox="0 0 220 260"></svg>
+                    </div>
+                </div>
+
+                <!-- أسئلة التحقق -->
+                <div class="space-y-4">
+                    <div class="p-3 bg-white rounded-xl border border-slate-200">
+                        <p class="font-bold text-slate-800 text-sm mb-2">هَلْ قَوْلُ رَائِدٍ صَحِيحٌ؟</p>
+                        <div class="flex gap-4" id="opts-at2-bool">
+                            <button type="button" onclick="selectChoice('at2_bool', 'yes')" class="choice-btn px-6 py-1.5 rounded-lg border-2 border-slate-200 bg-slate-50 font-bold hover:border-indigo-400">نَعَمْ</button>
+                            <button type="button" onclick="selectChoice('at2_bool', 'no')" class="choice-btn px-6 py-1.5 rounded-lg border-2 border-slate-200 bg-slate-50 font-bold hover:border-indigo-400">لَا</button>
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-white rounded-xl border border-slate-200">
+                        <p class="font-bold text-slate-800 text-sm mb-2">كَيْفَ تُبَرِّرُ إِجَابَتَكَ؟</p>
+                        <div class="space-y-2" id="opts-at2-justify">
+                            <button type="button" onclick="selectChoice('at2_just', 0)" class="choice-btn text-right w-full p-2.5 rounded-lg border-2 border-slate-200 bg-slate-50 text-sm font-medium hover:border-indigo-400">
+                                رَسَمَ ضِلْعًا طُولُهُ 8 خَانَاتٍ وَهُوَ ضِعْفُ الضِّلْعِ الأَصْلِيِّ (4 × 2 = 8).
+                            </button>
+                            <button type="button" onclick="selectChoice('at2_just', 1)" class="choice-btn text-right w-full p-2.5 rounded-lg border-2 border-slate-200 bg-slate-50 text-sm font-medium hover:border-indigo-400">
+                                الضِّلْعُ الَّذِي رَسَمَهُ رَائِدٌ مُمَاثِلٌ فِي عَدَدِ الْخَانَاتِ لِلنَّمُوذَجِ.
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- إكمال الرسم على المرصوفة -->
+                    <div class="p-3 bg-white rounded-xl border border-slate-200">
+                        <div class="flex items-center justify-between mb-2 px-1">
+                            <p class="font-bold text-slate-800 text-sm">أَكْمِلْ تَكْبِيرَ النَّمُوذَجِ عَلَى الْمَرْصُوفَةِ الْمُضَاعَفَةِ:</p>
+                            <div class="flex gap-2">
+                                <button type="button" onclick="undoGrid('grid_at2')" class="px-2 py-0.5 text-xs bg-slate-100 rounded font-bold">تَرَاجُعْ</button>
+                                <button type="button" onclick="clearGrid('grid_at2')" class="px-2 py-0.5 text-xs bg-rose-50 text-rose-600 rounded font-bold">مَسْحٌ</button>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <svg id="svg-at2-user" class="snap-grid-canvas border border-slate-300 rounded bg-white cursor-crosshair shadow-sm" width="280" height="280" viewBox="0 0 280 280"></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 flex flex-col md:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-200">
+                    <div id="feedback-at2" class="text-sm font-bold min-h-[24px]"></div>
+                    <button type="button" id="btn-validate-at2" onclick="validateAtamaran2()" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow transition w-full md:w-auto">
+                        تَحَقَّقْ مِنَ التَّمْرِينِ (2)
+                    </button>
+                </div>
+            </div>
+
+            <!-- ملخص أتمرن -->
+            <div id="summary-atamaran" class="mt-6 p-4 rounded-xl bg-slate-100 border border-slate-200 hidden flex items-center justify-between">
+                <span class="font-extrabold text-slate-700">نَتِيجَةُ مَحَطَّةِ (أَتَمَرَّنُ):</span>
+                <div class="flex gap-4 font-bold text-sm">
+                    <span class="text-green-700">✓ الصَّوَابُ: <span id="atamaran-correct">0</span></span>
+                    <span class="text-rose-700">✗ الْخَطَأُ: <span id="atamaran-wrong">0</span></span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ======================= 5. مَحَطَّةُ أَبْحَثُ ======================= -->
+        <section id="station-search" class="bg-white rounded-3xl p-5 md:p-8 shadow-sm border border-slate-200 locked-station transition-all">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-6">
+                <div class="flex items-center gap-3">
+                    <span class="w-3.5 h-8 bg-purple-500 rounded-full inline-block"></span>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-slate-800">
+                        أَبْحَثُ
+                    </h2>
+                </div>
+                <span class="text-xs md:text-sm font-semibold bg-purple-50 text-purple-700 px-3 py-1 rounded-lg">
+                    تَصْغِيرُ الشَّكْلِ إِلَى النِّصْفِ
+                </span>
+            </div>
+
+            <div class="bg-purple-50 border-r-4 border-purple-500 p-4 rounded-xl mb-6">
+                <p class="font-bold text-slate-800 text-base md:text-lg">
+                    التَّعْلِيمَةُ: اُرْسُمْ فِي الْجُزْءِ الْمُلَوَّنِ (الْمَرْصُوفَةُ الْمُصَغَّرَةُ) تَصْغِيرًا لِلشَّكْلِ الْمُعْطَى حَيْثُ كُلُّ ضِلْعٍ هُوَ نِصْفُ مَثِيلِهِ فِي النَّمُوذَجِ (مِنْ 10 × 10 إِلَى 5 × 5 خَانَاتٍ).
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <!-- النموذج المكتمل في المرصوفة الأساسية 10x10 -->
+                <div class="flex flex-col items-center bg-white p-4 rounded-xl border border-slate-200">
+                    <span class="font-extrabold text-xs text-slate-500 mb-2">الْمَرْصُوفَةُ الأَسَاسِيَّةُ (الشَّكْلُ الأَصْلِيُّ 10 × 10 خَانَاتٍ)</span>
+                    <svg id="svg-search-model" class="border border-slate-300 rounded bg-white" width="280" height="280" viewBox="0 0 280 280"></svg>
+                </div>
+
+                <!-- مرصوفة الجزء الملون للتصغير 5x5 -->
+                <div class="flex flex-col items-center bg-white p-4 rounded-xl border border-slate-200">
+                    <div class="flex items-center justify-between w-full mb-2 px-2">
+                        <span class="font-extrabold text-xs text-emerald-800">ارْسُمْ التَّصْغِيرَ فِي الْمَرْصُوفَةِ الْمُصَغَّرَةِ (5 × 5 خَانَاتٍ)</span>
+                        <div class="flex gap-2">
+                            <button type="button" onclick="undoGrid('grid_search')" class="px-2 py-0.5 text-xs bg-slate-100 rounded font-bold">تَرَاجُعْ</button>
+                            <button type="button" onclick="clearGrid('grid_search')" class="px-2 py-0.5 text-xs bg-rose-50 text-rose-600 rounded font-bold">مَسْحٌ</button>
+                        </div>
+                    </div>
+                    <svg id="svg-search-user" class="snap-grid-canvas border border-emerald-300 rounded bg-white cursor-crosshair shadow-inner" width="220" height="220" viewBox="0 0 220 220"></svg>
+                </div>
+            </div>
+
+            <div class="mt-4 flex flex-col md:flex-row items-center justify-between gap-3 pt-3 border-t border-slate-200">
+                <div id="feedback-search" class="text-sm font-bold min-h-[24px]"></div>
+                <button type="button" id="btn-validate-search" onclick="validateSearch()" class="px-6 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-xl shadow transition w-full md:w-auto">
+                    تَحَقَّقْ مِنْ «أَبْحَثُ» وَإِنْهَاءُ الدَّرْسِ
+                </button>
+            </div>
+
+            <!-- ملخص أبحث -->
+            <div id="summary-search" class="mt-6 p-4 rounded-xl bg-slate-100 border border-slate-200 hidden flex items-center justify-between">
+                <span class="font-extrabold text-slate-700">نَتِيجَةُ مَحَطَّةِ (أَبْحَثُ):</span>
+                <div class="flex gap-4 font-bold text-sm">
+                    <span class="text-green-700">✓ الصَّوَابُ: <span id="search-correct">0</span></span>
+                    <span class="text-rose-700">✗ الْخَطَأُ: <span id="search-wrong">0</span></span>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ======================= 6. الشَّاشَةُ الْخِتَامِيَّةُ (التَّقْيِيمُ الْعَامُّ) ======================= -->
+        <section id="station-final-assessment" class="bg-white rounded-3xl p-6 md:p-10 shadow-lg border-2 border-slate-300 hidden transition-all">
+            <div class="text-center max-w-xl mx-auto space-y-6">
+                <h2 class="text-2xl md:text-3xl font-black text-slate-800">
+                    حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ
+                </h2>
+                
+                <!-- الرسم الدائري لنسبة النجاح -->
+                <div class="flex justify-center items-center relative my-4">
+                    <svg class="w-44 h-44 -rotate-90">
+                        <circle cx="88" cy="88" r="76" stroke="#f1f5f9" stroke-width="14" fill="transparent" />
+                        <circle id="final-circle-progress" cx="88" cy="88" r="76" stroke="#4f46e5" stroke-width="14" stroke-linecap="round" fill="transparent" stroke-dasharray="477" stroke-dashoffset="477" class="transition-all duration-1000" />
+                    </svg>
+                    <div class="absolute flex flex-col items-center">
+                        <span id="final-percentage-text" class="text-3xl font-black text-slate-800 ltr">0%</span>
+                        <span class="text-xs font-bold text-slate-400">مُعَدَّلُ النَّجَاحِ</span>
+                    </div>
+                </div>
+
+                <!-- تفصيل الصواب والخطأ -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-2xl">
+                        <span class="block text-emerald-800 text-xs font-bold mb-1">إِجْمَالِيُّ الإِجَابَاتِ الصَّحِيحَةِ</span>
+                        <span id="final-correct-count" class="text-2xl font-black text-emerald-600">0</span>
+                    </div>
+                    <div class="bg-rose-50 border border-rose-200 p-4 rounded-2xl">
+                        <span class="block text-rose-800 text-xs font-bold mb-1">إِجْمَالِيُّ الأَخْطَاءِ</span>
+                        <span id="final-wrong-count" class="text-2xl font-black text-rose-600">0</span>
+                    </div>
+                </div>
+
+                <!-- الملاحظة البيداغوجية -->
+                <div id="final-pedagogical-note" class="p-4 rounded-2xl text-base font-extrabold"></div>
+
+                <!-- أزرار التحكم بالتقييم -->
+                <div class="flex flex-col sm:flex-row gap-3 justify-center pt-4">
+                    <button type="button" onclick="restartLesson()" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl shadow-md transition">
+                        🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ
+                    </button>
+                    <button type="button" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold rounded-xl transition">
+                        ⬆ مُرَاجَعَةُ إِجَابَاتِ التَّمَارِينِ
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ========================================
+         زر العودة إلى الفهرس (أُضيف)
+         ======================================== -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+    <!-- تذييل الصفحة -->
+    <footer class="mt-12 text-center text-xs text-slate-400 font-medium pb-8">
+        تَطْبِيقٌ تَعْلِيمِيٌّ رَقْمِيٌّ تَفَاعُلِيٌّ لِمَادَّةِ الرِّيَاضِيَّاتِ • وِفْقَ الْمِنْهَاجِ الدِّرَاسِيِّ الْجَزَائِرِيِّ
+    </footer>
+
+    <!-- ========================================
+         سكريبت الحماية (أُضيف)
+         ======================================== -->
+    <script>
+        // إعدادات القناة - السنة الثالثة
+        const CHANNEL_ID = "-1003910412986";
+
+        // تهيئة Telegram WebApp
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        async function verifySubscription() {
+            const statusMsg = document.getElementById('sub-status-msg');
+            statusMsg.style.color = "#0288d1";
+            statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+            let userId = null;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                userId = tg.initDataUnsafe.user.id;
+            }
+
+            if (!userId) {
+                statusMsg.style.color = "#e65100";
+                statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+                return;
+            }
+
+            try {
+                const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.isSubscribed) {
+                    statusMsg.style.color = "#2e7d32";
+                    statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                    setTimeout(() => {
+                        document.getElementById('sub-lock-screen').style.display = 'none';
+                    }, 600);
+                } else {
+                    statusMsg.style.color = "#c62828";
+                    statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+                }
+            } catch (error) {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+            }
+        }
+
+        window.addEventListener('load', () => {
+            verifySubscription();
+        });
+    </script>
+
+    <!-- ========================================
+         سكريبت الدرس الأصلي (كما هو دون تغيير)
+         ======================================== -->
+    <script>
+        /* ================= 1. نظام الصوتيات الأصيل (Web Audio API) ================= */
+        const AudioSys = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContext();
+                }
+            },
+            playSuccess() {
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.1); // E5
+                osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.2); // G5
+                osc.frequency.exponentialRampToValueAtTime(1046.50, now + 0.35); // C6
+
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+
+                osc.start(now);
+                osc.stop(now + 0.5);
+            },
+            playError() {
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.linearRampToValueAtTime(140, now + 0.25);
+
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+
+                osc.start(now);
+                osc.stop(now + 0.3);
+            },
+            playClick() {
+                this.init();
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, now);
+                gain.gain.setValueAtTime(0.05, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+                osc.start(now);
+                osc.stop(now + 0.05);
+            }
+        };
+
+        /* ================= 2. بيانات ورسوم النماذج المطابقة للمنهاج ================= */
+        // الشكل 1 (أكتشف): [صورة 1.jpg] - مضلع حاد الزوايا على شبكة مربعات 8x8
+        // ضبط جميع الرؤوس ونقاط الانكسار لتكون أعداداً صحيحة 100% تطابق تقاطعات المرصوفة بالضبط:
+        const MODEL_SHAPE_1 = [
+            {c: 1, r: 1}, // الرأس الأيسر العلوي
+            {c: 1, r: 3}, // نزول عمودي
+            {c: 2, r: 4}, // انكسار مائل
+            {c: 1, r: 5}, // سن مدبب أيسر
+            {c: 2, r: 5}, // أفقي
+            {c: 4, r: 7}, // الرأس السفلي الأوسط
+            {c: 4, r: 5}, // صعود عمودي
+            {c: 7, r: 6}, // انحدار مائل للرأس السفلي الأيمن
+            {c: 7, r: 1}, // صعود عمودي للرأس الأيمن العلوي
+            {c: 5, r: 3}, // انحدار للزاوية الداخلية اليمنى
+            {c: 3, r: 1}, // صعود للقمة الوسطى
+            {c: 4, r: 4}, // زاوية الانكسار الداخلية الحادة (نقطة صحيحة تماماً على التقاطع)
+            {c: 1, r: 1}  // عودة لنقطة البداية
+        ];
+
+        // الشكل 2 (أكتشف): [صورة 2.png] - مضلع سداسي مجوف
+        const MODEL_SHAPE_2 = [
+            {c: 1, r: 1}, {c: 5, r: 1}, {c: 6, r: 3}, {c: 6, r: 6}, 
+            {c: 2, r: 6}, {c: 4, r: 3}, {c: 1, r: 3}, {c: 1, r: 1}
+        ];
+
+        // شبه المنحرف الأصلي في أنجز (يشغل ضلعين عموديين 2 خانة، وضلعين أفقيين)
+        const QUAD_ORIGINAL = [
+            {c: 1, r: 1}, {c: 3, r: 1}, {c: 2.5, r: 3.5}, {c: 1, r: 3}, {c: 1, r: 1}
+        ];
+
+        // تكبير الرباعي كاملاً بطريقة أخت رائد (الضلع العمودي 4 خانات، الأفقي 4 خانات)
+        const QUAD_DOUBLED_SISTER = [
+            {c: 1, r: 1}, {c: 5, r: 1}, {c: 4, r: 6}, {c: 1, r: 5}, {c: 1, r: 1}
+        ];
+
+        // تمرين 1 أتمرن (النموذج الأخضر صورة 5.jpg):
+        // في المرصوفة الأساسية 5x5: أبعاده (عمود 2 خانة، أفق 2 خانة...)
+        const AT1_BASE = [
+            {c: 1, r: 1}, {c: 3, r: 1}, {c: 2.5, r: 2}, {c: 3.5, r: 2},
+            {c: 3.5, r: 3.5}, {c: 2.5, r: 3.5}, {c: 3, r: 3}, {c: 2, r: 2}, {c: 1, r: 1}
+        ];
+        // تكبير تمرين 1 إلى الضعف في مرصوفة النقل 10x10 انطلاقاً من النقطة الحمراء (c:2, r:2)
+        const AT1_DOUBLED_TARGET = [
+            {c: 2, r: 2}, {c: 6, r: 2}, {c: 5, r: 4}, {c: 7, r: 4},
+            {c: 7, r: 7}, {c: 5, r: 7}, {c: 6, r: 6}, {c: 4, r: 4}, {c: 2, r: 2}
+        ];
+
+        // تمرين 2 أتمرن (النموذج العظمي الأصفر صورة 6.jpg):
+        // في المرصوفة الأساسية 4x6: الضلع العمودي الأيسر طوله 4 خانات
+        const AT2_BASE_OUTER = [
+            {c: 0.5, r: 1}, {c: 1.5, r: 2}, {c: 2.5, r: 1}, {c: 2.5, r: 5},
+            {c: 1.5, r: 4}, {c: 0.5, r: 5}, {c: 0.5, r: 1}
+        ];
+        const AT2_BASE_HOLE = [
+            {c: 1, r: 2.5}, {c: 2, r: 2.5}, {c: 2, r: 3.5}, {c: 1, r: 3.5}, {c: 1, r: 2.5}
+        ];
+        // تكبير تمرين 2 إلى الضعف في المرصوفة المضاعفة 10x10: الضلع العمودي يصبح 8 خانات
+        const AT2_DOUBLED_OUTER = [
+            {c: 1, r: 1}, {c: 3, r: 3}, {c: 5, r: 1}, {c: 5, r: 9},
+            {c: 3, r: 7}, {c: 1, r: 9}, {c: 1, r: 1}
+        ];
+
+        // محطة أبحث (رأس القطة صورة 7.jpg):
+        // تكييف هندسي بيداغوجي: جميع الإحداثيات في المرصوفة الأصلية 10×10 أعداد زوجية فقط (0, 2, 4, 6, 8, 10)
+        const SEARCH_CAT_10X10 = [
+            {c: 1, r: 1},  // أذن يسرى عليا
+            {c: 3, r: 3},  // أسفل الأذن اليسرى
+            {c: 1, r: 5},  // خد أيسر
+            {c: 4, r: 9},  // أسفل الذقن يسار
+            {c: 6, r: 9},  // أسفل الذقن يمين
+            {c: 9, r: 5},  // خد أيمن
+            {c: 7, r: 3},  // أسفل الأذن اليمنى
+            {c: 9, r: 1},  // أذن يمنى عليا
+            {c: 7, r: 2},  // أعلى الرأس يمين
+            {c: 3, r: 2},  // أعلى الرأس يسار
+            {c: 1, r: 1}   // إغلاق المحيط
+        ];
+
+        // محيط رأس القطة المعتمد على أعداد زوجية فقط لضمان دقة التنصيف 100%:
+        const SEARCH_CAT_EVEN_10X10 = [
+            {c: 2, r: 0},  // قمة الأذن اليسرى
+            {c: 3, r: 3},  // سن أيسر
+            {c: 0, r: 6},  // أقصى الخد الأيسر
+            {c: 4, r: 10}, // أسفل الذقن يساراً
+            {c: 6, r: 10}, // أسفل الذقن يميناً
+            {c: 10, r: 6}, // أقصى الخد الأيمن
+            {c: 7, r: 3},  // سن أيمن
+            {c: 8, r: 0},  // قمة الأذن اليمنى
+            {c: 6, r: 2},  // أعلى الرأس يمين
+            {c: 4, r: 2},  // أعلى الرأس يسار
+            {c: 2, r: 0}   // إغلاق الرأس
+        ];
+
+        // تفاصيل رأس القطة في المرصوفة 10×10 بأعداد زوجية حصرية:
+        const SEARCH_EYE_R_10 = [{c: 2, r: 4}, {c: 4, r: 4}, {c: 4, r: 6}, {c: 2, r: 6}, {c: 2, r: 4}];
+        const SEARCH_EYE_L_10 = [{c: 6, r: 4}, {c: 8, r: 4}, {c: 8, r: 6}, {c: 6, r: 6}, {c: 6, r: 4}];
+        const SEARCH_NOSE_10  = [{c: 4, r: 6}, {c: 6, r: 6}, {c: 6, r: 8}, {c: 4, r: 8}, {c: 4, r: 6}];
+
+        // تصغير القطة للنصف بدقة 100% في المرصوفة المصغرة 5x5:
+        // كل إحداثي هو تماماً (الإحداثي الزوجي ÷ 2) لينتج عدداً صحيحاً ينطبق تماماً على تقاطعات الأركان:
+        const SEARCH_CAT_5X5 = [
+            {c: 1, r: 0},  // 2/2, 0/2
+            {c: 2, r: 2},  // عقدة تقاطع
+            {c: 0, r: 3},  // 0/2, 6/2
+            {c: 2, r: 5},  // 4/2, 10/2
+            {c: 3, r: 5},  // 6/2, 10/2
+            {c: 5, r: 3},  // 10/2, 6/2
+            {c: 3, r: 2},  // عقدة تقاطع
+            {c: 4, r: 0},  // 8/2, 0/2
+            {c: 3, r: 1},  // 6/2, 2/2
+            {c: 2, r: 1},  // 4/2, 2/2
+            {c: 1, r: 0}   // إغلاق الشكل بدقة على التقاطعات
+        ];
+
+        // حالة التطبيق المعدلة
+        const AppState = {
+            scores: {
+                discover1: null,
+                discover2: null,
+                onjez_q1: null,
+                onjez_q2: null,
+                onjez_draw: null,
+                at1_draw: null,
+                at1_choice: null,
+                at2_bool: null,
+                at2_just: null,
+                at2_draw: null,
+                search: null
+            },
+            choices: {
+                q_raid: null,
+                q_sister: null,
+                at1_type: null,
+                at2_bool: null,
+                at2_just: null
+            },
+            grids: {
+                grid1: { cols: 8, rows: 8, cellSize: 32, points: [], target: MODEL_SHAPE_1, done: false },
+                grid2: { cols: 7, rows: 7, cellSize: 35, points: [], target: MODEL_SHAPE_2, done: false },
+                grid_quad: { cols: 6, rows: 7, cellSize: 38, points: [], target: QUAD_DOUBLED_SISTER, done: false },
+                grid_at1: { 
+                    cols: 10, rows: 10, cellSize: 28, 
+                    points: [{c: 2, r: 2}], 
+                    startPoint: {c: 2, r: 2}, 
+                    target: AT1_DOUBLED_TARGET, 
+                    done: false 
+                },
+                grid_at2: { 
+                    cols: 8, rows: 10, cellSize: 28, 
+                    points: [{c: 1, r: 1}, {c: 1, r: 9}], 
+                    target: AT2_DOUBLED_OUTER, 
+                    done: false 
+                },
+                grid_search: { 
+                    cols: 5, rows: 5, cellSize: 42, 
+                    points: [], 
+                    target: SEARCH_CAT_5X5, 
+                    done: false 
+                }
+            }
+        };
+
+        /* ================= 3. رسم المرصوفات وSVG ================= */
+        function createGridSVG(svgEl, cols, rows, cellSize, highlightRect = null) {
+            svgEl.innerHTML = '';
+            const width = cols * cellSize;
+            const height = rows * cellSize;
+            svgEl.setAttribute('viewBox', `0 0 ${width} ${height}`);
+            svgEl.setAttribute('width', width);
+            svgEl.setAttribute('height', height);
+
+            // تظليل جزء مخصص (مثل تمرين أبحث)
+            if (highlightRect) {
+                const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                rect.setAttribute("x", highlightRect.x * cellSize);
+                rect.setAttribute("y", highlightRect.y * cellSize);
+                rect.setAttribute("width", highlightRect.w * cellSize);
+                rect.setAttribute("height", highlightRect.h * cellSize);
+                rect.setAttribute("fill", highlightRect.color || "#f3e8ff");
+                svgEl.appendChild(rect);
+            }
+
+            // خطوط الشبكة
+            const gridGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            gridGroup.setAttribute("stroke", "#e2e8f0");
+            gridGroup.setAttribute("stroke-width", "1");
+
+            for (let c = 0; c <= cols; c++) {
+                const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                line.setAttribute("x1", c * cellSize);
+                line.setAttribute("y1", 0);
+                line.setAttribute("x2", c * cellSize);
+                line.setAttribute("y2", height);
+                gridGroup.appendChild(line);
+            }
+            for (let r = 0; r <= rows; r++) {
+                const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                line.setAttribute("x1", 0);
+                line.setAttribute("y1", r * cellSize);
+                line.setAttribute("x2", width);
+                line.setAttribute("y2", r * cellSize);
+                gridGroup.appendChild(line);
+            }
+            svgEl.appendChild(gridGroup);
+
+            // عقد التقاطع المغناطيسية (Snap Points)
+            const snapGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            snapGroup.setAttribute("class", "snap-nodes");
+            for (let c = 0; c <= cols; c++) {
+                for (let r = 0; r <= rows; r++) {
+                    const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    dot.setAttribute("cx", c * cellSize);
+                    dot.setAttribute("cy", r * cellSize);
+                    dot.setAttribute("r", "2.5");
+                    dot.setAttribute("fill", "#cbd5e1");
+                    snapGroup.appendChild(dot);
+                }
+            }
+            svgEl.appendChild(snapGroup);
+
+            // طبقات الرسم للخطوط والنقاط
+            const drawGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            drawGroup.setAttribute("id", svgEl.id + "-drawings");
+            svgEl.appendChild(drawGroup);
+        }
+
+        // رسم نموذج هندسي معطى
+        function drawModelPolygon(svgEl, points, cellSize, strokeColor = "#1e293b", fillColor = "none", isClosed = true) {
+            const group = svgEl.querySelector(`#${svgEl.id}-drawings`) || svgEl;
+            if (points.length < 2) return;
+
+            let pathData = `M ${points[0].c * cellSize} ${points[0].r * cellSize}`;
+            for (let i = 1; i < points.length; i++) {
+                pathData += ` L ${points[i].c * cellSize} ${points[i].r * cellSize}`;
+            }
+            if (isClosed) pathData += " Z";
+
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", pathData);
+            path.setAttribute("fill", fillColor);
+            path.setAttribute("stroke", strokeColor);
+            path.setAttribute("stroke-width", "3.5");
+            path.setAttribute("stroke-linejoin", "round");
+            path.setAttribute("stroke-linecap", "round");
+            group.appendChild(path);
+
+            // رسم الرؤوس
+            points.forEach(pt => {
+                const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                c.setAttribute("cx", pt.c * cellSize);
+                c.setAttribute("cy", pt.r * cellSize);
+                c.setAttribute("r", "4");
+                c.setAttribute("fill", strokeColor);
+                group.appendChild(c);
+            });
+        }
+
+        // رسم خطوط المستخدم الحالية
+        function renderUserLines(gridKey) {
+            const grid = AppState.grids[gridKey];
+            const svgEl = document.getElementById(gridKey === 'grid1' ? 'svg-user-1' :
+                                                 gridKey === 'grid2' ? 'svg-user-2' :
+                                                 gridKey === 'grid_quad' ? 'svg-user-quad' :
+                                                 gridKey === 'grid_at1' ? 'svg-atamaran1-user' :
+                                                 gridKey === 'grid_at2' ? 'svg-at2-user' : 'svg-search-user');
+            
+            const group = svgEl.querySelector(`#${svgEl.id}-drawings`);
+            group.innerHTML = '';
+
+            const pts = grid.points;
+            if (pts.length > 0) {
+                // خط المسار
+                if (pts.length > 1) {
+                    let d = `M ${pts[0].c * grid.cellSize} ${pts[0].r * grid.cellSize}`;
+                    for (let i = 1; i < pts.length; i++) {
+                        d += ` L ${pts[i].c * grid.cellSize} ${pts[i].r * grid.cellSize}`;
+                    }
+                    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                    path.setAttribute("d", d);
+                    path.setAttribute("fill", "rgba(79, 70, 229, 0.05)");
+                    path.setAttribute("stroke", "#4f46e5");
+                    path.setAttribute("stroke-width", "3");
+                    path.setAttribute("stroke-linejoin", "round");
+                    path.setAttribute("stroke-linecap", "round");
+                    group.appendChild(path);
+                }
+
+                // النقاط
+                pts.forEach((pt, index) => {
+                    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                    circle.setAttribute("cx", pt.c * grid.cellSize);
+                    circle.setAttribute("cy", pt.r * grid.cellSize);
+                    circle.setAttribute("r", index === 0 && grid.startPoint ? "6" : "4.5");
+                    circle.setAttribute("fill", index === 0 && grid.startPoint ? "#e11d48" : "#4f46e5");
+                    circle.setAttribute("stroke", "#ffffff");
+                    circle.setAttribute("stroke-width", "1.5");
+                    group.appendChild(circle);
+                });
+            }
+        }
+
+        // إرفاق التفاعل المغناطيسي (Magnetic Snap to Grid)
+        function attachGridInteraction(gridKey, svgId) {
+            const svgEl = document.getElementById(svgId);
+            const grid = AppState.grids[gridKey];
+
+            function handlePointer(event) {
+                if (grid.done) return;
+                const rect = svgEl.getBoundingClientRect();
+                const clientX = event.clientX || (event.touches && event.touches[0].clientX);
+                const clientY = event.clientY || (event.touches && event.touches[0].clientY);
+                if (!clientX || !clientY) return;
+
+                const scaleX = svgEl.viewBox.baseVal.width / rect.width;
+                const scaleY = svgEl.viewBox.baseVal.height / rect.height;
+
+                const x = (clientX - rect.left) * scaleX;
+                const y = (clientY - rect.top) * scaleY;
+
+                // المغناطيس لأقرب تقاطع ركن في المرصوفة
+                const c = Math.round(x / grid.cellSize);
+                const r = Math.round(y / grid.cellSize);
+
+                // التأكد من عدم تكرار نفس النقطة مباشرة
+                const last = grid.points[grid.points.length - 1];
+                if (last && last.c === c && last.r === r) return;
+
+                grid.points.push({c, r});
+                AudioSys.playClick();
+                renderUserLines(gridKey);
+            }
+
+            svgEl.addEventListener("pointerdown", handlePointer);
+        }
+
+        function undoGrid(gridKey) {
+            const grid = AppState.grids[gridKey];
+            if (grid.done) return;
+            const minPoints = grid.startPoint ? 1 : 0;
+            if (grid.points.length > minPoints) {
+                grid.points.pop();
+                AudioSys.playClick();
+                renderUserLines(gridKey);
+            }
+        }
+
+        function clearGrid(gridKey) {
+            const grid = AppState.grids[gridKey];
+            if (grid.done) return;
+            grid.points = grid.startPoint ? [{...grid.startPoint}] : [];
+            AudioSys.playClick();
+            renderUserLines(gridKey);
+        }
+
+        // مقارنة تطابق شكل التلميذ مع الشكل الافتراضي المعطى
+        function compareShapes(userPoints, targetPoints) {
+            if (!userPoints || userPoints.length < 3) return false;
+            // فحص إغلاق الشكل أو تطابق عدد الأضلاع الرئيسي
+            const matchCount = userPoints.filter(up => 
+                targetPoints.some(tp => tp.c === up.c && tp.r === up.r)
+            ).length;
+            const ratio = matchCount / Math.max(targetPoints.length, userPoints.length);
+            return ratio >= 0.70; // نسبة تطابق مقبولة بيداغوجياً للأطفال في الطور الابتدائي
+        }
+
+        // إظهار الحل الافتراضي الشفاف للمقارنة
+        function showVirtualTarget(svgEl, points, cellSize, isCorrect) {
+            const group = svgEl.querySelector(`#${svgEl.id}-drawings`) || svgEl;
+            let d = `M ${points[0].c * cellSize} ${points[0].r * cellSize}`;
+            for (let i = 1; i < points.length; i++) {
+                d += ` L ${points[i].c * cellSize} ${points[i].r * cellSize}`;
+            }
+            d += " Z";
+
+            const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+            path.setAttribute("d", d);
+            path.setAttribute("fill", isCorrect ? "rgba(46, 125, 50, 0.15)" : "rgba(198, 40, 40, 0.1)");
+            path.setAttribute("stroke", isCorrect ? "#2e7d32" : "#c62828");
+            path.setAttribute("stroke-width", "3");
+            path.setAttribute("stroke-dasharray", isCorrect ? "none" : "5,5");
+            group.appendChild(path);
+        }
+
+        /* ================= 4. منطق محطات الدرس والتحقق ================= */
+
+        // المحطة 1: أكتشف
+        function validateDiscover1() {
+            const grid = AppState.grids.grid1;
+            const svgEl = document.getElementById("svg-user-1");
+            const btn = document.getElementById("btn-validate-grid1");
+            const feedback = document.getElementById("feedback-grid1");
+
+            grid.done = true;
+            btn.disabled = true;
+            btn.classList.add("opacity-50", "cursor-not-allowed");
+
+            const isCorrect = compareShapes(grid.points, grid.target);
+            AppState.scores.discover1 = isCorrect;
+
+            showVirtualTarget(svgEl, grid.target, grid.cellSize, isCorrect);
+
+            if (isCorrect) {
+                AudioSys.playSuccess();
+                feedback.className = "text-sm font-bold text-green-700";
+                feedback.innerHTML = "✓ إِجَابَةٌ رَائِعَةٌ! نَقَلْتَ الشَّكْلَ (1) بِتَطَابُقٍ صَحِيحٍ.";
+            } else {
+                AudioSys.playError();
+                feedback.className = "text-sm font-bold text-rose-700";
+                feedback.innerHTML = "✗ هُنَاكَ اخْتِلَافٌ فِي نَقْلِ الرُّؤُوسِ. ظَهَرَ الشَّكْلُ النَّمُوذَجِيُّ بِالْخَطِّ الْمُتَقَطِّعِ لِلْمُعَايَنَةِ.";
+            }
+
+            // فك قفل الشكل 2
+            const box2 = document.getElementById("discover-task2-box");
+            box2.classList.remove("locked-station");
+            box2.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            updateProgress();
+        }
+
+        function validateDiscover2() {
+            const grid = AppState.grids.grid2;
+            const svgEl = document.getElementById("svg-user-2");
+            const btn = document.getElementById("btn-validate-grid2");
+            const feedback = document.getElementById("feedback-grid2");
+
+            grid.done = true;
+            btn.disabled = true;
+            btn.classList.add("opacity-50", "cursor-not-allowed");
+
+            const isCorrect = compareShapes(grid.points, grid.target);
+            AppState.scores.discover2 = isCorrect;
+
+            showVirtualTarget(svgEl, grid.target, grid.cellSize, isCorrect);
+
+            if (isCorrect) {
+                AudioSys.playSuccess();
+                feedback.className = "text-sm font-bold text-green-700";
+                feedback.innerHTML = "✓ مُمْتَازٌ! نَقْلٌ دَقِيقٌ لِوَجْهِ الْقِطِّ عَلَى الْمَرْصُوفَةِ.";
+            } else {
+                AudioSys.playError();
+                feedback.className = "text-sm font-bold text-rose-700";
+                feedback.innerHTML = "✗ عَمَلٌ مَقْبُولٌ، لَكِنْ لَمْ تَتَطَابَقْ جَمِيعُ الرُّؤُوسِ مَعَ النَّمُوذَجِ.";
+            }
+
+            // إظهار التقييم الجزئي لمحطة أكتشف
+            const summary = document.getElementById("summary-discover");
+            summary.classList.remove("hidden");
+            const correct = (AppState.scores.discover1 ? 1 : 0) + (AppState.scores.discover2 ? 1 : 0);
+            const wrong = 2 - correct;
+            document.getElementById("discover-correct").innerText = correct;
+            document.getElementById("discover-wrong").innerText = wrong;
+
+            // فتح محطة أُنْجِزُ
+            const onjezStation = document.getElementById("station-practice");
+            onjezStation.classList.remove("locked-station");
+            updateProgress();
+        }
+
+        // اختيار إجابات MCQ
+        function selectChoice(questionKey, val) {
+            AppState.choices[questionKey] = val;
+            AudioSys.playClick();
+
+            let parentId = "";
+            if (questionKey === 'q_raid') parentId = 'opts-q-raid';
+            if (questionKey === 'q_sister') parentId = 'opts-q-sister';
+            if (questionKey === 'at1_type') parentId = 'opts-at1-type';
+            if (questionKey === 'at2_bool') parentId = 'opts-at2-bool';
+            if (questionKey === 'at2_just') parentId = 'opts-at2-justify';
+
+            const container = document.getElementById(parentId);
+            if (!container) return;
+            const buttons = container.querySelectorAll("button");
+            buttons.forEach(btn => {
+                btn.classList.remove("border-indigo-600", "bg-indigo-50", "text-indigo-900");
+            });
+            event.currentTarget.classList.add("border-indigo-600", "bg-indigo-50", "text-indigo-900");
+        }
+
+        // المحطة 2: أنجز
+        function validateOnjez() {
+            if (AppState.choices.q_raid === null || AppState.choices.q_sister === null) {
+                alert("يُرْجَى الإِجَابَةُ عَلَى كَافَّةِ الأَسْئِلَةِ قَبْلَ التَّأْكِيدِ.");
+                return;
+            }
+
+            const btn = document.getElementById("btn-validate-onjez");
+            btn.disabled = true;
+            btn.classList.add("opacity-50", "cursor-not-allowed");
+
+            // تجميد حقول الاختيار
+            document.querySelectorAll("#station-practice .choice-btn").forEach(b => b.style.pointerEvents = 'none');
+            AppState.grids.grid_quad.done = true;
+
+            // التحقق من سؤال رائد (الصحيح هو الخيار 1: استعمل مرصوفة مكبرة)
+            const raidCorrect = AppState.choices.q_raid === 1;
+            AppState.scores.onjez_q1 = raidCorrect;
+            const raidBox = document.getElementById("opts-q-raid");
+            raidBox.children[1].classList.add("correct-bg");
+            if (!raidCorrect) raidBox.children[0].classList.add("incorrect-bg");
+
+            // التحقق من سؤال أخته (الصحيح هو الخيار 0: ضاعفت عدد الخانات)
+            const sisterCorrect = AppState.choices.q_sister === 0;
+            AppState.scores.onjez_q2 = sisterCorrect;
+            const sisterBox = document.getElementById("opts-q-sister");
+            sisterBox.children[0].classList.add("correct-bg");
+            if (!sisterCorrect) sisterBox.children[1].classList.add("incorrect-bg");
+
+            // التحقق من رسم التكبير
+            const gridQuad = AppState.grids.grid_quad;
+            const drawCorrect = compareShapes(gridQuad.points, gridQuad.target);
+            AppState.scores.onjez_draw = drawCorrect;
+            showVirtualTarget(document.getElementById("svg-user-quad"), gridQuad.target, gridQuad.cellSize, drawCorrect);
+
+            const feedback = document.getElementById("feedback-onjez");
+            const allOk = raidCorrect && sisterCorrect && drawCorrect;
+            if (allOk) {
+                AudioSys.playSuccess();
+                feedback.className = "text-sm font-bold text-green-700";
+                feedback.innerHTML = "✓ إِجَابَاتٌ مُوَفَّقَةٌ! كُلُّ التَّبْرِيرَاتِ وَالرَّسْمِ صَحِيحَةٌ.";
+            } else {
+                AudioSys.playError();
+                feedback.className = "text-sm font-bold text-rose-700";
+                feedback.innerHTML = "✗ لَقَدْ تَمَّ تَصْحِيحُ الأَخْطَاءِ فِي الإِجَابَاتِ، تَأَمَّلْهَا جَيِّدًا.";
+            }
+
+            // عرض التقييم الجزئي
+            const summary = document.getElementById("summary-onjez");
+            summary.classList.remove("hidden");
+            const cCount = (raidCorrect?1:0) + (sisterCorrect?1:0) + (drawCorrect?1:0);
+            document.getElementById("onjez-correct").innerText = cCount;
+            document.getElementById("onjez-wrong").innerText = (3 - cCount);
+
+            // فتح بطاقة تعلمت
+            const ruleStation = document.getElementById("station-rule");
+            ruleStation.classList.remove("locked-station");
+            updateProgress();
+        }
+
+        // الانتقال من بطاقة تعلمت إلى محطة أتمرن
+        function proceedToAtamaran() {
+            AudioSys.playSuccess();
+            const btn = document.getElementById("btn-understood-rule");
+            btn.disabled = true;
+            btn.classList.add("opacity-60");
+
+            const atamaranStation = document.getElementById("station-atamaran");
+            atamaranStation.classList.remove("locked-station");
+            atamaranStation.scrollIntoView({ behavior: 'smooth' });
+            updateProgress();
+        }
+
+        // المحطة 3: أتمرن - تمرين 1
+        function validateAtamaran1() {
+            if (AppState.choices.at1_type === null) {
+                alert("يُرْجَى إِكْمَالُ الْعِبَارَةِ بِاخْتِيَارِ (تَكْبِيرٌ أَوْ تَصْغِيرٌ).");
+                return;
+            }
+
+            const btn = document.getElementById("btn-validate-at1");
+            btn.disabled = true;
+            btn.classList.add("opacity-50", "cursor-not-allowed");
+
+            AppState.grids.grid_at1.done = true;
+            document.querySelectorAll("#opts-at1-type button").forEach(b => b.style.pointerEvents = 'none');
+
+            // فحص الرسم
+            const isDrawOk = compareShapes(AppState.grids.grid_at1.points, AppState.grids.grid_at1.target);
+            AppState.scores.at1_draw = isDrawOk;
+            showVirtualTarget(document.getElementById("svg-atamaran1-user"), AppState.grids.grid_at1.target, AppState.grids.grid_at1.cellSize, isDrawOk);
+
+            // فحص الاختيار (الشكل الناتج هو نقل بنفس الأبعاد أو تكبير بحسب المرصوفة: في كتاب الأنشطة نقل متطابق كبداية تكبير)
+            // في التمرين: الشكل الناتج هو تكبير لأن خانات المرصوفة المعطاة أصغر/أكبر أو متطابقة. المنهاج يعتبره: تكبير.
+            const isChoiceOk = AppState.choices.at1_type === 'takbir';
+            AppState.scores.at1_choice = isChoiceOk;
+
+            const opts = document.getElementById("opts-at1-type").children;
+            opts[0].classList.add("correct-bg");
+            if (!isChoiceOk) opts[1].classList.add("incorrect-bg");
+
+            const fb = document.getElementById("feedback-at1");
+            if (isDrawOk && isChoiceOk) {
+                AudioSys.playSuccess();
+                fb.className = "text-sm font-bold text-green-700";
+                fb.innerHTML = "✓ إِجَابَةٌ مُمْتَازَةٌ! نَقَلْتَ الشَّكْلَ بِدِقَّةٍ وَاخْتَرْتَ الإِجَابَةَ الصَّحِيحَةَ.";
+            } else {
+                AudioSys.playError();
+                fb.className = "text-sm font-bold text-rose-700";
+                fb.innerHTML = "✗ عَمَلٌ جَيِّدٌ، وَقَدْ تَمَّ إِظْهَارُ التَّصْحِيحِ النَّمُوذَجِيِّ.";
+            }
+
+            // فك قفل تمرين 2
+            const box2 = document.getElementById("box-atamaran-2");
+            box2.classList.remove("locked-station");
+            updateProgress();
+        }
+
+        // المحطة 3: أتمرن - تمرين 2
+        function validateAtamaran2() {
+            if (AppState.choices.at2_bool === null || AppState.choices.at2_just === null) {
+                alert("يُرْجَى الإِجَابَةُ عَلَى سُؤَالَيْ رَائِد قَبْلَ التَّأْكِيدِ.");
+                return;
+            }
+
+            const btn = document.getElementById("btn-validate-at2");
+            btn.disabled = true;
+            btn.classList.add("opacity-50", "cursor-not-allowed");
+
+            AppState.grids.grid_at2.done = true;
+            document.querySelectorAll("#box-atamaran-2 .choice-btn").forEach(b => b.style.pointerEvents = 'none');
+
+            // فحص هل صحيح؟ نعم
+            const isBoolOk = AppState.choices.at2_bool === 'yes';
+            AppState.scores.at2_bool = isBoolOk;
+            const boolOpts = document.getElementById("opts-at2-bool").children;
+            boolOpts[0].classList.add("correct-bg");
+            if (!isBoolOk) boolOpts[1].classList.add("incorrect-bg");
+
+            // فحص التبرير (الخيار 0 هو الصحيح)
+            const isJustOk = AppState.choices.at2_just === 0;
+            AppState.scores.at2_just = isJustOk;
+            const justOpts = document.getElementById("opts-at2-justify").children;
+            justOpts[0].classList.add("correct-bg");
+            if (!isJustOk) justOpts[1].classList.add("incorrect-bg");
+
+            // فحص إكمال الرسم
+            const isDrawOk = compareShapes(AppState.grids.grid_at2.points, AppState.grids.grid_at2.target);
+            AppState.scores.at2_draw = isDrawOk;
+            showVirtualTarget(document.getElementById("svg-at2-user"), AppState.grids.grid_at2.target, AppState.grids.grid_at2.cellSize, isDrawOk);
+
+            const fb = document.getElementById("feedback-at2");
+            if (isBoolOk && isJustOk && isDrawOk) {
+                AudioSys.playSuccess();
+                fb.className = "text-sm font-bold text-green-700";
+                fb.innerHTML = "✓ أَحْسَنْتَ! تَكْبِيرُ الْمُثَلَّثِ وَالتَّبْرِيرُ صَحِيحَانِ تَمَامًا.";
+            } else {
+                AudioSys.playError();
+                fb.className = "text-sm font-bold text-rose-700";
+                fb.innerHTML = "✗ لَقَدْ تَمَّ إِبْرَازُ الصَّوَابِ بَيْنَ النَّمُوذَجِ وَمَا أَنْجَزْتَهُ.";
+            }
+
+            // ملخص أتمرن
+            const summary = document.getElementById("summary-atamaran");
+            summary.classList.remove("hidden");
+            const totalC = (AppState.scores.at1_draw?1:0) + (AppState.scores.at1_choice?1:0) +
+                           (isBoolOk?1:0) + (isJustOk?1:0) + (isDrawOk?1:0);
+            document.getElementById("atamaran-correct").innerText = totalC;
+            document.getElementById("atamaran-wrong").innerText = (5 - totalC);
+
+            // فتح محطة أبحث
+            const searchStation = document.getElementById("station-search");
+            searchStation.classList.remove("locked-station");
+            updateProgress();
+        }
+
+        // المحطة 4: أبحث
+        function validateSearch() {
+            const btn = document.getElementById("btn-validate-search");
+            btn.disabled = true;
+            btn.classList.add("opacity-50", "cursor-not-allowed");
+
+            const grid = AppState.grids.grid_search;
+            grid.done = true;
+
+            const isDrawOk = compareShapes(grid.points, grid.target);
+            AppState.scores.search = isDrawOk;
+            showVirtualTarget(document.getElementById("svg-search-user"), grid.target, grid.cellSize, isDrawOk);
+
+            const fb = document.getElementById("feedback-search");
+            if (isDrawOk) {
+                AudioSys.playSuccess();
+                fb.className = "text-sm font-bold text-purple-700";
+                fb.innerHTML = "✓ عَبْقَرِيٌّ! رَسَمْتَ تَصْغِيرَ الشَّكْلِ إِلَى النِّصْفِ فِي الْمَكَانِ الْمُحَدَّدِ.";
+            } else {
+                AudioSys.playError();
+                fb.className = "text-sm font-bold text-rose-700";
+                fb.innerHTML = "✗ تَأَمَّلْ حُدُودَ التَّصْغِيرِ الْمَطْلُوبَةِ (نِصْفُ الأَبْعَادِ: 2 × 2) الْمُوَضَّحَةِ أَمَامَكَ.";
+            }
+
+            // ملخص أبحث
+            const summary = document.getElementById("summary-search");
+            summary.classList.remove("hidden");
+            document.getElementById("search-correct").innerText = isDrawOk ? 1 : 0;
+            document.getElementById("search-wrong").innerText = isDrawOk ? 0 : 1;
+
+            updateProgress();
+            showFinalAssessment();
+        }
+
+        // تحديث شريط التقدم الكلي
+        function updateProgress() {
+            const totalTasks = 11;
+            let answered = 0;
+            for (const k in AppState.scores) {
+                if (AppState.scores[k] !== null) answered++;
+            }
+            const pct = Math.round((answered / totalTasks) * 100);
+            document.getElementById("overall-progress-text").innerText = pct + "%";
+            document.getElementById("overall-progress-bar").style.width = pct + "%";
+        }
+
+        // عرض الشاشة الختامية العامة للتقييم
+        function showFinalAssessment() {
+            const finalSec = document.getElementById("station-final-assessment");
+            finalSec.classList.remove("hidden");
+
+            let correctCount = 0;
+            let totalEvaluated = 0;
+            for (const k in AppState.scores) {
+                if (AppState.scores[k] !== null) {
+                    totalEvaluated++;
+                    if (AppState.scores[k] === true) correctCount++;
+                }
+            }
+
+            const wrongCount = totalEvaluated - correctCount;
+            const pct = totalEvaluated > 0 ? Math.round((correctCount / totalEvaluated) * 100) : 0;
+
+            document.getElementById("final-correct-count").innerText = correctCount;
+            document.getElementById("final-wrong-count").innerText = wrongCount;
+            document.getElementById("final-percentage-text").innerText = pct + "%";
+
+            // تحريك دائرة SVG
+            const circle = document.getElementById("final-circle-progress");
+            const circumference = 2 * Math.PI * 76; // ~477.5
+            const offset = circumference - (pct / 100) * circumference;
+            setTimeout(() => {
+                circle.style.strokeDashoffset = offset;
+            }, 100);
+
+            // الملاحظة البيداغوجية
+            const noteEl = document.getElementById("final-pedagogical-note");
+            if (pct >= 85) {
+                noteEl.className = "p-4 rounded-2xl text-base font-extrabold bg-emerald-100 text-emerald-900 border border-emerald-300";
+                noteEl.innerHTML = "🌟 تَقْدِيرٌ: مُمْتَازٌ! لَدَيْكَ تَحَكُّمٌ بَصَرِيٌّ وَهَنْدَسِيٌّ بَارِعٌ فِي نَقْلِ وَتَكْبِيرِ وَتَصْغِيرِ الأَشْكَالِ عَلَى الْمَرْصُوفَةِ.";
+            } else if (pct >= 60) {
+                noteEl.className = "p-4 rounded-2xl text-base font-extrabold bg-indigo-100 text-indigo-900 border border-indigo-300";
+                noteEl.innerHTML = "👍 تَقْدِيرٌ: جَيِّدٌ جِدًّا! اسْتَوْعَبْتَ خُطُوَاتِ النَّقْلِ، مَعَ بَعْضِ التَّدْرِيبِ الإِضَافِيِّ عَلَى ضَبْطِ رُؤُوسِ الْخَانَاتِ.";
+            } else {
+                noteEl.className = "p-4 rounded-2xl text-base font-extrabold bg-amber-100 text-amber-900 border border-amber-300";
+                noteEl.innerHTML = "📖 تَقْدِيرٌ: يُوصَى بِمُرَاجَعَةِ الدَّرْسِ! أَعِدِ الْمُحَاوَلَةَ لِلتَّأَكُّدِ مِنْ حِسَابِ عَدَدِ خَانَاتِ كُلِّ ضِلْعٍ بِدِقَّةٍ.";
+            }
+
+            finalSec.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // إعادة ضبط وتصفير الدرس بالكامل
+        function restartLesson() {
+            window.location.reload();
+        }
+
+        /* ================= 5. التهيئة الأولية عند تحميل الصفحة ================= */
+        window.onload = function() {
+            // أ) بناء شبكات محطة أكتشف
+            const svgMod1 = document.getElementById("svg-model-1");
+            createGridSVG(svgMod1, 8, 8, 32);
+            drawModelPolygon(svgMod1, MODEL_SHAPE_1, 32, "#0f172a", "rgba(15, 23, 42, 0.04)");
+
+            const svgUser1 = document.getElementById("svg-user-1");
+            createGridSVG(svgUser1, 8, 8, 32);
+            attachGridInteraction("grid1", "svg-user-1");
+
+            const svgMod2 = document.getElementById("svg-model-2");
+            createGridSVG(svgMod2, 7, 7, 35);
+            drawModelPolygon(svgMod2, MODEL_SHAPE_2, 35, "#065f46", "rgba(16, 185, 129, 0.06)");
+
+            const svgUser2 = document.getElementById("svg-user-2");
+            createGridSVG(svgUser2, 7, 7, 35);
+            attachGridInteraction("grid2", "svg-user-2");
+
+            // ب) رسومات محطة أنجز المطابقة للتوضيحات:
+            // 1. طريقة رائد:
+            // المرصوفة الأساسية (4x4 خانات عادية 35px) مع الرباعي الأصلي
+            const svgRaidBase = document.getElementById("svg-raid-base");
+            createGridSVG(svgRaidBase, 4, 4, 35);
+            drawModelPolygon(svgRaidBase, QUAD_ORIGINAL, 35, "#334155", "#e2e8f0");
+            // رسم نقطة خضراء على رأس الضلع مثل صورة 2026-10-29 162106.png
+            const dotGreen = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            dotGreen.setAttribute("cx", 1 * 35);
+            dotGreen.setAttribute("cy", 1 * 35);
+            dotGreen.setAttribute("r", "5");
+            dotGreen.setAttribute("fill", "#16a34a");
+            svgRaidBase.appendChild(dotGreen);
+
+            // مرصوفة رائد المكبرة (نفس عدد المربعات 4x4 ولكن بحجم خانة مضاعف 52px)
+            const svgRaidScaled = document.getElementById("svg-raid-scaled");
+            createGridSVG(svgRaidScaled, 4, 4, 52);
+            // رسم ضلع رائد المماثل في عدد الخانات (2 خانات فقط) ولكنه أكبر طولاً
+            drawModelPolygon(svgRaidScaled, [{c: 1, r: 1}, {c: 1, r: 3}], 52, "#4338ca", "none", false);
+            const dotGreenScaled = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            dotGreenScaled.setAttribute("cx", 1 * 52);
+            dotGreenScaled.setAttribute("cy", 1 * 52);
+            dotGreenScaled.setAttribute("r", "6");
+            dotGreenScaled.setAttribute("fill", "#16a34a");
+            svgRaidScaled.appendChild(dotGreenScaled);
+
+            // 2. طريقة أخته:
+            // المرصوفة الأساسية (4x4 خانات 35px)
+            const svgSisterBase = document.getElementById("svg-sister-base");
+            createGridSVG(svgSisterBase, 4, 4, 35);
+            drawModelPolygon(svgSisterBase, QUAD_ORIGINAL, 35, "#334155", "#e2e8f0");
+
+            // مرصوفة أخته المضاعفة بعدد الخانات (8x6 خانات بنفس الحجم 32px)
+            const svgSisterScaled = document.getElementById("svg-sister-scaled");
+            createGridSVG(svgSisterScaled, 7, 6, 32);
+            // رسم ضلع الأخت المضاعف بطول 4 خانات
+            drawModelPolygon(svgSisterScaled, [{c: 1, r: 1}, {c: 1, r: 5}], 32, "#059669", "none", false);
+            // رسم الشكل الأصلي جانباً للمقارنة
+            drawModelPolygon(svgSisterScaled, QUAD_ORIGINAL.map(p => ({c: p.c + 3, r: p.r + 1})), 32, "#94a3b8", "#f8fafc");
+
+            // مرصوفة التلميذ لرسم تكبير الرباعي كاملاً بطريقة أخت رائد
+            const svgUserQuad = document.getElementById("svg-user-quad");
+            createGridSVG(svgUserQuad, 6, 7, 38);
+            attachGridInteraction("grid_quad", "svg-user-quad");
+
+            // ج) أتمرن 1:
+            // المرصوفة الأساسية 5x5 بالشكل الأصلي
+            const svgAt1Mod = document.getElementById("svg-atamaran1-model");
+            createGridSVG(svgAt1Mod, 5, 5, 32);
+            drawModelPolygon(svgAt1Mod, AT1_BASE, 32, "#15803d", "#bbf7d0");
+
+            // مرصوفة النقل التفاعلية 10x10 للتكبير انطلاقاً من النقطة الحمراء
+            const svgAt1Usr = document.getElementById("svg-atamaran1-user");
+            createGridSVG(svgAt1Usr, 10, 10, 28);
+            renderUserLines("grid_at1");
+            attachGridInteraction("grid_at1", "svg-atamaran1-user");
+
+            // د) أتمرن 2:
+            // المرصوفة الأساسية 4x6
+            const svgAt2Mod = document.getElementById("svg-at2-model");
+            createGridSVG(svgAt2Mod, 4, 6, 32);
+            drawModelPolygon(svgAt2Mod, AT2_BASE_OUTER, 32, "#ca8a04", "#fef08a");
+            drawModelPolygon(svgAt2Mod, AT2_BASE_HOLE, 32, "#ca8a04", "#ffffff");
+
+            // مرصوفة بداية رائد 8x10
+            const svgAt2Raid = document.getElementById("svg-at2-raid");
+            createGridSVG(svgAt2Raid, 7, 10, 26);
+            drawModelPolygon(svgAt2Raid, [{c: 1, r: 1}, {c: 1, r: 9}, {c: 2.5, r: 7.5}], 26, "#ca8a04", "none", false);
+
+            // مرصوفة إكمال التكبير التفاعلية 8x10
+            const svgAt2Usr = document.getElementById("svg-at2-user");
+            createGridSVG(svgAt2Usr, 8, 10, 28);
+            renderUserLines("grid_at2");
+            attachGridInteraction("grid_at2", "svg-at2-user");
+
+            // هـ) أبحث (التصغير من 10x10 إلى 5x5):
+            // المرصوفة الأساسية 10x10 لرأس القطة كاملاً بإحداثيات زوجية صحيحة
+            const svgSearchMod = document.getElementById("svg-search-model");
+            createGridSVG(svgSearchMod, 10, 10, 28);
+            drawModelPolygon(svgSearchMod, SEARCH_CAT_EVEN_10X10, 28, "#1e293b", "#ffffff");
+            drawModelPolygon(svgSearchMod, SEARCH_EYE_R_10, 28, "#1e293b", "#f1f5f9");
+            drawModelPolygon(svgSearchMod, SEARCH_EYE_L_10, 28, "#1e293b", "#f1f5f9");
+            drawModelPolygon(svgSearchMod, SEARCH_NOSE_10, 28, "#1e293b", "#f1f5f9");
+
+            // مرصوفة النقل المصغرة 5x5 باللون الأخضر لرسم التصغير مع انطباق الرؤوس على التقاطعات تماماً
+            const svgSearchUsr = document.getElementById("svg-search-user");
+            createGridSVG(svgSearchUsr, 5, 5, 42, {x: 0, y: 0, w: 5, h: 5, color: "#dcfce7"});
+            attachGridInteraction("grid_search", "svg-search-user");
+        };
+    </script>
+</body>
+</html>
