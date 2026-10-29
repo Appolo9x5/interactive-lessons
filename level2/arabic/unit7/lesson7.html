@@ -1,0 +1,1876 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>بَيْنَ الْمَدِينَةِ وَالرِّيفِ | اللُّغَةُ الْعَرَبِيَّةُ وَالتَّرْبِيَةُ الإِسْلَامِيَّةُ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- مكتبة Telegram WebApp (ضرورية للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    :root {
+      --primary: #1976d2;
+      --primary-dark: #0d47a1;
+      --success: #2e7d32;
+      --error: #c62828;
+      --bg: #f5f9fc;
+      --card-bg: #ffffff;
+      --text: #263238;
+      --text-muted: #546e7a;
+      --accent: #ff9800;
+      --border: #e2e8f0;
+      --highlight-yellow: #fff9c4;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Tajawal', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 70px;
+      direction: rtl;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: #fff;
+      padding: 16px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header-titles h1 {
+      font-size: 1.25rem;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+
+    .header-titles p {
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-icon {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-icon:hover {
+      background: rgba(255, 255, 255, 0.35);
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 20px auto;
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .lesson-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      border-top: 6px solid var(--primary);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      padding: 24px 20px;
+      position: relative;
+      transition: opacity 0.3s ease, filter 0.3s ease;
+    }
+
+    .lesson-card.locked {
+      opacity: 0.55;
+      filter: grayscale(85%);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .card-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .page-badge {
+      background: var(--accent);
+      color: white;
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      border-radius: 20px;
+      box-shadow: 0 2px 5px rgba(255,152,0,0.3);
+    }
+
+    .eval-badge {
+      background: #eceff1;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      display: inline-flex;
+      gap: 10px;
+    }
+
+    .eval-badge span.c { color: var(--success); }
+    .eval-badge span.w { color: var(--error); }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .instruction {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+
+    .lesson-text-box {
+      background: #fdfbf7;
+      border-right: 5px solid var(--accent);
+      border-radius: 12px;
+      padding: 18px;
+      font-size: 1.15rem;
+      line-height: 2.1;
+      color: #1e293b;
+      margin: 16px 0;
+      border: 1px solid #f1ece4;
+      border-right-width: 5px;
+    }
+
+    .audio-player-box {
+      background: #eff6ff;
+      border: 1px dashed var(--primary);
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .audio-player-box audio {
+      width: 100%;
+      max-width: 420px;
+      height: 40px;
+    }
+
+    .audio-filename-note {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: #fff;
+      padding: 3px 10px;
+      border-radius: 8px;
+      border: 1px solid #dbeafe;
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .image-frame {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2px solid #e2e8f0;
+      background: #fff;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .image-frame img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .image-frame .img-caption {
+      padding: 8px 12px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--text);
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .qa-group {
+      margin-bottom: 20px;
+      background: #fafcff;
+      border: 1px solid #edf2f7;
+      border-radius: 14px;
+      padding: 16px;
+    }
+
+    .qa-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .qa-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #1e293b;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .qa-number {
+      background: var(--primary);
+      color: #fff;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .opt-btn {
+      background: #ffffff;
+      border: 2px solid #cbd5e1;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 0.98rem;
+      font-weight: 600;
+      text-align: right;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .opt-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #f0f7ff;
+      transform: translateX(-3px);
+    }
+
+    .opt-btn.correct {
+      background-color: #e8f5e9 !important;
+      border-color: var(--success) !important;
+      color: var(--success) !important;
+      font-weight: 700;
+    }
+
+    .opt-btn.wrong {
+      background-color: #ffebee !important;
+      border-color: var(--error) !important;
+      color: var(--error) !important;
+    }
+
+    .opt-btn:disabled {
+      cursor: default;
+    }
+
+    .highlight-formula {
+      color: #c2185b;
+      font-weight: 800;
+      background: #fce4ec;
+      padding: 1px 6px;
+      border-radius: 6px;
+    }
+
+    .match-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .match-item {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 12px;
+      align-items: center;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .match-item {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .match-item img {
+      width: 100%;
+      height: 95px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .match-choices {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .btn-match-select {
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      text-align: right;
+      transition: all 0.2s;
+    }
+
+    .btn-match-select:hover:not(:disabled) {
+      background: #eff6ff;
+      border-color: var(--primary);
+    }
+
+    .btn-match-select.correct {
+      background: #e8f5e9;
+      border-color: var(--success);
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .btn-match-select.wrong {
+      background: #ffebee;
+      border-color: var(--error);
+      color: var(--error);
+    }
+
+    .cross-words-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .cross-word-btn {
+      background: #fff;
+      border: 2px solid #94a3b8;
+      border-radius: 10px;
+      padding: 10px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .cross-word-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background: #f8fafc;
+    }
+
+    .cross-word-btn.crossed-correct {
+      background: #e8f5e9;
+      border-color: var(--success);
+      color: var(--success);
+      text-decoration: line-through;
+      text-decoration-thickness: 3px;
+    }
+
+    .cross-word-btn.crossed-wrong {
+      background: #ffebee;
+      border-color: var(--error);
+      color: var(--error);
+      text-decoration: line-through;
+      text-decoration-thickness: 3px;
+    }
+
+    .cross-word-btn.untouched-correct {
+      background: #f1f8e9;
+      border-color: var(--success);
+      color: #1b5e20;
+    }
+
+    .classify-box {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .word-pool {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      min-height: 52px;
+    }
+
+    .classify-chip {
+      background: #ffffff;
+      border: 2px solid var(--primary);
+      color: var(--primary-dark);
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+
+    .classify-chip.selected {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(25, 118, 210, 0.4);
+      transform: scale(1.05);
+    }
+
+    .classify-chip.placed {
+      display: none;
+    }
+
+    .classify-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 12px;
+    }
+
+    .classify-col {
+      width: 50%;
+      vertical-align: top;
+      background: #fff;
+      border: 2px dashed #94a3b8;
+      border-radius: 14px;
+      padding: 12px;
+      min-height: 160px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .classify-col.highlight-target {
+      border-color: var(--accent);
+      background: #fffdf5;
+    }
+
+    .classify-col-title {
+      font-weight: 800;
+      font-size: 1rem;
+      text-align: center;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+      border-bottom: 2px solid #f1f5f9;
+      color: var(--primary-dark);
+    }
+
+    .classify-slot-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .placed-item {
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .placed-item.correct {
+      background: #e8f5e9;
+      color: var(--success);
+      border: 1px solid #c8e6c9;
+    }
+
+    .placed-item.wrong {
+      background: #ffebee;
+      color: var(--error);
+      border: 1px solid #ffcdd2;
+    }
+
+    .quran-card-inner {
+      background: #fffef7;
+      border: 2px solid #e0d7c3;
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+      margin: 16px 0;
+    }
+
+    .bismillah {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #5d4037;
+      margin-bottom: 16px;
+    }
+
+    .quran-ayahs {
+      font-size: 1.35rem;
+      line-height: 2.3;
+      color: #27272a;
+      font-weight: 700;
+    }
+
+    .ayah-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border: 1.5px solid #d4af37;
+      border-radius: 50%;
+      color: #b45309;
+      font-size: 0.85rem;
+      margin: 0 4px;
+      font-weight: bold;
+    }
+
+    .final-report {
+      background: #ffffff;
+      border-top: 8px solid var(--accent);
+      border-radius: 20px;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      display: none;
+    }
+
+    .score-circle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 20px;
+      box-shadow: 0 6px 16px rgba(25, 118, 210, 0.35);
+    }
+
+    .score-pct {
+      font-size: 2.3rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .score-sub {
+      font-size: 0.85rem;
+      opacity: 0.9;
+    }
+
+    .report-message {
+      font-size: 1.3rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+      color: var(--primary-dark);
+    }
+
+    .report-details {
+      font-size: 1rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .report-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-main {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-main:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 2px solid #cbd5e1;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-outline:hover {
+      background: #f1f5f9;
+    }
+
+    .pedagogical-box {
+      background: #eef2ff;
+      border-right: 4px solid #6366f1;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      margin: 12px 0;
+    }
+
+    .next-step-hint {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--success);
+      font-weight: 700;
+      margin-top: 14px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(0.98); }
+    }
+
+    .letter-dhad {
+      color: #d32f2f;
+      font-weight: 900;
+      font-size: 1.25em;
+    }
+
+    .letter-tha {
+      color: #0288d1;
+      font-weight: 900;
+      font-size: 1.25em;
+    }
+
+    .phonics-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+
+    .phonics-table td {
+      border: 1px solid #e2e8f0;
+      padding: 10px;
+      text-align: center;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس */
+    .btn-back-home {
+      display: block;
+      width: calc(100% - 32px);
+      max-width: 788px;
+      margin: 12px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <!-- الهيدر التفاعلي -->
+  <header>
+    <div class="header-titles">
+      <h1>بَيْنَ الْمَدِينَةِ وَالرِّيفِ</h1>
+      <p>اللُّغَةُ الْعَرَبِيَّةُ وَالتَّرْبِيَةُ الإِسْلَامِيَّةُ • السَّنَةُ الثَّانِيَةُ ابْتِدَائِي</p>
+    </div>
+    <div class="header-actions">
+      <button id="soundToggleBtn" class="btn-icon" onclick="toggleSound()">
+        <span id="soundIcon">🔊</span>
+        <span id="soundText">الصَّوْتُ مُمَكَّنٌ</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== المحطة 1: فهم المنطوق ==================== -->
+    <section id="station-1" class="lesson-card" data-station="1">
+      <div class="card-header-bar">
+        <span class="page-badge">دَلِيلُ الْمُعَلِّمِ • فَهْمُ الْمَنْطُوقِ</span>
+        <div class="eval-badge">
+          <span>الْمَحَطَّةُ 1</span>
+          <span class="c">✓ <b id="s1-c">0</b></span>
+          <span class="w">✗ <b id="s1-w">0</b></span>
+        </div>
+      </div>
+      <h2 class="card-title">🎧 فَهْمُ الْمَنْطُوقِ: «رِحْلَةُ سُنُونُوَةٍ»</h2>
+      <p class="instruction">اسْتَمِعْ بِانْتِبَاهٍ إِلَى التَّسْجِيلِ الصَّوْتِيِّ ثُمَّ أَجِبْ عَنِ الأَسْئِلَةِ التَّالِيَةِ:</p>
+
+      <div class="audio-player-box">
+        <audio controls id="audio-comp">
+          <source src="audio_comprehension.mp3" type="audio/mpeg">
+          تَصَفُّحُكَ لَا يَدْعَمُ مُشَغِّلَ الصَّوْتِ.
+        </audio>
+        <span class="audio-filename-note">📁 مَلَفُّ الصَّوْتِ: audio_comprehension.mp3</span>
+      </div>
+
+      <div class="qa-container">
+        <div class="qa-group" id="q1-1" data-station-id="1">
+          <div class="qa-title"><span class="qa-number">1</span> مَا نَوْعُ الطَّائِرِ الَّذِي يَتَحَدَّثُ عَنْهُ النَّصُّ؟</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">طَائِرُ السُّنُونُو</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الْعُصْفُورُ الدُّورِيُّ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الْهُدْهُدُ</button>
+          </div>
+        </div>
+
+        <div class="qa-group" id="q1-2" data-station-id="1">
+          <div class="qa-title"><span class="qa-number">2</span> مِنْ بَيْنِ هَذِهِ الْكَائِنَاتِ، حَدِّدِ الطُّيُورَ:</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">الْحَمَامَةُ وَاللَّقْلَقُ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الْقِطُّ وَالْخَرُوفُ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الأَرْنَبُ وَالْكَلْبُ</button>
+          </div>
+        </div>
+
+        <div class="qa-group" id="q1-3" data-station-id="1">
+          <div class="qa-title"><span class="qa-number">3</span> مَاذَا شَاهَدَتِ الطُّيُورُ فِي مَدِينَةِ الْجَزَائِرِ؟</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">بِنَايَاتٍ عَالِيَةً وَشَوَارِعَ وَاسِعَةً وَشَاطِئًا جَمِيلًا</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">حُقُولَ قَمْحٍ وَأَشْجَارَ زَيْتُونٍ فَقَطْ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">غَابَاتٍ كَثِيفَةً وَجِبَالًا ثَلْجِيَّةً</button>
+          </div>
+        </div>
+
+        <div class="qa-group" id="q1-4" data-station-id="1">
+          <div class="qa-title"><span class="qa-number">4</span> أَيْنَ حَطَّ السِّرْبُ؟ وَلِمَاذَا؟</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">حَطَّ فِي الرِّيفِ لِيَسْتَرِيحَ مِنَ التَّعَبِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">حَطَّ فِي الْبَحْرِ لِيَسْبَحَ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">حَطَّ فِي الْمَدْرَسَةِ لِيَدْرُسَ</button>
+          </div>
+        </div>
+
+        <div class="qa-group" id="q1-5" data-station-id="1">
+          <div class="qa-title"><span class="qa-number">5</span> كَيْفَ وَصَفَ الصَّغِيرُ ذَلِكَ الْمَكَانَ (الرِّيفَ)؟</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">طَبِيعَةٌ خَلَّابَةٌ، حُقُولٌ خَضْرَاءُ وَاسِعَةٌ، وَهَوَاءٌ نَقِيٌّ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">مَدِينَةٌ مُزْدَحِمَةٌ بِالسَّيَّارَاتِ وَالضَّجِيجِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">مَكَانٌ مُظْلِمٌ وَمُخِيفٌ</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== المحطة 2: ص 45 أتأمل وأتحدث ==================== -->
+    <section id="station-2" class="lesson-card locked" data-station="2">
+      <div class="card-header-bar">
+        <span class="page-badge">كِتَابُ الْقِرَاءَةِ • صَفْحَة 45</span>
+        <div class="eval-badge">
+          <span>الْمَحَطَّةُ 2</span>
+          <span class="c">✓ <b id="s2-c">0</b></span>
+          <span class="w">✗ <b id="s2-w">0</b></span>
+        </div>
+      </div>
+      <h2 class="card-title">🖼️ أَتَأَمَّلُ وَأَتَحَدَّثُ</h2>
+      <p class="instruction">شَاهِدِ الصُّورَتَيْنِ جَيِّدًا ثُمَّ اخْتَرِ الإِجَابَةَ الصَّحِيحَةَ عَنْ كُلِّ سُؤَالٍ:</p>
+
+      <div class="image-grid">
+        <div class="image-frame">
+          <img src="p45_reef.jpg" alt="طَبِيعَةُ الرِّيفِ وَحُقُولُهُ" onerror="this.src='https://placehold.co/600x400/e8f5e9/2e7d32?text=صورة+الريف+p45_reef.jpg'">
+          <div class="img-caption">🏡 هُدُوءُ الرِّيفِ وَحُقُولُهُ الْخَضْرَاءُ (p45_reef.jpg)</div>
+        </div>
+        <div class="image-frame">
+          <img src="p45_madina.jpg" alt="عِمَارَاتُ الْمَدِينَةِ وَشَوَارِعُهَا" onerror="this.src='https://placehold.co/600x400/e3f2fd/1976d2?text=صورة+المدينة+p45_madina.jpg'">
+          <div class="img-caption">🏢 عِمَارَاتُ الْمَدِينَةِ وَشَوَارِعُهَا الْوَاسِعَةُ (p45_madina.jpg)</div>
+        </div>
+      </div>
+
+      <div class="qa-container">
+        <div class="qa-group" id="q2-1" data-station-id="2">
+          <div class="qa-title"><span class="qa-number">1</span> هَلْ تُحِبُّ الْعَيْشَ فِي الْمَدِينَةِ ؟ لِمَاذَا ؟</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">نَعَمْ، لِأَنَّ الْمَرَافِقَ مُتَوَفِّرَةٌ كَالْمَسَارِحِ وَالْمَحَلَّاتِ وَالْمُسْتَشْفَيَاتِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">لَا، لِأَنَّهُ لَا يُوجَدُ فِيهَا بِنَايَاتٌ أَبَدًا</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">نَعَمْ، لِأَنَّهَا مَلِيئَةٌ بِالْمَرَاعِي وَالْخِرْفَانِ</button>
+          </div>
+        </div>
+
+        <div class="qa-group" id="q2-2" data-station-id="2">
+          <div class="qa-title"><span class="qa-number">2</span> مَاذَا يُعْجِبُكَ فِي الرِّيفِ ؟</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">هُدُوؤُهُ، وَهَوَاؤُهُ النَّقِيُّ، وَحُقُولُهُ الْخَضْرَاءُ الْوَاسِعَةُ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">دُخَانُ الْمَصَانِعِ وَازْدِحَامُ السَّيَّارَاتِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">شَوَارِعُهُ الْمُكْتَظَّةُ وَالضَّجِيجُ الْعَالِي</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== المحطة 3: ص 46 استعمل الصيغ ==================== -->
+    <section id="station-3" class="lesson-card locked" data-station="3">
+      <div class="card-header-bar">
+        <span class="page-badge">كِتَابُ الْقِرَاءَةِ • صَفْحَة 46</span>
+        <div class="eval-badge">
+          <span>الْمَحَطَّةُ 3</span>
+          <span class="c">✓ <b id="s3-c">0</b></span>
+          <span class="w">✗ <b id="s3-w">0</b></span>
+        </div>
+      </div>
+      <h2 class="card-title">✨ أَسْتَعْمِلُ الصِّيَغَ</h2>
+      <p class="instruction">اقْرَأِ الْجُمَلَ مُنْتَبِهًا إِلَى الْكَلِمَاتِ الْمُلَوَّنَةِ (الصِّيَغِ الزَّمَانِيَّةِ وَأَدَاةِ الِاسْتِفْهَامِ):</p>
+
+      <div class="lesson-text-box">
+        <p>قَالَتِ السُّنُونُوَةُ : «<span class="highlight-formula">بِالْأَمْسِ</span> اسْتَمْتَعْنَا بِمَنَاظِرِ الْمَدِينَةِ ، <span class="highlight-formula">الْيَوْمَ</span> نَرْحَلُ مِنْ هُنَا ، <span class="highlight-formula">وَغَدًا</span> سَنَكُونُ فِي مَكَانٍ آخَرَ».</p>
+        <p style="margin-top: 10px;">قَالَ أَحَدُ الصِّغَارِ : «<span class="highlight-formula">مَاذَا</span> سَنَفْعَلُ فِي هَذَا الْمَكَانِ ؟»</p>
+      </div>
+
+      <div class="qa-group" id="q3-1" data-station-id="3">
+        <div class="qa-title"><span class="qa-number">1</span> تَدْرِيبٌ سَرِيعٌ: أَيُّ الْكَلِمَاتِ تَدُلُّ عَلَى الزَّمَنِ الَّذِي مَضَى وَانْتَهَى؟</div>
+        <div class="options-grid shuffle-container">
+          <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">بِالأَمْسِ</button>
+          <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الْيَوْمَ</button>
+          <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">غَدًا</button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== المحطة 4: ص 43 أنتج شفهيا ==================== -->
+    <section id="station-4" class="lesson-card locked" data-station="4">
+      <div class="card-header-bar">
+        <span class="page-badge">كِتَابُ الْقِرَاءَةِ • صَفْحَة 43</span>
+        <div class="eval-badge">
+          <span>الْمَحَطَّةُ 4</span>
+          <span class="c">✓ <b id="s4-c">0</b></span>
+          <span class="w">✗ <b id="s4-w">0</b></span>
+        </div>
+      </div>
+      <h2 class="card-title">🗣️ أُنْتِجُ شَفَهِيّاً: أُلَاحِظُ الْمَشَاهِدَ وَأُعِيدُ بِنَاءَ النَّصِّ الْمَنْطُوقِ</h2>
+      <p class="instruction">اخْتَرِ الْعِبَارَةَ الْمُنَاسِبَةَ الَّتِي تُلَخِّصُ كُلَّ مَشْهَدٍ مِنْ مَشَاهِدِ الْقِصَّةِ:</p>
+
+      <div class="match-container">
+        <div class="match-item" id="match-row-1" data-station-id="4">
+          <img src="p43_swallows_wires.jpg" alt="السنونو على الأسلاك" onerror="this.src='https://placehold.co/300x200/e0f2fe/0369a1?text=p43_swallows_wires.jpg'">
+          <div class="match-choices shuffle-container">
+            <button class="btn-match-select" data-correct="true" onclick="checkMatchChoice(this, 'match-row-1')">تَسْتَعِدُّ أَسْرَابُ الطُّيُورِ لِلْهِجْرَةِ مَعَ حُلُولِ الشِّتَاءِ</button>
+            <button class="btn-match-select" data-correct="false" onclick="checkMatchChoice(this, 'match-row-1')">حَلَّقَتِ الطُّيُورُ فِي سَمَاءِ مَدِينَةِ الْجَزَائِرِ</button>
+            <button class="btn-match-select" data-correct="false" onclick="checkMatchChoice(this, 'match-row-1')">حَطَّ الْجَمِيعُ فِي الرِّيفِ لِلِاسْتِرَاحَةِ</button>
+          </div>
+        </div>
+
+        <div class="match-item" id="match-row-2" data-station-id="4">
+          <img src="p43_swallows_makam.jpg" alt="السنونو أمام مقام الشهيد" onerror="this.src='https://placehold.co/300x200/fef3c7/b45309?text=p43_swallows_makam.jpg'">
+          <div class="match-choices shuffle-container">
+            <button class="btn-match-select" data-correct="true" onclick="checkMatchChoice(this, 'match-row-2')">حَلَّقَتِ السُّنُونُوَةُ مَعَ صِغَارِهَا عَالِيًا فِي سَمَاءِ مَدِينَةِ الْجَزَائِرِ</button>
+            <button class="btn-match-select" data-correct="false" onclick="checkMatchChoice(this, 'match-row-2')">تَصْطَفُّ الطُّيُورُ فَوْقَ أَسْلَاكِ الْكَهْرَبَاءِ تَنْتَظِرُ الرَّحِيلَ</button>
+            <button class="btn-match-select" data-correct="false" onclick="checkMatchChoice(this, 'match-row-2')">حَطَّ الصِّغَارُ فَوْقَ الأَشْجَارِ فِي الرِّيفِ</button>
+          </div>
+        </div>
+
+        <div class="match-item" id="match-row-3" data-station-id="4">
+          <img src="p43_swallows_reef.jpg" alt="السنونو في الريف" onerror="this.src='https://placehold.co/300x200/dcfce7/15803d?text=p43_swallows_reef.jpg'">
+          <div class="match-choices shuffle-container">
+            <button class="btn-match-select" data-correct="true" onclick="checkMatchChoice(this, 'match-row-3')">حَطَّ سِرْبُ السُّنُونُو فِي الرِّيفِ لِلِاسْتِرَاحَةِ بَيْنَ الْحُقُولِ الْخَضْرَاءِ</button>
+            <button class="btn-match-select" data-correct="false" onclick="checkMatchChoice(this, 'match-row-3')">تَسْتَعِدُّ الطُّيُورُ لِلْبَقَاءِ فِي الْمَدِينَةِ طَوَالَ الْعَامِ</button>
+            <button class="btn-match-select" data-correct="false" onclick="checkMatchChoice(this, 'match-row-3')">تَطِيرُ السُّنُونُوَةُ وَحِيدَةً بَعِيدًا عَنْ صِغَارِهَا</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== المحطة 5: ص 47 أقرأ وأفهم ==================== -->
+    <section id="station-5" class="lesson-card locked" data-station="5">
+      <div class="card-header-bar">
+        <span class="page-badge">كِتَابُ الْقِرَاءَةِ • صَفْحَة 47</span>
+        <div class="eval-badge">
+          <span>الْمَحَطَّةُ 5</span>
+          <span class="c">✓ <b id="s5-c">0</b></span>
+          <span class="w">✗ <b id="s5-w">0</b></span>
+        </div>
+      </div>
+      <h2 class="card-title">📖 أَقْرَأُ: «بَيْنَ الْمَدِينَةِ وَالرِّيفِ»</h2>
+      
+      <div class="lesson-text-box">
+        <h3 style="text-align:center; color:var(--primary-dark); margin-bottom:12px;">بَيْنَ الْمَدِينَةِ وَالرِّيفِ</h3>
+        <p>غَادَرَتْ سِهَامُ الْمَدِينَةَ بِاتِّجَاهِ الرِّيفِ ، وَلَمَّا ظَهَرَتْ لَهَا الْقَرْيَةُ قَالَتْ : «إِنَّهُ الرِّيفُ الَّذِي طَالَمَا حَلُمْتُ بِالْعَيْشِ فِيهِ يَا أَبِي ! أَهْوَى مَنَازِلَهُ الْجَمِيلَةَ وَالْمُتَبَاعِدَةَ عَنْ بَعْضِهَا ، لِتَفْسَحَ الْمَكَانَ لِلْحَدَائِقِ الْخَضْرَاءِ . أُحِبُّ مَنْظَرَ الْخِرْفَانِ وَهِيَ فِي الْمَرْعَى ، أَسْمَعُ ثُغَاءَهَا وَكَأَنَّهَا تُرَحِّبُ بِكُلِّ زَائِرٍ».</p>
+        <p style="margin-top:10px;">قَاطَعَتْهَا ثُرَيَّا قَائِلَةً : «أَمَّا أَنَا فَأُحِبُّ حَيَّنَا فِي الْمَدِينَةِ ، لِأَنَّ الْمَرَافِقَ مُتَوَفِّرَةٌ ، كَالْمَسْرَحِ وَالْحَدَائِقِ الْعُمُومِيَّةِ وَالْمَحَلَّاتِ التِّجَارِيَّةِ».</p>
+        <p style="margin-top:10px;">قَالَ الْأَبُ : «الرِّيفُ وَالْمَدِينَةُ ، كِلَاهُمَا جُزْءٌ مِنْ وَطَنِنَا الْغَالِي».</p>
+      </div>
+
+      <div class="pedagogical-box">
+        <h4 style="color:#3730a3; margin-bottom:6px;">📚 مَعَانِي الْمُفْرَدَاتِ:</h4>
+        <p>• <b>أَهْوَى :</b> أُحِبُّ (مِثَالٌ: أَهْوَى مُشَاهَدَةَ الرُّسُومِ الْمُتَحَرِّكَةِ).</p>
+        <p>• <b>لِتَفْسَحَ :</b> لِتَتْرُكَ (مِثَالٌ: يَفْسَحُ السَّائِقُونَ الطَّرِيقَ لِسَيَّارَةِ الْإِسْعَافِ).</p>
+      </div>
+
+      <h3 style="margin: 18px 0 10px; color: var(--primary-dark);">❓ أَفْهَمُ النَّصَّ:</h3>
+      
+      <div class="qa-container">
+        <div class="qa-group" id="q5-1" data-station-id="5">
+          <div class="qa-title"><span class="qa-number">1</span> إِلَى أَيْنَ ذَهَبَتْ سِهَامُ وَثُرَيَّا ؟</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">إِلَى الرِّيفِ لِقَضَاءِ الْعُطْلَةِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">إِلَى شَاطِئِ الْبَحْرِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">إِلَى حَدِيقَةِ الْحَيَوَانِ</button>
+          </div>
+        </div>
+
+        <div class="qa-group" id="q5-2" data-station-id="5">
+          <div class="qa-title"><span class="qa-number">2</span> كَيْفَ وَصَفَتْ سِهَامُ الرِّيفَ ؟</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">مَنَازِلُهُ جَمِيلَةٌ وَمُتَبَاعِدَةٌ تَفْسَحُ الْمَجَالَ لِلْحَدَائِقِ، وَالْخِرْفَانُ فِي الْمَرْعَى</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">شَوَارِعُهُ ضَيِّقَةٌ وَمُزْدَحِمَةٌ بِالسَّيَّارَاتِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">مَكَانٌ لَا يُوجَدُ فِيهِ شَجَرٌ وَلَا أَعْشَابٌ</button>
+          </div>
+        </div>
+
+        <div class="qa-group" id="q5-3" data-station-id="5">
+          <div class="qa-title"><span class="qa-number">3</span> مَا هِيَ الْمَرَافِقُ الْمَوْجُودَةُ فِي الْمَدِينَةِ حَسَبَ ثُرَيَّا ؟</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">الْمَسْرَحُ وَالْحَدَائِقُ الْعُمُومِيَّةُ وَالْمَحَلَّاتُ التِّجَارِيَّةُ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الزَّرِيبَةُ وَالْمَرْعَى وَحُقُولُ الْقَمْحِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الْغَابَاتُ الْكَبِيرَةُ فَقَطْ</button>
+          </div>
+        </div>
+
+        <div class="qa-group" id="q5-4" data-station-id="5">
+          <div class="qa-title"><span class="qa-number">4</span> كَيْفَ تُحَافِظُ عَلَى الْمَكَانِ الَّذِي تَعِيشُ فِيهِ ؟</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">أُحَافِظُ عَلَى نَظَافَتِهِ وَلَا أَرْمِي الأَوْسَاخَ وَأَعْتَنِي بِالأَشْجَارِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">أَرْمِي الْقُمَامَةَ فِي الطَّرِيقِ وَالْحَدَائِقِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">أُكَسِّرُ أَغْصَانَ الأَشْجَارِ فِي كُلِّ مَكَانٍ</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== المحطة 6: ص 48 أكتشف وأميز ==================== -->
+    <section id="station-6" class="lesson-card locked" data-station="6">
+      <div class="card-header-bar">
+        <span class="page-badge">كِتَابُ الْقِرَاءَةِ • صَفْحَة 48</span>
+        <div class="eval-badge">
+          <span>الْمَحَطَّةُ 6</span>
+          <span class="c">✓ <b id="s6-c">0</b></span>
+          <span class="w">✗ <b id="s6-w">0</b></span>
+        </div>
+      </div>
+      <h2 class="card-title">🔍 أَكْتَشِفُ وَأُمَيِّزُ + أُحَسِّنُ قِرَاءَتِي</h2>
+      
+      <p class="instruction">أَقْرَأُ مُنْتَبِهًا إِلَى الْحَرْفَيْنِ : <span class="letter-dhad">(ض)</span> وَ <span class="letter-tha">(ث)</span> :</p>
+      
+      <div class="lesson-text-box">
+        <p>• ذَهَبَتْ سِهَامُ وَ<span class="letter-tha">ثُ</span>رَيَّا إِلَى الرِّيفِ لِقَ<span class="letter-dhad">ضَ</span>اءِ الْعُطْلَةِ .</p>
+      </div>
+
+      <table class="phonics-table">
+        <tr>
+          <td><span class="letter-dhad">ض</span></td>
+          <td><span class="letter-tha">ث</span></td>
+        </tr>
+        <tr>
+          <td><span class="letter-dhad">ضَـ</span>ا</td>
+          <td><span class="letter-tha">ثَـ</span>ا</td>
+        </tr>
+        <tr>
+          <td><span class="letter-dhad">ضُـ</span>و</td>
+          <td><span class="letter-tha">ثُـ</span>و</td>
+        </tr>
+        <tr>
+          <td><span class="letter-dhad">ضِـ</span>ي</td>
+          <td><span class="letter-tha">ثِـ</span>ي</td>
+        </tr>
+      </table>
+
+      <div class="pedagogical-box">
+        <p><b>كَلِمَاتٌ لِلْقِرَاءَةِ وَالتَّمْيِيزِ:</b></p>
+        <p style="font-size:1.15rem; font-weight:700; margin-top:6px; display:flex; flex-wrap:wrap; gap:12px;">
+          <span>رَوْ<span class="letter-dhad">ضَ</span>ةٌ</span> - 
+          <span>كَوْ<span class="letter-tha">ثَ</span>رُ</span> - 
+          <span>ال<span class="letter-dhad">ضَّ</span>جِيجُ</span> - 
+          <span>ال<span class="letter-tha">ثَّ</span>مِينُ</span> - 
+          <span>حَوْ<span class="letter-dhad">ضٌ</span></span> - 
+          <span>مِحْرَا<span class="letter-tha">ثٌ</span></span>
+        </p>
+      </div>
+
+      <h3 style="margin: 18px 0 10px; color: var(--primary-dark);">🗣️ أُحَسِّنُ قِرَاءَتِي:</h3>
+      <div class="lesson-text-box" style="border-right-color: #0288d1;">
+        <p>« فِي الْمَدِينَةِ مَسَارِحُ وَسِينِمَا ، وَحَدَائِقُ عُمُومِيَّةٌ وَمَحَلَّاتٌ كُبْرَى ، وَمُسْتَشْفَيَاتٌ وَمَصَانِعُ . »</p>
+      </div>
+
+      <div class="qa-group" id="q6-1" data-station-id="6">
+        <div class="qa-title"><span class="qa-number">1</span> تَأْكِيدُ التَّمْيِيزِ: كَلِمَةُ «ال<span class="letter-dhad">ضَّ</span>جِيجُ» تَبْدَأُ بِحَرْفِ:</div>
+        <div class="options-grid shuffle-container">
+          <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">حَرْفِ الضَّادِ (ض)</button>
+          <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">حَرْفِ الثَّاءِ (ث)</button>
+          <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">حَرْفِ التَّاءِ (ت)</button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== المحطة 7: ص 49 التربية الإسلامية ==================== -->
+    <section id="station-7" class="lesson-card locked" data-station="7">
+      <div class="card-header-bar">
+        <span class="page-badge">التَّرْبِيَةُ الإِسْلَامِيَّةُ • صَفْحَة 49</span>
+        <div class="eval-badge">
+          <span>الْمَحَطَّةُ 7</span>
+          <span class="c">✓ <b id="s7-c">0</b></span>
+          <span class="w">✗ <b id="s7-w">0</b></span>
+        </div>
+      </div>
+      <h2 class="card-title">🕌 سُورَةُ قُرَيْشٍ</h2>
+      <p class="instruction">اسْتَمِعْ إِلَى التِّلَاوَةِ الْعَطِرَةِ لِسُورَةِ قُرَيْشٍ وَتَابِعِ الآيَاتِ الْكَرِيمَةَ:</p>
+
+      <div class="audio-player-box">
+        <audio controls id="audio-quraish">
+          <source src="surah_quraish.mp3" type="audio/mpeg">
+          تَصَفُّحُكَ لَا يَدْعَمُ مُشَغِّلَ الصَّوْتِ.
+        </audio>
+        <span class="audio-filename-note">📁 مَلَفُّ التِّلَاوَةِ: surah_quraish.mp3</span>
+      </div>
+
+      <div class="quran-card-inner">
+        <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+        <div class="quran-ayahs">
+          لِإِيلَافِ قُرَيْشٍ <span class="ayah-num">١</span>
+          إِيلَافِهِمْ رِحْلَةَ الشِّتَاءِ وَالصَّيْفِ <span class="ayah-num">٢</span>
+          فَلْيَعْبُدُوا رَبَّ هَٰذَا الْبَيْتِ <span class="ayah-num">٣</span>
+          الَّذِي أَطْعَمَهُم مِّن جُوعٍ وَآمَنَهُم مِّنْ خَوْفٍ <span class="ayah-num">٤</span>
+        </div>
+      </div>
+
+      <div class="pedagogical-box">
+        <h4 style="color:#b45309; margin-bottom:6px;">📖 أَفْهَمُ السُّورَةَ:</h4>
+        <p>كَانَتْ قُرَيْشٌ تَقُومُ بِرِحْلَتَيْنِ تِجَارِيَّتَيْنِ كَبِيرَتَيْنِ ، وَاحِدَةٌ فِي الشِّتَاءِ (إِلَى الْيَمَنِ) وَأُخْرَى فِي الصَّيْفِ (إِلَى الشَّامِ) ، وَكَانَتْ تَرْبَحُ مِنْهُمَا أَمْوَالًا كَثِيرَةً ، فَأَمَرَهُمُ اللَّهُ أَنْ يَعْبُدُوهُ وَيَشْكُرُوهُ عَلَى نِعْمَةِ الرِّزْقِ وَالأَمْنِ.</p>
+      </div>
+
+      <div class="pedagogical-box" style="background:#f0fdf4; border-right-color:#16a34a;">
+        <h4 style="color:#15803d; margin-bottom:6px;">🌟 أَتَعَلَّمُ مِنَ السُّورَةِ:</h4>
+        <p>• أَعْطَانَا اللَّهُ عَزَّ وَجَلَّ الْكَثِيرَ مِنَ النِّعَمِ ، كَنِعْمَةِ الطَّعَامِ وَالشَّرَابِ ، وَالأَمْنِ وَالصِّحَّةِ .</p>
+        <p>• يَجِبُ أَنْ نَعْبُدَهُ وَنَشْكُرَهُ عَلَى ذَلِكَ دَائِمًا .</p>
+      </div>
+
+      <div class="qa-group" id="q7-1" data-station-id="7">
+        <div class="qa-title"><span class="qa-number">1</span> كَمْ عَدَدُ رِحْلَاتِ قُرَيْشٍ التِّجَارِيَّةِ الْمَذْكُورَةِ فِي السُّورَةِ؟</div>
+        <div class="options-grid shuffle-container">
+          <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">رِحْلَتَانِ (رِحْلَةُ الشِّتَاءِ وَرِحْلَةُ الصَّيْفِ)</button>
+          <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">رِحْلَةٌ وَاحِدَةٌ فِي الرَّبِيعِ</button>
+          <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">أَرْبَعُ رِحْلَاتٍ كُلَّ شَهْرٍ</button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== المحطة 8: دفتر الأنشطة ص 29 ==================== -->
+    <section id="station-8" class="lesson-card locked" data-station="8">
+      <div class="card-header-bar">
+        <span class="page-badge">دَفْتَرُ الأَنْشِطَةِ • صَفْحَة 29</span>
+        <div class="eval-badge">
+          <span>الْمَحَطَّةُ 8</span>
+          <span class="c">✓ <b id="s8-c">0</b></span>
+          <span class="w">✗ <b id="s8-w">0</b></span>
+        </div>
+      </div>
+      <h2 class="card-title">✏️ أَنْشِطَةُ اللُّغَةِ (ص 29)</h2>
+
+      <h3 style="color:var(--primary-dark); margin: 10px 0;">1. أُوَظِّفُ الصِّيَغَ: (الْيَوْمَ / غَدًا / الأَمْسِ)</h3>
+      <div class="qa-container">
+        <div class="qa-group" id="q8-1" data-station-id="8">
+          <div class="qa-title"><span class="qa-number">1</span> [ ............ ] نَغْرِسُ شُجَيْرَةَ اللَّيْمُونِ .</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">الْيَوْمَ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الأَمْسِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">غَدًا</button>
+          </div>
+        </div>
+
+        <div class="qa-group" id="q8-2" data-station-id="8">
+          <div class="qa-title"><span class="qa-number">2</span> [ ............ ] زُرْنَا حَدِيقَةَ التَّسْلِيَةِ .</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">الأَمْسِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الْيَوْمَ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">غَدًا</button>
+          </div>
+        </div>
+
+        <div class="qa-group" id="q8-3" data-station-id="8">
+          <div class="qa-title"><span class="qa-number">3</span> [ ............ ] سَنَتَجَوَّلُ فِي الْمَدِينَةِ .</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">غَدًا</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الأَمْسِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الْيَوْمَ</button>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="color:var(--primary-dark); margin: 20px 0 10px;">2. أَطْرَحُ سُؤَالًا بـِ «مَاذَا» :</h3>
+      <div class="pedagogical-box">
+        <b>الْمِثَالُ:</b><br>
+        الأَبُ: هَيَّا ، أَحْضِرِيهَا يَا سَلْمَى.<br>
+        سَلْمَى: مَاذَا أُحْضِرُ يَا أَبِي ؟
+      </div>
+      <div class="qa-group" id="q8-4" data-station-id="8">
+        <div class="qa-title"><span class="qa-number">4</span> الْمُعَلِّمُ: «اكْتُبُوا». - التَّلَامِيذُ: [ ............ ] ؟</div>
+        <div class="options-grid shuffle-container">
+          <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">مَاذَا نَكْتُبُ يَا مُعَلِّمُنَا ؟</button>
+          <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">مَاذَا نَأْكُلُ يَا مُعَلِّمُنَا ؟</button>
+          <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">مَاذَا نَلْعَبُ يَا مُعَلِّمُنَا ؟</button>
+        </div>
+      </div>
+
+      <h3 style="color:var(--primary-dark); margin: 20px 0 10px;">3. أَفْهَمُ وَأُجِيبُ : أُشَطِّبُ الْكَلِمَاتِ الَّتِي لَمْ أَقْرَأْهَا فِي النَّصِّ</h3>
+      <p class="instruction">انْقُرْ عَلَى الْكَلِمَاتِ الَّتِي <b>لَمْ تُذْكَرْ</b> فِي نَصِّ «بَيْنَ الْمَدِينَةِ وَالرِّيفِ» لِتَشْطِيبِهَا (تُوجَدُ 4 كَلِمَاتٍ دَخِيلَةٍ):</p>
+      
+      <div class="cross-words-container" id="cross-activity" data-station-id="8">
+        <div class="cross-words-grid">
+          <button class="cross-word-btn" data-target-cross="false" onclick="toggleCrossWord(this)">الْمَدِينَةُ</button>
+          <button class="cross-word-btn" data-target-cross="false" onclick="toggleCrossWord(this)">الْقَرْيَةُ</button>
+          <button class="cross-word-btn" data-target-cross="true" onclick="toggleCrossWord(this)">الْبَسَاتِينُ</button>
+          <button class="cross-word-btn" data-target-cross="false" onclick="toggleCrossWord(this)">الْحَدِيقَةُ</button>
+          <button class="cross-word-btn" data-target-cross="false" onclick="toggleCrossWord(this)">الْمَرْعَى</button>
+          <button class="cross-word-btn" data-target-cross="false" onclick="toggleCrossWord(this)">الرِّيفُ</button>
+          <button class="cross-word-btn" data-target-cross="true" onclick="toggleCrossWord(this)">الْمَدَارِسُ</button>
+          <button class="cross-word-btn" data-target-cross="false" onclick="toggleCrossWord(this)">الْمَحَلَّاتُ</button>
+          <button class="cross-word-btn" data-target-cross="false" onclick="toggleCrossWord(this)">الْمَصَانِعُ</button>
+          <button class="cross-word-btn" data-target-cross="true" onclick="toggleCrossWord(this)">الْمُزْدَحِمَةُ</button>
+          <button class="cross-word-btn" data-target-cross="false" onclick="toggleCrossWord(this)">أَهْوَى</button>
+          <button class="cross-word-btn" data-target-cross="true" onclick="toggleCrossWord(this)">أَسْكُنُ</button>
+        </div>
+        <div style="margin-top:12px; text-align:left;">
+          <button id="btn-validate-cross" class="btn-main" onclick="validateCrossActivity()">تَأْكِيدُ الشَّطْبِ (٤ كَلِمَاتٍ)</button>
+        </div>
+      </div>
+
+      <h3 style="color:var(--primary-dark); margin: 20px 0 10px;">4. أُلَوِّنُ الْجُمْلَةَ الْمُنَاسِبَةَ :</h3>
+      <p class="instruction">مَعْنَى جُمْلَةِ : «أَهْوَى الْمَنَازِلَ» هُوَ :</p>
+      <div class="qa-group" id="q8-5" data-station-id="8">
+        <div class="options-grid shuffle-container">
+          <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">أَزُورُ الْمَنَازِلَ</button>
+          <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">أُحِبُّ الْمَنَازِلَ</button>
+          <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">أَبْنِي الْمَنَازِلَ</button>
+        </div>
+      </div>
+
+      <h3 style="color:var(--primary-dark); margin: 20px 0 10px;">5. أُوَظِّفُ التَّرَاكِيبَ اللُّغَوِيَّةَ :</h3>
+      <div class="qa-container">
+        <div class="qa-group" id="q8-6" data-station-id="8">
+          <div class="qa-title"><span class="qa-number">6</span> [ ............ ] فِي الزَّرِيبَةِ .</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">الْأَبْقَارُ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">السَّيَّارَاتُ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الطَّائِرَاتُ</button>
+          </div>
+        </div>
+
+        <div class="qa-group" id="q8-7" data-station-id="8">
+          <div class="qa-title"><span class="qa-number">7</span> الْعُمَّالُ فِي [ ............ ] .</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">الْمَصْنَعِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الْبَحْرِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">السَّمَاءِ</button>
+          </div>
+        </div>
+
+        <div class="qa-group" id="q8-8" data-station-id="8">
+          <div class="qa-title"><span class="qa-number">8</span> التَّلَامِيذُ فِي [ ............ ] .</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">الْمَدْرَسَةِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الْغَابَةِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الْمَطَارِ</button>
+          </div>
+        </div>
+
+        <div class="qa-group" id="q8-9" data-station-id="8">
+          <div class="qa-title"><span class="qa-number">9</span> رَكِّبْ جُمْلَةً مُفِيدَةً: [ ............ ] فِي [ ............ ] .</div>
+          <div class="options-grid shuffle-container">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">الْفَلَّاحُ فِي الْحَقْلِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">السَّمَكُ فِي الشَّجَرَةِ</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">الْقِطَارُ فِي الْغُرْفَةِ</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== المحطة 9: دفتر الأنشطة ص 30 أثري لغتي ==================== -->
+    <section id="station-9" class="lesson-card locked" data-station="9">
+      <div class="card-header-bar">
+        <span class="page-badge">دَفْتَرُ الأَنْشِطَةِ • صَفْحَة 30</span>
+        <div class="eval-badge">
+          <span>الْمَحَطَّةُ 9</span>
+          <span class="c">✓ <b id="s9-c">0</b></span>
+          <span class="w">✗ <b id="s9-w">0</b></span>
+        </div>
+      </div>
+      <h2 class="card-title">📦 أُثْرِي لُغَتِي: أُصَنِّفُ فِي الْجَدْوَلِ</h2>
+      <p class="instruction">انْقُرْ عَلَى الْكَلِمَةِ لِتَحْدِيدِهَا، ثُمَّ انْقُرْ عَلَى خَانَةِ الْجَدْوَلِ الْمُنَاسِبَةِ (فِي الرِّيفِ أَوْ فِي الْمَدِينَةِ):</p>
+
+      <div class="classify-box">
+        <div class="word-pool" id="wordPool">
+          <div class="classify-chip" data-word="الْحُقُولُ" data-category="reef" onclick="selectChip(this)">الْحُقُولُ</div>
+          <div class="classify-chip" data-word="الْخُضَرُ" data-category="reef" onclick="selectChip(this)">الْخُضَرُ</div>
+          <div class="classify-chip" data-word="الْمَحَلَّاتُ الْكُبْرَى" data-category="city" onclick="selectChip(this)">الْمَحَلَّاتُ الْكُبْرَى</div>
+          <div class="classify-chip" data-word="الْمَرْعَى" data-category="reef" onclick="selectChip(this)">الْمَرْعَى</div>
+          <div class="classify-chip" data-word="السِّينِمَا" data-category="city" onclick="selectChip(this)">السِّينِمَا</div>
+          <div class="classify-chip" data-word="الْمَسْرَحُ" data-category="city" onclick="selectChip(this)">الْمَسْرَحُ</div>
+          <div class="classify-chip" data-word="الْخِرْفَانُ" data-category="reef" onclick="selectChip(this)">الْخِرْفَانُ</div>
+          <div class="classify-chip" data-word="الْمَصَانِعُ" data-category="city" onclick="selectChip(this)">الْمَصَانِعُ</div>
+        </div>
+
+        <table class="classify-table">
+          <tr>
+            <td class="classify-col" id="col-reef" onclick="placeSelectedChip('reef')">
+              <div class="classify-col-title">🌾 أَجِدُهَا فِي الرِّيفِ</div>
+              <div class="classify-slot-items" id="slot-reef"></div>
+            </td>
+            <td class="classify-col" id="col-city" onclick="placeSelectedChip('city')">
+              <div class="classify-col-title">🏙️ أَجِدُهَا فِي الْمَدِينَةِ</div>
+              <div class="classify-slot-items" id="slot-city"></div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+
+    <!-- ==================== المحطة 10: دفتر الأنشطة ص 31 تربية إسلامية ==================== -->
+    <section id="station-10" class="lesson-card locked" data-station="10">
+      <div class="card-header-bar">
+        <span class="page-badge">دَفْتَرُ الأَنْشِطَةِ • صَفْحَة 31</span>
+        <div class="eval-badge">
+          <span>الْمَحَطَّةُ 10</span>
+          <span class="c">✓ <b id="s10-c">0</b></span>
+          <span class="w">✗ <b id="s10-w">0</b></span>
+        </div>
+      </div>
+      <h2 class="card-title">🌙 التَّرْبِيَةُ الإِسْلَامِيَّةُ: أُجِيبُ بِـ (صَحِيحٌ) أَوْ (خَاطِئٌ)</h2>
+      <p class="instruction">حَدِّدْ صِحَّةَ الْعِبَارَاتِ التَّالِيَةِ بِالنَّقْرِ عَلَى الزِّرِّ الْمُنَاسِبِ:</p>
+
+      <div class="qa-container">
+        <div class="qa-group" id="q10-1" data-station-id="10">
+          <div class="qa-title"><span class="qa-number">1</span> كَانَتْ قُرَيْشٌ تُمَارِسُ التِّجَارَةَ .</div>
+          <div class="options-grid">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">صَحِيحٌ ✓</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">خَاطِئٌ ✗</button>
+          </div>
+        </div>
+
+        <div class="qa-group" id="q10-2" data-station-id="10">
+          <div class="qa-title"><span class="qa-number">2</span> تَقُومُ بِرِحْلَةٍ فِي الشِّتَاءِ وَرِحْلَةٍ فِي الْخَرِيفِ .</div>
+          <div class="options-grid">
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">صَحِيحٌ ✓</button>
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">خَاطِئٌ ✗</button>
+          </div>
+        </div>
+
+        <div class="qa-group" id="q10-3" data-station-id="10">
+          <div class="qa-title"><span class="qa-number">3</span> تَرْبَحُ قُرَيْشٌ مِنَ التِّجَارَةِ أَمْوَالًا كَثِيرَةً .</div>
+          <div class="options-grid">
+            <button class="opt-btn" data-correct="true" onclick="checkAnswer(this)">صَحِيحٌ ✓</button>
+            <button class="opt-btn" data-correct="false" onclick="checkAnswer(this)">خَاطِئٌ ✗</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================== المحطة 11: التقرير الختامي ==================== -->
+    <section id="final-report" class="final-report">
+      <div class="score-circle">
+        <span class="score-pct" id="report-pct">0%</span>
+        <span class="score-sub">النِّسْبَةُ الْمِئَوِيَّةُ</span>
+      </div>
+      <h2 class="report-message" id="report-msg">أَحْسَنْتَ يَا بَطَلُ!</h2>
+      <p class="report-details" id="report-details">
+        حَصَلْتَ عَلَى <b id="rep-correct">0</b> إِجَابَةٍ صَحِيحَةٍ مِنْ إِجْمَالِي <b id="rep-total">0</b> سُؤَالًا.
+      </p>
+      <div class="report-actions">
+        <button class="btn-main" onclick="restartLesson()">🔄 إِعَادَةُ الدَّرْسِ</button>
+        <button class="btn-outline" onclick="window.scrollTo({top:0, behavior:'smooth'})">⬆️ الْعَوْدَةُ لِلْأَعْلَى</button>
+        <button class="btn-outline" onclick="exitApp()" style="border-color:#c62828;color:#c62828;">🚪 خُرُوجٌ</button>
+      </div>
+    </section>
+
+    <!-- زر العودة إلى الفهرس -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+  </main>
+
+  <script>
+    // ========================================================
+    // 🛡️ قسم الحماية
+    // ========================================================
+    const CHANNEL_ID = "-1004461185731";  // ← قناة السنة الثانية
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+
+    // ========================================================
+    // 🎯 قسم أنشطة الدرس
+    // ========================================================
+    let audioCtx = null;
+    let isSoundMuted = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function toggleSound() {
+      isSoundMuted = !isSoundMuted;
+      const icon = document.getElementById('soundIcon');
+      const text = document.getElementById('soundText');
+      if (isSoundMuted) {
+        icon.textContent = '🔇';
+        text.textContent = 'الصَّوْتُ مَكْتُومٌ';
+      } else {
+        icon.textContent = '🔊';
+        text.textContent = 'الصَّوْتُ مُمَكَّنٌ';
+        playTap();
+      }
+    }
+
+    function playSuccess() {
+      if (isSoundMuted) return;
+      initAudio();
+      try {
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(523.25, now);
+        osc.frequency.setValueAtTime(659.25, now + 0.1);
+        osc.frequency.setValueAtTime(783.99, now + 0.2);
+        osc.frequency.setValueAtTime(1046.50, now + 0.3);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.5);
+      } catch (e) {
+        console.warn("Audio error:", e);
+      }
+    }
+
+    function playError() {
+      if (isSoundMuted) return;
+      initAudio();
+      try {
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(260, now);
+        osc.frequency.setValueAtTime(190, now + 0.15);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.4);
+      } catch (e) {
+        console.warn("Audio error:", e);
+      }
+    }
+
+    function playTap() {
+      if (isSoundMuted) return;
+      initAudio();
+      try {
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.08);
+      } catch (e) {
+        console.warn("Audio error:", e);
+      }
+    }
+
+    const stationConfig = {
+      1: { total: 5, answered: 0, correct: 0, wrong: 0 },
+      2: { total: 2, answered: 0, correct: 0, wrong: 0 },
+      3: { total: 1, answered: 0, correct: 0, wrong: 0 },
+      4: { total: 3, answered: 0, correct: 0, wrong: 0 },
+      5: { total: 4, answered: 0, correct: 0, wrong: 0 },
+      6: { total: 1, answered: 0, correct: 0, wrong: 0 },
+      7: { total: 1, answered: 0, correct: 0, wrong: 0 },
+      8: { total: 10, answered: 0, correct: 0, wrong: 0 },
+      9: { total: 8, answered: 0, correct: 0, wrong: 0 },
+      10:{ total: 3, answered: 0, correct: 0, wrong: 0 }
+    };
+
+    function shuffleArray(elements) {
+      for (let i = elements.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        elements[i].parentNode.insertBefore(elements[j], elements[i]);
+      }
+    }
+
+    function shuffleAllContainers() {
+      document.querySelectorAll('.shuffle-container').forEach(container => {
+        const items = Array.from(container.children);
+        shuffleArray(items);
+      });
+    }
+
+    function checkAnswer(btn) {
+      initAudio();
+      const group = btn.closest('.qa-group');
+      const stationId = parseInt(group.getAttribute('data-station-id'));
+      const isCorrect = btn.getAttribute('data-correct') === 'true';
+
+      const allBtns = group.querySelectorAll('.opt-btn');
+      allBtns.forEach(b => {
+        b.disabled = true;
+        if (b.getAttribute('data-correct') === 'true') {
+          b.classList.add('correct');
+        }
+      });
+
+      if (!isCorrect) {
+        btn.classList.add('wrong');
+        playError();
+        stationConfig[stationId].wrong++;
+      } else {
+        playSuccess();
+        stationConfig[stationId].correct++;
+      }
+
+      stationConfig[stationId].answered++;
+      updateBadge(stationId);
+      checkStationProgression(stationId);
+    }
+
+    function checkMatchChoice(btn, rowId) {
+      initAudio();
+      const row = document.getElementById(rowId);
+      const stationId = parseInt(row.getAttribute('data-station-id'));
+      const isCorrect = btn.getAttribute('data-correct') === 'true';
+
+      const buttons = row.querySelectorAll('.btn-match-select');
+      buttons.forEach(b => {
+        b.disabled = true;
+        if (b.getAttribute('data-correct') === 'true') {
+          b.classList.add('correct');
+        }
+      });
+
+      if (!isCorrect) {
+        btn.classList.add('wrong');
+        playError();
+        stationConfig[stationId].wrong++;
+      } else {
+        playSuccess();
+        stationConfig[stationId].correct++;
+      }
+
+      stationConfig[stationId].answered++;
+      updateBadge(stationId);
+      checkStationProgression(stationId);
+    }
+
+    function toggleCrossWord(btn) {
+      playTap();
+      if (btn.classList.contains('active-crossed')) {
+        btn.classList.remove('active-crossed');
+        btn.style.textDecoration = 'none';
+        btn.style.background = '#fff';
+      } else {
+        btn.classList.add('active-crossed');
+        btn.style.textDecoration = 'line-through';
+        btn.style.textDecorationThickness = '3px';
+        btn.style.background = '#ffebee';
+      }
+    }
+
+    function validateCrossActivity() {
+      initAudio();
+      const container = document.getElementById('cross-activity');
+      const valBtn = document.getElementById('btn-validate-cross');
+      valBtn.disabled = true;
+
+      const words = container.querySelectorAll('.cross-word-btn');
+      let correctCrosses = 0;
+      let mistakes = 0;
+
+      words.forEach(btn => {
+        btn.disabled = true;
+        const targetCross = btn.getAttribute('data-target-cross') === 'true';
+        const isCrossed = btn.classList.contains('active-crossed');
+
+        if (targetCross && isCrossed) {
+          btn.className = 'cross-word-btn crossed-correct';
+          correctCrosses++;
+        } else if (!targetCross && isCrossed) {
+          btn.className = 'cross-word-btn crossed-wrong';
+          mistakes++;
+        } else if (targetCross && !isCrossed) {
+          btn.className = 'cross-word-btn crossed-wrong';
+          btn.style.textDecoration = 'line-through';
+          mistakes++;
+        } else {
+          btn.className = 'cross-word-btn untouched-correct';
+        }
+      });
+
+      const stationId = 8;
+      if (mistakes === 0 && correctCrosses === 4) {
+        playSuccess();
+        stationConfig[stationId].correct++;
+      } else {
+        playError();
+        stationConfig[stationId].wrong++;
+      }
+
+      stationConfig[stationId].answered++;
+      updateBadge(stationId);
+      checkStationProgression(stationId);
+    }
+
+    let currentlySelectedChip = null;
+
+    function selectChip(chip) {
+      playTap();
+      if (chip.classList.contains('placed')) return;
+
+      document.querySelectorAll('.classify-chip').forEach(c => c.classList.remove('selected'));
+      currentlySelectedChip = chip;
+      chip.classList.add('selected');
+
+      document.getElementById('col-reef').classList.add('highlight-target');
+      document.getElementById('col-city').classList.add('highlight-target');
+    }
+
+    function placeSelectedChip(targetCol) {
+      if (!currentlySelectedChip) return;
+      initAudio();
+
+      const chip = currentlySelectedChip;
+      const wordText = chip.getAttribute('data-word');
+      const expectedCat = chip.getAttribute('data-category');
+      const isCorrect = (expectedCat === targetCol);
+
+      const targetSlot = (targetCol === 'reef') ? document.getElementById('slot-reef') : document.getElementById('slot-city');
+      
+      const itemEl = document.createElement('div');
+      itemEl.className = 'placed-item ' + (isCorrect ? 'correct' : 'wrong');
+      itemEl.innerHTML = `<span>${wordText}</span> <span>${isCorrect ? '✓' : '✗'}</span>`;
+      targetSlot.appendChild(itemEl);
+
+      chip.classList.remove('selected');
+      chip.classList.add('placed');
+      currentlySelectedChip = null;
+
+      document.getElementById('col-reef').classList.remove('highlight-target');
+      document.getElementById('col-city').classList.remove('highlight-target');
+
+      const stationId = 9;
+      if (isCorrect) {
+        playSuccess();
+        stationConfig[stationId].correct++;
+      } else {
+        playError();
+        stationConfig[stationId].wrong++;
+      }
+
+      stationConfig[stationId].answered++;
+      updateBadge(stationId);
+      checkStationProgression(stationId);
+    }
+
+    function updateBadge(stationId) {
+      const cfg = stationConfig[stationId];
+      const cEl = document.getElementById(`s${stationId}-c`);
+      const wEl = document.getElementById(`s${stationId}-w`);
+      if (cEl) cEl.textContent = cfg.correct;
+      if (wEl) wEl.textContent = cfg.wrong;
+    }
+
+    function checkStationProgression(stationId) {
+      const cfg = stationConfig[stationId];
+      if (cfg.answered >= cfg.total) {
+        const nextStationId = stationId + 1;
+        const nextStationEl = document.getElementById(`station-${nextStationId}`);
+        if (nextStationEl) {
+          nextStationEl.classList.remove('locked');
+          setTimeout(() => {
+            nextStationEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 400);
+        } else if (stationId === 10) {
+          showFinalReport();
+        }
+      }
+    }
+
+    function showFinalReport() {
+      let totalCorrect = 0;
+      let totalQuestions = 0;
+
+      for (let s in stationConfig) {
+        totalCorrect += stationConfig[s].correct;
+        totalQuestions += stationConfig[s].total;
+      }
+
+      totalCorrect = Math.min(totalCorrect, totalQuestions);
+      let pct = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+      pct = Math.min(Math.max(pct, 0), 100);
+
+      document.getElementById('rep-correct').textContent = totalCorrect;
+      document.getElementById('rep-total').textContent = totalQuestions;
+      document.getElementById('report-pct').textContent = pct + '%';
+
+      const msgEl = document.getElementById('report-msg');
+      if (pct >= 90) {
+        msgEl.textContent = '🌟 مُمْتَازٌ جِدًّا يَا بَطَلَ الْقِرَاءَةِ! نَتِيجَةٌ رَائِعَةٌ!';
+        msgEl.style.color = '#2e7d32';
+      } else if (pct >= 75) {
+        msgEl.textContent = '👏 أَحْسَنْتَ عَمَلًا! إِجَابَاتُكَ قَوِيَّةٌ وَمُوَفَّقَةٌ!';
+        msgEl.style.color = '#1976d2';
+      } else if (pct >= 50) {
+        msgEl.textContent = '👍 جَيِّدٌ! رَاجِعِ الدَّرْسَ مَرَّةً أُخْرَى لِتَحْصُلَ عَلَى الْعَلَامَةِ الْكَامِلَةِ!';
+        msgEl.style.color = '#ff9800';
+      } else {
+        msgEl.textContent = '💪 لَا بَأْسَ، حَاوِلْ مَرَّةً أُخْرَى بِتَرْكِيزٍ أَكْبَرَ، أَنْتَ قَادِرٌ!';
+        msgEl.style.color = '#c62828';
+      }
+
+      const repCard = document.getElementById('final-report');
+      repCard.style.display = 'block';
+      setTimeout(() => {
+        repCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 300);
+    }
+
+    function restartLesson() {
+      window.location.reload();
+    }
+
+    function exitApp() {
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.close) {
+        window.Telegram.WebApp.close();
+      } else {
+        window.close();
+      }
+    }
+
+    window.onload = function() {
+      shuffleAllContainers();
+    };
+  </script>
+</body>
+</html>
