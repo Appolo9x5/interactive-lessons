@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>نَقْلُ رَسْمٍ عَلَى مَرْصُوفَةٍ - السَّنَة الثَّانِيَة ابْتِدَائِيّ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Cairo', 'Tajawal', sans-serif;
+            touch-action: manipulation;
+            user-select: none;
+            -webkit-user-select: none;
+            background-color: #f3f6fa;
+        }
+        .math-ltr {
+            direction: ltr !important;
+            unicode-bidi: isolate;
+        }
+        .grid-svg {
+            cursor: crosshair;
+            background: #ffffff;
+            touch-action: none;
+        }
+        .vertex-hit {
+            fill: transparent;
+            cursor: pointer;
+            transition: r 0.15s ease, fill 0.15s ease;
+        }
+        .vertex-hit:hover, .vertex-hit:active {
+            fill: rgba(37, 99, 235, 0.4);
+            r: 9;
+        }
+        .vertex-active {
+            fill: #2563eb !important;
+            r: 8 !important;
+            stroke: #ffffff;
+            stroke-width: 2.5;
+        }
+        .locked-stage {
+            opacity: 0.55;
+            pointer-events: none;
+            filter: grayscale(0.6);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e2e8f0;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.15); opacity: 0.3; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .anchor-pulse {
+            animation: pulse-ring 2s infinite ease-in-out;
+            transform-origin: center;
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري
+           ======================================== */
+        #sub-lock-screen {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(255, 255, 255, 0.98);
+          z-index: 99999;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          padding: 24px;
+          text-align: center;
+        }
+        .lock-box {
+          background: #ffffff;
+          border-radius: 20px;
+          padding: 30px 20px;
+          box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+          border: 2px solid #e1f5fe;
+          max-width: 380px;
+          width: 100%;
+        }
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+        .btn-channel {
+          display: block;
+          width: 100%;
+          background: #0288d1;
+          color: #ffffff;
+          text-decoration: none;
+          padding: 14px;
+          font-weight: 800;
+          border-radius: 12px;
+          font-size: 1.05rem;
+          margin-bottom: 10px;
+          box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+        .btn-check-sub {
+          width: 100%;
+          background: #e8f5e9;
+          color: #2e7d32;
+          border: 2px solid #2e7d32;
+          padding: 13px;
+          font-weight: 800;
+          border-radius: 12px;
+          font-size: 1.05rem;
+          cursor: pointer;
+          font-family: inherit;
+        }
+        .sub-status-msg {
+          margin-top: 15px;
+          font-size: 0.95rem;
+          font-weight: 700;
+          min-height: 24px;
+        }
+        .btn-back-home {
+          display: block;
+          width: 100%;
+          max-width: 420px;
+          margin: 16px auto 0 auto;
+          background: #0d47a1;
+          color: #ffffff;
+          border: none;
+          padding: 14px 24px;
+          border-radius: 12px;
+          font-weight: 900;
+          font-size: 1.05rem;
+          cursor: pointer;
+          text-decoration: none;
+          text-align: center;
+          box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col items-center p-2 sm:p-4 pb-24">
+
+    <!-- ========================================
+         نافذة قفل الاشتراك الإجباري
+         ======================================== -->
+    <div id="sub-lock-screen">
+      <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+        <div class="lock-desc">
+          لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+        </div>
+        <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+          📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+        </a>
+        <button class="btn-check-sub" onclick="verifySubscription()">
+          ✅ تَأْكِيدُ الاِشْتِرَاكِ
+        </button>
+        <div id="sub-status-msg" class="sub-status-msg"></div>
+      </div>
+    </div>
+
+    <!-- Header / Banner -->
+    <header class="w-full max-w-5xl bg-gradient-to-r from-blue-700 via-indigo-600 to-sky-600 text-white rounded-3xl shadow-xl p-4 sm:p-6 mb-6">
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
+            <div class="text-right">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="bg-amber-400 text-slate-900 font-extrabold px-3 py-1 rounded-full text-xs shadow-sm">الرِّيَاضِيَّاتُ</span>
+                    <span class="bg-blue-800 text-sky-200 px-3 py-1 rounded-full text-xs font-bold">السَّنَة الثَّانِيَة ابْتِدَائِيّ</span>
+                    <span class="bg-white/20 text-white px-2 py-0.5 rounded-md text-xs">الدَّرْسُ 09</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-black tracking-wide">نَقْلُ رَسْمٍ عَلَى مَرْصُوفَةٍ</h1>
+                <p class="text-blue-100 text-xs sm:text-sm mt-1">تَطْبِيقٌ تَرْبَوِيٌّ تَفَاعُلِيٌّ مُطَابِقٌ لِلْمِنْهَاجِ الْوَطَنِيِّ (كِتَاب التِّلْمِيذِ ص 22 + دَفْتَر الأَنْشِطَة ص 16)</p>
+            </div>
+            <div class="flex items-center gap-3 bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-white/20 shadow-inner">
+                <div class="text-center">
+                    <span class="block text-[11px] text-sky-200 font-bold">المَرْحَلَةُ الحَالِيَّة</span>
+                    <span id="currentStageBadge" class="text-lg font-black text-amber-300">1 / 5</span>
+                </div>
+                <div class="w-9 h-9 rounded-xl bg-amber-400 text-slate-900 flex items-center justify-center font-black text-lg shadow-sm">📐</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container of Stages -->
+    <main class="w-full max-w-5xl flex flex-col gap-8">
+
+        <!-- ================= STAGE 1: أَكْتَشِفُ ================= -->
+        <section id="stage-1" class="bg-white rounded-3xl p-4 sm:p-7 shadow-md border-2 border-slate-150 transition-all duration-300">
+            <div class="flex items-center justify-between border-b pb-3 mb-5 border-slate-200">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-black text-xl shadow-md">1</span>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-800">أَكْتَشِفُ (كِتَابُ التِّلْمِيذِ صَفْحَة 22)</h2>
+                        <p class="text-xs text-slate-500">نَمُوذَجُ الْفِيلِ عَلَى الْمَرْصُوفَةِ</p>
+                    </div>
+                </div>
+                <span class="status-badge px-3 py-1 rounded-full text-xs font-extrabold bg-blue-100 text-blue-700">قَيْدُ الإِنْجَاز</span>
+            </div>
+
+            <div class="bg-sky-50 border border-sky-200 rounded-2xl p-4 mb-6">
+                <h3 class="text-base sm:text-lg font-bold text-sky-950 mb-3 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-sky-600 text-white text-xs flex items-center justify-center">1</span>
+                    مَا اسْمُ الْحَيَوَانِ الْمَرْسُومِ فِي النَّمُوذَجِ ؟
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="stage1-choices">
+                    <button onclick="handleAnimalChoice(this, 'الزَّرَافَةُ', false)" class="choice-btn py-3 px-4 rounded-xl border-2 border-sky-300 bg-white font-bold text-slate-700 hover:border-blue-500 hover:bg-blue-50 transition-all shadow-sm">الزَّرَافَةُ</button>
+                    <button onclick="handleAnimalChoice(this, 'الْفِيلُ', true)" class="choice-btn py-3 px-4 rounded-xl border-2 border-sky-300 bg-white font-bold text-slate-700 hover:border-blue-500 hover:bg-blue-50 transition-all shadow-sm">الْفِيلُ</button>
+                    <button onclick="handleAnimalChoice(this, 'الأَسَدُ', false)" class="choice-btn py-3 px-4 rounded-xl border-2 border-sky-300 bg-white font-bold text-slate-700 hover:border-blue-500 hover:bg-blue-50 transition-all shadow-sm">الأَسَدُ</button>
+                </div>
+                <div id="stage1-choice-feedback" class="mt-2 text-xs font-bold hidden"></div>
+            </div>
+
+            <div class="mb-4">
+                <h3 class="text-base sm:text-lg font-bold text-slate-800 mb-2 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-indigo-600 text-white text-xs flex items-center justify-center">2</span>
+                    أَكْمِلْ نَقْلَ النَّمُوذَجِ عَلَى وَرَقَةِ الْعَمَلِ :
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-500 mb-4">
+                    💡 اِضْغَطْ أَوْ اسْحَبْ بَيْنَ أَرْكَانِ الْمُرَبَّعَاتِ (الْمِغْنَاطِيسِيَّة) لِرَسْمِ الْقِطَعِ النَّاقِصَةِ لِإِكْمَالِ جِسْمِ الْفِيلِ كَمَا فِي النَّمُوذَجِ.
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+                    <div class="flex flex-col items-center bg-slate-50 border border-slate-200 rounded-2xl p-3">
+                        <span class="px-4 py-1 rounded-full bg-slate-200 text-slate-800 font-extrabold text-xs mb-2 shadow-inner">نَمُوذَجٌ (مَرْجِعِيٌّ)</span>
+                        <div class="w-full overflow-x-auto flex justify-center py-1">
+                            <svg id="svg-elephant-ref" class="rounded-xl shadow-sm border border-slate-300 bg-white" width="340" height="260" viewBox="0 0 340 260"></svg>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center bg-blue-50/50 border border-blue-200 rounded-2xl p-3">
+                        <div class="flex items-center justify-between w-full mb-2 px-1">
+                            <span class="px-4 py-1 rounded-full bg-blue-600 text-white font-extrabold text-xs shadow-sm">وَرَقَةُ الْعَمَلِ (تَفَاعُلِيَّة)</span>
+                            <div class="flex items-center gap-1.5" id="controls-stage1">
+                                <button onclick="undoLastLine('elephant')" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-100 text-amber-800 hover:bg-amber-200 transition">↩ تَرَاجُع</button>
+                                <button onclick="clearUserLines('elephant')" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-rose-100 text-rose-800 hover:bg-rose-200 transition">🗑 مَسْح</button>
+                            </div>
+                        </div>
+                        <div class="w-full overflow-x-auto flex justify-center py-1">
+                            <svg id="svg-elephant-work" class="grid-svg rounded-xl shadow border-2 border-blue-400 bg-white" width="340" height="260" viewBox="0 0 340 260"></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-200">
+                <button id="btn-verify-stage1" onclick="verifyStage1()" class="w-full sm:w-auto px-7 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-base shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2">
+                    <span>تَحَقَّقْ مِنَ النَّتِيجَةِ</span>
+                    <span class="text-xl">✓</span>
+                </button>
+                <div id="sub-eval-stage1" class="hidden w-full sm:w-auto flex items-center gap-3 bg-slate-100 px-4 py-2 rounded-2xl text-xs font-bold">
+                    <span class="text-emerald-700 flex items-center gap-1"><span class="w-5 h-5 rounded-full bg-emerald-200 flex items-center justify-center">✓</span> الصَّحِيحُ: <b id="sub1-correct">0</b></span>
+                    <span class="text-rose-700 flex items-center gap-1"><span class="w-5 h-5 rounded-full bg-rose-200 flex items-center justify-center">✗</span> الْأَخْطَاءُ: <b id="sub1-wrong">0</b></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= STAGE 2: أُنْجِزُ ================= -->
+        <section id="stage-2" class="locked-stage bg-white rounded-3xl p-4 sm:p-7 shadow-md border-2 border-slate-150 transition-all duration-300">
+            <div class="flex items-center justify-between border-b pb-3 mb-5 border-slate-200">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-black text-xl shadow-md">2</span>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-800">أُنْجِزُ (كِتَابُ التِّلْمِيذِ صَفْحَة 22)</h2>
+                        <p class="text-xs text-slate-500">نَمُوذَجُ الطَّائِرَةِ عَلَى الْمَرْصُوفَةِ</p>
+                    </div>
+                </div>
+                <span class="status-badge px-3 py-1 rounded-full text-xs font-extrabold bg-slate-200 text-slate-600">مُقْفَل 🔒</span>
+            </div>
+
+            <div class="mb-4">
+                <h3 class="text-base sm:text-lg font-bold text-slate-800 mb-2 flex items-center gap-2">
+                    ✈️ انْقُلْ نَمُوذَجَ الطَّائِرَةِ عَلَى الْمَرْصُوفَةِ الْمُجَاوِرَةِ:
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-500 mb-4">
+                    💡 قُم بِعَدِّ مُرَبَّعَاتِ الْمَرْصُوفَةِ بِدِقَّةٍ وَأَوْصِلْ بَيْنَ أَرْكَانِهَا لِإِتْمَامِ هَيْكَلِ الطَّائِرَةِ وَجَنَاحَيْهَا.
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
+                    <div class="flex flex-col items-center bg-slate-50 border border-slate-200 rounded-2xl p-3">
+                        <span class="px-4 py-1 rounded-full bg-slate-200 text-slate-800 font-extrabold text-xs mb-2 shadow-inner">نَمُوذَجٌ</span>
+                        <div class="w-full overflow-x-auto flex justify-center py-1">
+                            <svg id="svg-plane-ref" class="rounded-xl shadow-sm border border-slate-300 bg-white" width="340" height="230" viewBox="0 0 340 230"></svg>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col items-center bg-indigo-50/50 border border-indigo-200 rounded-2xl p-3">
+                        <div class="flex items-center justify-between w-full mb-2 px-1">
+                            <span class="px-4 py-1 rounded-full bg-indigo-600 text-white font-extrabold text-xs shadow-sm">الْمَرْصُوفَةُ الْمُجَاوِرَةُ (وَرَقَةُ الْعَمَلِ)</span>
+                            <div class="flex items-center gap-1.5" id="controls-stage2">
+                                <button onclick="undoLastLine('plane')" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-amber-100 text-amber-800 hover:bg-amber-200 transition">↩ تَرَاجُع</button>
+                                <button onclick="clearUserLines('plane')" class="px-2.5 py-1 text-xs font-bold rounded-lg bg-rose-100 text-rose-800 hover:bg-rose-200 transition">🗑 مَسْح</button>
+                            </div>
+                        </div>
+                        <div class="w-full overflow-x-auto flex justify-center py-1">
+                            <svg id="svg-plane-work" class="grid-svg rounded-xl shadow border-2 border-indigo-400 bg-white" width="340" height="230" viewBox="0 0 340 230"></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-200">
+                <button id="btn-verify-stage2" onclick="verifyStage2()" class="w-full sm:w-auto px-7 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-base shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2">
+                    <span>تَحَقَّقْ مِنَ الطَّائِرَةِ</span>
+                    <span class="text-xl">✓</span>
+                </button>
+                <div id="sub-eval-stage2" class="hidden w-full sm:w-auto flex items-center gap-3 bg-slate-100 px-4 py-2 rounded-2xl text-xs font-bold">
+                    <span class="text-emerald-700 flex items-center gap-1"><span class="w-5 h-5 rounded-full bg-emerald-200 flex items-center justify-center">✓</span> الصَّحِيحُ: <b id="sub2-correct">0</b></span>
+                    <span class="text-rose-700 flex items-center gap-1"><span class="w-5 h-5 rounded-full bg-rose-200 flex items-center justify-center">✗</span> الْأَخْطَاءُ: <b id="sub2-wrong">0</b></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= STAGE 3: تَعَلَّمْتُ ================= -->
+        <section id="stage-rule" class="locked-stage bg-gradient-to-br from-amber-50 via-amber-100/60 to-yellow-50 rounded-3xl p-5 sm:p-7 shadow-lg border-2 border-amber-300 relative overflow-hidden transition-all duration-300">
+            <div class="absolute -left-6 -bottom-6 w-32 h-32 bg-amber-200/40 rounded-full blur-xl pointer-events-none"></div>
+            <div class="flex items-center gap-3 mb-3">
+                <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-black text-xl shadow-md">📜</div>
+                <h3 class="text-2xl font-black text-amber-950">تَعَلَّمْتُ</h3>
+            </div>
+            <div class="bg-white/80 backdrop-blur-sm rounded-2xl p-4 sm:p-5 border border-amber-200 shadow-sm leading-relaxed text-sm sm:text-base text-slate-800 font-bold">
+                « لِنَقْلِ رَسْمٍ عَلَى مَرْصُوفَةٍ حَسْبَ نَمُوذَجٍ مُعْطَى: 
+                <span class="text-blue-700">أَرْسُمُ القِطَعَ الَّتِي تَتْبَعُ خُطُوطَ المَرْصُوفَةِ بِعَدَدِ أَضْلَاعِ مُرَبَّعَاتِ الْمَرْصُوفَةِ الَّتِي تَحْتَلُّهَا</span>، 
+                وَأُعَيِّنُ <span class="text-indigo-700">مَوْضِعَيْ طَرَفَيْ الْقِطَعِ الَّتِي لَا تَتْبَعُ خُطُوطَ الْمَرْصُوفَةِ</span> ثُمَّ أَرْسُمُهَا. »
+            </div>
+            <div class="mt-4 flex justify-end">
+                <button id="btn-next-from-rule" onclick="proceedAfterRule()" class="px-6 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-extrabold text-sm shadow-md transition flex items-center gap-2">
+                    <span>مُتَابَعَةُ التَّمَارِينِ فِي دَفْتَرِ الأَنْشِطَةِ</span>
+                    <span>←</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= STAGE 4: أَتَمَرَّنُ (1 و 2) ================= -->
+        <section id="stage-3" class="locked-stage bg-white rounded-3xl p-4 sm:p-7 shadow-md border-2 border-slate-150 transition-all duration-300">
+            <div class="flex items-center justify-between border-b pb-3 mb-5 border-slate-200">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-2xl bg-teal-600 text-white flex items-center justify-center font-black text-xl shadow-md">3</span>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-800">أَتَمَرَّنُ (دَفْتَرُ الأَنْشِطَةِ صَفْحَة 16)</h2>
+                        <p class="text-xs text-slate-500">نَمُوذَجُ السَّيَّارَةِ + نَمُوذَجُ الْمَرْكَبِ الشِّرَاعِيِّ</p>
+                    </div>
+                </div>
+                <span class="status-badge px-3 py-1 rounded-full text-xs font-extrabold bg-slate-200 text-slate-600">مُقْفَل 🔒</span>
+            </div>
+
+            <div class="mb-8 p-4 rounded-2xl bg-teal-50/40 border border-teal-200">
+                <h3 class="text-base sm:text-lg font-bold text-teal-950 mb-2 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-teal-600 text-white text-xs flex items-center justify-center">1</span>
+                    أَكْمِلْ رَسْمَ مَثِيلٍ لِلنَّمُوذَجِ (السَّيَّارَة/الشَّاحِنَة) :
+                </h3>
+                <p class="text-xs text-slate-500 mb-3">
+                    💡 قُم بِإِكْمَالِ خُطُوطِ هَيْكَلِ الشَّاحِنَةِ الثَّانِيَةِ عَلَى الْمَرْصُوفَةِ بِنَفْسِ أَبْعَادِ النَّمُوذَجِ الأَوَّلِ.
+                </p>
+
+                <div class="flex flex-col items-center">
+                    <div class="flex items-center justify-between w-full max-w-2xl mb-1 px-1">
+                        <span class="text-xs font-extrabold text-slate-600">نَمُوذَجُ الشَّاحِنَةِ (يَسَار) ⟵ أَكْمِلْ هَيْكَلَهَا (يَمِين)</span>
+                        <div class="flex items-center gap-1.5" id="controls-truck">
+                            <button onclick="undoLastLine('truck')" class="px-2 py-0.5 text-xs font-bold rounded-lg bg-amber-100 text-amber-800">↩ تَرَاجُع</button>
+                            <button onclick="clearUserLines('truck')" class="px-2 py-0.5 text-xs font-bold rounded-lg bg-rose-100 text-rose-800">🗑 مَسْح</button>
+                        </div>
+                    </div>
+                    <div class="w-full overflow-x-auto flex justify-center py-1">
+                        <svg id="svg-truck" class="grid-svg rounded-xl shadow-md border-2 border-teal-400 bg-white" width="620" height="190" viewBox="0 0 620 190"></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4 p-4 rounded-2xl bg-sky-50/40 border border-sky-200">
+                <h3 class="text-base sm:text-lg font-bold text-sky-950 mb-2 flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-sky-600 text-white text-xs flex items-center justify-center">2</span>
+                    لَاحِظِ النَّمُوذَجَ ، وَانْقُلْهُ عَلَى الْمَرْصُوفَةِ بَدْءًا مِنَ النُّقْطَةِ الْحَمْرَاءِ 🔴 :
+                </h3>
+                <p class="text-xs text-slate-500 mb-3">
+                    💡 اِبْدَأْ رَسْمَ الزَّوْرَقِ الشِّرَاعِيِّ انْطِلَاقًا مِنَ النُّقْطَةِ الْحَمْرَاءِ الْمُوَضَّحَةِ فِي الْمَرْصُوفَةِ.
+                </p>
+
+                <div class="flex flex-col items-center">
+                    <div class="flex items-center justify-between w-full max-w-2xl mb-1 px-1">
+                        <span class="text-xs font-extrabold text-slate-600">اِرْسُمِ الزَّوْرَقَ هُنَا بَدْءًا مِنَ النُّقْطَةِ 🔴 ⟵ نَمُوذَجُ الزَّوْرَقِ (يَمِين)</span>
+                        <div class="flex items-center gap-1.5" id="controls-boat">
+                            <button onclick="undoLastLine('boat')" class="px-2 py-0.5 text-xs font-bold rounded-lg bg-amber-100 text-amber-800">↩ تَرَاجُع</button>
+                            <button onclick="clearUserLines('boat')" class="px-2 py-0.5 text-xs font-bold rounded-lg bg-rose-100 text-rose-800">🗑 مَسْح</button>
+                        </div>
+                    </div>
+                    <div class="w-full overflow-x-auto flex justify-center py-1">
+                        <svg id="svg-boat" class="grid-svg rounded-xl shadow-md border-2 border-sky-400 bg-white" width="620" height="230" viewBox="0 0 620 230"></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-200">
+                <button id="btn-verify-stage3" onclick="verifyStage3()" class="w-full sm:w-auto px-7 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-base shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2">
+                    <span>تَحَقَّقْ مِنْ تَمَارِينِ أَتَمَرَّنُ</span>
+                    <span class="text-xl">✓</span>
+                </button>
+                <div id="sub-eval-stage3" class="hidden w-full sm:w-auto flex items-center gap-3 bg-slate-100 px-4 py-2 rounded-2xl text-xs font-bold">
+                    <span class="text-emerald-700 flex items-center gap-1"><span class="w-5 h-5 rounded-full bg-emerald-200 flex items-center justify-center">✓</span> الصَّحِيحُ: <b id="sub3-correct">0</b></span>
+                    <span class="text-rose-700 flex items-center gap-1"><span class="w-5 h-5 rounded-full bg-rose-200 flex items-center justify-center">✗</span> الْأَخْطَاءُ: <b id="sub3-wrong">0</b></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= STAGE 5: أَبْحَثُ ================= -->
+        <section id="stage-4" class="locked-stage bg-white rounded-3xl p-4 sm:p-7 shadow-md border-2 border-slate-150 transition-all duration-300">
+            <div class="flex items-center justify-between border-b pb-3 mb-5 border-slate-200">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-2xl bg-purple-600 text-white flex items-center justify-center font-black text-xl shadow-md">4</span>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-black text-slate-800">أَبْحَثُ (دَفْتَرُ الأَنْشِطَةِ صَفْحَة 16)</h2>
+                        <p class="text-xs text-slate-500">الْمَرْصُوفَةُ النَّاقِصَةُ وَالمُجَسَّمُ</p>
+                    </div>
+                </div>
+                <span class="status-badge px-3 py-1 rounded-full text-xs font-extrabold bg-slate-200 text-slate-600">مُقْفَل 🔒</span>
+            </div>
+
+            <div class="mb-4">
+                <h3 class="text-base sm:text-lg font-bold text-slate-800 mb-2 flex items-center gap-2">
+                    📦 لَاحِظْ أَنَّ الْمَرْصُوفَةَ نَاقِصَةٌ، دُونَ إِتْمَامِهَا أَكْمِلْ رَسْمَ الشَّكْلِ حَسْبَ النَّمُوذَجِ :
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-500 mb-4">
+                    💡 اعْتَمِدْ عَلَى أَبْعَادِ الْقِطَعِ وَاتِّجَاهِهَا لِإِتْمَامِ صُنْدُوقِ مُتَوَازِي الْمُسْتَطِيلَاتِ حَتَّى فِي الْجُزْءِ الَّذِي تَغِيبُ فِيهِ خُطُوطُ الْمَرْصُوفَةِ.
+                </p>
+
+                <div class="flex flex-col items-center">
+                    <div class="flex items-center justify-between w-full max-w-2xl mb-1 px-1">
+                        <span class="text-xs font-extrabold text-slate-600">نَمُوذَجُ الْمُجَسَّمِ (يَسَار) ⟵ أَكْمِلْ رَسْمَهُ عَلَى الْمَرْصُوفَةِ النَّاقِصَةِ (يَمِين)</span>
+                        <div class="flex items-center gap-1.5" id="controls-box">
+                            <button onclick="undoLastLine('box')" class="px-2 py-0.5 text-xs font-bold rounded-lg bg-amber-100 text-amber-800">↩ تَرَاجُع</button>
+                            <button onclick="clearUserLines('box')" class="px-2 py-0.5 text-xs font-bold rounded-lg bg-rose-100 text-rose-800">🗑 مَسْح</button>
+                        </div>
+                    </div>
+                    <div class="w-full overflow-x-auto flex justify-center py-1">
+                        <svg id="svg-box" class="grid-svg rounded-xl shadow-md border-2 border-purple-400 bg-white" width="620" height="230" viewBox="0 0 620 230"></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-5 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-200">
+                <button id="btn-verify-stage4" onclick="verifyStage4()" class="w-full sm:w-auto px-7 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-base shadow-lg transition-transform active:scale-95 flex items-center justify-center gap-2">
+                    <span>تَحَقَّقْ وَأَنْهِ الدَّرْسَ</span>
+                    <span class="text-xl">🏆</span>
+                </button>
+                <div id="sub-eval-stage4" class="hidden w-full sm:w-auto flex items-center gap-3 bg-slate-100 px-4 py-2 rounded-2xl text-xs font-bold">
+                    <span class="text-emerald-700 flex items-center gap-1"><span class="w-5 h-5 rounded-full bg-emerald-200 flex items-center justify-center">✓</span> الصَّحِيحُ: <b id="sub4-correct">0</b></span>
+                    <span class="text-rose-700 flex items-center gap-1"><span class="w-5 h-5 rounded-full bg-rose-200 flex items-center justify-center">✗</span> الْأَخْطَاءُ: <b id="sub4-wrong">0</b></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= OVERALL EVALUATION SCREEN ================= -->
+        <section id="final-evaluation" class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-2xl border-2 border-indigo-500/40 mt-4">
+            <div class="text-center mb-6">
+                <span class="bg-indigo-500/30 text-indigo-300 border border-indigo-400/40 px-4 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider">التَّقْيِيمُ الْعَامُّ لِلتِّلْمِيذِ</span>
+                <h2 class="text-2xl sm:text-3xl font-black mt-2 text-white">حَصِيلَةُ الدَّرْسِ التَّفَاعُلِيِّ</h2>
+                <p class="text-xs sm:text-sm text-slate-300 mt-1">يُمْكِنُ لِلْوَلِيِّ أَوِ الأُسْتَاذِ الصُّعُودُ لِلأَعْلَى لِمُعَايَنَةِ تَفَاصِيلِ إِجَابَاتِ التِّلْمِيذِ دِقَّةً بِدِقَّةٍ.</p>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center justify-around gap-6 py-4">
+                <div class="relative flex items-center justify-center">
+                    <svg class="w-40 h-40 transform -rotate-90">
+                        <circle cx="80" cy="80" r="68" stroke="#334155" stroke-width="14" fill="transparent"/>
+                        <circle id="final-progress-circle" cx="80" cy="80" r="68" stroke="#10b981" stroke-width="14" stroke-linecap="round" fill="transparent" stroke-dasharray="427.25" stroke-dashoffset="427.25" class="transition-all duration-1000 ease-out"/>
+                    </svg>
+                    <div class="absolute flex flex-col items-center justify-center text-center">
+                        <span id="final-percent-text" class="text-3xl font-black text-white math-ltr">0%</span>
+                        <span class="text-[11px] text-slate-300 font-bold">نِسْبَةُ النَّجَاحِ</span>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3 w-full max-w-sm">
+                    <div class="flex justify-between items-center bg-white/10 px-4 py-2.5 rounded-2xl border border-white/10">
+                        <span class="text-sm font-bold text-emerald-400 flex items-center gap-2"><span>✓</span> إِجْمَالِيُّ الْقِطَعِ وَالإِجَابَاتِ الصَّحِيحَةِ:</span>
+                        <span id="final-total-correct" class="text-lg font-black text-emerald-300">0</span>
+                    </div>
+                    <div class="flex justify-between items-center bg-white/10 px-4 py-2.5 rounded-2xl border border-white/10">
+                        <span class="text-sm font-bold text-rose-400 flex items-center gap-2"><span>✗</span> إِجْمَالِيُّ الأَخْطَاءِ أَوِ الْقِطَعِ النَّاقِصَةِ:</span>
+                        <span id="final-total-wrong" class="text-lg font-black text-rose-300">0</span>
+                    </div>
+                    <div id="final-appreciation-box" class="p-4 rounded-2xl bg-indigo-900/60 border border-indigo-400/30 text-center font-extrabold text-sm sm:text-base text-amber-300 shadow-inner">
+                        أَكْمِلِ التَّمَارِينَ فِي الأَعْلَى لِتَظْهَرَ النَّتِيجَةُ النِّهَائِيَّةُ هُنَا.
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-4 mt-6 pt-5 border-t border-white/10">
+                <button onclick="resetWholeLesson()" class="px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-sm sm:text-base shadow-lg transition flex items-center gap-2">
+                    <span>🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنَ الْبِدَايَةِ</span>
+                </button>
+                <button onclick="exitApplication()" class="px-6 py-3 rounded-2xl bg-slate-700 hover:bg-slate-600 text-white font-bold text-sm sm:text-base transition">
+                    خُرُوجٌ
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- زر العودة إلى الفهرس -->
+    <a href="../../../index.html" class="btn-back-home">← العَوْدَةُ إِلَى الْفِهْرِسِ</a>
+
+    <!-- Custom Floating Notification Message -->
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl border border-slate-700 text-xs sm:text-sm font-bold opacity-0 transition-opacity duration-300 pointer-events-none flex items-center gap-2">
+        <span id="toast-icon">ℹ️</span>
+        <span id="toast-text">رِسَالَةٌ</span>
+    </div>
+
+    <!-- ========================================
+         سكريبت التحقق من الاشتراك (Vercel)
+         ======================================== -->
+    <script>
+        // ⚠️ لا يوجد BOT_TOKEN هنا (محفوظ في Vercel)
+        const CHANNEL_ID = "-1004461185731"; // السنة الثانية
+
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        async function verifySubscription() {
+            const statusMsg = document.getElementById('sub-status-msg');
+            statusMsg.style.color = "#0288d1";
+            statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+            let userId = null;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                userId = tg.initDataUnsafe.user.id;
+            }
+
+            if (!userId) {
+                statusMsg.style.color = "#e65100";
+                statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+                return;
+            }
+
+            try {
+                const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.isSubscribed) {
+                    statusMsg.style.color = "#2e7d32";
+                    statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                    setTimeout(() => {
+                        document.getElementById('sub-lock-screen').style.display = 'none';
+                    }, 600);
+                } else {
+                    statusMsg.style.color = "#c62828";
+                    statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+                }
+            } catch (error) {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+            }
+        }
+
+        // تشغيل التحقق تلقائياً عند فتح الصفحة
+        window.addEventListener('load', () => {
+            verifySubscription();
+        });
+    </script>
+
+    <!-- ========================================
+         سكريبت التطبيق التعليمي الأصلي
+         ======================================== -->
+    <script>
+        /* ================= SOUND ENGINE (Web Audio API) ================= */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playChime(success = true) {
+            try {
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const now = audioCtx.currentTime;
+                if (success) {
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                        gain.gain.setValueAtTime(0.18, now + idx * 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.start(now + idx * 0.08);
+                        osc.stop(now + idx * 0.08 + 0.4);
+                    });
+                } else {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.exponentialRampToValueAtTime(110, now + 0.3);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.36);
+                }
+            } catch (e) {
+                console.warn("Audio Context error:", e);
+            }
+        }
+
+        function playPop() {
+            try {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.05);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.06);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.07);
+            } catch (e) {}
+        }
+
+        /* ================= TOAST NOTIFICATION ================= */
+        let toastTimeout = null;
+        function showToast(text, icon = 'ℹ️') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').innerText = text;
+            document.getElementById('toast-icon').innerText = icon;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            toast.classList.add('opacity-100');
+            clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        /* ================= GLOBAL STATE & SCORING ================= */
+        const APP_STATE = {
+            currentStage: 1,
+            stage1: {
+                animalAnswered: false,
+                animalCorrect: false,
+                gridVerified: false,
+                correctCount: 0,
+                wrongCount: 0
+            },
+            stage2: {
+                gridVerified: false,
+                correctCount: 0,
+                wrongCount: 0
+            },
+            stage3: {
+                truckVerified: false,
+                boatVerified: false,
+                correctCount: 0,
+                wrongCount: 0
+            },
+            stage4: {
+                gridVerified: false,
+                correctCount: 0,
+                wrongCount: 0
+            }
+        };
+
+        /* ================= GEOMETRY & GRID DEFINITIONS ================= */
+        function getSegmentKey(p1, p2) {
+            const str1 = `${p1.gx},${p1.gy}`;
+            const str2 = `${p2.gx},${p2.gy}`;
+            return (str1 < str2) ? `${str1}-${str2}` : `${str2}-${str1}`;
+        }
+
+        /* ---------------- Stage 1: Elephant Grid ---------------- */
+        const ELEPHANT_SPEC = {
+            cols: 15,
+            rows: 12,
+            cellSize: 21,
+            offsetX: 12,
+            offsetY: 8,
+            initialLines: [
+                {p1: {gx:1, gy:3}, p2: {gx:3, gy:2}},
+                {p1: {gx:4, gy:3}, p2: {gx:6, gy:3}},
+                {p1: {gx:6, gy:3}, p2: {gx:7, gy:4}},
+                {p1: {gx:7, gy:4}, p2: {gx:6, gy:5}},
+                {p1: {gx:4, gy:4}, p2: {gx:5, gy:5}},
+                {p1: {gx:5, gy:5}, p2: {gx:6, gy:5}},
+                {p1: {gx:2, gy:6}, p2: {gx:3, gy:6}},
+                {p1: {gx:2, gy:6}, p2: {gx:3, gy:5}},
+                {p1: {gx:3, gy:5}, p2: {gx:4, gy:6}},
+                {p1: {gx:4, gy:6}, p2: {gx:5, gy:7}},
+                {p1: {gx:2, gy:9}, p2: {gx:3, gy:9}},
+                {p1: {gx:3, gy:9}, p2: {gx:3, gy:10}},
+                {p1: {gx:3, gy:10}, p2: {gx:2, gy:10}},
+                {p1: {gx:6, gy:8}, p2: {gx:7, gy:7}},
+                {p1: {gx:7, gy:7}, p2: {gx:9, gy:7}},
+                {p1: {gx:9, gy:7}, p2: {gx:10, gy:8}},
+                {p1: {gx:12, gy:4}, p2: {gx:13, gy:5}},
+                {p1: {gx:13, gy:5}, p2: {gx:14, gy:7}}
+            ],
+            targetLines: [
+                {p1: {gx:1, gy:3}, p2: {gx:1, gy:10}},
+                {p1: {gx:1, gy:10}, p2: {gx:2, gy:10}},
+                {p1: {gx:2, gy:6}, p2: {gx:2, gy:9}},
+                {p1: {gx:3, gy:2}, p2: {gx:11, gy:2}},
+                {p1: {gx:11, gy:2}, p2: {gx:13, gy:5}},
+                {p1: {gx:5, gy:7}, p2: {gx:5, gy:10}},
+                {p1: {gx:5, gy:10}, p2: {gx:6, gy:10}},
+                {p1: {gx:6, gy:10}, p2: {gx:6, gy:8}},
+                {p1: {gx:10, gy:8}, p2: {gx:10, gy:10}},
+                {p1: {gx:10, gy:10}, p2: {gx:11, gy:10}},
+                {p1: {gx:11, gy:10}, p2: {gx:12, gy:4}}
+            ],
+            eye: {gx: 2, gy: 3}
+        };
+
+        /* ---------------- Stage 2: Airplane Grid ---------------- */
+        const PLANE_SPEC = {
+            cols: 15,
+            rows: 10,
+            cellSize: 21,
+            offsetX: 12,
+            offsetY: 10,
+            initialLines: [
+                {p1: {gx:0, gy:5}, p2: {gx:1, gy:6}},
+                {p1: {gx:1, gy:4}, p2: {gx:2, gy:4}},
+                {p1: {gx:2, gy:4}, p2: {gx:3, gy:3}},
+                {p1: {gx:7, gy:3}, p2: {gx:8, gy:2}},
+                {p1: {gx:8, gy:2}, p2: {gx:9, gy:2}},
+                {p1: {gx:12, gy:2}, p2: {gx:14, gy:2}},
+                {p1: {gx:12, gy:6}, p2: {gx:13, gy:3}},
+                {p1: {gx:5, gy:7}, p2: {gx:7, gy:9}},
+                {p1: {gx:7, gy:9}, p2: {gx:8, gy:9}}
+            ],
+            targetLines: [
+                {p1: {gx:0, gy:5}, p2: {gx:1, gy:4}},
+                {p1: {gx:3, gy:3}, p2: {gx:12, gy:3}},
+                {p1: {gx:0, gy:5}, p2: {gx:12, gy:5}},
+                {p1: {gx:1, gy:6}, p2: {gx:10, gy:6}},
+                {p1: {gx:10, gy:6}, p2: {gx:12, gy:5}},
+                {p1: {gx:12, gy:3}, p2: {gx:12, gy:2}},
+                {p1: {gx:14, gy:2}, p2: {gx:13, gy:3}},
+                {p1: {gx:8, gy:3}, p2: {gx:9, gy:2}},
+                {p1: {gx:5, gy:6}, p2: {gx:5, gy:7}},
+                {p1: {gx:8, gy:9}, p2: {gx:7, gy:6}}
+            ],
+            windows: [
+                {gx: 2, gy: 3.5, w: 0.7, h: 0.5},
+                {gx: 5, gy: 3.5, w: 0.5, h: 0.6},
+                {gx: 8, gy: 3.5, w: 0.5, h: 0.6},
+                {gx: 10, gy: 3.5, w: 0.5, h: 0.6}
+            ]
+        };
+
+        /* ---------------- Stage 3: Atamarran 1 (Truck) ---------------- */
+        const TRUCK_SPEC = {
+            cols: 28,
+            rows: 8,
+            cellSize: 21,
+            offsetX: 16,
+            offsetY: 10,
+            modelLines: [
+                {p1: {gx:1, gy:4}, p2: {gx:12, gy:4}},
+                {p1: {gx:1, gy:4}, p2: {gx:1, gy:6}},
+                {p1: {gx:1, gy:6}, p2: {gx:12, gy:6}},
+                {p1: {gx:12, gy:4}, p2: {gx:12, gy:6}},
+                {p1: {gx:7, gy:4}, p2: {gx:7, gy:1}},
+                {p1: {gx:7, gy:1}, p2: {gx:9, gy:1}},
+                {p1: {gx:9, gy:1}, p2: {gx:10, gy:4}},
+                {p1: {gx:10, gy:4}, p2: {gx:10, gy:6}}
+            ],
+            modelWheels: [
+                {gx: 3, gy: 7, r: 0.9},
+                {gx: 9, gy: 7, r: 0.9}
+            ],
+            initialLines: [
+                {p1: {gx:14, gy:5}, p2: {gx:14, gy:6}}
+            ],
+            targetLines: [
+                {p1: {gx:14, gy:4}, p2: {gx:25, gy:4}},
+                {p1: {gx:14, gy:4}, p2: {gx:14, gy:6}},
+                {p1: {gx:14, gy:6}, p2: {gx:25, gy:6}},
+                {p1: {gx:25, gy:4}, p2: {gx:25, gy:6}},
+                {p1: {gx:20, gy:4}, p2: {gx:20, gy:1}},
+                {p1: {gx:20, gy:1}, p2: {gx:22, gy:1}},
+                {p1: {gx:22, gy:1}, p2: {gx:23, gy:4}},
+                {p1: {gx:23, gy:4}, p2: {gx:23, gy:6}}
+            ],
+            workWheels: [
+                {gx: 16, gy: 7, r: 0.9},
+                {gx: 22, gy: 7, r: 0.9}
+            ]
+        };
+
+        /* ---------------- Stage 3: Atamarran 2 (Boat) ---------------- */
+        const BOAT_SPEC = {
+            cols: 28,
+            rows: 10,
+            cellSize: 21,
+            offsetX: 16,
+            offsetY: 10,
+            anchorPoint: {gx: 13, gy: 5},
+            modelLines: [
+                {p1: {gx:16, gy:5}, p2: {gx:26, gy:5}},
+                {p1: {gx:16, gy:5}, p2: {gx:19, gy:7}},
+                {p1: {gx:19, gy:7}, p2: {gx:25, gy:7}},
+                {p1: {gx:25, gy:7}, p2: {gx:26, gy:5}},
+                {p1: {gx:21, gy:5}, p2: {gx:21, gy:1}},
+                {p1: {gx:16, gy:4}, p2: {gx:25, gy:4}},
+                {p1: {gx:16, gy:4}, p2: {gx:21, gy:1}},
+                {p1: {gx:21, gy:1}, p2: {gx:25, gy:4}}
+            ],
+            targetLines: [
+                {p1: {gx:3, gy:5}, p2: {gx:13, gy:5}},
+                {p1: {gx:3, gy:5}, p2: {gx:6, gy:7}},
+                {p1: {gx:6, gy:7}, p2: {gx:12, gy:7}},
+                {p1: {gx:12, gy:7}, p2: {gx:13, gy:5}},
+                {p1: {gx:8, gy:5}, p2: {gx:8, gy:1}},
+                {p1: {gx:3, gy:4}, p2: {gx:12, gy:4}},
+                {p1: {gx:3, gy:4}, p2: {gx:8, gy:1}},
+                {p1: {gx:8, gy:1}, p2: {gx:12, gy:4}}
+            ]
+        };
+
+        /* ---------------- Stage 4: Abhath (Completed Grid Box) ---------------- */
+        const BOX_SPEC = {
+            cols: 28,
+            rows: 10,
+            cellSize: 21,
+            offsetX: 16,
+            offsetY: 10,
+            modelLines: [
+                {p1: {gx:1, gy:4}, p2: {gx:9, gy:4}},
+                {p1: {gx:9, gy:4}, p2: {gx:9, gy:8}},
+                {p1: {gx:9, gy:8}, p2: {gx:1, gy:8}},
+                {p1: {gx:1, gy:8}, p2: {gx:1, gy:4}},
+                {p1: {gx:1, gy:4}, p2: {gx:5, gy:1}},
+                {p1: {gx:5, gy:1}, p2: {gx:13, gy:1}},
+                {p1: {gx:13, gy:1}, p2: {gx:9, gy:4}},
+                {p1: {gx:13, gy:1}, p2: {gx:13, gy:5}},
+                {p1: {gx:9, gy:8}, p2: {gx:13, gy:5}}
+            ],
+            initialLines: [
+                {p1: {gx:15, gy:4}, p2: {gx:18, gy:4}},
+                {p1: {gx:15, gy:4}, p2: {gx:15, gy:6}},
+                {p1: {gx:15, gy:4}, p2: {gx:17, gy:2.5}}
+            ],
+            targetLines: [
+                {p1: {gx:18, gy:4}, p2: {gx:23, gy:4}},
+                {p1: {gx:23, gy:4}, p2: {gx:23, gy:8}},
+                {p1: {gx:23, gy:8}, p2: {gx:15, gy:8}},
+                {p1: {gx:15, gy:6}, p2: {gx:15, gy:8}},
+                {p1: {gx:15, gy:4}, p2: {gx:19, gy:1}},
+                {p1: {gx:19, gy:1}, p2: {gx:27, gy:1}},
+                {p1: {gx:27, gy:1}, p2: {gx:23, gy:4}},
+                {p1: {gx:27, gy:1}, p2: {gx:27, gy:5}},
+                {p1: {gx:23, gy:8}, p2: {gx:27, gy:5}}
+            ]
+        };
+
+        /* ================= USER DRAWING MANAGERS ================= */
+        const DRAWINGS = {
+            elephant: [],
+            plane: [],
+            truck: [],
+            boat: [],
+            box: []
+        };
+
+        const ACTIVE_SELECTION = {
+            elephant: null,
+            plane: null,
+            truck: null,
+            boat: null,
+            box: null
+        };
+
+        /* ================= RENDERING ENGINES ================= */
+        function renderGridLines(svg, spec, options = {}) {
+            const { cols, rows, cellSize, offsetX, offsetY } = spec;
+            const w = cols * cellSize;
+            const h = rows * cellSize;
+
+            const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            bg.setAttribute('x', offsetX);
+            bg.setAttribute('y', offsetY);
+            bg.setAttribute('width', w);
+            bg.setAttribute('height', h);
+            bg.setAttribute('fill', '#ffffff');
+            svg.appendChild(bg);
+
+            for (let c = 0; c <= cols; c++) {
+                const x = offsetX + c * cellSize;
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', x);
+                line.setAttribute('y1', offsetY);
+                line.setAttribute('x2', x);
+                line.setAttribute('y2', offsetY + h);
+                line.setAttribute('stroke', '#cbd5e1');
+                line.setAttribute('stroke-width', '1');
+                svg.appendChild(line);
+            }
+
+            for (let r = 0; r <= rows; r++) {
+                const y = offsetY + r * cellSize;
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', offsetX);
+                line.setAttribute('y1', y);
+                line.setAttribute('x2', offsetX + w);
+                line.setAttribute('y2', y);
+                line.setAttribute('stroke', '#cbd5e1');
+                line.setAttribute('stroke-width', '1');
+                svg.appendChild(line);
+            }
+        }
+
+        function toPx(spec, gx, gy) {
+            return {
+                x: spec.offsetX + gx * spec.cellSize,
+                y: spec.offsetY + gy * spec.cellSize
+            };
+        }
+
+        function createSvgLine(p1, p2, color = '#b91c1c', width = 2.8, strokeDash = '') {
+            const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', p1.x);
+            line.setAttribute('y1', p1.y);
+            line.setAttribute('x2', p2.x);
+            line.setAttribute('y2', p2.y);
+            line.setAttribute('stroke', color);
+            line.setAttribute('stroke-width', width);
+            line.setAttribute('stroke-linecap', 'round');
+            if (strokeDash) line.setAttribute('stroke-dasharray', strokeDash);
+            return line;
+        }
+        /* ---------------- Stage 1: Elephant Drawing ---------------- */
+        function initElephantReference() {
+            const svg = document.getElementById('svg-elephant-ref');
+            svg.innerHTML = '';
+            renderGridLines(svg, ELEPHANT_SPEC);
+
+            const allRefLines = [...ELEPHANT_SPEC.initialLines, ...ELEPHANT_SPEC.targetLines];
+            allRefLines.forEach(l => {
+                const p1 = toPx(ELEPHANT_SPEC, l.p1.gx, l.p1.gy);
+                const p2 = toPx(ELEPHANT_SPEC, l.p2.gx, l.p2.gy);
+                svg.appendChild(createSvgLine(p1, p2, '#b91c1c', 2.8));
+            });
+
+            const eyePx = toPx(ELEPHANT_SPEC, ELEPHANT_SPEC.eye.gx, ELEPHANT_SPEC.eye.gy);
+            const eye = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            eye.setAttribute('cx', eyePx.x);
+            eye.setAttribute('cy', eyePx.y);
+            eye.setAttribute('r', '4');
+            eye.setAttribute('stroke', '#b91c1c');
+            eye.setAttribute('stroke-width', '2');
+            eye.setAttribute('fill', '#ffffff');
+            svg.appendChild(eye);
+        }
+
+        function initElephantWorkGrid() {
+            const svg = document.getElementById('svg-elephant-work');
+            svg.innerHTML = '';
+            renderGridLines(svg, ELEPHANT_SPEC);
+
+            const staticGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            ELEPHANT_SPEC.initialLines.forEach(l => {
+                const p1 = toPx(ELEPHANT_SPEC, l.p1.gx, l.p1.gy);
+                const p2 = toPx(ELEPHANT_SPEC, l.p2.gx, l.p2.gy);
+                staticGroup.appendChild(createSvgLine(p1, p2, '#b91c1c', 2.8));
+            });
+            const eyePx = toPx(ELEPHANT_SPEC, ELEPHANT_SPEC.eye.gx, ELEPHANT_SPEC.eye.gy);
+            const eye = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            eye.setAttribute('cx', eyePx.x);
+            eye.setAttribute('cy', eyePx.y);
+            eye.setAttribute('r', '4');
+            eye.setAttribute('stroke', '#b91c1c');
+            eye.setAttribute('stroke-width', '2');
+            eye.setAttribute('fill', '#ffffff');
+            staticGroup.appendChild(eye);
+            svg.appendChild(staticGroup);
+
+            const userGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            userGroup.setAttribute('id', 'user-lines-elephant');
+            svg.appendChild(userGroup);
+
+            const solutionGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            solutionGroup.setAttribute('id', 'solution-overlay-elephant');
+            solutionGroup.setAttribute('style', 'display: none;');
+            svg.appendChild(solutionGroup);
+
+            setupMagneticVertices(svg, ELEPHANT_SPEC, 'elephant');
+        }
+
+        /* ---------------- Stage 2: Plane Drawing ---------------- */
+        function initPlaneReference() {
+            const svg = document.getElementById('svg-plane-ref');
+            svg.innerHTML = '';
+            renderGridLines(svg, PLANE_SPEC);
+
+            const allPlaneLines = [...PLANE_SPEC.initialLines, ...PLANE_SPEC.targetLines];
+            allPlaneLines.forEach(l => {
+                const p1 = toPx(PLANE_SPEC, l.p1.gx, l.p1.gy);
+                const p2 = toPx(PLANE_SPEC, l.p2.gx, l.p2.gy);
+                svg.appendChild(createSvgLine(p1, p2, '#b91c1c', 2.8));
+            });
+
+            PLANE_SPEC.windows.forEach(w => {
+                const pos = toPx(PLANE_SPEC, w.gx, w.gy);
+                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                rect.setAttribute('x', pos.x);
+                rect.setAttribute('y', pos.y);
+                rect.setAttribute('width', w.w * PLANE_SPEC.cellSize);
+                rect.setAttribute('height', w.h * PLANE_SPEC.cellSize);
+                rect.setAttribute('stroke', '#b91c1c');
+                rect.setAttribute('stroke-width', '2');
+                rect.setAttribute('fill', '#ffffff');
+                svg.appendChild(rect);
+            });
+        }
+
+        function initPlaneWorkGrid() {
+            const svg = document.getElementById('svg-plane-work');
+            svg.innerHTML = '';
+            renderGridLines(svg, PLANE_SPEC);
+
+            const staticGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            PLANE_SPEC.initialLines.forEach(l => {
+                const p1 = toPx(PLANE_SPEC, l.p1.gx, l.p1.gy);
+                const p2 = toPx(PLANE_SPEC, l.p2.gx, l.p2.gy);
+                staticGroup.appendChild(createSvgLine(p1, p2, '#b91c1c', 2.8));
+            });
+            PLANE_SPEC.windows.forEach(w => {
+                const pos = toPx(PLANE_SPEC, w.gx, w.gy);
+                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                rect.setAttribute('x', pos.x);
+                rect.setAttribute('y', pos.y);
+                rect.setAttribute('width', w.w * PLANE_SPEC.cellSize);
+                rect.setAttribute('height', w.h * PLANE_SPEC.cellSize);
+                rect.setAttribute('stroke', '#b91c1c');
+                rect.setAttribute('stroke-width', '2');
+                rect.setAttribute('fill', '#ffffff');
+                staticGroup.appendChild(rect);
+            });
+            svg.appendChild(staticGroup);
+
+            const userGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            userGroup.setAttribute('id', 'user-lines-plane');
+            svg.appendChild(userGroup);
+
+            const solutionGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            solutionGroup.setAttribute('id', 'solution-overlay-plane');
+            solutionGroup.setAttribute('style', 'display: none;');
+            svg.appendChild(solutionGroup);
+
+            setupMagneticVertices(svg, PLANE_SPEC, 'plane');
+        }
+
+        /* ---------------- Stage 3: Truck Grid ---------------- */
+        function initTruckGrid() {
+            const svg = document.getElementById('svg-truck');
+            svg.innerHTML = '';
+            renderGridLines(svg, TRUCK_SPEC);
+
+            const modelGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            TRUCK_SPEC.modelLines.forEach(l => {
+                const p1 = toPx(TRUCK_SPEC, l.p1.gx, l.p1.gy);
+                const p2 = toPx(TRUCK_SPEC, l.p2.gx, l.p2.gy);
+                modelGroup.appendChild(createSvgLine(p1, p2, '#701a75', 2.8));
+            });
+            TRUCK_SPEC.modelWheels.forEach(w => {
+                const pos = toPx(TRUCK_SPEC, w.gx, w.gy);
+                const circ = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circ.setAttribute('cx', pos.x);
+                circ.setAttribute('cy', pos.y);
+                circ.setAttribute('r', w.r * TRUCK_SPEC.cellSize);
+                circ.setAttribute('stroke', '#701a75');
+                circ.setAttribute('stroke-width', '2.5');
+                circ.setAttribute('fill', '#ffffff');
+                modelGroup.appendChild(circ);
+            });
+            svg.appendChild(modelGroup);
+
+            const workPreGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            TRUCK_SPEC.initialLines.forEach(l => {
+                const p1 = toPx(TRUCK_SPEC, l.p1.gx, l.p1.gy);
+                const p2 = toPx(TRUCK_SPEC, l.p2.gx, l.p2.gy);
+                workPreGroup.appendChild(createSvgLine(p1, p2, '#701a75', 2.8));
+            });
+            TRUCK_SPEC.workWheels.forEach(w => {
+                const pos = toPx(TRUCK_SPEC, w.gx, w.gy);
+                const circ = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circ.setAttribute('cx', pos.x);
+                circ.setAttribute('cy', pos.y);
+                circ.setAttribute('r', w.r * TRUCK_SPEC.cellSize);
+                circ.setAttribute('stroke', '#701a75');
+                circ.setAttribute('stroke-width', '2.5');
+                circ.setAttribute('fill', '#ffffff');
+                workPreGroup.appendChild(circ);
+            });
+            svg.appendChild(workPreGroup);
+
+            const userGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            userGroup.setAttribute('id', 'user-lines-truck');
+            svg.appendChild(userGroup);
+
+            const solGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            solGroup.setAttribute('id', 'solution-overlay-truck');
+            solGroup.setAttribute('style', 'display: none;');
+            svg.appendChild(solGroup);
+
+            setupMagneticVertices(svg, TRUCK_SPEC, 'truck', (gx) => gx >= 12);
+        }
+
+        /* ---------------- Stage 3: Boat Grid ---------------- */
+        function initBoatGrid() {
+            const svg = document.getElementById('svg-boat');
+            svg.innerHTML = '';
+            renderGridLines(svg, BOAT_SPEC);
+
+            const modelGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            BOAT_SPEC.modelLines.forEach(l => {
+                const p1 = toPx(BOAT_SPEC, l.p1.gx, l.p1.gy);
+                const p2 = toPx(BOAT_SPEC, l.p2.gx, l.p2.gy);
+                modelGroup.appendChild(createSvgLine(p1, p2, '#b91c1c', 2.8));
+            });
+            svg.appendChild(modelGroup);
+
+            const anchorPx = toPx(BOAT_SPEC, BOAT_SPEC.anchorPoint.gx, BOAT_SPEC.anchorPoint.gy);
+            const anchorGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            const anchorHalo = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            anchorHalo.setAttribute('cx', anchorPx.x);
+            anchorHalo.setAttribute('cy', anchorPx.y);
+            anchorHalo.setAttribute('r', '10');
+            anchorHalo.setAttribute('fill', 'rgba(239, 68, 68, 0.35)');
+            anchorHalo.setAttribute('class', 'anchor-pulse');
+            anchorGroup.appendChild(anchorHalo);
+
+            const anchorDot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            anchorDot.setAttribute('cx', anchorPx.x);
+            anchorDot.setAttribute('cy', anchorPx.y);
+            anchorDot.setAttribute('r', '5.5');
+            anchorDot.setAttribute('fill', '#dc2626');
+            anchorGroup.appendChild(anchorDot);
+            svg.appendChild(anchorGroup);
+
+            const userGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            userGroup.setAttribute('id', 'user-lines-boat');
+            svg.appendChild(userGroup);
+
+            const solGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            solGroup.setAttribute('id', 'solution-overlay-boat');
+            solGroup.setAttribute('style', 'display: none;');
+            svg.appendChild(solGroup);
+
+            setupMagneticVertices(svg, BOAT_SPEC, 'boat', (gx) => gx <= 13);
+        }
+
+        /* ---------------- Stage 4: Box Grid (Abhath) ---------------- */
+        function initBoxGrid() {
+            const svg = document.getElementById('svg-box');
+            svg.innerHTML = '';
+            renderGridLines(svg, BOX_SPEC, { isCutoff: false });
+
+            const modelGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            BOX_SPEC.modelLines.forEach(l => {
+                const p1 = toPx(BOX_SPEC, l.p1.gx, l.p1.gy);
+                const p2 = toPx(BOX_SPEC, l.p2.gx, l.p2.gy);
+                modelGroup.appendChild(createSvgLine(p1, p2, '#b91c1c', 2.8));
+            });
+            svg.appendChild(modelGroup);
+
+            const workPreGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            BOX_SPEC.initialLines.forEach(l => {
+                const p1 = toPx(BOX_SPEC, l.p1.gx, l.p1.gy);
+                const p2 = toPx(BOX_SPEC, l.p2.gx, l.p2.gy);
+                workPreGroup.appendChild(createSvgLine(p1, p2, '#b91c1c', 2.8));
+            });
+            svg.appendChild(workPreGroup);
+
+            const userGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            userGroup.setAttribute('id', 'user-lines-box');
+            svg.appendChild(userGroup);
+
+            const solGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            solGroup.setAttribute('id', 'solution-overlay-box');
+            solGroup.setAttribute('style', 'display: none;');
+            svg.appendChild(solGroup);
+
+            setupMagneticVertices(svg, BOX_SPEC, 'box', (gx) => gx >= 15);
+        }
+
+        /* ================= MAGNETIC GRID SNAPPING ================= */
+        function setupMagneticVertices(svg, spec, exerciseKey, filterFn = null) {
+            const { cols, rows, cellSize, offsetX, offsetY } = spec;
+            const vertexGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            vertexGroup.setAttribute('class', 'magnetic-vertices-layer');
+
+            for (let gx = 0; gx <= cols; gx++) {
+                if (filterFn && !filterFn(gx)) continue;
+                for (let gy = 0; gy <= rows; gy++) {
+                    const px = toPx(spec, gx, gy);
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', px.x);
+                    circle.setAttribute('cy', px.y);
+                    circle.setAttribute('r', '7.5');
+                    circle.setAttribute('class', 'vertex-hit');
+                    circle.setAttribute('data-gx', gx);
+                    circle.setAttribute('data-gy', gy);
+
+                    circle.addEventListener('pointerdown', (e) => {
+                        e.preventDefault();
+                        handleVertexInteraction(exerciseKey, { gx, gy, px: px.x, py: px.y }, circle, spec);
+                    });
+
+                    vertexGroup.appendChild(circle);
+                }
+            }
+
+            svg.appendChild(vertexGroup);
+        }
+
+        function handleVertexInteraction(exerciseKey, pt, circleEl, spec) {
+            if (isExerciseLocked(exerciseKey)) {
+                showToast('هَذَا التَّمْرِينُ مُكْتَمِلٌ وَمُجَمَّدٌ لِلتَّقْيِيمِ.', '🔒');
+                return;
+            }
+
+            const currentActive = ACTIVE_SELECTION[exerciseKey];
+
+            if (!currentActive) {
+                ACTIVE_SELECTION[exerciseKey] = pt;
+                circleEl.classList.add('vertex-active');
+                playPop();
+                showToast('تَمَّ تَحْدِيدُ النُّقْطَةِ الأُولَى. اِضْغَطِ الآنَ عَلَى النُّقْطَةِ الثَّانِيَةِ لِرَسْمِ الْقِطْعَةِ.', '📍');
+            } else {
+                const p1 = currentActive;
+                const p2 = pt;
+
+                clearActiveVertexVisuals(exerciseKey);
+                ACTIVE_SELECTION[exerciseKey] = null;
+
+                if (p1.gx === p2.gx && p1.gy === p2.gy) {
+                    playPop();
+                    return;
+                }
+
+                const newKey = getSegmentKey(p1, p2);
+                const exists = DRAWINGS[exerciseKey].some(s => getSegmentKey(s.p1, s.p2) === newKey);
+                if (exists) {
+                    showToast('هَذِهِ الْقِطْعَةُ مَرْسُومَةٌ مَسْبَقًا!', '⚠️');
+                    return;
+                }
+
+                DRAWINGS[exerciseKey].push({ p1, p2, key: newKey });
+                playPop();
+                renderUserDrawings(exerciseKey, spec);
+            }
+        }
+
+        function clearActiveVertexVisuals(exerciseKey) {
+            const svgMap = {
+                elephant: 'svg-elephant-work',
+                plane: 'svg-plane-work',
+                truck: 'svg-truck',
+                boat: 'svg-boat',
+                box: 'svg-box'
+            };
+            const svg = document.getElementById(svgMap[exerciseKey]);
+            if (!svg) return;
+            svg.querySelectorAll('.vertex-active').forEach(el => el.classList.remove('vertex-active'));
+        }
+
+        function renderUserDrawings(exerciseKey, spec) {
+            const group = document.getElementById(`user-lines-${exerciseKey}`);
+            if (!group) return;
+            group.innerHTML = '';
+
+            DRAWINGS[exerciseKey].forEach((seg) => {
+                const px1 = toPx(spec, seg.p1.gx, seg.p1.gy);
+                const px2 = toPx(spec, seg.p2.gx, seg.p2.gy);
+                const line = createSvgLine(px1, px2, '#2563eb', 3.2);
+                group.appendChild(line);
+
+                [px1, px2].forEach(p => {
+                    const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    dot.setAttribute('cx', p.x);
+                    dot.setAttribute('cy', p.y);
+                    dot.setAttribute('r', '3.5');
+                    dot.setAttribute('fill', '#1d4ed8');
+                    group.appendChild(dot);
+                });
+            });
+        }
+
+        function undoLastLine(exerciseKey) {
+            if (isExerciseLocked(exerciseKey)) return;
+            if (DRAWINGS[exerciseKey].length > 0) {
+                DRAWINGS[exerciseKey].pop();
+                const specMap = {
+                    elephant: ELEPHANT_SPEC,
+                    plane: PLANE_SPEC,
+                    truck: TRUCK_SPEC,
+                    boat: BOAT_SPEC,
+                    box: BOX_SPEC
+                };
+                renderUserDrawings(exerciseKey, specMap[exerciseKey]);
+                playPop();
+            }
+        }
+
+        function clearUserLines(exerciseKey) {
+            if (isExerciseLocked(exerciseKey)) return;
+            DRAWINGS[exerciseKey] = [];
+            const specMap = {
+                elephant: ELEPHANT_SPEC,
+                plane: PLANE_SPEC,
+                truck: TRUCK_SPEC,
+                boat: BOAT_SPEC,
+                box: BOX_SPEC
+            };
+            renderUserDrawings(exerciseKey, specMap[exerciseKey]);
+            clearActiveVertexVisuals(exerciseKey);
+            ACTIVE_SELECTION[exerciseKey] = null;
+            playPop();
+        }
+
+        function isExerciseLocked(key) {
+            if (key === 'elephant') return APP_STATE.stage1.gridVerified;
+            if (key === 'plane') return APP_STATE.stage2.gridVerified;
+            if (key === 'truck' || key === 'boat') return APP_STATE.stage3.truckVerified;
+            if (key === 'box') return APP_STATE.stage4.gridVerified;
+            return false;
+        }
+
+        /* ================= ANIMAL SELECTION ================= */
+        function handleAnimalChoice(btn, animalName, isCorrect) {
+            if (APP_STATE.stage1.animalAnswered) return;
+            APP_STATE.stage1.animalAnswered = true;
+            APP_STATE.stage1.animalCorrect = isCorrect;
+
+            const container = document.getElementById('stage1-choices');
+            const buttons = container.querySelectorAll('.choice-btn');
+            buttons.forEach(b => {
+                b.disabled = true;
+                b.classList.add('pointer-events-none', 'opacity-70');
+            });
+
+            const feedback = document.getElementById('stage1-choice-feedback');
+            feedback.classList.remove('hidden');
+
+            if (isCorrect) {
+                btn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-700');
+                btn.classList.remove('bg-white', 'text-slate-700', 'opacity-70');
+                feedback.className = 'mt-2 text-xs font-black text-emerald-700 flex items-center gap-1';
+                feedback.innerHTML = '✓ إِجَابَةٌ صَحِيحَةٌ! الْحَيَوَانُ هُوَ الْفِيلُ.';
+                playChime(true);
+            } else {
+                btn.classList.add('bg-rose-600', 'text-white', 'border-rose-700');
+                btn.classList.remove('bg-white', 'text-slate-700', 'opacity-70');
+                feedback.className = 'mt-2 text-xs font-black text-rose-700 flex items-center gap-1';
+                feedback.innerHTML = '✗ إِجَابَةٌ خَاطِئَةٌ! الْحَيَوَانُ الْمَرْسُومُ هُوَ الْفِيلُ.';
+                playChime(false);
+            }
+        }
+
+        /* ================= VERIFICATION ENGINE ================= */
+        function evaluateDrawing(userSegs, targetSegs) {
+            const targetKeys = new Set(targetSegs.map(s => getSegmentKey(s.p1, s.p2)));
+            let correct = 0;
+            let wrong = 0;
+
+            const validatedUser = [];
+            userSegs.forEach(seg => {
+                const isMatch = targetKeys.has(seg.key);
+                if (isMatch) {
+                    correct++;
+                    validatedUser.push({ ...seg, status: 'correct' });
+                } else {
+                    wrong++;
+                    validatedUser.push({ ...seg, status: 'wrong' });
+                }
+            });
+
+            const drawnKeys = new Set(userSegs.map(s => s.key));
+            let missing = 0;
+            targetSegs.forEach(ts => {
+                const k = getSegmentKey(ts.p1, ts.p2);
+                if (!drawnKeys.has(k)) {
+                    missing++;
+                }
+            });
+
+            return {
+                correct,
+                wrong: wrong + missing,
+                validatedUser,
+                missing
+            };
+        }
+
+        function applyVisualEvaluation(exerciseKey, spec, targetSegs, evalResult) {
+            const userGroup = document.getElementById(`user-lines-${exerciseKey}`);
+            userGroup.innerHTML = '';
+
+            evalResult.validatedUser.forEach(seg => {
+                const px1 = toPx(spec, seg.p1.gx, seg.p1.gy);
+                const px2 = toPx(spec, seg.p2.gx, seg.p2.gy);
+                const color = seg.status === 'correct' ? '#2e7d32' : '#c62828';
+                userGroup.appendChild(createSvgLine(px1, px2, color, 3.5));
+            });
+
+            const solGroup = document.getElementById(`solution-overlay-${exerciseKey}`);
+            if (solGroup) {
+                solGroup.innerHTML = '';
+                solGroup.style.display = 'block';
+                targetSegs.forEach(seg => {
+                    const px1 = toPx(spec, seg.p1.gx, seg.p1.gy);
+                    const px2 = toPx(spec, seg.p2.gx, seg.p2.gy);
+                    const line = createSvgLine(px1, px2, '#059669', 2, '5 4');
+                    solGroup.appendChild(line);
+                });
+            }
+
+            const svgMap = {
+                elephant: 'svg-elephant-work',
+                plane: 'svg-plane-work',
+                truck: 'svg-truck',
+                boat: 'svg-boat',
+                box: 'svg-box'
+            };
+            const svg = document.getElementById(svgMap[exerciseKey]);
+            const magnetLayer = svg.querySelector('.magnetic-vertices-layer');
+            if (magnetLayer) magnetLayer.style.display = 'none';
+
+            const controls = document.getElementById(`controls-${exerciseKey}`);
+            if (controls) controls.classList.add('opacity-40', 'pointer-events-none');
+        }
+
+        /* ---------------- Verify Stage 1 ---------------- */
+        function verifyStage1() {
+            if (APP_STATE.stage1.gridVerified) return;
+
+            if (!APP_STATE.stage1.animalAnswered) {
+                showToast('يُرْجَى الإِجَابَةُ عَلَى سُؤَالِ اسْمِ الْحَيَوَانِ أَوَّلاً!', '⚠️');
+                return;
+            }
+
+            APP_STATE.stage1.gridVerified = true;
+            const evalResult = evaluateDrawing(DRAWINGS.elephant, ELEPHANT_SPEC.targetLines);
+            applyVisualEvaluation('elephant', ELEPHANT_SPEC, ELEPHANT_SPEC.targetLines, evalResult);
+
+            let totalCorrect = evalResult.correct + (APP_STATE.stage1.animalCorrect ? 1 : 0);
+            let totalWrong = evalResult.wrong + (APP_STATE.stage1.animalCorrect ? 0 : 1);
+
+            APP_STATE.stage1.correctCount = totalCorrect;
+            APP_STATE.stage1.wrongCount = totalWrong;
+
+            document.getElementById('sub1-correct').innerText = totalCorrect;
+            document.getElementById('sub1-wrong').innerText = totalWrong;
+            document.getElementById('sub-eval-stage1').classList.remove('hidden');
+
+            const btn = document.getElementById('btn-verify-stage1');
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'pointer-events-none');
+
+            playChime(totalWrong === 0);
+
+            unlockNextStage(2);
+            showToast('أَحْسَنْتَ! تَمَّتْ مُطَابَقَةُ الرَّسْمِ. انْتَقِلْ إِلَى مَرْحَلَةِ أُنْجِزُ.', '🎉');
+        }
+
+        /* ---------------- Verify Stage 2 ---------------- */
+        function verifyStage2() {
+            if (APP_STATE.stage2.gridVerified) return;
+            APP_STATE.stage2.gridVerified = true;
+
+            const evalResult = evaluateDrawing(DRAWINGS.plane, PLANE_SPEC.targetLines);
+            applyVisualEvaluation('plane', PLANE_SPEC, PLANE_SPEC.targetLines, evalResult);
+
+            APP_STATE.stage2.correctCount = evalResult.correct;
+            APP_STATE.stage2.wrongCount = evalResult.wrong;
+
+            document.getElementById('sub2-correct').innerText = evalResult.correct;
+            document.getElementById('sub2-wrong').innerText = evalResult.wrong;
+            document.getElementById('sub-eval-stage2').classList.remove('hidden');
+
+            const btn = document.getElementById('btn-verify-stage2');
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'pointer-events-none');
+
+            playChime(evalResult.wrong === 0);
+
+            unlockRuleStage();
+            showToast('عَمَلٌ مُمْتَازٌ! اقْرَأْ بِطَاقَةَ «تَعَلَّمْتُ» لِمُوَاصَلَةِ التَّمَارِينِ.', '📜');
+        }
+
+        /* ---------------- Handle Rule Stage ---------------- */
+        function unlockRuleStage() {
+            const ruleStage = document.getElementById('stage-rule');
+            ruleStage.classList.remove('locked-stage');
+            ruleStage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function proceedAfterRule() {
+            const btn = document.getElementById('btn-next-from-rule');
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'pointer-events-none');
+            unlockNextStage(3);
+            showToast('رَائِعٌ! انْتَقَلْتَ الآنَ إِلَى دَفْتَرِ الأَنْشِطَةِ (أَتَمَرَّنُ).', '✏️');
+        }
+
+        /* ---------------- Verify Stage 3 ---------------- */
+        function verifyStage3() {
+            if (APP_STATE.stage3.truckVerified) return;
+            APP_STATE.stage3.truckVerified = true;
+
+            const evalTruck = evaluateDrawing(DRAWINGS.truck, TRUCK_SPEC.targetLines);
+            applyVisualEvaluation('truck', TRUCK_SPEC, TRUCK_SPEC.targetLines, evalTruck);
+
+            const evalBoat = evaluateDrawing(DRAWINGS.boat, BOAT_SPEC.targetLines);
+            applyVisualEvaluation('boat', BOAT_SPEC, BOAT_SPEC.targetLines, evalBoat);
+
+            const totalCorrect = evalTruck.correct + evalBoat.correct;
+            const totalWrong = evalTruck.wrong + evalBoat.wrong;
+
+            APP_STATE.stage3.correctCount = totalCorrect;
+            APP_STATE.stage3.wrongCount = totalWrong;
+
+            document.getElementById('sub3-correct').innerText = totalCorrect;
+            document.getElementById('sub3-wrong').innerText = totalWrong;
+            document.getElementById('sub-eval-stage3').classList.remove('hidden');
+
+            const btn = document.getElementById('btn-verify-stage3');
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'pointer-events-none');
+
+            playChime(totalWrong === 0);
+            unlockNextStage(4);
+            showToast('أَحْسَنْتَ! انْتَقِلْ إِلَى الْمَرْحَلَةِ الأَخِيرَةِ: «أَبْحَثُ».', '🚀');
+        }
+
+        /* ---------------- Verify Stage 4 ---------------- */
+        function verifyStage4() {
+            if (APP_STATE.stage4.gridVerified) return;
+            APP_STATE.stage4.gridVerified = true;
+
+            const evalBox = evaluateDrawing(DRAWINGS.box, BOX_SPEC.targetLines);
+            applyVisualEvaluation('box', BOX_SPEC, BOX_SPEC.targetLines, evalBox);
+
+            APP_STATE.stage4.correctCount = evalBox.correct;
+            APP_STATE.stage4.wrongCount = evalBox.wrong;
+
+            document.getElementById('sub4-correct').innerText = evalBox.correct;
+            document.getElementById('sub4-wrong').innerText = evalBox.wrong;
+            document.getElementById('sub-eval-stage4').classList.remove('hidden');
+
+            const btn = document.getElementById('btn-verify-stage4');
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'pointer-events-none');
+
+            playChime(evalBox.wrong === 0);
+            computeFinalEvaluation();
+            showToast('تَهَانِينَا! أَتْمَمْتَ كَافَّةَ أَنْشِطَةِ الدَّرْسِ بِنَجَاحٍ. انْظُرِ التَّقْيِيمَ الْعَامَّ بِالأَسْفَلِ.', '🏆');
+        }
+
+        /* ---------------- Progression & Unlock Logic ---------------- */
+        function unlockNextStage(stageNum) {
+            APP_STATE.currentStage = stageNum;
+            document.getElementById('currentStageBadge').innerText = `${stageNum} / 5`;
+
+            const stageEl = document.getElementById(`stage-${stageNum}`);
+            if (stageEl) {
+                stageEl.classList.remove('locked-stage');
+                const badge = stageEl.querySelector('.status-badge');
+                if (badge) {
+                    badge.className = 'status-badge px-3 py-1 rounded-full text-xs font-extrabold bg-blue-100 text-blue-700';
+                    badge.innerText = 'قَيْدُ الإِنْجَاز';
+                }
+                stageEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+
+        /* ================= OVERALL EVALUATION ================= */
+        function computeFinalEvaluation() {
+            const totalCorrect = APP_STATE.stage1.correctCount +
+                                 APP_STATE.stage2.correctCount +
+                                 APP_STATE.stage3.correctCount +
+                                 APP_STATE.stage4.correctCount;
+
+            const totalWrong = APP_STATE.stage1.wrongCount +
+                               APP_STATE.stage2.wrongCount +
+                               APP_STATE.stage3.wrongCount +
+                               APP_STATE.stage4.wrongCount;
+
+            const grandTotal = totalCorrect + totalWrong;
+            const percentage = grandTotal > 0 ? Math.round((totalCorrect / grandTotal) * 100) : 0;
+
+            const circle = document.getElementById('final-progress-circle');
+            const circumference = 427.25;
+            const offset = circumference - (percentage / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+
+            if (percentage >= 80) {
+                circle.setAttribute('stroke', '#10b981');
+            } else if (percentage >= 50) {
+                circle.setAttribute('stroke', '#f59e0b');
+            } else {
+                circle.setAttribute('stroke', '#ef4444');
+            }
+
+            document.getElementById('final-percent-text').innerText = `${percentage}%`;
+            document.getElementById('final-total-correct').innerText = totalCorrect;
+            document.getElementById('final-total-wrong').innerText = totalWrong;
+
+            const appreciation = document.getElementById('final-appreciation-box');
+            if (percentage >= 85) {
+                appreciation.className = 'p-4 rounded-2xl bg-emerald-900/60 border border-emerald-400/40 text-center font-extrabold text-sm sm:text-base text-emerald-200 shadow-inner';
+                appreciation.innerHTML = '🌟 <b>مُمْتَازٌ وَبَارِعٌ جِدًّا!</b> تَمَكَّنْتَ مِنْ نَقْلِ الرُّسُومِ وَمُطَابَقَةِ أَرْكَانِ الْمَرْصُوفَةِ بِدِقَّةٍ عَالِيَةٍ.';
+            } else if (percentage >= 60) {
+                appreciation.className = 'p-4 rounded-2xl bg-amber-900/60 border border-amber-400/40 text-center font-extrabold text-sm sm:text-base text-amber-200 shadow-inner';
+                appreciation.innerHTML = '👍 <b>جَيِّدٌ جِدًّا!</b> لَدَيْكَ تَحَكُّمٌ طَيِّبٌ فِي مَفْهُومِ الْمَرْصُوفَةِ مَعَ حَاجَةٍ لِلتَّأَنِّي فِي عَدِّ الْمُرَبَّعَاتِ.';
+            } else {
+                appreciation.className = 'p-4 rounded-2xl bg-rose-900/60 border border-rose-400/40 text-center font-extrabold text-sm sm:text-base text-rose-200 shadow-inner';
+                appreciation.innerHTML = '🔍 <b>يُوصَى بِمُرَاجَعَةِ الدَّرْسِ:</b> يُرْجَى إِعَادَةُ الْمُحَاوَلَةِ وَالتَّرْكِيزُ عَلَى تَعْيِينِ نِقَاطِ الْبِدَايَةِ وَالنِّهَايَةِ لِكُلِّ قِطْعَةٍ.';
+            }
+
+            document.getElementById('final-evaluation').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /* ================= RESET & EXIT HANDLERS ================= */
+        function resetWholeLesson() {
+            location.reload();
+        }
+
+                function exitApplication() {
+            showToast('شُكْرًا لَكَ عَلَى اسْتِخْدَامِ التَّطْبِيقِ التَّفَاعُلِيِّ. بَارَكَ اللهُ فِيكَ!', '👋');
+            setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 600);
+        }
+
+        /* ================= APP INITIALIZATION ================= */
+        window.onload = function() {
+            initElephantReference();
+            initElephantWorkGrid();
+            initPlaneReference();
+            initPlaneWorkGrid();
+            initTruckGrid();
+            initBoatGrid();
+            initBoxGrid();
+        };
+    </script>
+</body>
+</html>
