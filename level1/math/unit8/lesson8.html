@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تَشْكِيلُ كَمِّيَّاتٍ - الرِّيَاضِيَّاتُ - السَّنَةُ الأُولَى ابْتِدَائِيّ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', 'Amiri', sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #eff6ff 100%);
+            touch-action: manipulation;
+        }
+        .amiri {
+            font-family: 'Amiri', serif;
+        }
+        .math-ltr {
+            direction: ltr !important;
+            unicode-bidi: isolate;
+        }
+        .card-stage {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-locked {
+            filter: grayscale(0.9);
+            opacity: 0.6;
+            pointer-events: none;
+            user-select: none;
+        }
+        .card-active {
+            box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.15), 0 8px 10px -6px rgba(16, 185, 129, 0.1);
+        }
+        .crossed-item {
+            position: relative;
+            filter: grayscale(0.8) opacity(0.5);
+        }
+        .crossed-item::after {
+            content: "✖";
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #dc2626;
+            font-size: 2.2rem;
+            font-weight: bold;
+            text-shadow: 0 0 4px white;
+            animation: popCross 0.2s ease-out;
+        }
+        @keyframes popCross {
+            0% { transform: scale(0.4); }
+            100% { transform: scale(1); }
+        }
+        .selected-ring {
+            box-shadow: 0 0 0 4px #3b82f6;
+            transform: scale(1.05);
+        }
+        svg.connecting-line {
+            pointer-events: none;
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري
+           ======================================== */
+        #sub-lock-screen {
+          position: fixed;
+          top: 0; left: 0;
+          width: 100vw; height: 100vh;
+          background: rgba(255, 255, 255, 0.98);
+          z-index: 99999;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          padding: 24px;
+          text-align: center;
+        }
+        .lock-box {
+          background: #ffffff;
+          border-radius: 20px;
+          padding: 30px 20px;
+          box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+          border: 2px solid #e1f5fe;
+          max-width: 380px;
+          width: 100%;
+        }
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+        .btn-channel {
+          display: block;
+          width: 100%;
+          background: #0288d1;
+          color: #ffffff;
+          text-decoration: none;
+          padding: 14px;
+          font-weight: 800;
+          border-radius: 12px;
+          font-size: 1.05rem;
+          margin-bottom: 10px;
+          box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+        .btn-check-sub {
+          width: 100%;
+          background: #e8f5e9;
+          color: #2e7d32;
+          border: 2px solid #2e7d32;
+          padding: 13px;
+          font-weight: 800;
+          border-radius: 12px;
+          font-size: 1.05rem;
+          cursor: pointer;
+          font-family: inherit;
+        }
+        .sub-status-msg {
+          margin-top: 15px;
+          font-size: 0.95rem;
+          font-weight: 700;
+          min-height: 24px;
+        }
+        .btn-back-home {
+          display: block;
+          width: 100%;
+          max-width: 420px;
+          margin: 16px auto 0 auto;
+          background: #0d47a1;
+          color: #ffffff;
+          border: none;
+          padding: 14px 24px;
+          border-radius: 12px;
+          font-weight: 900;
+          font-size: 1.05rem;
+          cursor: pointer;
+          text-decoration: none;
+          text-align: center;
+          box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 pb-20 selection:bg-emerald-200">
+
+    <!-- ========================================
+         نافذة قفل الاشتراك الإجباري
+         ======================================== -->
+    <div id="sub-lock-screen">
+      <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+        <div class="lock-desc">
+          لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+        </div>
+        <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel" id="channel-link">
+          📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+        </a>
+        <button class="btn-check-sub" onclick="verifySubscription()">
+          ✅ تَأْكِيدُ الاِشْتِرَاكِ
+        </button>
+        <div id="sub-status-msg" class="sub-status-msg"></div>
+      </div>
+    </div>
+
+    <!-- شريط الرأس والترويسة التربوية -->
+    <header class="bg-white/90 backdrop-blur-md sticky top-0 z-40 border-b border-emerald-100 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <span class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center font-bold text-2xl shadow-md">
+                    ٨
+                </span>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold text-emerald-800 tracking-wide amiri leading-tight">
+                        تَشْكِيلُ كَمِّيَّاتٍ
+                    </h1>
+                    <p class="text-xs md:text-sm text-slate-500 font-medium">
+                        الرِّيَاضِيَّاتُ • السَّنَةُ الأُولَى ابْتِدَائِيّ • الدَّرْسُ الثَّامِنُ
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200">
+                <span class="text-xs font-bold text-emerald-700">التَّقَدُّمُ:</span>
+                <span id="global-progress-txt" class="text-sm font-black text-emerald-600 math-ltr">0 / 8</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- الحاوية الأساسية للمحتوى التعليمي -->
+    <main class="max-w-4xl mx-auto px-4 py-6 space-y-8">
+
+        <!-- ==============================================
+             كِتَابُ الرِّيَاضِيَّاتِ (ص 19)
+             ============================================== -->
+        <div class="bg-amber-100/60 border border-amber-300/80 rounded-2xl p-3 text-amber-900 font-bold flex items-center gap-2 shadow-sm">
+            <span class="text-2xl">📖</span>
+            <span class="text-lg">كِتَابُ الرِّيَاضِيَّاتِ — الصَّفْحَةُ 19</span>
+        </div>
+
+        <!-- 1. أَكْتَشِفُ (1) : عَدُّ وَتَلْوِينُ الطُّيُورِ -->
+        <section id="stage-aktachef1" class="card-stage card-active bg-white rounded-3xl p-6 border-2 border-emerald-200 relative overflow-hidden">
+            <div class="flex items-center justify-between mb-4 border-b pb-3 border-slate-100">
+                <div class="flex items-center gap-2">
+                    <span class="bg-emerald-600 text-white text-sm font-bold px-3 py-1 rounded-xl">أَكْتَشِفُ 1</span>
+                    <h2 class="text-lg md:text-xl font-bold text-slate-800 amiri">كَمْ مِنْ طَائِرٍ فِي الصُّورَةِ؟</h2>
+                </div>
+                <div id="badge-aktachef1" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800">
+                    قَيْدَ الإِنْجَازِ
+                </div>
+            </div>
+
+            <div class="bg-sky-50/70 border-2 border-dashed border-sky-200 rounded-2xl p-3 mb-6 text-center">
+                <img src="birds.jpg" alt="صُورَةُ الطُّيُورِ" class="max-h-72 mx-auto rounded-xl shadow-sm object-contain w-full">
+            </div>
+
+            <div class="mb-5 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                <p class="text-sm font-bold text-slate-700 mb-3">
+                    ١. اِخْتَرِ اللَّوْنَ الْمَطْلُوبَ، ثُمَّ انْقُرْ عَلَى الرَّقَمِ الْمُنَاسِبِ لِتَلْوِينِهِ:
+                </p>
+                <div class="flex flex-wrap gap-3 items-center">
+                    <button type="button" onclick="selectColorBrush('yellow')" id="brush-yellow"
+                            class="brush-btn flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-amber-400 bg-amber-50 text-amber-900 font-bold transition shadow-sm">
+                        <span class="w-6 h-6 rounded-full bg-yellow-400 border border-amber-500 inline-block"></span>
+                        <span>لَوْنُ عَدَدِ كُلِّ الطُّيُورِ (أَصْفَر)</span>
+                    </button>
+
+                    <button type="button" onclick="selectColorBrush('green')" id="brush-green"
+                            class="brush-btn flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-emerald-400 bg-emerald-50 text-emerald-900 font-bold transition shadow-sm">
+                        <span class="w-6 h-6 rounded-full bg-emerald-500 border border-emerald-600 inline-block"></span>
+                        <span>لَوْنُ عَدَدِ الْحَمَامَاتِ (أَخْضَر)</span>
+                    </button>
+
+                    <button type="button" onclick="selectColorBrush('red')" id="brush-red"
+                            class="brush-btn flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-rose-400 bg-rose-50 text-rose-900 font-bold transition shadow-sm">
+                        <span class="w-6 h-6 rounded-full bg-rose-500 border border-rose-600 inline-block"></span>
+                        <span>لَوْنُ عَدَدِ الْعَصَافِيرِ (أَحْمَر)</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <div class="text-xs text-slate-500 font-bold mb-2">شَرِيطُ الأَرْقَامِ (مِنَ 1 إِلَى 9):</div>
+                <div class="flex flex-wrap gap-2 justify-center math-ltr bg-emerald-50/50 p-4 rounded-2xl border border-emerald-100">
+                    <div id="aktachef1-numbers" class="flex flex-wrap gap-2 justify-center"></div>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-2">
+                <button type="button" onclick="validateAktachef1()" id="btn-val-aktachef1"
+                        class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-2 text-base">
+                    <span>تَأْكِيدُ الإِجَابَةِ</span>
+                    <span>✓</span>
+                </button>
+            </div>
+
+            <div id="feedback-aktachef1" class="hidden mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold"></div>
+        </section>
+
+        <!-- 2. أَكْتَشِفُ (2) : هَلْ نَقَصَتْ حَبَّةُ فَاكِهَة؟ -->
+        <section id="stage-aktachef2" class="card-stage card-locked bg-white rounded-3xl p-6 border-2 border-slate-200 relative overflow-hidden">
+            <div class="flex items-center justify-between mb-4 border-b pb-3 border-slate-100">
+                <div class="flex items-center gap-2">
+                    <span class="bg-emerald-600 text-white text-sm font-bold px-3 py-1 rounded-xl">أَكْتَشِفُ 2</span>
+                    <h2 class="text-lg md:text-xl font-bold text-slate-800 amiri">هَلْ نَقَصَتْ حَبَّةٌ مِنَ الْفَاكِهَةِ؟</h2>
+                </div>
+                <div id="badge-aktachef2" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500">
+                    مُقْفَلٌ 🔒
+                </div>
+            </div>
+
+            <div class="bg-amber-50/50 border-2 border-amber-200 rounded-2xl p-3 mb-6 text-center">
+                <img src="fruits.jpg" alt="صُورَةُ الْفَاكِهَةِ قَبْلَ وَبَعْدَ" class="max-h-72 mx-auto rounded-xl shadow-sm object-contain w-full">
+            </div>
+
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-5">
+                <p class="text-base font-bold text-slate-800 mb-3">
+                    أَحِطْ (اِخْتَرْ) الْجَوَابَ الصَّحِيحَ: هَلْ نَقَصَتْ حَبَّةٌ مِنَ الْفَاكِهَةِ؟
+                </p>
+                <div class="flex gap-4 justify-center">
+                    <button type="button" onclick="chooseYesNo('yes')" id="btn-choice-yes"
+                            class="choice-yn px-8 py-3 rounded-2xl border-2 border-slate-300 font-black text-lg bg-white hover:bg-slate-50 transition shadow-sm">
+                        نَعَمْ
+                    </button>
+                    <button type="button" onclick="chooseYesNo('no')" id="btn-choice-no"
+                            class="choice-yn px-8 py-3 rounded-2xl border-2 border-slate-300 font-black text-lg bg-white hover:bg-slate-50 transition shadow-sm">
+                        لَا
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="button" onclick="validateAktachef2()" id="btn-val-aktachef2"
+                        class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-2">
+                    <span>تَأْكِيدُ الإِجَابَةِ</span>
+                    <span>✓</span>
+                </button>
+            </div>
+
+            <div id="feedback-aktachef2" class="hidden mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold"></div>
+        </section>
+        <!-- 3. أُنْجِزُ (1) : عَدُّ الأَدَوَاتِ الْمَدْرَسِيَّةِ -->
+        <section id="stage-ondjez1" class="card-stage card-locked bg-white rounded-3xl p-6 border-2 border-slate-200 relative overflow-hidden">
+            <div class="flex items-center justify-between mb-4 border-b pb-3 border-slate-100">
+                <div class="flex items-center gap-2">
+                    <span class="bg-emerald-600 text-white text-sm font-bold px-3 py-1 rounded-xl">أُنْجِزُ 1</span>
+                    <h2 class="text-lg md:text-xl font-bold text-slate-800 amiri">مَا هُوَ عَدَدُ الأَدَوَاتِ فِي الصُّورَةِ؟</h2>
+                </div>
+                <div id="badge-ondjez1" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500">
+                    مُقْفَلٌ 🔒
+                </div>
+            </div>
+
+            <div class="bg-indigo-50/50 border-2 border-indigo-200 rounded-2xl p-3 mb-6 text-center">
+                <img src="tools.jpg" alt="صُورَةُ الأَدَوَاتِ الْمَدْرَسِيَّةِ" class="max-h-72 mx-auto rounded-xl shadow-sm object-contain w-full">
+            </div>
+
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex flex-wrap items-center justify-between gap-4 mb-5">
+                <label for="ondjez1-input" class="text-base font-bold text-slate-800">
+                    عَدَدُ الأَدَوَاتِ فِي الصُّورَةِ هُوَ:
+                </label>
+                <div class="flex items-center gap-2">
+                    <input type="number" id="ondjez1-input" min="1" max="20" placeholder="؟"
+                           class="w-24 text-center font-black text-2xl text-emerald-800 bg-white border-2 border-emerald-300 rounded-xl py-2 focus:ring-4 focus:ring-emerald-200 outline-none math-ltr">
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="button" onclick="validateOndjez1()" id="btn-val-ondjez1"
+                        class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-2">
+                    <span>تَأْكِيدُ الإِجَابَةِ</span>
+                    <span>✓</span>
+                </button>
+            </div>
+
+            <div id="feedback-ondjez1" class="hidden mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold"></div>
+        </section>
+
+        <!-- 4. أُنْجِزُ (2) : ارْبِطْ كُلَّ أَدَاةٍ بِالْعَدَدِ الْمُنَاسِبِ -->
+        <section id="stage-ondjez2" class="card-stage card-locked bg-white rounded-3xl p-6 border-2 border-slate-200 relative overflow-hidden">
+            <div class="flex items-center justify-between mb-4 border-b pb-3 border-slate-100">
+                <div class="flex items-center gap-2">
+                    <span class="bg-emerald-600 text-white text-sm font-bold px-3 py-1 rounded-xl">أُنْجِزُ 2</span>
+                    <h2 class="text-lg md:text-xl font-bold text-slate-800 amiri">اِرْبِطْ كُلَّ أَدَاةٍ بِالْعَدَدِ الْمُنَاسِبِ</h2>
+                </div>
+                <div id="badge-ondjez2" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500">
+                    مُقْفَلٌ 🔒
+                </div>
+            </div>
+
+            <p class="text-sm font-bold text-slate-600 mb-4">
+                اِنْقُرْ عَلَى بَطَاقَةِ الأَدَاةِ، ثُمَّ انْقُرْ عَلَى بَطَاقَةِ الْعَدَدِ الَّذِي يُمَثِّلُ عَدَدَهَا:
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-4 items-center">
+                <div class="space-y-4">
+                    <div class="text-xs font-bold text-slate-400 mb-1">الأَدَوَاتُ:</div>
+
+                    <div id="card-tool-pencil" onclick="selectMatchTool('pencil')"
+                         class="tool-card p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-emerald-400 cursor-pointer flex items-center justify-between transition">
+                        <div class="flex items-center gap-3">
+                            <img src="pencil.png" alt="قلم" class="w-14 h-14 object-contain">
+                            <span class="font-bold text-slate-700">الْقَلَمُ</span>
+                        </div>
+                        <span id="slot-tool-pencil" class="text-xs font-bold px-3 py-1 rounded-lg bg-slate-100 text-slate-500 math-ltr">غير مربوط</span>
+                    </div>
+
+                    <div id="card-tool-eraser" onclick="selectMatchTool('eraser')"
+                         class="tool-card p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-emerald-400 cursor-pointer flex items-center justify-between transition">
+                        <div class="flex items-center gap-3">
+                            <img src="eraser.png" alt="ممحاة" class="w-14 h-14 object-contain">
+                            <span class="font-bold text-slate-700">الْمِمْحَاةُ</span>
+                        </div>
+                        <span id="slot-tool-eraser" class="text-xs font-bold px-3 py-1 rounded-lg bg-slate-100 text-slate-500 math-ltr">غير مربوط</span>
+                    </div>
+
+                    <div id="card-tool-sharpener" onclick="selectMatchTool('sharpener')"
+                         class="tool-card p-3 rounded-2xl border-2 border-slate-200 bg-white hover:border-emerald-400 cursor-pointer flex items-center justify-between transition">
+                        <div class="flex items-center gap-3">
+                            <img src="sharpener.png" alt="مبراة" class="w-14 h-14 object-contain">
+                            <span class="font-bold text-slate-700">الْمِبْرَاةُ</span>
+                        </div>
+                        <span id="slot-tool-sharpener" class="text-xs font-bold px-3 py-1 rounded-lg bg-slate-100 text-slate-500 math-ltr">غير مربوط</span>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="text-xs font-bold text-slate-400 mb-1">الأَعْدَادُ:</div>
+                    <div id="card-num-2" onclick="selectMatchNum(2)"
+                         class="num-card p-4 rounded-2xl border-2 border-slate-200 bg-emerald-50/40 hover:border-emerald-500 cursor-pointer flex items-center justify-center transition text-3xl font-black text-emerald-800 math-ltr">
+                        2
+                    </div>
+                    <div id="card-num-3" onclick="selectMatchNum(3)"
+                         class="num-card p-4 rounded-2xl border-2 border-slate-200 bg-emerald-50/40 hover:border-emerald-500 cursor-pointer flex items-center justify-center transition text-3xl font-black text-emerald-800 math-ltr">
+                        3
+                    </div>
+                    <div id="card-num-4" onclick="selectMatchNum(4)"
+                         class="num-card p-4 rounded-2xl border-2 border-slate-200 bg-emerald-50/40 hover:border-emerald-500 cursor-pointer flex items-center justify-center transition text-3xl font-black text-emerald-800 math-ltr">
+                        4
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="button" onclick="validateOndjez2()" id="btn-val-ondjez2"
+                        class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-2">
+                    <span>تَأْكِيدُ الرَّبْطِ</span>
+                    <span>✓</span>
+                </button>
+            </div>
+
+            <div id="feedback-ondjez2" class="hidden mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold"></div>
+        </section>
+
+        <!-- قَاعِدَةُ «تَعَلَّمْتُ» -->
+        <div class="bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-600 rounded-3xl p-6 text-white shadow-lg border-4 border-white">
+            <div class="flex items-center gap-3 mb-2">
+                <span class="bg-white/20 p-2 rounded-xl text-2xl">💡</span>
+                <h3 class="text-xl md:text-2xl font-bold amiri">تَعَلَّمْتُ:</h3>
+            </div>
+            <p class="text-base md:text-xl font-bold leading-relaxed amiri pr-4">
+                « لَا يَتَغَيَّرُ عَدَدُ الأَشْيَاءِ الَّتِي نَعُدُّهَا حَتَّى وَلَوْ غَيَّرْنَا تَرْتِيبَهَا كَمَا فِي مِثَالِ حَبَّاتِ الْفَاكِهَةِ. »
+            </p>
+        </div>
+
+        <!-- ==============================================
+             دَفْتَرُ الأَنْشِطَةِ (ص 12)
+             ============================================== -->
+        <div class="bg-sky-100/70 border border-sky-300 rounded-2xl p-3 text-sky-900 font-bold flex items-center gap-2 shadow-sm">
+            <span class="text-2xl">📝</span>
+            <span class="text-lg">دَفْتَرُ الأَنْشِطَةِ — الصَّفْحَةُ 12 («أَتَمَرَّنُ» وَ «أَبْحَثُ»)</span>
+        </div>
+
+        <!-- 5. أَتَمَرَّنُ (1) : أَشْطُبُ الأَشْيَاءَ الزَّائِدَةَ -->
+        <section id="stage-tamaran1" class="card-stage card-locked bg-white rounded-3xl p-6 border-2 border-slate-200 relative overflow-hidden">
+            <div class="flex items-center justify-between mb-4 border-b pb-3 border-slate-100">
+                <div class="flex items-center gap-2">
+                    <span class="bg-sky-600 text-white text-sm font-bold px-3 py-1 rounded-xl">أَتَمَرَّنُ 1</span>
+                    <h2 class="text-lg md:text-xl font-bold text-slate-800 amiri">أَشْطُبُ الأَشْيَاءَ الزَّائِدَةَ</h2>
+                </div>
+                <div id="badge-tamaran1" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500">
+                    مُقْفَلٌ 🔒
+                </div>
+            </div>
+
+            <p class="text-sm font-bold text-slate-600 mb-4">
+                اُنْقُرْ عَلَى الْحَبَّاتِ الزَّائِدَةِ لِشَطْبِهَا لِيَبْقَى فَقَطِ الْعَدَدُ الْمَكْتُوبُ فِي الْبَطَاقَةِ (9):
+            </p>
+
+            <div class="bg-rose-50/50 border-2 border-rose-200 rounded-3xl p-5 mb-5">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-bold text-rose-800">حَبَّاتُ الطَّمَاطِمِ الْمُتَوَاجِدَةُ: 12</span>
+                    <div class="bg-rose-600 text-white px-4 py-1.5 rounded-xl font-black text-xl math-ltr shadow-sm">
+                        الْعَدَدُ الْمَطْلُوبُ: 9
+                    </div>
+                </div>
+
+                <div id="tomatoes-grid" class="grid grid-cols-4 sm:grid-cols-6 gap-3 justify-items-center"></div>
+                <div class="text-xs text-slate-400 font-bold mt-3 text-center">
+                    (انقر على الحبة لشطبها ✖ أو إعادتها)
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="button" onclick="validateTamaran1()" id="btn-val-tamaran1"
+                        class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-2">
+                    <span>تَأْكِيدُ الشَّطْبِ</span>
+                    <span>✓</span>
+                </button>
+            </div>
+
+            <div id="feedback-tamaran1" class="hidden mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold"></div>
+        </section>
+
+        <!-- 6. أَتَمَرَّنُ (2) : لَوِّنْ نَجْمَاتٍ بِقَدْرِ الْعَدَدِ الْمَكْتُوبِ -->
+        <section id="stage-tamaran2" class="card-stage card-locked bg-white rounded-3xl p-6 border-2 border-slate-200 relative overflow-hidden">
+            <div class="flex items-center justify-between mb-4 border-b pb-3 border-slate-100">
+                <div class="flex items-center gap-2">
+                    <span class="bg-sky-600 text-white text-sm font-bold px-3 py-1 rounded-xl">أَتَمَرَّنُ 2</span>
+                    <h2 class="text-lg md:text-xl font-bold text-slate-800 amiri">لَوِّنْ نَجْمَاتٍ بِقَدْرِ الْعَدَدِ الْمَكْتُوبِ</h2>
+                </div>
+                <div id="badge-tamaran2" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500">
+                    مُقْفَلٌ 🔒
+                </div>
+            </div>
+
+            <div class="bg-amber-50/50 border-2 border-amber-200 rounded-3xl p-5 mb-5">
+                <div class="flex items-center justify-between mb-4">
+                    <p class="text-sm font-bold text-amber-900">
+                        اُنْقُرْ عَلَى النُّجُومِ لِتَلْوِينِهَا حَتَّى تُطَابِقَ الْعَدَدَ:
+                    </p>
+                    <div class="bg-amber-500 text-white px-5 py-2 rounded-2xl font-black text-2xl math-ltr shadow-md">
+                        7
+                    </div>
+                </div>
+
+                <div id="stars-grid" class="grid grid-cols-3 gap-4 justify-items-center max-w-sm mx-auto py-3"></div>
+
+                <div class="text-center font-bold text-slate-600 mt-2">
+                    عَدَدُ النُّجُومِ الْمُلَوَّنَةِ حَالِيًّا: <span id="stars-count-txt" class="text-amber-600 text-xl font-black math-ltr">0</span>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="button" onclick="validateTamaran2()" id="btn-val-tamaran2"
+                        class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-2">
+                    <span>تَأْكِيدُ التَّلْوِينِ</span>
+                    <span>✓</span>
+                </button>
+            </div>
+
+            <div id="feedback-tamaran2" class="hidden mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold"></div>
+        </section>
+        <!-- 7. أَتَمَرَّنُ (3) : أَكْمِلْ رَسْمَ الأَشْيَاءِ النَّاقِصَةِ -->
+        <section id="stage-tamaran3" class="card-stage card-locked bg-white rounded-3xl p-6 border-2 border-slate-200 relative overflow-hidden">
+            <div class="flex items-center justify-between mb-4 border-b pb-3 border-slate-100">
+                <div class="flex items-center gap-2">
+                    <span class="bg-sky-600 text-white text-sm font-bold px-3 py-1 rounded-xl">أَتَمَرَّنُ 3</span>
+                    <h2 class="text-lg md:text-xl font-bold text-slate-800 amiri">أَكْمِلْ رَسْمَ الأَشْيَاءِ النَّاقِصَةِ</h2>
+                </div>
+                <div id="badge-tamaran3" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500">
+                    مُقْفَلٌ 🔒
+                </div>
+            </div>
+
+            <p class="text-sm font-bold text-slate-600 mb-4">
+                اُنْقُرْ عَلَى زِرِّ الإِضَافَةِ لِإِكْمَالِ الْعَدَدِ الْمَكْتُوبِ فِي الْبَطَاقَةِ لِكُلِّ مَجْمُوعَةٍ:
+            </p>
+
+            <div class="space-y-4 mb-6">
+                <div class="p-4 rounded-2xl border-2 border-amber-200 bg-amber-50/40 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-amber-800">مَجْمُوعَةُ النُّجُومِ (الْمَطْلُوبُ: 8)</span>
+                            <span class="bg-amber-500 text-white text-xs font-black px-2 py-0.5 rounded math-ltr">8</span>
+                        </div>
+                        <div id="group-stars-box" class="flex flex-wrap gap-2 text-2xl items-center min-h-[40px]">
+                            <span>⭐</span><span>⭐</span><span>⭐</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="addStage3Item('stars')" class="px-4 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm shadow">
+                            + إِضَافَةُ نَجْمَةٍ
+                        </button>
+                        <button type="button" onclick="removeStage3Item('stars')" class="px-3 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm">
+                            -
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-2xl border-2 border-emerald-200 bg-emerald-50/40 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-emerald-800">مَجْمُوعَةُ أَوْرَاقِ الشَّجَرِ (الْمَطْلُوبُ: 5)</span>
+                            <span class="bg-emerald-600 text-white text-xs font-black px-2 py-0.5 rounded math-ltr">5</span>
+                        </div>
+                        <div id="group-leaves-box" class="flex flex-wrap gap-2 text-2xl items-center min-h-[40px]">
+                            <span>🍃</span><span>🍃</span><span>🍃</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="addStage3Item('leaves')" class="px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow">
+                            + إِضَافَةُ وَرَقَةٍ
+                        </button>
+                        <button type="button" onclick="removeStage3Item('leaves')" class="px-3 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm">
+                            -
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-2xl border-2 border-sky-200 bg-sky-50/40 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-sky-800">مَجْمُوعَةُ الْكُرَاتِ (الْمَطْلُوبُ: 6)</span>
+                            <span class="bg-sky-600 text-white text-xs font-black px-2 py-0.5 rounded math-ltr">6</span>
+                        </div>
+                        <div id="group-balls-box" class="flex flex-wrap gap-2 text-2xl items-center min-h-[40px]">
+                            <span>⚽</span><span>⚽</span><span>⚽</span><span>⚽</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="addStage3Item('balls')" class="px-4 py-1.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-bold text-sm shadow">
+                            + إِضَافَةُ كُرَةٍ
+                        </button>
+                        <button type="button" onclick="removeStage3Item('balls')" class="px-3 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm">
+                            -
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="button" onclick="validateTamaran3()" id="btn-val-tamaran3"
+                        class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-2">
+                    <span>تَأْكِيدُ الإِكْمَالِ</span>
+                    <span>✓</span>
+                </button>
+            </div>
+
+            <div id="feedback-tamaran3" class="hidden mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold"></div>
+        </section>
+
+        <!-- 8. أَتَمَرَّنُ (4) : حَبَّةُ بُنْدُقٍ لِكُلِّ سِنْجَابٍ -->
+        <section id="stage-tamaran4" class="card-stage card-locked bg-white rounded-3xl p-6 border-2 border-slate-200 relative overflow-hidden">
+            <div class="flex items-center justify-between mb-4 border-b pb-3 border-slate-100">
+                <div class="flex items-center gap-2">
+                    <span class="bg-sky-600 text-white text-sm font-bold px-3 py-1 rounded-xl">أَتَمَرَّنُ 4</span>
+                    <h2 class="text-lg md:text-xl font-bold text-slate-800 amiri">أَرْسُمُ (أُضِيفُ) حَبَّةَ بُنْدُقٍ لِكُلِّ سِنْجَابٍ</h2>
+                </div>
+                <div id="badge-tamaran4" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500">
+                    مُقْفَلٌ 🔒
+                </div>
+            </div>
+
+            <p class="text-sm font-bold text-slate-600 mb-4">
+                تُوجَدُ بِطَاقَةٌ بِهَا 4 سَنَاجِبَ، انْقُرْ عَلَى بِطَاقَةِ الْبُنْدُقِ لإِضَافَةِ حَبَّةِ بُنْدُقٍ لِكُلِّ سِنْجَابٍ:
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center mb-6">
+                <div class="p-6 rounded-3xl border-2 border-amber-300 bg-amber-50/60 text-center shadow-sm">
+                    <span class="text-xs font-bold text-amber-800 mb-2 block">بِطَاقَةُ السَّنَاجِبِ (4 سَنَاجِبَ)</span>
+                    <div class="flex justify-center gap-3 text-5xl py-3">
+                        <span>🐿️</span><span>🐿️</span><span>🐿️</span><span>🐿️</span>
+                    </div>
+                    <span class="text-xs font-bold text-amber-700">الْعَدَدُ: 4</span>
+                </div>
+
+                <div class="p-6 rounded-3xl border-2 border-orange-300 bg-orange-50/60 text-center shadow-sm">
+                    <span class="text-xs font-bold text-orange-800 mb-2 block">بِطَاقَةُ حَبَّاتِ الْبُنْدُقِ (اُنْقُرْ للإِضَافَةِ)</span>
+                    <div id="hazelnuts-display-box" class="flex flex-wrap justify-center items-center gap-2 min-h-[64px] py-2 text-4xl">
+                        <span id="no-nuts-txt" class="text-xs font-bold text-slate-400">لَا تُوجَدُ حَبَّاتُ بُنْدُقٍ حَالِيًّا</span>
+                    </div>
+                    <div class="flex justify-center gap-2 mt-3">
+                        <button type="button" onclick="addHazelnut()" class="px-5 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm shadow">
+                            + إِضَافَةُ حَبَّةِ بُنْدُقٍ 🌰
+                        </button>
+                        <button type="button" onclick="removeHazelnut()" class="px-3 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm">
+                            -
+                        </button>
+                    </div>
+                    <div class="text-xs font-bold text-orange-900 mt-2">
+                        عَدَدُ حَبَّاتِ الْبُنْدُقِ الْمُضَافَةِ: <span id="hazelnuts-count-txt" class="math-ltr text-base font-black">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="button" onclick="validateTamaran4()" id="btn-val-tamaran4"
+                        class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-2">
+                    <span>تَأْكِيدُ التَّوْزِيعِ</span>
+                    <span>✓</span>
+                </button>
+            </div>
+
+            <div id="feedback-tamaran4" class="hidden mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold"></div>
+        </section>
+
+        <!-- 9. أَبْحَثُ : الشَّرِيطُ الْعَدَدِيُّ مِنْ 8 خَانَاتٍ -->
+        <section id="stage-abhath" class="card-stage card-locked bg-white rounded-3xl p-6 border-2 border-slate-200 relative overflow-hidden">
+            <div class="flex items-center justify-between mb-4 border-b pb-3 border-slate-100">
+                <div class="flex items-center gap-2">
+                    <span class="bg-purple-600 text-white text-sm font-bold px-3 py-1 rounded-xl">أَبْحَثُ</span>
+                    <h2 class="text-lg md:text-xl font-bold text-slate-800 amiri">ارْبِطْ كُلَّ عَدَدٍ بِالْخَانَةِ الْمُنَاسِبَةِ فِي الشَّرِيطِ الْعَدَدِيِّ</h2>
+                </div>
+                <div id="badge-abhath" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500">
+                    مُقْفَلٌ 🔒
+                </div>
+            </div>
+
+            <p class="text-sm font-bold text-slate-600 mb-3">
+                اِخْتَرِ الْعَدَدَ مِنَ الأَسْفَلِ، ثُمَّ اضْغَطْ عَلَى الْخَانَةِ الْمُنَاسِبَةِ فِي الشَّرِيطِ الْعَدَدِيِّ (مِنَ الْيَسَارِ إِلَى الْيَمِينِ):
+            </p>
+
+            <div class="bg-purple-50/50 border-2 border-purple-200 rounded-3xl p-5 mb-6 overflow-x-auto">
+                <div class="text-xs font-bold text-purple-800 mb-3 text-center">
+                    الشَّرِيطُ الْعَدَدِيُّ (مِنَ 1 إِلَى 8):
+                </div>
+
+                <div id="number-strip" class="flex justify-center items-center gap-2 md:gap-3 math-ltr py-2 min-w-[500px]">
+                    <div class="w-14 h-16 rounded-2xl bg-purple-200/80 border-2 border-purple-400 font-black text-2xl text-purple-900 flex items-center justify-center select-none shadow-sm">
+                        1
+                    </div>
+                    <div id="strip-slot-1" onclick="placeNumInStrip(1)" class="strip-slot w-14 h-16 rounded-2xl bg-white border-2 border-dashed border-purple-300 hover:border-purple-600 cursor-pointer flex items-center justify-center font-black text-2xl text-purple-900 transition shadow-sm">
+                        ؟
+                    </div>
+                    <div id="strip-slot-2" onclick="placeNumInStrip(2)" class="strip-slot w-14 h-16 rounded-2xl bg-white border-2 border-dashed border-purple-300 hover:border-purple-600 cursor-pointer flex items-center justify-center font-black text-2xl text-purple-900 transition shadow-sm">
+                        ؟
+                    </div>
+                    <div id="strip-slot-3" onclick="placeNumInStrip(3)" class="strip-slot w-14 h-16 rounded-2xl bg-white border-2 border-dashed border-purple-300 hover:border-purple-600 cursor-pointer flex items-center justify-center font-black text-2xl text-purple-900 transition shadow-sm">
+                        ؟
+                    </div>
+                    <div id="strip-slot-4" onclick="placeNumInStrip(4)" class="strip-slot w-14 h-16 rounded-2xl bg-white border-2 border-dashed border-purple-300 hover:border-purple-600 cursor-pointer flex items-center justify-center font-black text-2xl text-purple-900 transition shadow-sm">
+                        ؟
+                    </div>
+                    <div id="strip-slot-5" onclick="placeNumInStrip(5)" class="strip-slot w-14 h-16 rounded-2xl bg-white border-2 border-dashed border-purple-300 hover:border-purple-600 cursor-pointer flex items-center justify-center font-black text-2xl text-purple-900 transition shadow-sm">
+                        ؟
+                    </div>
+                    <div class="w-14 h-16 rounded-2xl bg-purple-200/80 border-2 border-purple-400 font-black text-2xl text-purple-900 flex items-center justify-center select-none shadow-sm">
+                        7
+                    </div>
+                    <div id="strip-slot-7" onclick="placeNumInStrip(7)" class="strip-slot w-14 h-16 rounded-2xl bg-white border-2 border-dashed border-purple-300 hover:border-purple-600 cursor-pointer flex items-center justify-center font-black text-2xl text-purple-900 transition shadow-sm">
+                        ؟
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 mb-5">
+                <span class="text-xs font-bold text-slate-600 block mb-3">اخْتَرِ الْعَدَدَ لِوَضْعِهِ:</span>
+                <div class="flex flex-wrap justify-center gap-3 math-ltr">
+                    <button type="button" onclick="selectAbhathNumber(3)" id="btn-num-3" class="num-chip w-12 h-12 rounded-xl bg-white border-2 border-purple-300 font-black text-2xl text-purple-800 hover:bg-purple-100 transition shadow-sm">3</button>
+                    <button type="button" onclick="selectAbhathNumber(5)" id="btn-num-5" class="num-chip w-12 h-12 rounded-xl bg-white border-2 border-purple-300 font-black text-2xl text-purple-800 hover:bg-purple-100 transition shadow-sm">5</button>
+                    <button type="button" onclick="selectAbhathNumber(4)" id="btn-num-4" class="num-chip w-12 h-12 rounded-xl bg-white border-2 border-purple-300 font-black text-2xl text-purple-800 hover:bg-purple-100 transition shadow-sm">4</button>
+                    <button type="button" onclick="selectAbhathNumber(8)" id="btn-num-8" class="num-chip w-12 h-12 rounded-xl bg-white border-2 border-purple-300 font-black text-2xl text-purple-800 hover:bg-purple-100 transition shadow-sm">8</button>
+                    <button type="button" onclick="selectAbhathNumber(6)" id="btn-num-6" class="num-chip w-12 h-12 rounded-xl bg-white border-2 border-purple-300 font-black text-2xl text-purple-800 hover:bg-purple-100 transition shadow-sm">6</button>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button type="button" onclick="validateAbhathStrip()" id="btn-val-abhath"
+                        class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition flex items-center gap-2">
+                    <span>تَأْكِيدُ الشَّرِيطِ الْعَدَدِيِّ</span>
+                    <span>✓</span>
+                </button>
+            </div>
+
+            <div id="feedback-abhath" class="hidden mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold"></div>
+        </section>
+        <!-- ==============================================
+             الشَّاشَةُ الْخِتَامِيَّةُ (التَّقْيِيمُ الْعَامُّ)
+             ============================================== -->
+        <section id="final-summary-card" class="hidden bg-white rounded-3xl p-6 md:p-8 border-4 border-emerald-400 shadow-2xl relative overflow-hidden transition-all duration-500">
+            <div class="text-center max-w-lg mx-auto">
+                <span class="text-5xl mb-2 inline-block">🏆</span>
+                <h2 class="text-2xl md:text-3xl font-black text-slate-800 amiri mb-1">
+                    بِطَاقَةُ التَّقْيِيمِ الْبِيدَاغُوجِيِّ الْعَامِّ
+                </h2>
+                <p class="text-sm text-slate-500 mb-6 font-medium">
+                    نَتِيجَةُ إِكْمَالِ دَرْسِ «تَشْكِيلُ كَمِّيَّاتٍ»
+                </p>
+
+                <div class="relative w-44 h-44 mx-auto mb-6 flex items-center justify-center">
+                    <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="42" stroke="#e2e8f0" stroke-width="10" fill="transparent"/>
+                        <circle id="final-progress-circle" cx="50" cy="50" r="42" stroke="#10b981" stroke-width="10" stroke-linecap="round" fill="transparent"
+                                stroke-dasharray="264" stroke-dashoffset="264" class="transition-all duration-1000 ease-out"/>
+                    </svg>
+                    <div class="absolute flex flex-col items-center">
+                        <span id="final-score-percent" class="text-3xl md:text-4xl font-black text-slate-800 math-ltr">0%</span>
+                        <span class="text-xs font-bold text-slate-400">الْمُعَدَّلُ الْكُلِّيُّ</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3 flex items-center justify-center gap-3">
+                        <span class="text-2xl text-emerald-600 font-bold">✓</span>
+                        <div class="text-right">
+                            <div class="text-xs text-emerald-700 font-bold">الإِجَابَاتُ الصَّحِيحَةُ</div>
+                            <div id="stat-correct" class="text-xl font-black text-emerald-800 math-ltr">0</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-rose-50 border border-rose-200 rounded-2xl p-3 flex items-center justify-center gap-3">
+                        <span class="text-2xl text-rose-600 font-bold">✗</span>
+                        <div class="text-right">
+                            <div class="text-xs text-rose-700 font-bold">الإِجَابَاتُ الْخَاطِئَةُ</div>
+                            <div id="stat-wrong" class="text-xl font-black text-rose-800 math-ltr">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pedagogical-note" class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 font-bold text-base amiri mb-8 shadow-sm">
+                    جَارٍ حِسَابُ التَّقْدِيرِ التَّرْبَوِيِّ...
+                </div>
+
+                <div class="flex flex-wrap gap-4 justify-center">
+                    <button type="button" onclick="restartLesson()"
+                            class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-md transition flex items-center gap-2">
+                        <span>🔄</span>
+                        <span>إِعَادَةُ الْمُحَاوَلَةِ</span>
+                    </button>
+
+                    <button type="button" onclick="exitLesson()"
+                            class="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-2xl transition flex items-center gap-2">
+                        <span>🚪</span>
+                        <span>خُرُوجٌ</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- زر العودة إلى الفهرس -->
+    <a href="../../../index.html" class="btn-back-home">← العَوْدَةُ إِلَى الْفِهْرِسِ</a>
+
+    <!-- رسائل التنبيه العائمة المخصصة -->
+    <div id="toast-msg" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white px-5 py-2.5 rounded-2xl shadow-2xl text-sm font-bold opacity-0 pointer-events-none transition-all duration-300 z-50 flex items-center gap-2">
+        <span id="toast-icon">ℹ️</span>
+        <span id="toast-text">رسالة توجيهية</span>
+    </div>
+
+    <!-- ========================================
+         سكريبت التحقق من الاشتراك (Vercel)
+         ======================================== -->
+    <script>
+        const CHANNEL_ID = "-1004456852024"; // السنة الأولى
+
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        async function verifySubscription() {
+            const statusMsg = document.getElementById('sub-status-msg');
+            statusMsg.style.color = "#0288d1";
+            statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+            let userId = null;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                userId = tg.initDataUnsafe.user.id;
+            }
+
+            if (!userId) {
+                statusMsg.style.color = "#e65100";
+                statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+                return;
+            }
+
+            try {
+                const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.isSubscribed) {
+                    statusMsg.style.color = "#2e7d32";
+                    statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                    setTimeout(() => {
+                        document.getElementById('sub-lock-screen').style.display = 'none';
+                    }, 600);
+                } else {
+                    statusMsg.style.color = "#c62828";
+                    statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+                }
+            } catch (error) {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+            }
+        }
+
+        window.addEventListener('load', () => {
+            verifySubscription();
+        });
+    </script>
+
+    <!-- ==============================================
+         مَنْظُومَةُ التَّفَاعُلِ وَالأَصْوَاتِ (WEB AUDIO API)
+         ============================================== -->
+    <script>
+        const AudioEngine = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContext();
+                }
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            },
+            playSuccess() {
+                try {
+                    this.init();
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.setValueAtTime(554.37, now + 0.1);
+                    osc.frequency.setValueAtTime(659.25, now + 0.2);
+                    osc.frequency.setValueAtTime(880, now + 0.3);
+
+                    gain.gain.setValueAtTime(0.3, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now);
+                    osc.stop(now + 0.65);
+                } catch (e) {}
+            },
+            playError() {
+                try {
+                    this.init();
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.setValueAtTime(180, now + 0.15);
+
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+
+                    osc.start(now);
+                    osc.stop(now + 0.4);
+                } catch (e) {}
+            },
+            playPop() {
+                try {
+                    this.init();
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    osc.frequency.exponentialRampToValueAtTime(300, now + 0.08);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } catch(e){}
+            }
+        };
+
+        const AppState = {
+            totalStages: 8,
+            completedStages: 0,
+            correctCount: 0,
+            wrongCount: 0,
+            aktachef1: { selectedBrush: null, colorsMap: {} },
+            aktachef2: { selectedChoice: null },
+            ondjez1: { value: null },
+            ondjez2: { selectedTool: null, matches: {} },
+            tamaran1: { crossedIndices: new Set() },
+            tamaran2: { coloredStars: new Set() },
+            tamaran3: { starsCount: 3, leavesCount: 3, ballsCount: 4 },
+            tamaran4: { hazelnutsCount: 0 },
+            abhath: { selectedNumber: null, stripSlots: {} }
+        };
+
+        function showToast(text, icon = 'ℹ️') {
+            const toast = document.getElementById('toast-msg');
+            document.getElementById('toast-text').innerText = text;
+            document.getElementById('toast-icon').innerText = icon;
+            toast.classList.remove('opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+
+        function updateGlobalProgress() {
+            document.getElementById('global-progress-txt').innerText = `${AppState.completedStages} / ${AppState.totalStages}`;
+        }
+
+        /* -----------------------------------------------------------
+           المحطة 1: أكتشف (1)
+           ----------------------------------------------------------- */
+        function initAktachef1() {
+            const container = document.getElementById('aktachef1-numbers');
+            container.innerHTML = '';
+            for (let i = 1; i <= 9; i++) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.id = `num-btn-${i}`;
+                btn.className = 'w-11 h-11 md:w-12 md:h-12 rounded-2xl bg-white border-2 border-slate-200 font-black text-xl text-slate-800 transition shadow-sm hover:scale-105 active:scale-95 flex items-center justify-center';
+                btn.innerText = i;
+                btn.onclick = () => colorNumberButton(i);
+                container.appendChild(btn);
+            }
+        }
+
+        function selectColorBrush(color) {
+            AudioEngine.playPop();
+            AppState.aktachef1.selectedBrush = color;
+            document.querySelectorAll('.brush-btn').forEach(b => b.classList.remove('selected-ring'));
+            const activeBtn = document.getElementById(`brush-${color}`);
+            if (activeBtn) activeBtn.classList.add('selected-ring');
+            showToast('تَمَّ اخْتِيَارُ الْفُرْشَاةِ، انْقُرِ الآنَ عَلَى الرَّقَمِ الْمُرَادِ تَلْوِينُهُ.');
+        }
+
+        function colorNumberButton(num) {
+            if (!AppState.aktachef1.selectedBrush) {
+                showToast('اِخْتَرِ اللَّوْنَ أَوَّلًا مِنَ اللَّوْحَةِ فِي الأَعْلَى!', '⚠️');
+                return;
+            }
+            AudioEngine.playPop();
+            const btn = document.getElementById(`num-btn-${num}`);
+            const brush = AppState.aktachef1.selectedBrush;
+            AppState.aktachef1.colorsMap[num] = brush;
+
+            btn.className = 'w-11 h-11 md:w-12 md:h-12 rounded-2xl font-black text-xl transition shadow-md flex items-center justify-center';
+            if (brush === 'yellow') {
+                btn.classList.add('bg-yellow-400', 'text-amber-950', 'border-2', 'border-yellow-500');
+            } else if (brush === 'green') {
+                btn.classList.add('bg-emerald-500', 'text-white', 'border-2', 'border-emerald-600');
+            } else if (brush === 'red') {
+                btn.classList.add('bg-rose-500', 'text-white', 'border-2', 'border-rose-600');
+            }
+        }
+
+        function validateAktachef1() {
+            const map = AppState.aktachef1.colorsMap;
+            const isBirdsCorrect = (map[9] === 'yellow');
+            const isPigeonsCorrect = (map[4] === 'green');
+            const isSparrowsCorrect = (map[5] === 'red');
+            const isAllCorrect = isBirdsCorrect && isPigeonsCorrect && isSparrowsCorrect;
+
+            document.getElementById('btn-val-aktachef1').disabled = true;
+            document.getElementById('btn-val-aktachef1').classList.add('opacity-50', 'pointer-events-none');
+            document.getElementById('stage-aktachef1').classList.add('pointer-events-none');
+
+            const fb = document.getElementById('feedback-aktachef1');
+            fb.classList.remove('hidden');
+
+            if (isAllCorrect) {
+                AudioEngine.playSuccess();
+                AppState.correctCount++;
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-emerald-50 border-emerald-300 text-emerald-800';
+                fb.innerHTML = `<span>✓ إِجَابَةٌ صَحِيحَةٌ! (9 طُيُورٍ بِالأَصْفَرِ، 4 حَمَامَاتٍ بِالأَخْضَرِ، 5 عَصَافِيرٍ بِالأَحْمَرِ).</span><span>+1</span>`;
+                document.getElementById('badge-aktachef1').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800';
+                document.getElementById('badge-aktachef1').innerText = 'تَمَّ بِنَجَاحٍ ✓';
+            } else {
+                AudioEngine.playError();
+                AppState.wrongCount++;
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-rose-50 border-rose-300 text-rose-800';
+                fb.innerHTML = `<span>✗ إِجَابَةٌ غَيْرُ دَقِيقَةٍ. الصَّوَابُ: 9 لِلطُّيُورِ (أَصْفَر)، 4 لِلْحَمَامَاتِ (أَخْضَر)، 5 لِلْعَصَافِيرِ (أَحْمَر).</span><span>0</span>`;
+                document.getElementById('badge-aktachef1').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800';
+                document.getElementById('badge-aktachef1').innerText = 'خَاطِئٌ ✗';
+            }
+
+            AppState.completedStages++;
+            updateGlobalProgress();
+            unlockNextStage('stage-aktachef2', 'badge-aktachef2');
+        }
+
+        /* -----------------------------------------------------------
+           المحطة 2: أكتشف (2)
+           ----------------------------------------------------------- */
+        function chooseYesNo(choice) {
+            AudioEngine.playPop();
+            AppState.aktachef2.selectedChoice = choice;
+            document.querySelectorAll('.choice-yn').forEach(btn => btn.classList.remove('selected-ring', 'bg-emerald-100', 'border-emerald-500'));
+            const chosenBtn = document.getElementById(`btn-choice-${choice}`);
+            chosenBtn.classList.add('selected-ring', 'bg-emerald-100', 'border-emerald-500');
+        }
+
+        function validateAktachef2() {
+            if (!AppState.aktachef2.selectedChoice) {
+                showToast('يُرْجَى اخْتِيَارُ "نَعَمْ" أَوْ "لَا" قَبْلَ التَّأْكِيدِ', '⚠️');
+                return;
+            }
+
+            const isCorrect = (AppState.aktachef2.selectedChoice === 'no');
+
+            document.getElementById('btn-val-aktachef2').disabled = true;
+            document.getElementById('btn-val-aktachef2').classList.add('opacity-50', 'pointer-events-none');
+            document.getElementById('stage-aktachef2').classList.add('pointer-events-none');
+
+            const fb = document.getElementById('feedback-aktachef2');
+            fb.classList.remove('hidden');
+
+            const btnNo = document.getElementById('btn-choice-no');
+            const btnYes = document.getElementById('btn-choice-yes');
+
+            if (isCorrect) {
+                AudioEngine.playSuccess();
+                AppState.correctCount++;
+                btnNo.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600');
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-emerald-50 border-emerald-300 text-emerald-800';
+                fb.innerHTML = `<span>✓ صَحِيحٌ! لَمْ تَنْقُصْ أَيُّ حَبَّةٍ مِنَ الْفَاكِهَةِ، بَلْ تَغَيَّرَ التَّرْتِيبُ فَقَطْ.</span><span>+1</span>`;
+                document.getElementById('badge-aktachef2').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800';
+                document.getElementById('badge-aktachef2').innerText = 'تَمَّ بِنَجَاحٍ ✓';
+            } else {
+                AudioEngine.playError();
+                AppState.wrongCount++;
+                btnYes.classList.add('bg-rose-600', 'text-white', 'border-rose-600');
+                btnNo.classList.add('bg-emerald-100', 'border-emerald-500');
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-rose-50 border-rose-300 text-rose-800';
+                fb.innerHTML = `<span>✗ إِجَابَةٌ خَاطِئَةٌ. الْجَوَابُ الصَّحِيحُ هُوَ: "لَا" (الْعَدَدُ بَقِيَ 9).</span><span>0</span>`;
+                document.getElementById('badge-aktachef2').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800';
+                document.getElementById('badge-aktachef2').innerText = 'خَاطِئٌ ✗';
+            }
+
+            AppState.completedStages++;
+            updateGlobalProgress();
+            unlockNextStage('stage-ondjez1', 'badge-ondjez1');
+        }
+        /* -----------------------------------------------------------
+           المحطة 3: أنجز (1)
+           ----------------------------------------------------------- */
+        function validateOndjez1() {
+            const input = document.getElementById('ondjez1-input');
+            const val = parseInt(input.value.trim(), 10);
+
+            if (isNaN(val)) {
+                showToast('يُرْجَى كِتَابَةُ عَدَدِ الأَدَوَاتِ أَوَّلًا', '⚠️');
+                return;
+            }
+
+            const isCorrect = (val === 9);
+
+            input.disabled = true;
+            document.getElementById('btn-val-ondjez1').disabled = true;
+            document.getElementById('btn-val-ondjez1').classList.add('opacity-50', 'pointer-events-none');
+            document.getElementById('stage-ondjez1').classList.add('pointer-events-none');
+
+            const fb = document.getElementById('feedback-ondjez1');
+            fb.classList.remove('hidden');
+
+            if (isCorrect) {
+                AudioEngine.playSuccess();
+                AppState.correctCount++;
+                input.classList.add('bg-emerald-100', 'border-emerald-600', 'text-emerald-900');
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-emerald-50 border-emerald-300 text-emerald-800';
+                fb.innerHTML = `<span>✓ إِجَابَةٌ صَحِيحَةٌ! عَدَدُ الأَدَوَاتِ فِي الصُّورَةِ هُوَ 9 أَدَوَاتٍ.</span><span>+1</span>`;
+                document.getElementById('badge-ondjez1').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800';
+                document.getElementById('badge-ondjez1').innerText = 'تَمَّ بِنَجَاحٍ ✓';
+            } else {
+                AudioEngine.playError();
+                AppState.wrongCount++;
+                input.classList.add('bg-rose-100', 'border-rose-600', 'text-rose-900');
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-rose-50 border-rose-300 text-rose-800';
+                fb.innerHTML = `<span>✗ إِجَابَةٌ خَاطِئَةٌ! عَدَدُ الأَدَوَاتِ الصَّحِيحُ هُوَ 9.</span><span>0</span>`;
+                document.getElementById('badge-ondjez1').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800';
+                document.getElementById('badge-ondjez1').innerText = 'خَاطِئٌ ✗';
+            }
+
+            AppState.completedStages++;
+            updateGlobalProgress();
+            unlockNextStage('stage-ondjez2', 'badge-ondjez2');
+        }
+
+        /* -----------------------------------------------------------
+           المحطة 4: أنجز (2)
+           ----------------------------------------------------------- */
+        function selectMatchTool(toolName) {
+            AudioEngine.playPop();
+            AppState.ondjez2.selectedTool = toolName;
+            document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('selected-ring', 'border-emerald-500'));
+            const card = document.getElementById(`card-tool-${toolName}`);
+            card.classList.add('selected-ring', 'border-emerald-500');
+            showToast('تَمَّ تَحْدِيدُ الأَدَاةِ، انْقُرِ الآنَ عَلَى بَطَاقَةِ الْعَدَدِ الْمُنَاسِبِ.');
+        }
+
+        function selectMatchNum(num) {
+            if (!AppState.ondjez2.selectedTool) {
+                showToast('اِخْتَرِ الأَدَاةَ أَوَّلًا مِنَ الْجَانِبِ الأَيْمَنِ!', '⚠️');
+                return;
+            }
+            AudioEngine.playPop();
+            const tool = AppState.ondjez2.selectedTool;
+            AppState.ondjez2.matches[tool] = num;
+
+            const slot = document.getElementById(`slot-tool-${tool}`);
+            slot.innerText = `الْعَدَدُ: ${num}`;
+            slot.className = 'text-xs font-bold px-3 py-1 rounded-lg bg-emerald-100 text-emerald-800 math-ltr';
+
+            document.getElementById(`card-tool-${tool}`).classList.remove('selected-ring');
+            AppState.ondjez2.selectedTool = null;
+        }
+
+        function validateOndjez2() {
+            const matches = AppState.ondjez2.matches;
+            if (!matches.pencil || !matches.eraser || !matches.sharpener) {
+                showToast('يُرْجَى رَبْطُ جَمِيعِ الأَدَوَاتِ الثَّلَاثِ بِأَعْدَادِهَا أَوَّلًا', '⚠️');
+                return;
+            }
+
+            const isPencilOk = (matches.pencil === 2);
+            const isEraserOk = (matches.eraser === 3);
+            const isSharpenerOk = (matches.sharpener === 4);
+            const isAllCorrect = isPencilOk && isEraserOk && isSharpenerOk;
+
+            document.getElementById('btn-val-ondjez2').disabled = true;
+            document.getElementById('btn-val-ondjez2').classList.add('opacity-50', 'pointer-events-none');
+            document.getElementById('stage-ondjez2').classList.add('pointer-events-none');
+
+            const fb = document.getElementById('feedback-ondjez2');
+            fb.classList.remove('hidden');
+
+            if (isAllCorrect) {
+                AudioEngine.playSuccess();
+                AppState.correctCount++;
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-emerald-50 border-emerald-300 text-emerald-800';
+                fb.innerHTML = `<span>✓ أَحْسَنْتَ! رَبْطٌ صَحِيحٌ (الْقَلَمُ = 2 ، الْمِمْحَاةُ = 3 ، الْمِبْرَاةُ = 4).</span><span>+1</span>`;
+                document.getElementById('badge-ondjez2').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800';
+                document.getElementById('badge-ondjez2').innerText = 'تَمَّ بِنَجَاحٍ ✓';
+            } else {
+                AudioEngine.playError();
+                AppState.wrongCount++;
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-rose-50 border-rose-300 text-rose-800';
+                fb.innerHTML = `<span>✗ رَبْطٌ غَيْرُ صَحِيحٍ. الصَّوَابُ: الْقَلَمُ 2 ، الْمِمْحَاةُ 3 ، الْمِبْرَاةُ 4.</span><span>0</span>`;
+                document.getElementById('badge-ondjez2').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800';
+                document.getElementById('badge-ondjez2').innerText = 'خَاطِئٌ ✗';
+            }
+
+            AppState.completedStages++;
+            updateGlobalProgress();
+            unlockNextStage('stage-tamaran1', 'badge-tamaran1');
+        }
+
+        /* -----------------------------------------------------------
+           المحطة 5: أتمرن (1) الشطب
+           ----------------------------------------------------------- */
+        function initTamaran1() {
+            const container = document.getElementById('tomatoes-grid');
+            container.innerHTML = '';
+            for (let i = 0; i < 12; i++) {
+                const item = document.createElement('div');
+                item.id = `tomato-${i}`;
+                item.className = 'w-14 h-14 bg-white rounded-2xl border-2 border-rose-200 flex items-center justify-center cursor-pointer transition shadow-sm hover:scale-105';
+                item.innerHTML = `<span class="text-3xl select-none">🍅</span>`;
+                item.onclick = () => toggleTomatoCross(i);
+                container.appendChild(item);
+            }
+        }
+
+        function toggleTomatoCross(index) {
+            AudioEngine.playPop();
+            const el = document.getElementById(`tomato-${index}`);
+            if (AppState.tamaran1.crossedIndices.has(index)) {
+                AppState.tamaran1.crossedIndices.delete(index);
+                el.classList.remove('crossed-item');
+            } else {
+                AppState.tamaran1.crossedIndices.add(index);
+                el.classList.add('crossed-item');
+            }
+        }
+
+        function validateTamaran1() {
+            const crossedCount = AppState.tamaran1.crossedIndices.size;
+            const remainingCount = 12 - crossedCount;
+            const isCorrect = (crossedCount === 3 && remainingCount === 9);
+
+            document.getElementById('btn-val-tamaran1').disabled = true;
+            document.getElementById('btn-val-tamaran1').classList.add('opacity-50', 'pointer-events-none');
+            document.getElementById('stage-tamaran1').classList.add('pointer-events-none');
+
+            const fb = document.getElementById('feedback-tamaran1');
+            fb.classList.remove('hidden');
+
+            if (isCorrect) {
+                AudioEngine.playSuccess();
+                AppState.correctCount++;
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-emerald-50 border-emerald-300 text-emerald-800';
+                fb.innerHTML = `<span>✓ مُمْتَازٌ! شَطَبْتَ 3 حَبَّاتٍ زَائِدَةً لِيَبْقَى 9 حَبَّاتٍ كَمَا فِي الْبَطَاقَةِ.</span><span>+1</span>`;
+                document.getElementById('badge-tamaran1').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800';
+                document.getElementById('badge-tamaran1').innerText = 'تَمَّ بِنَجَاحٍ ✓';
+            } else {
+                AudioEngine.playError();
+                AppState.wrongCount++;
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-rose-50 border-rose-300 text-rose-800';
+                fb.innerHTML = `<span>✗ خَاطِئٌ! شَطَبْتَ ${crossedCount} حَبَّاتٍ، وَالْوَاجِبُ شَطْبُ 3 حَبَّاتٍ فَقَطْ لِيَبْقَى 9.</span><span>0</span>`;
+                document.getElementById('badge-tamaran1').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800';
+                document.getElementById('badge-tamaran1').innerText = 'خَاطِئٌ ✗';
+            }
+
+            AppState.completedStages++;
+            updateGlobalProgress();
+            unlockNextStage('stage-tamaran2', 'badge-tamaran2');
+        }
+
+        /* -----------------------------------------------------------
+           المحطة 6: أتمرن (2) تلوين 7 نجوم
+           ----------------------------------------------------------- */
+        function initTamaran2() {
+            const container = document.getElementById('stars-grid');
+            container.innerHTML = '';
+            for (let i = 0; i < 9; i++) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.id = `star-btn-${i}`;
+                btn.className = 'w-14 h-14 rounded-2xl bg-white border-2 border-slate-200 flex items-center justify-center cursor-pointer transition hover:scale-110 active:scale-95 shadow-sm';
+                btn.innerHTML = `
+                    <svg class="w-8 h-8 star-icon" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                `;
+                btn.onclick = () => toggleStarColor(i);
+                container.appendChild(btn);
+            }
+        }
+
+        function toggleStarColor(index) {
+            AudioEngine.playPop();
+            const btn = document.getElementById(`star-btn-${index}`);
+            const icon = btn.querySelector('.star-icon');
+
+            if (AppState.tamaran2.coloredStars.has(index)) {
+                AppState.tamaran2.coloredStars.delete(index);
+                btn.classList.remove('bg-amber-100', 'border-amber-400');
+                icon.setAttribute('fill', 'none');
+                icon.setAttribute('stroke', '#94a3b8');
+            } else {
+                AppState.tamaran2.coloredStars.add(index);
+                btn.classList.add('bg-amber-100', 'border-amber-400');
+                icon.setAttribute('fill', '#f59e0b');
+                icon.setAttribute('stroke', '#d97706');
+            }
+            document.getElementById('stars-count-txt').innerText = AppState.tamaran2.coloredStars.size;
+        }
+
+        function validateTamaran2() {
+            const count = AppState.tamaran2.coloredStars.size;
+            const isCorrect = (count === 7);
+
+            document.getElementById('btn-val-tamaran2').disabled = true;
+            document.getElementById('btn-val-tamaran2').classList.add('opacity-50', 'pointer-events-none');
+            document.getElementById('stage-tamaran2').classList.add('pointer-events-none');
+
+            const fb = document.getElementById('feedback-tamaran2');
+            fb.classList.remove('hidden');
+
+            if (isCorrect) {
+                AudioEngine.playSuccess();
+                AppState.correctCount++;
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-emerald-50 border-emerald-300 text-emerald-800';
+                fb.innerHTML = `<span>✓ إِجَابَةٌ مُمْتَازَةٌ! لَوَّنْتَ 7 نُجُومٍ تَمَامًا كَمَا هُوَ مَكْتُوبٌ فِي الْبَطَاقَةِ.</span><span>+1</span>`;
+                document.getElementById('badge-tamaran2').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800';
+                document.getElementById('badge-tamaran2').innerText = 'تَمَّ بِنَجَاحٍ ✓';
+            } else {
+                AudioEngine.playError();
+                AppState.wrongCount++;
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-rose-50 border-rose-300 text-rose-800';
+                fb.innerHTML = `<span>✗ خَطَأٌ! لَوَّنْتَ ${count} نُجُومٍ، وَالْمَطْلُوبُ هُوَ تَلْوِينُ 7 نُجُومٍ فَقَطْ.</span><span>0</span>`;
+                document.getElementById('badge-tamaran2').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800';
+                document.getElementById('badge-tamaran2').innerText = 'خَاطِئٌ ✗';
+            }
+
+            AppState.completedStages++;
+            updateGlobalProgress();
+            unlockNextStage('stage-tamaran3', 'badge-tamaran3');
+        }
+
+        /* -----------------------------------------------------------
+           المحطة 7: أتمرن (3) إكمال الأشياء الناقصة
+           ----------------------------------------------------------- */
+        function addStage3Item(type) {
+            AudioEngine.playPop();
+            if (type === 'stars') {
+                AppState.tamaran3.starsCount++;
+                renderStage3Group('stars');
+            } else if (type === 'leaves') {
+                AppState.tamaran3.leavesCount++;
+                renderStage3Group('leaves');
+            } else if (type === 'balls') {
+                AppState.tamaran3.ballsCount++;
+                renderStage3Group('balls');
+            }
+        }
+
+        function removeStage3Item(type) {
+            AudioEngine.playPop();
+            if (type === 'stars' && AppState.tamaran3.starsCount > 3) {
+                AppState.tamaran3.starsCount--;
+                renderStage3Group('stars');
+            } else if (type === 'leaves' && AppState.tamaran3.leavesCount > 3) {
+                AppState.tamaran3.leavesCount--;
+                renderStage3Group('leaves');
+            } else if (type === 'balls' && AppState.tamaran3.ballsCount > 4) {
+                AppState.tamaran3.ballsCount--;
+                renderStage3Group('balls');
+            }
+        }
+
+        function renderStage3Group(type) {
+            if (type === 'stars') {
+                const box = document.getElementById('group-stars-box');
+                box.innerHTML = '';
+                for (let i = 0; i < AppState.tamaran3.starsCount; i++) {
+                    box.innerHTML += '<span>⭐</span>';
+                }
+            } else if (type === 'leaves') {
+                const box = document.getElementById('group-leaves-box');
+                box.innerHTML = '';
+                for (let i = 0; i < AppState.tamaran3.leavesCount; i++) {
+                    box.innerHTML += '<span>🍃</span>';
+                }
+            } else if (type === 'balls') {
+                const box = document.getElementById('group-balls-box');
+                box.innerHTML = '';
+                for (let i = 0; i < AppState.tamaran3.ballsCount; i++) {
+                    box.innerHTML += '<span>⚽</span>';
+                }
+            }
+        }
+
+        function validateTamaran3() {
+            const isStarsOk = (AppState.tamaran3.starsCount === 8);
+            const isLeavesOk = (AppState.tamaran3.leavesCount === 5);
+            const isBallsOk = (AppState.tamaran3.ballsCount === 6);
+            const isAllCorrect = isStarsOk && isLeavesOk && isBallsOk;
+
+            document.getElementById('btn-val-tamaran3').disabled = true;
+            document.getElementById('btn-val-tamaran3').classList.add('opacity-50', 'pointer-events-none');
+            document.getElementById('stage-tamaran3').classList.add('pointer-events-none');
+
+            const fb = document.getElementById('feedback-tamaran3');
+            fb.classList.remove('hidden');
+
+            if (isAllCorrect) {
+                AudioEngine.playSuccess();
+                AppState.correctCount++;
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-emerald-50 border-emerald-300 text-emerald-800';
+                fb.innerHTML = `<span>✓ أَحْسَنْتَ صُنْعًا! أَكْمَلْتَ النُّجُومَ إِلَى 8، وَالأَوْرَاقَ إِلَى 5، وَالْكُرَاتِ إِلَى 6.</span><span>+1</span>`;
+                document.getElementById('badge-tamaran3').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800';
+                document.getElementById('badge-tamaran3').innerText = 'تَمَّ بِنَجَاحٍ ✓';
+            } else {
+                AudioEngine.playError();
+                AppState.wrongCount++;
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-rose-50 border-rose-300 text-rose-800';
+                fb.innerHTML = `<span>✗ إِكْمَالٌ غَيْرُ صَحِيحٍ. النُّجُومُ الْمَطْلُوبَةُ: 8، الأَوْرَاقُ: 5، الْكُرَاتُ: 6.</span><span>0</span>`;
+                document.getElementById('badge-tamaran3').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800';
+                document.getElementById('badge-tamaran3').innerText = 'خَاطِئٌ ✗';
+            }
+
+            AppState.completedStages++;
+            updateGlobalProgress();
+            unlockNextStage('stage-tamaran4', 'badge-tamaran4');
+        }
+
+        /* -----------------------------------------------------------
+           المحطة 8: أتمرن (4) حبة بندق لكل سنجاب
+           ----------------------------------------------------------- */
+        function addHazelnut() {
+            AudioEngine.playPop();
+            AppState.tamaran4.hazelnutsCount++;
+            renderHazelnuts();
+        }
+
+        function removeHazelnut() {
+            AudioEngine.playPop();
+            if (AppState.tamaran4.hazelnutsCount > 0) {
+                AppState.tamaran4.hazelnutsCount--;
+                renderHazelnuts();
+            }
+        }
+
+        function renderHazelnuts() {
+            const box = document.getElementById('hazelnuts-display-box');
+            const count = AppState.tamaran4.hazelnutsCount;
+            document.getElementById('hazelnuts-count-txt').innerText = count;
+
+            if (count === 0) {
+                box.innerHTML = `<span id="no-nuts-txt" class="text-xs font-bold text-slate-400">لَا تُوجَدُ حَبَّاتُ بُنْدُقٍ حَالِيًّا</span>`;
+            } else {
+                box.innerHTML = '';
+                for (let i = 0; i < count; i++) {
+                    box.innerHTML += '<span>🌰</span>';
+                }
+            }
+        }
+
+        function validateTamaran4() {
+            const isCorrect = (AppState.tamaran4.hazelnutsCount === 4);
+
+            document.getElementById('btn-val-tamaran4').disabled = true;
+            document.getElementById('btn-val-tamaran4').classList.add('opacity-50', 'pointer-events-none');
+            document.getElementById('stage-tamaran4').classList.add('pointer-events-none');
+
+            const fb = document.getElementById('feedback-tamaran4');
+            fb.classList.remove('hidden');
+
+            if (isCorrect) {
+                AudioEngine.playSuccess();
+                AppState.correctCount++;
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-emerald-50 border-emerald-300 text-emerald-800';
+                fb.innerHTML = `<span>✓ رَائِعٌ! أَضَفْتَ 4 حَبَّاتِ بُنْدُقٍ، حَبَّةٌ وَاحِدَةٌ لِكُلِّ سِنْجَابٍ.</span><span>+1</span>`;
+                document.getElementById('badge-tamaran4').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800';
+                document.getElementById('badge-tamaran4').innerText = 'تَمَّ بِنَجَاحٍ ✓';
+            } else {
+                AudioEngine.playError();
+                AppState.wrongCount++;
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-rose-50 border-rose-300 text-rose-800';
+                fb.innerHTML = `<span>✗ عَدَدُ حَبَّاتِ الْبُنْدُقِ (${AppState.tamaran4.hazelnutsCount}) لَا يُطَابِقُ عَدَدَ السَّنَاجِبِ (4).</span><span>0</span>`;
+                document.getElementById('badge-tamaran4').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800';
+                document.getElementById('badge-tamaran4').innerText = 'خَاطِئٌ ✗';
+            }
+
+            AppState.completedStages++;
+            updateGlobalProgress();
+            unlockNextStage('stage-abhath', 'badge-abhath');
+        }
+
+        /* -----------------------------------------------------------
+           المحطة 9: أبحث (الشريط العددي)
+           ----------------------------------------------------------- */
+        function selectAbhathNumber(num) {
+            AudioEngine.playPop();
+            AppState.abhath.selectedNumber = num;
+            document.querySelectorAll('.num-chip').forEach(btn => btn.classList.remove('selected-ring', 'bg-purple-600', 'text-white'));
+            const btn = document.getElementById(`btn-num-${num}`);
+            btn.classList.add('selected-ring', 'bg-purple-600', 'text-white');
+            showToast(`تَمَّ اخْتِيَارُ الْعَدَدِ ${num}، اضْغَطِ الآنَ عَلَى خَانَتِهِ الصَّحِيحَةِ فِي الشَّرِيطِ.`);
+        }
+
+        function placeNumInStrip(slotIndex) {
+            if (AppState.abhath.selectedNumber === null) {
+                showToast('اِخْتَرِ الْعَدَدَ أَوَّلًا مِنَ الْبِطَاقَاتِ فِي الأَسْفَلِ!', '⚠️');
+                return;
+            }
+            AudioEngine.playPop();
+            const val = AppState.abhath.selectedNumber;
+            AppState.abhath.stripSlots[slotIndex] = val;
+
+            const slotEl = document.getElementById(`strip-slot-${slotIndex}`);
+            slotEl.innerText = val;
+            slotEl.classList.remove('border-dashed', 'bg-white');
+            slotEl.classList.add('bg-purple-100', 'border-solid', 'border-purple-500');
+
+            const btn = document.getElementById(`btn-num-${val}`);
+            if (btn) btn.classList.remove('selected-ring', 'bg-purple-600', 'text-white');
+            AppState.abhath.selectedNumber = null;
+        }
+
+        function validateAbhathStrip() {
+            const slots = AppState.abhath.stripSlots;
+
+            const is3Ok = (slots[2] === 3);
+            const is4Ok = (slots[3] === 4);
+            const is5Ok = (slots[4] === 5);
+            const is6Ok = (slots[5] === 6);
+            const is8Ok = (slots[7] === 8);
+
+            const isAllCorrect = is3Ok && is4Ok && is5Ok && is6Ok && is8Ok;
+
+            document.getElementById('btn-val-abhath').disabled = true;
+            document.getElementById('btn-val-abhath').classList.add('opacity-50', 'pointer-events-none');
+            document.getElementById('stage-abhath').classList.add('pointer-events-none');
+
+            const fb = document.getElementById('feedback-abhath');
+            fb.classList.remove('hidden');
+
+            if (isAllCorrect) {
+                AudioEngine.playSuccess();
+                AppState.correctCount++;
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-emerald-50 border-emerald-300 text-emerald-800';
+                fb.innerHTML = `<span>✓ عَمَلٌ مُمْتَازٌ! وَضَعْتَ جَمِيعَ الأَعْدَادِ فِي أَمَاكِنِهَا الصَّحِيحَةِ فِي الشَّرِيطِ الْعَدَدِيِّ.</span><span>+1</span>`;
+                document.getElementById('badge-abhath').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800';
+                document.getElementById('badge-abhath').innerText = 'تَمَّ بِنَجَاحٍ ✓';
+            } else {
+                AudioEngine.playError();
+                AppState.wrongCount++;
+                fb.className = 'mt-4 p-4 rounded-2xl border flex items-center justify-between text-sm font-bold bg-rose-50 border-rose-300 text-rose-800';
+                fb.innerHTML = `<span>✗ تَرْتِيبٌ غَيْرُ صَحِيحٍ. التَّرْتِيبُ الطَّبِيعِيُّ هُوَ: 1، 2، 3، 4، 5، 6، 7، 8.</span><span>0</span>`;
+                document.getElementById('badge-abhath').className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800';
+                document.getElementById('badge-abhath').innerText = 'خَاطِئٌ ✗';
+            }
+
+            AppState.completedStages++;
+            updateGlobalProgress();
+            showFinalSummary();
+        }
+
+        /* -----------------------------------------------------------
+           نظام فتح المحطات المتتابعة
+           ----------------------------------------------------------- */
+        function unlockNextStage(stageId, badgeId) {
+            const nextStage = document.getElementById(stageId);
+            if (!nextStage) return;
+
+            nextStage.classList.remove('card-locked');
+            nextStage.classList.add('card-active');
+
+            const badge = document.getElementById(badgeId);
+            if (badge) {
+                badge.className = 'text-xs font-bold px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800';
+                badge.innerText = 'مُتَاحٌ لِلإِنْجَازِ';
+            }
+
+            setTimeout(() => {
+                nextStage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
+        }
+
+        /* -----------------------------------------------------------
+           الشاشة الختامية والتقييم العام
+           ----------------------------------------------------------- */
+        function showFinalSummary() {
+            const card = document.getElementById('final-summary-card');
+            card.classList.remove('hidden');
+
+            const total = AppState.totalStages;
+            const correct = Math.min(total, Math.max(0, AppState.correctCount));
+            const wrong = Math.max(0, total - correct);
+            const percentage = Math.min(100, Math.round((correct / total) * 100));
+
+            document.getElementById('stat-correct').innerText = correct;
+            document.getElementById('stat-wrong').innerText = wrong;
+            document.getElementById('final-score-percent').innerText = `${percentage}%`;
+
+            const circle = document.getElementById('final-progress-circle');
+            const circumference = 2 * Math.PI * 42;
+            const offset = Math.max(0, circumference - (circumference * percentage / 100));
+            circle.style.strokeDashoffset = offset;
+
+            if (percentage >= 80) {
+                circle.setAttribute('stroke', '#10b981');
+            } else if (percentage >= 50) {
+                circle.setAttribute('stroke', '#f59e0b');
+            } else {
+                circle.setAttribute('stroke', '#ef4444');
+            }
+
+            const noteEl = document.getElementById('pedagogical-note');
+            if (percentage === 100) {
+                noteEl.className = 'p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-950 font-bold text-base amiri mb-8 shadow-sm';
+                noteEl.innerHTML = `🌟 <strong>تَقْدِيرٌ: مُمْتَازٌ جِدًّا! (100%)</strong> لَقَدْ حَقَّقْتَ الْعَلَامَةَ الْكَامِلَةَ وَأَتْقَنْتَ عَدَّ وَتَشْكِيلَ الْكَمِّيَّاتِ وَتَرْتِيبَ الأَعْدَادِ. عَمَلٌ رَائِعٌ!`;
+            } else if (percentage >= 70) {
+                noteEl.className = 'p-4 rounded-2xl bg-teal-50 border border-teal-200 text-teal-950 font-bold text-base amiri mb-8 shadow-sm';
+                noteEl.innerHTML = `👍 <strong>تَقْدِيرٌ: جَيِّدٌ جِدًّا! (${percentage}%)</strong> أَدَاءٌ رَائِعٌ وَفَهْمٌ قَوِيٌّ لِمَفْهُومِ الْكَمِّيَّةِ وَتَرْتِيبِ الأَعْدَادِ.`;
+            } else {
+                noteEl.className = 'p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-950 font-bold text-base amiri mb-8 shadow-sm';
+                noteEl.innerHTML = `📖 <strong>تَقْدِيرٌ: يُوصَى بِالْمُرَاجَعَةِ (${percentage}%).</strong> حَاوِلْ مَرَّةً أُخْرَى مَعَ التَّرْكِيزِ فِي عَدِّ الأَشْيَاءِ وَتَكْمِلَتِهَا بِهُدُوءٍ.`;
+            }
+
+            setTimeout(() => {
+                card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 400);
+        }
+
+        function restartLesson() {
+            window.location.reload();
+        }
+
+        function exitLesson() {
+            showToast('شُكْرًا لَكَ عَلَى الْمُشَارَكَةِ! يُمْكِنُكَ إِغْلَاقُ النَّافِذَةِ الآنَ.', '👋');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initAktachef1();
+            initTamaran1();
+            initTamaran2();
+            updateGlobalProgress();
+        });
+    </script>
+</body>
+</html>
