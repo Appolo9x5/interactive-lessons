@@ -1,0 +1,2323 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دَرْسُ خِدْمَةِ الْأَرْضِ - اللُّغَةُ الْعَرَبِيَّةُ</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  
+  <style>
+    :root {
+      --primary: #1976d2;
+      --primary-dark: #0d47a1;
+      --success: #2e7d32;
+      --error: #c62828;
+      --bg: #f5f9fc;
+      --card-bg: #ffffff;
+      --text: #263238;
+      --text-muted: #546e7a;
+      --accent: #ff9800;
+    }
+
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .lesson-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      border-top: 6px solid var(--primary);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .lesson-card.locked {
+      opacity: 0.55;
+      pointer-events: none;
+      filter: grayscale(0.65);
+    }
+
+    .page-badge {
+      background: linear-gradient(135deg, #ff9800, #f57c00);
+      color: white;
+      font-weight: 700;
+      border-radius: 9999px;
+      box-shadow: 0 2px 6px rgba(255, 152, 0, 0.3);
+    }
+
+    .lesson-text-box {
+      background-color: #fdfbf7;
+      border-right: 6px solid var(--accent);
+      border-radius: 12px;
+      line-height: 2.2;
+    }
+
+    .choice-btn {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 0.85rem 1.1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: right;
+      width: 100%;
+    }
+
+    .choice-btn:hover:not(:disabled) {
+      border-color: var(--primary);
+      background-color: #eff6ff;
+      transform: translateY(-1px);
+    }
+
+    .choice-btn.selected {
+      border-color: var(--primary);
+      background-color: #e0f2fe;
+    }
+
+    .choice-btn.correct {
+      background-color: #e8f5e9 !important;
+      border-color: var(--success) !important;
+      color: var(--success) !important;
+      font-weight: 700;
+    }
+
+    .choice-btn.wrong {
+      background-color: #ffebee !important;
+      border-color: var(--error) !important;
+      color: var(--error) !important;
+    }
+
+    .locked-element {
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .link-item {
+      cursor: pointer;
+      border: 2px dashed #94a3b8;
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      background: #ffffff;
+      transition: all 0.2s;
+    }
+    .link-item.active {
+      border-color: var(--primary);
+      background: #e0f2fe;
+      border-style: solid;
+      transform: scale(1.02);
+    }
+    .link-item.paired-success {
+      background: #e8f5e9;
+      border-color: var(--success);
+      border-style: solid;
+      color: var(--success);
+      pointer-events: none;
+    }
+
+    .feedback-box {
+      border-radius: 10px;
+      padding: 0.65rem 1rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-top: 0.6rem;
+      display: none;
+    }
+    .feedback-box.show {
+      display: block;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .action-btn {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      font-weight: 700;
+      border-radius: 12px;
+      padding: 0.75rem 1.75rem;
+      box-shadow: 0 4px 10px rgba(25, 118, 210, 0.3);
+      transition: all 0.2s;
+    }
+    .action-btn:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+    .action-btn:disabled {
+      background: #cbd5e1;
+      box-shadow: none;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .text-input-field {
+      border: 2px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 0.6rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .text-input-field:focus {
+      border-color: var(--primary);
+    }
+    .text-input-field.correct-input {
+      border-color: var(--success);
+      background-color: #f0fdf4;
+    }
+    .text-input-field.wrong-input {
+      border-color: var(--error);
+      background-color: #fef2f2;
+    }
+
+    .verb-pill {
+      cursor: pointer;
+      user-select: none;
+      border: 2px solid #e2e8f0;
+      border-radius: 9999px;
+      padding: 0.6rem 1.4rem;
+      font-weight: 700;
+      transition: all 0.2s;
+      background: white;
+    }
+    .verb-pill.selected-orange {
+      background-color: var(--accent);
+      color: white;
+      border-color: #e65100;
+      box-shadow: 0 3px 8px rgba(255, 152, 0, 0.4);
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 16px auto 0 auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    }
+  </style>
+</head>
+
+<body class="p-3 sm:p-6 md:p-8 min-h-screen">
+  <div class="max-w-4xl mx-auto space-y-8">
+
+    <!-- ========================================
+         نافذة قفل الاشتراك الإجباري
+         ======================================== -->
+    <div id="sub-lock-screen">
+      <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+        <div class="lock-desc">
+          لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+        </div>
+        <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+          📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+        </a>
+        <button class="btn-check-sub" onclick="verifySubscription()">
+          ✅ تَأْكِيدُ الاِشْتِرَاكِ
+        </button>
+        <div id="sub-status-msg" class="sub-status-msg"></div>
+      </div>
+    </div>
+
+    <!-- شريط الرأس التفاعلي المتجاوب -->
+    <header class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-wrap items-center justify-between gap-4 sticky top-2 z-40">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-black text-2xl shadow-inner">
+          🌱
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-black text-blue-900">خِدْمَةُ الْأَرْضِ</h1>
+          <p class="text-xs sm:text-sm text-slate-500 font-medium">اللُّغَةُ الْعَرَبِيَّةُ – السَّنَةُ الثَّالِثَةُ ابْتِدَائِيٌّ (الدَّرْسُ 7)</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="soundToggle" onclick="toggleMute()" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-sm font-bold flex items-center gap-2 transition" title="تشغيل أو كتم الصوت">
+          <span id="soundIcon">🔊</span>
+          <span class="hidden sm:inline" id="soundLabel">الصوت مفعّل</span>
+        </button>
+        <div class="bg-blue-50 px-3.5 py-1.5 rounded-xl border border-blue-200 text-blue-800 text-sm font-bold flex items-center gap-1.5">
+          <span>النقاط:</span>
+          <span id="headerScore" class="text-base font-black text-blue-700">0</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- المحطة 1: فهم المنطوق (ص 43) -->
+    <section id="station1" class="lesson-card p-5 sm:p-7">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-blue-600 animate-ping"></span>
+          <h2 class="text-lg sm:text-xl font-black text-blue-900">الْمَحَطَّةُ الْأُولَى: فَهْمُ الْمَنْطُوقِ (أُحِبُّ وَطَنِي)</h2>
+        </div>
+        <span class="page-badge px-3 py-1 text-xs">كِتَابُ التِّلْمِيذِ ص 43</span>
+      </div>
+
+      <!-- إشعار سمعي مع مشغل الصوت -->
+      <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 flex flex-col sm:flex-row items-center gap-4">
+        <div class="text-3xl">🎧</div>
+        <div class="flex-1 text-right">
+          <h3 class="font-bold text-blue-900 mb-1 text-sm sm:text-base">اسْتَمِعْ بِانْتِبَاهٍ إِلَى النَّصِّ الْمَنْطُوقِ ثُمَّ أَجِبْ عَنِ الْأَسْئِلَةِ:</h3>
+          <p class="text-xs text-blue-700">اضغط على زر التشغيل في مشغل الصوت للاستماع لنص "أُحِبُّ وَطَنِي" دون قراءة النص.</p>
+        </div>
+        <audio controls class="w-full sm:w-64 outline-none" src="audio_comprehension.mp3">
+          متصفحك لا يدعم تشغيل الملف الصوتي.
+        </audio>
+      </div>
+
+      <!-- مشهد الجدارية المرفق مباشرة بعد الصوت -->
+      <div class="mb-8 rounded-xl overflow-hidden border border-slate-200 bg-slate-50 text-center">
+        <img src="p43_intro_wall.jpg" alt="المعلمة والتلاميذ والجدارية" class="w-full max-h-96 object-contain mx-auto" onerror="this.onerror=null;this.src='https://placehold.co/800x450/e2e8f0/1e293b?text=صورة+الجدارية+والقسم+(p43_intro_wall.jpg)';">
+        <p class="py-2 text-xs text-slate-500 font-semibold bg-white border-t border-slate-100">مَشْهَدُ الْقِسْمِ: الْمُعَلِّمَةُ وَالتَّلَامِيذُ يُشَاهِدُونَ جِدَارِيَّةَ أَكْرَمَ الَّتِي تُعَبِّرُ عَنْ حُبِّ الْوَطَنِ</p>
+      </div>
+
+      <!-- أسئلة فهم المنطوق الستة -->
+      <div class="space-y-6" id="s1_questions">
+        
+        <!-- س1 -->
+        <div class="q-block" data-qid="s1_q1">
+          <p class="font-bold text-slate-800 mb-3 text-sm sm:text-base">1. مَاذَا طَلَبَتِ الْمُعَلِّمَةُ مِنَ التَّلَامِيذِ؟</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's1')">
+              <span>أَنْ يُعَبِّرُوا عَنْ حُبِّهِمْ لِلْجَزَائِرِ بِالرَّسْمِ وَالْكَلِمَةِ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's1')">
+              <span>أَنْ يَكْتُبُوا قَصِيدَةً عَنِ الْعَلَمِ الْوَطَنِيِّ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's1')">
+              <span>أَنْ يَقُومُوا بِحِمْلَةِ تَنْظِيفٍ فِي الْفِنَاءِ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <!-- س2 -->
+        <div class="q-block" data-qid="s1_q2">
+          <p class="font-bold text-slate-800 mb-3 text-sm sm:text-base">2. مَتَى وَأَيْنَ طَلَبَتْ مِنْهُمْ ذَلِكَ؟</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's1')">
+              <span>بِمُنَاسَبَةِ عِيدِ الثَّوْرَةِ فِي الْقِسْمِ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's1')">
+              <span>بِمُنَاسَبَةِ عِيدِ الِاسْتِقْلَالِ فِي السَّاحَةِ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's1')">
+              <span>بِمُنَاسَبَةِ يَوْمِ الْعِلْمِ فِي الْمَكْتَبَةِ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <!-- س3 -->
+        <div class="q-block" data-qid="s1_q3">
+          <p class="font-bold text-slate-800 mb-3 text-sm sm:text-base">3. عِيدُ الثَّوْرَةِ مُنَاسَبَةٌ وَطَنِيَّةٌ نَحْتَفِلُ بِهَا يَوْمَ:</p>
+          <div class="shuffle-container grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's1')">
+              <span>1 نُوفَمْبِر</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's1')">
+              <span>5 جُوِيلِيَة</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <!-- س4 -->
+        <div class="q-block" data-qid="s1_q4">
+          <p class="font-bold text-slate-800 mb-3 text-sm sm:text-base">4. لِمَنْ كَانَ أَحْسَنُ عَمَلٍ؟ وَلِمَاذَا؟</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's1')">
+              <span>لِأَكْرَمَ؛ لِأَنَّهُ قَسَّمَ لَوْحَتَهُ إِلَى 4 مُرَبَّعَاتٍ مُمَيَّزَةٍ مَعَ كَلِمَاتٍ رَائِعَةٍ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's1')">
+              <span>لِمُنِيرٍ؛ لِأَنَّهُ اسْتَعْمَلَ أَلْوَانًا مَائِيَّةً كَثِيرَةً</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's1')">
+              <span>لِعِمَادٍ؛ لِأَنَّهُ كَتَبَ خَطًّا كَبِيرًا فَقَطْ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <!-- س5 -->
+        <div class="q-block" data-qid="s1_q5">
+          <p class="font-bold text-slate-800 mb-3 text-sm sm:text-base">5. تَذَكَّرِ الْجُمْلَةَ الَّتِي تَعَبِّرُ عَنِ الصُّورَةِ وَقَالَهَا أَكْرَمُ لِزُمَلَائِهِ:</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's1')">
+              <span>«إِنَّكَ يَا وَطَنِي جَهْدُ فَلَّاحٍ، وَقُوَّةُ عَامِلٍ، وَعَيْنُ جُنْدِيٍّ سَاهِرٍ وَكِتَابُ مُتَعَلِّمٍ»</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's1')">
+              <span>«وَطَنِي هُوَ أَرْضُ الْأَجْدَادِ الَّتِي نُحِبُّهَا جَمِيعًا بِكُلِّ فَرَحٍ»</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's1')">
+              <span>«الْوَطَنُ شَجَرَةٌ طَيِّبَةٌ لَا تَنْمُو إِلَّا فِي أَرْضِ التَّضْحِيَاتِ»</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <!-- س6 -->
+        <div class="q-block" data-qid="s1_q6">
+          <p class="font-bold text-slate-800 mb-3 text-sm sm:text-base">6. صِفِ الصُّورَةَ الَّتِي رَسَمَهَا أَكْرَمُ:</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's1')">
+              <span>تَضَمَّنَتْ رُسُومَاتٍ لِفَلَّاحِينَ، وَعُمَّالٍ فِي الْمَصْنَعِ، وَشَبَابٍ فِي الْجَيْشِ، وَطُلَّابٍ يَقْرَؤُونَ الْكُتُبَ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's1')">
+              <span>تَضَمَّنَتْ صُوَرَ شَاطِئِ الْبَحْرِ وَمَنَاظِرَ لِسُفُنٍ تِجَارِيَّةٍ ضَخْمَةٍ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's1')">
+              <span>تَضَمَّنَتْ حَدِيقَةَ أَلْعَابٍ وَأَطْفَالًا يَرْكَبُونَ الْأُرْجُوحَاتِ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+      </div>
+
+      <!-- تقييم مرحلي للمحطة زر الانتقال -->
+      <div class="mt-8 pt-5 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <div class="text-sm font-bold text-slate-600">
+          إِنْجَازُ الْمَحَطَّةِ: <span id="s1_progress" class="text-blue-700 font-extrabold">0 / 6</span>
+        </div>
+        <button id="btn_next_s1" disabled onclick="unlockStation(2)" class="action-btn text-sm">
+          تَأْكِيدُ الْمَحَطَّةِ وَالانْتِقَالُ لِلْمَحَطَّةِ الثَّانِيَةِ ⬅
+        </button>
+      </div>
+    </section>
+    <!-- المحطة 2: أستعمل الصيغ وأنتج شفهياً (ص 43) -->
+    <section id="station2" class="lesson-card p-5 sm:p-7 locked">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+          <h2 class="text-lg sm:text-xl font-black text-blue-900">الْمَحَطَّةُ الثَّانِيَةُ: أَسْتَعْمِلُ الصِّيَغَ وَأُنْتِجُ شَفَهِيّاً</h2>
+        </div>
+        <span class="page-badge px-3 py-1 text-xs">كِتَابُ التِّلْمِيذِ ص 43</span>
+      </div>
+
+      <div class="bg-amber-50/70 border border-amber-200 rounded-xl p-4 mb-6">
+        <h3 class="font-bold text-amber-950 mb-2 text-sm sm:text-base flex items-center gap-2">
+          <span>✨</span> أَلَاحِظُ الصِّيَغَ (سِوَى ، غَيْرَ ، إِلَّا):
+        </h3>
+        <ul class="space-y-1.5 text-sm sm:text-base text-slate-800 pr-4 list-disc font-medium">
+          <li>«لَمْ تُعَلِّقِ الْمُعَلِّمَةُ <span class="font-extrabold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">سِوَى</span> لَوْحَةِ أَكْرَمَ.»</li>
+          <li>«عَرَضَ كُلُّ التَّلَامِيذِ أَعْمَالَهُمْ <span class="font-extrabold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">غَيْرَ</span> تِلْمِيذٍ وَاحِدٍ.»</li>
+          <li>«لَوَّنْتُ كُلَّ الصُّوَرِ <span class="font-extrabold text-amber-700 bg-amber-100 px-2 py-0.5 rounded">إِلَّا</span> صُورَةً وَاحِدَةً.»</li>
+        </ul>
+      </div>
+
+      <h3 class="text-base sm:text-lg font-black text-slate-800 mb-4 pb-2 border-b border-slate-100">
+        تَحَدَّثْ عَنِ الصُّوَرِ مُسْتَعْمِلًا (إِلَّا ، سِوَى ، غَيْرَ):
+      </h3>
+
+      <div class="space-y-6 mb-8" id="s2_part1_questions">
+        
+        <div class="q-block grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50" data-qid="s2_q1">
+          <div class="md:col-span-1 text-center">
+            <img src="p43_fighting_kids.jpg" alt="أطفال يتشاجرون" class="w-full h-44 object-contain rounded-lg bg-white border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/400x300/e2e8f0/1e293b?text=صورة+أطفال+يتشاجرون+(p43_fighting_kids.jpg)';">
+            <span class="text-xs text-slate-500 font-semibold mt-1 inline-block">صُورَةُ الْأَطْفَالِ فِي السَّاحَةِ</span>
+          </div>
+          <div class="md:col-span-2 flex flex-col justify-center">
+            <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">اخْتَرِ التَّعْبِيرَ الصَّحِيحَ بِمُوَظَّفِ الِاسْتِثْنَاءِ:</p>
+            <div class="shuffle-container grid grid-cols-1 gap-2">
+              <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's2')">
+                <span>تَشَاجَرَ كُلُّ الْأَطْفَالِ إِلَّا طِفْلًا وَاحِدًا بَقِيَ هَادِئًا.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+              <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's2')">
+                <span>لَعِبَ الْأَطْفَالُ فِي السَّاحَةِ كُلُّهُمْ مَعًا.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+              <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's2')">
+                <span>غَادَرَ الْأَطْفَالُ الْمَدْرَسَةَ بَعْدَ انْتِهَاءِ الدَّرْسِ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+        </div>
+
+        <div class="q-block grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50" data-qid="s2_q2">
+          <div class="md:col-span-1 text-center">
+            <img src="p43_chicks_hatching.jpg" alt="كتاكيت تفقس" class="w-full h-44 object-contain rounded-lg bg-white border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/400x300/e2e8f0/1e293b?text=صورة+كتاكيت+تفقس+(p43_chicks_hatching.jpg)';">
+            <span class="text-xs text-slate-500 font-semibold mt-1 inline-block">صُورَةُ بَيْضَاتِ الْكَتَاكِيتِ</span>
+          </div>
+          <div class="md:col-span-2 flex flex-col justify-center">
+            <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">اخْتَرِ التَّعْبِيرَ الصَّحِيحَ بِمُوَظَّفِ الِاسْتِثْنَاءِ:</p>
+            <div class="shuffle-container grid grid-cols-1 gap-2">
+              <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's2')">
+                <span>فَقَسَتْ كُلُّ الْبَيْضَاتِ سِوَى بَيْضَةٍ وَاحِدَةٍ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+              <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's2')">
+                <span>طَارَتِ الْعَصَافِيرُ إِلَى أَعْلَى الشَّجَرَةِ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+              <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's2')">
+                <span>أَكَلَتِ الدَّجَاجَةُ الْحَبَّ فِي الْمَزْرَعَةِ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+        </div>
+
+        <div class="q-block grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50" data-qid="s2_q3">
+          <div class="md:col-span-1 text-center">
+            <img src="p43_builders.jpg" alt="عمال البناء" class="w-full h-44 object-contain rounded-lg bg-white border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/400x300/e2e8f0/1e293b?text=صورة+عمال+البناء+(p43_builders.jpg)';">
+            <span class="text-xs text-slate-500 font-semibold mt-1 inline-block">صُورَةُ عُمَّالِ الْبِنَاءِ</span>
+          </div>
+          <div class="md:col-span-2 flex flex-col justify-center">
+            <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">اخْتَرِ التَّعْبِيرَ الصَّحِيحَ بِمُوَظَّفِ الِاسْتِثْنَاءِ:</p>
+            <div class="shuffle-container grid grid-cols-1 gap-2">
+              <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's2')">
+                <span>بَنَى الْعُمَّالُ الْجِدَارَ غَيْرَ صَفٍّ وَاحِدٍ لَمْ يَكْتَمِلْ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+              <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's2')">
+                <span>زَرَعَ الْفَلَّاحُ حَقْلَ الْقَمْحِ كَامِلًا.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+              <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's2')">
+                <span>نَظَّفَ الْعُمَّالُ الشَّارِعَ الْكَبِيرَ بِالْمِكْنَسَةِ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <h3 class="text-base sm:text-lg font-black text-slate-800 mb-2 pt-4 border-t border-slate-200">
+        أُنْتِجُ شَفَهِيّاً: اخْتَرِ الصُّورَةَ وَبَيِّنْ كَيْفَ يَخْدُمُ صَاحِبُهَا وَطَنَهُ:
+      </h3>
+      <p class="text-xs text-slate-500 mb-5">اخْتَرِ الْعِبَارَةَ الصَّحِيحَةَ الَّتِي تَدُلُّ عَلَى كَيْفِيَّةِ خِدْمَةِ كُلِّ مِهْنَةٍ لِلْوَطَنِ:</p>
+
+      <div class="space-y-6" id="s2_part2_questions">
+        
+        <div class="q-block grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50" data-qid="s2_q4">
+          <div class="md:col-span-1 text-center">
+            <img src="p43_police.jpg" alt="الشرطي" class="w-full h-44 object-contain rounded-lg bg-white border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/400x300/e2e8f0/1e293b?text=صورة+الشرطي+(p43_police.jpg)';">
+            <span class="text-xs text-slate-500 font-semibold mt-1 inline-block">الشُّرْطِيُّ</span>
+          </div>
+          <div class="md:col-span-2 flex flex-col justify-center">
+            <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">كَيْفَ يَخْدُمُ الشُّرْطِيُّ وَطَنَهُ؟</p>
+            <div class="shuffle-container grid grid-cols-1 gap-2">
+              <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's2')">
+                <span>يَسْهَرُ عَلَى أَمْنِ الْمُواطِنِينَ وَيُطَبِّقُ النِّظَامَ وَيُنَظِّمُ الْمُرُورَ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+              <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's2')">
+                <span>يُعَالِجُ الْمَرْضَى وَيَصِفُ الدَّوَاءَ فِي الْمُسْتَشْفَى.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+              <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's2')">
+                <span>يَبْذُرُ الْحُبُوبَ وَيَحْصُدُ الْقَمْحَ بِالْمِنْجَلِ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+        </div>
+
+        <div class="q-block grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50" data-qid="s2_q5">
+          <div class="md:col-span-1 text-center">
+            <img src="p43_teacher.jpg" alt="المعلم" class="w-full h-44 object-contain rounded-lg bg-white border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/400x300/e2e8f0/1e293b?text=صورة+المعلم+(p43_teacher.jpg)';">
+            <span class="text-xs text-slate-500 font-semibold mt-1 inline-block">الْمُعَلِّمُ</span>
+          </div>
+          <div class="md:col-span-2 flex flex-col justify-center">
+            <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">كَيْفَ يَخْدُمُ الْمُعَلِّمُ وَطَنَهُ؟</p>
+            <div class="shuffle-container grid grid-cols-1 gap-2">
+              <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's2')">
+                <span>يُعَلِّمُ الْأَبْنَاءَ وَيَرْفَعُ عَنْهُمُ الْجَهْلَ وَيَبْنِي أَجْيَالَ الْمُسْتَقْبَلِ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+              <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's2')">
+                <span>يُصْلِحُ الْأَثَاثَ وَيَصْنَعُ الْأَبْوَابَ الْخَشَبِيَّةَ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+              <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's2')">
+                <span>يُصْلِحُ عَطَبَ السَّيَّارَاتِ فِي الْوَرْشَةِ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+        </div>
+
+        <div class="q-block grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50" data-qid="s2_q6">
+          <div class="md:col-span-1 text-center">
+            <img src="p43_vet.jpg" alt="الطبيبة البيطرية" class="w-full h-44 object-contain rounded-lg bg-white border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/400x300/e2e8f0/1e293b?text=صورة+البيطرية+(p43_vet.jpg)';">
+            <span class="text-xs text-slate-500 font-semibold mt-1 inline-block">الطَّبِيبَةُ الْبَيْطَرِيَّةُ</span>
+          </div>
+          <div class="md:col-span-2 flex flex-col justify-center">
+            <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">كَيْفَ تَخْدُمُ الطَّبِيبَةُ الْبَيْطَرِيَّةُ وَطَنَهَا؟</p>
+            <div class="shuffle-container grid grid-cols-1 gap-2">
+              <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's2')">
+                <span>تُدَاوِي الْحَيَوَانَاتِ وَتَحْمِيهَا مِنَ الْأَمْرَاضِ لِتَحْفَظَ الثَّرْوَةَ الْحَيَوَانِيَّةَ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+              <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's2')">
+                <span>تَبْنِي الْجُسُورَ وَالْمَنَازِلَ بِالْإِسْمَنْتِ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+              <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's2')">
+                <span>تَخِيطُ الْمَلَابِسَ وَالْأَثْوَابَ فِي الدُّكَّانِ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+        </div>
+
+        <div class="q-block grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50" data-qid="s2_q7">
+          <div class="md:col-span-1 text-center">
+            <img src="p43_oil_workers.jpg" alt="عمال البترول" class="w-full h-44 object-contain rounded-lg bg-white border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/400x300/e2e8f0/1e293b?text=صورة+عمال+البترول+(p43_oil_workers.jpg)';">
+            <span class="text-xs text-slate-500 font-semibold mt-1 inline-block">عُمَّالُ الْبِتْرُولِ</span>
+          </div>
+          <div class="md:col-span-2 flex flex-col justify-center">
+            <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">كَيْفَ يَخْدُمُ عُمَّالُ الْبِتْرُولِ وَطَنَهُمْ؟</p>
+            <div class="shuffle-container grid grid-cols-1 gap-2">
+              <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's2')">
+                <span>يَسْتَخْرِجُونَ طَاقَةَ الْوَطَنِ وَثَرْوَاتِهِ لِيَزْدَهِرَ الِاقْتِصَادُ وَتَتَطَوَّرَ الْبِلَادُ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+              <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's2')">
+                <span>يَقُودُونَ حَافِلَاتِ نَقْلِ الْمُسَافِرِينَ بَيْنَ الْمُدُنِ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+              <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's2')">
+                <span>يَصْنَعُونَ الْخُبْزَ وَالْحَلْوَيَاتِ الشَّهِيَّةَ.</span>
+                <span class="indicator text-lg"></span>
+              </button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="mt-8 pt-5 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <div class="text-sm font-bold text-slate-600">
+          إِنْجَازُ الْمَحَطَّةِ: <span id="s2_progress" class="text-blue-700 font-extrabold">0 / 7</span>
+        </div>
+        <button id="btn_next_s2" disabled onclick="unlockStation(3)" class="action-btn text-sm">
+          تَأْكِيدُ الْمَحَطَّةِ وَالانْتِقَالُ لِنَصِّ الْقِرَاءَةِ ⬅
+        </button>
+      </div>
+    </section>
+
+    <!-- المحطة 3: القراءة والفهم (ص 44 وص 45) -->
+    <section id="station3" class="lesson-card p-5 sm:p-7 locked">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+          <h2 class="text-lg sm:text-xl font-black text-blue-900">الْمَحَطَّةُ الثَّالِثَةُ: نَصُّ الْقِرَاءَةِ (خِدْمَةُ الْأَرْضِ) وَالْفَهْمُ</h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="page-badge px-3 py-1 text-xs">ص 44 - 45</span>
+        </div>
+      </div>
+
+      <div class="lesson-text-box p-5 sm:p-6 mb-7 shadow-sm">
+        <div class="flex flex-col md:flex-row items-center gap-5 mb-4 pb-4 border-b border-amber-200/60">
+          <img src="p44_farmer_sowing.jpg" alt="الفلاح ينثر البذور في الحقل" class="w-full md:w-56 h-48 object-contain rounded-xl bg-white border border-amber-200" onerror="this.onerror=null;this.src='https://placehold.co/400x300/e2e8f0/1e293b?text=صورة+الفلاح+يبذر+الأرض+(p44_farmer_sowing.jpg)';">
+          <div>
+            <h3 class="text-2xl font-black text-amber-900 mb-2">خِدْمَةُ الْأَرْضِ</h3>
+            <span class="inline-block bg-amber-100 text-amber-900 text-xs px-2.5 py-1 rounded-full font-bold">مِنْ كِتَابِ «طَرِيقُ الْإِنْشَاءِ»</span>
+          </div>
+        </div>
+
+        <div class="text-base sm:text-lg text-slate-800 leading-loose text-justify font-normal space-y-4">
+          <p>
+            قَبْلَ طُلُوعِ الشَّمْسِ، سَارَ عَبْدُ الْقَادِرِ مُتَوَجِّهًا إِلَى حَقْلِهِ حَامِلًا زَادَهُ، وَكَانَتِ الطَّبِيعَةُ لَا تَزَالُ نَائِمَةً.
+          </p>
+          <p>
+            مَا إِنْ وَصَلَ حَتَّى تَنَاوَلَ الْحُبُوبَ وَوَضَعَهَا فِي مِئْزَرِهِ الْكَبِيرِ وَرَاحَ يَبْذُرُهَا ذَاتَ الْيَمِينِ وَذَاتَ الشِّمَالِ، وَمَا إِنْ فَرَغَ حَتَّى بَدَأَ يَحْرُثُ جِهَةً أُخْرَى مِنَ الْأَرْضِ بِجَرَّارِهِ الْجَدِيدِ.
+          </p>
+          <p>
+            ارْتَفَعَتِ الشَّمْسُ وَهُوَ فِي عَمَلٍ دَائِبٍ، يَزْرَعُ الْأَرْضَ بِأَمَلٍ أَخْضَرَ مَعَ كُلِّ حَبَّةِ قَمْحٍ يَرْوِيهَا بِعَرَقِ جَبِينِهِ، وَهُوَ الَّذِي تَرَاهُ غَدًا فِي حَقْلِهِ يَعْمَلُ بِسَاعِدَيْنِ قَوِيَّيْنِ وَيَحْمِلُ مَعَهُ الْخَيْرَ وَالْبَرَكَةَ إِلَى بَيْتِهِ وَبُيُوتِ الْآخَرِينَ.
+          </p>
+          <p>
+            أَفَلَا يَسْتَحِقُّ هَذَا الَّذِي يَجِدُّ وَيَتْعَبُ فِي سَبِيلِنَا كُلَّ احْتِرَامٍ وَتَقْدِيرٍ؟ أَلَيْسَ هُوَ سَاعِدَ الْوَطَنِ الْأَيْمَنِ، يُحْيِي تُرْبَتَهُ وَيُغَذِّي أَبْنَاءَهُ وَيَنْشُرُ الْخَيْرَ وَالْهَنَاءَ فِي رُبُوعِهِ؟
+          </p>
+          <p class="font-bold text-amber-950">
+            هَنِيئًا لَكَ أَيُّهَا الْفَلَّاحُ، يَا خَادِمَ الْوَطَنِ وَيَا صَانِعَ الْأَمَلِ!
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-4 mb-8">
+        <h3 class="font-bold text-blue-900 mb-2 text-sm sm:text-base flex items-center gap-2">
+          <span>📖</span> كَلِمَاتِي الْجَدِيدَةُ:
+        </h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5 text-xs sm:text-sm">
+          <div class="bg-white p-2.5 rounded-lg border border-blue-100"><span class="font-bold text-blue-800">زَادَهُ:</span> طَعَامَهُ وَشَرَابَهُ.</div>
+          <div class="bg-white p-2.5 rounded-lg border border-blue-100"><span class="font-bold text-blue-800">يَبْذُرُ:</span> يَنْثُرُ الْبُذُورَ عَلَى الْأَرْضِ.</div>
+          <div class="bg-white p-2.5 rounded-lg border border-blue-100"><span class="font-bold text-blue-800">دَائِبٌ:</span> جَادٌّ وَمُثَابِرٌ.</div>
+          <div class="bg-white p-2.5 rounded-lg border border-blue-100"><span class="font-bold text-blue-800">رُبُوعِهِ:</span> أَنْحَائِهِ وَأَرْجَائِهِ.</div>
+        </div>
+      </div>
+
+      <h3 class="text-base sm:text-lg font-black text-slate-800 mb-4 pb-2 border-b border-slate-100">
+        ابْحَثْ عَنْ أَضْدَادِ الْمُفْرَدَاتِ التَّالِيَةِ فِي النَّصِّ:
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8" id="s3_antonyms">
+        
+        <div class="q-block p-4 rounded-xl border border-slate-200 bg-white" data-qid="s3_ant1">
+          <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">ضِدُّ كَلِمَةِ «بَدَأَ» فِي النَّصِّ هُوَ:</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's3')">
+              <span>فَرَغَ (انْتَهَى)</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>شَرَعَ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>تَوَاصَلَ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <div class="q-block p-4 rounded-xl border border-slate-200 bg-white" data-qid="s3_ant2">
+          <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">ضِدُّ كَلِمَةِ «مُسْتَيْقِظَةٌ» فِي النَّصِّ هُوَ:</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's3')">
+              <span>نَائِمَةٌ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>حَاضِرَةٌ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>نَشِيطَةٌ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <div class="q-block p-4 rounded-xl border border-slate-200 bg-white" data-qid="s3_ant3">
+          <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">ضِدُّ كَلِمَةِ «بِيَأْسٍ» فِي النَّصِّ هُوَ:</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's3')">
+              <span>بِأَمَلٍ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>بِخَوْفٍ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>بِتَعَبٍ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <div class="q-block p-4 rounded-xl border border-slate-200 bg-white" data-qid="s3_ant4">
+          <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">ضِدُّ كَلِمَةِ «ضَعِيفَيْنِ» فِي النَّصِّ هُوَ:</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's3')">
+              <span>قَوِيَّيْنِ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>صَغِيرَيْنِ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>بَطِيئَيْنِ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+      </div>
+
+      <h3 class="text-base sm:text-lg font-black text-slate-800 mb-4 pb-2 border-b border-slate-100">
+        أَقْرَأُ وَأَفْهَمُ (أَسْئِلَةُ فَهْمِ النَّصِّ):
+      </h3>
+
+      <div class="space-y-6" id="s3_comprehension">
+        
+                <div class="q-block" data-qid="s3_q1">
+          <p class="font-bold text-slate-800 mb-2.5 text-sm sm:text-base">1. مَنْ هُوَ بَطَلُ قِصَّتِنَا؟</p>
+          <div class="shuffle-container grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's3')">
+              <span>عَبْدُ الْقَادِرِ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>أَكْرَمُ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>عِمَادُ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <div class="q-block" data-qid="s3_q2">
+          <p class="font-bold text-slate-800 mb-2.5 text-sm sm:text-base">2. مَا هِيَ الْمِهْنَةُ الَّتِي يُمَارِسُهَا؟</p>
+          <div class="shuffle-container grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's3')">
+              <span>فَلَّاحٌ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>بَنَّاءٌ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>نَجَّارٌ</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <div class="q-block" data-qid="s3_q3">
+          <p class="font-bold text-slate-800 mb-2.5 text-sm sm:text-base">3. إِلَى أَيْنَ تَوَجَّهَ الْفَلَّاحُ؟ وَفِي أَيِّ وَقْتٍ؟ وَمَاذَا كَانَ يَحْمِلُ؟</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's3')">
+              <span>تَوَجَّهَ إِلَى حَقْلِهِ قَبْلَ طُلُوعِ الشَّمْسِ، حَامِلًا زَادَهُ (طَعَامَهُ وَشَرَابَهُ).</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>تَوَجَّهَ إِلَى السُّوقِ فِي الْمَسَاءِ، حَامِلًا الْغَلَّةَ لِبَيْعِهَا.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>تَوَجَّهَ إِلَى الْمَصْنَعِ فِي الصَّبَاحِ الْبَاكِرِ، حَامِلًا حَقِيبَةَ أَدَوَاتِهِ.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <div class="q-block" data-qid="s3_q4">
+          <p class="font-bold text-slate-800 mb-2.5 text-sm sm:text-base">4. مَاذَا فَعَلَ عِنْدَمَا وَصَلَ إِلَى الْحَقْلِ؟ وَكَيْفَ تَمَّ ذَلِكَ؟</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's3')">
+              <span>تَنَاوَلَ الْحُبُوبَ فِي مِئْزَرِهِ وَرَاحَ يَبْذُرُهَا ذَاتَ الْيَمِينِ وَذَاتَ الشِّمَالِ، ثُمَّ حَرَثَ بِجَرَّارِهِ الْجَدِيدِ.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>جَلَسَ تَحْتَ الشَّجَرَةِ لِيَسْتَرِيحَ وَيَشْرَبَ الْمَاءَ.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>قَطَفَ الثِّمَارَ النَّاضِجَةَ وَوَضَعَهَا فِي الصَّنَادِيقِ الْخَشَبِيَّةِ.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <div class="q-block" data-qid="s3_q5">
+          <p class="font-bold text-slate-800 mb-2.5 text-sm sm:text-base">5. لِمَاذَا تُعْتَبَرُ هَذِهِ الْمِهْنَةُ مُتْعِبَةً وَشَاقَّةً؟</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's3')">
+              <span>لِأَنَّهُ يَعْمَلُ بِعَمَلٍ دَائِبٍ وَيَرْوِي الْأَرْضَ بِعَرَقِ جَبِينِهِ تَحْتَ الشَّمْسِ بِسَاعِدَيْنِ قَوِيَّيْنِ.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>لِأَنَّهَا تَتَطَلَّبُ السَّفَرَ الدَّائِمَ لِمَسَافَاتٍ بَعِيدَةٍ جِدًّا.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>لِأَنَّ أَدَوَاتِهَا ثَقِيلَةٌ جِدًّا وَلَا يُمْكِنُ حَمْلُهَا.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <div class="q-block" data-qid="s3_q6">
+          <p class="font-bold text-slate-800 mb-2.5 text-sm sm:text-base">6. مَاذَا يَفْعَلُ الْفَلَّاحُ عِنْدَمَا يَنْضُجُ الْقَمْحُ؟</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's3')">
+              <span>يَحْصُدُهُ وَيَجْمَعُ الْغَلَّةَ لِيَحْمِلَ الْخَيْرَ وَالْبَرَكَةَ إِلَى بَيْتِهِ وَبُيُوتِ الْآخَرِينَ.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>يَتْرُكُهُ فِي الْأَرْضِ لِتَأْكُلَهُ الطُّيُورُ فَقَطْ.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>يَحْرِقُ الْحَقْلَ لِيَبْذُرَ مَكَانَهُ نَبَاتَاتٍ أُخْرَى.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <div class="q-block" data-qid="s3_q7">
+          <p class="font-bold text-slate-800 mb-2.5 text-sm sm:text-base">7. مَنْ يَسْتَفِيدُ بِخَيْرَاتِ هَذِهِ الْأَرْضِ؟</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's3')">
+              <span>الْفَلَّاحُ وَأُسْرَتُهُ وَبُيُوتُ كُلِّ الْمُواطِنِينَ وَالْوَطَنُ بِأَكْمَلِهِ.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>الْفَلَّاحُ وَحْدَهُ دُونَ غَيْرِهِ.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>التُّجَّارُ فَقَطْ فِي الْمَدِينَةِ.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <div class="q-block" data-qid="s3_q8">
+          <p class="font-bold text-slate-800 mb-2.5 text-sm sm:text-base">8. اسْتَخْرِجْ مِنَ النَّصِّ عِبَارَةً تَدُلُّ عَلَى خِدْمَةِ الْفَلَّاحِ لِوَطَنِهِ وَاسْتِحْقَاقِهِ الشُّكْرَ:</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's3')">
+              <span>«أَلَيْسَ هُوَ سَاعِدَ الْوَطَنِ الْأَيْمَنِ، يُحْيِي تُرْبَتَهُ وَيُغَذِّي أَبْنَاءَهُ وَيَنْشُرُ الْخَيْرَ...»</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>«ارْتَفَعَتِ الشَّمْسُ فِي كَبِدِ السَّمَاءِ الصَّافِيَةِ.»</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>«وَكَانَتِ الطَّبِيعَةُ لَا تَزَالُ نَائِمَةً.»</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <div class="q-block" data-qid="s3_q9">
+          <p class="font-bold text-slate-800 mb-2.5 text-sm sm:text-base">9. نَأْكُلُ يَوْمِيًّا بِفَضْلِ جُهْدِ الْفَلَّاحِ؛ فَهَلْ يُمْكِنُ أَنْ نَسْتَغْنِيَ عَنْ خِدْمَاتِ الْفَلَّاحِ؟</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's3')">
+              <span>لَا يُمْكِنُ الِاسْتِغْنَاءُ عَنْهُ أَبَدًا؛ لِأَنَّهُ يُوَفِّرُ لَنَا الْغِذَاءَ الْأَسَاسِيَّ (الْخُبْزَ وَالْخُضَرَ وَالْفَوَاكِهَ).</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>نَعَمْ، يُمْكِنُنَا الِاسْتِغْنَاءُ عَنْهُ وَالِاعْتِمَادُ عَلَى الْمَصَانِعِ فَقَطْ.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's3')">
+              <span>يُمْكِنُ الِاسْتِغْنَاءُ عَنْهُ فِي فَصْلِ الشِّتَاءِ فَقَطْ.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+      </div>
+
+      <div class="mt-8 pt-5 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <div class="text-sm font-bold text-slate-600">
+          إِنْجَازُ الْمَحَطَّةِ: <span id="s3_progress" class="text-blue-700 font-extrabold">0 / 13</span>
+        </div>
+        <button id="btn_next_s3" disabled onclick="unlockStation(4)" class="action-btn text-sm">
+          تَأْكِيدُ الْمَحَطَّةِ وَالاِنْتِقَالُ لِلظَّوَاهِرِ اللُّغَوِيَّةِ ⬅
+        </button>
+      </div>
+    </section>
+    <!-- المحطة 4: ألاحظ وأميز + أثري لغتي + صيغ عمر الصغير (ص 46 وص 47) -->
+    <section id="station4" class="lesson-card p-5 sm:p-7 locked">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+          <h2 class="text-lg sm:text-xl font-black text-blue-900">الْمَحَطَّةُ الرَّابِعَةُ: أُلَاحِظُ وَأُمَيِّزُ + أُثْرِي لُغَتِي + الصِّيَغُ</h2>
+        </div>
+        <span class="page-badge px-3 py-1 text-xs">ص 46 - 47</span>
+      </div>
+
+      <!-- قسم 1: أتعرف على الفعل الماضي -->
+      <div class="mb-8 p-4 rounded-xl border border-slate-200 bg-white shadow-sm">
+        <h3 class="font-black text-blue-900 mb-2 text-base">1. أَتَعَرَّفُ عَلَى الْفِعْلِ الْمَاضِي (أُلَاحِظُ وَأُمَيِّزُ):</h3>
+        
+        <div class="bg-amber-50/70 p-4 rounded-xl border border-amber-200 text-sm sm:text-base leading-loose mb-4">
+          «قَبْلَ طُلُوعِ الشَّمْسِ <span class="font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">سَارَ</span> عَبْدُ الْقَادِرِ مُتَوَجِّهًا إِلَى حَقْلِهِ، وَمَا إِنْ <span class="font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">وَصَلَ</span> حَتَّى <span class="font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">تَنَاوَلَ</span> الْحُبُوبَ وَ<span class="font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">وَضَعَهَا</span> فِي مِئْزَرِهِ ثُمَّ <span class="font-extrabold text-blue-700 bg-blue-100 px-2 py-0.5 rounded">رَاحَ</span> يَبْذُرُهَا ذَاتَ الْيَمِينِ وَذَاتَ الشِّمَالِ.»
+        </div>
+
+        <div class="q-block" data-qid="s4_q1">
+          <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">عَيِّنِ الْإِجَابَةَ الصَّحِيحَةَ:</p>
+          <div class="shuffle-container grid grid-cols-1 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's4')">
+              <span>قَامَ عَبْدُ الْقَادِرِ بِهَذِهِ الْأَعْمَالِ وَانْتَهَى مِنْهَا فِي الْمَاضِي.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's4')">
+              <span>يَقُومُ عَبْدُ الْقَادِرِ بِهَذِهِ الْأَعْمَالِ الْآنَ فِي الْحَاضِرِ.</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <div class="mt-3 bg-blue-50 p-3 rounded-lg text-xs sm:text-sm text-blue-900 font-semibold border border-blue-100">
+          💡 الْفِعْلُ الْمَاضِي هُوَ كُلُّ فِعْلٍ يَدُلُّ عَلَى حُصُولِ عَمَلٍ فِي الزَّمَنِ الْمَاضِي وَانْتَهَى، مِثْلُ: «رَسَمَ مُنِيرٌ خَرِيطَةَ الْجَزَائِرِ».
+        </div>
+      </div>
+
+      <!-- قسم 2: أكتشف وأستعمل التنوين بالفتح -->
+      <div class="mb-8 p-4 rounded-xl border border-slate-200 bg-white shadow-sm">
+        <h3 class="font-black text-blue-900 mb-2 text-base">2. أَكْتَشِفُ وَأَسْتَعْمِلُ التَّنْوِينَ (أُلَاحِظُ وَأُمَيِّزُ):</h3>
+
+        <div class="bg-amber-50/70 p-4 rounded-xl border border-amber-200 text-sm sm:text-base leading-loose mb-4">
+          «سَارَ عَبْدُ الْقَادِرِ <span class="font-extrabold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">مُتَوَجِّهًا</span> إِلَى حَقْلِهِ، <span class="font-extrabold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">حَامِلًا</span> زَادَهُ، وَكَانَتِ الطَّبِيعَةُ لَا تَزَالُ <span class="font-extrabold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">نَائِمَةً</span>.»
+        </div>
+
+        <div class="q-block" data-qid="s4_q2">
+          <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">كَيْفَ وَرَدَتِ الْكَلِمَاتُ الْمُلَوَّنَةُ؟</p>
+          <div class="shuffle-container grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's4')">
+              <span>نَكِرَةٌ (مُنَوَّنَةٌ بِالْفَتْحِ)</span>
+              <span class="indicator text-lg"></span>
+            </button>
+            <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's4')">
+              <span>مَعْرِفَةٌ (تَبْدَأُ بِـ ال)</span>
+              <span class="indicator text-lg"></span>
+            </button>
+          </div>
+          <div class="feedback-box"></div>
+        </div>
+
+        <div class="mt-3 bg-emerald-50 p-3 rounded-lg text-xs sm:text-sm text-emerald-900 font-semibold border border-emerald-100">
+          💡 التَّنْوِينُ بِالْفَتْحِ: أَضَعُ فَتْحَتَيْنِ مَعَ الْأَلِفِ فِي آخِرِ الْكَلِمَةِ، وَأَسْمَعُ وَأَنْطِقُ النُّونَ وَلَا أَكْتُبُهَا. مِثْلُ: حَصَدَ الْفَلَّاحُ أَرْضًا.
+        </div>
+      </div>
+
+      <!-- قسم 3: أثري لغتي (الربط التفاعلي) -->
+      <div class="mb-8 p-4 rounded-xl border border-slate-200 bg-white shadow-sm">
+        <h3 class="font-black text-blue-900 mb-1 text-base">3. أُثْرِي لُغَتِي: ارْبِطْ كُلَّ مِهْنَةٍ بِالْعَمَلِ الْمُنَاسِبِ لَهَا:</h3>
+        <p class="text-xs text-slate-500 mb-4">اضغط أولاً على اسم المهنة ثم اضغط على العبارة المقابلة لها ليتم الربط بدقة.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="matching_game">
+          <div class="space-y-2.5" id="jobs_column">
+            <div class="link-item text-center font-bold text-slate-800 text-sm sm:text-base" data-job="plumber">السَّمْكَرِيُّ</div>
+            <div class="link-item text-center font-bold text-slate-800 text-sm sm:text-base" data-job="hostess">الْمُضَيِّفَةُ</div>
+            <div class="link-item text-center font-bold text-slate-800 text-sm sm:text-base" data-job="vet">الْبَيْطَرِيُّ</div>
+            <div class="link-item text-center font-bold text-slate-800 text-sm sm:text-base" data-job="tailor">الْخَيَّاطُ</div>
+            <div class="link-item text-center font-bold text-slate-800 text-sm sm:text-base" data-job="shoemaker">الْإِسْكَافِيُّ</div>
+          </div>
+          <div class="space-y-2.5 shuffle-container" id="tasks_column">
+            <div class="link-item text-center font-bold text-slate-700 text-sm sm:text-base" data-task="shoemaker">يُصْلِحُ الْأَحْذِيَةَ</div>
+            <div class="link-item text-center font-bold text-slate-700 text-sm sm:text-base" data-task="plumber">يُرَكِّبُ أَنَابِيبَ الْمِيَاهِ وَالتَّدْفِئَةِ</div>
+            <div class="link-item text-center font-bold text-slate-700 text-sm sm:text-base" data-task="tailor">يَخِيطُ الْأَثْوَابَ</div>
+            <div class="link-item text-center font-bold text-slate-700 text-sm sm:text-base" data-task="hostess">تَسْهَرُ عَلَى رَاحَةِ الْمُسَافِرِينَ</div>
+            <div class="link-item text-center font-bold text-slate-700 text-sm sm:text-base" data-task="vet">يُدَاوِي الْحَيَوَانَاتِ</div>
+          </div>
+        </div>
+        <div id="matching_feedback" class="feedback-box mt-3"></div>
+      </div>
+
+      <!-- قسم 4: صيغ ص 47 (عمر الصغير) عبر عن الصور -->
+      <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm">
+        <h3 class="font-black text-blue-900 mb-2 text-base">4. أَسْتَعْمِلُ الصِّيَغَ (فِي يَوْمٍ ، فِي يَوْمٍ مِنَ الْأَيَّامِ ، فِي أَحَدِ الْأَيَّامِ) ص 47:</h3>
+        
+        <div class="bg-amber-50/70 p-3.5 rounded-xl border border-amber-200 text-xs sm:text-sm leading-relaxed mb-5">
+          «<span class="font-extrabold text-amber-800">فِي أَحَدِ أَيَّامِ</span> الْعُطْلَةِ الشَّتْوِيَّةِ ذَهَبَ عَبْدُ الرَّحْمَنِ مَعَ وَالِدِهِ إِلَى السِّينِمَا حَيْثُ شَاهَدَا فِيلْمَ مَعْرَكَةِ الْجَزَائِرِ.»
+        </div>
+
+        <div class="space-y-6" id="s4_p47_questions">
+          
+          <div class="q-block grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50" data-qid="s4_q3">
+            <div class="md:col-span-1 text-center">
+              <img src="p47_zoo_family.jpg" alt="عائلة في حديقة الحيوانات" class="w-full h-44 object-contain rounded-lg bg-white border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/400x300/e2e8f0/1e293b?text=صورة+حديقة+الحيوانات+(p47_zoo_family.jpg)';">
+              <span class="text-xs text-slate-500 font-semibold mt-1 inline-block">حَدِيقَةُ الْحَيَوَانَاتِ</span>
+            </div>
+            <div class="md:col-span-2 flex flex-col justify-center">
+              <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">اخْتَرِ التَّعْبِيرَ الصَّحِيحَ عَنِ الصُّورَةِ:</p>
+              <div class="shuffle-container grid grid-cols-1 gap-2">
+                <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's4')">
+                  <span>فِي يَوْمٍ مِنَ الْأَيَّامِ ذَهَبَتِ الْعَائِلَةُ إِلَى حَدِيقَةِ الْحَيَوَانَاتِ لِرُؤْيَةِ الْوَعْلِ.</span>
+                  <span class="indicator text-lg"></span>
+                </button>
+                <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's4')">
+                  <span>قَرَأَ الْوَلَدُ قِصَّةً فِي غُرْفَتِهِ مَسَاءً.</span>
+                  <span class="indicator text-lg"></span>
+                </button>
+                <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's4')">
+                  <span>رَكِبَ التَّلَامِيذُ حَافِلَةَ الْمَدْرَسَةِ مُسْرِعِينَ.</span>
+                  <span class="indicator text-lg"></span>
+                </button>
+              </div>
+              <div class="feedback-box"></div>
+            </div>
+          </div>
+
+          <div class="q-block grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50" data-qid="s4_q4">
+            <div class="md:col-span-1 text-center">
+              <img src="p47_reception_family.jpg" alt="عائلة في قاعة الاستقبال" class="w-full h-44 object-contain rounded-lg bg-white border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/400x300/e2e8f0/1e293b?text=صورة+قاعة+الاستقبال+(p47_reception_family.jpg)';">
+              <span class="text-xs text-slate-500 font-semibold mt-1 inline-block">قَاعَةُ الِاسْتِقْبَالِ مَعَ الْجَدِّ</span>
+            </div>
+            <div class="md:col-span-2 flex flex-col justify-center">
+              <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">اخْتَرِ التَّعْبِيرَ الصَّحِيحَ عَنِ الصُّورَةِ:</p>
+              <div class="shuffle-container grid grid-cols-1 gap-2">
+                <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's4')">
+                  <span>فِي أَحَدِ الْأَيَّامِ اجْتَمَعَتِ الْعَائِلَةُ فِي قَاعَةِ الِاسْتِقْبَالِ مَعَ الْجَدِّ لِشُرْبِ الشَّايِ.</span>
+                  <span class="indicator text-lg"></span>
+                </button>
+                <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's4')">
+                  <span>سَافَرَ الْأَبُ إِلَى مَدِينَةٍ أُخْرَى لِلْعَمَلِ.</span>
+                  <span class="indicator text-lg"></span>
+                </button>
+                <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's4')">
+                  <span>لَعِبَ الْأَطْفَالُ كُرَةَ الْقَدَمِ فِي الْمَلْعَبِ.</span>
+                  <span class="indicator text-lg"></span>
+                </button>
+              </div>
+              <div class="feedback-box"></div>
+            </div>
+          </div>
+
+          <div class="q-block grid grid-cols-1 md:grid-cols-3 gap-4 p-4 rounded-xl border border-slate-100 bg-slate-50/50" data-qid="s4_q5">
+            <div class="md:col-span-1 text-center">
+              <img src="p47_car_family.jpg" alt="عائلة في سيارة" class="w-full h-44 object-contain rounded-lg bg-white border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/400x300/e2e8f0/1e293b?text=صورة+العائلة+في+السيارة+(p47_car_family.jpg)';">
+              <span class="text-xs text-slate-500 font-semibold mt-1 inline-block">الْعَائِلَةُ فِي السَّيَّارَةِ</span>
+            </div>
+            <div class="md:col-span-2 flex flex-col justify-center">
+              <p class="font-bold text-slate-800 mb-2 text-sm sm:text-base">اخْتَرِ التَّعْبِيرَ الصَّحِيحَ عَنِ الصُّورَةِ:</p>
+              <div class="shuffle-container grid grid-cols-1 gap-2">
+                <button class="choice-btn" data-correct="true" onclick="handleChoiceClick(this, 's4')">
+                  <span>فِي يَوْمٍ انْطَلَقَتِ الْعَائِلَةُ فَرِحَةً فِي رِحْلَةٍ سِيَاحِيَّةٍ بِالسَّيَّارَةِ.</span>
+                  <span class="indicator text-lg"></span>
+                </button>
+                <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's4')">
+                  <span>نَزَلَ الْمَطَرُ غَزِيرًا فَأُغْلِقَتِ النَّوَافِذُ.</span>
+                  <span class="indicator text-lg"></span>
+                </button>
+                <button class="choice-btn" data-correct="false" onclick="handleChoiceClick(this, 's4')">
+                  <span>اشْتَرَى الْأَبُ أَلْعَابًا لِأَطْفَالِهِ الصِّغَارِ.</span>
+                  <span class="indicator text-lg"></span>
+                </button>
+              </div>
+              <div class="feedback-box"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mt-8 pt-5 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <div class="text-sm font-bold text-slate-600">
+          إِنْجَازُ الْمَحَطَّةِ: <span id="s4_progress" class="text-blue-700 font-extrabold">0 / 6</span>
+        </div>
+        <button id="btn_next_s4" disabled onclick="unlockStation(5)" class="action-btn text-sm">
+          تَأْكِيدُ الْمَحَطَّةِ وَالاِنْتِقَالُ لِدَفْتَرِ الأَنْشِطَةِ ⬅
+        </button>
+      </div>
+    </section>
+    <!-- المحطة 5: دفتر الأنشطة (ص 28 و 29) -->
+    <section id="station5" class="lesson-card p-5 sm:p-7 locked">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+          <h2 class="text-lg sm:text-xl font-black text-blue-900">الْمَحَطَّةُ الْخَامِسَةُ: دَفْتَرُ الْأَنْشِطَةِ (ص 28 - 29)</h2>
+        </div>
+        <span class="page-badge px-3 py-1 text-xs">كُرَّاسُ الْأَنْشِطَةِ ص 28 - 29</span>
+      </div>
+
+      <!-- قسم 1: أتذكر وأجيب ص 28 -->
+      <div class="mb-8 p-4 rounded-xl border border-slate-200 bg-white shadow-sm">
+        <h3 class="font-black text-blue-900 mb-2 text-base">1. أَتَذَكَّرُ وَأُجِيبُ (ص 28): اخْتَرِ الْإِجَابَةَ الصَّحِيحَةَ (صَحِيحٌ / خَاطِئٌ):</h3>
+        
+        <div class="space-y-4" id="s5_p28_tf">
+          
+          <div class="q-block p-3 rounded-lg border border-slate-100 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3" data-qid="s5_tf1">
+            <span class="font-semibold text-slate-800 text-sm sm:text-base">أَنْجَزَ التَّلَامِيذُ أَعْمَالًا تَعْبِيرِيَّةً بِمُنَاسَبَةِ عِيدِ النَّصْرِ.</span>
+            <div class="flex items-center gap-2">
+              <button class="choice-btn py-1.5 px-4 text-xs font-bold" data-correct="false" onclick="handleChoiceClick(this, 's5')">صَحِيحٌ</button>
+              <button class="choice-btn py-1.5 px-4 text-xs font-bold" data-correct="true" onclick="handleChoiceClick(this, 's5')">خَاطِئٌ</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+          <div class="q-block p-3 rounded-lg border border-slate-100 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3" data-qid="s5_tf2">
+            <span class="font-semibold text-slate-800 text-sm sm:text-base">عَلَّقَتِ الْمُعَلِّمَةُ الْكَثِيرَ مِنَ اللَّوْحَاتِ عَلَى جِدَارِ الْقِسْمِ.</span>
+            <div class="flex items-center gap-2">
+              <button class="choice-btn py-1.5 px-4 text-xs font-bold" data-correct="false" onclick="handleChoiceClick(this, 's5')">صَحِيحٌ</button>
+              <button class="choice-btn py-1.5 px-4 text-xs font-bold" data-correct="true" onclick="handleChoiceClick(this, 's5')">خَاطِئٌ</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+          <div class="q-block p-3 rounded-lg border border-slate-100 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3" data-qid="s5_tf3">
+            <span class="font-semibold text-slate-800 text-sm sm:text-base">أَكْرَمُ تِلْمِيذٌ مَاهِرٌ فِي الرَّسْمِ وَالتَّعْبِيرِ.</span>
+            <div class="flex items-center gap-2">
+              <button class="choice-btn py-1.5 px-4 text-xs font-bold" data-correct="true" onclick="handleChoiceClick(this, 's5')">صَحِيحٌ</button>
+              <button class="choice-btn py-1.5 px-4 text-xs font-bold" data-correct="false" onclick="handleChoiceClick(this, 's5')">خَاطِئٌ</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+          <div class="q-block p-3 rounded-lg border border-slate-100 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3" data-qid="s5_tf4">
+            <span class="font-semibold text-slate-800 text-sm sm:text-base">يَزْدَهِرُ الْوَطَنُ عِنْدَمَا يَعْمَلُ الْجَمِيعُ مِنْ أَجْلِهِ.</span>
+            <div class="flex items-center gap-2">
+              <button class="choice-btn py-1.5 px-4 text-xs font-bold" data-correct="true" onclick="handleChoiceClick(this, 's5')">صَحِيحٌ</button>
+              <button class="choice-btn py-1.5 px-4 text-xs font-bold" data-correct="false" onclick="handleChoiceClick(this, 's5')">خَاطِئٌ</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- قسم 2: أستعمل الصيغة ص 28 -->
+      <div class="mb-8 p-4 rounded-xl border border-slate-200 bg-white shadow-sm">
+        <h3 class="font-black text-blue-900 mb-2 text-base">2. أَسْتَعْمِلُ الصِّيغَةَ (ص 28): أَكْمِلِ الْجُمَلَ مُعَبِّرًا عَنِ الصُّوَرِ بِـ (إِلَّا ، غَيْرَ ، سِوَى):</h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="s5_p28_fill">
+          
+          <div class="q-block p-3 rounded-xl border border-slate-100 bg-slate-50" data-qid="s5_f1">
+            <img src="act_p28_horse.jpg" alt="الحصان" class="w-full h-36 object-contain rounded-lg bg-white mb-2 border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/400x250/e2e8f0/1e293b?text=صورة+الحصان+(act_p28_horse.jpg)';">
+            <p class="font-bold text-slate-800 text-sm mb-2">«لَوَّنَ عِمَادُ الْحِصَانَ .......»</p>
+            <div class="shuffle-container grid grid-cols-1 gap-1.5">
+              <button class="choice-btn text-xs py-1.5" data-correct="true" onclick="handleChoiceClick(this, 's5')">إِلَّا رَأْسَهُ</button>
+              <button class="choice-btn text-xs py-1.5" data-correct="false" onclick="handleChoiceClick(this, 's5')">كُلَّهُ بِالْأَسْوَدِ</button>
+              <button class="choice-btn text-xs py-1.5" data-correct="false" onclick="handleChoiceClick(this, 's5')">وَلَمْ يُلَوِّنْ شَيْئًا</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+          <div class="q-block p-3 rounded-xl border border-slate-100 bg-slate-50" data-qid="s5_f2">
+            <img src="act_p28_plates.jpg" alt="الصحون" class="w-full h-36 object-contain rounded-lg bg-white mb-2 border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/400x250/e2e8f0/1e293b?text=صورة+الصحون+(act_p28_plates.jpg)';">
+            <p class="font-bold text-slate-800 text-sm mb-2">«أَفْرَغَ صَدِيقِي كُلَّ الصُّحُونِ .......»</p>
+            <div class="shuffle-container grid grid-cols-1 gap-1.5">
+              <button class="choice-btn text-xs py-1.5" data-correct="true" onclick="handleChoiceClick(this, 's5')">سِوَى صَحْنٍ وَاحِدٍ</button>
+              <button class="choice-btn text-xs py-1.5" data-correct="false" onclick="handleChoiceClick(this, 's5')">وَتَرَكَهَا مَلِيئَةً</button>
+              <button class="choice-btn text-xs py-1.5" data-correct="false" onclick="handleChoiceClick(this, 's5')">فِي سَلَّةِ الْمُهْمَلَاتِ</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+          <div class="q-block p-3 rounded-xl border border-slate-100 bg-slate-50" data-qid="s5_f3">
+            <img src="act_p28_classroom.jpg" alt="تلاميذ القسم" class="w-full h-36 object-contain rounded-lg bg-white mb-2 border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/400x250/e2e8f0/1e293b?text=صورة+القسم+(act_p28_classroom.jpg)';">
+            <p class="font-bold text-slate-800 text-sm mb-2">«حَضَرَ كُلُّ التَّلَامِيذِ .......»</p>
+            <div class="shuffle-container grid grid-cols-1 gap-1.5">
+              <button class="choice-btn text-xs py-1.5" data-correct="true" onclick="handleChoiceClick(this, 's5')">غَيْرَ تِلْمِيذٍ وَاحِدٍ</button>
+              <button class="choice-btn text-xs py-1.5" data-correct="false" onclick="handleChoiceClick(this, 's5')">إِلَى السَّاحَةِ صَبَاحًا</button>
+              <button class="choice-btn text-xs py-1.5" data-correct="false" onclick="handleChoiceClick(this, 's5')">مُتَأَخِّرِينَ عَنِ الدَّرْسِ</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+          <div class="q-block p-3 rounded-xl border border-slate-100 bg-slate-50" data-qid="s5_f4">
+            <img src="act_p28_plants.jpg" alt="نباتات ذابلة" class="w-full h-36 object-contain rounded-lg bg-white mb-2 border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/400x250/e2e8f0/1e293b?text=صورة+النباتات+(act_p28_plants.jpg)';">
+            <p class="font-bold text-slate-800 text-sm mb-2">«ذَبُلَتْ كُلُّ النَّبَاتَاتِ .......»</p>
+            <div class="shuffle-container grid grid-cols-1 gap-1.5">
+              <button class="choice-btn text-xs py-1.5" data-correct="true" onclick="handleChoiceClick(this, 's5')">إِلَّا نَبْتَةً وَاحِدَةً (زَهْرَةً)</button>
+              <button class="choice-btn text-xs py-1.5" data-correct="false" onclick="handleChoiceClick(this, 's5')">مِنْ شِدَّةِ الْعَطَشِ</button>
+              <button class="choice-btn text-xs py-1.5" data-correct="false" onclick="handleChoiceClick(this, 's5')">فِي فَصْلِ الرَّبِيعِ</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+        </div>
+      </div>
+      <!-- قسم 3: أفهم النص ترتيب أعمال الفلاح ص 29 -->
+      <div class="mb-8 p-4 rounded-xl border border-slate-200 bg-white shadow-sm">
+        <h3 class="font-black text-blue-900 mb-2 text-base">3. أَفْهَمُ النَّصَّ (ص 29): رَتِّبِ الْأَعْمَالَ الَّتِي يَقُومُ بِهَا الْفَلَّاحُ حَسَبَ مَا وَرَدَتْ فِي النَّصِّ (1 ، 2 ، 3):</h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="s5_p29_order">
+          
+          <div class="q-block p-3 rounded-xl border border-slate-100 bg-slate-50 text-center" data-qid="s5_ord1">
+            <img src="act_p29_sowing_seeds.jpg" alt="نثر الحبوب" class="w-full h-36 object-contain rounded-lg bg-white mb-2 border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/300x200/e2e8f0/1e293b?text=نثر+الحبوب+(act_p29_sowing_seeds.jpg)';">
+            <p class="font-bold text-xs sm:text-sm text-slate-800 mb-2">يَبْذُرُ الْحُبُوبَ ذَاتَ الْيَمِينِ وَالشِّمَالِ</p>
+            <div class="shuffle-container flex justify-center gap-1.5">
+              <button class="choice-btn text-xs py-1 px-3 text-center" data-correct="true" onclick="handleChoiceClick(this, 's5')">الْمَرْحَلَةُ ( 1 )</button>
+              <button class="choice-btn text-xs py-1 px-3 text-center" data-correct="false" onclick="handleChoiceClick(this, 's5')">الْمَرْحَلَةُ ( 2 )</button>
+              <button class="choice-btn text-xs py-1 px-3 text-center" data-correct="false" onclick="handleChoiceClick(this, 's5')">الْمَرْحَلَةُ ( 3 )</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+          <div class="q-block p-3 rounded-xl border border-slate-100 bg-slate-50 text-center" data-qid="s5_ord2">
+            <img src="act_p29_tractor.jpg" alt="الحراثة بالجرار" class="w-full h-36 object-contain rounded-lg bg-white mb-2 border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/300x200/e2e8f0/1e293b?text=حرث+الأرض+(act_p29_tractor.jpg)';">
+            <p class="font-bold text-xs sm:text-sm text-slate-800 mb-2">يَحْرُثُ جِهَةً أُخْرَى بِجَرَّارِهِ الْجَدِيدِ</p>
+            <div class="shuffle-container flex justify-center gap-1.5">
+              <button class="choice-btn text-xs py-1 px-3 text-center" data-correct="false" onclick="handleChoiceClick(this, 's5')">الْمَرْحَلَةُ ( 1 )</button>
+              <button class="choice-btn text-xs py-1 px-3 text-center" data-correct="true" onclick="handleChoiceClick(this, 's5')">الْمَرْحَلَةُ ( 2 )</button>
+              <button class="choice-btn text-xs py-1 px-3 text-center" data-correct="false" onclick="handleChoiceClick(this, 's5')">الْمَرْحَلَةُ ( 3 )</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+          <div class="q-block p-3 rounded-xl border border-slate-100 bg-slate-50 text-center" data-qid="s5_ord3">
+            <img src="act_p29_farmer_returning.jpg" alt="العودة بالخير" class="w-full h-36 object-contain rounded-lg bg-white mb-2 border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/300x200/e2e8f0/1e293b?text=عودة+الفلاح+(act_p29_farmer_returning.jpg)';">
+            <p class="font-bold text-xs sm:text-sm text-slate-800 mb-2">يَحْمِلُ الْخَيْرَ وَالْبَرَكَةَ إِلَى الْبُيُوتِ</p>
+            <div class="shuffle-container flex justify-center gap-1.5">
+              <button class="choice-btn text-xs py-1 px-3 text-center" data-correct="false" onclick="handleChoiceClick(this, 's5')">الْمَرْحَلَةُ ( 1 )</button>
+              <button class="choice-btn text-xs py-1 px-3 text-center" data-correct="false" onclick="handleChoiceClick(this, 's5')">الْمَرْحَلَةُ ( 2 )</button>
+              <button class="choice-btn text-xs py-1 px-3 text-center" data-correct="true" onclick="handleChoiceClick(this, 's5')">الْمَرْحَلَةُ ( 3 )</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- قسم 4: عبر عن الصورة بفعل ماض ص 29 -->
+      <div class="mb-8 p-4 rounded-xl border border-slate-200 bg-white shadow-sm">
+        <h3 class="font-black text-blue-900 mb-2 text-base">4. عَبِّرْ عَنِ الصُّورَةِ بِاسْتِعْمَالِ فِعْلٍ مَاضٍ مُنَاسِبٍ (ص 29):</h3>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" id="s5_p29_past_verbs">
+          
+          <div class="q-block p-3 rounded-xl border border-slate-100 bg-slate-50 text-center" data-qid="s5_v1">
+            <img src="act_p29_girl_painting.jpg" alt="طفلة ترسم" class="w-full h-36 object-contain rounded-lg bg-white mb-2 border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/300x200/e2e8f0/1e293b?text=طفلة+ترسم+(act_p29_girl_painting.jpg)';">
+            <p class="font-bold text-xs sm:text-sm text-slate-800 mb-2">....... الطِّفْلَةُ لَوْحَةً.</p>
+            <div class="shuffle-container flex flex-col gap-1.5">
+              <button class="choice-btn text-xs py-1.5" data-correct="true" onclick="handleChoiceClick(this, 's5')">رَسَمَتْ</button>
+              <button class="choice-btn text-xs py-1.5" data-correct="false" onclick="handleChoiceClick(this, 's5')">تَرْسُمُ</button>
+              <button class="choice-btn text-xs py-1.5" data-correct="false" onclick="handleChoiceClick(this, 's5')">ارْسِمِي</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+          <div class="q-block p-3 rounded-xl border border-slate-100 bg-slate-50 text-center" data-qid="s5_v2">
+            <img src="act_p29_rooster.jpg" alt="ديك يصيح" class="w-full h-36 object-contain rounded-lg bg-white mb-2 border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/300x200/e2e8f0/1e293b?text=ديك+يصيح+(act_p29_rooster.jpg)';">
+            <p class="font-bold text-xs sm:text-sm text-slate-800 mb-2">....... الدِّيكُ.</p>
+            <div class="shuffle-container flex flex-col gap-1.5">
+              <button class="choice-btn text-xs py-1.5" data-correct="true" onclick="handleChoiceClick(this, 's5')">صَاحَ</button>
+              <button class="choice-btn text-xs py-1.5" data-correct="false" onclick="handleChoiceClick(this, 's5')">يَصِيحُ</button>
+              <button class="choice-btn text-xs py-1.5" data-correct="false" onclick="handleChoiceClick(this, 's5')">صِحْ</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+          <div class="q-block p-3 rounded-xl border border-slate-100 bg-slate-50 text-center" data-qid="s5_v3">
+            <img src="act_p29_girl_breakfast.jpg" alt="فتاة تفطر" class="w-full h-36 object-contain rounded-lg bg-white mb-2 border border-slate-200" onerror="this.onerror=null;this.src='https://placehold.co/300x200/e2e8f0/1e293b?text=فتاة+تتناول+الفطور+(act_p29_girl_breakfast.jpg)';">
+            <p class="font-bold text-xs sm:text-sm text-slate-800 mb-2">....... الْفَتَاةُ فُطُورَ الصَّبَاحِ.</p>
+            <div class="shuffle-container flex flex-col gap-1.5">
+              <button class="choice-btn text-xs py-1.5" data-correct="true" onclick="handleChoiceClick(this, 's5')">تَنَاوَلَتْ</button>
+              <button class="choice-btn text-xs py-1.5" data-correct="false" onclick="handleChoiceClick(this, 's5')">تَتَنَاوَلُ</button>
+              <button class="choice-btn text-xs py-1.5" data-correct="false" onclick="handleChoiceClick(this, 's5')">تَنَاوَلِي</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- قسم 5: إملاء ص 29 -->
+      <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm">
+        <h3 class="font-black text-blue-900 mb-2 text-base">5. إِمْلَاءٌ (ص 29): اكْتُبِ الْكَلِمَةَ بَيْنَ قَوْسَيْنِ مُنَوَّنَةً بِالْفَتْحِ:</h3>
+        <p class="text-xs text-slate-500 mb-4">اكْتُبِ الْكَلِمَةَ ثُمَّ اضْغَطْ عَلَى زِرِّ «تَحَقَّقْ» لِتَصْحِيحِهَا فَوْرِيًّا:</p>
+
+        <div class="space-y-4" id="s5_spelling_list">
+          
+          <div class="q-block flex flex-wrap items-center gap-2" data-qid="s5_sp1" data-expected="شجعانا">
+            <span class="text-sm sm:text-base font-semibold">دَافَعَ الْجُنُودُ عَنْ أَوْطَانِهِمْ فَمَاتُوا (الشُّجْعَانُ):</span>
+            <input type="text" class="text-input-field text-sm w-36 font-bold text-center" placeholder="الْكَلِمَةُ مُنَوَّنَةً">
+            <button onclick="checkSpellingInput(this, 's5')" class="action-btn text-xs py-1.5 px-3">تَحَقَّقْ</button>
+            <div class="feedback-box w-full"></div>
+          </div>
+
+          <div class="q-block flex flex-wrap items-center gap-2" data-qid="s5_sp2" data-expected="كتبا">
+            <span class="text-sm sm:text-base font-semibold">أَلَّفَ الْجَزَائِرِيُّونَ (الْكُتُبُ):</span>
+            <input type="text" class="text-input-field text-sm w-36 font-bold text-center" placeholder="الْكَلِمَةُ مُنَوَّنَةً">
+            <span class="text-sm font-semibold">مُفِيدَةً.</span>
+            <button onclick="checkSpellingInput(this, 's5')" class="action-btn text-xs py-1.5 px-3">تَحَقَّقْ</button>
+            <div class="feedback-box w-full"></div>
+          </div>
+
+          <div class="q-block flex flex-wrap items-center gap-2" data-qid="s5_sp3" data-expected="عاليا">
+            <span class="text-sm sm:text-base font-semibold">انْتَصَرَ فَرِيقُنَا الْوَطَنِيُّ وَرَفَعَ عَلَمَ الْجَزَائِرِ (الْعَالِي):</span>
+            <input type="text" class="text-input-field text-sm w-36 font-bold text-center" placeholder="الْكَلِمَةُ مُنَوَّنَةً">
+            <button onclick="checkSpellingInput(this, 's5')" class="action-btn text-xs py-1.5 px-3">تَحَقَّقْ</button>
+            <div class="feedback-box w-full"></div>
+          </div>
+
+          <div class="q-block flex flex-wrap items-center gap-2" data-qid="s5_sp4" data-expected="اخبارا">
+            <span class="text-sm sm:text-base font-semibold">نَقَلَتِ الصُّحُفِيَّةُ (الْأَخْبَارُ):</span>
+            <input type="text" class="text-input-field text-sm w-36 font-bold text-center" placeholder="الْكَلِمَةُ مُنَوَّنَةً">
+            <span class="text-sm font-semibold">سَارَّةً.</span>
+            <button onclick="checkSpellingInput(this, 's5')" class="action-btn text-xs py-1.5 px-3">تَحَقَّقْ</button>
+            <div class="feedback-box w-full"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mt-8 pt-5 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <div class="text-sm font-bold text-slate-600">
+          إِنْجَازُ الْمَحَطَّةِ: <span id="s5_progress" class="text-blue-700 font-extrabold">0 / 18</span>
+        </div>
+        <button id="btn_next_s5" disabled onclick="unlockStation(6)" class="action-btn text-sm">
+          تَأْكِيدُ الْمَحَطَّةِ وَالاِنْتِقَالُ لِأُقَيِّمُ تَعَلُّمَاتِي ⬅
+        </button>
+      </div>
+    </section>
+    <!-- المحطة 6: أقيم تعلماتي (ص 30) -->
+    <section id="station6" class="lesson-card p-5 sm:p-7 locked">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+          <h2 class="text-lg sm:text-xl font-black text-blue-900">الْمَحَطَّةُ السَّادِسَةُ: أُقَيِّمُ تَعَلُّمَاتِي (ص 30)</h2>
+        </div>
+        <span class="page-badge px-3 py-1 text-xs">كُرَّاسُ الْأَنْشِطَةِ ص 30</span>
+      </div>
+
+      <!-- تمرين 1: العامل يخدم وطنه -->
+      <div class="mb-8 p-4 rounded-xl border border-slate-200 bg-white shadow-sm" id="s6_ex1">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+          <h3 class="font-black text-blue-900 text-base">1. أَكْمِلْ بِمَا يُنَاسِبُ: «الْعَامِلُ يَخْدُمُ وَطَنَهُ عِنْدَمَا: يُنَظِّفُ شَوَارِعَهُ...»</h3>
+          <span id="ex1_counter" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-200">اخترت: 0 / 3</span>
+        </div>
+        <p class="text-xs text-slate-500 mb-3">اضْغَطْ عَلَى التَّصَرُّفَاتِ الصَّحِيحَةِ الثَّلَاثَةِ (3) الَّتِي يَخْدُمُ بِهَا الْعَامِلُ وَطَنَهُ:</p>
+        
+        <div class="shuffle-container grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="s6_ex1_grid">
+          <div class="q-block" data-qid="s6_e1_1">
+            <button class="choice-btn" data-correct="true" onclick="handleTaskMultiCheck(this, 'ex1', 3)"><span>يُنَظِّفُ شَوَارِعَهُ وَأَحْيَاءَهُ</span><span class="indicator"></span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_e1_2">
+            <button class="choice-btn" data-correct="true" onclick="handleTaskMultiCheck(this, 'ex1', 3)"><span>يُتْقِنُ عَمَلَهُ وَيُخْلِصُ فِيهِ</span><span class="indicator"></span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_e1_3">
+            <button class="choice-btn" data-correct="true" onclick="handleTaskMultiCheck(this, 'ex1', 3)"><span>يَسْهَرُ عَلَى حِمَايَتِهِ وَبِنَائِهِ</span><span class="indicator"></span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_e1_4">
+            <button class="choice-btn" data-correct="false" onclick="handleTaskMultiCheck(this, 'ex1', 3)"><span>يَتَكَاسَلُ فِي أَدَاءِ وَاجِبِهِ</span><span class="indicator"></span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_e1_5">
+            <button class="choice-btn" data-correct="false" onclick="handleTaskMultiCheck(this, 'ex1', 3)"><span>يُهْمِلُ نَظَافَةَ مَكَانِ عَمَلِهِ</span><span class="indicator"></span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_e1_6">
+            <button class="choice-btn" data-correct="false" onclick="handleTaskMultiCheck(this, 'ex1', 3)"><span>يَتَغَيَّبُ عَنْ مِهْنَتِهِ دُونَ عُذْرٍ</span><span class="indicator"></span></button>
+            <div class="feedback-box"></div>
+          </div>
+        </div>
+        <div id="ex1_done_msg" class="feedback-box mt-3 text-center"></div>
+      </div>
+
+      <!-- تمرين 2: جمل على المنوال -->
+      <div class="mb-8 p-4 rounded-xl border border-slate-200 bg-white shadow-sm" id="s6_ex2">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+          <h3 class="font-black text-blue-900 text-base">2. اخْتَرِ الْجُمَلَ الَّتِي هِيَ عَلَى نَفْسِ الْمِنْوَالِ: «حَضَرَ جَمِيعُ الْمَدْعُوِّينَ إِلَّا عَمِّي»:</h3>
+          <span id="ex2_counter" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-200">اخترت: 0 / 3</span>
+        </div>
+        <p class="text-xs text-slate-500 mb-3">اضْغَطْ عَلَى الْجُمَلِ الَّتِي تُفِيدُ الِاسْتِثْنَاءَ (3 جُمَلٍ صَحِيحَةٍ):</p>
+
+        <div class="shuffle-container grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="s6_ex2_grid">
+          <div class="q-block" data-qid="s6_e2_1">
+            <button class="choice-btn" data-correct="true" onclick="handleTaskMultiCheck(this, 'ex2', 3)"><span>قَرَأْتُ الْكِتَابَ كُلَّهُ إِلَّا فَصْلًا وَاحِدًا.</span><span class="indicator"></span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_e2_2">
+            <button class="choice-btn" data-correct="true" onclick="handleTaskMultiCheck(this, 'ex2', 3)"><span>نَجَحَ التَّلَامِيذُ جَمِيعًا إِلَّا الْمُتَهَاوِنَ.</span><span class="indicator"></span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_e2_3">
+            <button class="choice-btn" data-correct="true" onclick="handleTaskMultiCheck(this, 'ex2', 3)"><span>انْطَلَقَتِ السَّيَّارَاتُ إِلَّا سَيَّارَةً وَاحِدَةً.</span><span class="indicator"></span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_e2_4">
+            <button class="choice-btn" data-correct="false" onclick="handleTaskMultiCheck(this, 'ex2', 3)"><span>رَسَمَ أَكْرَمُ لَوْحَةً تَعْبِيرِيَّةً رَائِعَةً.</span><span class="indicator"></span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_e2_5">
+            <button class="choice-btn" data-correct="false" onclick="handleTaskMultiCheck(this, 'ex2', 3)"><span>يَعْمَلُ الْفَلَّاحُ بِنَشَاطٍ فِي حَقْلِهِ.</span><span class="indicator"></span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_e2_6">
+            <button class="choice-btn" data-correct="false" onclick="handleTaskMultiCheck(this, 'ex2', 3)"><span>ذَهَبْتُ إِلَى الْمَدْرَسَةِ صَبَاحًا بَاكِرًا.</span><span class="indicator"></span></button>
+            <div class="feedback-box"></div>
+          </div>
+        </div>
+        <div id="ex2_done_msg" class="feedback-box mt-3 text-center"></div>
+      </div>
+      <!-- تمرين 3: تلوين الأفعال الماضية -->
+      <div class="mb-8 p-4 rounded-xl border border-slate-200 bg-white shadow-sm" id="s6_ex3">
+        <h3 class="font-black text-blue-900 mb-1 text-base">3. نَسَجَتْ جَدَّتُكَ زَرْبِيَّةً مُسْتَعْمِلَةً أَفْعَالًا، ابْحَثْ عَنِ الْمَاضِيَةِ مِنْهَا وَلَوِّنْهَا بِالْبُرْتُقَالِيِّ:</h3>
+        <p class="text-xs text-slate-500 mb-4">اضغط على الأفعال الماضية فقط لتتلون باللون البرتقالي:</p>
+
+        <div class="shuffle-container flex flex-wrap gap-3 justify-center" id="verbs_carpet">
+          <div class="verb-pill" data-past="true" onclick="togglePastVerb(this)">سَمِعَ</div>
+          <div class="verb-pill" data-past="true" onclick="togglePastVerb(this)">عَطَفَ</div>
+          <div class="verb-pill" data-past="false" onclick="togglePastVerb(this)">اغْفِرْ</div>
+          <div class="verb-pill" data-past="true" onclick="togglePastVerb(this)">لَعِبَ</div>
+          <div class="verb-pill" data-past="false" onclick="togglePastVerb(this)">يَرْجُو</div>
+          <div class="verb-pill" data-past="true" onclick="togglePastVerb(this)">وَهَبَ</div>
+          <div class="verb-pill" data-past="false" onclick="togglePastVerb(this)">يَتَصَدَّقُ</div>
+          <div class="verb-pill" data-past="false" onclick="togglePastVerb(this)">اخْرُجْ</div>
+          <div class="verb-pill" data-past="true" onclick="togglePastVerb(this)">صَلَّى</div>
+          <div class="verb-pill" data-past="true" onclick="togglePastVerb(this)">زَكَّى</div>
+        </div>
+        <div class="text-center mt-4">
+          <button id="btn_verify_verbs" onclick="verifyVerbsCarpet()" class="action-btn text-xs py-2 px-5">تَحَقَّقْ مِنَ الْأَفْعَالِ الْمَاضِيَةِ</button>
+        </div>
+        <div id="verbs_feedback" class="feedback-box text-center"></div>
+      </div>
+
+      <!-- تمرين 4: جدول التنوين بالفتح -->
+      <div class="mb-8 p-4 rounded-xl border border-slate-200 bg-white shadow-sm" id="s6_ex4">
+        <h3 class="font-black text-blue-900 mb-2 text-base">4. قُمْ بِمَلْءِ الْجَدْوَلِ (تَنْوِينٌ بِالْفَتْحِ):</h3>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full text-center border-collapse border border-slate-200">
+            <thead>
+              <tr class="bg-blue-100/70 text-blue-900 font-bold text-sm sm:text-base">
+                <th class="border border-slate-200 p-2.5">الْكَلِمَةُ</th>
+                <th class="border border-slate-200 p-2.5">تَنْوِينٌ بِالْفَتْحِ</th>
+                <th class="border border-slate-200 p-2.5">التَّحَقُّقُ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-expected="عاملا">
+                <td class="border border-slate-200 p-2.5 font-bold">الْعَامِلَ</td>
+                <td class="border border-slate-200 p-2.5">
+                  <input type="text" class="text-input-field text-sm w-36 font-bold text-center" placeholder="اكْتُبْ هُنَا">
+                </td>
+                <td class="border border-slate-200 p-2.5">
+                  <button onclick="checkTableSpelling(this)" class="action-btn text-xs py-1 px-3">تَأْكِيدٌ</button>
+                </td>
+              </tr>
+              <tr data-expected="كثيرا">
+                <td class="border border-slate-200 p-2.5 font-bold">الْكَثِيرَ</td>
+                <td class="border border-slate-200 p-2.5">
+                  <input type="text" class="text-input-field text-sm w-36 font-bold text-center" placeholder="اكْتُبْ هُنَا">
+                </td>
+                <td class="border border-slate-200 p-2.5">
+                  <button onclick="checkTableSpelling(this)" class="action-btn text-xs py-1 px-3">تَأْكِيدٌ</button>
+                </td>
+              </tr>
+              <tr data-expected="مصنعا">
+                <td class="border border-slate-200 p-2.5 font-bold">الْمَصْنَعَ</td>
+                <td class="border border-slate-200 p-2.5">
+                  <input type="text" class="text-input-field text-sm w-36 font-bold text-center" placeholder="اكْتُبْ هُنَا">
+                </td>
+                <td class="border border-slate-200 p-2.5">
+                  <button onclick="checkTableSpelling(this)" class="action-btn text-xs py-1 px-3">تَأْكِيدٌ</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="table_feedback" class="feedback-box mt-3 text-center"></div>
+      </div>
+
+      <!-- تمرين 5: وسائل الفلاح -->
+      <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm" id="s6_ex5">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+          <h3 class="font-black text-blue-900 text-base">5. اضْغَطْ عَلَى الْوَسَائِلِ الَّتِي يَسْتَعْمِلُهَا الْفَلَّاحُ فِي أَدَاءِ عَمَلِهِ:</h3>
+          <span id="ex5_counter" class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-200">اخترت: 0 / 4</span>
+        </div>
+        <p class="text-xs text-slate-500 mb-3">اخْتَرِ الْأَدَوَاتِ الْأَرْبَعَةَ (4) الْخَاصَّةَ بِالْفَلَّاحِ:</p>
+
+        <div class="shuffle-container grid grid-cols-2 sm:grid-cols-4 gap-2.5" id="s6_farmer_tools">
+          <div class="q-block" data-qid="s6_t1">
+            <button class="choice-btn justify-center font-bold" data-correct="true" onclick="handleTaskMultiCheck(this, 'ex5', 4)"><span>الْفَأْسُ</span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_t2">
+            <button class="choice-btn justify-center font-bold" data-correct="true" onclick="handleTaskMultiCheck(this, 'ex5', 4)"><span>الْمِحْرَاثُ</span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_t3">
+            <button class="choice-btn justify-center font-bold" data-correct="true" onclick="handleTaskMultiCheck(this, 'ex5', 4)"><span>الْمِنْجَلُ</span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_t4">
+            <button class="choice-btn justify-center font-bold" data-correct="true" onclick="handleTaskMultiCheck(this, 'ex5', 4)"><span>الْجَرَّارُ</span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_t5">
+            <button class="choice-btn justify-center font-bold" data-correct="false" onclick="handleTaskMultiCheck(this, 'ex5', 4)"><span>السَّبُّورَةُ</span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_t6">
+            <button class="choice-btn justify-center font-bold" data-correct="false" onclick="handleTaskMultiCheck(this, 'ex5', 4)"><span>الطَّبَاشِيرُ</span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_t7">
+            <button class="choice-btn justify-center font-bold" data-correct="false" onclick="handleTaskMultiCheck(this, 'ex5', 4)"><span>الْمِقَصُّ</span></button>
+            <div class="feedback-box"></div>
+          </div>
+          <div class="q-block" data-qid="s6_t8">
+            <button class="choice-btn justify-center font-bold" data-correct="false" onclick="handleTaskMultiCheck(this, 'ex5', 4)"><span>الْمِشْرَطُ</span></button>
+            <div class="feedback-box"></div>
+          </div>
+        </div>
+        <div id="ex5_done_msg" class="feedback-box mt-3 text-center"></div>
+      </div>
+
+      <div class="mt-8 pt-5 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <div class="text-sm font-bold text-slate-600">
+          إِنْجَازُ الْمَحَطَّةِ: <span id="s6_progress" class="text-blue-700 font-extrabold">0 / 5</span>
+        </div>
+        <button id="btn_next_s6" disabled onclick="unlockStation(7)" class="action-btn text-sm">
+          تَأْكِيدُ الْمَحَطَّةِ وَالاِنْتِقَالُ لِلتَّعْبِيرِ الْكِتَابِيِّ ⬅
+        </button>
+      </div>
+    </section>
+    <!-- المحطة 7: أتدرب على التعبير الكتابي (ص 31) -->
+    <section id="station7" class="lesson-card p-5 sm:p-7 locked">
+      <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+          <h2 class="text-lg sm:text-xl font-black text-blue-900">الْمَحَطَّةُ السَّابِعَةُ: أَتَدَرَّبُ عَلَى التَّعْبِيرِ الْكِتَابِيِّ (ص 31)</h2>
+        </div>
+        <span class="page-badge px-3 py-1 text-xs">كُرَّاسُ الْأَنْشِطَةِ ص 31</span>
+      </div>
+
+      <div class="p-4 rounded-xl border border-slate-200 bg-white shadow-sm mb-6">
+        <h3 class="font-black text-blue-900 mb-1 text-base">إِلَيْكَ هَذِهِ الْقِصَّةَ الْمُشَوَّشَةَ (مَرَاحِلُ صُنْعِ رَغِيفِ الْخُبْزِ):</h3>
+        <p class="text-xs text-slate-500 mb-4">اضغط على كل فقرة، ثم اختر هل تمثل (الْبِدَايَةُ) أَمِ (الْوَسَطُ) أَمِ (النِّهَايَةُ):</p>
+
+        <div class="space-y-4" id="writing_paragraphs">
+          
+          <div class="q-block p-4 rounded-xl border border-slate-200 bg-slate-50/70" data-qid="w_p1">
+            <p class="text-sm sm:text-base leading-relaxed text-slate-800 font-medium mb-3">
+              «اعْتَدْتُ كُلَّ يَوْمٍ الذَّهَابَ إِلَى الْمَخْبَزَةِ فِي حَيِّنَا لِأَشْتَرِيَ مِنْهَا مَا نَحْتَاجُهُ مِنْ شَهِيِّ الْخُبْزِ.»
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <button class="choice-btn py-1.5 px-3 text-xs w-auto" data-correct="true" onclick="handleChoiceClick(this, 's7')">الْبِدَايَةُ</button>
+              <button class="choice-btn py-1.5 px-3 text-xs w-auto" data-correct="false" onclick="handleChoiceClick(this, 's7')">الْوَسَطُ</button>
+              <button class="choice-btn py-1.5 px-3 text-xs w-auto" data-correct="false" onclick="handleChoiceClick(this, 's7')">النِّهَايَةُ</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+          <div class="q-block p-4 rounded-xl border border-slate-200 bg-slate-50/70" data-qid="w_p2">
+            <p class="text-sm sm:text-base leading-relaxed text-slate-800 font-medium mb-3">
+              «وَفِي يَوْمٍ قَرَّرْتُ أَنْ أَرَى عَمَلَ الْخَبَّازِ عَنْ قُرْبٍ، وَبَعْدَ اسْتِئْذَانِهِ، دَخَلْتُ إِلَى دَاخِلِ الْفُرْنِ وَرُحْتُ أُرَاقِبُ مَرَاحِلَ صُنْعِ رَغِيفِ الْخُبْزِ، فَرَأَيْتُ كَيْفَ يَعْجِنُ الطَّحِينَ بَعْدَ سَكْبِ كَمِّيَّةٍ كَافِيَةٍ مِنَ الْمَاءِ عَلَيْهِ، ثُمَّ يُقَطَّعُ إِلَى قِطَعٍ مُدَوَّرَةٍ ثُمَّ تُرَقَّقُ الرَّقَائِقُ وَتُنْقَلُ عَلَى صِينِيَّاتٍ إِلَى الْأَفْرَانِ لِتَنْضَجَ.»
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <button class="choice-btn py-1.5 px-3 text-xs w-auto" data-correct="false" onclick="handleChoiceClick(this, 's7')">الْبِدَايَةُ</button>
+              <button class="choice-btn py-1.5 px-3 text-xs w-auto" data-correct="true" onclick="handleChoiceClick(this, 's7')">الْوَسَطُ</button>
+              <button class="choice-btn py-1.5 px-3 text-xs w-auto" data-correct="false" onclick="handleChoiceClick(this, 's7')">النِّهَايَةُ</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+          <div class="q-block p-4 rounded-xl border border-slate-200 bg-slate-50/70" data-qid="w_p3">
+            <p class="text-sm sm:text-base leading-relaxed text-slate-800 font-medium mb-3">
+              «وَفِي الْأَخِيرِ تَخْرُجُ الْأَرْغِفَةُ بِرَوَائِحِهَا الشَّهِيَّةِ لِتُسَلَّمَ إِلَى الزَّبَائِنِ الَّذِينَ يَنْتَظِرُونَ الْخُبْزَ السَّاخِنَ اللَّذِيذَ.»
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <button class="choice-btn py-1.5 px-3 text-xs w-auto" data-correct="false" onclick="handleChoiceClick(this, 's7')">الْبِدَايَةُ</button>
+              <button class="choice-btn py-1.5 px-3 text-xs w-auto" data-correct="false" onclick="handleChoiceClick(this, 's7')">الْوَسَطُ</button>
+              <button class="choice-btn py-1.5 px-3 text-xs w-auto" data-correct="true" onclick="handleChoiceClick(this, 's7')">النِّهَايَةُ</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+          <div class="q-block p-4 rounded-xl border border-slate-200 bg-slate-50/70" data-qid="w_p4">
+            <p class="text-sm sm:text-base leading-relaxed text-slate-800 font-medium mb-3">
+              «لَا أَحَدَ يَسْتَطِيعُ أَنْ يَسْتَغْنِيَ عَنِ الْخُبْزِ فَهُوَ غِذَاءٌ أَسَاسِيٌّ وَهُوَ نِعْمَةٌ كَبِيرَةٌ نَحْمَدُ اللَّهَ عَلَيْهَا، وَنَشْكُرُ الْخَبَّازَ عَلَى خِدْمَاتِهِ.»
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <button class="choice-btn py-1.5 px-3 text-xs w-auto" data-correct="false" onclick="handleChoiceClick(this, 's7')">الْبِدَايَةُ</button>
+              <button class="choice-btn py-1.5 px-3 text-xs w-auto" data-correct="false" onclick="handleChoiceClick(this, 's7')">الْوَسَطُ</button>
+              <button class="choice-btn py-1.5 px-3 text-xs w-auto" data-correct="true" onclick="handleChoiceClick(this, 's7')">النِّهَايَةُ (الْخَاتِمَةُ)</button>
+            </div>
+            <div class="feedback-box"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mt-8 pt-5 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+        <div class="text-sm font-bold text-slate-600">
+          إِنْجَازُ الْمَحَطَّةِ: <span id="s7_progress" class="text-blue-700 font-extrabold">0 / 4</span>
+        </div>
+        <button id="btn_finish" disabled onclick="showFinalReport()" class="action-btn text-sm bg-gradient-to-r from-emerald-600 to-teal-700">
+          إِنْهَاءُ الدَّرْسِ وَعَرْضُ النَّتِيجَةِ الْخِتَامِيَّةِ 🏆
+        </button>
+      </div>
+    </section>
+
+    <!-- التقرير الختامي النهائي -->
+    <section id="final-report" class="lesson-card p-6 sm:p-9 text-center hidden">
+      <div class="max-w-md mx-auto space-y-5">
+        <div class="text-6xl animate-bounce" id="report_icon">🎉</div>
+        <h2 class="text-2xl sm:text-3xl font-black text-blue-900">تَقْرِيرُ الْإِنْجَازِ الْبَيْدَاغُوجِيِّ</h2>
+        
+        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 p-6 rounded-2xl shadow-inner">
+          <p class="text-sm font-bold text-slate-600 mb-1">النِّسْبَةُ الْمِئَوِيَّةُ الْعَامَّةُ:</p>
+          <div class="text-5xl font-black text-blue-700 tracking-tight my-2" id="report_percentage">0%</div>
+          <p class="text-xs text-slate-500 font-semibold" id="report_detail">أَجَبْتَ بِشَكْلٍ صَحِيحٍ عَلَى 0 مِنْ أَصْلِ 0 نَشَاطًا</p>
+        </div>
+
+        <p class="text-base sm:text-lg font-extrabold text-slate-800" id="report_comment">
+          مُمْتَازٌ! أَنْتَ بَطَلٌ نَشِيطٌ تَعْرِفُ قِيمَةَ خِدْمَةِ الْأَرْضِ وَالْوَطَنِ!
+        </p>
+
+        <div class="pt-4 flex flex-wrap justify-center gap-3">
+          <button onclick="location.reload()" class="action-btn text-sm">
+            🔄 إِعَادَةُ الدَّرْسِ مِنَ الْبِدَايَةِ
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- زر العودة إلى الفهرس -->
+  <a href="../../../index.html" class="btn-back-home">← العَوْدَةُ إِلَى الْفِهْرِسِ</a>
+
+  <!-- ========================================
+       سكريبت التحقق من الاشتراك (Vercel)
+       ======================================== -->
+  <script>
+    const CHANNEL_ID = "-1003910412986"; // السنة الثالثة
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+  </script>
+  <!-- ==================== المحرك البرمجي التفاعلي ==================== -->
+  <script>
+    /* -------------------------------------------------------------
+       1. محرك المؤثرات الصوتية المدمجة (Web Audio API)
+    ------------------------------------------------------------- */
+    let audioCtx = null;
+    let isMuted = false;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playTone(freq, type, duration, delay = 0) {
+      if (isMuted) return;
+      try {
+        initAudio();
+        setTimeout(() => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+          gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start();
+          osc.stop(audioCtx.currentTime + duration);
+        }, delay);
+      } catch (e) {
+        console.warn('Audio play restricted:', e);
+      }
+    }
+
+    function playSuccessSound() {
+      playTone(523.25, 'triangle', 0.15, 0);
+      playTone(659.25, 'triangle', 0.2, 100);
+      playTone(783.99, 'triangle', 0.35, 200);
+    }
+
+    function playErrorSound() {
+      playTone(330, 'sawtooth', 0.2, 0);
+      playTone(220, 'sawtooth', 0.3, 150);
+    }
+
+    function playTapSound() {
+      playTone(440, 'sine', 0.08, 0);
+    }
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      document.getElementById('soundIcon').innerText = isMuted ? '🔇' : '🔊';
+      document.getElementById('soundLabel').innerText = isMuted ? 'الصوت مكتوم' : 'الصوت مفعّل';
+    }
+
+    /* -------------------------------------------------------------
+       2. إدارة حالة التقدم والنتائج
+    ------------------------------------------------------------- */
+    const state = {
+      score: 0,
+      totalQuestions: 59,
+      completedPerStation: {
+        s1: 0, s2: 0, s3: 0, s4: 0, s5: 0, s6: 0, s7: 0
+      },
+      targetsPerStation: {
+        s1: 6,
+        s2: 7,
+        s3: 13,
+        s4: 6,
+        s5: 18,
+        s6: 5,
+        s7: 4
+      }
+    };
+
+    const s6TaskState = {
+      ex1: { correctFound: 0, completed: false },
+      ex2: { correctFound: 0, completed: false },
+      ex5: { correctFound: 0, completed: false }
+    };
+
+    function updateScoreDisplay() {
+      document.getElementById('headerScore').innerText = state.score;
+    }
+
+    /* -------------------------------------------------------------
+       3. خوارزمية البعثرة العشوائية للخيارات
+    ------------------------------------------------------------- */
+    function shuffleElementChildren(parent) {
+      const children = Array.from(parent.children);
+      for (let i = children.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        parent.appendChild(children[j]);
+      }
+    }
+
+    function shuffleAllContainers() {
+      document.querySelectorAll('.shuffle-container').forEach(container => {
+        shuffleElementChildren(container);
+      });
+    }
+
+    /* -------------------------------------------------------------
+       4. معالجة الإجابات في الأسئلة متعددة الخيارات (MCQ Engine)
+    ------------------------------------------------------------- */
+    function handleChoiceClick(button, stationKey) {
+      const qBlock = button.closest('.q-block');
+      if (!qBlock || qBlock.classList.contains('locked-element')) return;
+
+      playTapSound();
+      const isCorrect = button.getAttribute('data-correct') === 'true';
+      const allButtons = qBlock.querySelectorAll('.choice-btn');
+      const feedbackBox = qBlock.querySelector('.feedback-box');
+
+      qBlock.classList.add('locked-element');
+      allButtons.forEach(btn => btn.disabled = true);
+
+      if (isCorrect) {
+        button.classList.add('correct');
+        const indicator = button.querySelector('.indicator');
+        if (indicator) indicator.innerText = '✓';
+        playSuccessSound();
+        state.score++;
+        updateScoreDisplay();
+
+        if (feedbackBox) {
+          feedbackBox.className = 'feedback-box show bg-emerald-50 text-emerald-800 border border-emerald-200';
+          feedbackBox.innerText = '✓ إِجَابَةٌ صَحِيحَةٌ! بَارَكَ اللَّهُ فِيكَ.';
+        }
+      } else {
+        button.classList.add('wrong');
+        const indicator = button.querySelector('.indicator');
+        if (indicator) indicator.innerText = '✗';
+        playErrorSound();
+
+        allButtons.forEach(btn => {
+          if (btn.getAttribute('data-correct') === 'true') {
+            btn.classList.add('correct');
+            const ind = btn.querySelector('.indicator');
+            if (ind) ind.innerText = '✓';
+          }
+        });
+
+        if (feedbackBox) {
+          feedbackBox.className = 'feedback-box show bg-rose-50 text-rose-800 border border-rose-200';
+          feedbackBox.innerText = '✗ إِجَابَةٌ خَاطِئَةٌ!';
+        }
+      }
+
+      state.completedPerStation[stationKey]++;
+      updateStationProgress(stationKey);
+    }
+
+    /* دالة معالجة التمارين المتعددة (ت1، ت2، ت5) */
+    function handleTaskMultiCheck(button, taskKey, targetCorrectCount) {
+      const qBlock = button.closest('.q-block');
+      if (!qBlock || qBlock.classList.contains('locked-element')) return;
+
+      playTapSound();
+      const isCorrect = button.getAttribute('data-correct') === 'true';
+      const feedbackBox = qBlock.querySelector('.feedback-box');
+      const counterEl = document.getElementById(`${taskKey}_counter`);
+
+      qBlock.classList.add('locked-element');
+      button.disabled = true;
+
+      if (isCorrect) {
+        button.classList.add('correct');
+        const indicator = button.querySelector('.indicator');
+        if (indicator) indicator.innerText = '✓';
+        playSuccessSound();
+        state.score++;
+        updateScoreDisplay();
+
+        s6TaskState[taskKey].correctFound++;
+        if (counterEl) {
+          counterEl.innerText = `اخترت: ${s6TaskState[taskKey].correctFound} / ${targetCorrectCount}`;
+        }
+
+        if (feedbackBox) {
+          feedbackBox.className = 'feedback-box show bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs py-1 mt-1';
+          feedbackBox.innerText = '✓ خِيَارٌ صَحِيحٌ وَمُمَيَّزٌ!';
+        }
+
+        if (s6TaskState[taskKey].correctFound >= targetCorrectCount && !s6TaskState[taskKey].completed) {
+          s6TaskState[taskKey].completed = true;
+          const doneMsg = document.getElementById(`${taskKey}_done_msg`);
+          if (doneMsg) {
+            doneMsg.className = 'feedback-box show bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold';
+            doneMsg.innerText = '🎉 أَحْسَنْتَ! لَقَدْ حَدَّدْتَ كَافَّةَ الْخِيَارَاتِ الصَّحِيحَةِ الْمَطْلُوبَةِ لِهَذَا التَّمْرِينِ بِنَجَاحٍ.';
+          }
+
+          const container = taskKey === 'ex1' ? document.getElementById('s6_ex1_grid')
+                          : taskKey === 'ex2' ? document.getElementById('s6_ex2_grid')
+                          : document.getElementById('s6_farmer_tools');
+          if (container) {
+            container.querySelectorAll('button').forEach(btn => btn.disabled = true);
+          }
+
+          state.completedPerStation.s6++;
+          updateStationProgress('s6');
+        }
+      } else {
+        button.classList.add('wrong');
+        const indicator = button.querySelector('.indicator');
+        if (indicator) indicator.innerText = '✗';
+        playErrorSound();
+
+        if (feedbackBox) {
+          feedbackBox.className = 'feedback-box show bg-rose-50 text-rose-800 border border-rose-200 text-xs py-1 mt-1';
+          feedbackBox.innerText = '✗ هَذَا الْخِيَارُ لَيْسَ مِنَ الْإِجَابَاتِ الْمَطْلُوبَةِ، تَابِعِ الْبَحْثَ!';
+        }
+      }
+    }
+
+    function updateStationProgress(stationKey) {
+      const current = state.completedPerStation[stationKey];
+      const target = state.targetsPerStation[stationKey];
+      const progSpan = document.getElementById(`${stationKey}_progress`);
+      if (progSpan) {
+        progSpan.innerText = `${current} / ${target}`;
+      }
+
+      if (current >= target) {
+        if (stationKey === 's7') {
+          const btn = document.getElementById('btn_finish');
+          if (btn) btn.disabled = false;
+        } else {
+          const btn = document.getElementById(`btn_next_${stationKey}`);
+          if (btn) {
+            btn.disabled = false;
+            btn.classList.add('animate-pulse');
+          }
+        }
+      }
+    }
+
+    function unlockStation(nextStationNum) {
+      playTapSound();
+      const nextStation = document.getElementById(`station${nextStationNum}`);
+
+      if (nextStation) {
+        nextStation.classList.remove('locked');
+        nextStation.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+    /* -------------------------------------------------------------
+       5. ميكانيكا لعبة الربط التفاعلي (ص 46: أثري لغتي)
+    ------------------------------------------------------------- */
+    let selectedJobEl = null;
+    let pairedCount = 0;
+
+    function initMatchingGame() {
+      const jobs = document.querySelectorAll('#jobs_column .link-item');
+      const tasks = document.querySelectorAll('#tasks_column .link-item');
+      const feedback = document.getElementById('matching_feedback');
+
+      jobs.forEach(jobEl => {
+        jobEl.addEventListener('click', () => {
+          if (jobEl.classList.contains('paired-success')) return;
+          playTapSound();
+          jobs.forEach(j => j.classList.remove('active'));
+          jobEl.classList.add('active');
+          selectedJobEl = jobEl;
+        });
+      });
+
+      tasks.forEach(taskEl => {
+        taskEl.addEventListener('click', () => {
+          if (taskEl.classList.contains('paired-success')) return;
+          if (!selectedJobEl) {
+            feedback.className = 'feedback-box show bg-amber-50 text-amber-900 border border-amber-200';
+            feedback.innerText = '👆 اضْغَطْ عَلَى اسْمِ الْمِهْنَةِ أَوَّلًا ثُمَّ اضْغَطْ عَلَى الْعِبَارَةِ الْمُنَاسِبَةِ!';
+            playErrorSound();
+            return;
+          }
+
+          const jobKey = selectedJobEl.getAttribute('data-job');
+          const taskKey = taskEl.getAttribute('data-task');
+
+          if (jobKey === taskKey) {
+            playSuccessSound();
+            selectedJobEl.classList.remove('active');
+            selectedJobEl.classList.add('paired-success');
+            taskEl.classList.add('paired-success');
+            selectedJobEl = null;
+            pairedCount++;
+            state.score++;
+            updateScoreDisplay();
+
+            feedback.className = 'feedback-box show bg-emerald-50 text-emerald-800 border border-emerald-200';
+            feedback.innerText = `✓ أَحْسَنْتَ! تَمَّ رَبْطُ (${pairedCount}/5) مِهَنٍ بِنَجَاحٍ.`;
+
+            if (pairedCount === 5) {
+              state.completedPerStation.s4++;
+              updateStationProgress('s4');
+            }
+          } else {
+            playErrorSound();
+            feedback.className = 'feedback-box show bg-rose-50 text-rose-800 border border-rose-200';
+            feedback.innerText = '✗ هَذِهِ الْعِبَارَةُ لَا تَتَنَاسَبُ مَعَ هَذِهِ الْمِهْنَةِ، جَرِّبْ عِبَارَةً أُخْرَى!';
+          }
+        });
+      });
+    }
+
+    /* -------------------------------------------------------------
+       6. معالجة الإدخال اللغوي الإملائي (Spelling Engine)
+    ------------------------------------------------------------- */
+    function normalizeArabic(text) {
+      if (!text) return '';
+      return text
+        .trim()
+        .toLowerCase()
+        .replace(/[\u064B-\u065F\u0670]/g, '')
+        .replace(/[إأآا]/g, 'ا')
+        .replace(/ى/g, 'ي')
+        .replace(/ة/g, 'ه');
+    }
+
+    function checkSpellingInput(btn, stationKey) {
+      const qBlock = btn.closest('.q-block');
+      if (!qBlock || qBlock.classList.contains('locked-element')) return;
+
+      playTapSound();
+      const input = qBlock.querySelector('input');
+      const expected = qBlock.getAttribute('data-expected');
+      const feedback = qBlock.querySelector('.feedback-box');
+      const userText = normalizeArabic(input.value);
+      const targetText = normalizeArabic(expected);
+
+      qBlock.classList.add('locked-element');
+      input.disabled = true;
+      btn.disabled = true;
+
+      if (userText === targetText) {
+        input.classList.add('correct-input');
+        feedback.className = 'feedback-box show bg-emerald-50 text-emerald-800 border border-emerald-200';
+        feedback.innerText = `✓ كِتَابَةٌ صَحِيحَةٌ وَمُتْقَنَةٌ! (${input.value})`;
+        playSuccessSound();
+        state.score++;
+        updateScoreDisplay();
+      } else {
+        input.classList.add('wrong-input');
+        feedback.className = 'feedback-box show bg-rose-50 text-rose-800 border border-rose-200';
+        feedback.innerText = `✗ الْكِتَابَةُ الصَّحِيحَةُ هِيَ: «${expected}»`;
+        playErrorSound();
+      }
+
+      state.completedPerStation[stationKey]++;
+      updateStationProgress(stationKey);
+    }
+
+    /* -------------------------------------------------------------
+       7. زربية الأفعال الماضية (ص 30 - تلوين بالبرتقالي)
+    ------------------------------------------------------------- */
+    function togglePastVerb(pill) {
+      if (pill.classList.contains('verified-locked')) return;
+      playTapSound();
+      pill.classList.toggle('selected-orange');
+    }
+
+    function verifyVerbsCarpet() {
+      const pills = document.querySelectorAll('#verbs_carpet .verb-pill');
+      const feedback = document.getElementById('verbs_feedback');
+      const verifyBtn = document.getElementById('btn_verify_verbs');
+      verifyBtn.disabled = true;
+
+      let allCorrect = true;
+      let countPast = 0;
+
+      pills.forEach(pill => {
+        pill.classList.add('verified-locked');
+        pill.style.pointerEvents = 'none';
+        const isPast = pill.getAttribute('data-past') === 'true';
+        const isSelected = pill.classList.contains('selected-orange');
+
+        if (isPast) {
+          pill.classList.add('selected-orange');
+          if (isSelected) {
+            countPast++;
+          } else {
+            allCorrect = false;
+          }
+        } else {
+          if (isSelected) {
+            allCorrect = false;
+            pill.style.borderColor = 'var(--error)';
+            pill.style.backgroundColor = '#ffebee';
+            pill.style.color = 'var(--error)';
+          }
+        }
+      });
+
+      if (allCorrect && countPast === 6) {
+        playSuccessSound();
+        feedback.className = 'feedback-box show bg-emerald-50 text-emerald-800 border border-emerald-200';
+        feedback.innerText = '✓ رَائِعٌ جِدًّا! حَدَّدْتَ جَمِيعَ الْأَفْعَالِ الْمَاضِيَةِ السِّتَّةِ بِنَجَاحٍ.';
+        state.score += 2;
+        updateScoreDisplay();
+      } else {
+        playErrorSound();
+        feedback.className = 'feedback-box show bg-amber-50 text-amber-900 border border-amber-200';
+        feedback.innerText = `الْأَفْعَالُ الْمَاضِيَةُ هِيَ: سَمِعَ ، عَطَفَ ، لَعِبَ ، وَهَبَ ، صَلَّى ، زَكَّى.`;
+      }
+
+      state.completedPerStation.s6++;
+      updateStationProgress('s6');
+    }
+
+    /* -------------------------------------------------------------
+       8. جدول التنوين بالفتح (ص 30)
+    ------------------------------------------------------------- */
+    let tableItemsDone = 0;
+    function checkTableSpelling(button) {
+      const tr = button.closest('tr');
+      const input = tr.querySelector('input');
+      const expected = tr.getAttribute('data-expected');
+      const feedback = document.getElementById('table_feedback');
+
+      if (input.disabled) return;
+      playTapSound();
+
+      const user = normalizeArabic(input.value);
+      const target = normalizeArabic(expected);
+
+      input.disabled = true;
+      button.disabled = true;
+      tableItemsDone++;
+
+      if (user === target) {
+        input.classList.add('correct-input');
+        playSuccessSound();
+        state.score++;
+        updateScoreDisplay();
+      } else {
+        input.classList.add('wrong-input');
+        input.value = `${input.value} ➔ ${expected}`;
+        playErrorSound();
+      }
+
+      if (tableItemsDone === 3) {
+        feedback.className = 'feedback-box show bg-emerald-50 text-emerald-800 border border-emerald-200';
+        feedback.innerText = '✓ تَمَّ إِكْمَالُ جَدْوَلِ التَّنْوِينِ بِالْفَتْحِ بِنَجَاحٍ.';
+        state.completedPerStation.s6++;
+        updateStationProgress('s6');
+      }
+    }
+
+    /* -------------------------------------------------------------
+       9. التقرير الختامي النهائي
+    ------------------------------------------------------------- */
+    function showFinalReport() {
+      playSuccessSound();
+      const reportSection = document.getElementById('final-report');
+      reportSection.classList.remove('hidden');
+      reportSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      let totalC = state.score;
+      let totalQ = state.totalQuestions;
+
+      totalC = Math.min(totalC, totalQ);
+      let pct = totalQ > 0 ? Math.round((totalC / totalQ) * 100) : 0;
+      pct = Math.min(Math.max(pct, 0), 100);
+
+      document.getElementById('report_percentage').innerText = `${pct}%`;
+      document.getElementById('report_detail').innerText = `أَنْجَزْتَ ${totalC} إِجَابَةً صَحِيحَةً مِنْ إِجْمَالِي ${totalQ} نَشَاطًا`;
+
+      const commentEl = document.getElementById('report_comment');
+      const iconEl = document.getElementById('report_icon');
+
+      if (pct >= 85) {
+        iconEl.innerText = '🌟';
+        commentEl.innerText = 'مُمْتَازٌ وَبَطَلٌ مُتَفَوِّقٌ! لَقَدْ تَعَلَّمْتَ كَيْفَ تَخْدُمُ أَرْضَكَ وَتَبْنِي وَطَنَكَ بِجِدٍّ وَإِخْلَاصٍ.';
+      } else if (pct >= 60) {
+        iconEl.innerText = '👏';
+        commentEl.innerText = 'عَمَلٌ جَيِّدٌ جِدًّا! لَدَيْكَ فَهْمٌ طَيِّبٌ لِلْمَفَاهِيمِ وَتَسْتَطِيعُ التَّفَوُّقَ أَكْثَرَ بِمُرَاجَعَةٍ خَفِيفَةٍ.';
+      } else {
+        iconEl.innerText = '🌱';
+        commentEl.innerText = 'بِدَايَةٌ طَيِّبَةٌ يَا صَدِيقِي! أَعِدِ الْمُحَاوَلَةَ لِتُحَقِّقَ الْعَلَامَةَ الْكَامِلَةَ فِي دَرْسِ خِدْمَةِ الْأَرْضِ.';
+      }
+    }
+
+    /* -------------------------------------------------------------
+       10. التهيئة التلقائية عند التحميل الكامل للصفحة
+    ------------------------------------------------------------- */
+    window.addEventListener('DOMContentLoaded', () => {
+      shuffleAllContainers();
+      initMatchingGame();
+    });
+  </script>
+</body>
+</html>
