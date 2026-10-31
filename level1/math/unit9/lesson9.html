@@ -1,0 +1,1574 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دَرْسُ الرِّيَاضِيَّاتِ: الْعَدَدُ 0 - السَّنَةُ الأُولَى ابْتِدَائِيّ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Tajawal', sans-serif;
+      background-color: #f8fafc;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .ltr-digits {
+      direction: ltr;
+      unicode-bidi: isolate;
+      font-variant-numeric: tabular-nums;
+    }
+    .input-box {
+      direction: ltr;
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.5rem;
+      transition: all 0.25s ease;
+    }
+    .card-locked {
+      filter: grayscale(85%);
+      opacity: 0.55;
+      pointer-events: none;
+    }
+    .strikethrough-mark {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .pulse-select {
+      animation: gentle-pulse 1.5s infinite;
+    }
+    @keyframes gentle-pulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+      50% { transform: scale(1.03); box-shadow: 0 0 0 6px rgba(59, 130, 246, 0); }
+    }
+    .badge-correct {
+      background-color: #2e7d32 !important;
+      color: #ffffff !important;
+      border-color: #1b5e20 !important;
+    }
+    .badge-wrong {
+      background-color: #c62828 !important;
+      color: #ffffff !important;
+      border-color: #b71c1c !important;
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 16px auto 0 auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-sky-50 via-amber-50/40 to-emerald-50/40 min-h-screen text-slate-800 antialiased p-3 sm:p-6 lg:p-8">
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <!-- الرأس والترويسة البيداغوجية -->
+  <header class="max-w-4xl mx-auto mb-8 bg-white/95 rounded-3xl shadow-sm border border-sky-100 p-5 sm:p-7 relative overflow-hidden backdrop-blur">
+    <div class="absolute -left-10 -top-10 w-36 h-36 bg-amber-200/50 rounded-full blur-2xl pointer-events-none"></div>
+    <div class="absolute -right-10 -bottom-10 w-36 h-36 bg-sky-200/50 rounded-full blur-2xl pointer-events-none"></div>
+    
+    <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+      <div class="flex items-center gap-3">
+        <span class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 to-emerald-400 text-white flex items-center justify-center font-black text-2xl shadow-md shadow-sky-500/20">
+          ٠
+        </span>
+        <div>
+          <span class="text-xs font-bold text-sky-600 bg-sky-50 px-3 py-1 rounded-full border border-sky-200">الرِّيَاضِيَّاتُ - السَّنَةُ الأُولَى ابْتِدَائِيّ</span>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-800 mt-1">الدَّرْسُ التَّاسِعُ: « الْعَدَدُ 0 »</h1>
+        </div>
+      </div>
+      <div class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-500 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
+        <span>كِتَابُ الرِّيَاضِيَّاتِ (ص 20)</span>
+        <span>•</span>
+        <span>دَفْتَرُ الأَنْشِطَةِ (ص 13)</span>
+      </div>
+    </div>
+
+    <div class="mt-4 flex items-center justify-between text-xs sm:text-sm text-slate-600 bg-sky-50/80 p-3 rounded-2xl border border-sky-200/70">
+      <div class="flex items-center gap-2">
+        <svg class="w-5 h-5 text-sky-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span>مُحَاوَلَةٌ وَاحِدَةٌ لِكُلِّ سُؤَالٍ، يَتِمُّ فَتْحُ الْمَحَطَّاتِ تِبَاعًا عِنْدَ إِتْمَامِ كُلِّ تَمْرِينٍ.</span>
+      </div>
+      <div id="global-counter-pill" class="font-bold text-sky-700 bg-white px-2.5 py-1 rounded-lg border border-sky-300">
+        الْمَحَطَّةُ: <span id="current-step-display">1</span> / 6
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto space-y-8">
+
+    <!-- ==================== المحطة 1: أكتشف ص 20 ==================== -->
+    <section id="station-1" class="bg-white rounded-3xl shadow-sm border border-slate-200 p-5 sm:p-7 transition-all duration-300">
+      <div class="flex items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-5">
+        <div class="flex items-center gap-3">
+          <span class="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-lg shadow-sm">1</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-800">أَكْتَشِفُ <span class="text-sm font-normal text-slate-500">(كِتَابُ التِّلْمِيذِ ص 20)</span></h2>
+        </div>
+        <span class="text-xs bg-amber-100 text-amber-800 font-bold px-3 py-1 rounded-full">سَنَدُ الْمُرُوجِ</span>
+      </div>
+
+      <p class="text-base sm:text-lg text-slate-700 mb-4 font-semibold leading-relaxed">
+        لَاحِظِ الصُّورَةَ جَيِّدًا، ثُمَّ اكْتُبِ الْعَدَدَ الْمُنَاسِبَ فِي كُلِّ خَانَةٍ:
+      </p>
+
+      <div class="rounded-2xl overflow-hidden border-2 border-slate-200 bg-slate-900/5 mb-6 shadow-inner relative flex items-center justify-center p-1 sm:p-2">
+        <img 
+          src="meadow_kids.png" 
+          alt="أطفال في المروج" 
+          id="meadow-img"
+          class="w-full h-auto max-h-[85vh] object-contain rounded-xl block"
+          onerror="this.onerror=null; this.src='1.jpeg'; this.classList.remove('hidden'); document.getElementById('meadow-svg-fallback').classList.add('hidden');"
+        >
+        <div id="meadow-svg-fallback" class="hidden w-full p-6 text-center bg-gradient-to-b from-sky-100 to-emerald-100">
+          <p class="text-slate-600 font-bold mb-2">ضَعِ الصُّورَةَ الْمُرْفَقَةَ بِاسْمِ <code class="bg-white px-2 py-0.5 rounded text-sky-700 border">meadow_kids.png</code> فِي مُجَلَّدِ الْكُودِ</p>
+          <div class="text-sm text-slate-500">مُعْطَيَاتُ الصُّورَةِ: 4 عَصَافِير، 8 فَرَاشَات، 6 دَعَاسِيق، 3 جَزَرَات، 3 بَالُونَات، كَلْبَانِ، وَلَا تُوجَدُ كُرَةٌ أَوْ سُلَحْفَاةٌ.</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6">
+        
+        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200 text-center flex flex-col items-center justify-between">
+          <div class="w-16 h-16 flex items-center justify-center mb-1">
+            <svg class="w-12 h-12" viewBox="0 0 64 64">
+              <circle cx="32" cy="32" r="28" fill="#ffffff" stroke="#1e293b" stroke-width="3"/>
+              <path d="M32 18 L44 26 L39 40 L25 40 L20 26 Z" fill="#1e293b"/>
+              <line x1="32" y1="18" x2="32" y2="4" stroke="#1e293b" stroke-width="2.5"/>
+              <line x1="44" y1="26" x2="57" y2="20" stroke="#1e293b" stroke-width="2.5"/>
+              <line x1="39" y1="40" x2="49" y2="52" stroke="#1e293b" stroke-width="2.5"/>
+              <line x1="25" y1="40" x2="15" y2="52" stroke="#1e293b" stroke-width="2.5"/>
+              <line x1="20" y1="26" x2="7" y2="20" stroke="#1e293b" stroke-width="2.5"/>
+            </svg>
+          </div>
+          <span class="text-sm font-bold text-slate-700 mb-2">كُرَةٌ</span>
+          <input type="number" min="0" max="20" id="discover-in-0" class="input-box w-20 h-12 rounded-xl border-2 border-slate-300 bg-white focus:border-sky-500 focus:outline-none" placeholder="؟">
+        </div>
+
+        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200 text-center flex flex-col items-center justify-between">
+          <div class="w-16 h-16 flex items-center justify-center mb-1">
+            <svg class="w-12 h-12" viewBox="0 0 64 64">
+              <circle cx="32" cy="34" r="18" fill="#d97706"/>
+              <ellipse cx="20" cy="22" rx="6" ry="12" fill="#92400e" transform="rotate(-20 20 22)"/>
+              <ellipse cx="44" cy="22" rx="6" ry="12" fill="#92400e" transform="rotate(20 44 22)"/>
+              <circle cx="26" cy="32" r="3" fill="#1e293b"/>
+              <circle cx="38" cy="32" r="3" fill="#1e293b"/>
+              <ellipse cx="32" cy="40" rx="4" ry="3" fill="#1e293b"/>
+            </svg>
+          </div>
+          <span class="text-sm font-bold text-slate-700 mb-2">كَلْبٌ</span>
+          <input type="number" min="0" max="20" id="discover-in-1" class="input-box w-20 h-12 rounded-xl border-2 border-slate-300 bg-white focus:border-sky-500 focus:outline-none" placeholder="؟">
+        </div>
+
+        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200 text-center flex flex-col items-center justify-between">
+          <div class="w-16 h-16 flex items-center justify-center mb-1">
+            <svg class="w-12 h-12" viewBox="0 0 64 64">
+              <path d="M14 36 Q22 20 40 22 Q52 24 52 34 Q52 46 36 46 Q24 46 14 36 Z" fill="#0284c7"/>
+              <path d="M46 30 L58 32 L46 36 Z" fill="#f59e0b"/>
+              <circle cx="42" cy="28" r="3" fill="#0f172a"/>
+              <path d="M24 38 Q34 26 42 36" stroke="#0369a1" stroke-width="3" fill="none"/>
+            </svg>
+          </div>
+          <span class="text-sm font-bold text-slate-700 mb-2">عُصْفُورٌ</span>
+          <input type="number" min="0" max="20" id="discover-in-2" class="input-box w-20 h-12 rounded-xl border-2 border-slate-300 bg-white focus:border-sky-500 focus:outline-none" placeholder="؟">
+        </div>
+
+        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200 text-center flex flex-col items-center justify-between">
+          <div class="w-16 h-16 flex items-center justify-center mb-1">
+            <svg class="w-12 h-12" viewBox="0 0 64 64">
+              <ellipse cx="26" cy="24" rx="10" ry="14" fill="#ef4444"/>
+              <ellipse cx="38" cy="22" rx="10" ry="14" fill="#eab308"/>
+              <path d="M26 38 L30 54" stroke="#64748b" stroke-width="2" stroke-linecap="round"/>
+              <path d="M38 36 L34 54" stroke="#64748b" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="text-sm font-bold text-slate-700 mb-2">بَالُونٌ</span>
+          <input type="number" min="0" max="20" id="discover-in-3" class="input-box w-20 h-12 rounded-xl border-2 border-slate-300 bg-white focus:border-sky-500 focus:outline-none" placeholder="؟">
+        </div>
+
+        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200 text-center flex flex-col items-center justify-between">
+          <div class="w-16 h-16 flex items-center justify-center mb-1">
+            <svg class="w-12 h-12" viewBox="0 0 64 64">
+              <path d="M18 36 A16 14 0 0 1 46 36 Z" fill="#15803d"/>
+              <circle cx="50" cy="35" r="5" fill="#4ade80"/>
+              <circle cx="52" cy="34" r="1.5" fill="#0f172a"/>
+              <circle cx="20" cy="40" r="4" fill="#4ade80"/>
+              <circle cx="44" cy="40" r="4" fill="#4ade80"/>
+            </svg>
+          </div>
+          <span class="text-sm font-bold text-slate-700 mb-2">سُلَحْفَاةٌ</span>
+          <input type="number" min="0" max="20" id="discover-in-4" class="input-box w-20 h-12 rounded-xl border-2 border-slate-300 bg-white focus:border-sky-500 focus:outline-none" placeholder="؟">
+        </div>
+
+        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200 text-center flex flex-col items-center justify-between">
+          <div class="w-16 h-16 flex items-center justify-center mb-1">
+            <svg class="w-12 h-12" viewBox="0 0 64 64">
+              <path d="M32 54 L22 22 Q32 18 42 22 Z" fill="#f97316"/>
+              <path d="M30 18 L26 8" stroke="#16a34a" stroke-width="3" stroke-linecap="round"/>
+              <path d="M32 18 L32 6" stroke="#16a34a" stroke-width="3" stroke-linecap="round"/>
+              <path d="M34 18 L38 8" stroke="#16a34a" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="text-sm font-bold text-slate-700 mb-2">جَزَرَةٌ</span>
+          <input type="number" min="0" max="20" id="discover-in-5" class="input-box w-20 h-12 rounded-xl border-2 border-slate-300 bg-white focus:border-sky-500 focus:outline-none" placeholder="؟">
+        </div>
+
+        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200 text-center flex flex-col items-center justify-between">
+          <div class="w-16 h-16 flex items-center justify-center mb-1">
+            <svg class="w-12 h-12" viewBox="0 0 64 64">
+              <circle cx="32" cy="34" r="16" fill="#dc2626"/>
+              <circle cx="32" cy="20" r="7" fill="#1e293b"/>
+              <line x1="32" y1="20" x2="32" y2="50" stroke="#1e293b" stroke-width="2.5"/>
+              <circle cx="26" cy="30" r="2.5" fill="#1e293b"/>
+              <circle cx="38" cy="30" r="2.5" fill="#1e293b"/>
+              <circle cx="25" cy="40" r="2.5" fill="#1e293b"/>
+              <circle cx="39" cy="40" r="2.5" fill="#1e293b"/>
+            </svg>
+          </div>
+          <span class="text-sm font-bold text-slate-700 mb-2">دَعْسُوقَةٌ</span>
+          <input type="number" min="0" max="20" id="discover-in-6" class="input-box w-20 h-12 rounded-xl border-2 border-slate-300 bg-white focus:border-sky-500 focus:outline-none" placeholder="؟">
+        </div>
+
+        <div class="bg-slate-50 rounded-2xl p-3 border border-slate-200 text-center flex flex-col items-center justify-between">
+          <div class="w-16 h-16 flex items-center justify-center mb-1">
+            <svg class="w-12 h-12" viewBox="0 0 64 64">
+              <path d="M32 30 Q16 12 14 26 Q12 40 30 36 Z" fill="#a855f7"/>
+              <path d="M32 30 Q48 12 50 26 Q52 40 34 36 Z" fill="#ec4899"/>
+              <ellipse cx="32" cy="32" rx="2.5" ry="10" fill="#1e293b"/>
+            </svg>
+          </div>
+          <span class="text-sm font-bold text-slate-700 mb-2">فَرَاشَةٌ</span>
+          <input type="number" min="0" max="20" id="discover-in-7" class="input-box w-20 h-12 rounded-xl border-2 border-slate-300 bg-white focus:border-sky-500 focus:outline-none" placeholder="؟">
+        </div>
+
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100">
+        <button id="btn-validate-1" onclick="validateStation1()" class="px-6 py-3 rounded-2xl bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-bold text-base shadow-md shadow-sky-600/20 transition">
+          تَأْكِيدُ الإِجَابَاتِ ✓
+        </button>
+        <div id="sub-eval-1" class="hidden flex items-center gap-4 text-sm font-bold bg-slate-50 px-4 py-2.5 rounded-2xl border border-slate-200">
+          <span class="text-emerald-700 flex items-center gap-1">الصَّوَاب: <span id="sub-1-correct">0</span> ✓</span>
+          <span class="text-rose-700 flex items-center gap-1">الْخَطَأ: <span id="sub-1-wrong">0</span> ✗</span>
+        </div>
+      </div>
+    </section>
+    <!-- ==================== المحطة 2: أنجز 1 ص 20 ==================== -->
+    <section id="station-2" class="card-locked bg-white rounded-3xl shadow-sm border border-slate-200 p-5 sm:p-7 transition-all duration-300">
+      <div class="flex items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-5">
+        <div class="flex items-center gap-3">
+          <span class="w-9 h-9 rounded-xl bg-sky-500 text-white flex items-center justify-center font-bold text-lg shadow-sm">2</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-800">أُنْجِزُ (1) <span class="text-sm font-normal text-slate-500">(كِتَابُ التِّلْمِيذِ ص 20)</span></h2>
+        </div>
+        <span class="text-xs bg-sky-100 text-sky-800 font-bold px-3 py-1 rounded-full">أَصَابِعُ الْيَدِ</span>
+      </div>
+
+      <p class="text-base sm:text-lg text-slate-700 mb-6 font-semibold">
+        أَحِطِ (اخْتَرْ) الْعَدَدَ الْمُنَاسِبَ الَّذِي تُمَثِّلُهُ أَصَابِعُ الْيَدِ فِي كُلِّ حَالَةٍ:
+      </p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
+        
+        <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 flex flex-col items-center justify-between text-center" id="hand-card-0">
+          <span class="text-xs font-bold text-slate-400 mb-2">الْحَالَةُ 1</span>
+          <div class="w-28 h-28 bg-white rounded-xl shadow-inner border border-slate-200 flex items-center justify-center p-2 mb-4">
+            <svg class="w-20 h-20" viewBox="0 0 100 100">
+              <rect x="35" y="55" width="30" height="32" rx="8" fill="#fed7aa" stroke="#ea580c" stroke-width="2.5"/>
+              <rect x="36" y="16" width="10" height="42" rx="5" fill="#ffedd5" stroke="#ea580c" stroke-width="2.5"/>
+              <rect x="49" y="14" width="10" height="44" rx="5" fill="#ffedd5" stroke="#ea580c" stroke-width="2.5"/>
+              <rect x="62" y="52" width="9" height="18" rx="4.5" fill="#fed7aa" stroke="#ea580c" stroke-width="2.5"/>
+              <rect x="25" y="55" width="10" height="18" rx="5" fill="#fed7aa" stroke="#ea580c" stroke-width="2.5"/>
+            </svg>
+          </div>
+          <div class="flex gap-2 w-full justify-center ltr-digits" id="hand-opts-0">
+            <button onclick="handleHandChoice(0, 0, 2)" class="btn-hand w-12 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-sky-50 active:scale-95 transition">0</button>
+            <button onclick="handleHandChoice(0, 1, 2)" class="btn-hand w-12 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-sky-50 active:scale-95 transition">1</button>
+            <button onclick="handleHandChoice(0, 2, 2)" class="btn-hand w-12 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-sky-50 active:scale-95 transition">2</button>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 flex flex-col items-center justify-between text-center" id="hand-card-1">
+          <span class="text-xs font-bold text-slate-400 mb-2">الْحَالَةُ 2</span>
+          <div class="w-28 h-28 bg-white rounded-xl shadow-inner border border-slate-200 flex items-center justify-center p-2 mb-4">
+            <svg class="w-20 h-20" viewBox="0 0 100 100">
+              <rect x="30" y="44" width="40" height="42" rx="12" fill="#fed7aa" stroke="#ea580c" stroke-width="2.5"/>
+              <line x1="40" y1="44" x2="40" y2="65" stroke="#ea580c" stroke-width="2.5"/>
+              <line x1="50" y1="44" x2="50" y2="65" stroke="#ea580c" stroke-width="2.5"/>
+              <line x1="60" y1="44" x2="60" y2="65" stroke="#ea580c" stroke-width="2.5"/>
+              <path d="M26 62 Q36 50 56 60" stroke="#ea580c" stroke-width="3" fill="none"/>
+            </svg>
+          </div>
+          <div class="flex gap-2 w-full justify-center ltr-digits" id="hand-opts-1">
+            <button onclick="handleHandChoice(1, 5, 0)" class="btn-hand w-12 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-sky-50 active:scale-95 transition">5</button>
+            <button onclick="handleHandChoice(1, 0, 0)" class="btn-hand w-12 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-sky-50 active:scale-95 transition">0</button>
+            <button onclick="handleHandChoice(1, 3, 0)" class="btn-hand w-12 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-sky-50 active:scale-95 transition">3</button>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 flex flex-col items-center justify-between text-center" id="hand-card-2">
+          <span class="text-xs font-bold text-slate-400 mb-2">الْحَالَةُ 3</span>
+          <div class="w-28 h-28 bg-white rounded-xl shadow-inner border border-slate-200 flex items-center justify-center p-2 mb-4">
+            <svg class="w-20 h-20" viewBox="0 0 100 100">
+              <rect x="35" y="52" width="32" height="35" rx="8" fill="#fed7aa" stroke="#ea580c" stroke-width="2.5"/>
+              <rect x="44" y="14" width="11" height="42" rx="5" fill="#ffedd5" stroke="#ea580c" stroke-width="2.5"/>
+              <rect x="58" y="52" width="9" height="18" rx="4.5" fill="#fed7aa" stroke="#ea580c" stroke-width="2.5"/>
+              <rect x="25" y="56" width="11" height="18" rx="5.5" fill="#fed7aa" stroke="#ea580c" stroke-width="2.5"/>
+            </svg>
+          </div>
+          <div class="flex gap-2 w-full justify-center ltr-digits" id="hand-opts-2">
+            <button onclick="handleHandChoice(2, 4, 1)" class="btn-hand w-12 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-sky-50 active:scale-95 transition">4</button>
+            <button onclick="handleHandChoice(2, 1, 1)" class="btn-hand w-12 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-sky-50 active:scale-95 transition">1</button>
+            <button onclick="handleHandChoice(2, 2, 1)" class="btn-hand w-12 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-sky-50 active:scale-95 transition">2</button>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 flex flex-col items-center justify-between text-center" id="hand-card-3">
+          <span class="text-xs font-bold text-slate-400 mb-2">الْحَالَةُ 4</span>
+          <div class="w-28 h-28 bg-white rounded-xl shadow-inner border border-slate-200 flex items-center justify-center p-2 mb-4">
+            <svg class="w-20 h-20" viewBox="0 0 100 100">
+              <rect x="28" y="56" width="44" height="32" rx="8" fill="#fed7aa" stroke="#ea580c" stroke-width="2.5"/>
+              <rect x="30" y="20" width="8" height="38" rx="4" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/>
+              <rect x="40" y="15" width="8" height="43" rx="4" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/>
+              <rect x="50" y="17" width="8" height="41" rx="4" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/>
+              <rect x="60" y="22" width="8" height="36" rx="4" fill="#ffedd5" stroke="#ea580c" stroke-width="2"/>
+              <path d="M26 62 Q35 55 45 62" stroke="#ea580c" stroke-width="2.5" fill="none"/>
+            </svg>
+          </div>
+          <div class="flex gap-2 w-full justify-center ltr-digits" id="hand-opts-3">
+            <button onclick="handleHandChoice(3, 4, 4)" class="btn-hand w-12 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-sky-50 active:scale-95 transition">4</button>
+            <button onclick="handleHandChoice(3, 1, 4)" class="btn-hand w-12 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-sky-50 active:scale-95 transition">1</button>
+            <button onclick="handleHandChoice(3, 0, 4)" class="btn-hand w-12 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-sky-50 active:scale-95 transition">0</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="sub-eval-2" class="hidden flex items-center justify-between text-sm font-bold bg-slate-50 px-4 py-3 rounded-2xl border border-slate-200">
+        <span class="text-slate-700">تَقْيِيمُ نَشَاطِ الأَصَابِعِ:</span>
+        <div class="flex items-center gap-4">
+          <span class="text-emerald-700">الصَّوَاب: <span id="sub-2-correct">0</span> / 4 ✓</span>
+          <span class="text-rose-700">الْخَطَأ: <span id="sub-2-wrong">0</span> / 4 ✗</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== المحطة 3: أنجز 2 ص 20 ==================== -->
+    <section id="station-3" class="card-locked bg-white rounded-3xl shadow-sm border border-slate-200 p-5 sm:p-7 transition-all duration-300">
+      <div class="flex items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-5">
+        <div class="flex items-center gap-3">
+          <span class="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold text-lg shadow-sm">3</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-800">أُنْجِزُ (2) <span class="text-sm font-normal text-slate-500">(كِتَابُ التِّلْمِيذِ ص 20)</span></h2>
+        </div>
+        <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full">الصَّنَادِيقُ وَالْكُرَاتُ</span>
+      </div>
+
+      <p class="text-base sm:text-lg text-slate-700 mb-6 font-semibold">
+        اكْتُبِ الْعَدَدَ الْمُنَاسِبَ فِي كُلِّ بِطَاقَةٍ (مِنْ 0 إِلَى 5):
+      </p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-6 ltr-digits">
+        
+        <div class="bg-amber-50/70 border-2 border-amber-200 rounded-2xl p-3 flex flex-col items-center">
+          <div class="w-full h-24 bg-white rounded-xl border-2 border-amber-300 flex items-center justify-center p-2 mb-3 shadow-inner">
+            <svg class="w-16 h-16" viewBox="0 0 80 80">
+              <rect x="6" y="10" width="68" height="60" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+              <circle cx="28" cy="32" r="9" fill="#2563eb"/>
+              <circle cx="52" cy="32" r="9" fill="#dc2626"/>
+              <circle cx="28" cy="52" r="9" fill="#16a34a"/>
+              <circle cx="52" cy="52" r="9" fill="#eab308"/>
+            </svg>
+          </div>
+          <input type="number" min="0" max="9" id="box-in-0" class="input-box w-16 h-12 rounded-xl border-2 border-slate-300 bg-white focus:border-emerald-500 focus:outline-none" placeholder="؟">
+        </div>
+
+        <div class="bg-amber-50/70 border-2 border-amber-200 rounded-2xl p-3 flex flex-col items-center">
+          <div class="w-full h-24 bg-white rounded-xl border-2 border-amber-300 flex items-center justify-center p-2 mb-3 shadow-inner">
+            <svg class="w-16 h-16" viewBox="0 0 80 80">
+              <rect x="6" y="10" width="68" height="60" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+              <circle cx="40" cy="28" r="9" fill="#ef4444"/>
+              <circle cx="26" cy="50" r="9" fill="#8b5cf6"/>
+              <circle cx="54" cy="50" r="9" fill="#06b6d4"/>
+            </svg>
+          </div>
+          <input type="number" min="0" max="9" id="box-in-1" class="input-box w-16 h-12 rounded-xl border-2 border-slate-300 bg-white focus:border-emerald-500 focus:outline-none" placeholder="؟">
+        </div>
+
+        <div class="bg-amber-50/70 border-2 border-amber-200 rounded-2xl p-3 flex flex-col items-center">
+          <div class="w-full h-24 bg-white rounded-xl border-2 border-amber-300 flex items-center justify-center p-2 mb-3 shadow-inner">
+            <svg class="w-16 h-16" viewBox="0 0 80 80">
+              <rect x="6" y="10" width="68" height="60" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+              <circle cx="40" cy="40" r="10" fill="#ec4899"/>
+            </svg>
+          </div>
+          <input type="number" min="0" max="9" id="box-in-2" class="input-box w-16 h-12 rounded-xl border-2 border-slate-300 bg-white focus:border-emerald-500 focus:outline-none" placeholder="؟">
+        </div>
+
+        <div class="bg-amber-50/70 border-2 border-amber-200 rounded-2xl p-3 flex flex-col items-center">
+          <div class="w-full h-24 bg-white rounded-xl border-2 border-amber-300 flex items-center justify-center p-2 mb-3 shadow-inner">
+            <svg class="w-16 h-16" viewBox="0 0 80 80">
+              <rect x="6" y="10" width="68" height="60" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+              <circle cx="26" cy="28" r="8" fill="#f97316"/>
+              <circle cx="54" cy="28" r="8" fill="#0ea5e9"/>
+              <circle cx="40" cy="40" r="8" fill="#10b981"/>
+              <circle cx="26" cy="54" r="8" fill="#6366f1"/>
+              <circle cx="54" cy="54" r="8" fill="#d946ef"/>
+            </svg>
+          </div>
+          <input type="number" min="0" max="9" id="box-in-3" class="input-box w-16 h-12 rounded-xl border-2 border-slate-300 bg-white focus:border-emerald-500 focus:outline-none" placeholder="؟">
+        </div>
+
+        <div class="bg-amber-50/70 border-2 border-amber-200 rounded-2xl p-3 flex flex-col items-center">
+          <div class="w-full h-24 bg-white rounded-xl border-2 border-amber-300 flex items-center justify-center p-2 mb-3 shadow-inner">
+            <svg class="w-16 h-16" viewBox="0 0 80 80">
+              <rect x="6" y="10" width="68" height="60" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+              <text x="40" y="46" font-size="16" fill="#94a3b8" text-anchor="middle" font-weight="bold">فَارِغ</text>
+            </svg>
+          </div>
+          <input type="number" min="0" max="9" id="box-in-4" class="input-box w-16 h-12 rounded-xl border-2 border-slate-300 bg-white focus:border-emerald-500 focus:outline-none" placeholder="؟">
+        </div>
+
+        <div class="bg-amber-50/70 border-2 border-amber-200 rounded-2xl p-3 flex flex-col items-center">
+          <div class="w-full h-24 bg-white rounded-xl border-2 border-amber-300 flex items-center justify-center p-2 mb-3 shadow-inner">
+            <svg class="w-16 h-16" viewBox="0 0 80 80">
+              <rect x="6" y="10" width="68" height="60" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+              <circle cx="30" cy="40" r="9" fill="#14b8a6"/>
+              <circle cx="50" cy="40" r="9" fill="#f43f5e"/>
+            </svg>
+          </div>
+          <input type="number" min="0" max="9" id="box-in-5" class="input-box w-16 h-12 rounded-xl border-2 border-slate-300 bg-white focus:border-emerald-500 focus:outline-none" placeholder="؟">
+        </div>
+
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-100">
+        <button id="btn-validate-3" onclick="validateStation3()" class="px-6 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-base shadow-md shadow-emerald-600/20 transition">
+          تَأْكِيدُ الأَعْدَادِ ✓
+        </button>
+        <div id="sub-eval-3" class="hidden flex items-center gap-4 text-sm font-bold bg-slate-50 px-4 py-2.5 rounded-2xl border border-slate-200">
+          <span class="text-emerald-700">الصَّوَاب: <span id="sub-3-correct">0</span> / 6 ✓</span>
+          <span class="text-rose-700">الْخَطَأ: <span id="sub-3-wrong">0</span> / 6 ✗</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== بطاقة تعلمت ==================== -->
+    <div id="card-learned" class="card-locked bg-gradient-to-r from-amber-400 via-orange-400 to-rose-400 rounded-3xl p-6 sm:p-7 shadow-lg text-white transition-all duration-300">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center text-3xl font-black shadow-inner flex-shrink-0">
+          ★
+        </div>
+        <div>
+          <span class="text-xs uppercase tracking-wider font-extrabold bg-white/30 px-3 py-1 rounded-full">قَاعِدَةُ الدَّرْسِ</span>
+          <h3 class="text-2xl sm:text-3xl font-black mt-1">تَعَلَّمْتُ</h3>
+          <p class="text-xl sm:text-2xl font-bold mt-2 text-white/95 leading-relaxed">
+            « أَكْتُبُ الصِّفْرَ بِهَذَا الرَّمْزِ: <span class="ltr-digits inline-block bg-white text-orange-600 px-3 py-0.5 rounded-xl text-3xl font-black shadow-md mx-1">0</span> »
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- ==================== المحطة 4: أتمرن 1 دفتر الأنشطة ص 13 ==================== -->
+    <section id="station-4" class="card-locked bg-white rounded-3xl shadow-sm border border-slate-200 p-5 sm:p-7 transition-all duration-300">
+      <div class="flex items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-5">
+        <div class="flex items-center gap-3">
+          <span class="w-9 h-9 rounded-xl bg-purple-500 text-white flex items-center justify-center font-bold text-lg shadow-sm">4</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-800">أَتَمَرَّنُ (1) <span class="text-sm font-normal text-slate-500">(دَفْتَرُ الأَنْشِطَةِ ص 13)</span></h2>
+        </div>
+        <span class="text-xs bg-purple-100 text-purple-800 font-bold px-3 py-1 rounded-full">صُحُونُ الْفَرَاوِلَةِ</span>
+      </div>
+
+      <p class="text-base sm:text-lg text-slate-700 mb-3 font-semibold">
+        ارْبِطْ كُلَّ صَحْنٍ بِالْعَدَدِ الْمُنَاسِبِ لَهُ:
+      </p>
+      <div class="text-xs sm:text-sm text-purple-700 bg-purple-50 p-2.5 rounded-xl border border-purple-200 mb-6 flex items-center gap-2">
+        <span>💡 طَرِيقَةُ الرَّبْطِ:</span>
+        <span>اضْغَطْ عَلَى الصَّحْنِ أَوَّلًا، ثُمَّ اضْغَطْ عَلَى بِطَاقَةِ الْعَدَدِ الَّتِي تُنَاسِبُهُ أَدْنَاهُ.</span>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 mb-8">
+        
+        <div id="plate-0" onclick="selectPlate(0, 0)" class="plate-card cursor-pointer bg-slate-50 border-2 border-slate-300 hover:border-purple-500 rounded-2xl p-3 flex flex-col items-center justify-between transition shadow-sm">
+          <span class="text-xs font-bold text-slate-400 mb-1">صَحْنُ أ</span>
+          <div class="w-full h-24 bg-white rounded-xl border border-slate-200 flex items-center justify-center relative p-1 shadow-inner">
+            <svg class="w-20 h-20" viewBox="0 0 100 70">
+              <ellipse cx="50" cy="45" rx="42" ry="18" fill="#f1f5f9" stroke="#94a3b8" stroke-width="3"/>
+              <ellipse cx="50" cy="43" rx="34" ry="12" fill="#ffffff"/>
+            </svg>
+          </div>
+          <div id="plate-status-0" class="mt-2 text-xs font-bold text-slate-500">اخْتَرْ رَقْمًا</div>
+        </div>
+
+        <div id="plate-1" onclick="selectPlate(1, 1)" class="plate-card cursor-pointer bg-slate-50 border-2 border-slate-300 hover:border-purple-500 rounded-2xl p-3 flex flex-col items-center justify-between transition shadow-sm">
+          <span class="text-xs font-bold text-slate-400 mb-1">صَحْنُ ب</span>
+          <div class="w-full h-24 bg-white rounded-xl border border-slate-200 flex items-center justify-center relative p-1 shadow-inner">
+            <svg class="w-20 h-20" viewBox="0 0 100 70">
+              <ellipse cx="50" cy="45" rx="42" ry="18" fill="#f1f5f9" stroke="#94a3b8" stroke-width="3"/>
+              <path d="M50 48 Q44 32 50 24 Q56 32 50 48 Z" fill="#ef4444"/>
+              <path d="M48 24 L52 24 L50 20 Z" fill="#22c55e"/>
+            </svg>
+          </div>
+          <div id="plate-status-1" class="mt-2 text-xs font-bold text-slate-500">اخْتَرْ رَقْمًا</div>
+        </div>
+
+        <div id="plate-2" onclick="selectPlate(2, 2)" class="plate-card cursor-pointer bg-slate-50 border-2 border-slate-300 hover:border-purple-500 rounded-2xl p-3 flex flex-col items-center justify-between transition shadow-sm">
+          <span class="text-xs font-bold text-slate-400 mb-1">صَحْنُ ج</span>
+          <div class="w-full h-24 bg-white rounded-xl border border-slate-200 flex items-center justify-center relative p-1 shadow-inner">
+            <svg class="w-20 h-20" viewBox="0 0 100 70">
+              <ellipse cx="50" cy="45" rx="42" ry="18" fill="#f1f5f9" stroke="#94a3b8" stroke-width="3"/>
+              <path d="M42 46 Q37 32 42 26 Q47 32 42 46 Z" fill="#ef4444"/>
+              <path d="M58 46 Q53 32 58 26 Q63 32 58 46 Z" fill="#ef4444"/>
+            </svg>
+          </div>
+          <div id="plate-status-2" class="mt-2 text-xs font-bold text-slate-500">اخْتَرْ رَقْمًا</div>
+        </div>
+
+        <div id="plate-3" onclick="selectPlate(3, 3)" class="plate-card cursor-pointer bg-slate-50 border-2 border-slate-300 hover:border-purple-500 rounded-2xl p-3 flex flex-col items-center justify-between transition shadow-sm">
+          <span class="text-xs font-bold text-slate-400 mb-1">صَحْنُ د</span>
+          <div class="w-full h-24 bg-white rounded-xl border border-slate-200 flex items-center justify-center relative p-1 shadow-inner">
+            <svg class="w-20 h-20" viewBox="0 0 100 70">
+              <ellipse cx="50" cy="45" rx="42" ry="18" fill="#f1f5f9" stroke="#94a3b8" stroke-width="3"/>
+              <path d="M36 46 Q32 34 36 28 Q40 34 36 46 Z" fill="#ef4444"/>
+              <path d="M50 42 Q46 30 50 24 Q54 30 50 42 Z" fill="#ef4444"/>
+              <path d="M64 46 Q60 34 64 28 Q68 34 64 46 Z" fill="#ef4444"/>
+            </svg>
+          </div>
+          <div id="plate-status-3" class="mt-2 text-xs font-bold text-slate-500">اخْتَرْ رَقْمًا</div>
+        </div>
+
+        <div id="plate-4" onclick="selectPlate(4, 4)" class="plate-card cursor-pointer bg-slate-50 border-2 border-slate-300 hover:border-purple-500 rounded-2xl p-3 flex flex-col items-center justify-between transition shadow-sm">
+          <span class="text-xs font-bold text-slate-400 mb-1">صَحْنُ هـ</span>
+          <div class="w-full h-24 bg-white rounded-xl border border-slate-200 flex items-center justify-center relative p-1 shadow-inner">
+            <svg class="w-20 h-20" viewBox="0 0 100 70">
+              <ellipse cx="50" cy="45" rx="42" ry="18" fill="#f1f5f9" stroke="#94a3b8" stroke-width="3"/>
+              <circle cx="34" cy="40" r="6" fill="#ef4444"/>
+              <circle cx="45" cy="34" r="6" fill="#ef4444"/>
+              <circle cx="56" cy="34" r="6" fill="#ef4444"/>
+              <circle cx="66" cy="40" r="6" fill="#ef4444"/>
+            </svg>
+          </div>
+          <div id="plate-status-4" class="mt-2 text-xs font-bold text-slate-500">اخْتَرْ رَقْمًا</div>
+        </div>
+
+        <div id="plate-5" onclick="selectPlate(5, 5)" class="plate-card cursor-pointer bg-slate-50 border-2 border-slate-300 hover:border-purple-500 rounded-2xl p-3 flex flex-col items-center justify-between transition shadow-sm">
+          <span class="text-xs font-bold text-slate-400 mb-1">صَحْنُ و</span>
+          <div class="w-full h-24 bg-white rounded-xl border border-slate-200 flex items-center justify-center relative p-1 shadow-inner">
+            <svg class="w-20 h-20" viewBox="0 0 100 70">
+              <ellipse cx="50" cy="45" rx="42" ry="18" fill="#f1f5f9" stroke="#94a3b8" stroke-width="3"/>
+              <circle cx="32" cy="42" r="5.5" fill="#ef4444"/>
+              <circle cx="41" cy="34" r="5.5" fill="#ef4444"/>
+              <circle cx="50" cy="42" r="5.5" fill="#ef4444"/>
+              <circle cx="59" cy="34" r="5.5" fill="#ef4444"/>
+              <circle cx="68" cy="42" r="5.5" fill="#ef4444"/>
+            </svg>
+          </div>
+          <div id="plate-status-5" class="mt-2 text-xs font-bold text-slate-500">اخْتَرْ رَقْمًا</div>
+        </div>
+
+      </div>
+
+      <div class="border-t border-slate-200 pt-5">
+        <div class="text-sm font-bold text-slate-700 mb-3 text-center">بِطَاقَاتُ الأَعْدَادِ (اضْغَطْ لِرَبْطِهَا بِالصَّحْنِ الْمُحَدَّدِ):</div>
+        <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4 ltr-digits" id="scattered-numbers-row">
+          <button onclick="linkPlateWithNumber(3)" class="btn-num-scatter w-16 h-16 rounded-2xl bg-white border-2 border-slate-300 hover:border-purple-500 font-black text-2xl shadow-sm transition active:scale-95" data-val="3">3</button>
+          <button onclick="linkPlateWithNumber(0)" class="btn-num-scatter w-16 h-16 rounded-2xl bg-white border-2 border-slate-300 hover:border-purple-500 font-black text-2xl shadow-sm transition active:scale-95" data-val="0">0</button>
+          <button onclick="linkPlateWithNumber(5)" class="btn-num-scatter w-16 h-16 rounded-2xl bg-white border-2 border-slate-300 hover:border-purple-500 font-black text-2xl shadow-sm transition active:scale-95" data-val="5">5</button>
+          <button onclick="linkPlateWithNumber(1)" class="btn-num-scatter w-16 h-16 rounded-2xl bg-white border-2 border-slate-300 hover:border-purple-500 font-black text-2xl shadow-sm transition active:scale-95" data-val="1">1</button>
+          <button onclick="linkPlateWithNumber(4)" class="btn-num-scatter w-16 h-16 rounded-2xl bg-white border-2 border-slate-300 hover:border-purple-500 font-black text-2xl shadow-sm transition active:scale-95" data-val="4">4</button>
+          <button onclick="linkPlateWithNumber(2)" class="btn-num-scatter w-16 h-16 rounded-2xl bg-white border-2 border-slate-300 hover:border-purple-500 font-black text-2xl shadow-sm transition active:scale-95" data-val="2">2</button>
+        </div>
+      </div>
+
+      <div id="sub-eval-4" class="hidden mt-6 flex items-center justify-between text-sm font-bold bg-slate-50 px-4 py-3 rounded-2xl border border-slate-200">
+        <span class="text-slate-700">تَقْيِيمُ رَبْطِ الصُّحُونِ:</span>
+        <div class="flex items-center gap-4">
+          <span class="text-emerald-700">الصَّوَاب: <span id="sub-4-correct">0</span> / 6 ✓</span>
+          <span class="text-rose-700">الْخَطَأ: <span id="sub-4-wrong">0</span> / 6 ✗</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== المحطة 5: أتمرن 2 دفتر الأنشطة ص 13 ==================== -->
+    <section id="station-5" class="card-locked bg-white rounded-3xl shadow-sm border border-slate-200 p-5 sm:p-7 transition-all duration-300">
+      <div class="flex items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-5">
+        <div class="flex items-center gap-3">
+          <span class="w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center font-bold text-lg shadow-sm">5</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-800">أَتَمَرَّنُ (2) <span class="text-sm font-normal text-slate-500">(دَفْتَرُ الأَنْشِطَةِ ص 13)</span></h2>
+        </div>
+        <span class="text-xs bg-rose-100 text-rose-800 font-bold px-3 py-1 rounded-full">الشَّطْبُ وَالْبَاقِي</span>
+      </div>
+
+      <p class="text-base sm:text-lg text-slate-700 mb-2 font-semibold">
+        أَشْطُبُ 3 أَشْيَاءَ فِي كُلِّ مَجْمُوعَةٍ، ثُمَّ أَلْوَنُ (أَخْتَارُ) عَدَدَ الأَشْيَاءِ الْبَاقِيَةِ:
+      </p>
+      <div class="text-xs sm:text-sm text-rose-700 bg-rose-50 p-2.5 rounded-xl border border-rose-200 mb-6">
+        ✂️ تَعْلِيمَةٌ: اضْغَطْ عَلَى 3 عَنَاصِرَ لِشَطْبِهَا، ثُمَّ اضْغَطْ عَلَى رَقْمِ الْعَنَاصِرِ الَّتِي بَقِيَتْ دُونَ شَطْبٍ.
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+        
+        <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 flex flex-col justify-between" id="strike-card-0">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-bold text-slate-700">المَجْمُوعَةُ أ: 5 بَالُونَات</span>
+              <span id="strike-count-0" class="text-xs font-bold bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600">المَشْطُوب: 0 / 3</span>
+            </div>
+            <div class="grid grid-cols-5 gap-2 bg-white rounded-xl p-3 border border-slate-200 mb-4 min-h-[90px] items-center">
+              <div onclick="toggleStrike(0, 0)" id="item-0-0" class="strike-item cursor-pointer relative h-16 rounded-lg bg-sky-50 flex items-center justify-center hover:bg-sky-100 transition">
+                <svg class="w-8 h-12" viewBox="0 0 30 50"><ellipse cx="15" cy="18" rx="12" ry="16" fill="#38bdf8"/><path d="M15 34 L15 48" stroke="#94a3b8" stroke-width="2"/></svg>
+                <div class="strikethrough-mark hidden flex items-center justify-center text-rose-600 font-black text-3xl">✕</div>
+              </div>
+              <div onclick="toggleStrike(0, 1)" id="item-0-1" class="strike-item cursor-pointer relative h-16 rounded-lg bg-sky-50 flex items-center justify-center hover:bg-sky-100 transition">
+                <svg class="w-8 h-12" viewBox="0 0 30 50"><ellipse cx="15" cy="18" rx="12" ry="16" fill="#f43f5e"/><path d="M15 34 L15 48" stroke="#94a3b8" stroke-width="2"/></svg>
+                <div class="strikethrough-mark hidden flex items-center justify-center text-rose-600 font-black text-3xl">✕</div>
+              </div>
+              <div onclick="toggleStrike(0, 2)" id="item-0-2" class="strike-item cursor-pointer relative h-16 rounded-lg bg-sky-50 flex items-center justify-center hover:bg-sky-100 transition">
+                <svg class="w-8 h-12" viewBox="0 0 30 50"><ellipse cx="15" cy="18" rx="12" ry="16" fill="#fbbf24"/><path d="M15 34 L15 48" stroke="#94a3b8" stroke-width="2"/></svg>
+                <div class="strikethrough-mark hidden flex items-center justify-center text-rose-600 font-black text-3xl">✕</div>
+              </div>
+              <div onclick="toggleStrike(0, 3)" id="item-0-3" class="strike-item cursor-pointer relative h-16 rounded-lg bg-sky-50 flex items-center justify-center hover:bg-sky-100 transition">
+                <svg class="w-8 h-12" viewBox="0 0 30 50"><ellipse cx="15" cy="18" rx="12" ry="16" fill="#4ade80"/><path d="M15 34 L15 48" stroke="#94a3b8" stroke-width="2"/></svg>
+                <div class="strikethrough-mark hidden flex items-center justify-center text-rose-600 font-black text-3xl">✕</div>
+              </div>
+              <div onclick="toggleStrike(0, 4)" id="item-0-4" class="strike-item cursor-pointer relative h-16 rounded-lg bg-sky-50 flex items-center justify-center hover:bg-sky-100 transition">
+                <svg class="w-8 h-12" viewBox="0 0 30 50"><ellipse cx="15" cy="18" rx="12" ry="16" fill="#c084fc"/><path d="M15 34 L15 48" stroke="#94a3b8" stroke-width="2"/></svg>
+                <div class="strikethrough-mark hidden flex items-center justify-center text-rose-600 font-black text-3xl">✕</div>
+              </div>
+            </div>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <span class="text-xs font-bold text-slate-500 mb-2 block">عَدَدُ الأَشْيَاءِ الْبَاقِيَةِ:</span>
+            <div class="flex gap-2 justify-center ltr-digits" id="rem-opts-0">
+              <button onclick="chooseRemaining(0, 2, 2)" class="btn-rem w-14 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-rose-50 transition">2</button>
+              <button onclick="chooseRemaining(0, 1, 2)" class="btn-rem w-14 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-rose-50 transition">1</button>
+              <button onclick="chooseRemaining(0, 3, 2)" class="btn-rem w-14 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-rose-50 transition">3</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 flex flex-col justify-between" id="strike-card-1">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-bold text-slate-700">المَجْمُوعَةُ ب: 3 لُعَبٍ</span>
+              <span id="strike-count-1" class="text-xs font-bold bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600">المَشْطُوب: 0 / 3</span>
+            </div>
+            <div class="grid grid-cols-3 gap-3 bg-white rounded-xl p-3 border border-slate-200 mb-4 min-h-[90px] items-center">
+              <div onclick="toggleStrike(1, 0)" id="item-1-0" class="strike-item cursor-pointer relative h-16 rounded-lg bg-amber-50 flex items-center justify-center hover:bg-amber-100 transition">
+                <svg class="w-10 h-10" viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" fill="#f59e0b"/><circle cx="12" cy="10" r="5" fill="#d97706"/><circle cx="28" cy="10" r="5" fill="#d97706"/></svg>
+                <div class="strikethrough-mark hidden flex items-center justify-center text-rose-600 font-black text-3xl">✕</div>
+              </div>
+              <div onclick="toggleStrike(1, 1)" id="item-1-1" class="strike-item cursor-pointer relative h-16 rounded-lg bg-amber-50 flex items-center justify-center hover:bg-amber-100 transition">
+                <svg class="w-10 h-10" viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" fill="#f59e0b"/><circle cx="12" cy="10" r="5" fill="#d97706"/><circle cx="28" cy="10" r="5" fill="#d97706"/></svg>
+                <div class="strikethrough-mark hidden flex items-center justify-center text-rose-600 font-black text-3xl">✕</div>
+              </div>
+              <div onclick="toggleStrike(1, 2)" id="item-1-2" class="strike-item cursor-pointer relative h-16 rounded-lg bg-amber-50 flex items-center justify-center hover:bg-amber-100 transition">
+                <svg class="w-10 h-10" viewBox="0 0 40 40"><circle cx="20" cy="20" r="14" fill="#f59e0b"/><circle cx="12" cy="10" r="5" fill="#d97706"/><circle cx="28" cy="10" r="5" fill="#d97706"/></svg>
+                <div class="strikethrough-mark hidden flex items-center justify-center text-rose-600 font-black text-3xl">✕</div>
+              </div>
+            </div>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <span class="text-xs font-bold text-slate-500 mb-2 block">عَدَدُ الأَشْيَاءِ الْبَاقِيَةِ:</span>
+            <div class="flex gap-2 justify-center ltr-digits" id="rem-opts-1">
+              <button onclick="chooseRemaining(1, 5, 0)" class="btn-rem w-14 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-rose-50 transition">5</button>
+              <button onclick="chooseRemaining(1, 3, 0)" class="btn-rem w-14 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-rose-50 transition">3</button>
+              <button onclick="chooseRemaining(1, 0, 0)" class="btn-rem w-14 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-rose-50 transition">0</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 flex flex-col justify-between" id="strike-card-2">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-bold text-slate-700">المَجْمُوعَةُ ج: 4 لُعَبٍ</span>
+              <span id="strike-count-2" class="text-xs font-bold bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600">المَشْطُوب: 0 / 3</span>
+            </div>
+            <div class="grid grid-cols-4 gap-2 bg-white rounded-xl p-3 border border-slate-200 mb-4 min-h-[90px] items-center">
+              <div onclick="toggleStrike(2, 0)" id="item-2-0" class="strike-item cursor-pointer relative h-16 rounded-lg bg-emerald-50 flex items-center justify-center hover:bg-emerald-100 transition">
+                <svg class="w-10 h-10" viewBox="0 0 40 40"><path d="M10 24 Q18 10 30 18 Q34 26 26 28 Z" fill="#10b981"/><circle cx="28" cy="18" r="2" fill="#0f172a"/></svg>
+                <div class="strikethrough-mark hidden flex items-center justify-center text-rose-600 font-black text-3xl">✕</div>
+              </div>
+              <div onclick="toggleStrike(2, 1)" id="item-2-1" class="strike-item cursor-pointer relative h-16 rounded-lg bg-emerald-50 flex items-center justify-center hover:bg-emerald-100 transition">
+                <svg class="w-10 h-10" viewBox="0 0 40 40"><path d="M10 24 Q18 10 30 18 Q34 26 26 28 Z" fill="#10b981"/><circle cx="28" cy="18" r="2" fill="#0f172a"/></svg>
+                <div class="strikethrough-mark hidden flex items-center justify-center text-rose-600 font-black text-3xl">✕</div>
+              </div>
+              <div onclick="toggleStrike(2, 2)" id="item-2-2" class="strike-item cursor-pointer relative h-16 rounded-lg bg-emerald-50 flex items-center justify-center hover:bg-emerald-100 transition">
+                <svg class="w-10 h-10" viewBox="0 0 40 40"><path d="M10 24 Q18 10 30 18 Q34 26 26 28 Z" fill="#10b981"/><circle cx="28" cy="18" r="2" fill="#0f172a"/></svg>
+                <div class="strikethrough-mark hidden flex items-center justify-center text-rose-600 font-black text-3xl">✕</div>
+              </div>
+              <div onclick="toggleStrike(2, 3)" id="item-2-3" class="strike-item cursor-pointer relative h-16 rounded-lg bg-emerald-50 flex items-center justify-center hover:bg-emerald-100 transition">
+                <svg class="w-10 h-10" viewBox="0 0 40 40"><path d="M10 24 Q18 10 30 18 Q34 26 26 28 Z" fill="#10b981"/><circle cx="28" cy="18" r="2" fill="#0f172a"/></svg>
+                <div class="strikethrough-mark hidden flex items-center justify-center text-rose-600 font-black text-3xl">✕</div>
+              </div>
+            </div>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <span class="text-xs font-bold text-slate-500 mb-2 block">عَدَدُ الأَشْيَاءِ الْبَاقِيَةِ:</span>
+            <div class="flex gap-2 justify-center ltr-digits" id="rem-opts-2">
+              <button onclick="chooseRemaining(2, 0, 1)" class="btn-rem w-14 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-rose-50 transition">0</button>
+              <button onclick="chooseRemaining(2, 3, 1)" class="btn-rem w-14 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-rose-50 transition">3</button>
+              <button onclick="chooseRemaining(2, 1, 1)" class="btn-rem w-14 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-rose-50 transition">1</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 flex flex-col justify-between" id="strike-card-3">
+          <div>
+            <div class="flex justify-between items-center mb-2">
+              <span class="text-sm font-bold text-slate-700">المَجْمُوعَةُ د: 3 قِطَعِ لِيغُو</span>
+              <span id="strike-count-3" class="text-xs font-bold bg-white px-2.5 py-1 rounded-lg border border-slate-200 text-slate-600">المَشْطُوب: 0 / 3</span>
+            </div>
+            <div class="grid grid-cols-3 gap-3 bg-white rounded-xl p-3 border border-slate-200 mb-4 min-h-[90px] items-center">
+              <div onclick="toggleStrike(3, 0)" id="item-3-0" class="strike-item cursor-pointer relative h-16 rounded-lg bg-indigo-50 flex items-center justify-center hover:bg-indigo-100 transition">
+                <svg class="w-10 h-8" viewBox="0 0 50 35"><rect x="4" y="10" width="42" height="20" rx="3" fill="#6366f1"/><rect x="10" y="4" width="8" height="6" rx="1.5" fill="#4f46e5"/><rect x="22" y="4" width="8" height="6" rx="1.5" fill="#4f46e5"/><rect x="34" y="4" width="8" height="6" rx="1.5" fill="#4f46e5"/></svg>
+                <div class="strikethrough-mark hidden flex items-center justify-center text-rose-600 font-black text-3xl">✕</div>
+              </div>
+              <div onclick="toggleStrike(3, 1)" id="item-3-1" class="strike-item cursor-pointer relative h-16 rounded-lg bg-indigo-50 flex items-center justify-center hover:bg-indigo-100 transition">
+                <svg class="w-10 h-8" viewBox="0 0 50 35"><rect x="4" y="10" width="42" height="20" rx="3" fill="#eab308"/><rect x="10" y="4" width="8" height="6" rx="1.5" fill="#ca8a04"/><rect x="22" y="4" width="8" height="6" rx="1.5" fill="#ca8a04"/><rect x="34" y="4" width="8" height="6" rx="1.5" fill="#ca8a04"/></svg>
+                <div class="strikethrough-mark hidden flex items-center justify-center text-rose-600 font-black text-3xl">✕</div>
+              </div>
+              <div onclick="toggleStrike(3, 2)" id="item-3-2" class="strike-item cursor-pointer relative h-16 rounded-lg bg-indigo-50 flex items-center justify-center hover:bg-indigo-100 transition">
+                <svg class="w-10 h-8" viewBox="0 0 50 35"><rect x="4" y="10" width="42" height="20" rx="3" fill="#10b981"/><rect x="10" y="4" width="8" height="6" rx="1.5" fill="#059669"/><rect x="22" y="4" width="8" height="6" rx="1.5" fill="#059669"/><rect x="34" y="4" width="8" height="6" rx="1.5" fill="#059669"/></svg>
+                <div class="strikethrough-mark hidden flex items-center justify-center text-rose-600 font-black text-3xl">✕</div>
+              </div>
+            </div>
+          </div>
+          <div class="border-t border-slate-200 pt-3">
+            <span class="text-xs font-bold text-slate-500 mb-2 block">عَدَدُ الأَشْيَاءِ الْبَاقِيَةِ:</span>
+            <div class="flex gap-2 justify-center ltr-digits" id="rem-opts-3">
+              <button onclick="chooseRemaining(3, 2, 0)" class="btn-rem w-14 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-rose-50 transition">2</button>
+                            <button onclick="chooseRemaining(3, 0, 0)" class="btn-rem w-14 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-rose-50 transition">0</button>
+              <button onclick="chooseRemaining(3, 1, 0)" class="btn-rem w-14 h-12 rounded-xl border-2 border-slate-300 font-extrabold text-xl bg-white hover:bg-rose-50 transition">1</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="sub-eval-5" class="hidden flex items-center justify-between text-sm font-bold bg-slate-50 px-4 py-3 rounded-2xl border border-slate-200">
+        <span class="text-slate-700">تَقْيِيمُ نَشَاطِ الشَّطْبِ:</span>
+        <div class="flex items-center gap-4">
+          <span class="text-emerald-700">الصَّوَاب: <span id="sub-5-correct">0</span> / 4 ✓</span>
+          <span class="text-rose-700">الْخَطَأ: <span id="sub-5-wrong">0</span> / 4 ✗</span>
+        </div>
+      </div>
+    </section>
+    <!-- ==================== المحطة 6: أبحث دفتر الأنشطة ص 13 ==================== -->
+    <section id="station-6" class="card-locked bg-white rounded-3xl shadow-sm border border-slate-200 p-5 sm:p-7 transition-all duration-300">
+      <div class="flex items-center justify-between gap-3 border-b border-slate-100 pb-3 mb-5">
+        <div class="flex items-center gap-3">
+          <span class="w-9 h-9 rounded-xl bg-indigo-500 text-white flex items-center justify-center font-bold text-lg shadow-sm">6</span>
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-800">أَبْحَثُ <span class="text-sm font-normal text-slate-500">(دَفْتَرُ الأَنْشِطَةِ ص 13)</span></h2>
+        </div>
+        <span class="text-xs bg-indigo-100 text-indigo-800 font-bold px-3 py-1 rounded-full">أَدَوَاتِي الْمَدْرَسِيَّةُ</span>
+      </div>
+
+      <p class="text-base sm:text-lg text-slate-700 mb-6 font-semibold">
+        « سَاعِدْنِي عَلَى عَدِّ أَدَوَاتِي الْمَدْرَسِيَّةِ، وَشُكْرًا. »
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start mb-6">
+        
+        <!-- المرحلة الأولى: صورة مدمجة تحتوي على (1 حقيبة، 1 ممحاة، 2 كراريس، 1 مسطرة، 3 أقلام) -->
+        <div class="md:col-span-5 bg-gradient-to-b from-indigo-50/70 to-sky-50/70 border-2 border-indigo-200 rounded-3xl p-4 flex flex-col items-center shadow-inner">
+          <span class="text-xs font-extrabold text-indigo-700 bg-white px-3.5 py-1 rounded-full border border-indigo-200 mb-3 shadow-sm">
+            صُورَةُ الأَدَوَاتِ الْمَدْرَسِيَّةِ
+          </span>
+          
+          <div class="w-full bg-white rounded-2xl border-2 border-indigo-100 p-4 shadow-sm relative overflow-hidden">
+            <svg class="w-full h-auto" viewBox="0 0 340 280">
+              <rect x="0" y="0" width="340" height="280" rx="16" fill="#f8fafc"/>
+              <rect x="8" y="8" width="324" height="264" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+              <line x1="8" y1="210" x2="332" y2="210" stroke="#f1f5f9" stroke-width="2"/>
+
+              <!-- 1. حقيبة مدرسية واحدة -->
+              <g id="item-bag" transform="translate(18, 25)">
+                <path d="M38 32 C38 14, 62 14, 62 32" stroke="#4338ca" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+                <rect x="15" y="30" width="70" height="78" rx="14" fill="#6366f1" stroke="#3730a3" stroke-width="3"/>
+                <rect x="25" y="58" width="50" height="42" rx="8" fill="#a5b4fc" stroke="#4338ca" stroke-width="2.5"/>
+                <rect x="44" y="50" width="12" height="18" rx="3" fill="#fbbf24" stroke="#d97706" stroke-width="1.5"/>
+                <circle cx="50" cy="62" r="2" fill="#78350f"/>
+              </g>
+
+              <!-- 2. كراسان (2) متجاوران بتراكب خفيف -->
+              <g id="item-notebook-1" transform="translate(115, 25)">
+                <rect x="0" y="0" width="62" height="82" rx="6" fill="#38bdf8" stroke="#0284c7" stroke-width="2.5"/>
+                <rect x="0" y="0" width="12" height="82" rx="3" fill="#0284c7"/>
+                <line x1="18" y1="24" x2="52" y2="24" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                <line x1="18" y1="38" x2="48" y2="38" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="18" y1="52" x2="50" y2="52" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+              </g>
+              <g id="item-notebook-2" transform="translate(142, 38)">
+                <rect x="0" y="0" width="62" height="82" rx="6" fill="#fbbf24" stroke="#d97706" stroke-width="2.5"/>
+                <rect x="0" y="0" width="12" height="82" rx="3" fill="#d97706"/>
+                <line x1="18" y1="24" x2="52" y2="24" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+                <line x1="18" y1="38" x2="48" y2="38" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="18" y1="52" x2="50" y2="52" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>
+              </g>
+
+              <!-- 3. مسطرة واحدة -->
+              <g id="item-ruler" transform="translate(25, 148)">
+                <rect x="0" y="0" width="180" height="26" rx="4" fill="#2dd4bf" stroke="#0f766e" stroke-width="2.5"/>
+                <line x1="20" y1="0" x2="20" y2="14" stroke="#0f766e" stroke-width="2"/>
+                <line x1="40" y1="0" x2="40" y2="10" stroke="#0f766e" stroke-width="1.5"/>
+                <line x1="60" y1="0" x2="60" y2="14" stroke="#0f766e" stroke-width="2"/>
+                <line x1="80" y1="0" x2="80" y2="10" stroke="#0f766e" stroke-width="1.5"/>
+                <line x1="100" y1="0" x2="100" y2="14" stroke="#0f766e" stroke-width="2"/>
+                <line x1="120" y1="0" x2="120" y2="10" stroke="#0f766e" stroke-width="1.5"/>
+                <line x1="140" y1="0" x2="140" y2="14" stroke="#0f766e" stroke-width="2"/>
+                <line x1="160" y1="0" x2="160" y2="10" stroke="#0f766e" stroke-width="1.5"/>
+              </g>
+
+              <!-- 4. ممحاة واحدة -->
+              <g id="item-eraser" transform="translate(235, 35)">
+                <rect x="0" y="0" width="72" height="42" rx="7" fill="#f43f5e" stroke="#be123c" stroke-width="2.5"/>
+                <path d="M38 0 L72 0 L72 42 L38 42 Z" fill="#3b82f6"/>
+                <line x1="38" y1="0" x2="38" y2="42" stroke="#ffffff" stroke-width="2.5"/>
+              </g>
+
+              <!-- 5. 3 أقلام متفرقة الألوان -->
+              <g id="item-pencil-1" transform="translate(230, 110)">
+                <rect x="16" y="0" width="78" height="15" rx="3" fill="#ea580c"/>
+                <polygon points="16,0 0,7.5 16,15" fill="#fde68a" stroke="#ca8a04" stroke-width="1"/>
+                <polygon points="6,4.7 0,7.5 6,10.3" fill="#1e293b"/>
+                <rect x="86" y="0" width="12" height="15" rx="2" fill="#cbd5e1"/>
+              </g>
+
+              <g id="item-pencil-2" transform="translate(225, 142)">
+                <rect x="16" y="0" width="82" height="15" rx="3" fill="#16a34a"/>
+                <polygon points="16,0 0,7.5 16,15" fill="#fde68a" stroke="#ca8a04" stroke-width="1"/>
+                <polygon points="6,4.7 0,7.5 6,10.3" fill="#1e293b"/>
+                <rect x="90" y="0" width="12" height="15" rx="2" fill="#cbd5e1"/>
+              </g>
+
+              <g id="item-pencil-3" transform="translate(235, 174)">
+                <rect x="16" y="0" width="74" height="15" rx="3" fill="#9333ea"/>
+                <polygon points="16,0 0,7.5 16,15" fill="#fde68a" stroke="#ca8a04" stroke-width="1"/>
+                <polygon points="6,4.7 0,7.5 6,10.3" fill="#1e293b"/>
+                <rect x="82" y="0" width="12" height="15" rx="2" fill="#cbd5e1"/>
+              </g>
+            </svg>
+          </div>
+          <span class="text-xs text-slate-500 mt-2 font-semibold">عُدَّ كُلَّ نَوْعٍ مِنَ الأَدَوَاتِ وَسَجِّلِ الْعَدَدَ فِي الْجَدْوَلِ.</span>
+        </div>
+
+        <!-- المرحلة الثانية: جدول الأدوات -->
+        <div class="md:col-span-7 bg-white rounded-3xl border-2 border-slate-200 p-4 sm:p-5">
+          <div class="text-xs font-bold text-slate-500 mb-3 bg-slate-50 p-2.5 rounded-xl border border-slate-200">
+            اكْتُبْ عَدَدَ كُلِّ أَدَاةٍ تُشَاهِدُهَا (اكْتُبْ 0 لِلأَدَاةِ غَيْرِ الْمَوْجُودَةِ):
+          </div>
+
+          <div class="divide-y divide-slate-100">
+            
+            <!-- 1. حقيبة -->
+            <div class="flex items-center justify-between py-2">
+              <div class="flex items-center gap-3">
+                <span class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center font-bold text-indigo-600 text-lg">🎒</span>
+                <span class="text-base font-bold text-slate-800">حَقِيبَةٌ</span>
+              </div>
+              <input type="number" min="0" max="9" id="search-in-0" class="input-box w-16 h-11 rounded-xl border-2 border-slate-300 bg-white focus:border-indigo-500 focus:outline-none" placeholder="؟">
+            </div>
+
+            <!-- 2. كراس -->
+            <div class="flex items-center justify-between py-2">
+              <div class="flex items-center gap-3">
+                <span class="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center font-bold text-sky-600 text-lg">📒</span>
+                <span class="text-base font-bold text-slate-800">كُرَّاسٌ</span>
+              </div>
+              <input type="number" min="0" max="9" id="search-in-1" class="input-box w-16 h-11 rounded-xl border-2 border-slate-300 bg-white focus:border-indigo-500 focus:outline-none" placeholder="؟">
+            </div>
+
+            <!-- 3. قلم -->
+            <div class="flex items-center justify-between py-2">
+              <div class="flex items-center gap-3">
+                <span class="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center font-bold text-amber-600 text-lg">✏️</span>
+                <span class="text-base font-bold text-slate-800">قَلَمٌ</span>
+              </div>
+              <input type="number" min="0" max="9" id="search-in-2" class="input-box w-16 h-11 rounded-xl border-2 border-slate-300 bg-white focus:border-indigo-500 focus:outline-none" placeholder="؟">
+            </div>
+
+            <!-- 4. مبراة (غير موجودة = 0) -->
+            <div class="flex items-center justify-between py-2">
+              <div class="flex items-center gap-3">
+                <span class="w-10 h-10 rounded-xl bg-rose-50 flex items-center justify-center font-bold text-rose-600 text-lg">⚙️</span>
+                <span class="text-base font-bold text-slate-800">مِبْرَاةٌ</span>
+              </div>
+              <input type="number" min="0" max="9" id="search-in-3" class="input-box w-16 h-11 rounded-xl border-2 border-slate-300 bg-white focus:border-indigo-500 focus:outline-none" placeholder="؟">
+            </div>
+
+            <!-- 5. ممحاة -->
+            <div class="flex items-center justify-between py-2">
+              <div class="flex items-center gap-3">
+                <span class="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center font-bold text-pink-600 text-lg">🩹</span>
+                <span class="text-base font-bold text-slate-800">مِمْحَاةٌ</span>
+              </div>
+              <input type="number" min="0" max="9" id="search-in-4" class="input-box w-16 h-11 rounded-xl border-2 border-slate-300 bg-white focus:border-indigo-500 focus:outline-none" placeholder="؟">
+            </div>
+
+            <!-- 6. مقص (غير موجود = 0) -->
+            <div class="flex items-center justify-between py-2">
+              <div class="flex items-center gap-3">
+                <span class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center font-bold text-slate-600 text-lg">✂️</span>
+                <span class="text-base font-bold text-slate-800">مِقَصٌّ</span>
+              </div>
+              <input type="number" min="0" max="9" id="search-in-5" class="input-box w-16 h-11 rounded-xl border-2 border-slate-300 bg-white focus:border-indigo-500 focus:outline-none" placeholder="؟">
+            </div>
+
+            <!-- 7. مسطرة -->
+            <div class="flex items-center justify-between py-2">
+              <div class="flex items-center gap-3">
+                <span class="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center font-bold text-teal-600 text-lg">📐</span>
+                <span class="text-base font-bold text-slate-800">مِسْطَرَةٌ</span>
+              </div>
+              <input type="number" min="0" max="9" id="search-in-6" class="input-box w-16 h-11 rounded-xl border-2 border-slate-300 bg-white focus:border-indigo-500 focus:outline-none" placeholder="؟">
+            </div>
+
+          </div>
+
+          <div class="mt-5 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+            <button id="btn-validate-6" onclick="validateStation6()" class="px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold text-base shadow-md shadow-indigo-600/20 transition">
+              تَأْكِيدُ الْحِسَابِ ✓
+            </button>
+            <div id="sub-eval-6" class="hidden flex items-center gap-4 text-sm font-bold bg-slate-50 px-4 py-2.5 rounded-2xl border border-slate-200">
+              <span class="text-emerald-700">الصَّوَاب: <span id="sub-6-correct">0</span> / 7 ✓</span>
+              <span class="text-rose-700">الْخَطَأ: <span id="sub-6-wrong">0</span> / 7 ✗</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+    <!-- ==================== الشاشة الختامية والتقييم العام ==================== -->
+    <section id="final-summary-card" class="hidden bg-white rounded-3xl shadow-xl border-2 border-sky-300 p-6 sm:p-9 text-center transition-all duration-500">
+      <div class="max-w-xl mx-auto">
+        
+        <span class="inline-block px-4 py-1.5 rounded-full bg-sky-100 text-sky-800 font-extrabold text-sm mb-4">
+          نَتِيجَةُ الدَّرْسِ الْعَامَّةُ
+        </span>
+        
+        <h2 id="final-title" class="text-3xl sm:text-4xl font-black text-slate-800 mb-6">
+          أَحْسَنْتَ يَا بَطَلَ الرِّيَاضِيَّاتِ! 🎉
+        </h2>
+
+        <div class="relative w-44 h-44 mx-auto mb-6 flex items-center justify-center">
+          <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" stroke="#f1f5f9" stroke-width="12" fill="none"/>
+            <circle id="final-progress-circle" cx="60" cy="60" r="50" stroke="#0ea5e9" stroke-width="12" stroke-dasharray="314.15" stroke-dashoffset="314.15" stroke-linecap="round" fill="none" class="transition-all duration-1000 ease-out"/>
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center">
+            <span id="final-percentage-text" class="text-4xl font-black text-slate-800 ltr-digits">0%</span>
+            <span class="text-xs font-bold text-slate-400 mt-0.5">نِسْبَةُ النَّجَاحِ</span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-6 max-w-sm mx-auto">
+          <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-3">
+            <span class="text-xs font-bold text-emerald-800 block">إِجْمَالِي الصَّوَاب</span>
+            <span id="total-correct-display" class="text-3xl font-black text-emerald-600 ltr-digits">0</span>
+          </div>
+          <div class="bg-rose-50 border border-rose-200 rounded-2xl p-3">
+            <span class="text-xs font-bold text-rose-800 block">إِجْمَالِي الْخَطَأ</span>
+            <span id="total-wrong-display" class="text-3xl font-black text-rose-600 ltr-digits">0</span>
+          </div>
+        </div>
+
+        <p id="final-feedback-text" class="text-lg font-bold text-slate-700 mb-8 leading-relaxed">
+          أَدَاءٌ رَائِعٌ! يُمْكِنُكَ الصُّعُودُ لِلأَعْلَى لِمُرَاجَعَةِ إِجَابَاتِكَ بِالتَّفْصِيلِ.
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <button onclick="resetWholeApp()" class="px-8 py-3.5 rounded-2xl bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-extrabold text-lg shadow-lg shadow-sky-600/25 transition">
+            إِعَادَةُ الْمُحَاوَلَةِ 🔄
+          </button>
+          <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="px-6 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 font-bold text-base transition">
+            مُعَايَنَةُ الأَخْطَاءِ فِي الأَعْلَى ⬆️
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- زر العودة إلى الفهرس -->
+  <a href="../../../index.html" class="btn-back-home">← العَوْدَةُ إِلَى الْفِهْرِسِ</a>
+
+  <footer class="max-w-4xl mx-auto mt-12 mb-6 text-center text-xs font-semibold text-slate-400">
+    تَمَّ تَطْوِيرُ هَذَا التَّطْبِيقِ التَّعْلِيمِيِّ لِمُطَابَقَةِ مِنْهَاجِ الْجُمْهُورِيَّةِ الْجَزَائِرِيَّةِ - السَّنَةُ الْأُولَى ابْتِدَائِيّ
+  </footer>
+
+  <!-- ========================================
+       سكريبت التحقق من الاشتراك (Vercel)
+       ======================================== -->
+  <script>
+    const CHANNEL_ID = "-1004456852024"; // السنة الأولى
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+  </script>
+  <!-- ==================== المحرك البرمجي المتكامل ==================== -->
+  <script>
+    // 1. محرك المؤثرات الصوتية النقي عبر Web Audio API
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playTone(freq, type, duration, delay = 0) {
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
+
+        gain.gain.setValueAtTime(0.15, ctx.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start(ctx.currentTime + delay);
+        osc.stop(ctx.currentTime + delay + duration);
+      } catch (e) {}
+    }
+
+    function soundSuccess() {
+      playTone(523.25, 'triangle', 0.15, 0);
+      playTone(659.25, 'triangle', 0.20, 0.12);
+      playTone(783.99, 'triangle', 0.35, 0.25);
+    }
+
+    function soundError() {
+      playTone(280, 'sawtooth', 0.2, 0);
+      playTone(220, 'sawtooth', 0.35, 0.15);
+    }
+
+    // 2. إدارة الحالة العامة للتطبيق
+    const appState = {
+      scores: {
+        s1: { correct: 0, wrong: 0, total: 8 },
+        s2: { correct: 0, wrong: 0, total: 4 },
+        s3: { correct: 0, wrong: 0, total: 6 },
+        s4: { correct: 0, wrong: 0, total: 6 },
+        s5: { correct: 0, wrong: 0, total: 4 },
+        s6: { correct: 0, wrong: 0, total: 7 },
+      },
+      currentStep: 1,
+      plateSelected: null,
+      platePairs: {},
+      plateAnswers: { 0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5 },
+      strikes: { 0: [false, false, false, false, false], 1: [false, false, false], 2: [false, false, false, false], 3: [false, false, false] },
+      remChosen: { 0: null, 1: null, 2: null, 3: null }
+    };
+
+    function unlockNextStation(nextId, stepNumber) {
+      const el = document.getElementById(nextId);
+      if (el) {
+        el.classList.remove('card-locked');
+        appState.currentStep = Math.max(appState.currentStep, stepNumber);
+        document.getElementById('current-step-display').textContent = appState.currentStep;
+        
+        setTimeout(() => {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 350);
+      }
+    }
+
+    // 3. محطة 1: أكتشف ص 20
+    const s1Answers = [0, 2, 4, 3, 0, 3, 6, 8];
+
+    function validateStation1() {
+      let correct = 0;
+      let wrong = 0;
+
+      for (let i = 0; i < 8; i++) {
+        const inp = document.getElementById(`discover-in-${i}`);
+        const userVal = parseInt(inp.value.trim(), 10);
+        const correctVal = s1Answers[i];
+
+        inp.disabled = true;
+        inp.style.pointerEvents = 'none';
+
+        if (userVal === correctVal) {
+          correct++;
+          inp.classList.add('badge-correct');
+        } else {
+          wrong++;
+          inp.classList.add('badge-wrong');
+          inp.value = `${isNaN(userVal) ? '؟' : userVal} (${correctVal})`;
+        }
+      }
+
+      appState.scores.s1.correct = correct;
+      appState.scores.s1.wrong = wrong;
+
+      document.getElementById('sub-1-correct').textContent = correct;
+      document.getElementById('sub-1-wrong').textContent = wrong;
+      document.getElementById('sub-eval-1').classList.remove('hidden');
+
+      const btn = document.getElementById('btn-validate-1');
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'pointer-events-none');
+
+      if (wrong === 0) {
+        soundSuccess();
+      } else {
+        soundError();
+      }
+
+      unlockNextStation('station-2', 2);
+    }
+
+    // 4. محطة 2: أنجز 1 ص 20
+    const s2CardsDone = [false, false, false, false];
+
+    function handleHandChoice(cardIndex, chosenVal, correctVal) {
+      if (s2CardsDone[cardIndex]) return;
+      s2CardsDone[cardIndex] = true;
+
+      const optsContainer = document.getElementById(`hand-opts-${cardIndex}`);
+      const buttons = optsContainer.querySelectorAll('.btn-hand');
+
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        btn.style.pointerEvents = 'none';
+        const btnVal = parseInt(btn.textContent.trim(), 10);
+
+        if (btnVal === chosenVal) {
+          if (chosenVal === correctVal) {
+            btn.classList.add('badge-correct');
+            appState.scores.s2.correct++;
+            soundSuccess();
+          } else {
+            btn.classList.add('badge-wrong');
+            appState.scores.s2.wrong++;
+            soundError();
+          }
+        } else if (btnVal === correctVal) {
+          btn.classList.add('badge-correct');
+        }
+      });
+
+      if (s2CardsDone.every(Boolean)) {
+        document.getElementById('sub-2-correct').textContent = appState.scores.s2.correct;
+        document.getElementById('sub-2-wrong').textContent = appState.scores.s2.wrong;
+        document.getElementById('sub-eval-2').classList.remove('hidden');
+        unlockNextStation('station-3', 3);
+      }
+    }
+
+    // 5. محطة 3: أنجز 2 ص 20
+    const s3Answers = [4, 3, 1, 5, 0, 2];
+
+    function validateStation3() {
+      let correct = 0;
+      let wrong = 0;
+
+      for (let i = 0; i < 6; i++) {
+        const inp = document.getElementById(`box-in-${i}`);
+        const userVal = parseInt(inp.value.trim(), 10);
+        const correctVal = s3Answers[i];
+
+        inp.disabled = true;
+        inp.style.pointerEvents = 'none';
+
+        if (userVal === correctVal) {
+          correct++;
+          inp.classList.add('badge-correct');
+        } else {
+          wrong++;
+          inp.classList.add('badge-wrong');
+          inp.value = `${isNaN(userVal) ? '؟' : userVal} (${correctVal})`;
+        }
+      }
+
+      appState.scores.s3.correct = correct;
+      appState.scores.s3.wrong = wrong;
+
+      document.getElementById('sub-3-correct').textContent = correct;
+      document.getElementById('sub-3-wrong').textContent = wrong;
+      document.getElementById('sub-eval-3').classList.remove('hidden');
+
+      const btn = document.getElementById('btn-validate-3');
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'pointer-events-none');
+
+      if (wrong === 0) {
+        soundSuccess();
+      } else {
+        soundError();
+      }
+
+      unlockNextStation('card-learned', 4);
+      unlockNextStation('station-4', 4);
+    }
+
+    // 6. محطة 4: أتمرن 1 ص 13
+    function selectPlate(plateIndex, strawberryCount) {
+      if (appState.platePairs[plateIndex] !== undefined) return;
+
+      document.querySelectorAll('.plate-card').forEach(p => p.classList.remove('ring-4', 'ring-purple-500', 'pulse-select'));
+
+      appState.plateSelected = { index: plateIndex, count: strawberryCount };
+      const currentPlateEl = document.getElementById(`plate-${plateIndex}`);
+      currentPlateEl.classList.add('ring-4', 'ring-purple-500', 'pulse-select');
+
+      const statusEl = document.getElementById(`plate-status-${plateIndex}`);
+      statusEl.textContent = '👈 اضْغَطْ رَقْمًا';
+      statusEl.className = 'mt-2 text-xs font-bold text-purple-700 animate-bounce';
+    }
+
+    function linkPlateWithNumber(numValue) {
+      if (!appState.plateSelected) return;
+
+      const { index, count } = appState.plateSelected;
+      if (appState.platePairs[index] !== undefined) return;
+
+      const plateEl = document.getElementById(`plate-${index}`);
+      const statusEl = document.getElementById(`plate-status-${index}`);
+
+      plateEl.classList.remove('ring-4', 'ring-purple-500', 'pulse-select');
+      plateEl.style.pointerEvents = 'none';
+
+      const isCorrect = (numValue === count);
+      appState.platePairs[index] = numValue;
+
+      if (isCorrect) {
+        appState.scores.s4.correct++;
+        plateEl.classList.add('badge-correct');
+        statusEl.textContent = `الْعَدَد: ${numValue} ✓`;
+        statusEl.className = 'mt-2 text-xs font-bold text-white';
+        soundSuccess();
+      } else {
+        appState.scores.s4.wrong++;
+        plateEl.classList.add('badge-wrong');
+        statusEl.textContent = `${numValue} ✗ (${count})`;
+        statusEl.className = 'mt-2 text-xs font-bold text-white';
+        soundError();
+      }
+
+      appState.plateSelected = null;
+
+      if (Object.keys(appState.platePairs).length === 6) {
+        document.querySelectorAll('.btn-num-scatter').forEach(b => {
+          b.disabled = true;
+          b.style.pointerEvents = 'none';
+        });
+
+        document.getElementById('sub-4-correct').textContent = appState.scores.s4.correct;
+        document.getElementById('sub-4-wrong').textContent = appState.scores.s4.wrong;
+        document.getElementById('sub-eval-4').classList.remove('hidden');
+
+        unlockNextStation('station-5', 5);
+      }
+    }
+
+    // 7. محطة 5: أتمرن 2 ص 13
+    function toggleStrike(groupIndex, itemIndex) {
+      const groupStrikes = appState.strikes[groupIndex];
+      const itemEl = document.getElementById(`item-${groupIndex}-${itemIndex}`);
+      const mark = itemEl.querySelector('.strikethrough-mark');
+
+      if (groupStrikes[itemIndex]) {
+        groupStrikes[itemIndex] = false;
+        mark.classList.add('hidden');
+      } else {
+        const count = groupStrikes.filter(Boolean).length;
+        if (count < 3) {
+          groupStrikes[itemIndex] = true;
+          mark.classList.remove('hidden');
+          playTone(400, 'sine', 0.08);
+        }
+      }
+
+      const currentCount = groupStrikes.filter(Boolean).length;
+      document.getElementById(`strike-count-${groupIndex}`).textContent = `المَشْطُوب: ${currentCount} / 3`;
+    }
+
+    const s5Done = [false, false, false, false];
+
+    function chooseRemaining(groupIndex, chosenVal, correctRemaining) {
+      if (s5Done[groupIndex]) return;
+      s5Done[groupIndex] = true;
+
+      const card = document.getElementById(`strike-card-${groupIndex}`);
+      card.querySelectorAll('.strike-item').forEach(it => it.style.pointerEvents = 'none');
+
+      const optsContainer = document.getElementById(`rem-opts-${groupIndex}`);
+      const buttons = optsContainer.querySelectorAll('.btn-rem');
+
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        btn.style.pointerEvents = 'none';
+        const val = parseInt(btn.textContent.trim(), 10);
+
+        if (val === chosenVal) {
+          if (chosenVal === correctRemaining) {
+            btn.classList.add('badge-correct');
+            appState.scores.s5.correct++;
+            soundSuccess();
+          } else {
+            btn.classList.add('badge-wrong');
+            appState.scores.s5.wrong++;
+            soundError();
+          }
+        } else if (val === correctRemaining) {
+          btn.classList.add('badge-correct');
+        }
+      });
+
+      if (s5Done.every(Boolean)) {
+        document.getElementById('sub-5-correct').textContent = appState.scores.s5.correct;
+        document.getElementById('sub-5-wrong').textContent = appState.scores.s5.wrong;
+        document.getElementById('sub-eval-5').classList.remove('hidden');
+        unlockNextStation('station-6', 6);
+      }
+    }
+
+    // 8. محطة 6: أبحث ص 13
+    // حقيبة: 1 / كراس: 2 / قلم: 3 / مبراة: 0 / ممحاة: 1 / مقص: 0 / مسطرة: 1
+    const s6Answers = [1, 2, 3, 0, 1, 0, 1];
+
+    function validateStation6() {
+      let correct = 0;
+      let wrong = 0;
+
+      for (let i = 0; i < 7; i++) {
+        const inp = document.getElementById(`search-in-${i}`);
+        const userVal = parseInt(inp.value.trim(), 10);
+        const correctVal = s6Answers[i];
+
+        inp.disabled = true;
+        inp.style.pointerEvents = 'none';
+
+        if (userVal === correctVal) {
+          correct++;
+          inp.classList.add('badge-correct');
+        } else {
+          wrong++;
+          inp.classList.add('badge-wrong');
+          inp.value = `${isNaN(userVal) ? '؟' : userVal} (${correctVal})`;
+        }
+      }
+
+      appState.scores.s6.correct = correct;
+      appState.scores.s6.wrong = wrong;
+
+      document.getElementById('sub-6-correct').textContent = correct;
+      document.getElementById('sub-6-wrong').textContent = wrong;
+      document.getElementById('sub-eval-6').classList.remove('hidden');
+
+      const btn = document.getElementById('btn-validate-6');
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'pointer-events-none');
+
+      if (wrong === 0) {
+        soundSuccess();
+      } else {
+        soundError();
+      }
+
+      showFinalSummary();
+    }
+
+    // 9. التقييم العام النهائي
+    function showFinalSummary() {
+      const summaryCard = document.getElementById('final-summary-card');
+      summaryCard.classList.remove('hidden');
+
+      const totalCorrect = appState.scores.s1.correct + appState.scores.s2.correct + appState.scores.s3.correct + appState.scores.s4.correct + appState.scores.s5.correct + appState.scores.s6.correct;
+      const totalWrong = appState.scores.s1.wrong + appState.scores.s2.wrong + appState.scores.s3.wrong + appState.scores.s4.wrong + appState.scores.s5.wrong + appState.scores.s6.wrong;
+      const totalQuestions = 35; // 8 + 4 + 6 + 6 + 4 + 7
+
+      const percentage = Math.round((totalCorrect / totalQuestions) * 100);
+
+      document.getElementById('total-correct-display').textContent = totalCorrect;
+      document.getElementById('total-wrong-display').textContent = totalWrong;
+      document.getElementById('final-percentage-text').textContent = `${percentage}%`;
+
+      const circle = document.getElementById('final-progress-circle');
+      const offset = 314.15 - (percentage / 100) * 314.15;
+      setTimeout(() => {
+        circle.style.strokeDashoffset = offset;
+        if (percentage >= 80) {
+          circle.setAttribute('stroke', '#16a34a');
+        } else if (percentage >= 50) {
+          circle.setAttribute('stroke', '#f59e0b');
+        } else {
+          circle.setAttribute('stroke', '#e11d48');
+        }
+      }, 200);
+
+      const titleEl = document.getElementById('final-title');
+      const feedbackEl = document.getElementById('final-feedback-text');
+
+      if (percentage >= 90) {
+        titleEl.textContent = 'مُمْتَازٌ! أَنْتَ عَبْقَرِيُّ الصِّفْرِ! 🌟';
+        feedbackEl.textContent = 'إِجَابَاتٌ دَقِيقَةٌ وَرَائِعَةٌ فِي كَافَّةِ مَحَطَّاتِ الْكِتَابِ وَدَفْتَرِ الأَنْشِطَةِ.';
+      } else if (percentage >= 70) {
+        titleEl.textContent = 'جَيِّدٌ جِدًّا! نَتِيجَةٌ مُمَيَّزَةٌ! 👏';
+        feedbackEl.textContent = 'لَقَدْ تَعَرَّفْتَ عَلَى الْعَدَدِ 0 وَمَعْنَاهُ بِشَكْلٍ مُمْتَازٍ. رَاجِعِ الأَخْطَاءَ فِي الأَعْلَى لِتَتَفَوَّقَ أَكْثَرَ.';
+      } else {
+        titleEl.textContent = 'يُوصَى بِمُرَاجَعَةِ الدَّرْسِ مَرَّةً أُخْرَى! 💡';
+        feedbackEl.textContent = 'الصِّفْرُ (0) يَعْنِي عَدَمَ وُجُودِ أَيِّ شَيْءٍ فِي الْمَجْمُوعَةِ. اضْغَطْ عَلَى إِعَادَةِ الْمُحَاوَلَةِ لِتَتَدَرَّبَ مِنْ جَدِيدٍ.';
+      }
+
+      setTimeout(() => {
+        summaryCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 400);
+    }
+
+    function resetWholeApp() {
+      window.location.reload();
+    }
+  </script>
+</body>
+</html>
