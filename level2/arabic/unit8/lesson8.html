@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق درس خيرات الريف ودفتر الأنشطة - السنة الثانية ابتدائي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --primary: #1976d2;
+            --primary-dark: #0d47a1;
+            --success: #2e7d32;
+            --error: #c62828;
+            --bg: #f5f9fc;
+            --card-bg: #ffffff;
+            --text: #263238;
+            --text-muted: #546e7a;
+            --accent: #ff9800;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding: 15px;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: var(--primary-dark);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .audio-btn, .audio-toggle {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .audio-btn:hover, .audio-toggle:hover {
+            opacity: 0.9;
+        }
+
+        .lesson-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            border-top: 6px solid var(--primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .page-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        h3 {
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+        }
+
+        .lesson-text-box {
+            background: #fdfbf7;
+            border-right: 5px solid var(--accent);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .img-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .img-container {
+            text-align: center;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .img-container span {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .question-box {
+            margin-bottom: 20px;
+            background: #f8fafc;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .question-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid #cbd5e1;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: right;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #e2e8f0;
+            border-color: var(--primary);
+        }
+
+        .option-btn.correct {
+            background: var(--success) !important;
+            color: white !important;
+            border-color: var(--success) !important;
+        }
+
+        .option-btn.wrong {
+            background: var(--error) !important;
+            color: white !important;
+            border-color: var(--error) !important;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .classification-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: #f1f8e9;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px dashed #81c784;
+        }
+
+        .words-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #c8e6c9;
+            min-height: 50px;
+            align-items: center;
+        }
+
+        .draggable-word {
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            user-select: none;
+            transition: 0.2s;
+        }
+
+        .draggable-word:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .draggable-word.selected {
+            background: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255,152,0,0.4);
+            transform: scale(1.1);
+        }
+
+        .drop-zones-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .drop-zones-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .drop-zone {
+            background: white;
+            border: 2px solid #a5d6a7;
+            border-radius: 8px;
+            padding: 10px;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .drop-zone:hover {
+            border-color: var(--success);
+            background: #f9fbe7;
+        }
+
+        .zone-title {
+            font-weight: 700;
+            color: var(--success);
+            text-align: center;
+            border-bottom: 2px solid #c8e6c9;
+            padding-bottom: 4px;
+            margin-bottom: 4px;
+        }
+
+        .zone-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .placed-item {
+            background: #e8f5e9;
+            color: var(--success);
+            border: 1px solid #81c784;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .shake {
+            animation: shake 0.4s;
+            border-color: var(--error) !important;
+            background: #ffebee !important;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .final-report {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-top: 30px;
+            display: none;
+        }
+
+        .final-report h2 {
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+        }
+
+        .score-display {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .action-btns {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn-main {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-main:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري (أُضيفت)
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس (أُضيف) */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            max-width: 420px;
+            margin: 20px auto 10px auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+    <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+        <div class="lock-desc">
+            لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+        </div>
+        <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+            📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+        </a>
+        <button class="btn-check-sub" onclick="verifySubscription()">
+            ✅ تَأْكِيدُ الاِشْتِرَاكِ
+        </button>
+        <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+</div>
+
+<div class="container">
+    <header>
+        <h1>اللغة العربية والتربية الإسلامية – السنة الثانية ابتدائي</h1>
+        <p>الدرس الثامن: خَيْرَاتُ الرِّيفِ + دَفْتَرُ الْأَنْشِطَةِ</p>
+    </header>
+
+    <div class="top-bar">
+        <span id="progress-status">الإجابات الصحيحة: <strong id="correct-count">0</strong> / <strong id="total-count">0</strong></span>
+        <button class="audio-toggle" onclick="toggleMuteSound()">🔊 الصوت: مفعل</button>
+    </div>
+
+    <!-- المحطة الأولى: فهم المنطوق -->
+    <div class="lesson-card">
+        <div class="page-badge">فهم المنطوق</div>
+        <h3>أستمع وأفهم النص المنطوق</h3>
+        <div class="lesson-text-box">
+            <p>استمع بعناية إلى نص "جني الزيتون"، ثم أجب عن الأسئلة بدقة:</p>
+        </div>
+        <div style="text-align: center; margin-bottom: 15px;">
+            <audio id="comprehensionAudio" src="audio_comprehension.mp3" preload="auto"></audio>
+            <button class="audio-btn" onclick="playAudio('comprehensionAudio')">▶ تشغيل نص فهم المنطوق</button>
+        </div>
+
+        <div class="question-box" data-q="1">
+            <div class="question-title">1. مَا هُوَ النَّشَاطُ الَّذِي يَتَحَدَّثُ عَنْهُ النَّصُّ؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">صَيْدُ السَّمَكِ</button>
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">جَنْيُ الزَّيْتُونِ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">حَصَادُ الْقَمْحِ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="2">
+            <div class="question-title">2. لِمَاذَا وَضَعَ الْخَالُ الْمَفَارِشَ حَوْلَ الزَّيْتُونَةِ؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">لِيَتَسَاقَطَ عَلَيْهَا الْكَثِيرُ مِنَ الْحَبِّ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">لِلْجُلُوسِ عَلَيْهَا</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">لِلتَّزَيُّنِ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="3">
+            <div class="question-title">3. مَاذَا أَمْسَكَ الْخَالُ بِيَدِهِ الْيُمْنَى؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">يَجْذِبُ بِأَصَابِعِ يَدِهِ الْيُمْنَى</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">غُصْنَ الزَّيْتُونِ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">السُّلَّمَ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="4">
+            <div class="question-title">4. وَمَاذَا فَعَلَ بِيَدِهِ الْيُسْرَى؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">يَجْذِبُ بِالْأَصَابِعِ</button>
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">يُمْسِكُ غُصْنَ الزَّيْتُونِ الْمُحَمَّلَ حَبّاً</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">يَحْمِلُ السِّفْطَ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="5">
+            <div class="question-title">5. مَا هُوَ دَوْرُ الْبَنَاتِ فِي جَنْيِ الزَّيْتُونِ؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">قَطْفُ الزَّيْتُونِ مِنَ الْأَعْلَى</button>
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">الْتِقَاطُ الْقَلِيلِ الْمُتَنَاثِرِ خَارِجَ الْمَفَارِشِ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">عَصْرُ الزَّيْتُونِ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="6">
+            <div class="question-title">6. لَوْ كُنْتَ مَعَهُمْ مَاذَا كُنْتَ سَتَفْعَلُ؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">أُسَاعِدُهُمْ فِي جَنْيِ الزَّيْتُونِ بِحُبٍّ وَتَعَاوُنٍ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">أَتْرُكُهُمْ وَأَنْصَرِفُ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">أَلْعَبُ وَحْدِي</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- المحطة الثانية: معاني المفردات -->
+    <div class="lesson-card">
+        <div class="page-badge">معاني المفردات</div>
+        <h3>مَعَانِي الْمُفْرَدَاتِ</h3>
+        <div class="lesson-text-box">
+            <p>• <strong>الْبَادِيَةُ:</strong> الرِّيفُ.</p>
+            <p style="margin-right: 15px; color: var(--text-muted);"><i>يَعِيشُ الْفَلَّاحُونَ فِي الْبَادِيَةِ.</i></p>
+            <p style="margin-top: 10px;">• <strong>تَتَبَاهَى:</strong> تَفْتَخِرُ.</p>
+            <p style="margin-right: 15px; color: var(--text-muted);"><i>يَتَبَاهَى الطَّاوُوسُ بِرِيشِهِ الْجَمِيلِ.</i></p>
+        </div>
+    </div>
+
+    <!-- المحطة الثالثة: أتأمل وأتحدث (ص 50) -->
+    <div class="lesson-card">
+        <div class="page-badge">ص 50</div>
+        <h3>أَتَأَمَّلُ وَأَتَحَدَّثُ</h3>
+        <div class="img-grid">
+            <div class="img-container"><img src="1.jpg" alt="حقل خضروات" onerror="this.src='https://placehold.co/300x150/1976d2/ffffff?text=حقل+خضروات'"><span>حقل خضروات (`1.jpg`)</span></div>
+            <div class="img-container"><img src="2.jpg" alt="حصاد" onerror="this.src='https://placehold.co/300x150/1976d2/ffffff?text=حصاد'"><span>حصاد (`2.jpg`)</span></div>
+            <div class="img-container"><img src="3.jpeg" alt="أغنام في مرعى" onerror="this.src='https://placehold.co/300x150/1976d2/ffffff?text=أغنام'"><span>أغنام في مرعى (`3.jpeg`)</span></div>
+        </div>
+
+        <div class="question-box" data-q="7">
+            <div class="question-title">7. أَيْنَ يُمَارِسُ هَذَا النَّشَاطُ؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">فِي الْمَدِينَةِ</button>
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">فِي الرِّيفِ أَوِ الْبَادِيَةِ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">فِي الْمَطَارِ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="8">
+            <div class="question-title">8. أُذْكُرْ أَنْوَاعَ الْخُضَرِ الَّتِي نَجْنِيهَا مِنَ الْأَرْضِ؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">الْخَسُّ، الْجَزَرُ، وَالْبَاذِنْجَانُ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">الْحَدِيدُ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">الْبْلَاسْتِيكُ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="9">
+            <div class="question-title">9. مَاذَا نَسْتَفِيدُ مِنْ تَرْبِيَةِ الْحَيَوَانَاتِ؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">نَسْتَفِيدُ مِنْ لُحُومِهَا، حَلِيبِهَا، وَصُوفِهَا</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">لَا شَيْءَ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">لِلطَّيَرَانِ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- المحطة الرابعة: أستعمل الصيغ (ص 51) -->
+    <div class="lesson-card">
+        <div class="page-badge">ص 51</div>
+        <h3>أَسْتَعْمِلُ الصِّيَغَ</h3>
+        <div class="lesson-text-box">
+            <p>يَتَسَاقَطُ <strong style="color:var(--accent);">(الْكَثِيرُ)</strong> مِنَ الْحَبِّ عَلَى الْمَفَارِشِ، وَيَتَنَاثَرُ <strong style="color:var(--accent);">(الْقَلِيلُ)</strong> مِنْهُ خَارِجَهُ.</p>
+            <p><strong style="color:var(--accent);">(لَمْ)</strong> تَتْرُكِ الْبَنَاتُ حَبَّةً وَاحِدَةً عَلَى الْأَرْضِ.</p>
+            <p>اسْتَمْتَعْنَا كَثِيرًا، <strong style="color:var(--accent);">(لَنْ)</strong> أَنْسَى هَذَا الْيَوْمَ.</p>
+        </div>
+    </div>
+
+    <!-- المحطة الخامسة: أتحدث شفوياً (ص 51) -->
+    <div class="lesson-card">
+        <div class="page-badge">ص 51</div>
+        <h3>أَتَحَدَّثُ شَفَوِيًّا</h3>
+        <div class="img-grid">
+            <div class="img-container"><img src="4.jpg" alt="رجل يقطف الزيتون" onerror="this.src='https://placehold.co/300x150/1976d2/ffffff?text=قطف+الزيتون'"><span>1- رجل يقطف الزيتون (`4.jpg`)</span></div>
+            <div class="img-container"><img src="5.jpg" alt="امرأة تجمع الزيتون" onerror="this.src='https://placehold.co/300x150/1976d2/ffffff?text=جمع+الزيتون'"><span>2- امرأة تجمع الزيتون (`5.jpg`)</span></div>
+            <div class="img-container"><img src="6.jpg" alt="معصرة زيتون" onerror="this.src='https://placehold.co/300x150/1976d2/ffffff?text=معصرة'"><span>3- معصرة زيتون (`6.jpg`)</span></div>
+            <div class="img-container"><img src="7.jpg" alt="سكب الزيت" onerror="this.src='https://placehold.co/300x150/1976d2/ffffff?text=سكب+الزيت'"><span>4- سكب زيت الزيتون (`7.jpg`)</span></div>
+        </div>
+
+        <div class="question-box" data-q="10">
+            <div class="question-title">10. مَاذَا يَفْعَلُ الرَّجُلُ فِي الْمَشْهَدِ الْأَوَّلِ؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">يَنَامُ</button>
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">يَقْطِفُ وَيَنْفُضُ الزَّيْتُونَ مِنَ الشَّجَرَةِ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">يَقْرَأُ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="11">
+            <div class="question-title">11. مَاذَا تَفْعَلُ الْمَرْأَةُ فِي الْمَشْهَدِ الثَّانِي؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">تَجْمَعُ حَبَّ الزَّيْتُونِ فِي السِّلَالِ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">تُشَاهِدُ التَّلْفَازَ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">تَسْقِي الزَّهْرَ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="12">
+            <div class="question-title">12. مَاذَا يَحْدُثُ دَاخِلَ الْمَعْصَرَةِ (الْمَشْهَدِ الثَّالِثِ)؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">تُلْعَبُ كُرَةُ الْقَدَمِ</button>
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">تُعْصَرُ حَبَّاتُ الزَّيْتُونِ لِاسْتِخْرَاجِ الزَّيْتِ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">تُطْبَخُ الْخُضَرُ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- المحطة السادسة: نص القراءة (ص 52-53) -->
+    <div class="lesson-card">
+        <div class="page-badge">ص 52-53</div>
+        <h3>نَصُّ الْقِرَاءَةِ: مِنْ خَيْرَاتِ الرِّيفِ</h3>
+        <div class="lesson-text-box">
+            <p>كَانَتْ عَائِلَةُ عَمِّي أَكْثَرَ أَهْلِ الْبَادِيَةِ حُبًّا لِلْفِلَاحَةِ، وَقَدْ رَزَقَهُمُ اللَّهُ أَرْضًا وَاسِعَةً، فَزَرَعُوا فِيهَا الْخُضَرَ، وَغَرَسُوا فِي جُزْءٍ مِنْهَا أَشْجَارَ الْفَاكِهَةِ، أَمَّا الْجُزْءُ الْأَكْبَرُ فَزَرَعُوهُ قَمْحًا.</p>
+            <p>ذَاتَ يَوْمٍ، اصْطَحَبَنِي عَمِّي إِلَى حُقُولِ الْقَمْحِ، فَأُعْجِبْتُ بِمَنْظَرِ السَّنَابِلِ، وَهِيَ تَتَمَايَلُ وَكَأَنَّهَا تَتَبَاهَى بِلَوْنِهَا الذَّهَبِيِّ.</p>
+            <p>فَجْأَةً، رَأَيْتُ شَاحِنَةً عِمْلَاقَةً، فَقُلْتُ: مَا هَذِهِ الشَّاحِنَةُ يَا عَمِّي؟</p>
+            <p>الْعَمُّ: هَذِهِ حَاصِدَةٌ يَا كَرِيمُ، جِئْنَا بِهَا لِنَحْصُدَ الْقَمْحَ، وَقَدْ كُنَّا فِي الْمَاضِي نَحْصُدُهُ بِالْمَنَاجِلِ، وَنَدْرُسُهُ بِالثِّيرَانِ.</p>
+        </div>
+
+        <div class="question-box" data-q="13">
+            <div class="question-title">13. أَيْنَ تَسْكُنُ عَائِلَةُ الْعَمِّ؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">فِي الْمَدِينَةِ</button>
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">فِي الْبَادِيَةِ (الرِّيفِ)</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">فِي الْمِيْنَاءِ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="14">
+            <div class="question-title">14. أُذْكُرْ أَنْوَاعَ النَّبَاتَاتِ الْمَوْجُودَةِ فِي مَزْرَعَةِ الْعَمِّ؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">الْخُضَرُ، أَشْجَارُ الْفَاكِهَةِ، وَالْقَمْحُ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">الْبْلَاسْتِيكُ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">الْحَدِيدُ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="15">
+            <div class="question-title">15. لِمَاذَا أَحْضَرَ الْعَمُّ الْحَاصِدَةَ؟ أَعِدْ مَا قَالَهُ.</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">لِنَحْصُدَ الْقَمْحَ، فَهِيَ تُوَفِّرُ الْجُهْدَ وَالْوَقْتَ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">لِلتَّنْزِهِ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">لِلتَّسَوْقِ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- المحطة السابعة: أكتشف وأمميز وأحسن قراءتي وأتعلم (ص 54) -->
+    <div class="lesson-card">
+        <div class="page-badge">ص 54</div>
+        <h3>أَكْتِشِفُ وَأُمَيِّزُ وَأُحْسِنُ قِرَاءَتِي وَأَتَعَلَّمُ</h3>
+        <div class="lesson-text-box">
+            <p><strong>أَقْرَأُ مُنْتَبِهًا إِلَى الْحَرْفَيْنِ (ن، ي):</strong></p>
+            <p>كَانَتِ السَّنَابِلُ الْمَمْلُوءَةُ تَتَمَايَلُ يَمِينًا وَشِمَالًا.</p>
+            <p style="margin-top: 8px; color: var(--primary-dark);"><strong>ي - ن - ي - ن - ي - ن - ي - ن - ي -</strong></p>
+            <p style="margin-top: 5px;">نزل - يَبَسَ - شَهِي - غُصْنَ - يُسَاعِدُ - نُعَاوِنُ</p>
+            <hr style="margin: 10px 0; border: 0; border-top: 1px solid #ddd;">
+            <p><strong>أُحْسِنُ قِرَاءَتِي:</strong></p>
+            <p>فَقُلْتُ: مَاذَا سَتَفْعَلُ بِهَذِهِ الشَّاحِنَةِ الضَّخْمَةِ يَا عَمِّي؟ الْعَمُّ: هَذِهِ لَيْسَتْ شَاحِنَةً يَا كَرِيمُ، إِنَّهَا الْحَاصِدَةُ، جِئْنَا بِهَا لِنَحْصُدَ الْقَمْحَ، فَهِيَ تُوَفِّرُ الْجُهْدَ وَالْوَقْتَ.</p>
+            <hr style="margin: 10px 0; border: 0; border-top: 1px solid #ddd;">
+            <p><strong>أَتَعَلَّمُ:</strong></p>
+            <p>أَنَا مُسْلِمٌ أُومِنُ أَنَّ اللَّهَ وَاحِدٌ لَا شَرِيكَ لَهُ، فَأَعْبُدُهُ وَأُطِيعُهُ.</p>
+            <p style="margin-top: 5px; font-weight: 700; color: var(--accent);">لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ.</p>
+        </div>
+    </div>
+
+    <!-- المحطة الثامنة: أتدرب على الإنتاج الكتابي (ص 54) -->
+    <div class="lesson-card">
+        <div class="page-badge">الإنتاج الكتابي</div>
+        <h3>أَتَدَرَّبُ عَلَى الْإِنْتَاجِ الْكِتَابِيِّ</h3>
+        <div class="lesson-text-box">
+            <p>أَسْتَعِينُ بِالْجَدْوَلِ وَأَكْتُبُ ثَلَاثَ جُمَلٍ عَنْ نَشَاطِ الْفَلَاحِ:</p>
+            <p style="margin-top: 8px; font-weight: 700; color: var(--accent);">الكلمات: يُغْرِسُ / الفلاح / الشَّجَيْرَات / في / الْحَقْل / يُرَبِّي / الفلاح / الْمَوَاشِي / في / الزُّرِيبَةِ / يَزْرَعُ / الْفَلَّاحُ / الْخُضَرَ / فِي / الْبُسْتَانِ</p>
+        </div>
+        <div class="question-box" data-q="16">
+            <div class="question-title">16. الجملة الأولى الصحيحة من الجدول:</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">يَزْرَعُ الْفَلَّاحُ الْخُضَرَ فِي الْبُسْتَانِ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">يَزْرَعُ الْفَلَّاحُ الْمَوَاشِي</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">يُرَبِّي الْفَلَّاحُ الْخُضَرَ</button>
+            </div>
+        </div>
+        <div class="question-box" data-q="17">
+            <div class="question-title">17. الجملة الثانية الصحيحة من الجدول:</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">يُرَبِّي الْفَلَّاحُ الْمَوَاشِيَ فِي الزَّرِيبَةِ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">يُرَبِّي الْفَلَّاحُ الشَّجَيْرَاتِ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">يَغْرِسُ الْفَلَّاحُ الْمَوَاشِيَ</button>
+            </div>
+        </div>
+        <div class="question-box" data-q="18">
+            <div class="question-title">18. الجملة الثالثة الصحيحة من الجدول:</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">يَغْرِسُ الْفَلَّاحُ الشَّجَيْرَاتِ فِي الْحَقْلِ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">يَغْرِسُ الْفَلَّاحُ الزَّرِيبَةَ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">يَزْرَعُ الْفَلَّاحُ الْمَوَاشِيَ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- المحطة التاسعة: التربية الإسلامية (ص 54) -->
+    <div class="lesson-card">
+        <div class="page-badge">التربية الإسلامية</div>
+        <h3>مِنْ أَرْكَانِ الْإِيمَانِ 1</h3>
+        <div class="img-grid">
+            <div class="img-container"><img src="9.jpg" alt="طيور ملونة" onerror="this.src='https://placehold.co/300x150/1976d2/ffffff?text=طيور'"><span>طيور ملونة (`9.jpg`)</span></div>
+            <div class="img-container"><img src="8.jpg" alt="شلال ماء" onerror="this.src='https://placehold.co/300x150/1976d2/ffffff?text=شلال+ماء'"><span>شلال ماء (`8.jpg`)</span></div>
+        </div>
+
+        <div class="question-box" data-q="19">
+            <div class="question-title">19. مَنْ خَلَقَ هَذِهِ الطُّيُورَ وَلَوَّنَهَا؟ وَمَنْ يُطْعِمُهَا؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">اللَّهُ خَالِقُ كُلِّ شَيْءٍ وَهُوَ يُطْعِمُهَا</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">الطَّبِيعَةُ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">الْبَشَرُ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="20">
+            <div class="question-title">20. هَلْ نَسْتَطِيعُ الْعَيْشَ بِدُونِ مَاءٍ؟ مَنْ أَوْجَدَ هَذَا الْمَاءَ، وَهَذِهِ الْأَشْجَارَ؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">لَا نَسْتَطِيعُ، وَاللَّهُ وَحْدَهُ أَوْجَدَهَا</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">نَسْتَطِيعُ وَحْدَنَا</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">الْرِّيحُ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="21">
+            <div class="question-title">21. مَا هُوَ وَاجِبُنَا نَحْوَ خَالِقِنَا؟</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">أَنَا مُسْلِمٌ أُومِنُ أَنَّ اللَّهَ وَاحِدٌ لَا شَرِيكَ لَهُ، فَأَعْبُدُهُ وَأُطِيعُهُ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">أَنْ أَتَجَاهَلَهُ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">أَنْ أَعْبُدَ غَيْرَهُ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- المحطة العاشرة: دفتر الأنشطة (ص 32-34) -->
+    <div class="lesson-card">
+        <div class="page-badge">دفتر الأنشطة ص 32-34</div>
+        <h3>دَفْتَرُ الْأَنْشِطَةِ</h3>
+
+        <div class="question-box" data-q="22">
+            <div class="question-title">22. أَوْظِفُ الصِّيَغَة (كَثِيرٌ أَوْ قَلِيلٌ): هَذِهِ بَاقَةٌ فِيهَا ............ مِنَ الْأَزْهَارِ.</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">كَثِيرٌ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">قَلِيلٌ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="23">
+            <div class="question-title">23. أَوْظِفُ الصِّيَغَة (كَثِيرٌ أَوْ قَلِيلٌ): الْمَدِينَةُ فِيهَا ............ مِنَ الْأَشْجَارِ.</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">قَلِيلٌ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">كَثِيرٌ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="24">
+            <div class="question-title">24. أَوْظِفُ الصِّيَغَة (لَمْ أَوْ لَنْ): ......... أَنْزِلْ مِنَ الشَّجَرَةِ حَتَّى أَجْنِيَ كُلَّ الزَّيْتُونِ.</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">لَنْ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">لَمْ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="25">
+            <div class="question-title">25. أَوْظِفُ الصِّيَغَة (لَمْ أَوْ لَنْ): قَرَأَ كَرِيمٌ كُلَّ الْقِصَّةِ وَ...... يَتْرُكْ صَفْحَةً وَاحِدَةً.</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">لَمْ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">لَنْ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="26">
+            <div class="question-title">26. أَفْهَمُ وَأُجِيبُ (كيف نسمي الآلة التي جاءت إلى الحقل؟):</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">الْحَاصِدَةُ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">بِالْمَنَاجِلِ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="27">
+            <div class="question-title">27. أَفْهَمُ وَأُجِيبُ (بماذا كان يحصد القمح في الماضي؟):</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">بِالْمَنَاجِلِ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">الْحَاصِدَةُ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="28">
+            <div class="question-title">28. أَكْتُبُ كَلِمَةً عَكْسَ الْكَلِمَةِ الْمُلَوَّنَةِ (تَسْكُنُ وِدَادُ فِي الْبَادِيَةِ ➔ تسكن سهام في):</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">الْمَدِينَةِ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">الرِّيفِ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">الْبَادِيَةِ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="29">
+            <div class="question-title">29. أُوَظِّفُ التَّرَاكِيبَ اللُّغَوِيَّةَ (أَنْتَ تَزُورُ الرِّيفَ ➔ أنتِ):</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">أَنْتِ تَزُورِينَ الرِّيفَ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">أَنْتِ تَزُورُ الرِّيفَ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">أَنْتِ زُرْتِ الرِّيفَ</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="30">
+            <div class="question-title">30. أُوَظِّفُ التَّرَاكِيبَ اللُّغَوِيَّةَ (أَنْتَ تغرس الأشجار ➔ أنتِ):</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">أَنْتِ تَغْرِسِينَ الْأَشْجَارَ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">أَنْتِ تَغْرِسُ الْأَشْجَارَ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">أَنْتِ غَرَسْتِ الْأَشْجَارَ</button>
+            </div>
+        </div>
+
+        <div class="question-box" id="classificationBox" data-q="31">
+            <div class="question-title">31. أَصِفُ مُنْتَجَاتِ الْفَلَّاحِ (اضغط على الكلمة ثم اضغط على الخانة المناسبة في الجدول):</div>
+            <div class="classification-container">
+                <p style="font-size: 0.9rem; font-weight: 700; color: var(--text-muted);">بنك الكلمات (اضغط لاختيار كلمة):</p>
+                <div class="words-bank" id="wordsBank">
+                    <div class="draggable-word" onclick="selectWord(this, 'فَوَاكِهُ')">تُفَّاحٌ</div>
+                    <div class="draggable-word" onclick="selectWord(this, 'خُضَرٌ')">جَزَرٌ</div>
+                    <div class="draggable-word" onclick="selectWord(this, 'خُضَرٌ')">خس</div>
+                    <div class="draggable-word" onclick="selectWord(this, 'خُضَرٌ')">بَاذِنْجَانٌ</div>
+                    <div class="draggable-word" onclick="selectWord(this, 'فَوَاكِهُ')">بُرْتُقَالٌ</div>
+                    <div class="draggable-word" onclick="selectWord(this, 'خُضَرٌ')">كُوسَةٌ</div>
+                    <div class="draggable-word" onclick="selectWord(this, 'حُبُوبٌ')">فَاصُولِيَا</div>
+                    <div class="draggable-word" onclick="selectWord(this, 'فَوَاكِهُ')">فَرَاوِلَةٌ</div>
+                    <div class="draggable-word" onclick="selectWord(this, 'حُبُوبٌ')">قَمْحٌ</div>
+                    <div class="draggable-word" onclick="selectWord(this, 'حُبُوبٌ')">عَدَسٌ</div>
+                    <div class="draggable-word" onclick="selectWord(this, 'حُبُوبٌ')">شَعِيرٌ</div>
+                </div>
+
+                <div class="drop-zones-grid">
+                    <div class="drop-zone" onclick="placeWord('فَوَاكِهُ')">
+                        <div class="zone-title">فَوَاكِهُ</div>
+                        <div class="zone-items" id="zone-فَوَاكِهُ"></div>
+                    </div>
+                    <div class="drop-zone" onclick="placeWord('حُبُوبٌ')">
+                        <div class="zone-title">حُبُوبٌ</div>
+                        <div class="zone-items" id="zone-حُبُوبٌ"></div>
+                    </div>
+                    <div class="drop-zone" onclick="placeWord('خُضَرٌ')">
+                        <div class="zone-title">خُضَرٌ</div>
+                        <div class="zone-items" id="zone-خُضَرٌ"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-box" id="imanBox" data-q="32">
+            <div class="question-title">32. أَنَا تِلْمِيذٌ مُؤْمِنٌ بِاللَّهِ (اضغط على الْعِبَارَاتِ الصَّحِيحَةَ فقط):</div>
+            <div class="options-grid">
+                <button class="option-btn iman-btn" data-correct="false" onclick="toggleImanOption(this)">اللَّهُ يُحِبُّ الْمُؤْمِنِينَ</button>
+                <button class="option-btn iman-btn" data-correct="false" onclick="toggleImanOption(this)">اللَّهُ خَالِقُ كُلِّ شَيْءٍ</button>
+                <button class="option-btn iman-btn" data-correct="true" onclick="toggleImanOption(this)">اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ</button>
+                <button class="option-btn iman-btn" data-correct="false" onclick="toggleImanOption(this)">صَلَّى اللَّهُ عَلَيْهِ وَسَلَّمَ</button>
+                <button class="option-btn iman-btn" data-correct="false" onclick="toggleImanOption(this)">أَدْعُو اللَّهَ</button>
+                <button class="option-btn iman-btn" data-correct="true" onclick="toggleImanOption(this)">أَعْبُدُ اللَّهَ وَأُطِيعُهُ</button>
+            </div>
+            <div style="margin-top: 10px; text-align: center;">
+                <button class="btn-main" onclick="checkImanAnswers()">تحقق من إجابات العبارات الصحيحة</button>
+            </div>
+        </div>
+
+        <div class="question-box" data-q="33">
+            <div class="question-title">33. أُكْمِلُ الشَّهَادَةَ: لَا ............ إِلَّا ............ وَحْدَهُ لَا ............ لَهُ.</div>
+            <div class="options-grid shuffle-container">
+                <button class="option-btn" data-correct="true" onclick="checkAnswer(this, true)">إِلَهَ / اللَّهُ / شَرِيكَ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">رَبَّ / النَّاسُ / مَلِكَ</button>
+                <button class="option-btn" data-correct="false" onclick="checkAnswer(this, false)">قَوِيَّ / الخَالِقُ / نَاصِرَ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- التقرير الختامي -->
+    <div id="finalReport" class="final-report">
+        <h2>🎉 أَحْسَنْتَ يَا بَطَلُ!</h2>
+        <p>لقد أتممت جميع تمارين درس "خيرات الريف" ودفتر الأنشطة بنجاح تام.</p>
+        <div class="score-display" id="finalPercentage">0%</div>
+        <p id="feedbackMessage" style="font-size: 1.1rem; font-weight: 700; color: var(--text-muted);"></p>
+        <div class="action-btns">
+            <button class="btn-main" onclick="location.reload()">إِعَادَةُ الْمُحَاوَلَةِ</button>
+        </div>
+    </div>
+
+</div>
+
+<!-- ========================================
+     زر العودة إلى الفهرس (أُضيف)
+     ======================================== -->
+<a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+<!-- ========================================
+     سكريبت الحماية (أُضيف)
+     ======================================== -->
+<script>
+    // إعدادات القناة - السنة الثانية
+    const CHANNEL_ID = "-1004461185731";
+
+    // تهيئة Telegram WebApp
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+        tg.ready();
+        tg.expand();
+    }
+
+    async function verifySubscription() {
+        const statusMsg = document.getElementById('sub-status-msg');
+        statusMsg.style.color = "#0288d1";
+        statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+        let userId = null;
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            userId = tg.initDataUnsafe.user.id;
+        }
+
+        if (!userId) {
+            statusMsg.style.color = "#e65100";
+            statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+            return;
+        }
+
+        try {
+            const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.isSubscribed) {
+                statusMsg.style.color = "#2e7d32";
+                statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                setTimeout(() => {
+                    document.getElementById('sub-lock-screen').style.display = 'none';
+                }, 600);
+            } else {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+            }
+        } catch (error) {
+            statusMsg.style.color = "#c62828";
+            statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+        }
+    }
+
+    window.addEventListener('load', () => {
+        verifySubscription();
+    });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي (كما هو دون تغيير)
+     ======================================== -->
+<script>
+    const totalQuestions = 33;
+    let correctAnswersCount = 0;
+    let answeredQuestions = 0;
+    let isMuted = false;
+
+    document.getElementById('total-count').innerText = totalQuestions;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll('.shuffle-container').forEach(container => {
+            let buttons = Array.from(container.children);
+            for (let i = buttons.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                container.appendChild(buttons[j]);
+            }
+        });
+    });
+
+    function playAudio(audioId) {
+        let audio = document.getElementById(audioId);
+        if (audio) {
+            audio.play().catch(e => console.log("Audio play blocked or missing"));
+        }
+    }
+
+    function toggleMuteSound() {
+        isMuted = !isMuted;
+        let btn = document.querySelector('.audio-toggle');
+        if (isMuted) {
+            btn.innerText = "🔇 الصوت: معطل";
+            btn.style.background = "#c62828";
+        } else {
+            btn.innerText = "🔊 الصوت: مفعل";
+            btn.style.background = "var(--accent)";
+        }
+    }
+
+    function playTone(type) {
+        if (isMuted) return;
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'success') {
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            } else {
+                osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime + 0.1);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+            }
+        } catch (e) {
+            console.log("Web Audio API not supported");
+        }
+    }
+
+    function checkAnswer(button, isCorrect) {
+        const questionBox = button.closest('.question-box');
+        if (questionBox.classList.contains('locked')) return;
+
+        questionBox.classList.add('locked');
+        const buttons = questionBox.querySelectorAll('.option-btn');
+        
+        buttons.forEach(btn => {
+            btn.disabled = true;
+            if (btn.getAttribute('data-correct') === 'true') {
+                btn.classList.add('correct');
+            }
+        });
+
+        if (isCorrect) {
+            button.classList.add('correct');
+            correctAnswersCount++;
+            playTone('success');
+        } else {
+            button.classList.add('wrong');
+            playTone('error');
+        }
+
+        answeredQuestions++;
+        document.getElementById('correct-count').innerText = correctAnswersCount;
+        checkCompletion();
+    }
+
+    let selectedWordEl = null;
+    let selectedWordCorrectCategory = null;
+    let classificationErrors = 0;
+    let correctlyPlacedCount = 0;
+
+    function selectWord(wordElement, correctCategory) {
+        if (wordElement.style.display === 'none' || wordElement.classList.contains('placed')) return;
+        
+        document.querySelectorAll('.draggable-word').forEach(el => el.classList.remove('selected'));
+        
+        selectedWordEl = wordElement;
+        selectedWordCorrectCategory = correctCategory;
+        wordElement.classList.add('selected');
+    }
+
+    function placeWord(targetCategory) {
+        let classBox = document.getElementById('classificationBox');
+        if (classBox.classList.contains('locked')) return;
+
+        if (!selectedWordEl) {
+            let zones = document.querySelectorAll('.drop-zone');
+            zones.forEach(z => z.classList.add('shake'));
+            setTimeout(() => zones.forEach(z => z.classList.remove('shake')), 400);
+            return;
+        }
+
+        if (selectedWordCorrectCategory === targetCategory) {
+            let zoneItems = document.getElementById('zone-' + targetCategory);
+            let itemName = selectedWordEl.innerText;
+
+            let newItem = document.createElement('div');
+            newItem.className = 'placed-item';
+            newItem.innerText = itemName;
+            zoneItems.appendChild(newItem);
+
+            selectedWordEl.style.display = 'none';
+            selectedWordEl.classList.remove('selected');
+            
+            correctlyPlacedCount++;
+            playTone('success');
+
+            selectedWordEl = null;
+            selectedWordCorrectCategory = null;
+
+            if (correctlyPlacedCount === 11) {
+                classBox.classList.add('locked');
+                if (classificationErrors === 0) {
+                    correctAnswersCount++;
+                }
+                playTone('success');
+                answeredQuestions++;
+                document.getElementById('correct-count').innerText = correctAnswersCount;
+                checkCompletion();
+            }
+
+        } else {
+            classificationErrors++;
+            playTone('error');
+
+            let targetZone = document.querySelector(`.drop-zone[onclick="placeWord('${targetCategory}')"]`);
+            targetZone.classList.add('shake');
+            setTimeout(() => targetZone.classList.remove('shake'), 400);
+
+            selectedWordEl.classList.remove('selected');
+            selectedWordEl = null;
+            selectedWordCorrectCategory = null;
+        }
+    }
+
+    function toggleImanOption(btn) {
+        if (btn.closest('.question-box').classList.contains('locked')) return;
+        btn.classList.toggle('selected-iman');
+        btn.style.borderColor = btn.classList.contains('selected-iman') ? 'var(--accent)' : '#cbd5e1';
+        btn.style.background = btn.classList.contains('selected-iman') ? '#fff8e1' : 'white';
+    }
+
+    function checkImanAnswers() {
+        let imanBox = document.getElementById('imanBox');
+        if (imanBox.classList.contains('locked')) return;
+        imanBox.classList.add('locked');
+
+        let buttons = imanBox.querySelectorAll('.iman-btn');
+        let allCorrectChosen = true;
+
+        buttons.forEach(btn => {
+            btn.disabled = true;
+            let isTrue = btn.getAttribute('data-correct') === 'true';
+            let isSelected = btn.classList.contains('selected-iman');
+
+            if (isTrue) {
+                btn.classList.add('correct');
+                if (!isSelected) allCorrectChosen = false;
+            } else {
+                if (isSelected) {
+                    btn.classList.add('wrong');
+                    allCorrectChosen = false;
+                }
+            }
+        });
+
+        if (allCorrectChosen) {
+            correctAnswersCount++;
+            playTone('success');
+        } else {
+            playTone('error');
+        }
+
+        answeredQuestions++;
+        document.getElementById('correct-count').innerText = correctAnswersCount;
+        checkCompletion();
+    }
+
+    function checkCompletion() {
+        if (answeredQuestions === totalQuestions) {
+            showFinalReport();
+        }
+    }
+
+    function showFinalReport() {
+        let totalC = Math.min(correctAnswersCount, totalQuestions);
+        let pct = totalQuestions > 0 ? Math.round((totalC / totalQuestions) * 100) : 0;
+        pct = Math.min(Math.max(pct, 0), 100);
+
+        document.getElementById('finalPercentage').innerText = pct + '%';
+        
+        let msg = "";
+        if (pct === 100) {
+            msg = "عَبْقَرِيٌّ! نَتِيجَةٌ مِثَالِيَّةٌ وتَفَوُّقٌ رَائِعٌ في كل أنشطة الريف!";
+        } else if (pct >= 80) {
+            msg = "مُمْتَازٌ جِدّاً! أَدَاءٌ بَاهِرٌ ومُشَرِّفٌ!";
+        } else if (pct >= 50) {
+            msg = "جَيِّدٌ! حَاوِلِ الْمُرَاجَعَةَ لِلتَّمَيُّزِ أَكْثَرَ.";
+        } else {
+            msg = "بِمُمْكِنِكَ الْمُحَاوَلَةَ مَرَّةً أُخْرَى لِتَحْقِيقِ نَتِيجَةٍ أَفْضَلَ.";
+        }
+        document.getElementById('feedbackMessage').innerText = msg;
+
+        let reportElement = document.getElementById('finalReport');
+        reportElement.style.display = 'block';
+        reportElement.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
