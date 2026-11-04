@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>اللغة العربية • في القرية</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    :root {
+      --primary: #1976d2;
+      --primary-dark: #0d47a1;
+      --success: #2e7d32;
+      --error: #c62828;
+      --bg: #f5f9fc;
+      --card-bg: #ffffff;
+      --text: #263238;
+      --text-muted: #546e7a;
+      --accent: #ff9800;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Tajawal', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 12px;
+      padding-bottom: 70px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      background: #ffffff;
+      padding: 8px 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .app-title-mini { font-weight: 800; color: var(--primary-dark); font-size: 1.05rem; }
+    .audio-btn {
+      background: #e1f5fe;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      font-size: 19px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .page-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .lesson-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-top: 6px solid var(--primary);
+    }
+
+    .lesson-title {
+      color: var(--primary-dark);
+      font-weight: 900;
+      font-size: 1.3rem;
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 15px;
+      border-bottom: 2px dashed #b3e5fc;
+      padding-bottom: 10px;
+    }
+
+    .lesson-text-box {
+      background: #fdfbf7;
+      border: 1px solid #ffe0b2;
+      border-right: 5px solid var(--accent);
+      border-radius: 10px;
+      padding: 14px;
+      line-height: 2.2;
+      font-size: 1.05rem;
+      margin-bottom: 18px;
+      color: #37474f;
+      text-align: justify;
+    }
+    .lesson-text-title { font-weight: bold; color: #e65100; margin-bottom: 6px; display: block; }
+
+    .instruction { font-weight: 800; color: #37474f; margin: 15px 0 10px 0; font-size: 1.05rem; }
+
+    .audio-wrapper {
+      background: #e3f2fd;
+      padding: 14px;
+      border-radius: 12px;
+      margin: 10px 0 15px 0;
+      border: 1px solid #90caf9;
+      text-align: center;
+    }
+    .media-player { width: 100%; max-width: 400px; margin-top: 6px; }
+
+    .q-image-box {
+      text-align: center;
+      margin: 14px 0 18px 0;
+      background: #fafafa;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid #cfd8dc;
+    }
+    .q-image-box img {
+      width: 100%;
+      max-width: 240px;
+      height: 160px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #fff;
+      display: block;
+      margin: 0 auto 10px auto;
+    }
+
+    .img-grid-responsive {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin: 14px 0;
+      align-items: end;
+    }
+    .img-grid-responsive div { text-align: center; }
+    .img-grid-responsive img {
+      width: 100%;
+      max-width: 140px;
+      height: 110px;
+      object-fit: contain;
+      border-radius: 8px;
+      border: 1.5px solid #cfd8dc;
+      background: #fff;
+      padding: 4px;
+    }
+
+    .tf-btn, .drag-word, .tag-btn {
+      background: #ffffff;
+      border: 2px solid #b0bec5;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-block;
+    }
+
+    .drag-word.selected {
+      border-color: var(--primary);
+      background: #e1f5fe;
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
+    }
+
+    .locked { pointer-events: none !important; cursor: not-allowed; opacity: 0.85; }
+    .correct { background-color: #e8f5e9 !important; border-color: var(--success) !important; color: var(--success) !important; font-weight: bold; }
+    .wrong { background-color: #ffebee !important; border-color: var(--error) !important; color: var(--error) !important; font-weight: bold; }
+
+    .drop-zone {
+      display: inline-block;
+      min-width: 75px;
+      min-height: 32px;
+      border-bottom: 2px dashed #0288d1;
+      margin: 0 4px;
+      vertical-align: middle;
+      text-align: center;
+      color: var(--primary-dark);
+      font-weight: bold;
+      background: #e1f5fe;
+      border-radius: 6px;
+      padding: 2px 6px;
+      line-height: 28px;
+    }
+
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      background: #fef8e7;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid #e0a800;
+    }
+    .matrix-table td {
+      border: 1.5px solid #f0d060;
+      padding: 10px;
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #000;
+    }
+
+    .eval-badge {
+      background: #f1f8e9;
+      border: 1px solid #dcedc8;
+      padding: 8px 14px;
+      border-radius: 10px;
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-around;
+      font-weight: 800;
+      font-size: 0.95rem;
+    }
+    .text-success { color: var(--success); }
+    .text-error { color: var(--error); }
+
+    .word-pool {
+      background: #f8fafc;
+      border: 1.5px dashed #b0bec5;
+      padding: 10px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+
+    #final-report {
+      text-align: center;
+      background: #ffffff;
+      border: 3px solid var(--primary);
+      border-radius: 18px;
+      padding: 25px 18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      margin-top: 30px;
+    }
+    .final-score { font-size: 3.2rem; font-weight: 900; color: var(--primary-dark); margin: 12px 0; }
+    .final-remark { font-size: 1.25rem; font-weight: 800; padding: 8px 16px; border-radius: 20px; display: inline-block; margin-bottom: 20px; }
+
+    .btn-restart {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      font-size: 1.15rem;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري (أُضيفت)
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس (أُضيف) */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 20px auto 10px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري (أُضيفت)
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <div class="top-bar">
+    <span class="app-title-mini">اللغة العربية • السنة الأولى ابتدائي • فِي الْقَرْيَةِ</span>
+    <button class="audio-btn" id="audio-toggle" onclick="toggleAudio()" title="كتم/تشغيل الصوت">🔊</button>
+  </div>
+
+  <!-- ========================================================
+       الجزء 1: كتاب التلميذ - ص 43
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 43</span>
+    <h2 class="lesson-title">فَهْمُ الْمَنْطُوقِ • فِي الْقَرْيَةِ</h2>
+    
+    <p class="instruction">🎧 اسْتَمِعْ إِلَى نَصِّ (فَهْمِ الْمَنْطُوقِ) :</p>
+    <div class="audio-wrapper">
+      <audio controls class="media-player" preload="auto">
+        <source src="fahd_al_mantiq_qariya.mp3" type="audio/mpeg">
+        متصفحك لا يدعم مشغل الصوت.
+      </audio>
+    </div>
+
+    <p class="instruction">أَفْهَمُ نَصَّ الْمَنْطُوقِ (أَجِبْ عَنِ الْأَسْئِلَةِ الآتِيَةِ) :</p>
+    <div id="ex-p43-listening-mcq"></div>
+
+    <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+    <p class="instruction">أَبْنِي وَأَقْرَأُ :</p>
+    <div class="lesson-text-box" style="text-align: center; font-size: 1.2rem;">
+      <span style="color: var(--primary-dark); font-weight: 900;">المزارع</span> في <span style="color: var(--primary-dark); font-weight: 900;">القرية</span> <span style="color: #e65100; font-weight: 900;">واسعة</span>.<br>
+      <span style="color: var(--primary-dark); font-weight: 900;">الحياة</span> فيها <span style="color: #e65100; font-weight: 900;">هادئة</span>، و<span style="color: var(--success); font-weight: 900;">الهواء</span> <span style="color: var(--success); font-weight: 900;">نقي</span>.
+    </div>
+
+    <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+    <p class="instruction">أَسْتَعْمِلُ : الْيَوْمَ ، غَدًا</p>
+    <div class="lesson-text-box" style="line-height: 2.5;">
+      • <span style="color: var(--accent); font-weight: bold;">اليوم</span> يعود عمي من المزرعة.<br>
+      • <span style="color: var(--accent); font-weight: bold;">غدا</span> نزور القرية.
+    </div>
+    
+    <p class="instruction">تَطْبِيقُ الصِّيَغِ (اِخْتَرِ الصِّيغَةَ الْمُنَاسِبَةَ) :</p>
+    <div id="ex-p43-formulas-mcq"></div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-p43-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-p43-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 2: كتاب التلميذ - ص 44 (حرف العين)
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 44</span>
+    <h2 class="lesson-title">أَكْتَشِفُ • أَتَعَرَّفُ عَلَى رَسْمِ الْحَرْفِ ( ع )</h2>
+    
+    <div class="lesson-text-box" style="text-align: center;">
+       الْمَزَارِعُ فِي الْقَرْيَةِ وَاسِعَةٌ<br>
+      <strong style="color:var(--error);">الْمَزَارِعُ</strong><br>
+      <span style="font-size: 1.8rem; color:var(--error); font-weight:900;">عُ</span>
+    </div>
+
+    <p class="instruction">أَتَعَرَّفُ عَلَى رَسْمِ الْحَرْفِ (ع / ـعـ / ـع / عـ) :</p>
+    <div class="lesson-text-box" style="text-align: center; font-size: 1.5rem; color: #0d47a1;">
+      عـ &nbsp;&nbsp;&nbsp; ـعـ &nbsp;&nbsp;&nbsp; ـع &nbsp;&nbsp;&nbsp; ع
+    </div>
+
+    <p class="instruction">أَقْرَأُ وَأُثَبِّتُ (جَدْوَلُ حَرْفِ الْعَيْنِ) :</p>
+    <table class="matrix-table">
+      <tr><td>ع</td><td>عَ</td><td>عُ</td><td>عِي</td></tr>
+      <tr><td>عـ</td><td>عَا</td><td>عُو</td><td>ـعـ</td></tr>
+      <tr><td>ـع</td><td>عـَ</td><td>عُـو</td><td>ـعـِ</td></tr>
+      <tr><td>ع</td><td>عـِ</td><td>عـُو</td><td>ـعـَ</td></tr>
+    </table>
+
+    <p class="instruction">أَقْرَأُ الْكَلِمَاتِ (اضْغَطْ عَلَى الْكَلِمَةِ ثُمَّ عَلَى الصُّورَةِ الْمُنَاسِبَةِ) :</p>
+    <div class="word-pool" id="pool-p44-words"></div>
+
+    <div class="img-grid-responsive">
+      <div><img src="img_qati3.png" alt=""><span class="drop-zone" data-ans="قَطِيعُ" style="width:100%;"></span></div>
+      <div><img src="img_mazra3a.png" alt=""><span class="drop-zone" data-ans="مَزْرَعَةٌ" style="width:100%;"></span></div>
+      <div><img src="img_osfour.png" alt=""><span class="drop-zone" data-ans="عُصْفُورٌ" style="width:100%;"></span></div>
+      <div><img src="img_araba.png" alt=""><span class="drop-zone" data-ans="عَرَبَةٌ" style="width:100%;"></span></div>
+    </div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-p44-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-p44-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 3: كتاب التلميذ - ص 45 (حرف الهاء)
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 45</span>
+    <h2 class="lesson-title">أَكْتَشِفُ • أَتَعَرَّفُ عَلَى رَسْمِ الْحَرْفِ ( هـ )</h2>
+    
+    <div class="lesson-text-box" style="text-align: center;">
+      الْحَيَاةُ هَادِئَةٌ وَالْهَوَاءُ نَقِيٌّ<br>
+      <strong style="color:var(--error);">الْهَوَاءُ</strong><br>
+      <span style="font-size: 1.8rem; color:var(--error); font-weight:900;">هـ</span>
+    </div>
+
+    <p class="instruction">أَتَعَرَّفُ عَلَى رَسْمِ الْحَرْفِ (هـ / ـهـ / ـه / ه) :</p>
+    <div class="lesson-text-box" style="text-align: center; font-size: 1.5rem; color: #0d47a1;">
+      هـ &nbsp;&nbsp;&nbsp; ـهـ &nbsp;&nbsp;&nbsp; ـه &nbsp;&nbsp;&nbsp; ه
+    </div>
+
+    <p class="instruction">أَقْرَأُ وَأُثَبِّتُ (جَدْوَلُ حَرْفِ الْهَاءِ) :</p>
+    <table class="matrix-table">
+      <tr><td>هـ</td><td>هَـ</td><td>هُـ</td><td>هِيَ</td></tr>
+      <tr><td>ـهـ</td><td>هَا</td><td>هُو</td><td>ـهَ</td></tr>
+      <tr><td>ـه</td><td>هَـ</td><td>هُـ</td><td>ـهِ</td></tr>
+      <tr><td>ه</td><td>هـِ</td><td>هـُو</td><td>هـَ</td></tr>
+    </table>
+
+    <p class="instruction">أَقْرَأُ الْكَلِمَاتِ (اضْغَطْ عَلَى الْكَلِمَةِ ثُمَّ عَلَى الصُّورَةِ الْمُنَاسِبَةِ) :</p>
+    <div class="word-pool" id="pool-p45-words"></div>
+
+    <div class="img-grid-responsive">
+      <div><img src="img_azhar.png" alt=""><span class="drop-zone" data-ans="أَزْهَارٌ" style="width:100%;"></span></div>
+      <div><img src="img_hudhud.png" alt=""><span class="drop-zone" data-ans="هَدْهَدٌ" style="width:100%;"></span></div>
+      <div><img src="img_hilal.png" alt=""><span class="drop-zone" data-ans="هِلَالٌ" style="width:100%;"></span></div>
+      <div><img src="img_mahr.png" alt=""><span class="drop-zone" data-ans="مَهْرٌ" style="width:100%;"></span></div>
+    </div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-p45-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-p45-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 4: كتاب التلميذ - ص 46
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كِتَابُ التِّلْمِيذِ - صَفْحَةُ 46</span>
+    <h2 class="lesson-title">أُحِبُّ بِيئَتِي • الصِّدْقُ • أَفْهَمُ وَأَحْفَظُ</h2>
+    
+    <p class="instruction">أُلاحِظُ وَأُعَبِّرُ (اضْغَطْ عَلَى الجُمْلَةِ ثُمَّ عَلَى الصُّورَةِ الْمُنَاسِبَةِ) :</p>
+    
+    <div class="word-pool" id="pool-p46-sentences"></div>
+
+    <div class="img-grid-responsive">
+      <div><img src="img_story_9.png" alt=""><span class="drop-zone" data-ans="كَسَرَتِ الْبِنْتُ الْمِزْهَرِيَّةَ" style="width:100%;"></span></div>
+      <div><img src="img_story_10.png" alt=""><span class="drop-zone" data-ans="قَالَتِ الْبِنْتُ الْحَقِيقَةَ لِأُمِّهَا بِأَنَّهَا كَسَرَتِ الْمِزْهَرِيَّةَ" style="width:100%;"></span></div>
+      <div><img src="img_story_11.png" alt=""><span class="drop-zone" data-ans="سَامَحَتِ الْأُمُّ ابْنَتَهَا لِأَنَّهَا قَالَتِ الْحَقِيقَةَ" style="width:100%;"></span></div>
+    </div>
+
+    <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+    <div class="lesson-text-box">
+      <span class="lesson-text-title">📖 أَفْهَمُ :</span>
+      الطفل الصادق يحبه الله ويحبه الناس.<br><br>
+      <span class="lesson-text-title">📖 أَحْفَظُ :</span>
+      قال رسول الله - صلى الله عليه وسلم - :<br>
+      <strong>« إن الصدق يهدي إلى البر ، وإن البر يهدي إلى الجنة »</strong>.
+    </div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-p46-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-p46-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 5: كراس الأنشطة - ص 20
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كُرَّاسُ الأَنْشِطَةِ - صَفْحَةُ 20</span>
+    <h2 class="lesson-title">أَثْبُتُ (1) • أثبت (2)</h2>
+    
+    <p class="instruction">1. أثبت (1): حدد شكل حرف العين المناسب لكل كلمة :</p>
+    <div id="box-ein-mcq" style="margin-bottom:14px;"></div>
+
+    <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+    <p class="instruction">2. أثبت (2): حدد شكل حرف الهاء المناسب للكلمات الآتية :</p>
+    <div id="box-haa-mcq" style="margin-bottom:14px;"></div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-act20-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-act20-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       الجزء 6: كراس الأنشطة - ص 21
+       ======================================================== -->
+  <div class="lesson-card">
+    <span class="page-badge">كُرَّاسُ الأَنْشِطَةِ - صَفْحَةُ 21</span>
+    <h2 class="lesson-title">أُثْرِي لُغَتِي • أُنْتِجُ كِتَابِيّاً</h2>
+    
+    <p class="instruction">1. اختر اللون المناسب (أحمر لحرف العين / أصفر لحرف الهاء) ثم اضغط على الكلمة :</p>
+    <div style="text-align: center; margin-bottom: 12px;">
+      <button class="tf-btn" id="btn-color-red" onclick="selectColor('red')" style="background:#ffebee; color:var(--error); border-color:var(--error);">🎨 اللون الأحمر (للحرف ع)</button>
+      <button class="tf-btn" id="btn-color-yellow" onclick="selectColor('yellow')" style="background:#fffde7; color:#f57f17; border-color:#fbc02d;">🎨 اللون الأصفر (للحرف هـ)</button>
+    </div>
+    <div id="box-color-words" style="margin-bottom:14px; text-align:center;"></div>
+
+    <hr style="margin:20px 0; border:0; border-top:1px dashed #cfd8dc;">
+
+    <p class="instruction">2. رَتِّبِ الْكَلِمَاتِ لِتُكَوِّنَ جُمْلَةً مُفِيدَةً :</p>
+    <div class="word-pool" id="pool-act21-sentence"></div>
+    <div style="line-height: 2.8; font-size: 1.05rem; text-align: center;">
+      <span class="drop-zone" data-ans="الْأَغْنَامُ"></span>
+      <span class="drop-zone" data-ans="مُنْتَشِرَةٌ"></span>
+      <span class="drop-zone" data-ans="فِي"></span>
+      <span class="drop-zone" data-ans="الْمَرَاعِي"></span>.
+    </div>
+
+    <div class="eval-badge">
+      <span class="text-success">صحيحة: <span id="ex-act21-c">0</span></span>
+      <span class="text-error">خاطئة: <span id="ex-act21-w">0</span></span>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       التقرير النهائي الشامل
+       ======================================================== -->
+  <div id="final-report">
+    <h2 style="color: var(--primary-dark); margin-top: 0;">📊 التَّقْرِيرُ النِّهَائِيُّ لِلدَّرْسِ</h2>
+    <p style="color: var(--text-muted); font-size:1.1rem; margin-bottom:15px;">حصيلة إجابات التمارين التفاعلية لكامل الدرس :</p>
+    
+    <div style="display:flex; justify-content: space-around; margin: 15px 0;">
+      <div style="color: var(--success); font-weight:800; font-size:1.25rem;">
+        إجابات صحيحة<br><span id="total-c" style="font-size:1.8rem;">0</span>
+      </div>
+      <div style="color: var(--error); font-weight:800; font-size:1.25rem;">
+        إجابات خاطئة<br><span id="total-w" style="font-size:1.8rem;">0</span>
+      </div>
+    </div>
+
+    <div class="final-score" id="total-percent">0%</div>
+    <div class="final-remark" id="total-remark">جارٍ الإنجاز...</div>
+    
+    <button class="btn-restart" onclick="restartEntireLesson()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنَ الْبِدَايَةِ</button>
+  </div>
+
+  <!-- ========================================
+       زر العودة إلى الفهرس (أُضيف)
+       ======================================== -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+  <!-- ========================================
+       سكريبت الحماية (أُضيف)
+       ======================================== -->
+  <script>
+    // إعدادات القناة - السنة الأولى
+    const CHANNEL_ID = "-1004456852024";
+
+    // تهيئة Telegram WebApp
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+  </script>
+
+  <!-- ========================================
+       سكريبت الدرس الأصلي (كما هو دون تغيير)
+       ======================================== -->
+  <script>
+  let audioEnabled = true;
+  const AudioContext = window.AudioContext || window.webkitAudioContext;
+  let actx = null;
+
+  function getAudioContext() {
+    if (!actx) actx = new AudioContext();
+    if (actx.state === 'suspended') actx.resume();
+    return actx;
+  }
+
+  function toggleAudio() {
+    audioEnabled = !audioEnabled;
+    document.getElementById('audio-toggle').textContent = audioEnabled ? '🔊' : '🔇';
+  }
+
+  function playTone(freq, type, duration) {
+    if(!audioEnabled) return;
+    try {
+      const ctx = getAudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, ctx.currentTime);
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + duration);
+    } catch(e) {}
+  }
+
+  function playSuccess() {
+    playTone(523.25, 'sine', 0.12);
+    setTimeout(() => playTone(659.25, 'sine', 0.12), 110);
+    setTimeout(() => playTone(783.99, 'sine', 0.22), 220);
+  }
+
+  function playError() {
+    playTone(180, 'sawtooth', 0.35);
+  }
+
+  function playTap() {
+    playTone(600, 'triangle', 0.04);
+  }
+
+  function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  let totalCorrectAnswers = 0;
+  let totalWrongAnswers = 0;
+
+  function registerScore(badgePrefix, isCorrect) {
+    if (isCorrect) {
+      totalCorrectAnswers++;
+      const el = document.getElementById(`${badgePrefix}-c`);
+      if (el) el.textContent = parseInt(el.textContent) + 1;
+    } else {
+      totalWrongAnswers++;
+      const el = document.getElementById(`${badgePrefix}-w`);
+      if (el) el.textContent = parseInt(el.textContent) + 1;
+    }
+    updateLiveReport();
+  }
+
+  function updateLiveReport() {
+    document.getElementById('total-c').textContent = totalCorrectAnswers;
+    document.getElementById('total-w').textContent = totalWrongAnswers;
+
+    const answeredCount = totalCorrectAnswers + totalWrongAnswers;
+    let percent = answeredCount === 0 ? 0 : Math.round((totalCorrectAnswers / answeredCount) * 100);
+    percent = Math.min(Math.max(percent, 0), 100);
+    document.getElementById('total-percent').textContent = percent + '%';
+
+    const remarkEl = document.getElementById('total-remark');
+    if (answeredCount < 4) {
+      remarkEl.textContent = 'واصِل إنجاز التمارين...';
+      remarkEl.style.backgroundColor = '#eceff1';
+      remarkEl.style.color = '#37474f';
+    } else if (percent >= 90) {
+      remarkEl.textContent = 'ممتاز! عمل رائع وإجابات متفوقة.';
+      remarkEl.style.backgroundColor = '#c8e6c9';
+      remarkEl.style.color = '#1b5e20';
+    } else if (percent >= 70) {
+      remarkEl.textContent = 'جيد جداً! استيعابك ممتاز للدروس.';
+      remarkEl.style.backgroundColor = '#bbdefb';
+      remarkEl.style.color = '#0d47a1';
+    } else if (percent >= 50) {
+      remarkEl.textContent = 'أحسنت، وراجع النص لتقديم نتيجة أفضل.';
+      remarkEl.style.backgroundColor = '#ffe0b2';
+      remarkEl.style.color = '#e65100';
+    } else {
+      remarkEl.textContent = 'حاول مجدداً وركز أكثر.';
+      remarkEl.style.backgroundColor = '#ffcdd2';
+      remarkEl.style.color = '#b71c1c';
+    }
+  }
+
+  function buildRandomizedMCQ(containerId, badgeId, questions) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+
+    questions.forEach(q => {
+      const wrap = document.createElement('div');
+      wrap.style.marginBottom = "14px";
+      wrap.innerHTML = `<span style="font-size:1.02rem; font-weight:700; display:block; margin-bottom:6px;">• ${q.text}</span>`;
+      
+      const btnGroup = document.createElement('div');
+      const shuffledOptions = shuffleArray(q.options);
+
+      shuffledOptions.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'tf-btn';
+        btn.textContent = opt.label;
+
+        btn.onclick = () => {
+          playTap();
+          Array.from(btnGroup.querySelectorAll('.tf-btn')).forEach(b => b.classList.add('locked'));
+
+          if (opt.correct) {
+            btn.classList.add('correct');
+            playSuccess();
+            registerScore(badgeId, true);
+          } else {
+            btn.classList.add('wrong');
+            playError();
+            registerScore(badgeId, false);
+          }
+        };
+        btnGroup.appendChild(btn);
+      });
+
+      wrap.appendChild(btnGroup);
+      container.appendChild(wrap);
+    });
+  }
+
+  let activeSelectedWord = null;
+
+  function setupWordImageMatching(poolId, zonesSelector, badgeId, items) {
+    const pool = document.getElementById(poolId);
+    pool.innerHTML = '';
+    const shuffled = shuffleArray(items);
+
+    shuffled.forEach(item => {
+      const span = document.createElement('span');
+      span.className = 'drag-word';
+      span.textContent = item.label;
+      span.setAttribute('data-val', item.val);
+
+      span.onclick = () => {
+        if (span.classList.contains('locked')) return;
+        playTap();
+        pool.querySelectorAll('.drag-word.selected').forEach(el => el.classList.remove('selected'));
+        span.classList.add('selected');
+        activeSelectedWord = span;
+      };
+
+      pool.appendChild(span);
+    });
+
+    const zones = document.querySelectorAll(zonesSelector);
+    zones.forEach(zone => {
+      zone.onclick = () => {
+        if (zone.classList.contains('locked') || !activeSelectedWord) return;
+
+        const expected = zone.getAttribute('data-ans');
+        const actual = activeSelectedWord.getAttribute('data-val');
+
+        activeSelectedWord.classList.remove('selected');
+        activeSelectedWord.classList.add('locked');
+        zone.classList.add('locked');
+
+        zone.textContent = activeSelectedWord.textContent;
+        activeSelectedWord.style.visibility = 'hidden';
+
+        if (expected === actual) {
+          playSuccess();
+          zone.classList.add('correct');
+          registerScore(badgeId, true);
+        } else {
+          playError();
+          zone.classList.add('wrong');
+          registerScore(badgeId, false);
+        }
+
+        activeSelectedWord = null;
+      };
+    });
+  }
+
+  function setupTapToFill(poolId, zonesSelector, badgeId, wordsList) {
+    const pool = document.getElementById(poolId);
+    pool.innerHTML = '';
+    const shuffledWords = shuffleArray(wordsList);
+
+    shuffledWords.forEach(wObj => {
+      const span = document.createElement('span');
+      span.className = 'drag-word';
+      span.textContent = wObj.label;
+      span.setAttribute('data-val', wObj.val);
+
+      span.onclick = () => {
+        if (span.classList.contains('locked')) return;
+        playTap();
+        document.querySelectorAll('.drag-word.selected').forEach(el => el.classList.remove('selected'));
+        span.classList.add('selected');
+        activeSelectedWord = span;
+      };
+
+      pool.appendChild(span);
+    });
+
+    const zones = document.querySelectorAll(zonesSelector);
+    zones.forEach(zone => {
+      zone.onclick = () => {
+        if (zone.classList.contains('locked') || !activeSelectedWord) return;
+
+        const expected = zone.getAttribute('data-ans');
+        const actual = activeSelectedWord.getAttribute('data-val');
+
+        activeSelectedWord.classList.remove('selected');
+        activeSelectedWord.classList.add('locked');
+        zone.classList.add('locked');
+
+        zone.textContent = activeSelectedWord.textContent;
+        activeSelectedWord.style.visibility = 'hidden';
+
+        if (expected === actual) {
+          playSuccess();
+          zone.classList.add('correct');
+          registerScore(badgeId, true);
+        } else {
+          playError();
+          zone.classList.add('wrong');
+          registerScore(badgeId, false);
+        }
+
+        activeSelectedWord = null;
+      };
+    });
+  }
+
+  let selectedColorForColoring = null;
+  function selectColor(color) {
+    selectedColorForColoring = color;
+    document.getElementById('btn-color-red').style.borderWidth = color === 'red' ? '4px' : '2px';
+    document.getElementById('btn-color-yellow').style.borderWidth = color === 'yellow' ? '4px' : '2px';
+  }
+
+  function setupColoringActivity(containerId, items, badgeId) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    const shuffled = shuffleArray(items);
+
+    shuffled.forEach(item => {
+      const btn = document.createElement('button');
+      btn.className = 'tag-btn';
+      btn.textContent = item.label;
+
+      btn.onclick = () => {
+        if (btn.classList.contains('locked') || !selectedColorForColoring) return;
+        playTap();
+        btn.classList.add('locked');
+
+        if (selectedColorForColoring === item.expectedColor) {
+          btn.classList.add('correct');
+          btn.style.backgroundColor = item.expectedColor === 'red' ? '#ffebee' : '#fffde7';
+          playSuccess();
+          registerScore(badgeId, true);
+        } else {
+          btn.classList.add('wrong');
+          playError();
+          registerScore(badgeId, false);
+        }
+      };
+      container.appendChild(btn);
+    });
+  }
+
+  function initAllActivities() {
+    totalCorrectAnswers = 0;
+    totalWrongAnswers = 0;
+    updateLiveReport();
+
+    // 1. فهم المنطوق والصيغ
+    buildRandomizedMCQ('ex-p43-listening-mcq', 'ex-p43', [
+      { text: "هل قرية أحمد جميلة؟", options: [{ label: "نعم قرية أحمد جميلة", correct: true }, { label: "ليست جميلة", correct: false }] },
+      { text: "كيف هي الحياة فيها؟", options: [{ label: "الحياة هادئة", correct: true }, { label: "الحياة صاخبة ومليئة بالازدحام", correct: false }] },
+      { text: "لماذا هواؤها نقي؟ (هل فيها مصانع وسيارات؟)", options: [{ label: "لأنه لا يوجد فيها مصانع ولا ضجيج سيارات", correct: true }, { label: "لأنها مليئة بالمصانع والسيارات", correct: false }] },
+      { text: "هل أناسها طيبون؟ ماذا تسود بينهم؟", options: [{ label: "نعم أناسها طيبون، تسود بينهم المحبة والاحترام والصدق في الكلام", correct: true }, { label: "أناسها غير طيبين وتسود بينهم الكراهية", correct: false }] },
+      { text: "تشوق أحمد لرؤية قرية جده، ماذا طلب من جده؟", options: [{ label: "طلب منه أن يأخذه إليها", correct: true }, { label: "طلب منه أن يترك القرية", correct: false }] },
+      { text: "كيف وجد أحمد قرية جده؟ هل وجدها مثل ما تخيلها؟", options: [{ label: "وجدها أجمل مما تخيل", correct: true }, { label: "وجدها أقل جمالا مما تخيل", correct: false }] },
+      { text: "كيف وجد فيها البيوت والمزارع؟", options: [{ label: "البيوت قائلة ومتفرقة والمزارع واسعة", correct: true }, { label: "البيوت كثيرة ومتلاصقة والمزارع ضيقة", correct: false }] },
+      { text: "أين كانت ترعى الأغنام؟", options: [{ label: "كانت ترعى في المراعي الخضراء", correct: true }, { label: "كانت ترعى في وسط الشارع", correct: false }] },
+      { text: "هل وجد أحمد ازدحام وضجيج السيارات؟", options: [{ label: "لا يوجد ازدحام وضجيج السيارات", correct: true }, { label: "نعم وجد ازدحاما كبيرا", correct: false }] },
+      { text: "بماذا كان ينعم الناس فيها؟", options: [{ label: "ينعم الناس بالراحة والاطمئنان", correct: true }, { label: "ينعم الناس بالتعب والقلق", correct: false }] }
+    ]);
+
+    buildRandomizedMCQ('ex-p43-formulas-mcq', 'ex-p43', [
+      { text: "اختر الصيغة المناسبة: «... نَزُورُ الْقَرْيَةَ.»", options: [{ label: "غدًا", correct: true }, { label: "اليوم", correct: false }] },
+      { text: "اختر الصيغة المناسبة: «... يَعُودُ عَمِّي مِنَ الْمَزْرَعَةِ.»", options: [{ label: "اليوم", correct: true }, { label: "غدًا", correct: false }] }
+    ]);
+
+    // 2. ص 44
+    setupWordImageMatching('pool-p44-words', '.img-grid-responsive div .drop-zone', 'ex-p44', [
+      { label: "قَطِيعُ", val: "قَطِيعُ" },
+      { label: "مَزْرَعَةٌ", val: "مَزْرَعَةٌ" },
+      { label: "عُصْفُورٌ", val: "عُصْفُورٌ" },
+      { label: "عَرَبَةٌ", val: "عَرَبَةٌ" }
+    ]);
+
+    // 3. ص 45
+    setupWordImageMatching('pool-p45-words', '.img-grid-responsive div .drop-zone', 'ex-p45', [
+      { label: "أَزْهَارٌ", val: "أَزْهَارٌ" },
+      { label: "هَدْهَدٌ", val: "هَدْهَدٌ" },
+      { label: "هِلَالٌ", val: "هِلَالٌ" },
+      { label: "مَهْرٌ", val: "مَهْرٌ" }
+    ]);
+
+    // 4. ص 46
+    setupWordImageMatching('pool-p46-sentences', '.img-grid-responsive div .drop-zone', 'ex-p46', [
+      { label: "كَسَرَتِ الْبِنْتُ الْمِزْهَرِيَّةَ", val: "كَسَرَتِ الْبِنْتُ الْمِزْهَرِيَّةَ" },
+      { label: "قَالَتِ الْبِنْتُ الْحَقِيقَةَ لِأُمِّهَا بِأَنَّهَا كَسَرَتِ الْمِزْهَرِيَّةَ", val: "قَالَتِ الْبِنْتُ الْحَقِيقَةَ لِأُمِّهَا بِأَنَّهَا كَسَرَتِ الْمِزْهَرِيَّةَ" },
+      { label: "سَامَحَتِ الْأُمُّ ابْنَتَهَا لِأَنَّهَا قَالَتِ الْحَقِيقَةَ", val: "سَامَحَتِ الْأُمُّ ابْنَتَهَا لِأَنَّهَا قَالَتِ الْحَقِيقَةَ" }
+    ]);
+
+    // 5. ص 20
+    buildRandomizedMCQ('box-ein-mcq', 'ex-act20', [
+      { text: "عِنَبٌ", options: [{ label: "عـ", correct: true }, { label: "ـعـ", correct: false }, { label: "ع", correct: false }] },
+      { text: "نَعْجَةٌ", options: [{ label: "ـعـ", correct: true }, { label: "عـ", correct: false }, { label: "ـع", correct: false }] },
+      { text: "طَعَامٌ", options: [{ label: "ـعـ", correct: true }, { label: "ع", correct: false }, { label: "عـ", correct: false }] },
+      { text: "قَطِيعٌ", options: [{ label: "ـع", correct: true }, { label: "عـ", correct: false }, { label: "ـعـ", correct: false }] },
+      { text: "رَاعٌ", options: [{ label: "ع", correct: true }, { label: "ـع", correct: false }, { label: "عـ", correct: false }] },
+      { text: "بَعِيرٌ", options: [{ label: "ـعـ", correct: true }, { label: "ع", correct: false }, { label: "عـ", correct: false }] },
+      { text: "عَادَ", options: [{ label: "عـ", correct: true }, { label: "ـعـ", correct: false }, { label: "ع", correct: false }] },
+      { text: "عُودٌ", options: [{ label: "عـ", correct: true }, { label: "ـعـ", correct: false }, { label: "ع", correct: false }] }
+    ]);
+
+    buildRandomizedMCQ('box-haa-mcq', 'ex-act20', [
+      { text: "مِزْ...رِيَّةٌ", options: [{ label: "هـ", correct: true }, { label: "ـهـ", correct: false }, { label: "ـه", correct: false }] },
+      { text: "فاكـ...ـة", options: [{ label: "ـهـ", correct: true }, { label: "هـ", correct: false }, { label: "ه", correct: false }] },
+      { text: "....ـلال", options: [{ label: "هـ", correct: true }, { label: "ـهـ", correct: false }, { label: "ـه", correct: false }] },
+      { text: "....ـرة", options: [{ label: "هـ", correct: true }, { label: "ـهـ", correct: false }, { label: "ـه", correct: false }] },
+      { text: "مـ....ـر", options: [{ label: "ـهـ", correct: true }, { label: "هـ", correct: false }, { label: "ـه", correct: false }] },
+      { text: "...ـد...ـد", options: [{ label: "هـ", correct: true }, { label: "ـهـ", correct: false }, { label: "ـه", correct: false }] }
+    ]);
+
+    // 6. ص 21
+    setupColoringActivity('box-color-words', [
+      { label: "فَوَاكِهُ", expectedColor: "yellow" },
+      { label: "عِيدٌ", expectedColor: "red" },
+      { label: "هَذَا", expectedColor: "yellow" },
+      { label: "عَيْنٌ", expectedColor: "red" },
+      { label: "عَسَلٌ", expectedColor: "red" },
+      { label: "تَلْهُو", expectedColor: "yellow" },
+      { label: "مُهَرٌ", expectedColor: "yellow" }
+    ], 'ex-act21');
+
+    setupTapToFill('pool-act21-sentence', '#pool-act21-sentence ~ div .drop-zone', 'ex-act21', [
+      { label: "الْأَغْنَامُ", val: "الْأَغْنَامُ" },
+      { label: "مُنْتَشِرَةٌ", val: "مُنْتَشِرَةٌ" },
+      { label: "فِي", val: "فِي" },
+      { label: "الْمَرَاعِي", val: "الْمَرَاعِي" }
+    ]);
+  }
+
+  function restartEntireLesson() {
+    document.querySelectorAll('.eval-badge span span').forEach(el => el.textContent = '0');
+    initAllActivities();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  window.onload = initAllActivities;
+  </script>
+</body>
+</html>
