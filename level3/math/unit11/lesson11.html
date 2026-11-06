@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدرس 10: الأعداد من 0 إلى 999 (الجزء 2) - السنة الثالثة ابتدائي</title>
+    <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --primary: #1976d2;
+            --primary-dark: #0d47a1;
+            --secondary: #ff9800;
+            --success: #2e7d32;
+            --error: #c62828;
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --border-radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            padding: 20px;
+            direction: rtl;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-right: 5px solid var(--primary);
+        }
+
+        h2.section-title {
+            color: var(--primary-dark);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .instruction {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #444;
+        }
+
+        .math-ltr {
+            direction: ltr;
+            text-align: left;
+            unicode-bidi: embed;
+            display: inline-block;
+            font-weight: bold;
+            font-family: monospace;
+            font-size: 1.1rem;
+        }
+
+        .row-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        input[type="text"], input[type="number"] {
+            padding: 8px 10px;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--primary);
+        }
+
+        input.correct {
+            background-color: rgba(46, 125, 50, 0.1);
+            border-color: var(--success) !important;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        input.incorrect {
+            background-color: rgba(198, 40, 40, 0.1);
+            border-color: var(--error) !important;
+            color: var(--error);
+            font-weight: bold;
+        }
+
+        button.check-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+
+        button.check-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .feedback-msg {
+            margin-top: 8px;
+            font-weight: bold;
+            font-size: 0.95rem;
+        }
+
+        .m-e-w-container {
+            display: inline-flex;
+            gap: 8px;
+            direction: ltr;
+            align-items: center;
+            background: #f9f9f9;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .m-box, .e-box, .w-box {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            font-weight: bold;
+        }
+
+        .m-box input, .e-box input, .w-box input {
+            width: 55px;
+        }
+
+        table.standard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        table.standard-table th, table.standard-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+
+        table.standard-table th {
+            background-color: #f0f4f8;
+            color: var(--primary-dark);
+        }
+
+        .learn-box {
+            background: #fff8e1;
+            border: 2px dashed #ffb300;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 25px;
+        }
+
+        .learn-box h3 {
+            color: #f57f17;
+            margin-bottom: 8px;
+        }
+
+        .color-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .match-card {
+            padding: 12px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .color-palette {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .color-btn {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid #333;
+            cursor: pointer;
+        }
+
+        .color-yellow { background-color: #fff176; }
+        .color-blue { background-color: #90caf9; }
+        .color-brown { background-color: #bcaaa4; }
+        .color-btn.active-color { border-width: 4px; border-color: #000; transform: scale(1.1); }
+
+        .visual-block {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .visual-grid-art {
+            background: #fff;
+            border: 1px dashed #b0bec5;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: #263238;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .currency-item {
+            display: inline-flex;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #cfd8dc;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        #final-evaluation {
+            background: #ffffff;
+            border: 3px solid var(--primary);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            text-align: center;
+            margin-top: 40px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+        }
+
+        .circular-progress {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(var(--success) 0deg, #e0e0e0 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px auto;
+        }
+
+        .circular-progress::before {
+            content: "";
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: white;
+        }
+
+        .progress-value {
+            position: relative;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+
+        .control-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn-action {
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-retry { background-color: var(--secondary); color: white; }
+        .btn-exit { background-color: var(--error); color: white; }
+
+        .locked-section {
+            opacity: 0.6;
+            pointer-events: none;
+            position: relative;
+        }
+        .locked-section::after {
+            content: "🔒 أتمم التمارين السابقة لفتح هذا التمرين";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            z-index: 10;
+        }
+
+        .base-ten-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            border: 2px dashed #90a4ae;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .hundreds-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            grid-template-rows: repeat(10, 1fr);
+            width: 60px;
+            height: 60px;
+            gap: 1px;
+            background: #ffb74d;
+            border: 2px solid #e65100;
+            padding: 1px;
+            border-radius: 3px;
+        }
+        .hundreds-grid .cell {
+            background: #ffe082;
+            width: 100%;
+            height: 100%;
+            border-radius: 1px;
+        }
+
+        .tens-column {
+            display: grid;
+            grid-template-rows: repeat(10, 1fr);
+            width: 10px;
+            height: 60px;
+            gap: 1px;
+            background: #66bb6a;
+            border: 2px solid #1b5e20;
+            padding: 1px;
+            border-radius: 2px;
+        }
+        .tens-column .cell {
+            background: #a5d6a7;
+            width: 100%;
+            height: 100%;
+            border-radius: 1px;
+        }
+
+        .ones-unit {
+            width: 12px;
+            height: 12px;
+            background: #ffd54f;
+            border: 2px solid #f57f17;
+            border-radius: 2px;
+            display: inline-block;
+        }
+
+        .currency-img {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #cfd8dc;
+            padding: 5px 8px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            margin: 2px;
+        }
+        .currency-img .bill {
+            width: 50px;
+            height: 25px;
+            background: linear-gradient(135deg, #e3f2fd, #90caf9);
+            border: 1px solid #1976d2;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #0d47a1;
+        }
+        .currency-img .coin {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fff9c4, #fbc02d);
+            border: 1px solid #f57f17;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #e65100;
+        }
+
+        .camera-toy-img {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #fce4ec;
+            border: 2px solid #e91e63;
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #880e4f;
+        }
+        .camera-toy-img .camera-icon {
+            font-size: 2rem;
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري (أُضيفت)
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس (أُضيف) */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            max-width: 420px;
+            margin: 20px auto 10px auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+    <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+        <div class="lock-desc">
+            لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+        </div>
+        <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+            📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+        </a>
+        <button class="btn-check-sub" onclick="verifySubscription()">
+            ✅ تَأْكِيدُ الاِشْتِرَاكِ
+        </button>
+        <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+</div>
+
+<div class="container">
+    <header>
+        <h1>رياضيات – السنة الثالثة ابتدائي</h1>
+        <p>الدرس 10: الأعداد من 0 إلى 999 (الجزء 2)</p>
+    </header>
+
+    <!-- محطة أكتشف -->
+    <div class="section-card" id="station-أكتشف">
+        <h2 class="section-title">أكتشف</h2>
+        <div class="instruction">
+            1- بِاسْتِعْمَالِ قِطَعٍ نَقْدِيَّةٍ مِنْ فِئَةِ 100، 10 وَ1 دِينَارٍ، لِدَفْعِ ثَمَنِ اللَّوْحَةِ (854 دِينارًا). شَكِّلْ جَدْوَلًا تَكْتُبُ فِيهِ عَدَدَ الْقِطَعِ مِنْ كُلِّ فِئَةٍ:
+        </div>
+        <table class="standard-table">
+            <tr>
+                <th>فئة 1 دينار (🪙 1 دج)</th>
+                <th>فئة 10 دينار (💵 10 دج)</th>
+                <th>فئة 100 دينار (💶 100 دج)</th>
+            </tr>
+            <tr>
+                <td><input type="number" id="q1-1" style="width: 90px;"></td>
+                <td><input type="number" id="q1-10" style="width: 90px;"></td>
+                <td><input type="number" id="q1-100" style="width: 90px;"></td>
+            </tr>
+        </table>
+        <div style="margin-top: 15px;">
+            <div class="instruction">أَكْمِلْ حِسَابَاتِ أَمِين، مَرْيَم وَأَيْمَن:</div>
+            <div class="row-group">
+                <span>أمين: 854 هو</span>
+                <div class="m-e-w-container">
+                    <div class="m-box"><input type="number" id="amin-m">م</div>
+                    <div class="e-box"><input type="number" id="amin-e">ع</div>
+                    <div class="w-box"><input type="number" id="amin-w">و</div>
+                </div>
+            </div>
+            <div class="row-group">
+                <span>مريم: <span class="math-ltr">854 =</span></span>
+                <input type="text" id="marium-eq" class="math-ltr" style="width: 240px;" placeholder="800 + 50 + 4">
+            </div>
+            <div class="row-group">
+                <span>أَيْمَن: <span class="math-ltr">854 = (8 × ؟) + (5 × ؟) + ؟</span></span>
+                <div class="math-ltr" style="display:flex; gap:5px; align-items:center;">
+                    (8 × <input type="number" id="ayman-1" style="width:70px;">) + (5 × <input type="number" id="ayman-2" style="width:70px;">) + <input type="number" id="ayman-3" style="width:70px;">
+                </div>
+            </div>
+        </div>
+        <button class="check-btn" onclick="checkStation1()">تحقق من أكتشف</button>
+        <div id="feedback-1" class="feedback-msg"></div>
+    </div>
+
+    <!-- محطة أنجز -->
+    <div class="section-card locked-section" id="station-أنجز">
+        <h2 class="section-title">أنْجِزُ</h2>
+        <div class="instruction">1- انْقُلْ ثُمَّ أَكْمِلْ مَلْءَ الْجَدْوَلِ كَمَا فِي الْمِثَالِ:</div>
+        <table class="standard-table">
+            <tr>
+                <th>العدد بالأرقام</th>
+                <th>الحروف</th>
+                <th>التفكيك النموذجي</th>
+                <th>التفكيك (و، ع، م)</th>
+            </tr>
+            <tr>
+                <td>689</td>
+                <td>سِتَّةُ مِائَةٍ وَتِسْعَةٌ وَثَمَانُونَ</td>
+                <td><span class="math-ltr">600 + 80 + 9</span></td>
+                <td>9و 8ع 6م</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="eng-n1" style="width:90px;" class="math-ltr"></td>
+                <td><input type="text" id="eng-t1" style="width: 160px;"></td>
+                <td><input type="text" id="eng-eq1" class="math-ltr"></td>
+                <td>
+                    <div class="m-e-w-container">
+                        <div class="m-box"><input type="number" id="eng1-m" value="7">م</div>
+                        <div class="e-box"><input type="number" id="eng1-e" value="1" disabled>ع</div>
+                        <div class="w-box"><input type="number" id="eng1-w" value="7" disabled>و</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="number" id="eng-n2" style="width:90px;" class="math-ltr"></td>
+                <td><input type="text" id="eng-t2" style="width: 160px;"></td>
+                <td><span class="math-ltr">900 + 6</span></td>
+                <td>
+                    <div class="m-e-w-container">
+                        <div class="m-box"><input type="number" id="eng2-m">م</div>
+                        <div class="e-box"><input type="number" id="eng2-e">ع</div>
+                        <div class="w-box"><input type="number" id="eng2-w">و</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>423</td>
+                <td><input type="text" id="eng-text3" style="width: 160px;"></td>
+                <td><input type="text" id="eng-eq3" class="math-ltr"></td>
+                <td>
+                    <div class="m-e-w-container">
+                        <div class="m-box"><input type="number" id="eng3-m">م</div>
+                        <div class="e-box"><input type="number" id="eng3-e">ع</div>
+                        <div class="w-box"><input type="number" id="eng3-w">و</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <div class="instruction" style="margin-top: 20px;">2- أنقل ثم أكمل الفراغات (من اليسار لليمين):</div>
+        <div class="row-group math-ltr">
+            548 = 500 + 40 + <input type="number" id="f1" style="width:70px;"> = (5 × 100) + (<input type="number" id="f2" style="width:70px;"> × 10) + 8
+        </div>
+        <div class="row-group math-ltr">
+            934 = <input type="number" id="f3" style="width:70px;"> + 10 + 10 + <input type="number" id="f4" style="width:70px;"> + <input type="number" id="f5" style="width:70px;"> = (<input type="number" id="f6" style="width:70px;"> × 100) + (<input type="number" id="f7" style="width:70px;"> × 10) + <input type="number" id="f8" style="width:70px;">
+        </div>
+        <div class="row-group math-ltr">
+            408 = 100 + <input type="number" id="f9" style="width:70px;"> + <input type="number" id="f10" style="width:70px;"> + <input type="number" id="f11" style="width:70px;"> + <input type="number" id="f12" style="width:70px;"> = (<input type="number" id="f13" style="width:70px;"> × 100) + (<input type="number" id="f14" style="width:70px;"> × 10) + <input type="number" id="f15" style="width:70px;">
+        </div>
+        <button class="check-btn" onclick="checkStation2()">تحقق من أنجز</button>
+        <div id="feedback-2" class="feedback-msg"></div>
+    </div>
+
+    <!-- بطاقة تعلمت -->
+    <div class="learn-box">
+        <h3>تَعَلَّمْتُ</h3>
+        <p>يُمْكِنُ تَفْكِيكُ عَدَدٍ بِعِدَّةِ كَيْفِيَاتٍ وَمِنْهَا:</p>
+        <p class="math-ltr">324 = 100 + 100 + 100 + 10 + 10 + 4</p>
+        <p class="math-ltr">324 = (3 × 100) + (2 × 10) + 4</p>
+    </div>
+
+    <!-- محطة أتمرن -->
+    <div class="section-card locked-section" id="station-أتمرن">
+        <h2 class="section-title">أَتَمَرَّنُ</h2>
+        
+        <div class="instruction">1- أَكْتُبُ التَّفْكِيكَ النَّمُوذَجِيَّ لِلْأَعْدَادِ الْمُمَثَّلَةِ هَنْدَسِيّاً:</div>
+        
+        <!-- أتمرن 1: الشكل الأول -->
+        <div class="visual-block">
+            <div class="base-ten-container">
+                <!-- 7 صفائح مئات -->
+                <div style="display: flex; flex-wrap: wrap; gap: 4px; max-width: 220px;">
+                    <div class="hundreds-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="hundreds-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="hundreds-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="hundreds-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="hundreds-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="hundreds-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="hundreds-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="hundreds-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                </div>
+                <!-- 3 أعمدة عشرات -->
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 2px;">
+                    <div class="tens-column"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="tens-column"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="tens-column"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                </div>
+                <!-- 6 مربعات متفرقة -->
+                <div style="display: flex; flex-wrap: wrap; gap: 3px; max-width: 60px;">
+                    <span class="ones-unit"></span><span class="ones-unit"></span><span class="ones-unit"></span>
+                    <span class="ones-unit"></span><span class="ones-unit"></span><span class="ones-unit"></span>
+                </div>
+            </div>
+            <div class="row-group math-ltr">
+                <input type="number" id="atm1-res" style="width:75px;" placeholder="؟"> = (<input type="number" id="atm1-1" style="width:70px;"> × 100) + (<input type="number" id="atm1-2" style="width:70px;"> × 10) + <input type="number" id="atm1-3" style="width:70px;">
+            </div>
+        </div>
+
+        <!-- أتمرن 1: الشكل الثاني -->
+        <div class="visual-block">
+            <div class="base-ten-container">
+                <!-- 4 صفائح مئات -->
+                <div style="display: flex; flex-wrap: wrap; gap: 4px; max-width: 220px;">
+                    <div class="hundreds-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="hundreds-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="hundreds-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="hundreds-grid"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                </div>
+                <!-- 7 أعمدة عشرات -->
+                <div style="display: flex; flex-direction: row; gap: 2px; flex-wrap: wrap; justify-content: center;">
+                    <div class="tens-column"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="tens-column"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="tens-column"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="tens-column"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="tens-column"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="tens-column"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                    <div class="tens-column"><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div></div>
+                </div>
+                <!-- 2 مربعات متفرقة -->
+                <div style="display: flex; flex-wrap: wrap; gap: 3px; max-width: 30px;">
+                    <span class="ones-unit"></span><span class="ones-unit"></span>
+                </div>
+            </div>
+            <div class="row-group math-ltr">
+                <input type="number" id="atm2-res" style="width:75px;" placeholder="؟"> = (<input type="number" id="atm2-1" style="width:70px;"> × 100) + (<input type="number" id="atm2-2" style="width:70px;"> × 10) + <input type="number" id="atm2-3" style="width:70px;">
+            </div>
+        </div>
+
+        <div class="instruction" style="margin-top:20px;">2- لوِّنْ بِنَفْسِ اللَّوْنِ بِطَاقَاتِ الْأَعْدَادِ الْمُتَسَاوِيَةِ (اتجاه العمليات من اليسار لليمين):</div>
+        <div class="color-palette">
+            <span>اختر لوناً ثم اضغط على البطاقات المتساوية:</span>
+            <div class="color-btn color-yellow active-color" onclick="selectColor('yellow', this)"></div>
+            <div class="color-btn color-blue" onclick="selectColor('blue', this)"></div>
+            <div class="color-btn color-brown" onclick="selectColor('brown', this)"></div>
+        </div>
+        <div class="color-cards-grid" id="color-cards-container"></div>
+
+        <div class="instruction" style="margin-top:20px;">3- أُوجِدُ الْعَدَدَ الدَّخِيلَ (اضغط عليه - اتجاه العمليات من اليسار لليمين):</div>
+        <div id="intruder-container" style="display:flex; flex-direction:column; gap:8px;"></div>
+
+        <div class="instruction" style="margin-top:20px;">4- أُكْمِلُ الْجَدْوَلَ كَمَا فِي السَّطْرِ الْأَوَّلِ:</div>
+        <table class="standard-table">
+            <tr>
+                <th>العدد</th>
+                <th>التفكيك</th>
+                <th>الوحدات والمئات</th>
+            </tr>
+            <tr>
+                <td>526</td>
+                <td>500 + 20 + 6</td>
+                <td>5م 2ع 6و</td>
+            </tr>
+            <tr>
+                <td><input type="number" id="t4-1" style="width:80px;" class="math-ltr"></td>
+                <td>90 + 900</td>
+                <td>
+                    <div class="m-e-w-container">
+                        <div class="m-box"><input type="number" id="t41-m">م</div>
+                        <div class="e-box"><input type="number" id="t41-e">ع</div>
+                        <div class="w-box"><input type="number" id="t41-w">و</div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="number" id="t4-2" style="width:80px;" class="math-ltr"></td>
+                <td><input type="text" id="t4-2-eq" class="math-ltr" style="width: 150px;"></td>
+                <td>9و 9م</td>
+            </tr>
+            <tr>
+                <td>870</td>
+                <td><input type="text" id="t4-3-eq" class="math-ltr" style="width: 150px;"></td>
+                <td>
+                    <div class="m-e-w-container">
+                        <div class="m-box"><input type="number" id="t43-m">م</div>
+                        <div class="e-box"><input type="number" id="t43-e">ع</div>
+                        <div class="w-box"><input type="number" id="t43-w">و</div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <button class="check-btn" onclick="checkStation3()" style="margin-top:15px;">تحقق من أتمرن</button>
+        <div id="feedback-3" class="feedback-msg"></div>
+    </div>
+
+    <!-- محطة أبحث -->
+    <div class="section-card locked-section" id="station-أبحث">
+        <h2 class="section-title">أَبْحَثُ</h2>
+        <div class="instruction">
+            هَلْ يَسْتَطِيعُ أَيْمَنُ شِرَاءَ اللُّعْبَةِ بِاسْتِعْمَالِ كُلِّ الْأَوْرَاقِ وَالْقِطَعِ النَّقْدِيَّةِ؟
+        </div>
+        <div class="visual-block">
+            <div class="camera-toy-img" style="justify-content: center; margin-bottom: 15px;">
+                <span class="camera-icon">📷</span>
+                <span>لعبة كاميرا</span>
+                <span style="background: #ffcdd2; color: #c62828; padding: 3px 10px; border-radius: 6px; font-size: 0.95rem;">السعر: 895 دينارًا</span>
+            </div>
+            
+            <p style="font-size: 1.05rem; margin-bottom: 8px; font-weight: bold;">الأوراق والقطع النقدية المتوفرة لدى أيمــن:</p>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+                <div class="currency-img">
+                    <div class="bill">200 دج</div>
+                    <span>ورقة نقدية 200</span>
+                </div>
+                <div class="currency-img">
+                    <div class="bill">500 دج</div>
+                    <span>ورقة نقدية 500</span>
+                </div>
+                <div class="currency-img">
+                    <div class="bill">100 دج</div>
+                    <span>ورقة نقدية 100</span>
+                </div>
+                <div class="currency-img">
+                    <div class="coin">50</div>
+                    <span>قطعة 50</span>
+                </div>
+                <div class="currency-img">
+                    <div class="coin">10</div>
+                    <span>قطعة 10</span>
+                </div>
+                <div class="currency-img">
+                    <div class="coin">10</div>
+                    <span>قطعة 10</span>
+                </div>
+                <div class="currency-img">
+                    <div class="coin">10</div>
+                    <span>قطعة 10</span>
+                </div>
+                <div class="currency-img">
+                    <div class="coin">5</div>
+                    <span>قطعة 5</span>
+                </div>
+            </div>
+        </div>
+        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 15px;">
+            <button class="btn-action" id="btn-yes" onclick="answerSearch(true)" style="background-color: var(--success); color: white;">نعم يستطيع</button>
+            <button class="btn-action" id="btn-no" onclick="answerSearch(false)" style="background-color: var(--error); color: white;">لا يستطيع</button>
+        </div>
+        <div id="feedback-search" class="feedback-msg" style="text-align: center; margin-top: 10px;"></div>
+    </div>
+
+    <!-- شاشة التقييم العام -->
+    <div id="final-evaluation" style="display:none;">
+        <h2>التقييم العام للدرس</h2>
+        <div class="circular-progress" id="circularProgress">
+            <div class="progress-value" id="progressValue">0%</div>
+        </div>
+        <p id="eval-message" style="font-size: 1.2rem; font-weight: bold; margin: 10px 0;"></p>
+        <p id="eval-details" style="color: #666; margin-bottom: 10px;"></p>
+        <p id="eval-counts" style="font-size: 1.05rem; font-weight: bold; color: var(--text-main);"></p>
+        <div class="control-buttons">
+            <button class="btn-action btn-retry" onclick="resetAll()">إعادة المحاولة</button>
+            <button class="btn-action btn-exit" onclick="exitLesson()">خروج</button>
+        </div>
+    </div>
+
+    <!-- ========================================
+         زر العودة إلى الفهرس (أُضيف)
+         ======================================== -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+</div>
+
+<!-- ========================================
+     سكريبت الحماية (أُضيف)
+     ======================================== -->
+<script>
+    // إعدادات القناة - السنة الثالثة
+    const CHANNEL_ID = "-1003910412986";
+
+    // تهيئة Telegram WebApp
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+        tg.ready();
+        tg.expand();
+    }
+
+    async function verifySubscription() {
+        const statusMsg = document.getElementById('sub-status-msg');
+        statusMsg.style.color = "#0288d1";
+        statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+        let userId = null;
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            userId = tg.initDataUnsafe.user.id;
+        }
+
+        if (!userId) {
+            statusMsg.style.color = "#e65100";
+            statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+            return;
+        }
+
+        try {
+            const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.isSubscribed) {
+                statusMsg.style.color = "#2e7d32";
+                statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                setTimeout(() => {
+                    document.getElementById('sub-lock-screen').style.display = 'none';
+                }, 600);
+            } else {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+            }
+        } catch (error) {
+            statusMsg.style.color = "#c62828";
+            statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+        }
+    }
+
+    window.addEventListener('load', () => {
+        verifySubscription();
+    });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي (كما هو دون تغيير)
+     ======================================== -->
+<script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+        if (!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        if (type === 'success') {
+            osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.1);
+            gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.4);
+        } else {
+            osc.frequency.setValueAtTime(220, audioCtx.currentTime);
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime + 0.15);
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.3);
+        }
+    }
+
+    let stationResults = { s1: null, s2: null, s3: null, s4: null };
+    let totalCorrectFields = 0;
+    let totalIncorrectFields = 0;
+
+    function markInput(el, isCorrect) {
+        if (isCorrect) {
+            el.classList.remove('incorrect');
+            el.classList.add('correct');
+        } else {
+            el.classList.remove('correct');
+            el.classList.add('incorrect');
+        }
+        return isCorrect;
+    }
+
+    function checkStation1() {
+        if(stationResults.s1 !== null) return;
+        
+        let fields = [
+            { el: document.getElementById('q1-1'), ans: 4 },
+            { el: document.getElementById('q1-10'), ans: 5 },
+            { el: document.getElementById('q1-100'), ans: 8 },
+            { el: document.getElementById('amin-w'), ans: 4 },
+            { el: document.getElementById('amin-e'), ans: 5 },
+            { el: document.getElementById('amin-m'), ans: 8 },
+            { el: document.getElementById('ayman-1'), ans: 100 },
+            { el: document.getElementById('ayman-2'), ans: 10 },
+            { el: document.getElementById('ayman-3'), ans: 4 }
+        ];
+
+        let allCorrect = true;
+        let correctCount = 0;
+        
+        fields.forEach(f => {
+            let val = parseInt(f.el.value);
+            let isCorrect = (val === f.ans);
+            markInput(f.el, isCorrect);
+            if (isCorrect) correctCount++;
+            else allCorrect = false;
+        });
+
+        let elMar = document.getElementById('marium-eq');
+        let marVal = elMar.value.replace(/\s+/g, '').replace(/\+/g, '+');
+        let isMarCorrect = /^(800|50|4)\+?(800|50|4)\+?(800|50|4)$/.test(marVal) && 
+                           marVal.includes('800') && marVal.includes('50') && marVal.includes('4');
+        markInput(elMar, isMarCorrect);
+        if (isMarCorrect) correctCount++;
+        else allCorrect = false;
+
+        totalCorrectFields += correctCount;
+        totalIncorrectFields += (10 - correctCount);
+
+        let fb = document.getElementById('feedback-1');
+        
+        stationResults.s1 = allCorrect;
+        
+        if(allCorrect) {
+            fb.innerHTML = "✓ إجابة صحيحة ممتاز!";
+            fb.style.color = "var(--success)";
+            playSound('success');
+        } else {
+            fb.innerHTML = "✗ توجد أخطاء، تلون الإجابات الصحيحة بالأخضر والخاطئة بالأحمر. يمكنك المتابعة.";
+            fb.style.color = "var(--error)";
+            playSound('error');
+        }
+        lockInputs('station-أكتشف');
+        unlockStation('station-أنجز');
+    }
+
+    function checkStation2() {
+        if(stationResults.s2 !== null) return;
+        
+        let fields = [
+            { id: 'eng-n1', ans: 717, type: 'int' },
+            { id: 'eng-eq1', ans: '700+10+7', type: 'eq' },
+            { id: 'eng1-w', ans: 7, type: 'int' },
+            { id: 'eng1-e', ans: 1, type: 'int' },
+            { id: 'eng1-m', ans: 7, type: 'int' },
+            { id: 'eng-n2', ans: 906, type: 'int' },
+            { id: 'eng2-w', ans: 6, type: 'int' },
+            { id: 'eng2-e', ans: 0, type: 'int' },
+            { id: 'eng2-m', ans: 9, type: 'int' },
+            { id: 'eng3-w', ans: 3, type: 'int' },
+            { id: 'eng3-e', ans: 2, type: 'int' },
+            { id: 'eng3-m', ans: 4, type: 'int' },
+            { id: 'f1', ans: 8, type: 'int' },
+            { id: 'f2', ans: 4, type: 'int' },
+            { id: 'f3', ans: 900, type: 'int' },
+            { id: 'f4', ans: 10, type: 'int' },
+            { id: 'f5', ans: 4, type: 'int' },
+            { id: 'f6', ans: 9, type: 'int' },
+            { id: 'f7', ans: 3, type: 'int' },
+            { id: 'f8', ans: 4, type: 'int' },
+            { id: 'f9', ans: 100, type: 'int' },
+            { id: 'f10', ans: 100, type: 'int' },
+            { id: 'f11', ans: 100, type: 'int' },
+            { id: 'f12', ans: 8, type: 'int' },
+            { id: 'f13', ans: 4, type: 'int' },
+            { id: 'f14', ans: 0, type: 'int' },
+            { id: 'f15', ans: 8, type: 'int' }
+        ];
+
+        let allCorrect = true;
+        let correctCount = 0;
+        let totalFields = fields.length + 1;
+
+        fields.forEach(f => {
+            let el = document.getElementById(f.id);
+            let isCorrect = false;
+            if (f.type === 'int') {
+                isCorrect = (parseInt(el.value) === f.ans);
+            } else if (f.type === 'eq') {
+                let val = el.value.replace(/\s+/g, '');
+                isCorrect = (val === f.ans);
+            }
+            markInput(el, isCorrect);
+            if (isCorrect) correctCount++;
+            else allCorrect = false;
+        });
+
+        let elText = document.getElementById('eng-t1');
+        let isTextCorrect = elText.value.trim().length > 2;
+        markInput(elText, isTextCorrect);
+        if (isTextCorrect) correctCount++;
+        else allCorrect = false;
+
+        let elText3 = document.getElementById('eng-text3');
+        let isText3Correct = elText3.value.trim().length > 2;
+        markInput(elText3, isText3Correct);
+        if (isText3Correct) correctCount++;
+        else allCorrect = false;
+
+        let elEq3 = document.getElementById('eng-eq3');
+        let eq3Val = elEq3.value.replace(/\s+/g, '');
+        let isEq3Correct = eq3Val === '400+20+3' || eq3Val === '300+120+3' || eq3Val === '423';
+        markInput(elEq3, isEq3Correct);
+        if (isEq3Correct) correctCount++;
+        else allCorrect = false;
+
+        totalCorrectFields += correctCount;
+        totalIncorrectFields += (totalFields + 2 - correctCount);
+
+        let fb = document.getElementById('feedback-2');
+        stationResults.s2 = allCorrect;
+
+        if(allCorrect) {
+            fb.innerHTML = "✓ أحسنت! إجابات صحيحة.";
+            fb.style.color = "var(--success)";
+            playSound('success');
+        } else {
+            fb.innerHTML = "✗ توجد أخطاء في الجدول أو الفراغات. يمكنك المتابعة.";
+            fb.style.color = "var(--error)";
+            playSound('error');
+        }
+        lockInputs('station-أنجز');
+        unlockStation('station-أتمرن');
+    }
+
+    let selectedCardColor = 'yellow';
+    function selectColor(color, el) {
+        document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active-color'));
+        el.classList.add('active-color');
+        selectedCardColor = color;
+    }
+
+    const colorPairs = [
+        { id: 1, text: "(6 × 100) + (8 × 10) + 7", group: 'group1' },
+        { id: 2, text: "600 + 80 + 7", group: 'group1' },
+        { id: 3, text: "687", group: 'group1' },
+        { id: 4, text: "154", group: 'group2' },
+        { id: 5, text: "(1 × 100) + (5 × 10) + 4", group: 'group2' },
+        { id: 6, text: "100 + 50 + 4", group: 'group2' },
+        { id: 7, text: "(2 × 100) + 6", group: 'group3' },
+        { id: 8, text: "100 + 100 + 6", group: 'group3' },
+        { id: 9, text: "206", group: 'group3' }
+    ];
+
+    const colorMap = { yellow: '#fff176', blue: '#90caf9', brown: '#bcaaa4' };
+    let cardAssignments = {};
+
+    function initColorCards() {
+        const container = document.getElementById('color-cards-container');
+        container.innerHTML = '';
+        let shuffled = [...colorPairs].sort(() => Math.random() - 0.5);
+        shuffled.forEach(item => {
+            let div = document.createElement('div');
+            div.className = 'match-card math-ltr';
+            div.innerText = item.text;
+            div.onclick = () => {
+                div.style.backgroundColor = colorMap[selectedCardColor];
+                cardAssignments[item.id] = item.group;
+            };
+            container.appendChild(div);
+        });
+    }
+
+    const intruders = [
+        { text: "خَمْسُ مَائَةٍ وَثَلَاثَةٌ وَأَرْبَعُونَ وِحْدَةً", correct: false },
+        { text: "(54 × 10) + 3", correct: false },
+        { text: "(4 × 100) + (5 × 10) + 3", correct: true },
+        { text: "543", correct: false },
+        { text: "500 + 40 + 3", correct: false }
+    ];
+
+    let selectedIntruder = null;
+    function initIntruders() {
+        const container = document.getElementById('intruder-container');
+        container.innerHTML = '';
+        let shuffledIntruders = [...intruders].sort(() => Math.random() - 0.5);
+        shuffledIntruders.forEach((item) => {
+            let btn = document.createElement('div');
+            btn.className = 'match-card';
+            btn.style.textAlign = 'right';
+            btn.innerText = item.text;
+            btn.onclick = () => {
+                document.querySelectorAll('#intruder-container .match-card').forEach(c => c.style.borderColor = '#ccc');
+                btn.style.borderColor = '#1976d2';
+                selectedIntruder = item.correct;
+            };
+            container.appendChild(btn);
+        });
+    }
+
+    function checkStation3() {
+        if(stationResults.s3 !== null) return;
+        
+        let allCorrect = true;
+        let correctCount = 0;
+        let totalFields = 0;
+
+        let atm1Fields = [
+            { id: 'atm1-res', ans: 736 },
+            { id: 'atm1-1', ans: 7 },
+            { id: 'atm1-2', ans: 3 },
+            { id: 'atm1-3', ans: 6 }
+        ];
+        atm1Fields.forEach(f => {
+            let el = document.getElementById(f.id);
+            let isCorrect = (parseInt(el.value) === f.ans);
+            markInput(el, isCorrect);
+            if (isCorrect) correctCount++;
+            else allCorrect = false;
+            totalFields++;
+        });
+
+        let atm2Fields = [
+            { id: 'atm2-res', ans: 472 },
+            { id: 'atm2-1', ans: 4 },
+            { id: 'atm2-2', ans: 7 },
+            { id: 'atm2-3', ans: 2 }
+        ];
+        atm2Fields.forEach(f => {
+            let el = document.getElementById(f.id);
+            let isCorrect = (parseInt(el.value) === f.ans);
+            markInput(el, isCorrect);
+            if (isCorrect) correctCount++;
+            else allCorrect = false;
+            totalFields++;
+        });
+
+        if (selectedIntruder === true) {
+            correctCount++;
+        } else {
+            allCorrect = false;
+        }
+        totalFields++;
+
+        let tableFields = [
+            { id: 't4-1', ans: 990 },
+            { id: 't4-2', ans: 909 },
+            { id: 't4-2-eq', ans: '900+9' },
+            { id: 't4-3-eq', ans: '800+70' },
+            { id: 't41-m', ans: 9 },
+            { id: 't41-e', ans: 9 },
+            { id: 't41-w', ans: 0 },
+            { id: 't43-m', ans: 8 },
+            { id: 't43-e', ans: 7 },
+            { id: 't43-w', ans: 0 }
+        ];
+        tableFields.forEach(f => {
+            let el = document.getElementById(f.id);
+            let isCorrect = false;
+            if (typeof f.ans === 'string') {
+                let val = el.value.replace(/\s+/g, '');
+                isCorrect = val.includes(f.ans);
+            } else {
+                isCorrect = (parseInt(el.value) === f.ans);
+            }
+            markInput(el, isCorrect);
+            if (isCorrect) correctCount++;
+            else allCorrect = false;
+            totalFields++;
+        });
+
+        totalCorrectFields += correctCount;
+        totalIncorrectFields += (totalFields - correctCount);
+
+        let fb = document.getElementById('feedback-3');
+        stationResults.s3 = allCorrect;
+
+        if(allCorrect) {
+            fb.innerHTML = "✓ ممتاز! تم حل تمارين أتمرن بنجاح.";
+            fb.style.color = "var(--success)";
+            playSound('success');
+        } else {
+            fb.innerHTML = "✗ تحقق من الإجابات واختيار العدد الدخيل. يمكنك المتابعة.";
+            fb.style.color = "var(--error)";
+            playSound('error');
+        }
+        lockInputs('station-أتمرن');
+        unlockStation('station-أبحث');
+    }
+
+    function answerSearch(isYes) {
+        if(stationResults.s4 !== null) return;
+        let fb = document.getElementById('feedback-search');
+        
+        if(isYes === false) {
+            fb.innerHTML = "✓ صحيح! المجموع هو 885 دج وهو أقل من سعر اللعبة 895 دج، فلا يستطيع الشراء.";
+            fb.style.color = "var(--success)";
+            playSound('success');
+            stationResults.s4 = true;
+            totalCorrectFields += 1;
+        } else {
+            fb.innerHTML = "✗ خطأ، مجموع المبالغ 885 دج ولا يكفي لشراء اللعبة ذات 895 دج.";
+            fb.style.color = "var(--error)";
+            playSound('error');
+            stationResults.s4 = false;
+            totalIncorrectFields += 1;
+        }
+        document.getElementById('btn-yes').style.pointerEvents = 'none';
+        document.getElementById('btn-no').style.pointerEvents = 'none';
+        showFinalEvaluation();
+    }
+
+    function exitLesson() {
+        if (window.Telegram?.WebApp) {
+            Telegram.WebApp.close();
+        } else {
+            window.history.back();
+        }
+    }
+
+    function unlockStation(id) {
+        const el = document.getElementById(id);
+        if(el) el.classList.remove('locked-section');
+    }
+
+    function lockInputs(stationId) {
+        const card = document.getElementById(stationId);
+        if (card) {
+            card.querySelectorAll('input, button').forEach(el => {
+                if(!el.classList.contains('check-btn')) el.disabled = true;
+            });
+        }
+    }
+
+    function showFinalEvaluation() {
+        const finalEval = document.getElementById('final-evaluation');
+        finalEval.style.display = 'block';
+        
+        let totalAnswers = totalCorrectFields + totalIncorrectFields;
+        let percentage = totalAnswers > 0 ? Math.round((totalCorrectFields / totalAnswers) * 100) : 0;
+
+        document.getElementById('progressValue').innerText = percentage + '%';
+        document.getElementById('circularProgress').style.background = `conic-gradient(var(--success) ${percentage * 3.6}deg, #e0e0e0 0deg)`;
+
+        let msg = document.getElementById('eval-message');
+        let details = document.getElementById('eval-details');
+        let counts = document.getElementById('eval-counts');
+
+        if(percentage >= 80) {
+            msg.innerText = "ممتاز! أداء رائع استمر في التميز.";
+            msg.style.color = "var(--success)";
+        } else if(percentage >= 50) {
+            msg.innerText = "جيد جداً، يُوصى ببعض المراجعة.";
+            msg.style.color = "var(--secondary)";
+        } else {
+            msg.innerText = "يحتاج لإعادة المحاولة والتركيز أكثر.";
+            msg.style.color = "var(--error)";
+        }
+        details.innerText = `أجبت بشكل صحيح على ${totalCorrectFields} إجابة من أصل ${totalAnswers} إجابة.`;
+        counts.innerHTML = `إجمالي الإجابات الصحيحة: <span style="color: var(--success);">${totalCorrectFields}</span> | إجمالي الإجابات الخاطئة: <span style="color: var(--error);">${totalIncorrectFields}</span>`;
+        finalEval.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function resetAll() {
+        window.location.reload();
+    }
+
+    window.onload = () => {
+        initColorCards();
+        initIntruders();
+    };
+</script>
+
+</body>
+</html>
