@@ -1,0 +1,2005 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أجند معارفي + حصيلة - رياضيات الثالثة ابتدائي (النسخة النهائية)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+        .ltr-math {
+            direction: ltr;
+            unicode-bidi: embed;
+            text-align: right;
+        }
+        .locked {
+            opacity: 0.4;
+            pointer-events: none;
+            filter: grayscale(30%);
+        }
+        .error-highlight {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+        .success-highlight {
+            border-color: #10b981 !important;
+            background-color: #ecfdf5 !important;
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        
+        /* Styles for Grid Exercise */
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            max-width: 380px;
+            height: 300px;
+            background-color: #fff;
+            border: 2px solid #bdc3c7;
+            cursor: crosshair;
+            margin: 0 auto;
+        }
+        .canvas-container canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .reference-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: none;
+            border: 2px dashed rgba(231, 76, 60, 0.9);
+            background: rgba(255, 255, 255, 0.25);
+        }
+        .grid-bg {
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        /* Custom style for split place value boxes */
+        .place-value-box {
+            display: inline-flex;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            background: white;
+        }
+        .place-value-item {
+            padding: 0.5rem 1rem;
+            font-weight: bold;
+            text-align: center;
+            border-left: 1px solid #cbd5e1;
+        }
+        .place-value-item:last-child {
+            border-left: none;
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري (أُضيفت)
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس (أُضيف) */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            max-width: 420px;
+            margin: 20px auto 10px auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-50 flex flex-col items-center justify-start p-4 sm:p-6">
+
+    <!-- ========================================
+         نافذة قفل الاشتراك الإجباري (أُضيفت)
+         ======================================== -->
+    <div id="sub-lock-screen">
+        <div class="lock-box">
+            <div class="lock-icon">🔒</div>
+            <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+            <div class="lock-desc">
+                لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+            </div>
+            <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+                📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+            </a>
+            <button class="btn-check-sub" onclick="verifySubscription()">
+                ✅ تَأْكِيدُ الاِشْتِرَاكِ
+            </button>
+            <div id="sub-status-msg" class="sub-status-msg"></div>
+        </div>
+    </div>
+
+    <!-- Top Header Banner -->
+    <header class="w-full max-w-5xl bg-gradient-to-r from-blue-700 to-indigo-800 text-white shadow-xl rounded-2xl p-6 mb-8 text-center relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+        <div class="absolute -left-10 -top-10 w-40 h-40 bg-emerald-500/10 rounded-full blur-2xl"></div>
+        <span class="bg-amber-400 text-slate-900 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider inline-block mb-2">المنهاج الجزائري - السنة الثالثة ابتدائي</span>
+        <h1 class="text-3xl sm:text-4xl font-black mb-2">أَجَنِّدُ مَعَارِفِي + حَصِيلَةٌ</h1>
+        <p class="text-blue-100 text-sm sm:text-base">الصفحات: 21، 22، 23 | تطبيق رقمي تفاعلي متكامل</p>
+    </header>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-5xl space-y-8 pb-16">
+
+        <!-- ================= PAGE 21 ================= -->
+        <section id="section-p21" class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 sm:p-8 transition-all duration-300">
+            <div class="flex items-center justify-between border-b pb-4 mb-6">
+                <h2 class="text-xl sm:text-2xl font-bold text-blue-900 flex items-center gap-2">
+                    <span class="bg-blue-100 text-blue-700 w-8 h-8 rounded-full flex items-center justify-center text-sm font-black">21</span>
+                    الْوَضْعِيَّةُ: حَيَوَانَاتٌ مِنْ حَوْلِنَا
+                </h2>
+                <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-semibold">الصفحة 21</span>
+            </div>
+
+            <!-- Exercise 1: Antelope -->
+            <div class="mb-8 p-5 bg-slate-50 rounded-xl border border-slate-200" data-exercise="p21-1">
+                <h3 class="font-bold text-slate-800 mb-3 text-lg">1- القوفز ظبي شَبِيهٌ بِالْغَزَالِ مِنْ فَصِيلَةِ الْبَقَرِيَّاتِ، يَعِيشُ فِي إِفْرِيقِيَا. يَصِلُ طُولُ قَفْزَتِهِ إِلَى 15 m وَارْتِفَاعُهَا إِلَى 3 m.</h3>
+                <div class="space-y-4 text-slate-700 mb-4">
+                    <p class="font-semibold text-indigo-900">أ) مَا هُوَ الِارْتِفَاعُ الَّذِي تَصِلُ إِلَيْهِ قَفْزَةُ هَذَا الظَّبْي؟</p>
+                    <div class="flex items-center gap-2 ltr-math">
+                        <input type="text" id="p21-q1-ans1" class="w-28 p-2 border rounded-lg text-center font-bold" placeholder="">
+                        <span class="font-bold text-slate-600">m</span>
+                    </div>
+
+                    <p class="font-semibold text-indigo-900 mt-4">ب) وَمَا هِيَ الْمَسَافَةُ الَّتِي يَقْطَعُهَا عِنْدَمَا يَقُومُ بِـ 4 قَفَزَاتٍ؟ (أدخل الحساب والنتيجة)</p>
+                    <div class="flex flex-wrap items-center gap-2 ltr-math">
+                        <span>الحساب: 15 × 4 =</span>
+                        <input type="text" id="p21-q1-calc" class="w-24 p-2 border rounded-lg text-center font-bold" placeholder="">
+                        <span class="font-bold text-slate-600">m</span>
+                    </div>
+
+                    <p class="font-semibold text-indigo-900 mt-4">ج) أَيُّ السُّؤَالَيْنِ لَا يَحْتَاجُ إِلَى حِسَابٍ؟</p>
+                    <div class="flex gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer bg-white px-4 py-2 rounded-lg border shadow-sm">
+                            <input type="radio" name="p21-q1-no-calc" value="first" class="w-4 h-4 text-blue-600">
+                            <span>السؤال الأول (الارتفاع)</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer bg-white px-4 py-2 rounded-lg border shadow-sm">
+                            <input type="radio" name="p21-q1-no-calc" value="second" class="w-4 h-4 text-blue-600">
+                            <span>السؤال الثاني (المسافة)</span>
+                        </label>
+                    </div>
+                </div>
+                <button onclick="checkP21Ex1()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow transition duration-200">تحقق من التمرين 1</button>
+                <div id="p21-ex1-feedback" class="mt-3 text-sm font-semibold"></div>
+            </div>
+
+            <!-- Exercise 2: Printing Press -->
+            <div class="mb-8 p-5 bg-slate-50 rounded-xl border border-slate-200 locked" data-exercise="p21-2">
+                <h3 class="font-bold text-slate-800 mb-3 text-lg">2- تَلَقَّى صَاحِبُ مَطْبَعَةٍ طَلَبِيَّةً مِنْ وَكَالَةٍ سِيَاحِيَّةٍ لِإِعْدَادِ 850 مَطْوِيَّةً إِشْهَارِيَّةً، فَأَرْسَلَ لِلْوَكَالَةِ 6 رُزَمٍ ذَاتِ 100 مَطْوِيَّةٍ وَ8 رُزَمٍ ذَاتِ 10 مَطْوِيَّاتٍ. هَلِ اسْتَطَاعَ صَاحِبُ الْمَطْبَعَةِ تَلْبِيَةَ الطَّلَبِيَّةِ؟</h3>
+                
+                <div class="space-y-4 text-slate-700 mb-4">
+                    <div class="p-3 bg-white rounded-lg border ltr-math flex flex-wrap items-center gap-3">
+                        <span class="font-bold text-slate-700 rtl:mr-auto">العملية / الحساب:</span>
+                        <span>6 × 100 =</span>
+                        <input type="text" id="p21-q2-c1" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                        <span>، 8 × 10 =</span>
+                        <input type="text" id="p21-q2-c2" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                        <span>، المجموع:</span>
+                        <input type="text" id="p21-q2-c3" class="w-24 p-1.5 border rounded text-center font-bold" placeholder="">
+                    </div>
+
+                    <p class="font-semibold text-slate-800">هل استطاع تلبية الطلبية؟</p>
+                    <div class="flex gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer bg-white px-4 py-2 rounded-lg border shadow-sm">
+                            <input type="radio" name="p21-q2-ans" value="yes" class="w-4 h-4 text-blue-600">
+                            <span>نعم</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer bg-white px-4 py-2 rounded-lg border shadow-sm">
+                            <input type="radio" name="p21-q2-ans" value="no" class="w-4 h-4 text-blue-600">
+                            <span>لا</span>
+                        </label>
+                    </div>
+                </div>
+                <button onclick="checkP21Ex2()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow transition duration-200">تحقق من التمرين 2</button>
+                <div id="p21-ex2-feedback" class="mt-3 text-sm font-semibold"></div>
+            </div>
+
+            <!-- Exercise 3: Three Towers -->
+            <div class="mb-8 p-5 bg-slate-50 rounded-xl border border-slate-200 locked" data-exercise="p21-3">
+                <h3 class="font-bold text-slate-800 mb-3 text-lg">3- تُعَدُّ هَذِهِ الْأَبْرَاجُ الثَّلَاثَةُ مِنَ الْأَكْثَرِ شُهْرَةً فِي الْعَالَمِ بِسَبَبِ طُولِهَا:</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="bg-white p-3 rounded-xl border shadow-sm text-center">
+                        <img src="burj-khalifa.jpg" alt="برج خليفة" class="w-full h-40 object-cover rounded-lg mb-2">
+                        <p class="font-bold text-slate-800 text-sm">برج خليفة في دبي (828 m - 60 طابق)</p>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border shadow-sm text-center">
+                        <img src="taipei-101.jpg" alt="تايبيه 101" class="w-full h-40 object-cover rounded-lg mb-2">
+                        <p class="font-bold text-slate-800 text-sm">تايبيه 101 تايوان (509 m - 101 طابق)</p>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border shadow-sm text-center">
+                        <img src="petronas.jpg" alt="برجي باتروناس" class="w-full h-40 object-cover rounded-lg mb-2">
+                        <p class="font-bold text-slate-800 text-sm">برجي باتروناس ماليزيا (452 m - 88 طابق)</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <p class="font-semibold text-indigo-900 mb-2">أ) رَتِّبِ الْأَبْرَاجَ الثَّلَاثَةَ حَسَبَ الِارْتِفَاعِ:</p>
+                        <select id="p21-q3-height" class="w-full p-3 border rounded-xl bg-white font-semibold">
+                            <option value="">-- اختر الترتيب الصحيح --</option>
+                            <option value="petronas,taipei,khalifa">برجي باتروناس (452m) ، تايبيه 101 (509m) ، برج خليفة (828m)</option>
+                            <option value="khalifa,taipei,petronas">برج خليفة (828m) ، تايبيه 101 (509m) ، برجي باتروناس (452m)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-indigo-900 mb-2">ب) رَتِّبِ الْأَبْرَاجَ الثَّلَاثَةَ حَسَبَ عَدَدِ الطَّوَابِقِ:</p>
+                        <select id="p21-q3-floors" class="w-full p-3 border rounded-xl bg-white font-semibold">
+                            <option value="">-- اختر الترتيب الصحيح --</option>
+                            <option value="khalifa,petronas,taipei">برج خليفة (60) ، برجي باتروناس (88) ، تايبيه 101 (101)</option>
+                            <option value="taipei,petronas,khalifa">تايبيه 101 (101) ، برجي باتروناس (88) ، برج خليفة (60)</option>
+                        </select>
+                    </div>
+                </div>
+                <button onclick="checkP21Ex3()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow transition duration-200">تحقق من التمرين 3</button>
+                <div id="p21-ex3-feedback" class="mt-3 text-sm font-semibold"></div>
+            </div>
+
+            <!-- Exercise 4: Beach Trip -->
+            <div class="mb-8 p-5 bg-slate-50 rounded-xl border border-slate-200 locked" data-exercise="p21-4">
+                <h3 class="font-bold text-slate-800 mb-3 text-lg">4- ذَهَبَ 65 طِفْلًا مَعَ مُرَافِقِيهِمْ فِي رِحْلَةٍ إِلَى الشَّاطِئِ. نَزَلَ 53 طِفْلًا مِنْهُمْ إِلَى الْبَحْرِ لِلسِّبَاحَةِ، كَمْ طِفْلًا بَقِيَ عَلَى الشَّاطِئِ؟</h3>
+                <div class="space-y-4 ltr-math">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span class="font-bold text-slate-700 rtl:ml-auto">العملية العمودية / الأفقية:</span>
+                        <span>65 - 53 =</span>
+                        <input type="text" id="p21-q4-ans" class="w-24 p-2 border rounded-lg text-center font-bold text-lg" placeholder="">
+                        <span class="font-bold text-slate-600">طفلاً</span>
+                    </div>
+                </div>
+                <button onclick="checkP21Ex4()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow transition duration-200">تحقق من التمرين 4</button>
+                <div id="p21-ex4-feedback" class="mt-3 text-sm font-semibold"></div>
+            </div>
+
+            <!-- Exercise 5: Geometric Shapes Splitting -->
+            <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 locked" data-exercise="p21-5">
+                <h3 class="font-bold text-slate-800 mb-2 text-lg">5- أَقْسِمْ كُلَّ وَاحِدٍ مِنَ الْأَشْكَالِ الثَّلَاثَةِ إِلَى مُثَلَّثَيْنِ</h3>
+                <p class="text-sm text-slate-600 mb-4">انقر على ركنين من أركان الشكل لرسم خط أحمر يقسمه إلى مثلثين:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="bg-white p-3 rounded-xl border text-center shadow-sm">
+                        <span class="font-bold block mb-2 text-slate-700">مُعَيَّن صحيح</span>
+                        <canvas id="canvas-shape-1" width="200" height="160" class="mx-auto border rounded bg-slate-50 cursor-crosshair"></canvas>
+                        <button onclick="resetShape(1)" class="mt-2 text-xs bg-slate-200 hover:bg-slate-300 px-3 py-1 rounded">إعادة الرسم</button>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border text-center shadow-sm">
+                        <span class="font-bold block mb-2 text-slate-700">مُرَبَّع صحيح</span>
+                        <canvas id="canvas-shape-2" width="200" height="160" class="mx-auto border rounded bg-slate-50 cursor-crosshair"></canvas>
+                        <button onclick="resetShape(2)" class="mt-2 text-xs bg-slate-200 hover:bg-slate-300 px-3 py-1 rounded">إعادة الرسم</button>
+                    </div>
+                    <div class="bg-white p-3 rounded-xl border text-center shadow-sm">
+                        <span class="font-bold block mb-2 text-slate-700">مُسْتَطِيل صحيح</span>
+                        <canvas id="canvas-shape-3" width="200" height="160" class="mx-auto border rounded bg-slate-50 cursor-crosshair"></canvas>
+                        <button onclick="resetShape(3)" class="mt-2 text-xs bg-slate-200 hover:bg-slate-300 px-3 py-1 rounded">إعادة الرسم</button>
+                    </div>
+                </div>
+                <button onclick="checkP21Ex5()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow transition duration-200">تحقق من التقسيم الهندسي</button>
+                <div id="p21-ex5-feedback" class="mt-3 text-sm font-semibold"></div>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 22 (حَصِيلَةٌ 1) ================= -->
+        <section id="section-p22" class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 sm:p-8 locked transition-all duration-300">
+            <div class="flex items-center justify-between border-b pb-4 mb-6">
+                <h2 class="text-xl sm:text-2xl font-bold text-blue-900 flex items-center gap-2">
+                    <span class="bg-emerald-100 text-emerald-700 w-8 h-8 rounded-full flex items-center justify-center text-sm font-black">22</span>
+                    حَصِيلَةٌ (1) - تَمْثِيلٌ، حِسَابٌ، وَمُقَارَنَةٌ
+                </h2>
+                <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-semibold">الصفحة 22</span>
+            </div>
+
+            <!-- Number Sequence -->
+            <div class="mb-8 p-5 bg-slate-50 rounded-xl border border-slate-200" data-exercise="p22-seq">
+                <h3 class="font-bold text-slate-800 mb-3 text-lg">أُكْمِلُ مُتَتَالِيَةَ الْأَعْدَادِ وَفْقَ انْتِظَامِهَا: (من اليسار إلى اليمين)</h3>
+                <div class="ltr-math flex flex-wrap items-center gap-2 mb-4">
+                    <span class="bg-white px-3 py-2 border rounded font-bold">596</span>
+                    <span>/</span>
+                    <span class="bg-white px-3 py-2 border rounded font-bold">576</span>
+                    <span>/</span>
+                    <span class="bg-white px-3 py-2 border rounded font-bold">556</span>
+                    <span>/</span>
+                    <input type="text" id="p22-seq-1" class="w-16 p-2 border rounded text-center font-bold" placeholder="">
+                    <span>/</span>
+                    <input type="text" id="p22-seq-2" class="w-16 p-2 border rounded text-center font-bold" placeholder="">
+                    <span>/</span>
+                    <input type="text" id="p22-seq-3" class="w-16 p-2 border rounded text-center font-bold" placeholder="">
+                    <span>/</span>
+                    <input type="text" id="p22-seq-4" class="w-16 p-2 border rounded text-center font-bold" placeholder="">
+                    <span>/</span>
+                    <input type="text" id="p22-seq-5" class="w-16 p-2 border rounded text-center font-bold" placeholder="">
+                </div>
+                <button onclick="checkP22Seq()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow">تحقق من المتتالية</button>
+                <div id="p22-seq-feedback" class="mt-3 text-sm font-semibold"></div>
+            </div>
+
+            <!-- Half & Double Vocabulary -->
+            <div class="mb-8 p-5 bg-slate-50 rounded-xl border border-slate-200 locked" data-exercise="p22-vocab">
+                <h3 class="font-bold text-slate-800 mb-3 text-lg">مَعْرِفَةٌ وَاسْتِعْمَالُ مُفْرَدَاتِ (ضِعْف / نِصْف)</h3>
+                <div class="space-y-3 text-slate-800 mb-4">
+                    <div class="flex items-center gap-3 bg-white p-3 rounded-lg border">
+                        <span class="font-bold ltr-math">الْعَدَدُ 431 هُوَ</span>
+                        <select id="p22-v-1" class="p-2 border rounded font-bold bg-slate-50">
+                            <option value="">-- اختر المفردة --</option>
+                            <option value="نصف">نِصْفُ</option>
+                            <option value="ضعف">ضِعْفُ</option>
+                        </select>
+                        <span class="font-bold ltr-math">الْعَدَدُ 862</span>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white p-3 rounded-lg border">
+                        <span class="font-bold ltr-math">الْعَدَدُ 900 هُوَ</span>
+                        <select id="p22-v-2" class="p-2 border rounded font-bold bg-slate-50">
+                            <option value="">-- اختر المفردة --</option>
+                            <option value="نصف">نِصْفُ</option>
+                            <option value="ضعف">ضِعْفُ</option>
+                        </select>
+                        <span class="font-bold ltr-math">الْعَدَدُ 450</span>
+                    </div>
+                </div>
+                <button onclick="checkP22Vocab()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow">تحقق من المفردات</button>
+                <div id="p22-vocab-feedback" class="mt-3 text-sm font-semibold"></div>
+            </div>
+
+            <!-- Horizontal Calculations -->
+            <div class="mb-8 p-5 bg-slate-50 rounded-xl border border-slate-200 locked" data-exercise="p22-calc">
+                <h3 class="font-bold text-slate-800 mb-3 text-lg">حِسَابُ مَجْمُوعٍ أَوْ فَرْقِ عَدَدَيْنِ أُفُقِيًّا (من اليسار إلى اليمين)</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-4 ltr-math">
+                    <div class="bg-white p-3 rounded-lg border flex items-center justify-between">
+                        <span>354 - 11 =</span>
+                        <input type="text" id="p22-calc-1" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border flex items-center justify-between">
+                        <span>870 - 11 =</span>
+                        <input type="text" id="p22-calc-2" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border flex items-center justify-between">
+                        <span>9 + 331 =</span>
+                        <input type="text" id="p22-calc-3" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border flex items-center justify-between">
+                        <span>9 + 305 =</span>
+                        <input type="text" id="p22-calc-4" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border flex items-center justify-between">
+                        <span>659 + 63 =</span>
+                        <input type="text" id="p22-calc-5" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border flex items-center justify-between">
+                        <span>830 - 125 =</span>
+                        <input type="text" id="p22-calc-6" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border flex items-center justify-between">
+                        <span>409 + 129 =</span>
+                        <input type="text" id="p22-calc-7" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border flex items-center justify-between">
+                        <span>659 - 23 =</span>
+                        <input type="text" id="p22-calc-8" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                    </div>
+                    <div class="bg-white p-3 rounded-lg border flex items-center justify-between">
+                        <span>95 + 688 =</span>
+                        <input type="text" id="p22-calc-9" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                    </div>
+                </div>
+                <button onclick="checkP22Calc()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow">تحقق من الحسابات الأفقية</button>
+                <div id="p22-calc-feedback" class="mt-3 text-sm font-semibold"></div>
+            </div>
+
+            <!-- ================= INTEGRATED: Copy Shape on Grid ================= -->
+            <div class="mb-8 p-5 bg-slate-50 rounded-xl border border-slate-200 locked" data-exercise="p22-grid">
+                <h3 class="font-bold text-slate-800 mb-2 text-lg">نَقْلُ شَكْلٍ عَلَى مَرْصُوفَةٍ</h3>
+                <p class="text-sm text-slate-600 mb-4">قم بنقل الشكل الموجود في المرصوفة المرجعية إلى مرصوفة العمل، واستعن بخاصية الجذب المغناطيسي لأركان المربعات، ثم اضغط على زر التحقق للمطابقة.</p>
+                
+                <div class="flex flex-col md:flex-row gap-6 items-center justify-center mb-4">
+                    <!-- Reference Grid -->
+                    <div class="bg-white p-3 rounded-xl border shadow-sm w-full md:w-auto flex flex-col items-center">
+                        <span class="font-bold text-sm mb-2 text-slate-700">المرصوفة المرجعية</span>
+                        <div class="canvas-container" style="cursor: default;">
+                            <canvas id="refGridCanvas" width="380" height="300"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Work Grid -->
+                    <div class="bg-white p-3 rounded-xl border shadow-sm w-full md:w-auto flex flex-col items-center">
+                        <span class="font-bold text-sm mb-2 text-slate-700">مرصوفة العمل (للتلميذ)</span>
+                        <div class="canvas-container" id="workCanvasContainer">
+                            <canvas id="workGridCanvas" width="380" height="300"></canvas>
+                            <canvas id="workDrawCanvas" width="380" height="300"></canvas>
+                            <div class="reference-overlay" id="referenceOverlay">
+                                <canvas id="overlayCanvas" width="380" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="grid-feedback-msg" class="text-center font-bold text-emerald-600 mb-3 h-6"></div>
+                
+                <div class="flex justify-center gap-3">
+                    <button onclick="clearGridCanvas()" class="bg-slate-500 hover:bg-slate-600 text-white font-bold px-4 py-2 rounded-xl shadow transition text-sm">مسح الرسم</button>
+                    <button onclick="verifyGridWork()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-xl shadow transition duration-200">التحقق من المطابقة</button>
+                </div>
+                <div id="p22-grid-feedback" class="mt-3 text-sm font-semibold text-center"></div>
+            </div>
+
+            <!-- ================= INTEGRATED: Number Representation & Writing ================= -->
+            <div class="mb-8 p-5 bg-slate-50 rounded-xl border border-slate-200 locked" data-exercise="p22-rep">
+                <h3 class="font-bold text-slate-800 mb-3 text-lg">٣- أَكْتُبُ الْأَعْدَادَ الْمُمَثَّلَةَ بِالْأَرْقَامِ وَبِالْحُرُوفِ</h3>
+                <p class="text-sm text-slate-600 mb-4">تأمل النماذج المرسومة بعناية (الصفائح تمثل المئات، والأعمدة تمثل العشرات، والمربعات الصغيرة تمثل الآحاد)، ثم اكتب العدد بالأرقام والحروف بدقة.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                    <!-- Card 1: 650 -->
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="bg-indigo-50 text-indigo-700 font-bold px-3 py-1 rounded-lg text-xs">البطاقة أ</span>
+                                <span class="text-xs text-slate-400 font-medium">مئات وعشرات</span>
+                            </div>
+                            <div class="bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center min-h-[160px] mb-4 relative overflow-hidden grid-bg">
+                                <div class="flex flex-wrap gap-2 items-center justify-center z-10">
+                                    <!-- 6 Hundreds -->
+                                    <div class="grid grid-cols-3 gap-1 p-1 bg-amber-100 border border-amber-300 rounded shadow-sm" title="6 صفائح مئات">
+                                        <div class="w-10 h-10 bg-amber-400 grid grid-cols-10 grid-rows-10 gap-[0.5px] p-[1px] rounded-sm"><script>for(let i=0; i<100; i++) document.write('<div class="bg-amber-200 w-full h-full"></div>');</script></div>
+                                        <div class="w-10 h-10 bg-amber-400 grid grid-cols-10 grid-rows-10 gap-[0.5px] p-[1px] rounded-sm"><script>for(let i=0; i<100; i++) document.write('<div class="bg-amber-200 w-full h-full"></div>');</script></div>
+                                        <div class="w-10 h-10 bg-amber-400 grid grid-cols-10 grid-rows-10 gap-[0.5px] p-[1px] rounded-sm"><script>for(let i=0; i<100; i++) document.write('<div class="bg-amber-200 w-full h-full"></div>');</script></div>
+                                        <div class="w-10 h-10 bg-amber-400 grid grid-cols-10 grid-rows-10 gap-[0.5px] p-[1px] rounded-sm"><script>for(let i=0; i<100; i++) document.write('<div class="bg-amber-200 w-full h-full"></div>');</script></div>
+                                        <div class="w-10 h-10 bg-amber-400 grid grid-cols-10 grid-rows-10 gap-[0.5px] p-[1px] rounded-sm"><script>for(let i=0; i<100; i++) document.write('<div class="bg-amber-200 w-full h-full"></div>');</script></div>
+                                        <div class="w-10 h-10 bg-amber-400 grid grid-cols-10 grid-rows-10 gap-[0.5px] p-[1px] rounded-sm"><script>for(let i=0; i<100; i++) document.write('<div class="bg-amber-200 w-full h-full"></div>');</script></div>
+                                    </div>
+                                    <!-- 5 Tens -->
+                                    <div class="flex gap-1 bg-emerald-50 p-1.5 border border-emerald-300 rounded shadow-sm" title="5 أعمدة عشرات">
+                                        <div class="w-3 h-16 bg-emerald-600 grid grid-rows-10 gap-[1px] p-[1px] rounded-sm"><script>for(let i=0; i<10; i++) document.write('<div class="bg-emerald-300 w-full h-full"></div>');</script></div>
+                                        <div class="w-3 h-16 bg-emerald-600 grid grid-rows-10 gap-[1px] p-[1px] rounded-sm"><script>for(let i=0; i<10; i++) document.write('<div class="bg-emerald-300 w-full h-full"></div>');</script></div>
+                                        <div class="w-3 h-16 bg-emerald-600 grid grid-rows-10 gap-[1px] p-[1px] rounded-sm"><script>for(let i=0; i<10; i++) document.write('<div class="bg-emerald-300 w-full h-full"></div>');</script></div>
+                                        <div class="w-3 h-16 bg-emerald-600 grid grid-rows-10 gap-[1px] p-[1px] rounded-sm"><script>for(let i=0; i<10; i++) document.write('<div class="bg-emerald-300 w-full h-full"></div>');</script></div>
+                                        <div class="w-3 h-16 bg-emerald-600 grid grid-rows-10 gap-[1px] p-[1px] rounded-sm"><script>for(let i=0; i<10; i++) document.write('<div class="bg-emerald-300 w-full h-full"></div>');</script></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 mb-1">العدد بالأرقام:</label>
+                                <input type="number" id="rep_ans1_num" class="w-full bg-slate-50 border-2 border-slate-200 rounded-lg px-3 py-1.5 text-center font-bold text-md focus:outline-none focus:border-indigo-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 mb-1">العدد بالحروف:</label>
+                                <input type="text" id="rep_ans1_word" class="w-full bg-slate-50 border-2 border-slate-200 rounded-lg px-3 py-1.5 text-center text-sm focus:outline-none focus:border-indigo-500 transition">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: 306 -->
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="bg-indigo-50 text-indigo-700 font-bold px-3 py-1 rounded-lg text-xs">البطاقة ب</span>
+                                <span class="text-xs text-slate-400 font-medium">مئات وآحاد</span>
+                            </div>
+                            <div class="bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center min-h-[160px] mb-4 relative overflow-hidden grid-bg">
+                                <div class="flex flex-col gap-2 items-center justify-center z-10">
+                                    <!-- 3 Hundreds -->
+                                    <div class="flex gap-1 p-1 bg-amber-100 border border-amber-300 rounded shadow-sm" title="3 صفائح مئات">
+                                        <div class="w-10 h-10 bg-amber-400 grid grid-cols-10 grid-rows-10 gap-[0.5px] p-[1px] rounded-sm"><script>for(let i=0; i<100; i++) document.write('<div class="bg-amber-200 w-full h-full"></div>');</script></div>
+                                        <div class="w-10 h-10 bg-amber-400 grid grid-cols-10 grid-rows-10 gap-[0.5px] p-[1px] rounded-sm"><script>for(let i=0; i<100; i++) document.write('<div class="bg-amber-200 w-full h-full"></div>');</script></div>
+                                        <div class="w-10 h-10 bg-amber-400 grid grid-cols-10 grid-rows-10 gap-[0.5px] p-[1px] rounded-sm"><script>for(let i=0; i<100; i++) document.write('<div class="bg-amber-200 w-full h-full"></div>');</script></div>
+                                    </div>
+                                    <!-- 6 Units -->
+                                    <div class="grid grid-cols-3 gap-1 bg-amber-50 p-1.5 border border-amber-300 rounded shadow-sm" title="6 مربعات آحاد">
+                                        <div class="w-3 h-3 bg-amber-300 border border-amber-500 rounded-[2px]"></div>
+                                        <div class="w-3 h-3 bg-amber-300 border border-amber-500 rounded-[2px]"></div>
+                                        <div class="w-3 h-3 bg-amber-300 border border-amber-500 rounded-[2px]"></div>
+                                        <div class="w-3 h-3 bg-amber-300 border border-amber-500 rounded-[2px]"></div>
+                                        <div class="w-3 h-3 bg-amber-300 border border-amber-500 rounded-[2px]"></div>
+                                        <div class="w-3 h-3 bg-amber-300 border border-amber-500 rounded-[2px]"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 mb-1">العدد بالأرقام:</label>
+                                <input type="number" id="rep_ans2_num" class="w-full bg-slate-50 border-2 border-slate-200 rounded-lg px-3 py-1.5 text-center font-bold text-md focus:outline-none focus:border-indigo-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 mb-1">العدد بالحروف:</label>
+                                <input type="text" id="rep_ans2_word" class="w-full bg-slate-50 border-2 border-slate-200 rounded-lg px-3 py-1.5 text-center text-sm focus:outline-none focus:border-indigo-500 transition">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3: 423 -->
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="bg-indigo-50 text-indigo-700 font-bold px-3 py-1 rounded-lg text-xs">البطاقة ج</span>
+                                <span class="text-xs text-slate-400 font-medium">مئات، عشرات، وآحاد</span>
+                            </div>
+                            <div class="bg-slate-50 border-2 border-dashed border-slate-200 rounded-xl p-4 flex flex-col items-center justify-center min-h-[160px] mb-4 relative overflow-hidden grid-bg">
+                                <div class="flex flex-col gap-2 items-center justify-center z-10">
+                                    <!-- 4 Hundreds -->
+                                    <div class="grid grid-cols-2 gap-1 p-1 bg-amber-100 border border-amber-300 rounded shadow-sm" title="4 صفائح مئات">
+                                        <div class="w-10 h-10 bg-amber-400 grid grid-cols-10 grid-rows-10 gap-[0.5px] p-[1px] rounded-sm"><script>for(let i=0; i<100; i++) document.write('<div class="bg-amber-200 w-full h-full"></div>');</script></div>
+                                        <div class="w-10 h-10 bg-amber-400 grid grid-cols-10 grid-rows-10 gap-[0.5px] p-[1px] rounded-sm"><script>for(let i=0; i<100; i++) document.write('<div class="bg-amber-200 w-full h-full"></div>');</script></div>
+                                        <div class="w-10 h-10 bg-amber-400 grid grid-cols-10 grid-rows-10 gap-[0.5px] p-[1px] rounded-sm"><script>for(let i=0; i<100; i++) document.write('<div class="bg-amber-200 w-full h-full"></div>');</script></div>
+                                        <div class="w-10 h-10 bg-amber-400 grid grid-cols-10 grid-rows-10 gap-[0.5px] p-[1px] rounded-sm"><script>for(let i=0; i<100; i++) document.write('<div class="bg-amber-200 w-full h-full"></div>');</script></div>
+                                    </div>
+                                    <div class="flex gap-2 items-center">
+                                        <!-- 2 Tens -->
+                                        <div class="flex gap-1 bg-emerald-50 p-1 border border-emerald-300 rounded shadow-sm" title="2 عمود عشرات">
+                                            <div class="w-3 h-16 bg-emerald-600 grid grid-rows-10 gap-[1px] p-[1px] rounded-sm"><script>for(let i=0; i<10; i++) document.write('<div class="bg-emerald-300 w-full h-full"></div>');</script></div>
+                                            <div class="w-3 h-16 bg-emerald-600 grid grid-rows-10 gap-[1px] p-[1px] rounded-sm"><script>for(let i=0; i<10; i++) document.write('<div class="bg-emerald-300 w-full h-full"></div>');</script></div>
+                                        </div>
+                                        <!-- 3 Units -->
+                                        <div class="flex gap-1 bg-amber-50 p-1 border border-amber-300 rounded shadow-sm" title="3 مربعات آحاد">
+                                            <div class="w-3 h-3 bg-amber-300 border border-amber-500 rounded-[2px]"></div>
+                                            <div class="w-3 h-3 bg-amber-300 border border-amber-500 rounded-[2px]"></div>
+                                            <div class="w-3 h-3 bg-amber-300 border border-amber-500 rounded-[2px]"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 mb-1">العدد بالأرقام:</label>
+                                <input type="number" id="rep_ans3_num" class="w-full bg-slate-50 border-2 border-slate-200 rounded-lg px-3 py-1.5 text-center font-bold text-md focus:outline-none focus:border-indigo-500 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-600 mb-1">العدد بالحروف:</label>
+                                <input type="text" id="rep_ans3_word" class="w-full bg-slate-50 border-2 border-slate-200 rounded-lg px-3 py-1.5 text-center text-sm focus:outline-none focus:border-indigo-500 transition">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button onclick="checkRepAnswers()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow transition duration-200">تحقق من التمثيل والكتابة</button>
+                </div>
+                <div id="p22-rep-feedback" class="mt-3 text-sm font-semibold text-center"></div>
+            </div>
+
+            <!-- Decompose Numbers -->
+            <div class="mb-8 p-5 bg-slate-50 rounded-xl border border-slate-200 locked" data-exercise="p22-decomp">
+                <h3 class="font-bold text-slate-800 mb-3 text-lg">فَكِّكِ الْأَعْدَادَ</h3>
+                <div class="space-y-3 ltr-math">
+                    <div class="bg-white p-3 rounded border flex items-center justify-between">
+                        <span class="font-bold text-slate-700 rtl:ml-auto">326 =</span>
+                        <input type="text" id="p22-dec-1" class="w-full max-w-md p-2 border rounded font-bold text-center" placeholder="">
+                    </div>
+                    <div class="bg-white p-3 rounded border flex items-center justify-between">
+                        <span class="font-bold text-slate-700 rtl:ml-auto">690 =</span>
+                        <input type="text" id="p22-dec-2" class="w-full max-w-md p-2 border rounded font-bold text-center" placeholder="">
+                    </div>
+                    <div class="bg-white p-3 rounded border flex items-center justify-between">
+                        <span class="font-bold text-slate-700 rtl:ml-auto">960 =</span>
+                        <input type="text" id="p22-dec-3" class="w-full max-w-md p-2 border rounded font-bold text-center" placeholder="">
+                    </div>
+                </div>
+                <button onclick="checkP22Decomp()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow">تحقق من التفكيك</button>
+                <div id="p22-decomp-feedback" class="mt-3 text-sm font-semibold"></div>
+            </div>
+
+            <!-- Compare, Sort, and Bound Numbers -->
+            <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 locked" data-exercise="p22-comp">
+                <h3 class="font-bold text-slate-800 mb-3 text-lg">مُقَارَنَةٌ وَتَرْتِيبُ وَحَصْرُ أَعْدَادٍ</h3>
+                <div class="space-y-4">
+                    <div>
+                        <p class="font-semibold text-indigo-900 mb-2">1- قَارِنْ بِاسْتِعْمَالِ الْقَائِمَةِ الْمُنْسَدِلَةِ لِلرَّمْزَيْنِ (&lt; أو &gt;):</p>
+                        <div class="space-y-2 ltr-math">
+                            <div class="bg-white p-2.5 rounded border flex items-center justify-center gap-4">
+                                <span class="font-bold">743</span>
+                                <select id="p22-cmp-1" class="p-2 border rounded font-bold bg-slate-50 text-center">
+                                    <option value="">-- اختر --</option>
+                                    <option value=">">&gt;</option>
+                                    <option value="<">&lt;</option>
+                                </select>
+                                <span class="font-bold">678</span>
+                            </div>
+                            <div class="bg-white p-2.5 rounded border flex items-center justify-center gap-4">
+                                <span class="font-bold">903</span>
+                                <select id="p22-cmp-2" class="p-2 border rounded font-bold bg-slate-50 text-center">
+                                    <option value="">-- اختر --</option>
+                                    <option value=">">&gt;</option>
+                                    <option value="<">&lt;</option>
+                                </select>
+                                <span class="font-bold">99</span>
+                            </div>
+                            <div class="bg-white p-2.5 rounded border flex items-center justify-center gap-4">
+                                <span class="font-bold">9</span>
+                                <select id="p22-cmp-3" class="p-2 border rounded font-bold bg-slate-50 text-center">
+                                    <option value="">-- اختر --</option>
+                                    <option value=">">&gt;</option>
+                                    <option value="<">&lt;</option>
+                                </select>
+                                <span class="font-bold">253</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <p class="font-semibold text-indigo-900 mb-2">2- رَتِّبْ تَصَاعُدِيًّا الْأَعْدَادَ الآتية: (900، 69، 96، 306، 189)</p>
+                        <p class="text-xs text-slate-500 mb-2">اضغط على الأعداد بالترتيب المناسب لتنتقل إلى الحيز السفلي:</p>
+                        <div id="sort-source-pool" class="flex flex-wrap gap-2 p-3 bg-white rounded-xl border mb-3 ltr-math">
+                            <button onclick="selectSortItem(this, '900')" class="px-4 py-2 bg-blue-100 hover:bg-blue-200 rounded-lg font-bold text-blue-950 transition">900</button>
+                            <button onclick="selectSortItem(this, '69')" class="px-4 py-2 bg-blue-100 hover:bg-blue-200 rounded-lg font-bold text-blue-950 transition">69</button>
+                            <button onclick="selectSortItem(this, '96')" class="px-4 py-2 bg-blue-100 hover:bg-blue-200 rounded-lg font-bold text-blue-950 transition">96</button>
+                            <button onclick="selectSortItem(this, '306')" class="px-4 py-2 bg-blue-100 hover:bg-blue-200 rounded-lg font-bold text-blue-950 transition">306</button>
+                            <button onclick="selectSortItem(this, '189')" class="px-4 py-2 bg-blue-100 hover:bg-blue-200 rounded-lg font-bold text-blue-950 transition">189</button>
+                        </div>
+                        <div class="p-3 bg-emerald-50 rounded-xl border border-emerald-200 min-h-[50px] flex items-center gap-2 ltr-math" id="sort-target-box">
+                            <span class="text-xs text-emerald-700 font-bold rtl:ml-2">حيز الترتيب التصاعدي:</span>
+                        </div>
+                        <button onclick="resetSorting()" class="mt-2 text-xs bg-slate-200 px-3 py-1 rounded">إعادة الترتيب</button>
+                    </div>
+
+                    <div class="mt-4">
+                        <p class="font-semibold text-indigo-900 mb-2">3- أَحْصُرُ كُلَّ عَدَدٍ بَيْنَ مِائَتَيْنِ مُتَتَالِيَيْنِ (من اليسار إلى اليمين):</p>
+                        <div class="space-y-2 ltr-math">
+                            <div class="bg-white p-2.5 rounded border flex items-center justify-center gap-3">
+                                <input type="text" id="p22-bnd-1a" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                                <span class="font-bold">&lt; 368 &lt;</span>
+                                <input type="text" id="p22-bnd-1b" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                            </div>
+                            <div class="bg-white p-2.5 rounded border flex items-center justify-center gap-3">
+                                <input type="text" id="p22-bnd-2a" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                                <span class="font-bold">&lt; 409 &lt;</span>
+                                <input type="text" id="p22-bnd-2b" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                            </div>
+                            <div class="bg-white p-2.5 rounded border flex items-center justify-center gap-3">
+                                <input type="text" id="p22-bnd-3a" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                                <span class="font-bold">&lt; 872 &lt;</span>
+                                <input type="text" id="p22-bnd-3b" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="checkP22Comp()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow">تحقق من المقارنة والحصر</button>
+                <div id="p22-comp-feedback" class="mt-3 text-sm font-semibold"></div>
+            </div>
+        </section>
+
+
+        <!-- ================= PAGE 23 (أُدَعِّمُ تَعَلُّمَاتِي) ================= -->
+        <section id="section-p23" class="bg-white rounded-2xl shadow-md border border-slate-200 p-6 sm:p-8 locked transition-all duration-300">
+            <div class="flex items-center justify-between border-b pb-4 mb-6">
+                <h2 class="text-xl sm:text-2xl font-bold text-blue-900 flex items-center gap-2">
+                    <span class="bg-amber-100 text-amber-800 w-8 h-8 rounded-full flex items-center justify-center text-sm font-black">23</span>
+                    أُدَعِّمُ تَعَلُّمَاتِي + مَعَالَجَةٌ
+                </h2>
+                <span class="text-xs bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-semibold">الصفحة 23</span>
+            </div>
+
+            <!-- Units Digit and Count -->
+            <div class="mb-8 p-5 bg-slate-50 rounded-xl border border-slate-200" data-exercise="p23-1">
+                <h3 class="font-bold text-slate-800 mb-3 text-lg">1- تحديد رقم الوحدات وعدد الوحدات (من اليسار إلى اليمين)</h3>
+                <div class="space-y-3 ltr-math">
+                    <div class="bg-white p-3 rounded border flex flex-wrap items-center gap-4">
+                        <span class="font-bold text-lg">180:</span>
+                        <span>رقم الوحدات هو</span>
+                        <input type="text" id="p23-u1-d" class="w-16 p-1.5 border rounded text-center font-bold" placeholder="">
+                        <span>عدد الوحدات هو</span>
+                        <input type="text" id="p23-u1-c" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                    </div>
+                    <div class="bg-white p-3 rounded border flex flex-wrap items-center gap-4">
+                        <span class="font-bold text-lg">306:</span>
+                        <span>رقم الوحدات هو</span>
+                        <input type="text" id="p23-u2-d" class="w-16 p-1.5 border rounded text-center font-bold" placeholder="">
+                        <span>عدد الوحدات هو</span>
+                        <input type="text" id="p23-u2-c" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                    </div>
+                    <div class="bg-white p-3 rounded border flex flex-wrap items-center gap-4">
+                        <span class="font-bold text-lg">9:</span>
+                        <span>رقم الوحدات هو</span>
+                        <input type="text" id="p23-u3-d" class="w-16 p-1.5 border rounded text-center font-bold" placeholder="">
+                        <span>عدد الوحدات هو</span>
+                        <input type="text" id="p23-u3-c" class="w-20 p-1.5 border rounded text-center font-bold" placeholder="">
+                    </div>
+                </div>
+                <button onclick="checkP23Ex1()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow">تحقق من التمرين 1</button>
+                <div id="p23-ex1-feedback" class="mt-3 text-sm font-semibold"></div>
+            </div>
+
+            <!-- Write in digits or letters & True/False -->
+            <div class="mb-8 p-5 bg-slate-50 rounded-xl border border-slate-200 locked" data-exercise="p23-2">
+                <h3 class="font-bold text-slate-800 mb-3 text-lg">2- أَكْتُبُ بِالْأَرْقَامِ أَوْ بِالْحُرُوفِ وتصحيح الخطأ</h3>
+                <div class="space-y-4 text-slate-800">
+                    <div class="bg-white p-3 rounded border flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <span>تِسْعُ مِائَةٍ وَوَاحِدٍ:</span>
+                        <input type="text" id="p23-w-1" class="w-32 p-2 border rounded font-bold text-center" placeholder="">
+                    </div>
+                    <div class="bg-white p-3 rounded border flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <span>654 بالحروف:</span>
+                        <input type="text" id="p23-w-2" class="w-full sm:w-96 p-2 border rounded font-semibold" placeholder="">
+                    </div>
+                    <div class="bg-white p-3 rounded border flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <span class="font-bold ltr-math">ثَلَاثُ مِائَةٍ وَوَاحِدٌ: 3001</span>
+                        <div class="flex items-center gap-3">
+                            <select id="p23-tf-1" class="p-2 border rounded font-bold">
+                                <option value="">-- صحيح أم خطأ --</option>
+                                <option value="false">خطأ</option>
+                                <option value="true">صحيح</option>
+                            </select>
+                            <input type="text" id="p23-corr-1" placeholder="التصحيح" class="w-28 p-2 border rounded font-bold text-center">
+                        </div>
+                    </div>
+                    <div class="bg-white p-3 rounded border flex flex-col sm:flex-row items-center justify-between gap-3">
+                        <span class="font-bold ltr-math">سِتَّةٌ وَسَبْعُونَ: 67</span>
+                        <div class="flex items-center gap-3">
+                            <select id="p23-tf-2" class="p-2 border rounded font-bold">
+                                <option value="">-- صحيح أم خطأ --</option>
+                                <option value="false">خطأ</option>
+                                <option value="true">صحيح</option>
+                            </select>
+                            <input type="text" id="p23-corr-2" placeholder="التصحيح" class="w-28 p-2 border rounded font-bold text-center">
+                        </div>
+                    </div>
+                </div>
+                <button onclick="checkP23Ex2()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow">تحقق من التمارين</button>
+                <div id="p23-ex2-feedback" class="mt-3 text-sm font-semibold"></div>
+            </div>
+
+            <!-- Equivalent representations selection -->
+            <div class="mb-8 p-5 bg-slate-50 rounded-xl border border-slate-200 locked" data-exercise="p23-3">
+                <h3 class="font-bold text-slate-800 mb-3 text-lg">3- أَضْغَطُ عَلَى الْكِتَابَاتِ الْمُخْتَلِفَةِ لِنَفْسِ الْعَدَدِ</h3>
+                
+                <!-- Equivalent representations for 722 -->
+                <div class="p-4 bg-white rounded-xl border mb-4">
+                    <p class="font-semibold text-indigo-900 mb-2">أ) اختر المتطابقات الصحيحة للعدد 722:</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
+                        <label class="flex items-center gap-3 bg-slate-50 p-3 rounded border cursor-pointer hover:bg-slate-100">
+                            <input type="checkbox" name="p23-eq-722" value="700+20+2" class="w-5 h-5 text-blue-600 rounded">
+                            <span class="font-bold ltr-math">700 + 20 + 2</span>
+                        </label>
+                        <label class="flex items-center gap-3 bg-slate-50 p-3 rounded border cursor-pointer hover:bg-slate-100">
+                            <input type="checkbox" name="p23-eq-722" value="272" class="w-5 h-5 text-blue-600 rounded">
+                            <span class="font-bold ltr-math">272</span>
+                        </label>
+                        <label class="flex items-center gap-3 bg-slate-50 p-3 rounded border cursor-pointer hover:bg-slate-100">
+                            <input type="checkbox" name="p23-eq-722" value="722" class="w-5 h-5 text-blue-600 rounded">
+                            <span class="font-bold ltr-math">722</span>
+                        </label>
+                        
+                        <!-- Split boxes for 722 -->
+                        <label class="flex items-center gap-3 bg-slate-50 p-3 rounded border cursor-pointer hover:bg-slate-100">
+                            <input type="checkbox" name="p23-eq-722" value="2و 2ع 7م" class="w-5 h-5 text-blue-600 rounded">
+                            <div class="place-value-box">
+                                <span class="place-value-item text-slate-700 bg-slate-100">2و</span>
+                                <span class="place-value-item text-slate-700 bg-slate-100">2ع</span>
+                                <span class="place-value-item text-slate-700 bg-slate-100">7م</span>
+                            </div>
+                        </label>
+
+                        <label class="flex items-center gap-3 bg-slate-50 p-3 rounded border cursor-pointer hover:bg-slate-100 sm:col-span-2">
+                            <input type="checkbox" name="p23-eq-722" value="سَبْعُ مِائَةٍ وَاثْنَانِ وَعِشْرُونَ" class="w-5 h-5 text-blue-600 rounded">
+                            <span class="font-bold">سَبْعُ مِائَةٍ وَاثْنَانِ وَعِشْرُونَ</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Equivalent representations for 129 -->
+                <div class="p-4 bg-white rounded-xl border">
+                    <p class="font-semibold text-indigo-900 mb-2">ب) اختر المتطابقات الصحيحة للعدد 129:</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2">
+                        <label class="flex items-center gap-3 bg-slate-50 p-3 rounded border cursor-pointer hover:bg-slate-100">
+                            <input type="checkbox" name="p23-eq-129" value="100+90+2" class="w-5 h-5 text-blue-600 rounded">
+                            <span class="font-bold ltr-math">100 + 90 + 2</span>
+                        </label>
+                        <label class="flex items-center gap-3 bg-slate-50 p-3 rounded border cursor-pointer hover:bg-slate-100">
+                            <input type="checkbox" name="p23-eq-129" value="192" class="w-5 h-5 text-blue-600 rounded">
+                            <span class="font-bold ltr-math">192</span>
+                        </label>
+
+                        <!-- Split boxes for 129 -->
+                        <label class="flex items-center gap-3 bg-slate-50 p-3 rounded border cursor-pointer hover:bg-slate-100">
+                            <input type="checkbox" name="p23-eq-129" value="1و / 2ع / 9م" class="w-5 h-5 text-blue-600 rounded">
+                            <div class="place-value-box">
+                                <span class="place-value-item text-slate-700 bg-slate-100">1و</span>
+                                <span class="place-value-item text-slate-700 bg-slate-100">2ع</span>
+                                <span class="place-value-item text-slate-700 bg-slate-100">9م</span>
+                            </div>
+                        </label>
+
+                        <label class="flex items-center gap-3 bg-slate-50 p-3 rounded border cursor-pointer hover:bg-slate-100">
+                            <input type="checkbox" name="p23-eq-129" value="129" class="w-5 h-5 text-blue-600 rounded">
+                            <span class="font-bold ltr-math">129</span>
+                        </label>
+                        <label class="flex items-center gap-3 bg-slate-50 p-3 rounded border cursor-pointer hover:bg-slate-100 sm:col-span-2">
+                            <input type="checkbox" name="p23-eq-129" value="مِائَةٌ وَتِسْعَةٌ وَعِشْرُونَ" class="w-5 h-5 text-blue-600 rounded">
+                            <span class="font-bold">مِائَةٌ وَتِسْعَةٌ وَعِشْرُونَ</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button onclick="checkP23Ex3()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow">تحقق من التماثل</button>
+                <div id="p23-ex3-feedback" class="mt-3 text-sm font-semibold"></div>
+            </div>
+
+            <!-- Calculation & Vertical Operations -->
+            <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 locked" data-exercise="p23-4">
+                <h3 class="font-bold text-slate-800 mb-3 text-lg">4 & 5- الْحِسَابُ وَالْعَمَلِيَّاتُ الْعَمُودِيَّةُ وَالتَّصْحِيحُ</h3>
+                <div class="space-y-4">
+                    <div class="bg-white p-3 rounded border ltr-math flex items-center justify-between">
+                        <span class="font-semibold rtl:ml-auto">9 + 112 =</span>
+                        <input type="text" id="p23-calc-1" class="w-24 p-2 border rounded text-center font-bold" placeholder="">
+                    </div>
+                    <div class="bg-white p-3 rounded border ltr-math flex items-center justify-between">
+                        <span class="font-semibold rtl:ml-auto">4 + 32 =</span>
+                        <input type="text" id="p23-calc-2" class="w-24 p-2 border rounded text-center font-bold" placeholder="">
+                    </div>
+
+                    <div class="border-t pt-4 mt-4">
+                        <p class="font-semibold text-indigo-900 mb-2">أضع العملية ثم أجري الحساب عمودياً (مع خانات عمودية دقيقة لكل مرتبة وحدات، عشرات، مئات):</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 ltr-math">
+                            <!-- Vertical Operation 1: 405 + 38 -->
+                            <div class="bg-white p-4 rounded-xl border shadow-sm">
+                                <span class="font-bold text-sm block mb-3 text-slate-700 rtl:text-right">العملية الأولى: 405 + 38</span>
+                                <div class="grid grid-cols-4 gap-1 text-center font-bold max-w-[200px] mx-auto text-sm mb-2 text-slate-500">
+                                    <span>احتفاظ</span>
+                                    <span>م</span>
+                                    <span>ع</span>
+                                    <span>و</span>
+                                </div>
+                                <div class="grid grid-cols-4 gap-1 text-center max-w-[200px] mx-auto mb-2">
+                                    <input type="text" id="v1-c1" class="p-1 border rounded text-center font-bold text-amber-600 text-sm" placeholder="">
+                                    <input type="text" id="v1-h1" class="p-1.5 border rounded text-center font-bold text-lg" value="4">
+                                    <input type="text" id="v1-t1" class="p-1.5 border rounded text-center font-bold text-lg" value="0">
+                                    <input type="text" id="v1-u1" class="p-1.5 border rounded text-center font-bold text-lg" value="5">
+                                </div>
+                                <div class="grid grid-cols-4 gap-1 text-center max-w-[200px] mx-auto mb-3 border-b-2 pb-2">
+                                    <span>+</span>
+                                    <input type="text" id="v1-h2" class="p-1.5 border rounded text-center font-bold text-lg" value="0">
+                                    <input type="text" id="v1-t2" class="p-1.5 border rounded text-center font-bold text-lg" value="3">
+                                    <input type="text" id="v1-u2" class="p-1.5 border rounded text-center font-bold text-lg" value="8">
+                                </div>
+                                <div class="grid grid-cols-4 gap-1 text-center max-w-[200px] mx-auto">
+                                    <span>=</span>
+                                    <input type="text" id="v1-res-h" class="p-1.5 border rounded text-center font-bold text-lg bg-slate-50" placeholder="">
+                                    <input type="text" id="v1-res-t" class="p-1.5 border rounded text-center font-bold text-lg bg-slate-50" placeholder="">
+                                    <input type="text" id="v1-res-u" class="p-1.5 border rounded text-center font-bold text-lg bg-slate-50" placeholder="">
+                                </div>
+                            </div>
+
+                            <!-- Vertical Operation 2: 25 + 193 -->
+                            <div class="bg-white p-4 rounded-xl border shadow-sm">
+                                <span class="font-bold text-sm block mb-3 text-slate-700 rtl:text-right">العملية الثانية: 25 + 193</span>
+                                <div class="grid grid-cols-4 gap-1 text-center font-bold max-w-[200px] mx-auto text-sm mb-2 text-slate-500">
+                                    <span>احتفاظ</span>
+                                    <span>م</span>
+                                    <span>ع</span>
+                                    <span>و</span>
+                                </div>
+                                <div class="grid grid-cols-4 gap-1 text-center max-w-[200px] mx-auto mb-2">
+                                    <input type="text" id="v2-c1" class="p-1 border rounded text-center font-bold text-amber-600 text-sm" placeholder="">
+                                    <input type="text" id="v2-h1" class="p-1.5 border rounded text-center font-bold text-lg" value="0">
+                                    <input type="text" id="v2-t1" class="p-1.5 border rounded text-center font-bold text-lg" value="2">
+                                    <input type="text" id="v2-u1" class="p-1.5 border rounded text-center font-bold text-lg" value="5">
+                                </div>
+                                <div class="grid grid-cols-4 gap-1 text-center max-w-[200px] mx-auto mb-3 border-b-2 pb-2">
+                                    <span>+</span>
+                                    <input type="text" id="v2-h2" class="p-1.5 border rounded text-center font-bold text-lg" value="1">
+                                    <input type="text" id="v2-t2" class="p-1.5 border rounded text-center font-bold text-lg" value="9">
+                                    <input type="text" id="v2-u2" class="p-1.5 border rounded text-center font-bold text-lg" value="3">
+                                </div>
+                                <div class="grid grid-cols-4 gap-1 text-center max-w-[200px] mx-auto">
+                                    <span>=</span>
+                                    <input type="text" id="v2-res-h" class="p-1.5 border rounded text-center font-bold text-lg bg-slate-50" placeholder="">
+                                    <input type="text" id="v2-res-t" class="p-1.5 border rounded text-center font-bold text-lg bg-slate-50" placeholder="">
+                                    <input type="text" id="v2-res-u" class="p-1.5 border rounded text-center font-bold text-lg bg-slate-50" placeholder="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t pt-4 mt-4">
+                        <p class="font-semibold text-indigo-900 mb-2">تصحيح العمليات العمودية (صحيح أو خطأ مع إصلاح النتيجة):</p>
+                        <div class="space-y-3">
+                            <div class="bg-white p-3 rounded border flex flex-col sm:flex-row items-center justify-between gap-3">
+                                <span class="font-bold ltr-math">325 + 12 = 445</span>
+                                <div class="flex items-center gap-3">
+                                    <select id="p23-vtf-1" class="p-2 border rounded font-bold">
+                                        <option value="">-- ص / خ --</option>
+                                        <option value="false">خطأ</option>
+                                        <option value="true">صحيح</option>
+                                    </select>
+                                    <input type="text" id="p23-vcorr-1" placeholder="التصحيح" class="w-28 p-2 border rounded font-bold text-center">
+                                </div>
+                            </div>
+                            <div class="bg-white p-3 rounded border flex flex-col sm:flex-row items-center justify-between gap-3">
+                                <span class="font-bold ltr-math">508 + 93 = 591</span>
+                                <div class="flex items-center gap-3">
+                                    <select id="p23-vtf-2" class="p-2 border rounded font-bold">
+                                        <option value="">-- ص / خ --</option>
+                                        <option value="false">خطأ</option>
+                                        <option value="true">صحيح</option>
+                                    </select>
+                                    <input type="text" id="p23-vcorr-2" placeholder="التصحيح" class="w-28 p-2 border rounded font-bold text-center">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button onclick="checkP23Ex4()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-2.5 rounded-xl shadow">تحقق من العمليات النهائية</button>
+                <div id="p23-ex4-feedback" class="mt-3 text-sm font-semibold"></div>
+            </div>
+        </section>
+
+
+        <!-- ================= BOTTOM GENERAL EVALUATION SUMMARY ================= -->
+        <section id="evaluation-summary" class="bg-gradient-to-br from-slate-900 to-indigo-950 text-white rounded-3xl shadow-2xl p-6 sm:p-10 mt-12 border-4 border-amber-400">
+            <div class="text-center mb-8">
+                <span class="bg-amber-400 text-slate-950 font-black px-4 py-1.5 rounded-full text-sm uppercase tracking-wider shadow">لوحة التقييم الختامي الشامل</span>
+                <h3 class="text-2xl sm:text-3xl font-black mt-3">حصيلة أداء التلميذ ومتابعة إنجازاته</h3>
+                <p class="text-slate-300 text-sm mt-1">يتم تحديث هذه اللوحة تلقائياً فور اجتيازك لمحطات الدرس (تحت التمارين مباشرة)</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center bg-white/5 p-6 rounded-2xl border border-white/10 mb-8">
+                <!-- Circular Progress SVG -->
+                <div class="flex flex-col items-center justify-center">
+                    <div class="relative w-36 h-36 flex items-center justify-center">
+                        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="40" stroke="currentColor" stroke-width="8" class="text-slate-800 fill-none"></circle>
+                            <circle id="progress-circle" cx="50" cy="50" r="40" stroke="currentColor" stroke-width="8" stroke-dasharray="251.2" stroke-dashoffset="251.2" stroke-linecap="round" class="text-emerald-400 fill-none transition-all duration-1000"></circle>
+                        </svg>
+                        <div class="absolute flex flex-col items-center justify-center text-center">
+                            <span id="score-percentage" class="text-3xl font-black text-white">0%</span>
+                            <span class="text-xs text-slate-400">نسبة الإنجاز</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Counters & Stats -->
+                <div class="space-y-4 text-center md:text-right">
+                    <div class="flex items-center justify-between bg-white/10 p-3 rounded-xl">
+                        <span class="text-slate-300 font-semibold">المحطات المجتازة بنجاح:</span>
+                        <span id="passed-count" class="text-xl font-black text-emerald-400">0 / 13</span>
+                    </div>
+                    <div class="flex items-center justify-between bg-white/10 p-3 rounded-xl">
+                        <span class="text-slate-300 font-semibold">المحاولات الصحيحة:</span>
+                        <span id="correct-count" class="text-xl font-black text-blue-400">0</span>
+                    </div>
+                    <div class="flex items-center justify-between bg-white/10 p-3 rounded-xl">
+                        <span class="text-slate-300 font-semibold">الأخطاء المسجلة:</span>
+                        <span id="error-count" class="text-xl font-black text-rose-400">0</span>
+                    </div>
+                </div>
+
+                <!-- Pedagogical Note -->
+                <div class="bg-indigo-900/60 p-5 rounded-2xl border border-indigo-700/50 flex flex-col justify-center text-center">
+                    <h4 class="text-amber-300 font-bold mb-2 text-lg">التقدير البيداغوجي</h4>
+                    <p id="pedagogical-note" class="text-slate-200 text-sm leading-relaxed">ابدأ بحل التمارين بالتتابع لتظهر ملاحظات التقييم هنا...</p>
+                </div>
+            </div>
+
+            <!-- Control Buttons -->
+            <div class="flex flex-wrap gap-4 justify-center">
+                <button onclick="resetAllExercises()" class="bg-amber-500 hover:bg-amber-600 text-slate-950 font-black px-8 py-3 rounded-xl shadow-lg transition duration-200 flex items-center gap-2">
+                    <span>إعادة المحاولة من جديد</span>
+                </button>
+                <button onclick="if(window.Telegram?.WebApp){Telegram.WebApp.close()}else{window.history.back()}" class="bg-slate-800 hover:bg-slate-700 text-white font-bold px-8 py-3 rounded-xl shadow-lg border border-slate-700 transition duration-200">
+                    خروج من التطبيق
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================
+             زر العودة إلى الفهرس (أُضيف)
+             ======================================== -->
+        <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+    </main>
+
+    <!-- ========================================
+         سكريبت الحماية (أُضيف)
+         ======================================== -->
+    <script>
+        // إعدادات القناة - السنة الثالثة
+        const CHANNEL_ID = "-1003910412986";
+
+        // تهيئة Telegram WebApp
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        async function verifySubscription() {
+            const statusMsg = document.getElementById('sub-status-msg');
+            statusMsg.style.color = "#0288d1";
+            statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+            let userId = null;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                userId = tg.initDataUnsafe.user.id;
+            }
+
+            if (!userId) {
+                statusMsg.style.color = "#e65100";
+                statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+                return;
+            }
+
+            try {
+                const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.isSubscribed) {
+                    statusMsg.style.color = "#2e7d32";
+                    statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                    setTimeout(() => {
+                        document.getElementById('sub-lock-screen').style.display = 'none';
+                    }, 600);
+                } else {
+                    statusMsg.style.color = "#c62828";
+                    statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+                }
+            } catch (error) {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+            }
+        }
+
+        window.addEventListener('load', () => {
+            verifySubscription();
+        });
+    </script>
+
+    <!-- ========================================
+         سكريبت الدرس الأصلي (كما هو دون تغيير)
+         ======================================== -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            if (!audioCtx) return;
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            if (type === 'success') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+            } else {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+            }
+        }
+
+        let totalPassed = 0;
+        let correctAttempts = 0;
+        let errorAttempts = 0;
+        let totalQuestionsAttempted = 0;
+        const totalModules = 13;
+
+        function updateEvaluation(isSuccess, correctCount = 1, wrongCount = 0) {
+            totalPassed++;
+            totalQuestionsAttempted += (correctCount + wrongCount);
+            correctAttempts += correctCount;
+            errorAttempts += wrongCount;
+
+            if (isSuccess) {
+                playSound('success');
+            } else {
+                playSound('error');
+            }
+
+            let pct = totalQuestionsAttempted > 0 ? Math.round((correctAttempts / totalQuestionsAttempted) * 100) : 0;
+            
+            document.getElementById('score-percentage').innerText = pct + '%';
+            document.getElementById('passed-count').innerText = totalPassed + ' / ' + totalModules;
+            document.getElementById('correct-count').innerText = correctAttempts;
+            document.getElementById('error-count').innerText = errorAttempts;
+
+            const circle = document.getElementById('progress-circle');
+            const circumference = 251.2;
+            const offset = circumference - (pct / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+
+            const noteEl = document.getElementById('pedagogical-note');
+            if (pct === 100) {
+                noteEl.innerText = "ممتاز جداً! أداء خارق واستيعاب تام لكافة معارف الحصيلة والوضعيات.";
+            } else if (pct >= 70) {
+                noteEl.innerText = "جيد جداً! مستوى مبهر في الحساب والمقارنة وتمثيل الأعداد.";
+            } else if (pct >= 40) {
+                noteEl.innerText = "مستوى حسَن، واصل التقدم وأعد مراجعة العمليات والحصر بدقة.";
+            } else {
+                noteEl.innerText = "أبدأ بحل التمارين بتتابع بعناية لتحقيق نتائج ممتازة.";
+            }
+        }
+
+        function unlockNextExercise(currentExSelector) {
+            const currentEl = document.querySelector(`[data-exercise="${currentExSelector}"]`);
+            if (currentEl) {
+                currentEl.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+                currentEl.classList.add('bg-emerald-50/50', 'border-emerald-200');
+            }
+
+            const lockedList = document.querySelectorAll('.locked');
+            if (lockedList.length > 0) {
+                lockedList[0].classList.remove('locked');
+            }
+        }
+
+        function handleWrongAttempt(currentExSelector, feedbackId, message, wrongInputs = []) {
+            const currentEl = document.querySelector(`[data-exercise="${currentExSelector}"]`);
+            if (currentEl) {
+                currentEl.querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+                currentEl.classList.add('bg-rose-50/50', 'border-rose-200');
+            }
+            wrongInputs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('error-highlight');
+            });
+
+            document.getElementById(feedbackId).innerHTML = `<span class="text-rose-600 font-bold">✗ ${message} (تم تحديد الأخطاء باللون الأحمر - انتقال للتمرين الموالي)</span>`;
+            
+            updateEvaluation(false, 0, 1);
+            
+            const lockedList = document.querySelectorAll('.locked');
+            if (lockedList.length > 0) {
+                lockedList[0].classList.remove('locked');
+            }
+        }
+
+        // ================= PAGE 21 LOGIC =================
+        function checkP21Ex1() {
+            const a1 = document.getElementById('p21-q1-ans1').value.trim();
+            const calc = document.getElementById('p21-q1-calc').value.trim();
+            const noCalc = document.querySelector('input[name="p21-q1-no-calc"]:checked');
+            const fb = document.getElementById('p21-ex1-feedback');
+
+            let wrong = [];
+            if (a1 !== '3') wrong.push('p21-q1-ans1');
+            if (calc !== '60') wrong.push('p21-q1-calc');
+
+            let ok = (a1 === '3' && calc === '60' && noCalc && noCalc.value === 'first');
+            if (ok) {
+                fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ إجابة صحيحة ودقيقة!</span>';
+                updateEvaluation(true, 3, 0);
+                unlockNextExercise('p21-1');
+            } else {
+                handleWrongAttempt('p21-1', 'p21-ex1-feedback', 'إجابة خاطئة في الارتفاع أو الحساب.', wrong);
+            }
+        }
+
+        function checkP21Ex2() {
+            const c1 = document.getElementById('p21-q2-c1').value.trim();
+            const c2 = document.getElementById('p21-q2-c2').value.trim();
+            const c3 = document.getElementById('p21-q2-c3').value.trim();
+            const ans = document.querySelector('input[name="p21-q2-ans"]:checked');
+            const fb = document.getElementById('p21-ex2-feedback');
+
+            let wrong = [];
+            if (c1 !== '600') wrong.push('p21-q2-c1');
+            if (c2 !== '80') wrong.push('p21-q2-c2');
+            if (c3 !== '680') wrong.push('p21-q2-c3');
+
+            let ok = (c1 === '600' && c2 === '80' && c3 === '680' && ans && ans.value === 'no');
+            if (ok) {
+                fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ أحسنت! المجموع هو 680 وهو أقل من 850 إذن لا يستطيع تلبية الطلبية.</span>';
+                updateEvaluation(true, 4, 0);
+                unlockNextExercise('p21-2');
+            } else {
+                handleWrongAttempt('p21-2', 'p21-ex2-feedback', 'إجابة خاطئة في حساب رزم المطويات.', wrong);
+            }
+        }
+
+        function checkP21Ex3() {
+            const h = document.getElementById('p21-q3-height').value;
+            const f = document.getElementById('p21-q3-floors').value;
+            const fb = document.getElementById('p21-ex3-feedback');
+
+            let wrong = [];
+            if (h !== 'petronas,taipei,khalifa') wrong.push('p21-q3-height');
+            if (f !== 'khalifa,petronas,taipei') wrong.push('p21-q3-floors');
+
+            let ok = (h === 'petronas,taipei,khalifa' && f === 'khalifa,petronas,taipei');
+            if (ok) {
+                fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ ترتيب صحيح للأبراج حسب الارتفاع وعدد الطوابق!</span>';
+                updateEvaluation(true, 2, 0);
+                unlockNextExercise('p21-3');
+            } else {
+                handleWrongAttempt('p21-3', 'p21-ex3-feedback', 'خطأ في ترتيب الأبراج (راجع الارتفاع وعدد الطوابق).', wrong);
+            }
+        }
+
+        function checkP21Ex4() {
+            const ans = document.getElementById('p21-q4-ans').value.trim();
+            const fb = document.getElementById('p21-ex4-feedback');
+
+            let ok = (ans === '12');
+            if (ok) {
+                fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ صحيح! 65 - 53 = 12 طفلاً بقوا على الشاطئ.</span>';
+                updateEvaluation(true, 1, 0);
+                unlockNextExercise('p21-4');
+            } else {
+                handleWrongAttempt('p21-4', 'p21-ex4-feedback', 'إجابة خاطئة. الفرق الصحيح هو 12.', ['p21-q4-ans']);
+            }
+        }
+
+        // Geometric shape rendering
+        const shapesState = { 1: false, 2: false, 3: false };
+        function initShapeCanvases() {
+            [1, 2, 3].forEach(id => {
+                const canvas = document.getElementById(`canvas-shape-${id}`);
+                const ctx = canvas.getContext('2d');
+                drawShape(id, ctx);
+                
+                let isDrawing = false;
+                let startPoint = null;
+
+                canvas.addEventListener('mousedown', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const v = getNearestVertex(id, x, y);
+                    if (v) {
+                        isDrawing = true;
+                        startPoint = v;
+                    }
+                });
+
+                canvas.addEventListener('mousemove', (e) => {
+                    if (!isDrawing) return;
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    drawShape(id, ctx);
+                    ctx.beginPath();
+                    ctx.moveTo(startPoint.x, startPoint.y);
+                    ctx.lineTo(x, y);
+                    ctx.strokeStyle = '#ef4444';
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                });
+
+                canvas.addEventListener('mouseup', (e) => {
+                    if (!isDrawing) return;
+                    isDrawing = false;
+                    const rect = canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const v = getNearestVertex(id, x, y);
+                    if (v && v !== startPoint) {
+                        shapesState[id] = true;
+                        drawShape(id, ctx);
+                        ctx.beginPath();
+                        ctx.moveTo(startPoint.x, startPoint.y);
+                        ctx.lineTo(v.x, v.y);
+                        ctx.strokeStyle = '#ef4444';
+                        ctx.lineWidth = 3;
+                        ctx.stroke();
+                    } else {
+                        drawShape(id, ctx);
+                    }
+                });
+            });
+        }
+
+        function getVertices(id) {
+            if (id === 1) return [{x:30, y:80}, {x:100, y:40}, {x:170, y:80}, {x:100, y:120}]; 
+            if (id === 2) return [{x:40, y:30}, {x:160, y:30}, {x:160, y:130}, {x:40, y:130}];
+            return [{x:25, y:35}, {x:175, y:35}, {x:175, y:125}, {x:25, y:125}];
+        }
+
+        function getNearestVertex(id, x, y) {
+            const verts = getVertices(id);
+            for (let v of verts) {
+                const dist = Math.hypot(v.x - x, v.y - y);
+                if (dist < 30) return v;
+            }
+            return null;
+        }
+
+        function drawShape(id, ctx) {
+            ctx.clearRect(0, 0, 200, 160);
+            const verts = getVertices(id);
+            ctx.beginPath();
+            ctx.moveTo(verts[0].x, verts[0].y);
+            for (let i = 1; i < verts.length; i++) {
+                ctx.lineTo(verts[i].x, verts[i].y);
+            }
+            ctx.closePath();
+            ctx.strokeStyle = '#1e293b';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            verts.forEach(v => {
+                ctx.beginPath();
+                ctx.arc(v.x, v.y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = '#3b82f6';
+                ctx.fill();
+            });
+        }
+
+        function resetShape(id) {
+            shapesState[id] = false;
+            const canvas = document.getElementById(`canvas-shape-${id}`);
+            const ctx = canvas.getContext('2d');
+            drawShape(id, ctx);
+        }
+
+        function checkP21Ex5() {
+            const fb = document.getElementById('p21-ex5-feedback');
+            if (shapesState[1] && shapesState[2] && shapesState[3]) {
+                fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ ممتاز! تم تقسيم الأشكال الثلاثة إلى مثلثين بدقة عبر الأركان.</span>';
+                updateEvaluation(true, 3, 0);
+                unlockNextExercise('p21-5');
+            } else {
+                handleWrongAttempt('p21-5', 'p21-ex5-feedback', 'لم تقم بتقسيم الأشكال الثلاثة بشكل صحيح إلى مثلثين.');
+            }
+        }
+
+        // ================= PAGE 22 LOGIC =================
+        function checkP22Seq() {
+            const s1 = document.getElementById('p22-seq-1').value.trim();
+            const s2 = document.getElementById('p22-seq-2').value.trim();
+            const s3 = document.getElementById('p22-seq-3').value.trim();
+            const s4 = document.getElementById('p22-seq-4').value.trim();
+            const s5 = document.getElementById('p22-seq-5').value.trim();
+            const fb = document.getElementById('p22-seq-feedback');
+
+            let wrong = [];
+            if (s1 !== '536') wrong.push('p22-seq-1');
+            if (s2 !== '516') wrong.push('p22-seq-2');
+            if (s3 !== '496') wrong.push('p22-seq-3');
+            if (s4 !== '476') wrong.push('p22-seq-4');
+            if (s5 !== '456') wrong.push('p22-seq-5');
+
+            if (s1 === '536' && s2 === '516' && s3 === '496' && s4 === '476' && s5 === '456') {
+                fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ متتالية صحيحة بنقصان 20 في كل مرة!</span>';
+                updateEvaluation(true, 5, 0);
+                unlockNextExercise('p22-seq');
+            } else {
+                handleWrongAttempt('p22-seq', 'p22-seq-feedback', 'خطأ في متتالية الأعداد.', wrong);
+            }
+        }
+
+        function checkP22Vocab() {
+            const v1 = document.getElementById('p22-v-1').value;
+            const v2 = document.getElementById('p22-v-2').value;
+            const fb = document.getElementById('p22-vocab-feedback');
+
+            let wrong = [];
+            if (v1 !== 'نصف') wrong.push('p22-v-1');
+            if (v2 !== 'ضعف') wrong.push('p22-v-2');
+
+            if (v1 === 'نصف' && v2 === 'ضعف') {
+                fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ إجابة صحيحة لاستخدام مفردات نصف وضِعف!</span>';
+                updateEvaluation(true, 2, 0);
+                unlockNextExercise('p22-vocab');
+            } else {
+                handleWrongAttempt('p22-vocab', 'p22-vocab-feedback', 'خطأ في اختيار المفردات.', wrong);
+            }
+        }
+
+        function checkP22Calc() {
+            const ansIds = ['p22-calc-1','p22-calc-2','p22-calc-3','p22-calc-4','p22-calc-5','p22-calc-6','p22-calc-7','p22-calc-8','p22-calc-9'];
+            const correct = ['343', '859', '340', '314', '722', '705', '538', '636', '783'];
+            const fb = document.getElementById('p22-calc-feedback');
+
+            let wrong = [];
+            let correctCount = 0;
+            ansIds.forEach((id, i) => {
+                if (document.getElementById(id).value.trim() !== correct[i]) wrong.push(id);
+                else correctCount++;
+            });
+
+            if (wrong.length === 0) {
+                fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ جميع الحسابات الأفقية صحيحة!</span>';
+                updateEvaluation(true, 9, 0);
+                unlockNextExercise('p22-calc');
+            } else {
+                handleWrongAttempt('p22-calc', 'p22-calc-feedback', 'خطأ في بعض العمليات الحسابية الأفقية (تم التحديد باللون الأحمر).', wrong);
+            }
+        }
+
+        // ================= INTEGRATED GRID LOGIC =================
+        const gridSize = 40;
+        const refGridCanvas = document.getElementById('refGridCanvas');
+        const rCtx = refGridCanvas.getContext('2d');
+        const workGridCanvas = document.getElementById('workGridCanvas');
+        const workDrawCanvas = document.getElementById('workDrawCanvas');
+        const overlayCanvas = document.getElementById('overlayCanvas');
+        
+        const wgCtx = workGridCanvas.getContext('2d');
+        const wdCtx = workDrawCanvas.getContext('2d');
+        const oCtx = overlayCanvas.getContext('2d');
+
+        const pointA = { x: 5 * gridSize, y: 6 * gridSize };
+        const pointB = { x: 2 * gridSize, y: 2 * gridSize };
+        const pointC = { x: 8 * gridSize, y: 1 * gridSize };
+
+        let userPointB = null;
+        let userPointC = null;
+        let userLines = [];
+        let isDrawing = false;
+        let currentLineStart = null;
+
+        function drawGrid(ctx, width, height) {
+            ctx.clearRect(0, 0, width, height);
+            ctx.strokeStyle = '#dcdde1';
+            ctx.lineWidth = 1;
+            for (let x = 0; x <= width; x += gridSize) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
+            }
+            for (let y = 0; y <= height; y += gridSize) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+            }
+        }
+
+        function drawReferencePanel() {
+            drawGrid(rCtx, refGridCanvas.width, refGridCanvas.height);
+
+            rCtx.fillStyle = 'rgba(46, 204, 113, 0.4)';
+            rCtx.beginPath();
+            rCtx.moveTo(pointB.x, pointB.y);
+            rCtx.lineTo(pointB.x, 6 * gridSize);
+            rCtx.lineTo(pointA.x, 6 * gridSize);
+            rCtx.closePath();
+            rCtx.fill();
+            rCtx.strokeStyle = '#27ae60';
+            rCtx.lineWidth = 2;
+            rCtx.stroke();
+
+            rCtx.fillStyle = 'rgba(52, 152, 219, 0.4)';
+            rCtx.beginPath();
+            rCtx.moveTo(pointC.x, pointC.y);
+            rCtx.lineTo(pointC.x, 6 * gridSize);
+            rCtx.lineTo(pointA.x, 6 * gridSize);
+            rCtx.closePath();
+            rCtx.fill();
+            rCtx.strokeStyle = '#2980b9';
+            rCtx.lineWidth = 2;
+            rCtx.stroke();
+
+            rCtx.strokeStyle = '#000000';
+            rCtx.lineWidth = 3;
+            rCtx.beginPath();
+            rCtx.moveTo(pointA.x, pointA.y);
+            rCtx.lineTo(pointB.x, pointB.y);
+            rCtx.lineTo(pointC.x, pointC.y);
+            rCtx.closePath();
+            rCtx.stroke();
+
+            drawPointWithLabel(rCtx, pointA.x, pointA.y, 'A', '#e74c3c');
+            drawPointWithLabel(rCtx, pointB.x, pointB.y, 'B', '#c0392b');
+            drawPointWithLabel(rCtx, pointC.x, pointC.y, 'C', '#c0392b');
+        }
+
+        function drawPointWithLabel(ctx, x, y, label, color) {
+            ctx.fillStyle = color;
+            ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
+            ctx.font = 'bold 16px Cairo';
+            ctx.fillStyle = '#2c3e50';
+            ctx.fillText(label, x - 5, y - 10);
+        }
+
+        function initWorkGrid() {
+            drawGrid(wgCtx, workGridCanvas.width, workGridCanvas.height);
+            wdCtx.clearRect(0, 0, workDrawCanvas.width, workDrawCanvas.height);
+            wdCtx.fillStyle = '#e74c3c';
+            wdCtx.beginPath(); wdCtx.arc(pointA.x, pointA.y, 6, 0, Math.PI * 2); wdCtx.fill();
+            wdCtx.font = 'bold 16px Cairo';
+            wdCtx.fillStyle = '#2c3e50';
+            wdCtx.fillText('A', pointA.x - 5, pointA.y + 22);
+        }
+
+        function getSnapPoint(clientX, clientY) {
+            const rect = workDrawCanvas.getBoundingClientRect();
+            const scaleX = workDrawCanvas.width / rect.width;
+            const scaleY = workDrawCanvas.height / rect.height;
+            
+            const mouseX = (clientX - rect.left) * scaleX;
+            const mouseY = (clientY - rect.top) * scaleY;
+
+            const snappedX = Math.round(mouseX / gridSize) * gridSize;
+            const snappedY = Math.round(mouseY / gridSize) * gridSize;
+
+            const dist = Math.hypot(mouseX - snappedX, mouseY - snappedY);
+            if (dist < 25) {
+                return { x: snappedX, y: snappedY };
+            }
+            return null;
+        }
+
+        workDrawCanvas.addEventListener('click', (e) => {
+            const snap = getSnapPoint(e.clientX, e.clientY);
+            if (!snap) return;
+            if (!userPointB && (snap.x !== pointA.x || snap.y !== pointA.y)) {
+                userPointB = snap;
+            } else if (userPointB && !userPointC && (snap.x !== userPointB.x || snap.y !== userPointB.y)) {
+                userPointC = snap;
+            }
+            redrawUserWork();
+        });
+
+        workDrawCanvas.addEventListener('mousedown', (e) => {
+            const snap = getSnapPoint(e.clientX, e.clientY);
+            if (snap) {
+                isDrawing = true;
+                currentLineStart = snap;
+            }
+        });
+
+        workDrawCanvas.addEventListener('mouseup', (e) => {
+            if (!isDrawing) return;
+            const snap = getSnapPoint(e.clientX, e.clientY);
+            if (snap && currentLineStart) {
+                userLines.push({ start: currentLineStart, end: snap });
+                redrawUserWork();
+            }
+            isDrawing = false;
+            currentLineStart = null;
+        });
+
+        function redrawUserWork() {
+            wdCtx.clearRect(0, 0, workDrawCanvas.width, workDrawCanvas.height);
+            wdCtx.fillStyle = '#e74c3c';
+            wdCtx.beginPath(); wdCtx.arc(pointA.x, pointA.y, 6, 0, Math.PI * 2); wdCtx.fill();
+            wdCtx.font = 'bold 16px Cairo';
+            wdCtx.fillStyle = '#2c3e50';
+            wdCtx.fillText('A', pointA.x - 5, pointA.y + 22);
+
+            if (userPointB) {
+                wdCtx.fillStyle = '#2980b9';
+                wdCtx.beginPath(); wdCtx.arc(userPointB.x, userPointB.y, 6, 0, Math.PI * 2); wdCtx.fill();
+                wdCtx.fillText('B', userPointB.x - 5, userPointB.y - 10);
+            }
+            if (userPointC) {
+                wdCtx.fillStyle = '#2980b9';
+                wdCtx.beginPath(); wdCtx.arc(userPointC.x, userPointC.y, 6, 0, Math.PI * 2); wdCtx.fill();
+                wdCtx.fillText('C', userPointC.x - 5, userPointC.y - 10);
+            }
+
+            wdCtx.strokeStyle = '#000000';
+            wdCtx.lineWidth = 3;
+            userLines.forEach(line => {
+                wdCtx.beginPath();
+                wdCtx.moveTo(line.start.x, line.start.y);
+                wdCtx.lineTo(line.end.x, line.end.y);
+                wdCtx.stroke();
+            });
+        }
+
+        function verifyGridWork() {
+            const overlay = document.getElementById('referenceOverlay');
+            overlay.style.display = 'block';
+
+            oCtx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
+            drawGrid(oCtx, overlayCanvas.width, overlayCanvas.height);
+
+            oCtx.strokeStyle = '#e74c3c';
+            oCtx.lineWidth = 3;
+            oCtx.setLineDash([5, 5]);
+
+            oCtx.beginPath();
+            oCtx.moveTo(pointA.x, pointA.y);
+            oCtx.lineTo(pointB.x, pointB.y);
+            oCtx.lineTo(pointC.x, pointC.y);
+            oCtx.closePath();
+            oCtx.stroke();
+
+            oCtx.setLineDash([]);
+            oCtx.font = 'bold 16px Cairo';
+            oCtx.fillStyle = '#c0392b';
+            oCtx.fillText('A', pointA.x - 5, pointA.y + 22);
+            oCtx.fillText('B', pointB.x - 5, pointB.y - 10);
+            oCtx.fillText('C', pointC.x - 5, pointC.y - 10);
+
+            document.getElementById('grid-feedback-msg').textContent = "تم وضع ورقة الشفافية للمطابقة فوق عملك! قارن رسمك بالخطوط الحمراء المنقطة.";
+            
+            const fb = document.getElementById('p22-grid-feedback');
+            fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ تمت المطابقة بنجاح!</span>';
+            updateEvaluation(true, 1, 0);
+            unlockNextExercise('p22-grid');
+            
+            workDrawCanvas.style.pointerEvents = 'none';
+        }
+
+        function clearGridCanvas() {
+            userLines = [];
+            userPointB = null;
+            userPointC = null;
+            redrawUserWork();
+            document.getElementById('referenceOverlay').style.display = 'none';
+            document.getElementById('grid-feedback-msg').textContent = "تم مسح الرسم، يمكنك المحاولة مرة أخرى.";
+            workDrawCanvas.style.pointerEvents = 'auto';
+        }
+
+        // ================= INTEGRATED REPRESENTATION LOGIC =================
+        function normalizeArabic(text) {
+            if (!text) return "";
+            return text
+                .trim()
+                .toLowerCase()
+                .replace(/[\u064b-\u0652]/g, "")
+                .replace(/[أإآء]/g, "ا")
+                .replace(/ة/g, "ه")
+                .replace(/\s+/g, " ");
+        }
+
+        function checkRepAnswers() {
+            const val1_num = document.getElementById('rep_ans1_num').value.trim();
+            const val1_word = document.getElementById('rep_ans1_word').value.trim();
+            const val2_num = document.getElementById('rep_ans2_num').value.trim();
+            const val2_word = document.getElementById('rep_ans2_word').value.trim();
+            const val3_num = document.getElementById('rep_ans3_num').value.trim();
+            const val3_word = document.getElementById('rep_ans3_word').value.trim();
+            const fb = document.getElementById('p22-rep-feedback');
+
+            if (!val1_num || !val1_word || !val2_num || !val2_word || !val3_num || !val3_word) {
+                fb.innerHTML = '<span class="text-rose-600 font-bold">⚠️ الرجاء تعبئة جميع خانات الأرقام والحروف قبل التحقق!</span>';
+                return;
+            }
+
+            let score = 0;
+            let wrongFields = [];
+
+            const field1_num = document.getElementById('rep_ans1_num');
+            const field1_word = document.getElementById('rep_ans1_word');
+            let is1NumCorrect = (val1_num === "650");
+            let norm1Word = normalizeArabic(val1_word);
+            let is1WordCorrect = (norm1Word.includes("ست") && (norm1Word.includes("مائه") || norm1Word.includes("مائة"))) && (norm1Word.includes("خمسون") || norm1Word.includes("خمسين"));
+
+            applyRepFieldStyle(field1_num, is1NumCorrect); if (!is1NumCorrect) wrongFields.push('rep_ans1_num'); else score++;
+            applyRepFieldStyle(field1_word, is1WordCorrect); if (!is1WordCorrect) wrongFields.push('rep_ans1_word'); else score++;
+
+            const field2_num = document.getElementById('rep_ans2_num');
+            const field2_word = document.getElementById('rep_ans2_word');
+            let is2NumCorrect = (val2_num === "306");
+            let norm2Word = normalizeArabic(val2_word);
+            let is2WordCorrect = (norm2Word.includes("ثلاث") && (norm2Word.includes("مائه") || norm2Word.includes("مائة"))) && (norm2Word.includes("ست") || norm2Word.includes("سته"));
+
+            applyRepFieldStyle(field2_num, is2NumCorrect); if (!is2NumCorrect) wrongFields.push('rep_ans2_num'); else score++;
+            applyRepFieldStyle(field2_word, is2WordCorrect); if (!is2WordCorrect) wrongFields.push('rep_ans2_word'); else score++;
+
+            const field3_num = document.getElementById('rep_ans3_num');
+            const field3_word = document.getElementById('rep_ans3_word');
+            let is3NumCorrect = (val3_num === "423");
+            let norm3Word = normalizeArabic(val3_word);
+            let is3WordCorrect = (norm3Word.includes("اربع") && (norm3Word.includes("مائه") || norm3Word.includes("مائة"))) && (norm3Word.includes("ثلاث") || norm3Word.includes("ثلاثه")) && (norm3Word.includes("عشرون") || norm3Word.includes("عشرين"));
+
+            applyRepFieldStyle(field3_num, is3NumCorrect); if (!is3NumCorrect) wrongFields.push('rep_ans3_num'); else score++;
+            applyRepFieldStyle(field3_word, is3WordCorrect); if (!is3WordCorrect) wrongFields.push('rep_ans3_word'); else score++;
+
+            if (score === 6) {
+                fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ ممتاز جداً! إجاباتك صحيحة كلياً وتمثيلك دقيق.</span>';
+                updateEvaluation(true, 6, 0);
+                unlockNextExercise('p22-rep');
+            } else {
+                fb.innerHTML = '<span class="text-rose-600 font-bold">✗ هناك أخطاء في التمثيل. راجع الحقول الملونة بالأحمر.</span>';
+                updateEvaluation(false, score, 6 - score);
+                unlockNextExercise('p22-rep');
+            }
+        }
+
+        function applyRepFieldStyle(element, isCorrect) {
+            element.classList.remove('border-slate-200', 'bg-slate-50', 'border-emerald-500', 'bg-emerald-50', 'border-rose-500', 'bg-rose-50', 'text-emerald-900', 'text-rose-900');
+            if (isCorrect) {
+                element.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-900');
+            } else {
+                element.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-900');
+            }
+        }
+
+        // ================= CONTINUE PAGE 22 LOGIC =================
+        function checkP22Decomp() {
+            const d1 = document.getElementById('p22-dec-1').value.replace(/\s+/g, '');
+            const d2 = document.getElementById('p22-dec-2').value.replace(/\s+/g, '');
+            const d3 = document.getElementById('p22-dec-3').value.replace(/\s+/g, '');
+            const fb = document.getElementById('p22-decomp-feedback');
+
+            let wrong = [];
+            if (!d1.includes('300') || !d1.includes('20') || !d1.includes('6')) wrong.push('p22-dec-1');
+            if (!d2.includes('600') || !d2.includes('90')) wrong.push('p22-dec-2');
+            if (!d3.includes('900') || !d3.includes('60')) wrong.push('p22-dec-3');
+
+            if (wrong.length === 0) {
+                fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ تفكيك الأعداد صحيح تماماً!</span>';
+                updateEvaluation(true, 3, 0);
+                unlockNextExercise('p22-decomp');
+            } else {
+                handleWrongAttempt('p22-decomp', 'p22-decomp-feedback', 'خطأ في تفكيك الأعداد.', wrong);
+            }
+        }
+
+        let userSortedArray = [];
+        function selectSortItem(btn, val) {
+            btn.disabled = true;
+            btn.classList.add('opacity-50', 'bg-slate-300');
+            userSortedArray.push(val);
+            
+            const targetBox = document.getElementById('sort-target-box');
+            const chip = document.createElement('span');
+            chip.className = 'px-3 py-1.5 bg-white border border-emerald-300 rounded-lg font-bold text-emerald-900 shadow-sm';
+            chip.innerText = val;
+            targetBox.appendChild(chip);
+        }
+
+        function resetSorting() {
+            userSortedArray = [];
+            const targetBox = document.getElementById('sort-target-box');
+            targetBox.innerHTML = '<span class="text-xs text-emerald-700 font-bold rtl:ml-2">حيز الترتيب التصاعدي:</span>';
+            document.querySelectorAll('#sort-source-pool button').forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'bg-slate-300');
+            });
+        }
+
+        function checkP22Comp() {
+            const c1 = document.getElementById('p22-cmp-1').value;
+            const c2 = document.getElementById('p22-cmp-2').value;
+            const c3 = document.getElementById('p22-cmp-3').value;
+            
+            const b1a = document.getElementById('p22-bnd-1a').value.trim();
+            const b1b = document.getElementById('p22-bnd-1b').value.trim();
+            const b2a = document.getElementById('p22-bnd-2a').value.trim();
+            const b2b = document.getElementById('p22-bnd-2b').value.trim();
+            const b3a = document.getElementById('p22-bnd-3a').value.trim();
+            const b3b = document.getElementById('p22-bnd-3b').value.trim();
+            const fb = document.getElementById('p22-comp-feedback');
+
+            let wrong = [];
+            if (c1 !== '>') wrong.push('p22-cmp-1');
+            if (c2 !== '>') wrong.push('p22-cmp-2');
+            if (c3 !== '<') wrong.push('p22-cmp-3');
+            if (b1a !== '300') wrong.push('p22-bnd-1a');
+            if (b1b !== '400') wrong.push('p22-bnd-1b');
+            if (b2a !== '400') wrong.push('p22-bnd-2a');
+            if (b2b !== '500') wrong.push('p22-bnd-2b');
+            if (b3a !== '800') wrong.push('p22-bnd-3a');
+            if (b3b !== '900') wrong.push('p22-bnd-3b');
+
+            let sortCorrect = (userSortedArray.length === 5 && userSortedArray[0]==='69' && userSortedArray[1]==='96' && userSortedArray[2]==='189' && userSortedArray[3]==='306' && userSortedArray[4]==='900');
+            let okCmp = (c1 === '>' && c2 === '>' && c3 === '<');
+            let okBnd = (b1a === '300' && b1b === '400' && b2a === '400' && b2b === '500' && b3a === '800' && b3b === '900');
+
+            if (okCmp && sortCorrect && okBnd) {
+                fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ المقارنة والترتيب التصاعدي التفاعلي والحصر صحيحة تماماً!</span>';
+                updateEvaluation(true, 9, 0);
+                unlockNextExercise('p22-comp');
+            } else {
+                handleWrongAttempt('p22-comp', 'p22-comp-feedback', 'خطأ في المقارنة، أو الترتيب التصاعدي، أو الحصر بين مئتين متتاليتين.', wrong);
+            }
+        }
+
+        // ================= PAGE 23 LOGIC =================
+        function checkP23Ex1() {
+            const u1d = document.getElementById('p23-u1-d').value.trim();
+            const u1c = document.getElementById('p23-u1-c').value.trim();
+            const u2d = document.getElementById('p23-u2-d').value.trim();
+            const u2c = document.getElementById('p23-u2-c').value.trim();
+            const u3d = document.getElementById('p23-u3-d').value.trim();
+            const u3c = document.getElementById('p23-u3-c').value.trim();
+            const fb = document.getElementById('p23-ex1-feedback');
+
+            let wrong = [];
+            if (u1d !== '0') wrong.push('p23-u1-d');
+            if (u1c !== '180') wrong.push('p23-u1-c');
+            if (u2d !== '6') wrong.push('p23-u2-d');
+            if (u2c !== '306') wrong.push('p23-u2-c');
+            if (u3d !== '9') wrong.push('p23-u3-d');
+            if (u3c !== '9') wrong.push('p23-u3-c');
+
+            let ok = (u1d === '0' && u1c === '180' && u2d === '6' && u2c === '306' && u3d === '9' && u3c === '9');
+            if (ok) {
+                fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ تحديد رقم وعدد الوحدات صحيح!</span>';
+                updateEvaluation(true, 6, 0);
+                unlockNextExercise('p23-1');
+            } else {
+                handleWrongAttempt('p23-1', 'p23-ex1-feedback', 'خطأ في تحديد الوحدات.', wrong);
+            }
+        }
+
+        function checkP23Ex2() {
+            const w1 = document.getElementById('p23-w-1').value.trim();
+            const w2 = document.getElementById('p23-w-2').value.trim();
+            const tf1 = document.getElementById('p23-tf-1').value;
+            const c1 = document.getElementById('p23-corr-1').value.trim();
+            const tf2 = document.getElementById('p23-tf-2').value;
+            const c2 = document.getElementById('p23-corr-2').value.trim();
+            const fb = document.getElementById('p23-ex2-feedback');
+
+            let wrong = [];
+            if (w1 !== '901') wrong.push('p23-w-1');
+            if (w2.length < 3) wrong.push('p23-w-2');
+            if (tf1 !== 'false') wrong.push('p23-tf-1');
+            if (c1 !== '301') wrong.push('p23-corr-1');
+            if (tf2 !== 'false') wrong.push('p23-tf-2');
+            if (c2 !== '76') wrong.push('p23-corr-2');
+
+            let ok = (w1 === '901' && w2.length > 2 && tf1 === 'false' && c1 === '301' && tf2 === 'false' && c2 === '76');
+            if (ok) {
+                fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ إجابات صحيحة وتصحيح دقيق للأخطاء!</span>';
+                updateEvaluation(true, 4, 0);
+                unlockNextExercise('p23-2');
+            } else {
+                handleWrongAttempt('p23-2', 'p23-ex2-feedback', 'خطأ في الكتابة أو التصحيح.', wrong);
+            }
+        }
+
+        function checkP23Ex3() {
+            const cb722 = document.querySelectorAll('input[name="p23-eq-722"]:checked');
+            const vals722 = Array.from(cb722).map(cb => cb.value);
+            let ok722 = (vals722.length === 4 && 
+                          vals722.includes('700+20+2') && 
+                          vals722.includes('722') && 
+                          vals722.includes('2و 2ع 7م') && 
+                          vals722.includes('سَبْعُ مِائَةٍ وَاثْنَانِ وَعِشْرُونَ') &&
+                          !vals722.includes('272'));
+            
+            const cb129 = document.querySelectorAll('input[name="p23-eq-129"]:checked');
+            const vals129 = Array.from(cb129).map(cb => cb.value);
+            let ok129 = (vals129.length === 2 && 
+                          vals129.includes('129') && 
+                          vals129.includes('مِائَةٌ وَتِسْعَةٌ وَعِشْرُونَ') &&
+                          !vals129.includes('100+90+2') &&
+                          !vals129.includes('192') &&
+                          !vals129.includes('1و / 2ع / 9م'));
+
+            const fb = document.getElementById('p23-ex3-feedback');
+
+            if (ok722 && ok129) {
+                fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ ممتاز! اخترت المتطابقات الصحيحة للأعداد 722 و 129.</span>';
+                updateEvaluation(true, 2, 0);
+                unlockNextExercise('p23-3');
+            } else {
+                let errCount = 0;
+                if (!ok722) errCount++;
+                if (!ok129) errCount++;
+                
+                fb.innerHTML = '<span class="text-rose-600 font-bold">✗ خطأ في اختيار المتطابقات. تأكد من اختيار الكتابات الصحيحة فقط وتجنب الخاطئة.</span>';
+                updateEvaluation(false, 0, errCount);
+                unlockNextExercise('p23-3');
+            }
+        }
+
+        function checkP23Ex4() {
+            const c1 = document.getElementById('p23-calc-1').value.trim();
+            const c2 = document.getElementById('p23-calc-2').value.trim();
+            
+            const v1_h = document.getElementById('v1-res-h').value.trim();
+            const v1_t = document.getElementById('v1-res-t').value.trim();
+            const v1_u = document.getElementById('v1-res-u').value.trim();
+
+            const v2_h = document.getElementById('v2-res-h').value.trim();
+            const v2_t = document.getElementById('v2-res-t').value.trim();
+            const v2_u = document.getElementById('v2-res-u').value.trim();
+            
+            const vtf1 = document.getElementById('p23-vtf-1').value;
+            const vc1 = document.getElementById('p23-vcorr-1').value.trim();
+            const vtf2 = document.getElementById('p23-vtf-2').value;
+            const vc2 = document.getElementById('p23-vcorr-2').value.trim();
+            const fb = document.getElementById('p23-ex4-feedback');
+
+            let wrong = [];
+            if (c1 !== '121') wrong.push('p23-calc-1');
+            if (c2 !== '36') wrong.push('p23-calc-2');
+            if (v1_h !== '4' || v1_t !== '4' || v1_u !== '3') wrong.push('v1-res-u');
+            if (v2_h !== '2' || v2_t !== '1' || v2_u !== '8') wrong.push('v2-res-u');
+            if (vtf1 !== 'false') wrong.push('p23-vtf-1');
+            if (vc1 !== '337') wrong.push('p23-vcorr-1');
+            if (vtf2 !== 'false') wrong.push('p23-vtf-2');
+            if (vc2 !== '601') wrong.push('p23-vcorr-2');
+
+            let ok = (c1 === '121' && c2 === '36' && v1_h==='4' && v1_t==='4' && v1_u==='3' && v2_h==='2' && v2_t==='1' && v2_u==='8' && vtf1 === 'false' && vc1 === '337' && vtf2 === 'false' && vc2 === '601');
+            if (ok) {
+                fb.innerHTML = '<span class="text-emerald-600 font-bold">✓ أداء رائع! الحسابات والعمليات العمودية المحمولة وتصحيحها سليمة كلياً.</span>';
+                updateEvaluation(true, 6, 0);
+                unlockNextExercise('p23-4');
+            } else {
+                handleWrongAttempt('p23-4', 'p23-ex4-feedback', 'خطأ في العمليات الحسابية أو العمودية أو التصحيح.', wrong);
+            }
+        }
+
+        function resetAllExercises() {
+            location.reload();
+        }
+
+        window.onload = function() {
+            initShapeCanvases();
+            drawReferencePanel();
+            initWorkGrid();
+        };
+    </script>
+</body>
+</html>
