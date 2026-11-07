@@ -176,7 +176,7 @@
       font-size: 1.05rem;
     }
 
-    /* ====== قائمة العناصر (مستويات / مواد / دروس) ====== */
+    /* ====== قائمة العناصر ====== */
     .list-container {
       display: flex;
       flex-direction: column;
@@ -233,7 +233,7 @@
       flex-shrink: 0;
     }
 
-    /* بطاقة المستوى مغلقة */
+    /* بطاقة مغلقة */
     .list-item.locked {
       background: #fafafa;
       border-color: #eceff1;
@@ -361,7 +361,6 @@
 
 <div class="container">
 
-  <!-- الشريط العلوي -->
   <div class="topbar">
     <div class="topbar-icon">📚</div>
     <div class="topbar-text">
@@ -370,10 +369,8 @@
     </div>
   </div>
 
-  <!-- Breadcrumb -->
   <div class="breadcrumb" id="breadcrumb"></div>
 
-  <!-- منطقة المحتوى الرئيسية -->
   <div id="app-content">
     <div class="loading-screen">
       <div class="spinner"></div>
@@ -393,7 +390,9 @@
   const CHANNELS = {
     level1: { id: "-1004456852024", name: "السنة الأولى", link: "https://t.me/c/4456852024" },
     level2: { id: "-1004461185731", name: "السنة الثانية", link: "https://t.me/c/4461185731" },
-    level3: { id: "-1003910412986", name: "السنة الثالثة", link: "https://t.me/c/3910412986" }
+    level3: { id: "-1003910412986", name: "السنة الثالثة", link: "https://t.me/c/3910412986" },
+    // 🕌 مستوى تحفيظ القرآن الكريم (بدون رقم — جاهز لإضافة السنة الرابعة لاحقاً)
+    quran:  { id: "-1003467697425", name: "تحفيظ القرآن الكريم", link: "https://t.me/c/3467697425" }
   };
 
   // ========================================
@@ -537,11 +536,25 @@
           ]
         }
       }
+    },
+    // 🕌 مستوى تحفيظ القرآن الكريم (بدون رقم)
+    quran: {
+      name: "تحفيظ القرآن الكريم",
+      icon: "📖",
+      subjects: {
+        memorization: {
+          name: "حفظ السور",
+          icon: "🕌",
+          lessons: [
+            { title: "سورة الفاتحة", url: "quran/unit1/index.html" }
+          ]
+        }
+      }
     }
   };
 
   // ========================================
-  // 🎁 الدرس المجاني (يُعرض دائماً في الأعلى)
+  // 🎁 الدرس المجاني
   // ========================================
   const FREE_LESSON = {
     title: "الدرس 1: أنا لست أنانيا",
@@ -562,7 +575,7 @@
   // ========================================
   // حالة التنقل الحالية
   // ========================================
-  let access = { level1: false, level2: false, level3: false };
+  let access = { level1: false, level2: false, level3: false, quran: false };
   let nav = { level: null, subject: null };
 
   // ========================================
@@ -581,7 +594,7 @@
   }
 
   // ========================================
-  // فتح الروابط الخارجية (تيليجرام)
+  // فتح الروابط الخارجية
   // ========================================
   function openExternalLink(event, url) {
     event.preventDefault();
@@ -620,7 +633,6 @@
       return `${sep}<span class="breadcrumb-item" data-bc="${i}">${it.label}</span>`;
     }).join('');
 
-    // ربط الأحداث
     bc.querySelectorAll('.breadcrumb-item[data-bc]').forEach(el => {
       const idx = parseInt(el.getAttribute('data-bc'));
       el.onclick = () => items[idx].action();
@@ -638,7 +650,7 @@
     const container = document.getElementById('app-content');
     let html = '<div class="list-container">';
 
-    // بطاقة الدرس المجاني في الأعلى
+    // بطاقة الدرس المجاني
     html += `
       <div class="list-item free-item" onclick="openExternalLink(event, '${FREE_LESSON.url}')">
         <div class="list-item-icon">${FREE_LESSON.icon}</div>
@@ -657,14 +669,15 @@
       const lvl = CURRICULUM[levelKey];
       const hasAccess = access[levelKey];
       const subjectCount = Object.keys(lvl.subjects).length;
+      const isQuran = levelKey === 'quran';
 
       if (hasAccess) {
         html += `
-          <div class="list-item" onclick="renderSubjects('${levelKey}')">
+          <div class="list-item${isQuran ? ' quran-item' : ''}" onclick="renderSubjects('${levelKey}')">
             <div class="list-item-icon">${lvl.icon}</div>
             <div class="list-item-body">
               <div class="list-item-title">${lvl.name}</div>
-              <div class="list-item-subtitle">${subjectCount} مواد دراسية</div>
+              <div class="list-item-subtitle">${subjectCount} ${subjectCount === 1 ? 'مادة' : 'مواد دراسية'}</div>
             </div>
             <div class="list-item-arrow">›</div>
           </div>
@@ -714,7 +727,6 @@
     });
     html += '</div>';
 
-    // زر العودة
     html += `<button class="back-btn" onclick="renderLevels()">← العودة إلى المستويات</button>`;
 
     container.innerHTML = html;
@@ -746,7 +758,6 @@
     });
     html += '</div>';
 
-    // زر العودة
     html += `<button class="back-btn" onclick="renderSubjects('${levelKey}')">← العودة إلى المواد</button>`;
 
     container.innerHTML = html;
@@ -819,7 +830,6 @@
     const userId = tg?.initDataUnsafe?.user?.id;
 
     if (!userId) {
-      // في المتصفح: اعرض فقط الدرس المجاني + رسالة توضيحية
       const container = document.getElementById('app-content');
       container.innerHTML = `
         <div class="list-container">
@@ -842,12 +852,14 @@
     }
 
     try {
-      const [a1, a2, a3] = await Promise.all([
+      // 🔄 التحقق من الاشتراك في جميع القنوات (بما فيها قناة القرآن)
+      const [a1, a2, a3, aq] = await Promise.all([
         checkSubscription(CHANNELS.level1.id, userId),
         checkSubscription(CHANNELS.level2.id, userId),
-        checkSubscription(CHANNELS.level3.id, userId)
+        checkSubscription(CHANNELS.level3.id, userId),
+        checkSubscription(CHANNELS.quran.id, userId)
       ]);
-      access = { level1: a1, level2: a2, level3: a3 };
+      access = { level1: a1, level2: a2, level3: a3, quran: aq };
       renderLevels();
     } catch (e) {
       showError("حَدَثَ خَطَأٌ فِي الاِتِّصَالِ. حَاوِلْ مَرَّةً أُخْرَى.");
