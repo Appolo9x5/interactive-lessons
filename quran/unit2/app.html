@@ -94,6 +94,7 @@
     }
 
     .quran-verse { display: block; padding: 6px 0; border-bottom: 1px solid #F5F7FA; }
+    .quran-verse.basmala { color: var(--primary); font-size: 1.3rem; border-bottom: 2px dashed #EBF3FD; margin-bottom: 6px; }
 
     .verse-number {
       display: inline-flex;
@@ -381,7 +382,7 @@
     </div>
 
     <div class="quran-text" id="fullQuranText">
-      <span class="quran-verse">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span>
+      <span class="quran-verse basmala">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span>
       <span class="quran-verse">قُلْ أَعُوذُ بِرَبِّ النَّاسِ <span class="verse-number">1</span></span>
       <span class="quran-verse">مَلِكِ النَّاسِ <span class="verse-number">2</span></span>
       <span class="quran-verse">إِلَٰهِ النَّاسِ <span class="verse-number">3</span></span>
@@ -519,8 +520,9 @@
       } catch(e) { console.warn('Tone error:', e); }
     }
 
-    // ✅ بيانات سورة الناس
+    // ✅ بيانات سورة الناس (مع البسملة)
     const NAS_VERSES = [
+      { id: 0, text: "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ" },
       { id: 1, text: "قُلْ أَعُوذُ بِرَبِّ النَّاسِ" },
       { id: 2, text: "مَلِكِ النَّاسِ" },
       { id: 3, text: "إِلَٰهِ النَّاسِ" },
@@ -529,32 +531,43 @@
       { id: 6, text: "مِنَ الْجِنَّةِ وَالنَّاسِ" }
     ];
 
+    // ✅ تنظيف شامل للنص العربي (يشمل الألف الخنجرية وعلامات الوقف القرآني)
     function cleanArabic(str) {
       if (!str) return "";
       return str
-        .replace(/[ًٌٍَُِّْـ]/g, '')
-        .replace(/[إأآءٱ]/g, 'ا')
+        // إزالة جميع التشكيل والعلامات القرآنية (بما فيها الألف الخنجرية \u0670)
+        .replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/g, '')
+        // توحيد الهمزات والألف (بما فيها الأشكال المعروضة)
+        .replace(/[إأآءٱﺁﺇﺃ]/g, 'ا')
+        // التاء المربوطة → هاء
         .replace(/ة/g, 'ه')
+        // الألف المقصورة → ياء
         .replace(/ى/g, 'ي')
+        // الواو والياء المهموزتان
         .replace(/ؤ/g, 'و')
         .replace(/ئ/g, 'ي')
-        .replace(/[«»\.\,\:\-\_\؟\؛\،]/g, '')
+        // إزالة علامات الترقيم
+        .replace(/[«»\.\,\:\-\_\؟\؛\،\!\?]/g, '')
         .trim();
     }
 
-    // 🔥 هامش تسامح كبير للأطفال
+    // 🔥 هامش تسامح كبير للأطفال (موسّع)
     function isPhoneticallySimilar(spoken, target) {
       if (!spoken || !target) return false;
       const s = cleanArabic(spoken);
       const t = cleanArabic(target);
       if (!s || !t) return false;
+
+      // 1) تطابق تام
       if (s === t) return true;
 
+      // 2) إزالة "ال" التعريف من البداية
       const stripAl = (w) => w.startsWith('ال') ? w.substring(2) : w;
       const w1 = stripAl(s);
       const w2 = stripAl(t);
       if (w1 === w2 && w1.length >= 2) return true;
 
+      // 3) توحيد الحروف المتقاربة صوتياً + تجاهل الألف
       const harmonize = (w) => w
         .replace(/[طت]/g, 'ت')
         .replace(/[صسث]/g, 'س')
@@ -563,33 +576,39 @@
         .replace(/[حهخ]/g, 'ه')
         .replace(/[فث]/g, 'ف')
         .replace(/[يى]/g, 'ي')
-        .replace(/[وؤ]/g, 'و');
+        .replace(/[وؤ]/g, 'و')
+        .replace(/ا/g, '');   // تجاهل الألف في المقارنة الصوتية
 
       const h1 = harmonize(w1);
       const h2 = harmonize(w2);
+
+      if (!h1 || !h2) return false;
+
+      // 4) تطابق بعد التوحيد
       if (h1 === h2) return true;
 
-      // تسامح كبير: احتواء جزئي
-      if (w1.length >= 3 && w2.length >= 3) {
-        if (w1.includes(w2) || w2.includes(w1)) return true;
-
-        let matchCount = 0;
-        for (let char of h1) {
-          if (h2.includes(char)) matchCount++;
-        }
-        // تسامح: 60% تطابق يكفي
-        if (matchCount >= Math.ceil(Math.min(h1.length, h2.length) * 0.6)) {
-          return true;
-        }
+      // 5) احتواء جزئي (كلمة داخل كلمة)
+      if (h1.length >= 2 && h2.length >= 2) {
+        if (h1.includes(h2) || h2.includes(h1)) return true;
       }
 
-      // كلمات قصيرة: تطابق أول حرفين
-      if (w1.length === 2 && w2.length === 2 && w1[0] === w2[0]) return true;
+      // 6) تشابه نسبي 55% (تسامح كبير للأطفال)
+      let matchCount = 0;
+      for (let char of h1) {
+        if (h2.includes(char)) matchCount++;
+      }
+      const similarity = matchCount / Math.max(h1.length, h2.length);
+      if (similarity >= 0.55) return true;
+
+      // 7) تطابق أول حرفين للكلمات القصيرة
+      if (h1.length >= 2 && h2.length >= 2 && h1.substring(0, 2) === h2.substring(0, 2)) {
+        return true;
+      }
 
       return false;
     }
 
-    // بناء قائمة الكلمات المتوقعة
+    // بناء قائمة الكلمات المتوقعة من الآيات
     let expectedPoemWords = [];
     NAS_VERSES.forEach(v => {
       const words = v.text.split(/\s+/).filter(Boolean);
@@ -620,7 +639,7 @@
           btn.textContent = '⏸';
         }).catch((err) => {
           console.error('Audio play error:', err);
-          alert('تأكد من وجود ملف nas.mp3 في نفس المجلد مع app.html');
+          alert('تأكد من وجود ملف nas.mp3 في نفس المجلد مع index.html');
         });
       } else {
         audio.pause();
@@ -810,7 +829,6 @@
 
     function resetSilenceTimer() {
       clearTimeout(voiceSilenceTimer);
-      // لا نعرض شيئاً تلقائياً — الطفل يستخدم زر "ساعدني" يدوياً
     }
 
     function showVoiceErrorBadge() {
@@ -836,7 +854,6 @@
       currentWordIndex++;
       updateVoiceCounters();
 
-      // وميض لتوضيح الكلمة المُساعدة
       const box = document.getElementById('voiceLiveBox');
       box.scrollTop = box.scrollHeight;
 
@@ -909,21 +926,15 @@
       secFinal.style.display = 'block';
       secFinal.classList.remove('locked');
 
-      // حساب النسبة
       const totalWords = scoreState.s4.totalWords || 1;
       const memorized = scoreState.s4.correctWords;
       const helps = scoreState.s4.helps;
 
-      // نسبة الحفظ الأساسية
       let basePercent = (memorized / totalWords) * 100;
-
-      // خصم على المساعدات (2% لكل مساعدة، بحد أقصى 20%)
       let penalty = Math.min(helps * 2, 20);
-
       let finalPercent = Math.max(0, Math.round(basePercent - penalty));
       if (finalPercent > 100) finalPercent = 100;
 
-      // تحديث الدائرة
       const circlePath = document.getElementById('scoreCirclePath');
       const circumference = 2 * Math.PI * 70;
       const offset = circumference - (finalPercent / 100) * circumference;
@@ -934,7 +945,6 @@
 
       document.getElementById('scorePercentLabel').innerText = `${finalPercent}%`;
 
-      // تغيير لون الدائرة حسب النسبة
       if (finalPercent >= 90) circlePath.style.stroke = '#2ECC71';
       else if (finalPercent >= 70) circlePath.style.stroke = '#4A90E2';
       else if (finalPercent >= 50) circlePath.style.stroke = '#F39C12';
