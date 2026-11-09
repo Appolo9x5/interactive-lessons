@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>متتالية الأعداد من 0 إلى 69</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --primary: #1976d2;
+            --success: #2e7d32;
+            --error: #c62828;
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 30px;
+            font-size: 2.2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            position: relative;
+            transition: opacity 0.3s;
+        }
+
+        .section-card.locked {
+            opacity: 0.5;
+            pointer-events: none;
+            filter: grayscale(0.5);
+        }
+
+        .section-title {
+            color: #d84315;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ffccbc;
+            padding-bottom: 5px;
+        }
+
+        .math-ltr {
+            direction: ltr;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .ribbon-wrapper {
+            overflow-x: auto;
+            padding: 10px 0;
+        }
+        
+        .ribbon-grid {
+            display: grid;
+            grid-template-columns: repeat(17, 35px);
+            grid-template-rows: repeat(5, 35px);
+            gap: 3px;
+            direction: ltr;
+            margin: 10px auto;
+            width: max-content;
+        }
+
+        .cell {
+            border: 2px solid #555;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            border-radius: 4px;
+        }
+
+        .cell input {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            border: none;
+            background: transparent;
+            font-weight: bold;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .bg-yellow { background-color: #fff59d; }
+        .bg-blue { background-color: #90caf9; }
+        .bg-grey { background-color: #e0e0e0; }
+        .bg-red { background-color: #ef9a9a; }
+        .bg-pink { background-color: #f48fb1; }
+        .bg-green { background-color: #a5d6a7; }
+
+        input[type="text"], input[type="number"], select {
+            border: 2px solid #90caf9;
+            border-radius: 6px;
+            padding: 5px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1.1rem;
+            text-align: center;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        input.arabic-input {
+            width: 150px;
+            text-align: right;
+            padding-right: 10px;
+        }
+
+        input.num-input {
+            width: 60px;
+        }
+
+        .correct {
+            background-color: #e8f5e9 !important;
+            border-color: var(--success) !important;
+            color: var(--success) !important;
+        }
+
+        .incorrect {
+            background-color: #ffebee !important;
+            border-color: var(--error) !important;
+            color: var(--error) !important;
+        }
+
+        .btn-validate {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            display: block;
+            margin: 20px auto 10px;
+            transition: 0.3s;
+        }
+        
+        .btn-validate:hover {
+            background-color: #1565c0;
+        }
+
+        .eval-box {
+            background: #f1f8e9;
+            border: 1px dashed var(--success);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 15px;
+            display: none;
+            font-weight: bold;
+        }
+
+        .sortable-pool, .sortable-target {
+            display: flex;
+            gap: 10px;
+            min-height: 50px;
+            padding: 10px;
+            background: #fafafa;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            justify-content: center;
+            direction: ltr;
+        }
+
+        .sort-item {
+            background: var(--primary);
+            color: white;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.2rem;
+            user-select: none;
+        }
+        .sort-slot {
+            width: 45px;
+            height: 45px;
+            background: #eee;
+            border: 2px dashed #999;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .select-btn {
+            background: #eee;
+            border: 2px solid #ccc;
+            padding: 5px 15px;
+            margin: 0 5px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .select-btn.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .card-talamto {
+            background-color: #fff9c4;
+            border-right: 6px solid #fbc02d;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin: 20px 0;
+            display: none;
+        }
+
+        #final-evaluation {
+            display: none;
+            text-align: center;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+
+        .circular-chart {
+            display: block;
+            margin: 10px auto;
+            max-width: 150px;
+            max-height: 150px;
+        }
+        .circle-bg {
+            fill: none;
+            stroke: #eee;
+            stroke-width: 3.8;
+        }
+        .circle {
+            fill: none;
+            stroke-width: 2.8;
+            stroke-linecap: round;
+            transition: stroke-dasharray 1s ease-out;
+        }
+        .percentage {
+            fill: #333;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.5em;
+            text-anchor: middle;
+            font-weight: bold;
+        }
+        .eval-note {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .btn-retry, .btn-exit {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            color: white;
+        }
+        .btn-retry { background: #f57c00; }
+        .btn-exit { background: #d32f2f; }
+        
+        hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
+        .mb-3 { margin-bottom: 15px; }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري (أُضيفت)
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس (أُضيف) */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            max-width: 420px;
+            margin: 20px auto 10px auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+    <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+        <div class="lock-desc">
+            لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+        </div>
+        <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+            📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+        </a>
+        <button class="btn-check-sub" onclick="verifySubscription()">
+            ✅ تَأْكِيدُ الاِشْتِرَاكِ
+        </button>
+        <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+</div>
+
+<div class="container">
+    <h1>متتالية الأعداد من 0 إلى 69</h1>
+
+    <!-- محطة: أكتشف -->
+    <div id="sec-1" class="section-card">
+        <div class="section-title">أَكْتَشِفُ</div>
+        <p>لَاحِظِ هَذَا الشَّرِيطِ ثُمَّ أَجِبْ. أَكْمِلْ مَلْءَ شَرِيطِ الْأَعْدَادِ.</p>
+        
+        <div class="ribbon-wrapper">
+            <div class="ribbon-grid" id="ribbon-container">
+                <!-- سيتم توليد الشبكة برمجيا -->
+            </div>
+        </div>
+        
+        <button class="btn-validate" onclick="validateSection1()">تأكيد الإجابة</button>
+        <div id="eval-1" class="eval-box"></div>
+    </div>
+
+    <!-- محطة: أنجز -->
+    <div id="sec-2" class="section-card locked">
+        <div class="section-title">أُنْجِزُ</div>
+        
+        <p><strong>1-</strong> أَكْتُبُ الْعَدَدَ الَّذِي يَسْبِقُ وَالَّذِي يَلِي:</p>
+        <div style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+            <div class="math-ltr"><input type="number" class="num-input" data-ans="52"> <span style="font-weight:bold; font-size:1.2rem;">53</span> <input type="number" class="num-input" data-ans="54"></div>
+            <div class="math-ltr"><input type="number" class="num-input" data-ans="33"> <span style="font-weight:bold; font-size:1.2rem;">34</span> <input type="number" class="num-input" data-ans="35"></div>
+            <div class="math-ltr"><input type="number" class="num-input" data-ans="28"> <span style="font-weight:bold; font-size:1.2rem;">29</span> <input type="number" class="num-input" data-ans="30"></div>
+            <div class="math-ltr"><input type="number" class="num-input" data-ans="41"> <span style="font-weight:bold; font-size:1.2rem;">42</span> <input type="number" class="num-input" data-ans="43"></div>
+            <div class="math-ltr"><input type="number" class="num-input" data-ans="66"> <span style="font-weight:bold; font-size:1.2rem;">67</span> <input type="number" class="num-input" data-ans="68"></div>
+        </div>
+
+        <hr>
+        <p><strong>2-</strong> رَتِّبِ الْأَعْدَادَ 39، 45، 56، 60، 31 مِنَ الْأَصْغَرِ إِلَى الْأَكْبَرِ:</p>
+        <div class="sortable-pool" id="sort-pool">
+            <div class="sort-item" onclick="moveItem(this)">39</div>
+            <div class="sort-item" onclick="moveItem(this)">45</div>
+            <div class="sort-item" onclick="moveItem(this)">56</div>
+            <div class="sort-item" onclick="moveItem(this)">60</div>
+            <div class="sort-item" onclick="moveItem(this)">31</div>
+        </div>
+        <div style="text-align:center; margin:10px;">⬇️ اضغط على الرقم لترتيبه ⬇️</div>
+        <div class="sortable-target" id="sort-target">
+            <div class="sort-slot"></div>
+            <div class="sort-slot"></div>
+            <div class="sort-slot"></div>
+            <div class="sort-slot"></div>
+            <div class="sort-slot"></div>
+        </div>
+
+        <hr>
+        <p><strong>3-</strong> أَكْتُبُ بِالْحُرُوفِ:</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div><strong>30:</strong> <input type="text" class="arabic-input" data-ans="ثلاثون"></div>
+            <div><strong>40:</strong> <input type="text" class="arabic-input" data-ans="اربعون"></div>
+            <div><strong>50:</strong> <input type="text" class="arabic-input" data-ans="خمسون"></div>
+            <div><strong>60:</strong> <input type="text" class="arabic-input" data-ans="ستون"></div>
+        </div>
+
+        <button class="btn-validate" onclick="validateSection2()">تأكيد الإجابة</button>
+        <div id="eval-2" class="eval-box"></div>
+    </div>
+
+    <!-- بطاقة تعلمت -->
+    <div id="card-talamto" class="card-talamto">
+        <strong>تَعَلَّمْتُ:</strong><br>
+        كُلُّ الْأَعْدَادِ إِلَى 69 تُكْتَبُ بِالْأَرْقَامِ وَبِالْحُرُوفِ. عِنْدَمَا أُرَتِّبُ هَذِهِ الْأَعْدَادَ مِنَ الْأَصْغَرِ إِلَى الْأَكْبَرِ، أَسْتَعْمِلُ الْأَرْقَامَ وَأُرَتِّبُهَا كَمَا فِي الشَّرِيطِ مِنْ أَصْغَرِ عَدَدٍ إِلَى أَكْبَرِ عَدَدٍ.
+    </div>
+
+    <!-- محطة: أتمرن -->
+    <div id="sec-3" class="section-card locked">
+        <div class="section-title">أَتَمَرَّنُ</div>
+        
+        <p><strong>1-</strong> اكْتُبِ الْأَعْدَادَ بِالْحُرُوفِ:</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;" class="mb-3">
+            <div><strong>8:</strong> <input type="text" class="arabic-input" data-ans="ثمانية"></div>
+            <div><strong>21:</strong> <input type="text" class="arabic-input" data-ans="واحد وعشرون"></div>
+            <div><strong>24:</strong> <input type="text" class="arabic-input" data-ans="اربعة وعشرون"></div>
+            <div><strong>63:</strong> <input type="text" class="arabic-input" data-ans="ثلاثة وستون"></div>
+            <div><strong>19:</strong> <input type="text" class="arabic-input" data-ans="تسعة عشر"></div>
+            <div><strong>31:</strong> <input type="text" class="arabic-input" data-ans="واحد وثلاثون"></div>
+            <div><strong>55:</strong> <input type="text" class="arabic-input" data-ans="خمسة وخمسون"></div>
+            <div><strong>36:</strong> <input type="text" class="arabic-input" data-ans="ستة وثلاثون"></div>
+            <div><strong>42:</strong> <input type="text" class="arabic-input" data-ans="اثنان واربعون|اثنتان واربعون"></div>
+        </div>
+
+        <hr>
+        <p><strong>2-</strong> اكْتُبِ الْأَعْدَادَ بِالْأَرْقَامِ:</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;" class="mb-3">
+            <div><strong>سَبْعَة:</strong> <input type="number" class="num-input" data-ans="7"></div>
+            <div><strong>ثَلَاثَة وَخَمْسُونَ:</strong> <input type="number" class="num-input" data-ans="53"></div>
+            <div><strong>سَبْعَة وَأَرْبَعُونَ:</strong> <input type="number" class="num-input" data-ans="47"></div>
+            <div><strong>سِتَّة وَثَلَاثُونَ:</strong> <input type="number" class="num-input" data-ans="36"></div>
+            <div><strong>اِثْنَانِ وَسِتُّونَ:</strong> <input type="number" class="num-input" data-ans="62"></div>
+            <div><strong>أَرْبَعَة وَأَرْبَعُونَ:</strong> <input type="number" class="num-input" data-ans="44"></div>
+        </div>
+
+        <hr>
+        <p><strong>3-</strong> رَتِّبِ الْأَعْدَادَ الْآتِيَةَ عَلَى الشَّرِيطِ 52 ، 37 ، 49 ، 28 :</p>
+        <div class="math-ltr mb-3">
+            <div class="cell bg-yellow" style="width:40px; height:40px;">16</div>
+            <input type="number" class="num-input" style="width:50px; height:40px;" data-ans="28">
+            <input type="number" class="num-input" style="width:50px; height:40px;" data-ans="37">
+            <div class="cell bg-grey" style="width:40px; height:40px;">40</div>
+            <input type="number" class="num-input" style="width:50px; height:40px;" data-ans="49">
+            <input type="number" class="num-input" style="width:50px; height:40px;" data-ans="52">
+            <div class="cell bg-green" style="width:40px; height:40px;">63</div>
+        </div>
+
+        <hr>
+        <p><strong>4-</strong> أَكْمِلْ بِإِحْدَى الْعِبَارَتَيْنِ «أَصْغَرُ» أَوْ «أَكْبَرُ»:</p>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; direction: ltr;" class="mb-3">
+            <div class="math-ltr"><span>43</span> <select data-ans="أكبر"><option value=""></option><option value="أكبر">أَكْبَرُ</option><option value="أصغر">أَصْغَرُ</option></select> <span>مِنْ 34</span></div>
+            <div class="math-ltr"><span>61</span> <select data-ans="أكبر"><option value=""></option><option value="أكبر">أَكْبَرُ</option><option value="أصغر">أَصْغَرُ</option></select> <span>مِنْ 16</span></div>
+            <div class="math-ltr"><span>13</span> <select data-ans="أصغر"><option value=""></option><option value="أكبر">أَكْبَرُ</option><option value="أصغر">أَصْغَرُ</option></select> <span>مِنْ 31</span></div>
+            <div class="math-ltr"><span>52</span> <select data-ans="أكبر"><option value=""></option><option value="أكبر">أَكْبَرُ</option><option value="أصغر">أَصْغَرُ</option></select> <span>مِنْ 39</span></div>
+            <div class="math-ltr"><span>45</span> <select data-ans="أكبر"><option value=""></option><option value="أكبر">أَكْبَرُ</option><option value="أصغر">أَصْغَرُ</option></select> <span>مِنْ 33</span></div>
+            <div class="math-ltr"><span>16</span> <select data-ans="أصغر"><option value=""></option><option value="أكبر">أَكْبَرُ</option><option value="أصغر">أَصْغَرُ</option></select> <span>مِنْ 61</span></div>
+        </div>
+
+        <button class="btn-validate" onclick="validateSection3()">تأكيد الإجابة</button>
+        <div id="eval-3" class="eval-box"></div>
+    </div>
+
+    <!-- محطة: أبحث -->
+    <div id="sec-4" class="section-card locked">
+        <div class="section-title">أَبْحَثُ</div>
+        
+        <p>اضغط على <strong>أَصْغَرَ</strong> الْأَعْدَادِ:</p>
+        <div class="math-ltr mb-3" id="min-btns">
+            <div class="select-btn" onclick="selectBtn(this, 'min-btns')">34</div>
+            <div class="select-btn" onclick="selectBtn(this, 'min-btns')" data-ans="correct">14</div>
+            <div class="select-btn" onclick="selectBtn(this, 'min-btns')">20</div>
+            <div class="select-btn" onclick="selectBtn(this, 'min-btns')">53</div>
+            <div class="select-btn" onclick="selectBtn(this, 'min-btns')">66</div>
+        </div>
+
+        <p>اضغط على <strong>أَكْبَرَ</strong> الْأَعْدَادِ:</p>
+        <div class="math-ltr mb-3" id="max-btns">
+            <div class="select-btn" onclick="selectBtn(this, 'max-btns')">34</div>
+            <div class="select-btn" onclick="selectBtn(this, 'max-btns')">14</div>
+            <div class="select-btn" onclick="selectBtn(this, 'max-btns')">20</div>
+            <div class="select-btn" onclick="selectBtn(this, 'max-btns')">53</div>
+            <div class="select-btn" onclick="selectBtn(this, 'max-btns')" data-ans="correct">66</div>
+        </div>
+
+        <hr>
+        <p>أَكْمِلْ مَلْءَ الْبِطَاقَاتِ مِنَ الْأَصْغَرِ إِلَى الْأَكْبَرِ:</p>
+        <div class="math-ltr mb-3" style="flex-wrap: wrap;">
+            <div class="cell bg-grey" style="width:35px; height:35px;">40</div>
+            <input type="number" class="num-input" style="width:45px;" data-ans="41">
+            <input type="number" class="num-input" style="width:45px;" data-ans="42">
+            <div class="cell bg-grey" style="width:35px; height:35px;">43</div>
+            <input type="number" class="num-input" style="width:45px;" data-ans="44">
+            <input type="number" class="num-input" style="width:45px;" data-ans="45">
+            <input type="number" class="num-input" style="width:45px;" data-ans="46">
+            <input type="number" class="num-input" style="width:45px;" data-ans="47">
+            <input type="number" class="num-input" style="width:45px;" data-ans="48">
+            <input type="number" class="num-input" style="width:45px;" data-ans="49">
+            <input type="number" class="num-input" style="width:45px;" data-ans="50">
+            <div class="cell bg-grey" style="width:35px; height:35px;">51</div>
+            <input type="number" class="num-input" style="width:45px;" data-ans="52">
+            <input type="number" class="num-input" style="width:45px;" data-ans="53">
+        </div>
+
+        <button class="btn-validate" onclick="validateSection4()">تأكيد الإجابة</button>
+        <div id="eval-4" class="eval-box"></div>
+    </div>
+
+    <!-- التقييم العام -->
+    <div id="final-evaluation">
+        <h2 style="color: var(--primary);">التقييم العام</h2>
+        <svg viewBox="0 0 36 36" class="circular-chart">
+            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path class="circle" id="progress-circle" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <text x="18" y="20.35" class="percentage" id="progress-text">0%</text>
+        </svg>
+        <div class="eval-note" id="eval-note-text"></div>
+        <p id="eval-details" style="font-size: 1.2rem;"></p>
+        <div class="controls">
+            <button class="btn-retry" onclick="location.reload()">إعادة المحاولة</button>
+            <button class="btn-exit" onclick="exitLesson()">خروج</button>
+        </div>
+    </div>
+
+    <!-- ========================================
+         زر العودة إلى الفهرس (أُضيف)
+         ======================================== -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</div>
+
+<!-- ========================================
+     سكريبت الحماية (أُضيف)
+     ======================================== -->
+<script>
+    // إعدادات القناة - السنة الثانية
+    const CHANNEL_ID = "-1004461185731";
+
+    // تهيئة Telegram WebApp
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+        tg.ready();
+        tg.expand();
+    }
+
+    async function verifySubscription() {
+        const statusMsg = document.getElementById('sub-status-msg');
+        statusMsg.style.color = "#0288d1";
+        statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+        let userId = null;
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            userId = tg.initDataUnsafe.user.id;
+        }
+
+        if (!userId) {
+            statusMsg.style.color = "#e65100";
+            statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+            return;
+        }
+
+        try {
+            const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.isSubscribed) {
+                statusMsg.style.color = "#2e7d32";
+                statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                setTimeout(() => {
+                    document.getElementById('sub-lock-screen').style.display = 'none';
+                }, 600);
+            } else {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+            }
+        } catch (error) {
+            statusMsg.style.color = "#c62828";
+            statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+        }
+    }
+
+    window.addEventListener('load', () => {
+        verifySubscription();
+    });
+
+    function exitLesson() {
+        if (window.Telegram?.WebApp) {
+            Telegram.WebApp.close();
+        } else {
+            window.history.back();
+        }
+    }
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي (كما هو دون تغيير)
+     ======================================== -->
+<script>
+    // إعدادات الصوت (Web Audio API)
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const audioCtx = new AudioContext();
+
+    function playSound(type) {
+        if(audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        if(type === 'correct') {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.1);
+            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+        } else {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.2);
+            gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+        }
+    }
+
+    // بناء شبكة شريط الأعداد (محطة أكتشف)
+    const ribbonData = [
+        {val: 24, r:1, c:1, color:'yellow'}, {val: 25, r:1, c:2, color:'yellow', pre:true}, {val: 26, r:1, c:3, color:'yellow'},
+        {val: 27, r:1, c:4, color:'yellow'}, {val: 28, r:1, c:5, color:'yellow'}, {val: 29, r:1, c:6, color:'yellow', pre:true},
+        {val: 30, r:1, c:7, color:'blue', pre:true}, {val: 31, r:1, c:8, color:'blue'}, {val: 32, r:1, c:9, color:'blue'},
+        {val: 33, r:1, c:10, color:'blue'}, {val: 34, r:1, c:11, color:'blue', pre:true}, {val: 35, r:1, c:12, color:'blue', pre:true},
+        {val: 36, r:1, c:13, color:'blue'}, {val: 37, r:1, c:14, color:'blue'}, {val: 38, r:1, c:15, color:'blue'},
+        {val: 39, r:1, c:16, color:'blue', pre:true}, {val: 40, r:1, c:17, color:'grey'},
+        {val: 41, r:2, c:17, color:'grey', pre:true},
+        {val: 42, r:3, c:17, color:'red', pre:true}, {val: 43, r:3, c:16, color:'red'}, {val: 44, r:3, c:15, color:'red'},
+        {val: 45, r:3, c:14, color:'red'}, {val: 46, r:3, c:13, color:'red'}, {val: 47, r:3, c:12, color:'red', pre:true},
+        {val: 48, r:3, c:11, color:'red', pre:true}, {val: 49, r:3, c:10, color:'red'}, {val: 50, r:3, c:9, color:'red'},
+        {val: 51, r:3, c:8, color:'red'}, {val: 52, r:3, c:7, color:'red', pre:true}, {val: 53, r:3, c:6, color:'red'},
+        {val: 54, r:3, c:5, color:'red'}, {val: 55, r:3, c:4, color:'red'}, {val: 56, r:3, c:3, color:'red'},
+        {val: 57, r:3, c:2, color:'red'}, {val: 58, r:3, c:1, color:'pink', pre:true},
+        {val: 59, r:4, c:1, color:'pink'},
+        {val: 60, r:5, c:1, color:'green'}, {val: 61, r:5, c:2, color:'green', pre:true}, {val: 62, r:5, c:3, color:'green'},
+        {val: 63, r:5, c:4, color:'green'}, {val: 64, r:5, c:5, color:'green'}, {val: 65, r:5, c:6, color:'green'},
+        {val: 66, r:5, c:7, color:'green'}, {val: 67, r:5, c:8, color:'green'}, {val: 68, r:5, c:9, color:'green'},
+        {val: 69, r:5, c:10, color:'green', pre:true}
+    ];
+
+    const ribbonContainer = document.getElementById('ribbon-container');
+    ribbonData.forEach(item => {
+        const div = document.createElement('div');
+        div.className = `cell bg-${item.color}`;
+        div.style.gridColumn = item.c;
+        div.style.gridRow = item.r;
+        
+        if (item.pre) {
+            div.textContent = item.val;
+        } else {
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.dataset.ans = item.val;
+            div.appendChild(input);
+        }
+        ribbonContainer.appendChild(div);
+    });
+
+    // منطق الترتيب التفاعلي
+    let expectedOrder = ['31', '39', '45', '56', '60'];
+    function moveItem(elem) {
+        if(elem.parentElement.id === 'sort-pool') {
+            const emptySlot = document.querySelector('#sort-target .sort-slot:empty');
+            if(emptySlot) emptySlot.appendChild(elem);
+        } else {
+            document.getElementById('sort-pool').appendChild(elem);
+        }
+    }
+
+    // منطق الاختيار في محطة أبحث
+    function selectBtn(elem, groupId) {
+        const container = document.getElementById(groupId);
+        if(container.classList.contains('frozen')) return;
+        Array.from(container.children).forEach(b => b.classList.remove('selected'));
+        elem.classList.add('selected');
+    }
+
+    // معالجة نصوص اللغة العربية
+    function normalizeArabic(text) {
+        return text.replace(/[ًٌٍَُِّْ]/g, '')
+                   .replace(/[أإآ]/g, 'ا')
+                   .replace(/ة/g, 'ه')
+                   .trim();
+    }
+
+    function checkTextInput(inputVal, expectedAnswers) {
+        const normInput = normalizeArabic(inputVal);
+        const expectedArr = expectedAnswers.split('|');
+        return expectedArr.some(exp => normalizeArabic(exp) === normInput);
+    }
+
+    // نظام التقييم
+    let totalScore = 0;
+    let totalQuestions = 0;
+
+    function freezeSection(secId, btn) {
+        btn.style.display = 'none';
+        const inputs = document.querySelectorAll(`#${secId} input, #${secId} select, #${secId} .sortable-pool, #${secId} .sortable-target`);
+        inputs.forEach(el => el.style.pointerEvents = 'none');
+        document.getElementById(secId).classList.add('frozen');
+    }
+
+    function evaluateFields(secId, inputsSelector) {
+        const inputs = document.querySelectorAll(inputsSelector);
+        let correct = 0;
+        let localTotal = 0;
+        
+        inputs.forEach(input => {
+            if(!input.dataset.ans) return;
+            localTotal++;
+            const expected = input.dataset.ans;
+            
+            let isCorrect = false;
+            if (input.tagName === 'INPUT' && input.type === 'text') {
+                isCorrect = checkTextInput(input.value, expected);
+            } else {
+                isCorrect = (input.value.trim() === expected);
+            }
+            
+            if (isCorrect) {
+                input.classList.add('correct');
+                correct++;
+            } else {
+                input.classList.add('incorrect');
+            }
+        });
+        
+        return {correct, total: localTotal};
+    }
+
+    function showSectionEval(secId, evalNum, correct, total) {
+        const box = document.getElementById(`eval-${evalNum}`);
+        box.style.display = 'block';
+        box.innerHTML = `النتيجة: ${correct} إجابات صحيحة من أصل ${total} ✓`;
+        totalScore += correct;
+        totalQuestions += total;
+        
+        if(correct === total) {
+            playSound('correct');
+            box.style.backgroundColor = '#e8f5e9';
+            box.style.color = '#2e7d32';
+        } else {
+            playSound('error');
+            box.style.backgroundColor = '#fff3e0';
+            box.style.color = '#ef6c00';
+        }
+    }
+
+    function unlockNext(nextSecId) {
+        if(nextSecId) {
+            document.getElementById(nextSecId).classList.remove('locked');
+            document.getElementById(nextSecId).scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    window.validateSection1 = function() {
+        const res = evaluateFields('sec-1', '#sec-1 input');
+        freezeSection('sec-1', document.querySelector('#sec-1 .btn-validate'));
+        showSectionEval('sec-1', 1, res.correct, res.total);
+        unlockNext('sec-2');
+    }
+
+    window.validateSection2 = function() {
+        let res = evaluateFields('sec-2', '#sec-2 input');
+        
+        let sortCorrect = true;
+        const slots = document.querySelectorAll('#sort-target .sort-slot');
+        slots.forEach((slot, i) => {
+            res.total++;
+            if(slot.children.length > 0 && slot.children[0].innerText === expectedOrder[i]) {
+                slot.children[0].classList.add('correct');
+                res.correct++;
+            } else {
+                sortCorrect = false;
+                if(slot.children.length > 0) slot.children[0].classList.add('incorrect');
+            }
+        });
+
+        freezeSection('sec-2', document.querySelector('#sec-2 .btn-validate'));
+        showSectionEval('sec-2', 2, res.correct, res.total);
+        
+        document.getElementById('card-talamto').style.display = 'block';
+        unlockNext('sec-3');
+    }
+
+    window.validateSection3 = function() {
+        const res = evaluateFields('sec-3', '#sec-3 input, #sec-3 select');
+        freezeSection('sec-3', document.querySelector('#sec-3 .btn-validate'));
+        showSectionEval('sec-3', 3, res.correct, res.total);
+        unlockNext('sec-4');
+    }
+
+    window.validateSection4 = function() {
+        let res = evaluateFields('sec-4', '#sec-4 input');
+        
+        ['min-btns', 'max-btns'].forEach(groupId => {
+            const group = document.getElementById(groupId);
+            group.classList.add('frozen');
+            const selected = group.querySelector('.selected');
+            res.total++;
+            if(selected && selected.dataset.ans === 'correct') {
+                selected.classList.add('correct');
+                res.correct++;
+            } else {
+                if(selected) selected.classList.add('incorrect');
+                const rightBtn = group.querySelector('[data-ans="correct"]');
+                rightBtn.classList.add('correct');
+            }
+        });
+
+        freezeSection('sec-4', document.querySelector('#sec-4 .btn-validate'));
+        showSectionEval('sec-4', 4, res.correct, res.total);
+        
+        showFinalEvaluation();
+    }
+
+    function showFinalEvaluation() {
+        const finalDiv = document.getElementById('final-evaluation');
+        finalDiv.style.display = 'block';
+        
+        const percentage = Math.round((totalScore / totalQuestions) * 100);
+        
+        const circle = document.getElementById('progress-circle');
+        const dashValue = `${percentage}, 100`;
+        
+        let strokeColor = '#f44336';
+        let note = 'يُوصَى بِمُرَاجَعَةِ الدَّرْسِ';
+        if(percentage >= 80) { strokeColor = '#4caf50'; note = 'مُمْتَازٌ ! عَمَلٌ رَائِعٌ'; }
+        else if (percentage >= 50) { strokeColor = '#ff9800'; note = 'جَيِّدٌ، وَيُمْكِنُكَ التَّحَسُّنُ'; }
+        
+        setTimeout(() => {
+            circle.style.stroke = strokeColor;
+            circle.setAttribute('stroke-dasharray', dashValue);
+            document.getElementById('progress-text').textContent = `${percentage}%`;
+        }, 300);
+
+        document.getElementById('eval-note-text').textContent = note;
+        document.getElementById('eval-note-text').style.color = strokeColor;
+        document.getElementById('eval-details').textContent = `لَقَدْ أَجَبْتَ إِجَابَةً صَحِيحَةً عَلَى ${totalScore} مِنْ أَصْلِ ${totalQuestions} سُؤَالاً.`;
+        
+        finalDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
