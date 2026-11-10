@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>العدد 10 - الدرس 11</title>
+    <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --primary: #2196F3;
+            --correct: #4CAF50;
+            --incorrect: #F44336;
+            --bg: #f9f9f9;
+            --text: #333;
+            --border: #ccc;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+        h1, h2 { color: var(--primary); text-align: center; }
+        .section-title {
+            background-color: #e3f2fd;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-top: 20px;
+            border-right: 5px solid var(--primary);
+        }
+        .task-container {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .task-container.active { display: block; }
+        .task-container.disabled {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        input[type="number"], input[type="text"] {
+            width: 50px;
+            padding: 8px;
+            font-size: 18px;
+            text-align: center;
+            border: 2px solid var(--border);
+            border-radius: 5px;
+            direction: ltr;
+        }
+        input.correct { border-color: var(--correct); background-color: #e8f5e9; color: var(--correct); }
+        input.incorrect { border-color: var(--incorrect); background-color: #ffebee; color: var(--incorrect); }
+        
+        .btn-check {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 15px auto;
+            width: 80%;
+        }
+        
+        .album-wrapper {
+            display: flex;
+            direction: ltr;
+            background: #8d6e63;
+            padding: 10px;
+            border-radius: 8px;
+            max-width: 400px;
+            margin: 15px auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+        .album-page {
+            flex: 1;
+            background: #fff;
+            min-height: 180px;
+            padding: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            gap: 8px;
+            border: 1px solid #ddd;
+        }
+        .album-page.left-page { border-right: 2px solid #5d4037; border-radius: 5px 0 0 5px; }
+        .album-page.right-page { border-radius: 0 5px 5px 0; }
+        .photo-thumb {
+            width: 35px; height: 35px;
+            background: #e0e0e0;
+            border: 2px solid #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 20px;
+        }
+
+        .shapes-grid, .click-add-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 15px 0;
+            padding: 20px;
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            min-height: 50px;
+        }
+        .click-add-container { cursor: pointer; background-color: #fafafa; }
+        .click-add-container:hover { border-color: var(--primary); }
+        .shape {
+            font-size: 30px;
+            cursor: pointer;
+            user-select: none;
+            transition: 0.2s;
+        }
+        .shape.crossed {
+            position: relative;
+            opacity: 0.5;
+        }
+        .shape.crossed::after {
+            content: '❌';
+            position: absolute;
+            left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+        }
+        .shape.selected { transform: scale(1.2); filter: drop-shadow(0 0 5px var(--primary)); }
+        
+        .chain-box {
+            position: relative;
+            width: 100%;
+            max-width: 320px;
+            margin: 15px auto;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .chain-ball {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            position: relative;
+            z-index: 2;
+            cursor: pointer;
+            box-shadow: inset -2px -2px 4px rgba(0,0,0,0.2);
+        }
+        .chain-ball.blue-group { background: #64b5f6; cursor: default; }
+        .chain-ball.green-group { background: #81c784; }
+        #lines-svg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .table-container { overflow-x: auto; direction: ltr; }
+        table { border-collapse: collapse; margin: 15px auto; }
+        td {
+            width: 35px; height: 35px;
+            border: 1px solid var(--border);
+            text-align: center;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .td-header input { width: 35px; height: 35px; border: none; padding: 0; font-size: 16px; text-align: center;}
+        .td-readonly { background-color: #eeeeee; cursor: default; }
+        td.colored { background-color: var(--correct); }
+        td.wrong-colored { background-color: var(--incorrect); }
+        
+        #evaluation {
+            display: none;
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 2px solid var(--primary);
+        }
+        .circle-chart {
+            width: 100px; height: 100px;
+            border-radius: 50%;
+            background: conic-gradient(var(--correct) 0%, var(--border) 0%);
+            margin: 15px auto;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; font-weight: bold;
+        }
+        .circle-inner {
+            width: 80px; height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري (أُضيفت)
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس (أُضيف) */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            max-width: 420px;
+            margin: 20px auto 10px auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+    <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+        <div class="lock-desc">
+            لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+        </div>
+        <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel" id="channel-link">
+            📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+        </a>
+        <button class="btn-check-sub" onclick="verifySubscription()">
+            ✅ تَأْكِيدُ الاِشْتِرَاكِ
+        </button>
+        <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+</div>
+
+    <h1>الدرس 11: العدد 10</h1>
+
+    <!-- قسم أكتشف -->
+    <div class="section-title">أَكْتَشِفُ</div>
+    <div class="task-container active" id="task-1">
+        <p>تُرِيدُ لَيْلَى إِلْصَاقَ صُوَرٍ أُخْرَى عَلَى الصَّفْحَةِ الْأَخِيرَةِ مِنْ أَلْبُومِهَا، حَيْثُ تَكُونُ الصُّوَرُ بِقَدْرِ صُوَرِ الصَّفْحَةِ الْمُقَابِلَةِ.</p>
+        
+        <div class="album-wrapper">
+            <div class="album-page left-page" id="album-left"></div>
+            <div class="album-page right-page" id="album-right"></div>
+        </div>
+
+        <p>1. تُلْصِقُ لَيْلَى <input type="number" id="t1-q1" data-ans="7"> صُوَرٍ.</p>
+        <p>2. كَمْ يُصْبِحُ عَدَدُ الصُّوَرِ؟ <input type="number" id="t1-q2" data-ans="10"></p>
+        <p>3. يُمْكِنُ إِلْصَاقُ <input type="number" id="t1-q3" data-ans="10"> صُوَرٍ عَلَى كُلِّ صَفْحَةٍ مِنْ صَفَحَاتِ الْأَلْبُومِ.</p>
+        <button class="btn-check" onclick="checkTask(1)">تحقق</button>
+    </div>
+
+    <!-- قسم أنجز -->
+    <div class="section-title">أُنْجِزُ</div>
+    
+    <div class="task-container" id="task-2">
+        <p>1. عُدَّ الْمُثَلَّثَاتِ بِقَدْرِ الْعَدَدِ الْمَكْتُوبِ عَلَى الْبِطَاقَةِ، وَأَشْطُبِ الْمُثَلَّثَاتِ الزَّائِدَةَ: <strong>(10)</strong></p>
+        <div class="shapes-grid" id="grid-triangles"></div>
+        <button class="btn-check" onclick="checkInteractiveTask(2, 'crossed', 4)">تحقق</button>
+    </div>
+
+    <div class="task-container" id="task-3">
+        <p>2. أَكْمِلْ رَسْمَ الْقُرَيْصَاتِ النَّاقِصَةِ: <strong>(10)</strong></p>
+        <p style="font-size: 14px; color: gray;">(اضغط داخل المربع لإضافة قريصة)</p>
+        <div class="click-add-container" id="grid-circles" onclick="addShape(this, '🔴')"></div>
+        <button class="btn-check" onclick="checkClickCount(3, 'grid-circles', 10)">تحقق</button>
+    </div>
+
+    <div class="task-container" id="task-4">
+        <p>3. اِضْغَطْ عَلَى 10 كُرَاتٍ لِتَحْدِيدِهَا:</p>
+        <div class="shapes-grid" id="grid-balls"></div>
+        <button class="btn-check" onclick="checkInteractiveTask(4, 'selected', 10)">تحقق</button>
+    </div>
+
+    <!-- قسم تعلمت -->
+    <div class="section-title" style="background-color:#fff3e0; border-color:#ff9800;">تَعَلَّمْتُ</div>
+    <div class="task-container" id="task-learn" style="display:none; text-align:center; font-size:18px;">
+        <p><strong>الْعَدَدُ عَشْرَةٌ يُكْتَبُ بِرَقْمَيْنِ، هُمَا الصِّفْرُ وَالْوَاحِدُ، هَكَذَا 10.</strong></p>
+        <button class="btn-check" style="background-color:#ff9800;" onclick="nextTask('learn')">مواصلة</button>
+    </div>
+
+    <!-- قسم أتمرن -->
+    <div class="section-title">أَتَمَرَّنُ</div>
+    
+    <div class="task-container" id="task-5">
+        <p>1. مَا عَدَدُ الْكُرَيَّاتِ فِي السِّلْسِلَةِ الزَّرْقَاءِ؟ <input type="number" id="t5-q1" data-ans="10"></p>
+        <p>أَكْمِلْ رَسْمَ السِّلْسِلَةِ الْخَضْرَاءِ بِحَيْثُ تَشْمَلُ 10 كُرَيَّاتٍ.</p>
+        <p style="font-size: 14px; color: gray;">(اضغط على الكريات الحرة لتوصيلها بالسلسلة الخضراء)</p>
+        
+        <div class="chain-box" id="chain-box">
+            <svg id="lines-svg"></svg>
+        </div>
+
+        <button class="btn-check" onclick="checkTask5()">تحقق</button>
+    </div>
+
+    <div class="task-container" id="task-6">
+        <p>2. أَكْمِلْ تَلْوِينَ 10 خَانَاتٍ بِالْأَخْضَرِ بَدْءًا مِنَ الْخَانَةِ 1. وَأَكْتُبُ الْعَدَدَ 10 فِي الْمَكَانِ الْمُنَاسِبِ.</p>
+        <div class="table-container">
+            <table id="grid-table">
+                <tr id="table-row-1"></tr>
+                <tr id="table-row-2"></tr>
+            </table>
+        </div>
+        <button class="btn-check" onclick="checkTask6()">تحقق</button>
+    </div>
+
+    <!-- قسم أبحث -->
+    <div class="section-title">أَبْحَثُ</div>
+    
+    <div class="task-container" id="task-7">
+        <p>1. اِشْطُبِ الْأَهِلَّةَ الَّتِي تَزِيدُ عَنْ 10.</p>
+        <div class="shapes-grid" id="grid-crescents"></div>
+        <button class="btn-check" onclick="checkInteractiveTask(7, 'crossed', 3)">تحقق</button>
+    </div>
+
+    <div class="task-container" id="task-8">
+        <p>2. أَرْسُمُ النَّجْمَاتِ النَّاقِصَةَ لِتَكْوِينِ مَجْمُوعَةِ 10 نَجْمَاتٍ.</p>
+        <p style="font-size: 14px; color: gray;">(اضغط داخل المربع لإضافة نجمة)</p>
+        <div class="click-add-container" id="grid-stars" onclick="addShape(this, '⭐')"></div>
+        <button class="btn-check" onclick="checkClickCount(8, 'grid-stars', 10)">إكمال التقييم</button>
+    </div>
+
+    <!-- التقييم الكلي -->
+    <div id="evaluation">
+        <h2>التقييم العام</h2>
+        <div class="circle-chart" id="eval-chart">
+            <div class="circle-inner" id="eval-percent">0%</div>
+        </div>
+        <p>الإجابات الصحيحة: <span id="eval-correct" style="color:var(--correct); font-weight:bold;">0</span></p>
+        <p>الإجابات الخاطئة: <span id="eval-incorrect" style="color:var(--incorrect); font-weight:bold;">0</span></p>
+        <p id="eval-remark" style="font-size: 18px; font-weight: bold; margin-top: 10px;"></p>
+    </div>
+
+    <!-- ========================================
+         زر العودة إلى الفهرس (أُضيف)
+         ======================================== -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+    <!-- ========================================
+         سكريبت الحماية (أُضيف)
+         ======================================== -->
+    <script>
+        // إعدادات القناة - السنة الأولى
+        const CHANNEL_ID = "-1004456852024";
+
+        // تهيئة Telegram WebApp
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        async function verifySubscription() {
+            const statusMsg = document.getElementById('sub-status-msg');
+            statusMsg.style.color = "#0288d1";
+            statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+            let userId = null;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                userId = tg.initDataUnsafe.user.id;
+            }
+
+            if (!userId) {
+                statusMsg.style.color = "#e65100";
+                statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+                return;
+            }
+
+            try {
+                const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.isSubscribed) {
+                    statusMsg.style.color = "#2e7d32";
+                    statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                    setTimeout(() => {
+                        document.getElementById('sub-lock-screen').style.display = 'none';
+                    }, 600);
+                } else {
+                    statusMsg.style.color = "#c62828";
+                    statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+                }
+            } catch (error) {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+            }
+        }
+
+        window.addEventListener('load', () => {
+            verifySubscription();
+        });
+    </script>
+
+    <!-- ========================================
+         سكريبت الدرس الأصلي (كما هو دون تغيير)
+         ======================================== -->
+    <script>
+        let totalCorrect = 0;
+        let totalIncorrect = 0;
+        const tasksOrder = [1, 2, 3, 4, 'learn', 5, 6, 7, 8, 'eval'];
+        let currentTaskIndex = 0;
+        
+        let greenChain = [10, 11, 12];
+        let blueChain = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+        window.onload = () => {
+            const leftAlbum = document.getElementById('album-left');
+            const rightAlbum = document.getElementById('album-right');
+            for(let i=0; i<10; i++) leftAlbum.innerHTML += `<div class="photo-thumb">🏞️</div>`;
+            for(let i=0; i<3; i++) rightAlbum.innerHTML += `<div class="photo-thumb">🏞️</div>`;
+
+            generateShapes('grid-triangles', 14, '🔺', 'crossable');
+            initClickToAdd('grid-circles', 4, '🔴');
+            generateShapes('grid-balls', 16, '⚽', 'selectable');
+            
+            generateChainsExercise();
+            
+            generateTable();
+            generateShapes('grid-crescents', 13, '🌙', 'crossable');
+            initClickToAdd('grid-stars', 8, '⭐');
+            
+            window.addEventListener('resize', drawSVGChains);
+        };
+
+        function generateShapes(containerId, count, emoji, type) {
+            const container = document.getElementById(containerId);
+            for (let i = 0; i < count; i++) {
+                let span = document.createElement('span');
+                span.innerText = emoji;
+                span.className = 'shape';
+                
+                if (type === 'crossable') {
+                    span.onclick = function() { this.classList.toggle('crossed'); };
+                } else if (type === 'selectable') {
+                    span.onclick = function() { this.classList.toggle('selected'); };
+                }
+                container.appendChild(span);
+            }
+        }
+
+        function initClickToAdd(containerId, initialCount, emoji) {
+            const container = document.getElementById(containerId);
+            for(let i=0; i<initialCount; i++) {
+                let span = document.createElement('span');
+                span.innerText = emoji;
+                span.className = 'shape drawn';
+                container.appendChild(span);
+            }
+        }
+        function addShape(container, emoji) {
+            if (container.classList.contains('disabled-interactive')) return;
+            let span = document.createElement('span');
+            span.innerText = emoji;
+            span.className = 'shape drawn';
+            span.animate([{transform: 'scale(0)'}, {transform: 'scale(1)'}], {duration: 200});
+            container.appendChild(span);
+        }
+        function checkClickCount(taskId, containerId, target) {
+            const container = document.getElementById(containerId);
+            const count = container.children.length;
+            container.classList.add('disabled-interactive');
+            
+            if (count === target) {
+                totalCorrect++;
+                container.style.borderColor = "var(--correct)";
+            } else {
+                totalIncorrect++;
+                container.style.borderColor = "var(--incorrect)";
+            }
+            freezeAndMove(taskId);
+        }
+
+        function generateChainsExercise() {
+            const box = document.getElementById('chain-box');
+            for(let i=0; i<40; i++) {
+                let ball = document.createElement('div');
+                ball.className = 'chain-ball';
+                ball.id = 'ball-' + i;
+                
+                if(blueChain.includes(i)) {
+                    ball.classList.add('blue-group');
+                } else if(greenChain.includes(i)) {
+                    ball.classList.add('green-group');
+                } else {
+                    ball.onclick = function() {
+                        if(box.classList.contains('frozen-box')) return;
+                        if(!greenChain.includes(i)) {
+                            greenChain.push(i);
+                            ball.classList.add('green-group');
+                            drawSVGChains();
+                        }
+                    };
+                }
+                box.appendChild(ball);
+            }
+            setTimeout(drawSVGChains, 50);
+        }
+
+        function drawSVGChains() {
+            const svg = document.getElementById('lines-svg');
+            const box = document.getElementById('chain-box');
+            svg.innerHTML = ''; 
+
+            const getCenter = (id) => {
+                const el = document.getElementById(id);
+                if(!el) return null;
+                return {
+                    x: el.offsetLeft + (el.offsetWidth / 2),
+                    y: el.offsetTop + (el.offsetHeight / 2)
+                };
+            };
+
+            let bluePts = blueChain.map(i => { let p = getCenter('ball-'+i); return p ? `${p.x},${p.y}` : ''; }).join(' ');
+            let bluePoly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+            bluePoly.setAttribute('points', bluePts);
+            bluePoly.setAttribute('stroke', '#1976D2');
+            bluePoly.setAttribute('stroke-width', '4');
+            bluePoly.setAttribute('fill', 'none');
+            svg.appendChild(bluePoly);
+
+            let greenPts = greenChain.map(i => { let p = getCenter('ball-'+i); return p ? `${p.x},${p.y}` : ''; }).join(' ');
+            let greenPoly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+            greenPoly.setAttribute('points', greenPts);
+            greenPoly.setAttribute('stroke', '#388E3C');
+            greenPoly.setAttribute('stroke-width', '4');
+            greenPoly.setAttribute('fill', 'none');
+            svg.appendChild(greenPoly);
+        }
+
+        function checkTask5() {
+            const input = document.getElementById('t5-q1');
+            let passedText = false;
+            let passedChain = false;
+
+            if (input.value == "10") { input.classList.add('correct'); passedText = true; }
+            else { input.classList.add('incorrect'); }
+            input.disabled = true;
+
+            if (greenChain.length === 10) passedChain = true;
+            
+            if (passedText) totalCorrect++; else totalIncorrect++;
+            if (passedChain) totalCorrect++; else totalIncorrect++;
+
+            document.getElementById('chain-box').classList.add('frozen-box');
+            freezeAndMove(5);
+        }
+
+        function generateTable() {
+            const row1 = document.getElementById('table-row-1');
+            const row2 = document.getElementById('table-row-2');
+            for (let i = 1; i <= 13; i++) {
+                let td1 = document.createElement('td');
+                td1.className = "td-header";
+                if(i === 1) {
+                    td1.innerHTML = '1';
+                    td1.className = "td-readonly";
+                } else {
+                    let inp = document.createElement('input');
+                    inp.type = "text"; 
+                    inp.maxLength = 2;
+                    inp.dataset.col = i;
+                    td1.appendChild(inp);
+                }
+                row1.appendChild(td1);
+
+                let td2 = document.createElement('td');
+                if (i === 1) {
+                    td2.classList.add('colored');
+                } else {
+                    td2.onclick = function() { this.classList.toggle('colored'); };
+                }
+                row2.appendChild(td2);
+            }
+        }
+
+        function checkTask6() {
+            const inputs = document.querySelectorAll('#table-row-1 input');
+            let numberPlacedCorrectly = false;
+            inputs.forEach(inp => {
+                if (inp.value == "10" && inp.dataset.col == "10") {
+                    numberPlacedCorrectly = true;
+                    inp.classList.add('correct');
+                } else if (inp.value !== "") {
+                    inp.classList.add('incorrect');
+                }
+                inp.disabled = true;
+            });
+            if (numberPlacedCorrectly) totalCorrect++; else totalIncorrect++;
+
+            const tds = document.querySelectorAll('#table-row-2 td');
+            let coloredCount = 0;
+            let outsideColored = false;
+            
+            tds.forEach((td, index) => {
+                if (td.classList.contains('colored')) {
+                    coloredCount++;
+                    if (index >= 10) outsideColored = true;
+                }
+                td.onclick = null;
+            });
+
+            if (coloredCount === 10 && !outsideColored) {
+                totalCorrect++;
+            } else {
+                totalIncorrect++;
+                tds.forEach((td, index) => {
+                    if(td.classList.contains('colored') && index >= 10) td.classList.add('wrong-colored');
+                });
+            }
+            freezeAndMove(6);
+        }
+
+        function checkTask(taskId) {
+            const container = document.getElementById('task-' + taskId);
+            const inputs = container.querySelectorAll('input');
+            inputs.forEach(input => {
+                if (input.value == input.dataset.ans) {
+                    input.classList.add('correct');
+                    totalCorrect++;
+                } else {
+                    input.classList.add('incorrect');
+                    totalIncorrect++;
+                }
+                input.disabled = true;
+            });
+            freezeAndMove(taskId);
+        }
+
+        function checkInteractiveTask(taskId, className, targetCount) {
+            const container = document.getElementById('task-' + taskId);
+            const elements = container.querySelectorAll('.shape.' + className);
+            if (elements.length === targetCount) {
+                totalCorrect++;
+                container.style.borderColor = "var(--correct)";
+            } else {
+                totalIncorrect++;
+                container.style.borderColor = "var(--incorrect)";
+            }
+            freezeAndMove(taskId);
+        }
+
+        function freezeAndMove(taskId) {
+            const container = document.getElementById('task-' + taskId);
+            container.classList.add('disabled');
+            container.querySelector('.btn-check').style.display = 'none';
+            nextTask(taskId);
+        }
+
+        function nextTask(currentId) {
+            if(currentId === 'learn') document.getElementById('task-learn').style.display = 'none';
+            
+            currentTaskIndex++;
+            const nextId = tasksOrder[currentTaskIndex];
+            
+            if (nextId === 'eval') showEvaluation();
+            else if (nextId === 'learn') document.getElementById('task-learn').style.display = 'block';
+            else document.getElementById('task-' + nextId).classList.add('active');
+            
+            if (nextId === 5) setTimeout(drawSVGChains, 50); 
+        }
+
+        function showEvaluation() {
+            document.getElementById('evaluation').style.display = 'block';
+            document.getElementById('eval-correct').innerText = totalCorrect;
+            document.getElementById('eval-incorrect').innerText = totalIncorrect;
+            
+            const totalQuestions = totalCorrect + totalIncorrect;
+            const percentage = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+            
+            document.getElementById('eval-percent').innerText = percentage + '%';
+            document.getElementById('eval-chart').style.background = `conic-gradient(var(--correct) ${percentage}%, var(--border) 0)`;
+
+            let remark = "";
+            if (percentage === 100) remark = "ممتاز! مطابقة تامة للمنهاج.";
+            else if (percentage >= 70) remark = "عمل جيد، لكن راجع أخطاءك.";
+            else remark = "تحتاج إلى المزيد من التركيز والمراجعة.";
+            document.getElementById('eval-remark').innerText = remark;
+            
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
