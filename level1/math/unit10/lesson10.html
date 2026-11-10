@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>درس: عد كميات صغيرة</title>
+    <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --bg-color: #f5f7fa;
+            --disabled: #bdc3c7;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        #main-content {
+            display: block; 
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1, h2 { text-align: center; color: var(--primary); }
+        .section-title {
+            background: var(--primary); color: white;
+            padding: 10px; border-radius: 5px; margin-top: 30px;
+        }
+        .exercise-container {
+            margin-bottom: 20px; padding: 15px;
+            border: 2px solid #eee; border-radius: 8px;
+            opacity: 0.5; pointer-events: none;
+            transition: all 0.3s;
+        }
+        .exercise-container.active {
+            opacity: 1; pointer-events: auto; border-color: var(--primary);
+        }
+        .ltr-math {
+            direction: ltr;
+            display: flex; justify-content: center; align-items: center;
+            flex-wrap: wrap; gap: 10px; margin: 15px 0;
+        }
+        .box {
+            border: 2px solid #ccc; padding: 10px; border-radius: 5px;
+            text-align: center; min-width: 60px;
+        }
+        .balls { color: #3498db; font-size: 20px; }
+        .fingers { margin-bottom: 5px; display: flex; justify-content: center; }
+        .options, .number-line {
+            display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;
+        }
+        .btn-option {
+            padding: 10px 20px; font-size: 18px; cursor: pointer;
+            border: 2px solid var(--primary); background: white;
+            border-radius: 5px; transition: 0.2s;
+        }
+        .btn-option:hover { background: var(--primary); color: white; }
+        .input-box {
+            width: 50px; height: 50px; text-align: center; font-size: 20px;
+            border: 2px solid #ccc; border-radius: 5px;
+        }
+        .correct { background-color: var(--success) !important; color: white !important; border-color: var(--success) !important; pointer-events: none; }
+        .wrong { background-color: var(--danger) !important; color: white !important; border-color: var(--danger) !important; pointer-events: none; }
+        .number-cell {
+            width: 40px; height: 40px; border: 2px solid #333;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 20px; font-weight: bold; cursor: pointer;
+        }
+        #evaluation {
+            margin-top: 40px; padding: 20px; border: 3px solid var(--primary);
+            border-radius: 10px; text-align: center; display: none;
+        }
+        .circle-wrap {
+            width: 150px; height: 150px; background: #f0f0f0;
+            border-radius: 50%; margin: 20px auto;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 30px; font-weight: bold; border: 10px solid var(--primary);
+        }
+        .talamt-card {
+            background: #fff3cd; border: 2px solid #ffeeba;
+            padding: 15px; border-radius: 8px; text-align: center;
+            font-size: 22px; font-weight: bold; margin: 20px 0;
+        }
+
+        /* تنسيق النرد ثنائي الأبعاد */
+        .dice-2d {
+            width: 36px; height: 36px; background: white; border: 2px solid #333; border-radius: 6px;
+            display: grid; grid-template-columns: 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 1fr;
+            padding: 3px; box-sizing: border-box;
+        }
+        .dice-dot { width: 6px; height: 6px; background: #333; border-radius: 50%; justify-self: center; align-self: center; }
+        .dice-5 .d1 { grid-column: 1; grid-row: 1; }
+        .dice-5 .d2 { grid-column: 3; grid-row: 1; }
+        .dice-5 .d3 { grid-column: 2; grid-row: 2; }
+        .dice-5 .d4 { grid-column: 1; grid-row: 3; }
+        .dice-5 .d5 { grid-column: 3; grid-row: 3; }
+        
+        #abhath-line { margin-top: 80px; }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري (أُضيفت)
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس (أُضيف) */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            max-width: 420px;
+            margin: 20px auto 10px auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+    <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+        <div class="lock-desc">
+            لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+        </div>
+        <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel" id="channel-link">
+            📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+        </a>
+        <button class="btn-check-sub" onclick="verifySubscription()">
+            ✅ تَأْكِيدُ الاِشْتِرَاكِ
+        </button>
+        <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+</div>
+
+    <div id="main-content">
+        <h1>عد كميات صغيرة</h1>
+        
+        <h2 class="section-title">أكتشف</h2>
+        
+        <!-- أكتشف 1 -->
+        <div id="ex-aktashif-1" class="exercise-container active">
+            <h3>1. صِلْ كُلَّ بَالُونَ بِالْعَدَدِ الْمُنَاسِب: (اختر العدد المناسب لكل صندوق)</h3>
+            <div class="ltr-math" id="aktashif-1-boxes"></div>
+            <div class="options ltr-math" id="aktashif-1-btns"></div>
+        </div>
+
+        <!-- أكتشف 2 -->
+        <div id="ex-aktashif-2" class="exercise-container">
+            <h3>2. أَكْمِلْ رَسْمَ الْقُرَيْصَاتِ حَتَّى تَكُونَ بِقَدْرِ الْأَصَابِعِ الْمَرْفُوعَةِ: (اضغط لإضافة قريصة)</h3>
+            <div class="ltr-math" id="aktashif-2-boxes"></div>
+        </div>
+
+        <h2 class="section-title">أُنجز</h2>
+
+        <!-- أنجز 1 -->
+        <div id="ex-andjiz-1" class="exercise-container">
+            <h3>1. اكْتُبِ الْعَدَدَ الْمُنَاسِبَ فِي كُلِّ بِطَاقَة:</h3>
+            <div class="ltr-math" id="andjiz-1-boxes"></div>
+        </div>
+
+        <!-- أنجز 2 -->
+        <div id="ex-andjiz-2" class="exercise-container">
+            <h3>2. أَكْمَلْ سِلْسِلَةَ الْأَعَدَادِ:</h3>
+            <div class="ltr-math" id="andjiz-2-sequence"></div>
+        </div>
+
+        <h2 class="section-title">تعلمت</h2>
+        <div id="ex-talamt" class="exercise-container">
+            <div class="talamt-card">
+                قِرَاءَةِ وَكِتَابَة العَدَدَيْنِ : ثَمَانِيَة 8 وَتِسْعَة 9
+            </div>
+            <button class="btn-option" onclick="completeTalamt()">واصل</button>
+        </div>
+
+        <h2 class="section-title">أتمرن</h2>
+
+        <!-- أتمرن 1 -->
+        <div id="ex-atamaran-1" class="exercise-container">
+            <h3>1. اضغط على العدد المناسب:</h3>
+            <div class="ltr-math" id="atamaran-1-boxes"></div>
+        </div>
+
+        <!-- أتمرن 2 -->
+        <div id="ex-atamaran-2" class="exercise-container">
+            <h3>2. أَكْمِلْ رَسْمَ الْقُرَيْصَاتِ النَّاقِصَةِ فِي كُلِّ بِطَاقَة: (اضغط لإضافة قريصة)</h3>
+            <div class="ltr-math" id="atamaran-2-boxes"></div>
+        </div>
+
+        <!-- أتمرن 3 -->
+        <div id="ex-atamaran-3" class="exercise-container">
+            <h3>3. اربط كُلَّ صُورَة بِالْعَدَدِ الْمُنَاسِب: (اختر العدد للصندوق)</h3>
+            <div class="ltr-math" id="atamaran-3-boxes"></div>
+            <div class="options ltr-math" id="atamaran-3-btns"></div>
+        </div>
+
+        <h2 class="section-title">أبحث</h2>
+        <!-- أبحث -->
+        <div id="ex-abhath" class="exercise-container">
+            <h3>لَوِّنْ خَانَةِ الْوُصُول:</h3>
+            <div class="number-line ltr-math" id="abhath-line"></div>
+        </div>
+
+        <!-- التقييم الكلي -->
+        <div id="evaluation">
+            <h2>التقييم العام</h2>
+            <div class="circle-wrap" id="eval-circle">0%</div>
+            <h3>الإجابات الصحيحة: <span id="eval-correct" style="color:var(--success)">0</span></h3>
+            <h3>الإجابات الخاطئة: <span id="eval-wrong" style="color:var(--danger)">0</span></h3>
+            <h2 id="eval-remark"></h2>
+        </div>
+
+        <!-- ========================================
+             زر العودة إلى الفهرس (أُضيف)
+             ======================================== -->
+        <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+    </div>
+
+    <!-- ========================================
+         سكريبت الحماية (أُضيف)
+         ======================================== -->
+    <script>
+        // إعدادات القناة - السنة الأولى
+        const CHANNEL_ID = "-1004456852024";
+
+        // تهيئة Telegram WebApp
+        const tg = window.Telegram?.WebApp;
+        if (tg) {
+            tg.ready();
+            tg.expand();
+        }
+
+        async function verifySubscription() {
+            const statusMsg = document.getElementById('sub-status-msg');
+            statusMsg.style.color = "#0288d1";
+            statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+            let userId = null;
+            if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                userId = tg.initDataUnsafe.user.id;
+            }
+
+            if (!userId) {
+                statusMsg.style.color = "#e65100";
+                statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+                return;
+            }
+
+            try {
+                const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+                const response = await fetch(url);
+                const data = await response.json();
+
+                if (data.isSubscribed) {
+                    statusMsg.style.color = "#2e7d32";
+                    statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                    setTimeout(() => {
+                        document.getElementById('sub-lock-screen').style.display = 'none';
+                    }, 600);
+                } else {
+                    statusMsg.style.color = "#c62828";
+                    statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+                }
+            } catch (error) {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+            }
+        }
+
+        window.addEventListener('load', () => {
+            verifySubscription();
+        });
+    </script>
+
+    <!-- ========================================
+         سكريبت الدرس الأصلي (كما هو دون تغيير)
+         ======================================== -->
+    <script>
+        let totalCorrect = 0;
+        let totalWrong = 0;
+
+        function recordAnswer(isCorrect) {
+            if (isCorrect) totalCorrect++;
+            else totalWrong++;
+            updateEvaluation();
+        }
+
+        function updateEvaluation() {
+            const total = totalCorrect + totalWrong;
+            if (total === 0) return;
+            const percentage = Math.round((totalCorrect / total) * 100);
+            document.getElementById('eval-correct').innerText = totalCorrect;
+            document.getElementById('eval-wrong').innerText = totalWrong;
+            const circle = document.getElementById('eval-circle');
+            circle.innerText = percentage + '%';
+            
+            let remark = "";
+            if(percentage >= 80) remark = "ممتاز! واصل تألقك 🌟";
+            else if(percentage >= 50) remark = "عمل جيد، لكن يمكنك التحسن 👍";
+            else remark = "تحتاج إلى المزيد من التركيز والمراجعة 📚";
+            
+            document.getElementById('eval-remark').innerText = remark;
+        }
+
+        function unlockNextExercise(currentId, nextId) {
+            document.getElementById(currentId).classList.remove('active');
+            if (nextId === 'evaluation') {
+                document.getElementById('evaluation').style.display = 'block';
+            } else {
+                document.getElementById(nextId).classList.add('active');
+                document.getElementById(nextId).scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function getBallsHTML(count) {
+            return '🔵'.repeat(count);
+        }
+
+        function getFingersSVG(count) {
+            const hand5 = `<svg width="50" height="50" viewBox="0 0 50 50">
+                <rect x="10" y="25" width="30" height="25" rx="5" fill="#fcd3b6" stroke="#333" stroke-width="1.5"/>
+                <rect x="4" y="15" width="8" height="15" rx="4" fill="#fcd3b6" stroke="#333" stroke-width="1.5" transform="rotate(-20 10 25)"/>
+                <rect x="12" y="5" width="7" height="25" rx="3.5" fill="#fcd3b6" stroke="#333" stroke-width="1.5"/>
+                <rect x="21" y="2" width="7" height="28" rx="3.5" fill="#fcd3b6" stroke="#333" stroke-width="1.5"/>
+                <rect x="30" y="5" width="7" height="25" rx="3.5" fill="#fcd3b6" stroke="#333" stroke-width="1.5"/>
+                <rect x="38" y="10" width="6" height="20" rx="3" fill="#fcd3b6" stroke="#333" stroke-width="1.5"/>
+            </svg>`;
+            
+            const getRightHand = (up) => {
+                const hT = up >= 1 ? 15 : 5, yT = up >= 1 ? 15 : 25;
+                const hI = up >= 2 ? 25 : 5, yI = up >= 2 ? 5 : 25;
+                const hM = up >= 3 ? 28 : 5, yM = up >= 3 ? 2 : 25;
+                const hR = up >= 4 ? 25 : 5, yR = up >= 4 ? 5 : 25;
+                const hP = up >= 5 ? 20 : 5, yP = up >= 5 ? 10 : 25;
+                return `<svg width="50" height="50" viewBox="0 0 50 50">
+                    <rect x="10" y="25" width="30" height="25" rx="5" fill="#fcd3b6" stroke="#333" stroke-width="1.5"/>
+                    <rect x="38" y="${yT}" width="8" height="${hT}" rx="4" fill="#fcd3b6" stroke="#333" stroke-width="1.5" transform="rotate(20 40 25)"/>
+                    <rect x="30" y="${yI}" width="7" height="${hI}" rx="3.5" fill="#fcd3b6" stroke="#333" stroke-width="1.5"/>
+                    <rect x="21" y="${yM}" width="7" height="${hM}" rx="3.5" fill="#fcd3b6" stroke="#333" stroke-width="1.5"/>
+                    <rect x="12" y="${yR}" width="7" height="${hR}" rx="3.5" fill="#fcd3b6" stroke="#333" stroke-width="1.5"/>
+                    <rect x="4" y="${yP}" width="6" height="${hP}" rx="3" fill="#fcd3b6" stroke="#333" stroke-width="1.5"/>
+                </svg>`;
+            };
+            return `<div style="display:flex; gap:10px; justify-content:center; align-items:center;">${hand5}${getRightHand(count-5)}</div>`;
+        }
+
+        const ak1_data = [5, 8, 6, 9, 7];
+        let ak1_answered = 0;
+        let ak1_selectedBtn = null;
+
+        function initAktashif1() {
+            const boxesDiv = document.getElementById('aktashif-1-boxes');
+            const btnsDiv = document.getElementById('aktashif-1-btns');
+            
+            ak1_data.forEach((val, index) => {
+                boxesDiv.innerHTML += `
+                    <div class="box" id="ak1-box-${index}" onclick="checkAk1(${index}, ${val})">
+                        <div class="balls">${getBallsHTML(val)}</div>
+                        <div style="margin-top:10px; border-top:1px solid #ccc; padding-top:5px;">؟</div>
+                    </div>`;
+            });
+
+            for(let i=1; i<=10; i++) {
+                btnsDiv.innerHTML += `<button class="btn-option" id="ak1-btn-${i}" onclick="selectAk1Btn(${i}, this)">${i}</button>`;
+            }
+        }
+
+        function selectAk1Btn(val, btnEl) {
+            document.querySelectorAll('#aktashif-1-btns .btn-option').forEach(b => b.style.borderColor = 'var(--primary)');
+            btnEl.style.borderColor = 'orange';
+            ak1_selectedBtn = val;
+        }
+
+        function checkAk1(index, correctVal) {
+            if (!ak1_selectedBtn) return;
+            const box = document.getElementById(`ak1-box-${index}`);
+            if (box.classList.contains('correct') || box.classList.contains('wrong')) return;
+
+            if (ak1_selectedBtn === correctVal) {
+                box.classList.add('correct');
+                box.children[1].innerText = ak1_selectedBtn;
+                recordAnswer(true);
+            } else {
+                box.classList.add('wrong');
+                box.children[1].innerText = ak1_selectedBtn;
+                recordAnswer(false);
+            }
+            
+            ak1_answered++;
+            ak1_selectedBtn = null;
+            document.querySelectorAll('#aktashif-1-btns .btn-option').forEach(b => b.style.borderColor = 'var(--primary)');
+            
+            if (ak1_answered === ak1_data.length) unlockNextExercise('ex-aktashif-1', 'ex-aktashif-2');
+        }
+
+        const ak2_data = [
+            { startBalls: 2, target: 7 },
+            { startBalls: 3, target: 8 },
+            { startBalls: 4, target: 9 }
+        ];
+        let ak2_answered = 0;
+        let ak2_currentBalls = [2, 3, 4];
+
+        function initAktashif2() {
+            const container = document.getElementById('aktashif-2-boxes');
+            ak2_data.forEach((item, index) => {
+                container.innerHTML += `
+                    <div class="box" id="ak2-box-${index}">
+                        <div class="fingers">${getFingersSVG(item.target)}</div>
+                        <div class="balls" id="ak2-balls-${index}">${getBallsHTML(item.startBalls)}</div>
+                        <button class="btn-option" style="margin-top:10px;" onclick="addBallAk2(${index})">أضف قريصة</button>
+                        <button class="btn-option" style="margin-top:10px; background:#ddd" onclick="submitAk2(${index}, ${item.target})">تحقق</button>
+                    </div>`;
+            });
+        }
+
+        function addBallAk2(index) {
+            ak2_currentBalls[index]++;
+            document.getElementById(`ak2-balls-${index}`).innerHTML = getBallsHTML(ak2_currentBalls[index]);
+        }
+
+        function submitAk2(index, target) {
+            const box = document.getElementById(`ak2-box-${index}`);
+            if (box.classList.contains('locked')) return;
+
+            if (ak2_currentBalls[index] === target) {
+                box.classList.add('correct', 'locked');
+                recordAnswer(true);
+            } else {
+                box.classList.add('wrong', 'locked');
+                recordAnswer(false);
+            }
+            ak2_answered++;
+            if (ak2_answered === ak2_data.length) unlockNextExercise('ex-aktashif-2', 'ex-andjiz-1');
+        }
+
+        const an1_data = [
+            { icon: '🐞', count: 8 },
+            { icon: '🐥', count: 9 },
+            { icon: '🐝', count: 7 },
+            { icon: '🦋', count: 6 }
+        ];
+        let an1_answered = 0;
+
+        function initAndjiz1() {
+            const container = document.getElementById('andjiz-1-boxes');
+            an1_data.forEach((item, index) => {
+                container.innerHTML += `
+                    <div class="box" id="an1-box-${index}">
+                        <div style="font-size:24px;">${item.icon.repeat(item.count)}</div>
+                        <input type="number" class="input-box" id="an1-input-${index}">
+                        <br><button class="btn-option" style="margin-top:10px;" onclick="checkAn1(${index}, ${item.count})">تأكيد</button>
+                    </div>`;
+            });
+        }
+
+        function checkAn1(index, correctVal) {
+            const box = document.getElementById(`an1-box-${index}`);
+            const input = document.getElementById(`an1-input-${index}`);
+            if (box.classList.contains('locked')) return;
+
+            if (parseInt(input.value) === correctVal) {
+                box.classList.add('correct', 'locked');
+                recordAnswer(true);
+            } else {
+                box.classList.add('wrong', 'locked');
+                recordAnswer(false);
+            }
+            input.disabled = true;
+            an1_answered++;
+            if (an1_answered === an1_data.length) unlockNextExercise('ex-andjiz-1', 'ex-andjiz-2');
+        }
+
+        const an2_seq = [1, null, null, 4, null, null, null, null, 9];
+        let an2_answered = 0;
+
+        function initAndjiz2() {
+            const container = document.getElementById('andjiz-2-sequence');
+            an2_seq.forEach((val, index) => {
+                if (val !== null) {
+                    container.innerHTML += `<div class="number-cell" style="background:#eee;">${val}</div>`;
+                } else {
+                    container.innerHTML += `<input type="number" class="number-cell" id="an2-seq-${index}" style="background:#fff; text-align:center;" data-correct="${index + 1}">`;
+                }
+            });
+            container.innerHTML += `<div style="width:100%; text-align:center; margin-top:10px;"><button class="btn-option" onclick="checkAn2()">تأكيد الكل</button></div>`;
+        }
+
+        function checkAn2() {
+            const container = document.getElementById('ex-andjiz-2');
+            if(container.classList.contains('locked')) return;
+            
+            for(let i=0; i<an2_seq.length; i++) {
+                if(an2_seq[i] === null) {
+                    const input = document.getElementById(`an2-seq-${i}`);
+                    if(parseInt(input.value) === i+1) {
+                        input.classList.add('correct');
+                        recordAnswer(true);
+                    } else {
+                        input.classList.add('wrong');
+                        recordAnswer(false);
+                    }
+                    input.disabled = true;
+                }
+            }
+            container.classList.add('locked');
+            unlockNextExercise('ex-andjiz-2', 'ex-talamt');
+        }
+
+        function completeTalamt() {
+            unlockNextExercise('ex-talamt', 'ex-atamaran-1');
+        }
+
+        const at1_data = [
+            { icon: '🐻', count: 5, options: [5, 4, 3] },
+            { icon: '🦊', count: 7, options: [9, 7, 6] },
+            { icon: '🐔', count: 8, options: [7, 5, 8] }
+        ];
+        let at1_answered = 0;
+
+        function initAtamaran1() {
+            const container = document.getElementById('atamaran-1-boxes');
+            at1_data.forEach((item, index) => {
+                let optsHtml = item.options.map(opt => `<button class="btn-option" onclick="checkAt1(${index}, ${opt}, ${item.count}, this)">${opt}</button>`).join('');
+                container.innerHTML += `
+                    <div class="box" id="at1-box-${index}">
+                        <div style="font-size:24px;">${item.icon.repeat(item.count)}</div>
+                        <div class="options" style="margin-top:10px;">${optsHtml}</div>
+                    </div>`;
+            });
+        }
+
+        function checkAt1(index, selected, correct, btn) {
+            const box = document.getElementById(`at1-box-${index}`);
+            if (box.classList.contains('locked')) return;
+
+            if (selected === correct) {
+                btn.classList.add('correct');
+                box.classList.add('correct', 'locked');
+                recordAnswer(true);
+            } else {
+                btn.classList.add('wrong');
+                box.classList.add('wrong', 'locked');
+                recordAnswer(false);
+            }
+            at1_answered++;
+            if (at1_answered === at1_data.length) unlockNextExercise('ex-atamaran-1', 'ex-atamaran-2');
+        }
+
+        const at2_data = [
+            { startBalls: 3, target: 8 },
+            { startBalls: 4, target: 9 },
+            { startBalls: 2, target: 6 },
+            { startBalls: 3, target: 7 }
+        ];
+        let at2_answered = 0;
+        let at2_currentBalls = [3, 4, 2, 3];
+
+        function initAtamaran2() {
+            const container = document.getElementById('atamaran-2-boxes');
+            at2_data.forEach((item, index) => {
+                container.innerHTML += `
+                    <div class="box" id="at2-box-${index}">
+                        <div class="fingers">${getFingersSVG(item.target)}</div>
+                        <div class="balls" id="at2-balls-${index}">${getBallsHTML(item.startBalls)}</div>
+                        <button class="btn-option" style="margin-top:10px;" onclick="addBallAt2(${index})">أضف قريصة</button>
+                        <button class="btn-option" style="margin-top:10px; background:#ddd" onclick="submitAt2(${index}, ${item.target})">تحقق</button>
+                    </div>`;
+            });
+        }
+
+        function addBallAt2(index) {
+            at2_currentBalls[index]++;
+            document.getElementById(`at2-balls-${index}`).innerHTML = getBallsHTML(at2_currentBalls[index]);
+        }
+
+        function submitAt2(index, target) {
+            const box = document.getElementById(`at2-box-${index}`);
+            if (box.classList.contains('locked')) return;
+
+            if (at2_currentBalls[index] === target) {
+                box.classList.add('correct', 'locked');
+                recordAnswer(true);
+            } else {
+                box.classList.add('wrong', 'locked');
+                recordAnswer(false);
+            }
+            at2_answered++;
+            if (at2_answered === at2_data.length) unlockNextExercise('ex-atamaran-2', 'ex-atamaran-3');
+        }
+
+        const at3_data = [9, 8, 7, 6];
+        const at3_opts = [8, 9, 6, 7];
+        let at3_answered = 0;
+        let at3_selectedBtn = null;
+
+        function initAtamaran3() {
+            const boxesDiv = document.getElementById('atamaran-3-boxes');
+            const btnsDiv = document.getElementById('atamaran-3-btns');
+            
+            at3_data.forEach((val, index) => {
+                boxesDiv.innerHTML += `
+                    <div class="box" id="at3-box-${index}" onclick="checkAt3(${index}, ${val})">
+                        <div class="balls">${getBallsHTML(val)}</div>
+                        <div style="margin-top:10px; border-top:1px solid #ccc; padding-top:5px;">؟</div>
+                    </div>`;
+            });
+
+            at3_opts.forEach(opt => {
+                btnsDiv.innerHTML += `<button class="btn-option" onclick="selectAt3Btn(${opt}, this)">${opt}</button>`;
+            });
+        }
+
+        function selectAt3Btn(val, btnEl) {
+            document.querySelectorAll('#atamaran-3-btns .btn-option').forEach(b => b.style.borderColor = 'var(--primary)');
+            btnEl.style.borderColor = 'orange';
+            at3_selectedBtn = val;
+        }
+
+        function checkAt3(index, correctVal) {
+            if (!at3_selectedBtn) return;
+            const box = document.getElementById(`at3-box-${index}`);
+            if (box.classList.contains('locked')) return;
+
+            if (at3_selectedBtn === correctVal) {
+                box.classList.add('correct', 'locked');
+                box.children[1].innerText = at3_selectedBtn;
+                recordAnswer(true);
+            } else {
+                box.classList.add('wrong', 'locked');
+                box.children[1].innerText = at3_selectedBtn;
+                recordAnswer(false);
+            }
+            
+            at3_answered++;
+            at3_selectedBtn = null;
+            document.querySelectorAll('#atamaran-3-btns .btn-option').forEach(b => b.style.borderColor = 'var(--primary)');
+            
+            if (at3_answered === at3_data.length) unlockNextExercise('ex-atamaran-3', 'ex-abhath');
+        }
+
+        function initAbhath() {
+            const container = document.getElementById('abhath-line');
+            for(let i=1; i<=10; i++) {
+                let extraHtml = '';
+                if(i === 1) {
+                    extraHtml = `
+                    <div dir="ltr" style="position: absolute; top: -55px; left: 50%; transform: translateX(-16px); display: flex; align-items: center; gap: 8px; flex-direction: row; white-space: nowrap;">
+                        <div style="font-size:32px; line-height: 1; width: 32px; text-align: center;">🐭</div>
+                        <div style="font-size:26px; font-weight:bold; color:#333;">&rarr;</div>
+                        <div class="dice-2d dice-5">
+                            <div class="dice-dot d1"></div><div class="dice-dot d2"></div><div class="dice-dot d3"></div><div class="dice-dot d4"></div><div class="dice-dot d5"></div>
+                        </div>
+                    </div>`;
+                }
+                container.innerHTML += `<div class="number-cell" style="position:relative;" id="abhath-cell-${i}" onclick="checkAbhath(${i})">${extraHtml}${i}</div>`;
+            }
+        }
+
+        function checkAbhath(selectedVal) {
+            const exDiv = document.getElementById('ex-abhath');
+            if (exDiv.classList.contains('locked')) return;
+
+            const targetVal = 1 + 5; 
+            const cell = document.getElementById(`abhath-cell-${selectedVal}`);
+
+            if (selectedVal === targetVal) {
+                cell.classList.add('correct');
+                recordAnswer(true);
+            } else {
+                cell.classList.add('wrong');
+                recordAnswer(false);
+            }
+            
+            exDiv.classList.add('locked');
+            unlockNextExercise('ex-abhath', 'evaluation');
+        }
+
+        window.onload = function() {
+            initAktashif1();
+            initAktashif2();
+            initAndjiz1();
+            initAndjiz2();
+            initAtamaran1();
+            initAtamaran2();
+            initAtamaran3();
+            initAbhath();
+        };
+    </script>
+</body>
+</html>
