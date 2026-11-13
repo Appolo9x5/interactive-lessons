@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مَدِينَتُنَا - اللغة العربية (السنة الأولى)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800&family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --primary: #2b7a78;
+            --primary-dark: #17252a;
+            --secondary: #3aafa9;
+            --accent: #f39c12;
+            --bg-color: #f4f9f9;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --success: #27ae60;
+            --success-bg: #e8f8f0;
+            --error: #e74c3c;
+            --error-bg: #fdedec;
+            --border-radius: 18px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            padding-bottom: 50px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            box-shadow: 0 6px 15px rgba(43, 122, 120, 0.2);
+            margin-bottom: 25px;
+        }
+
+        header .badge {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-shadow: 1px 2px 4px rgba(0,0,0,0.15);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 22px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 2px solid #e2e8f0;
+            transition: opacity 0.4s ease, filter 0.4s ease;
+        }
+
+        .section-card.locked {
+            opacity: 0.55;
+            pointer-events: none;
+            filter: grayscale(40%);
+            position: relative;
+        }
+
+        .section-card.locked::after {
+            content: "🔒 أَكْمِلِ النَّشَاطَ السَّابِقَ لِفَتْحِ هَذَا الْقِسْمِ";
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #334155;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 2px dashed #cbd5e1;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .page-tag {
+            background: #fef3c7;
+            color: #b45309;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border: 1px solid #fde68a;
+        }
+
+        .audio-box {
+            background: #eef7f6;
+            border: 2px solid var(--secondary);
+            border-radius: 15px;
+            padding: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .audio-box p {
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 450px;
+            outline: none;
+        }
+
+        .question-block {
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #0f172a;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+
+        .option-btn {
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 12px 15px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: right;
+            color: var(--text-color);
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--secondary);
+            background: #f0fdfa;
+        }
+
+        .option-btn.correct {
+            background-color: var(--success) !important;
+            color: white !important;
+            border-color: var(--success) !important;
+        }
+
+        .option-btn.wrong {
+            background-color: var(--error) !important;
+            color: white !important;
+            border-color: var(--error) !important;
+        }
+
+        .option-btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .main-scene-img {
+            width: 100%;
+            max-height: 450px;
+            object-fit: contain;
+            border-radius: 16px;
+            border: 3px solid #cbd5e1;
+            margin-bottom: 15px;
+            background: #fff;
+        }
+
+        .reading-box {
+            background: #fffbeb;
+            border: 2px solid #fcd34d;
+            border-radius: 14px;
+            padding: 18px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .reading-box h3 {
+            color: #b45309;
+            margin-bottom: 10px;
+            font-size: 1.25rem;
+        }
+
+        .reading-sentence {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin: 8px 0;
+        }
+
+        .highlight-red {
+            color: #dc2626;
+        }
+
+        .letter-forms {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+
+        .letter-card {
+            background: #f0fdfa;
+            border: 2px solid var(--secondary);
+            border-radius: 15px;
+            padding: 15px 25px;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+        }
+
+        .words-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .word-card {
+            background: #fff;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .word-card img {
+            width: 100%;
+            height: 130px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 8px;
+        }
+
+        .word-card .word-label {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .syllables-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .syllables-table td {
+            border: 2px solid #cbd5e1;
+            padding: 12px;
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: #f8fafc;
+            color: var(--primary-dark);
+        }
+
+        .quran-box {
+            background: linear-gradient(to left, #ecfdf5, #f0fdfa);
+            border: 2px solid #10b981;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .quran-verse {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #065f46;
+            margin: 10px 0;
+        }
+
+        .clickable-words-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .word-spot-btn {
+            background: #fff;
+            border: 2px solid #94a3b8;
+            border-radius: 14px;
+            padding: 15px;
+            font-size: 1.6rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .word-spot-btn:hover:not(:disabled) {
+            background: #f1f5f9;
+            transform: translateY(-2px);
+        }
+
+        .word-spot-btn.spotted {
+            background: var(--success-bg);
+            border-color: var(--success);
+            color: #0f172a;
+            cursor: default;
+        }
+
+        .circled-letter {
+            display: inline-block;
+            border: 3px solid var(--success);
+            background-color: var(--success);
+            color: white;
+            border-radius: 50%;
+            padding: 0 7px;
+            margin: 0 1px;
+        }
+
+        .fill-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-top: 15px;
+        }
+
+        .fill-item {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .fill-item img {
+            width: 100%;
+            height: 135px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background: #fff;
+        }
+
+        .incomplete-word {
+            font-size: 1.65rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .letter-choices {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .letter-choice-btn {
+            background: #fff;
+            border: 2px solid #64748b;
+            border-radius: 10px;
+            padding: 6px 14px;
+            font-size: 1.35rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .letter-choice-btn:hover:not(:disabled) {
+            background: #e0f2fe;
+            border-color: #0284c7;
+        }
+
+        .letter-choice-btn.correct {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .letter-choice-btn.wrong {
+            background: var(--error);
+            color: white;
+            border-color: var(--error);
+        }
+
+        .scramble-area {
+            background: #f8fafc;
+            border: 2px dashed #94a3b8;
+            border-radius: 14px;
+            padding: 16px;
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        .sentence-slots {
+            min-height: 55px;
+            background: #fff;
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        .scramble-words {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .scramble-btn {
+            background: #e0f2fe;
+            border: 2px solid #0284c7;
+            color: #0369a1;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .scramble-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .btn-next-read {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: block;
+            margin: 15px auto 0;
+            box-shadow: 0 4px 10px rgba(243, 156, 18, 0.3);
+        }
+
+        .btn-next-read:disabled {
+            background: var(--success);
+            cursor: default;
+            box-shadow: none;
+        }
+
+        .mini-score-bar {
+            margin-top: 16px;
+            padding: 10px 15px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .score-good { color: var(--success); }
+        .score-bad { color: var(--error); }
+
+        .final-report {
+            background: linear-gradient(135deg, #ffffff, #f0fdfa);
+            border: 3px solid var(--primary);
+            border-radius: 22px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 30px;
+            box-shadow: 0 8px 25px rgba(43, 122, 120, 0.15);
+        }
+
+        .final-report h2 {
+            color: var(--primary);
+            font-size: 1.7rem;
+            margin-bottom: 18px;
+        }
+
+        .report-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: #fff;
+            border: 2px solid #cbd5e1;
+            border-radius: 15px;
+            padding: 15px;
+        }
+
+        .stat-box .stat-num {
+            font-size: 2rem;
+            font-weight: 800;
+            display: block;
+        }
+
+        .btn-reset {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 14px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-reset:hover {
+            background: var(--primary-dark);
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري (أُضيفت)
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس (أُضيف) */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            max-width: 420px;
+            margin: 20px auto 10px auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+    <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+        <div class="lock-desc">
+            لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+        </div>
+        <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel" id="channel-link">
+            📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+        </a>
+        <button class="btn-check-sub" onclick="verifySubscription()">
+            ✅ تَأْكِيدُ الاِشْتِرَاكِ
+        </button>
+        <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+</div>
+
+<header>
+    <div class="badge">اللُّغَةُ الْعَرَبِيَّةُ – السَّنَةُ الْأُولَى – الدَّرْسُ التَّاسِعُ</div>
+    <h1>🏙️ مَدِينَتُنَا 🏙️</h1>
+</header>
+
+<div class="container">
+
+    <!-- القسم 1: فهم المنطوق -->
+    <section class="section-card" id="sec-1">
+        <div class="section-header">
+            <h2 class="section-title">🎧 أَوَّلًا: فَهْمُ الْمَنْطُوقِ</h2>
+            <span class="page-tag">تَمْرِينٌ سَمْعِيٌّ</span>
+        </div>
+
+        <div class="audio-box">
+            <p>اسْتَمِعْ جَيِّدًا إِلَى النَّصِّ الْمَنْطُوقِ ثُمَّ أَجِبْ عَنِ الْأَسْئِلَةِ:</p>
+            <audio controls>
+                <source src="mantouq_09.mp3" type="audio/mpeg">
+                مُتَصَفِّحُكَ لَا يَدْعَمُ تَشْغِيلَ الصَّوْتِ.
+            </audio>
+        </div>
+
+        <div class="question-block" data-sec="1" data-q="1">
+            <div class="question-text">1. كَيْفَ هِيَ شَوَارِعُ مَدِينَتِنَا وَبِنَايَاتُهَا؟</div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMCQ(this, true, 1)">شَوَارِعُهَا وَاسِعَةٌ وَبِنَايَاتُهَا عَالِيَةٌ</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 1)">شَوَارِعُهَا ضَيِّقَةٌ وَبِنَايَاتُهَا صَغِيرَةٌ</button>
+            </div>
+        </div>
+
+        <div class="question-block" data-sec="1" data-q="2">
+            <div class="question-text">2. مَا هِيَ الْأَمَاكِنُ الَّتِي تُنِيرُ فِيهَا الْأَضْوَاءُ؟</div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMCQ(this, false, 1)">تُنِيرُ الْأَضْوَاءُ الْغَابَاتِ وَالْحُقُولَ</button>
+                <button class="option-btn" onclick="checkMCQ(this, true, 1)">تُنِيرُ الْأَضْوَاءُ وَاجِهَاتِ الْمَحَلَّاتِ التِّجَارِيَّةِ</button>
+            </div>
+        </div>
+
+        <div class="question-block" data-sec="1" data-q="3">
+            <div class="question-text">3. هَلْ تَقِلُّ حَرَكَةُ النَّاسِ فِي اللَّيْلِ؟</div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMCQ(this, true, 1)">لَا، حَرَكَةُ النَّاسِ لَا تَكَادُ تَنْقَطِعُ لَيْلًا وَنَهَارًا</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 1)">نَعَمْ، تَتَوَقَّفُ حَرَكَةُ النَّاسِ تَمَامًا فِي اللَّيْلِ</button>
+            </div>
+        </div>
+
+        <div class="question-block" data-sec="1" data-q="4">
+            <div class="question-text">4. مَا سَبَبُ الضَّجِيجِ؟ وَمَا أَهَمُّ وَسَائِلِ النَّقْلِ الَّتِي تَكْثُرُ فِي مَدِينَتِكَ؟</div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMCQ(this, true, 1)">كَثْرَةُ وَسَائِلِ النَّقْلِ الْمُخْتَلِفَةِ (السَّيَّارَاتُ، الْحَافِلَاتُ، الشَّاحِنَاتُ)</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 1)">أَصْوَاتُ الْعَصَافِيرِ وَالْحَيَوَانَاتِ فِي الْمَزْرَعَةِ</button>
+            </div>
+        </div>
+
+        <div class="question-block" data-sec="1" data-q="5">
+            <div class="question-text">5. أَيْنَ يَقْضِي النَّاسُ أَوْقَاتَ فَرَاغِهِمْ؟ وَلِمَاذَا؟</div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMCQ(this, false, 1)">فِي الْمُسْتَشْفَى لِلْعَمَلِ وَالدِّرَاسَةِ</button>
+                <button class="option-btn" onclick="checkMCQ(this, true, 1)">فِي حَدِيقَةِ التَّسْلِيَةِ رَغْبَةً فِي الرَّاحَةِ وَالِاسْتِجْمَامِ</button>
+            </div>
+        </div>
+
+        <div class="mini-score-bar" id="score-sec-1">
+            <span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span>
+        </div>
+    </section>
+
+    <!-- القسم 2: كتاب التلميذ - صفحة 47 -->
+    <section class="section-card locked" id="sec-2">
+        <div class="section-header">
+            <h2 class="section-title">📖 أُلَاحِظُ وَأُعَبِّرُ / أَبْنِي وَأَقْرَأُ</h2>
+            <span class="page-tag">كِتَابُ التِّلْمِيذِ – صَفْحَة 47</span>
+        </div>
+
+        <img src="01.jpeg" alt="مَدِينَتُنَا: مَدْرَسَة، مُسْتَشْفَى، جَامِعَة، بَنْك، حَدِيقَة عَامَّة" class="main-scene-img">
+
+        <div class="reading-box">
+            <h3>أَبْنِي وَأَقْرَأُ</h3>
+            <p class="reading-sentence">مَدِينَتُنَا <span class="highlight-red">جَـ</span>مِيلَةٌ، شَوَارِعُهَا وَاسِعَةٌ.</p>
+            <p class="reading-sentence">فِيهَا مَـ<span class="highlight-red">حَـ</span>لَّاتٌ تِجَارِيَّةٌ كَثِيرَةٌ وَحَدَائِقُ لِلتَّسْلِيَةِ.</p>
+        </div>
+
+        <div class="reading-box" style="background:#f0fdf4; border-color:#86efac;">
+            <h3 style="color:#15803d;">أَسْتَعْمِلُ: كَثِيرٌ، قَلِيلٌ.</h3>
+            <p class="reading-sentence">فِي الْمَدِينَةِ مَحَلَّاتٌ <span class="highlight-red">كَثِيرَةٌ</span>.</p>
+            <p class="reading-sentence">فِي الْقَرْيَةِ مَدَارِسُ <span class="highlight-red">قَلِيلَةٌ</span>.</p>
+        </div>
+
+        <div class="question-block" data-sec="2" data-q="1">
+            <div class="question-text">أُكْمِلُ بِالْكَلِمَةِ الْمُنَاسِبَةِ: فِي الْمَدِينَةِ مَحَلَّاتٌ ............</div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMCQ(this, true, 2)">كَثِيرَةٌ</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 2)">قَلِيلَةٌ</button>
+            </div>
+        </div>
+
+        <div class="question-block" data-sec="2" data-q="2">
+            <div class="question-text">أُكْمِلُ بِالْكَلِمَةِ الْمُنَاسِبَةِ: فِي الْقَرْيَةِ مَدَارِسُ ............</div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMCQ(this, false, 2)">كَثِيرَةٌ</button>
+                <button class="option-btn" onclick="checkMCQ(this, true, 2)">قَلِيلَةٌ</button>
+            </div>
+        </div>
+
+        <div class="mini-score-bar" id="score-sec-2">
+            <span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span>
+        </div>
+    </section>
+
+    <!-- القسم 3: كتاب التلميذ - صفحة 48 (حرف الجيم) -->
+    <section class="section-card locked" id="sec-3">
+        <div class="section-header">
+            <h2 class="section-title">🔤 أَكْتَشِفُ حَرْفَ الْجِيمِ (ج)</h2>
+            <span class="page-tag">كِتَابُ التِّلْمِيذِ – صَفْحَة 48</span>
+        </div>
+
+        <div class="reading-box">
+            <h3>أَكْتَشِفُ</h3>
+            <p class="reading-sentence">مَدِينَتُنَا <span class="highlight-red">جَـ</span>مِيلَةٌ ⬅️ <span class="highlight-red">جَـ</span>مِيلَةٌ ⬅️ <span class="highlight-red">جَـ</span></p>
+        </div>
+
+        <h3 style="text-align:center; color:var(--primary); margin-top:15px;">أَتَعَرَّفُ عَلَى رَسْمِ الْحَرْفِ</h3>
+        <div class="letter-forms">
+            <div class="letter-card">جـ</div>
+            <div class="letter-card">ـجـ</div>
+            <div class="letter-card">ـج</div>
+            <div class="letter-card">ج</div>
+        </div>
+
+        <h3 style="text-align:center; color:var(--primary); margin-top:20px;">أَقْرَأُ الْكَلِمَاتِ الَّتِي فِيهَا حَرْفُ الْجِيمِ</h3>
+        <div class="words-showcase">
+            <div class="word-card">
+                <img src="05.jpeg" alt="مَسْجِدٌ">
+                <div class="word-label">مَسْـ<span class="highlight-red">جِـ</span>دٌ</div>
+            </div>
+            <div class="word-card">
+                <img src="04.jpeg" alt="عَجُوزٌ">
+                <div class="word-label">عَـ<span class="highlight-red">جُـ</span>وزٌ</div>
+            </div>
+            <div class="word-card">
+                <img src="03.jpeg" alt="دَرَّاجَةٌ">
+                <div class="word-label">دَرَّا<span class="highlight-red">جَـ</span>ةٌ</div>
+            </div>
+            <div class="word-card">
+                <img src="02.jpeg" alt="جَامِعَةٌ">
+                <div class="word-label"><span class="highlight-red">جَـ</span>امِعَةٌ</div>
+            </div>
+        </div>
+
+        <h3 style="text-align:center; color:var(--primary); margin-top:20px;">أَقْرَأُ وَأُثَبِّتُ</h3>
+        <table class="syllables-table">
+            <tr>
+                <td>جَـ</td><td>جُـ</td><td>جِـ</td><td>جْ</td>
+            </tr>
+            <tr>
+                <td>جَا</td><td>جُو</td><td>جِي</td><td>جً / جٌ / جٍ</td>
+            </tr>
+        </table>
+
+        <button class="btn-next-read" id="btn-read-3" onclick="completeReadingSection(3, 4)">✅ أَتْمَمْتُ قِرَاءَةَ حَرْفِ الْجِيمِ (ج)</button>
+    </section>
+
+    <!-- القسم 4: كتاب التلميذ - صفحة 49 (حرف الحاء) -->
+    <section class="section-card locked" id="sec-4">
+        <div class="section-header">
+            <h2 class="section-title">🔤 أَكْتَشِفُ حَرْفَ الْحَاءِ (ح)</h2>
+            <span class="page-tag">كِتَابُ التِّلْمِيذِ – صَفْحَة 49</span>
+        </div>
+
+        <div class="reading-box">
+            <h3>أَكْتَشِفُ</h3>
+            <p class="reading-sentence">مَـ<span class="highlight-red">حَـ</span>لَّاتٌ تِجَارِيَّةٌ ⬅️ مَـ<span class="highlight-red">حَـ</span>لَّاتٌ ⬅️ <span class="highlight-red">حَـ</span></p>
+        </div>
+
+        <h3 style="text-align:center; color:var(--primary); margin-top:15px;">أَتَعَرَّفُ عَلَى رَسْمِ الْحَرْفِ</h3>
+        <div class="letter-forms">
+            <div class="letter-card">حـ</div>
+            <div class="letter-card">ـحـ</div>
+            <div class="letter-card">ـح</div>
+            <div class="letter-card">ح</div>
+        </div>
+
+        <h3 style="text-align:center; color:var(--primary); margin-top:20px;">أَقْرَأُ الْكَلِمَاتِ الَّتِي فِيهَا حَرْفُ الْحَاءِ</h3>
+        <div class="words-showcase">
+            <div class="word-card">
+                <img src="09.jpeg" alt="مَسْبَحٌ">
+                <div class="word-label">مَسْبَـ<span class="highlight-red">حٌ</span></div>
+            </div>
+            <div class="word-card">
+                <img src="08.jpeg" alt="شَاحِنَةٌ">
+                <div class="word-label">شَا<span class="highlight-red">حِـ</span>نَةٌ</div>
+            </div>
+            <div class="word-card">
+                <img src="07.jpeg" alt="حَافِلَةٌ">
+                <div class="word-label"><span class="highlight-red">حَـ</span>افِلَةٌ</div>
+            </div>
+            <div class="word-card">
+                <img src="06.jpeg" alt="حَدِيقَةٌ">
+                <div class="word-label"><span class="highlight-red">حَـ</span>دِيقَةٌ</div>
+            </div>
+        </div>
+
+        <h3 style="text-align:center; color:var(--primary); margin-top:20px;">أَقْرَأُ وَأُثَبِّتُ</h3>
+        <table class="syllables-table">
+            <tr>
+                <td>حَـ</td><td>حُـ</td><td>حِـ</td><td>حْ</td>
+            </tr>
+            <tr>
+                <td>حَا</td><td>حُو</td><td>حِي</td><td>حً / حٌ / حٍ</td>
+            </tr>
+        </table>
+
+        <button class="btn-next-read" id="btn-read-4" onclick="completeReadingSection(4, 5)">✅ أَتْمَمْتُ قِرَاءَةَ حَرْفِ الْحَاءِ (ح)</button>
+    </section>
+
+    <!-- القسم 5: كتاب التلميذ - صفحة 50 (التربية الإسلامية) -->
+    <section class="section-card locked" id="sec-5">
+        <div class="section-header">
+            <h2 class="section-title">🕌 أَتَعَاوَنُ مَعَ غَيْرِي</h2>
+            <span class="page-tag">كِتَابُ التِّلْمِيذِ – صَفْحَة 50</span>
+        </div>
+
+        <div class="reading-box">
+            <h3>أَفْهَمُ</h3>
+            <p class="reading-sentence">التَّعَاوُنُ يَنْشُرُ الْمَحَبَّةَ بَيْنَ النَّاسِ.</p>
+            <p class="reading-sentence">فِي التَّعَاوُنِ أَجْرٌ عَظِيمٌ.</p>
+        </div>
+
+        <div class="quran-box">
+            <h3 style="color:#047857;">أَحْفَظُ</h3>
+            <p style="font-weight:700;">قَالَ اللَّهُ تَعَالَى:</p>
+            <p class="quran-verse">﴿ وَتَعَاوَنُوا عَلَى الْبِرِّ وَالتَّقْوَىٰ ۖ وَلَا تَعَاوَنُوا عَلَى الْإِثْمِ وَالْعُدْوَانِ ﴾</p>
+            <p style="font-weight:700; color:#065f46;">(سُورَةُ الْمَائِدَةِ، الْآيَةُ: 02)</p>
+        </div>
+
+        <div class="question-block" style="margin-top:15px;" data-sec="5" data-q="1">
+            <div class="question-text">أُكْمِلُ الْآيَةَ الْكَرِيمَةَ: ﴿ وَتَعَاوَنُوا عَلَى الْبِرِّ وَ............ ﴾</div>
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMCQ(this, true, 5)">التَّقْوَىٰ</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 5)">الْعُدْوَانِ</button>
+            </div>
+        </div>
+
+        <div class="mini-score-bar" id="score-sec-5">
+            <span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span>
+        </div>
+    </section>
+
+    <!-- القسم 6: كراس الأنشطة - صفحة 22 -->
+    <section class="section-card locked" id="sec-6">
+        <div class="section-header">
+            <h2 class="section-title">✏️ أُثَبِّتُ (1) وَ أُثَبِّتُ (2)</h2>
+            <span class="page-tag">كُرَّاسُ الْأَنْشِطَةِ – صَفْحَة 22</span>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text">■ أُثَبِّتُ (1): أُحَدِّدُ حَرْفَ الْجِيمِ (ج) بِالضَّغْطِ عَلَى كُلِّ كَلِمَةٍ:</div>
+            <div class="clickable-words-grid">
+                <button class="word-spot-btn" onclick="spotJeem(this, '<span class=\'circled-letter\'>جَـ</span>وْلَةٌ')">جَوْلَةٌ</button>
+                <button class="word-spot-btn" onclick="spotJeem(this, 'مَتْـ<span class=\'circled-letter\'>جَـ</span>رٌ')">مَتْجَرٌ</button>
+                <button class="word-spot-btn" onclick="spotJeem(this, '<span class=\'circled-letter\'>جِـ</span>سْرٌ')">جِسْرٌ</button>
+                <button class="word-spot-btn" onclick="spotJeem(this, 'دَرَّا<span class=\'circled-letter\'>جَـ</span>ةٌ')">دَرَّاجَةٌ</button>
+                <button class="word-spot-btn" onclick="spotJeem(this, 'مُـ<span class=\'circled-letter\'>جَـ</span>اهِدٌ')">مُجَاهِدٌ</button>
+                <button class="word-spot-btn" onclick="spotJeem(this, 'عَـ<span class=\'circled-letter\'>جِـ</span>يبٌ')">عَجِيبٌ</button>
+                <button class="word-spot-btn" onclick="spotJeem(this, 'أُرْ<span class=\'circled-letter\'>جُـ</span>وحَةٌ')">أُرْجُوحَةٌ</button>
+                <button class="word-spot-btn" onclick="spotJeem(this, 'بُرْ<span class=\'circled-letter\'>جٌ</span>')">بُرْجٌ</button>
+            </div>
+        </div>
+
+        <div class="question-block" style="margin-top:20px;">
+            <div class="question-text">■ أُثَبِّتُ (2): أُكْمِلُ الْكَلِمَةَ النَّاقِصَةَ بِحَرْفِ الْحَاءِ (ح) الْمُنَاسِبِ:</div>
+            <div class="fill-grid">
+                <div class="fill-item" id="fill-6-1">
+                    <img src="12.jpeg" alt="حِصَانٌ">
+                    <div class="incomplete-word" id="word-6-1">...صَانٌ</div>
+                    <div class="letter-choices">
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, true, 'word-6-1', 'حِـصَانٌ', 6)">حـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-1', 'حِـصَانٌ', 6)">ـحـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-1', 'حِـصَانٌ', 6)">ـح</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-1', 'حِـصَانٌ', 6)">ح</button>
+                    </div>
+                </div>
+
+                <div class="fill-item" id="fill-6-2">
+                    <img src="11.jpeg" alt="مِمْحَاةٌ">
+                    <div class="incomplete-word" id="word-6-2">مِمْـ...ـاةٌ</div>
+                    <div class="letter-choices">
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-2', 'مِمْـحَـاةٌ', 6)">حـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, true, 'word-6-2', 'مِمْـحَـاةٌ', 6)">ـحـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-2', 'مِمْـحَـاةٌ', 6)">ـح</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-2', 'مِمْـحَـاةٌ', 6)">ح</button>
+                    </div>
+                </div>
+
+                <div class="fill-item" id="fill-6-3">
+                    <img src="10.jpeg" alt="حَلَزُونٌ">
+                    <div class="incomplete-word" id="word-6-3">...لَزُونٌ</div>
+                    <div class="letter-choices">
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, true, 'word-6-3', 'حَـلَزُونٌ', 6)">حـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-3', 'حَـلَزُونٌ', 6)">ـحـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-3', 'حَـلَزُونٌ', 6)">ـح</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-3', 'حَـلَزُونٌ', 6)">ح</button>
+                    </div>
+                </div>
+
+                <div class="fill-item" id="fill-6-4">
+                    <img src="15.jpeg" alt="مِفْتَاحٌ">
+                    <div class="incomplete-word" id="word-6-4">مِفْتَا...</div>
+                    <div class="letter-choices">
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-4', 'مِفْتَاحٌ', 6)">حـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-4', 'مِفْتَاحٌ', 6)">ـحـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-4', 'مِفْتَاحٌ', 6)">ـح</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, true, 'word-6-4', 'مِفْتَاحٌ', 6)">ح</button>
+                    </div>
+                </div>
+
+                <div class="fill-item" id="fill-6-5">
+                    <img src="14.jpeg" alt="حُوتٌ">
+                    <div class="incomplete-word" id="word-6-5">...وتٌ</div>
+                    <div class="letter-choices">
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, true, 'word-6-5', 'حُـوتٌ', 6)">حـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-5', 'حُـوتٌ', 6)">ـحـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-5', 'حُـوتٌ', 6)">ـح</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-5', 'حُـوتٌ', 6)">ح</button>
+                    </div>
+                </div>
+
+                <div class="fill-item" id="fill-6-6">
+                    <img src="13.jpeg" alt="مِحْفَظَةٌ">
+                    <div class="incomplete-word" id="word-6-6">مِـ...فَظَةٌ</div>
+                    <div class="letter-choices">
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-6', 'مِـحْـفَظَةٌ', 6)">حـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, true, 'word-6-6', 'مِـحْـفَظَةٌ', 6)">ـحـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-6', 'مِـحْـفَظَةٌ', 6)">ـح</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-6-6', 'مِـحْـفَظَةٌ', 6)">ح</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mini-score-bar" id="score-sec-6">
+            <span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span>
+        </div>
+    </section>
+
+    <!-- القسم 7: كراس الأنشطة - صفحة 23 -->
+    <section class="section-card locked" id="sec-7">
+        <div class="section-header">
+            <h2 class="section-title">✍️ أُنْتِجُ</h2>
+            <span class="page-tag">كُرَّاسُ الْأَنْشِطَةِ – صَفْحَة 23</span>
+        </div>
+
+        <div class="question-block">
+            <div class="question-text">■ أَسْتَعِينُ بِالصُّوَرِ وَأُضِيفُ الْحَرْفَ النَّاقِصَ جِيمًا (ج) أَوْ حَاءً (ح):</div>
+            <div class="fill-grid">
+                <div class="fill-item">
+                    <img src="16.jpeg" alt="تِمْسَاحٌ">
+                    <div class="incomplete-word" id="word-7-1">هَذَا تِمْسَا...</div>
+                    <div class="letter-choices">
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-1', 'هَذَا تِمْسَاحٌ', 7)">ج</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, true, 'word-7-1', 'هَذَا تِمْسَاحٌ', 7)">ح</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-1', 'هَذَا تِمْسَاحٌ', 7)">ـج</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-1', 'هَذَا تِمْسَاحٌ', 7)">ـح</button>
+                    </div>
+                </div>
+
+                <div class="fill-item">
+                    <img src="17.jpeg" alt="إِجَّاصَةٌ">
+                    <div class="incomplete-word" id="word-7-2">هَذِهِ إِ...ـاصَةٌ</div>
+                    <div class="letter-choices">
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, true, 'word-7-2', 'هَذِهِ إِجَّاصَةٌ', 7)">جـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-2', 'هَذِهِ إِجَّاصَةٌ', 7)">ـجـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-2', 'هَذِهِ إِجَّاصَةٌ', 7)">حـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-2', 'هَذِهِ إِجَّاصَةٌ', 7)">ـحـ</button>
+                    </div>
+                </div>
+
+                <div class="fill-item">
+                    <img src="18.jpeg" alt="حَمَامَةٌ">
+                    <div class="incomplete-word" id="word-7-3">هَذِهِ ...ـمَامَةٌ</div>
+                    <div class="letter-choices">
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-3', 'هَذِهِ حَمَامَةٌ', 7)">جـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, true, 'word-7-3', 'هَذِهِ حَمَامَةٌ', 7)">حـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-3', 'هَذِهِ حَمَامَةٌ', 7)">ـجـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-3', 'هَذِهِ حَمَامَةٌ', 7)">ـحـ</button>
+                    </div>
+                </div>
+
+                <div class="fill-item">
+                    <img src="03.jpeg" alt="دَرَّاجَةٌ">
+                    <div class="incomplete-word" id="word-7-4">هَذِهِ دَرَّا...ـةٌ</div>
+                    <div class="letter-choices">
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, true, 'word-7-4', 'هَذِهِ دَرَّاجَةٌ', 7)">جـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-4', 'هَذِهِ دَرَّاجَةٌ', 7)">ـجـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-4', 'هَذِهِ دَرَّاجَةٌ', 7)">حـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-4', 'هَذِهِ دَرَّاجَةٌ', 7)">ـحـ</button>
+                    </div>
+                </div>
+
+                <div class="fill-item">
+                    <img src="09.jpeg" alt="مَسْبَحٌ">
+                    <div class="incomplete-word" id="word-7-5">هَذَا مَسْبَـ...</div>
+                    <div class="letter-choices">
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-5', 'هَذَا مَسْبَحٌ', 7)">ـج</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, true, 'word-7-5', 'هَذَا مَسْبَحٌ', 7)">ـح</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-5', 'هَذَا مَسْبَحٌ', 7)">ج</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-5', 'هَذَا مَسْبَحٌ', 7)">ح</button>
+                    </div>
+                </div>
+
+                <div class="fill-item">
+                    <img src="04.jpeg" alt="عَجُوزٌ">
+                    <div class="incomplete-word" id="word-7-6">هَذِهِ عَـ...ـوزٌ</div>
+                    <div class="letter-choices">
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-6', 'هَذِهِ عَجُوزٌ', 7)">جـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, true, 'word-7-6', 'هَذِهِ عَجُوزٌ', 7)">ـجـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-6', 'هَذِهِ عَجُوزٌ', 7)">حـ</button>
+                        <button class="letter-choice-btn" onclick="checkLetterFill(this, false, 'word-7-6', 'هَذِهِ عَجُوزٌ', 7)">ـحـ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="question-block" style="margin-top:20px;">
+            <div class="question-text">■ مَاذَا يُوجَدُ فِي الْمَدِينَةِ؟ (لَاحِظِ الصُّورَةَ وَاخْتَرِ الْإِجَابَةَ الصَّحِيحَةَ)</div>
+            <img src="01.jpeg" alt="مَاذَا يُوجَدُ فِي الْمَدِينَةِ" class="main-scene-img" style="max-height:320px;">
+            <div class="options-grid">
+                <button class="option-btn" onclick="checkMCQ(this, true, 7)">يُوجَدُ فِي الْمَدِينَةِ: مَدْرَسَةٌ، مُسْتَشْفَى، جَامِعَةٌ، بَنْكٌ، مَسْجِدٌ، وَحَدِيقَةٌ عَامَّةٌ</button>
+                <button class="option-btn" onclick="checkMCQ(this, false, 7)">يُوجَدُ فِي الْمَدِينَةِ حُقُولٌ وَأَبْقَارٌ وَمَزَارِعُ فَقَطْ</button>
+            </div>
+        </div>
+
+        <div class="question-block" style="margin-top:20px;">
+            <div class="question-text">■ أُرَتِّبُ الْكَلِمَاتِ وَأُكَوِّنُ جُمْلَةً: (شَوَارِعُ - وَاسِعَةٌ - الْمَدِينَةِ)</div>
+            <div class="scramble-area">
+                <div class="sentence-slots" id="sentence-slots">اضْغَطْ عَلَى الْكَلِمَاتِ بِالتَّرْتِيبِ الصَّحِيحِ...</div>
+                <div class="scramble-words" id="scramble-words">
+                    <button class="scramble-btn" onclick="pickWord(this, 'شَوَارِعُ')">شَوَارِعُ</button>
+                    <button class="scramble-btn" onclick="pickWord(this, 'وَاسِعَةٌ')">وَاسِعَةٌ</button>
+                    <button class="scramble-btn" onclick="pickWord(this, 'الْمَدِينَةِ')">الْمَدِينَةِ</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mini-score-bar" id="score-sec-7">
+            <span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span>
+        </div>
+    </section>
+
+    <!-- التقرير النهائي -->
+    <section class="final-report" id="final-report">
+        <h2>📊 التَّقْرِيرُ النِّهَائِيُّ لِلْوَحْدَةِ</h2>
+        <div class="report-stats">
+            <div class="stat-box">
+                <span class="stat-num score-good" id="total-correct">0</span>
+                <span>إِجَابَاتٌ صَحِيحَةٌ</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-num score-bad" id="total-wrong">0</span>
+                <span>إِجَابَاتٌ خَاطِئَةٌ</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-num" style="color:var(--primary);" id="total-percent">0%</span>
+                <span>نِسْبَةُ الْإِنْجَازِ</span>
+            </div>
+        </div>
+        <button class="btn-reset" onclick="resetAll()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنَ الْبِدَايَةِ</button>
+    </section>
+
+    <!-- ========================================
+         زر العودة إلى الفهرس (أُضيف)
+         ======================================== -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</div>
+
+<!-- ========================================
+     سكريبت الحماية (أُضيف)
+     ======================================== -->
+<script>
+    // إعدادات القناة - السنة الأولى
+    const CHANNEL_ID = "-1004456852024";
+
+    // تهيئة Telegram WebApp
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+        tg.ready();
+        tg.expand();
+    }
+
+    async function verifySubscription() {
+        const statusMsg = document.getElementById('sub-status-msg');
+        statusMsg.style.color = "#0288d1";
+        statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+        let userId = null;
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            userId = tg.initDataUnsafe.user.id;
+        }
+
+        if (!userId) {
+            statusMsg.style.color = "#e65100";
+            statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+            return;
+        }
+
+        try {
+            const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.isSubscribed) {
+                statusMsg.style.color = "#2e7d32";
+                statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                setTimeout(() => {
+                    document.getElementById('sub-lock-screen').style.display = 'none';
+                }, 600);
+            } else {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+            }
+        } catch (error) {
+            statusMsg.style.color = "#c62828";
+            statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+        }
+    }
+
+    window.addEventListener('load', () => {
+        verifySubscription();
+    });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي (كما هو دون تغيير)
+     ======================================== -->
+<script>
+    const sectionRequirements = {
+        1: 5,
+        2: 2,
+        3: 1,
+        4: 1,
+        5: 1,
+        6: 14,
+        7: 8
+    };
+
+    const totalQuestions = 30;
+
+    let sectionProgress = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    let sectionScores = {
+        1: { c: 0, w: 0 },
+        2: { c: 0, w: 0 },
+        5: { c: 0, w: 0 },
+        6: { c: 0, w: 0 },
+        7: { c: 0, w: 0 }
+    };
+
+    let globalCorrect = 0;
+    let globalWrong = 0;
+
+    function unlockNextSection(currentSec) {
+        if (sectionProgress[currentSec] >= sectionRequirements[currentSec]) {
+            const nextSec = document.getElementById(`sec-${currentSec + 1}`);
+            if (nextSec && nextSec.classList.contains('locked')) {
+                nextSec.classList.remove('locked');
+            }
+        }
+    }
+
+    function updateScores(secId, isCorrect) {
+        if (isCorrect) {
+            sectionScores[secId].c++;
+            globalCorrect++;
+        } else {
+            sectionScores[secId].w++;
+            globalWrong++;
+        }
+
+        const bar = document.getElementById(`score-sec-${secId}`);
+        if (bar) {
+            bar.innerHTML = `<span class="score-good">صَحِيحَة: ${sectionScores[secId].c}</span> | <span class="score-bad">خَاطِئَة: ${sectionScores[secId].w}</span>`;
+        }
+
+        document.getElementById('total-correct').textContent = globalCorrect;
+        document.getElementById('total-wrong').textContent = globalWrong;
+        const percent = Math.round((globalCorrect / totalQuestions) * 100);
+        document.getElementById('total-percent').textContent = `${percent}%`;
+    }
+
+    function checkMCQ(btn, isCorrect, secId) {
+        const parent = btn.parentElement;
+        const buttons = parent.querySelectorAll('.option-btn');
+
+        buttons.forEach(b => b.disabled = true);
+
+        if (isCorrect) {
+            btn.classList.add('correct');
+        } else {
+            btn.classList.add('wrong');
+            buttons.forEach(b => {
+                if (b.getAttribute('onclick').includes('true')) {
+                    b.classList.add('correct');
+                }
+            });
+        }
+
+        updateScores(secId, isCorrect);
+        sectionProgress[secId]++;
+        unlockNextSection(secId);
+    }
+
+    function completeReadingSection(currentSec, nextSec) {
+        const btn = document.getElementById(`btn-read-${currentSec}`);
+        btn.disabled = true;
+        btn.textContent = "✔️ أَحْسَنْتَ! تَمَّتِ الْقِرَاءَةُ";
+        sectionProgress[currentSec] = 1;
+        unlockNextSection(currentSec);
+    }
+
+    function spotJeem(btn, highlightedHTML) {
+        if (btn.disabled) return;
+        btn.disabled = true;
+        btn.classList.add('spotted');
+        btn.innerHTML = highlightedHTML;
+
+        updateScores(6, true);
+        sectionProgress[6]++;
+        unlockNextSection(6);
+    }
+
+    function checkLetterFill(btn, isCorrect, wordElId, fullCorrectWord, secId) {
+        const parent = btn.parentElement;
+        const buttons = parent.querySelectorAll('.letter-choice-btn');
+        const wordDisplay = document.getElementById(wordElId);
+
+        buttons.forEach(b => b.disabled = true);
+
+        if (isCorrect) {
+            btn.classList.add('correct');
+            wordDisplay.style.color = 'var(--success)';
+        } else {
+            btn.classList.add('wrong');
+            wordDisplay.style.color = 'var(--error)';
+            buttons.forEach(b => {
+                if (b.getAttribute('onclick').includes('true')) {
+                    b.classList.add('correct');
+                }
+            });
+        }
+
+        wordDisplay.textContent = fullCorrectWord;
+        updateScores(secId, isCorrect);
+        sectionProgress[secId]++;
+        unlockNextSection(secId);
+    }
+
+    let pickedWords = [];
+    const targetSentence = ["شَوَارِعُ", "الْمَدِينَةِ", "وَاسِعَةٌ"];
+
+    function pickWord(btn, word) {
+        btn.disabled = true;
+        pickedWords.push(word);
+
+        const slots = document.getElementById('sentence-slots');
+        if (pickedWords.length === 1) {
+            slots.innerHTML = '';
+        }
+
+        const span = document.createElement('span');
+        span.textContent = word;
+        span.style.padding = '5px 12px';
+        span.style.borderRadius = '8px';
+        span.style.background = '#e2e8f0';
+        slots.appendChild(span);
+
+        if (pickedWords.length === 3) {
+            const isCorrect = pickedWords.every((val, idx) => val === targetSentence[idx]);
+            if (isCorrect) {
+                slots.style.borderColor = 'var(--success)';
+                slots.style.background = 'var(--success-bg)';
+                slots.style.color = 'var(--success)';
+            } else {
+                slots.style.borderColor = 'var(--error)';
+                slots.style.background = 'var(--error-bg)';
+                slots.innerHTML = `<span style="color:var(--error); text-decoration:line-through; margin-left:10px;">${pickedWords.join(' ')}</span> ⬅️ <span style="color:var(--success);">شَوَارِعُ الْمَدِينَةِ وَاسِعَةٌ</span>`;
+            }
+
+            updateScores(7, isCorrect);
+            sectionProgress[7]++;
+            unlockNextSection(7);
+        }
+    }
+
+    function resetAll() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(() => location.reload(), 300);
+    }
+</script>
+
+</body>
+</html>
