@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الدَّرْسُ 13 : مُقَارَنَةُ سِعَاتٍ - السَّنَةُ الثَّالِثَةُ ابْتِدَائِيٌّ</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&display=swap');
+
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --secondary: #f59e0b;
+      --accent: #7c3aed;
+      --bg: #f0f9ff;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #cbd5e1;
+      --correct-bg: #dcfce7;
+      --correct-border: #16a34a;
+      --correct-text: #14532d;
+      --wrong-bg: #fee2e2;
+      --wrong-border: #dc2626;
+      --wrong-text: #7f1d1d;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Cairo', Tahoma, Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 16px;
+      background: linear-gradient(180deg, #e0f2fe 0%, #f8fafc 100%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .lesson-header {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #fff;
+      border-radius: 22px;
+      padding: 20px 24px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.25);
+      margin-bottom: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lesson-badge {
+      display: inline-block;
+      background: #facc15;
+      color: #1e293b;
+      font-weight: 900;
+      padding: 4px 16px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .lesson-header h1 {
+      margin: 4px 0;
+      font-size: 1.9rem;
+      font-weight: 900;
+    }
+
+    .lesson-sub {
+      font-size: 1rem;
+      opacity: 0.95;
+    }
+
+    .ltr {
+      direction: ltr;
+      display: inline-block;
+      unicode-bidi: isolate;
+      font-weight: 800;
+    }
+
+    .station {
+      background: var(--card-bg);
+      border-radius: 22px;
+      padding: 22px;
+      margin-bottom: 24px;
+      border: 2px solid #e2e8f0;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .station.locked-station {
+      opacity: 0.55;
+      pointer-events: none;
+      filter: grayscale(0.4);
+      position: relative;
+    }
+
+    .station-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      border-bottom: 3px dashed #e2e8f0;
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+    }
+
+    .station-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.35rem;
+      font-weight: 900;
+      padding: 6px 18px;
+      border-radius: 14px;
+      color: #fff;
+    }
+
+    .title-discover { background: #ea580c; }
+    .title-practice { background: #16a34a; }
+    .title-learned { background: #7c3aed; }
+    .title-train { background: #0284c7; }
+    .title-search { background: #db2777; }
+
+    .lock-badge {
+      background: #f1f5f9;
+      color: #475569;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .exercise-box {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 18px;
+      transition: all 0.3s ease;
+    }
+
+    .exercise-box.locked-ex {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .exercise-box.frozen-ex {
+      border-color: #94a3b8;
+    }
+
+    .ex-instruction {
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-top: 0;
+      margin-bottom: 14px;
+    }
+
+    .ex-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      font-weight: 900;
+      margin-left: 8px;
+      font-size: 1rem;
+    }
+
+    .vessels-row {
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 16px;
+      background: #fff;
+      border: 2px solid #bae6fd;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .vessel-card {
+      text-align: center;
+      padding: 10px 14px;
+      border-radius: 14px;
+      background: #f0f9ff;
+      border: 1.5px solid #bae6fd;
+      min-width: 120px;
+    }
+
+    .vessel-label {
+      display: inline-block;
+      background: #0284c7;
+      color: #fff;
+      font-weight: 900;
+      padding: 2px 12px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+      font-size: 0.95rem;
+    }
+
+    input[type="number"], input[type="text"], select {
+      border: 2px solid #94a3b8;
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      text-align: center;
+      background: #fff;
+      color: #0f172a;
+      transition: all 0.2s;
+      min-width: 72px;
+    }
+
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+    }
+
+    .correct-field {
+      background-color: var(--correct-bg) !important;
+      border-color: var(--correct-border) !important;
+      color: var(--correct-text) !important;
+    }
+
+    .wrong-field {
+      background-color: var(--wrong-bg) !important;
+      border-color: var(--wrong-border) !important;
+      color: var(--wrong-text) !important;
+    }
+
+    .correction-hint {
+      display: inline-block;
+      margin-right: 6px;
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--correct-border);
+      background: #f0fdf4;
+      padding: 2px 8px;
+      border-radius: 8px;
+      border: 1px solid #86efac;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+    }
+
+    .eq-card {
+      background: #fff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      flex-wrap: wrap;
+    }
+
+    .math-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+
+    .math-table th, .math-table td {
+      border: 2px solid #cbd5e1;
+      padding: 10px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .math-table th {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    .pairs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+    }
+
+    .pair-row {
+      background: #fff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .cap-badge {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      color: #92400e;
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-weight: 900;
+      min-width: 95px;
+      text-align: center;
+    }
+
+    .strike-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .strike-card {
+      background: #fff;
+      border: 2px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .strike-options {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .strike-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border: 2px solid #94a3b8;
+      border-radius: 10px;
+      background: #f8fafc;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .strike-btn.selected-strike {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #b91c1c;
+      text-decoration: line-through;
+      text-decoration-thickness: 3px;
+    }
+
+    .learned-box {
+      background: linear-gradient(135deg, #f3e8ff, #ede9fe);
+      border: 3px solid #8b5cf6;
+      border-radius: 18px;
+      padding: 20px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #4c1d95;
+      text-align: center;
+    }
+
+    .learned-formula {
+      display: inline-block;
+      background: #fff;
+      border: 2px solid #8b5cf6;
+      padding: 6px 20px;
+      border-radius: 12px;
+      margin-top: 10px;
+      font-size: 1.3rem;
+      color: #5b21b6;
+    }
+
+    .btn-check {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 14px;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+      transition: transform 0.15s;
+    }
+
+    .btn-check:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+
+    .btn-check:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .feedback-msg {
+      margin-top: 10px;
+      font-weight: 800;
+      padding: 8px 14px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .feedback-ok {
+      display: block;
+      background: var(--correct-bg);
+      color: var(--correct-text);
+      border: 1.5px solid var(--correct-border);
+    }
+
+    .feedback-err {
+      display: block;
+      background: var(--wrong-bg);
+      color: var(--wrong-text);
+      border: 1.5px solid var(--wrong-border);
+    }
+
+    .station-counter {
+      background: #f1f5f9;
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 10px 16px;
+      text-align: center;
+      font-weight: 900;
+      font-size: 1.05rem;
+      margin-top: 12px;
+      color: #334155;
+    }
+
+    .final-report {
+      background: linear-gradient(135deg, #ffffff, #f0f9ff);
+      border: 3px solid #0284c7;
+      border-radius: 24px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(2, 132, 199, 0.15);
+      margin-top: 30px;
+    }
+
+    .final-report h2 {
+      margin-top: 0;
+      color: #0369a1;
+      font-size: 1.6rem;
+      font-weight: 900;
+    }
+
+    .circle-chart-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 18px auto;
+      width: 180px;
+      height: 180px;
+      position: relative;
+    }
+
+    .circle-svg {
+      width: 180px;
+      height: 180px;
+      display: block;
+      transform: rotate(-90deg);
+    }
+
+    .circle-bg {
+      fill: none;
+      stroke: #fee2e2;
+      stroke-width: 16;
+    }
+
+    .circle-progress {
+      fill: none;
+      stroke: #16a34a;
+      stroke-width: 16;
+      stroke-linecap: round;
+      stroke-dasharray: 439.82;
+      stroke-dashoffset: 439.82;
+      transition: stroke-dashoffset 0.6s ease, stroke 0.4s ease;
+    }
+
+    .circle-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .circle-percent {
+      font-size: 2.1rem;
+      font-weight: 900;
+      color: #0369a1;
+      line-height: 1.1;
+    }
+
+    .circle-label {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #64748b;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .stat-box {
+      background: #fff;
+      border: 2px solid #bae6fd;
+      border-radius: 16px;
+      padding: 14px;
+    }
+
+    .stat-val {
+      font-size: 1.75rem;
+      font-weight: 900;
+      display: block;
+    }
+
+    .stat-sub {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #64748b;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .btn-reset {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      font-weight: 900;
+      cursor: pointer;
+      margin-top: 6px;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+      .lesson-header h1 {
+        font-size: 1.45rem;
+      }
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري (أُضيفت)
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس (أُضيف) */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 20px auto 10px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    }
+  </style>
+  <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<div class="container">
+  <header class="lesson-header">
+    <div class="lesson-badge">الرّيَاضِيَّاتُ – السَّنَةُ الثَّالِثَةُ ابْتِدَائِيٌّ – الدَّرْسُ 13</div>
+    <h1>مُقَارَنَةُ سِعَاتٍ</h1>
+    <div class="lesson-sub">كِتَابُ التِّلْمِيذِ ص 26 &nbsp;|&nbsp; كُرَّاسُ الْأَنْشِطَةِ ص 17</div>
+  </header>
+
+  <!-- ==================== المحطة 1: أكتشف ==================== -->
+  <section class="station" id="station-discover">
+    <div class="station-header">
+      <div class="station-title title-discover">🔍 أَكْتَشِفُ</div>
+      <span class="lock-badge" id="status-discover">مَفْتُوحٌ</span>
+    </div>
+
+    <div class="exercise-box" id="ex-d1">
+      <p class="ex-instruction">
+        <span class="ex-num">1</span>
+        تُرِيدُ لَيْلَى اسْتِعْمَالَ قَارُورَةٍ سِعَتُهَا <span class="ltr">50 cL</span> لِمَلْءِ الْأَوْعِيَةِ الثَّلَاثَةِ بِالْمَاءِ.
+      </p>
+
+      <div class="vessels-row">
+        <div class="vessel-card">
+          <div class="vessel-label">الْقَارُورَةُ</div>
+          <svg width="70" height="90" viewBox="0 0 70 90">
+            <rect x="26" y="6" width="18" height="10" rx="2" fill="#0284c7"/>
+            <path d="M22 16 L48 16 L54 32 L54 80 C54 84 50 86 46 86 L24 86 C20 86 16 84 16 80 L16 32 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="2.5"/>
+            <rect x="18" y="45" width="34" height="39" rx="4" fill="#38bdf8" opacity="0.6"/>
+          </svg>
+          <div><span class="ltr">50 cL</span></div>
+        </div>
+
+        <div class="vessel-card">
+          <div class="vessel-label">الْوِعَاءُ ج</div>
+          <svg width="80" height="90" viewBox="0 0 80 90">
+            <path d="M20 20 L60 20 L55 82 L25 82 Z" fill="#fde68a" stroke="#d97706" stroke-width="2.5"/>
+            <path d="M60 30 C72 30 72 58 58 60" fill="none" stroke="#d97706" stroke-width="3"/>
+          </svg>
+          <div><span class="ltr">1 L</span></div>
+        </div>
+
+        <div class="vessel-card">
+          <div class="vessel-label">الْوِعَاءُ ب</div>
+          <svg width="95" height="90" viewBox="0 0 95 90">
+            <path d="M18 16 L77 16 L70 84 L25 84 Z" fill="#fbcfe8" stroke="#db2777" stroke-width="2.5"/>
+            <path d="M20 16 Q47 -4 75 16" fill="none" stroke="#9d174d" stroke-width="2.5"/>
+          </svg>
+          <div><span class="ltr">3 L</span></div>
+        </div>
+
+        <div class="vessel-card">
+          <div class="vessel-label">الْوِعَاءُ أ</div>
+          <svg width="110" height="90" viewBox="0 0 110 90">
+            <rect x="42" y="6" width="26" height="10" rx="2" fill="#16a34a"/>
+            <rect x="20" y="16" width="70" height="68" rx="12" fill="#bbf7d0" stroke="#16a34a" stroke-width="2.5"/>
+            <rect x="72" y="24" width="10" height="24" rx="4" fill="#ffffff" stroke="#16a34a" stroke-width="2"/>
+          </svg>
+          <div><span class="ltr">5 L</span></div>
+        </div>
+      </div>
+
+      <p class="ex-instruction" style="font-size:1rem;">• كَمْ قَارُورَةً يَلْزَمُهَا لِمَلْءِ كُلِّ وِعَاءٍ مِنَ الْأَوْعِيَةِ الثَّلَاثَةِ أ ، ب ، ج ؟</p>
+      <div class="grid-2" style="margin-bottom:14px;">
+        <div class="eq-card">
+          لِمَلْءِ الْوِعَاءِ <strong>أ</strong> (<span class="ltr">5 L</span>) : &nbsp;
+          <input type="number" id="d1_a" data-ans="10" placeholder="؟" /> &nbsp; قَارُورَةً
+        </div>
+        <div class="eq-card">
+          لِمَلْءِ الْوِعَاءِ <strong>ب</strong> (<span class="ltr">3 L</span>) : &nbsp;
+          <input type="number" id="d1_b" data-ans="6" placeholder="؟" /> &nbsp; قَوَارِيرَ
+        </div>
+        <div class="eq-card">
+          لِمَلْءِ الْوِعَاءِ <strong>ج</strong> (<span class="ltr">1 L</span>) : &nbsp;
+          <input type="number" id="d1_c" data-ans="2" placeholder="؟" /> &nbsp; قَارُورَتَانِ
+        </div>
+      </div>
+
+      <p class="ex-instruction" style="font-size:1rem;">• رَتِّبِ الْأَوْعِيَةَ الثَّلَاثَةَ مِنَ الْأَصْغَرِ سِعَةً إِلَى الْأَكْبَرِ سِعَةً (مِنَ الْيَسَارِ إِلَى الْيَمِينِ) :</p>
+      <div class="eq-card">
+        <span class="ltr" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:center;">
+          <select id="d1_ord1" data-ans="ج">
+            <option value="">؟</option>
+            <option value="أ">أ (5 L)</option>
+            <option value="ب">ب (3 L)</option>
+            <option value="ج">ج (1 L)</option>
+          </select>
+          <span>&lt;</span>
+          <select id="d1_ord2" data-ans="ب">
+            <option value="">؟</option>
+            <option value="أ">أ (5 L)</option>
+            <option value="ب">ب (3 L)</option>
+            <option value="ج">ج (1 L)</option>
+          </select>
+          <span>&lt;</span>
+          <select id="d1_ord3" data-ans="أ">
+            <option value="">؟</option>
+            <option value="أ">أ (5 L)</option>
+            <option value="ب">ب (3 L)</option>
+            <option value="ج">ج (1 L)</option>
+          </select>
+        </span>
+      </div>
+
+      <button class="btn-check" id="btn-d1" onclick="checkEx('d1')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+      <div class="feedback-msg" id="fb-d1"></div>
+    </div>
+
+    <div class="exercise-box locked-ex" id="ex-d2">
+      <p class="ex-instruction">
+        <span class="ex-num">2</span>
+        انْقُلْ عَلَى كُرَّاسِكَ ثُمَّ أَكْمِلْ بِالْعَدَدِ الْمُنَاسِبِ :
+      </p>
+      <div class="grid-2">
+        <div class="eq-card">
+          <span class="ltr">50 cL + 50 cL = <input type="number" id="d2_1" data-ans="100" style="width:80px;" /> cL</span>
+        </div>
+        <div class="eq-card">
+          <span class="ltr">100 cL = <input type="number" id="d2_2" data-ans="1" style="width:70px;" /> L</span>
+        </div>
+        <div class="eq-card">
+          <span class="ltr">5 L = <input type="number" id="d2_3" data-ans="500" style="width:85px;" /> cL</span>
+        </div>
+        <div class="eq-card">
+          <span class="ltr">2 L = <input type="number" id="d2_4" data-ans="200" style="width:85px;" /> cL</span>
+        </div>
+        <div class="eq-card">
+          <span class="ltr">300 cL = <input type="number" id="d2_5" data-ans="3" style="width:70px;" /> L</span>
+        </div>
+      </div>
+
+      <button class="btn-check" id="btn-d2" onclick="checkEx('d2')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+      <div class="feedback-msg" id="fb-d2"></div>
+    </div>
+
+    <div class="station-counter" id="cnt-discover">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+  </section>
+
+  <!-- ==================== المحطة 2: أنجز ==================== -->
+  <section class="station locked-station" id="station-practice">
+    <div class="station-header">
+      <div class="station-title title-practice">✍️ أُنْجِزُ</div>
+      <span class="lock-badge" id="status-practice">مُغْلَقٌ حَتَّى إِتْمَامِ أَكْتَشِفُ</span>
+    </div>
+
+    <div class="exercise-box" id="ex-p1">
+      <p class="ex-instruction">
+        <span class="ex-num">1</span>
+        بِعُلْبَةٍ وَاحِدَةٍ مِنْ عَصِيرِ الْبُرْتُقَالِ سِعَتُهَا <span class="ltr">1 L</span> يُمْكِنُ مَلْءُ <span class="ltr">5</span> أَكْوَابٍ.
+        أَكْمِلْ مَلْءَ الْجَدْوَلِ التَّالِي :
+      </p>
+
+      <div style="overflow-x:auto;">
+        <table class="math-table">
+          <tr>
+            <th>عَدَدُ الْعُلَبِ</th>
+            <td><span class="ltr">1</span></td>
+            <td><span class="ltr">2</span></td>
+            <td><span class="ltr">3</span></td>
+            <td><span class="ltr">4</span></td>
+            <td><span class="ltr">5</span></td>
+          </tr>
+          <tr>
+            <th>عَدَدُ الْأَكْوَابِ</th>
+            <td><input type="number" id="p1_1" data-ans="5" style="width:68px;" /></td>
+            <td><input type="number" id="p1_2" data-ans="10" style="width:68px;" /></td>
+            <td><input type="number" id="p1_3" data-ans="15" style="width:68px;" /></td>
+            <td><input type="number" id="p1_4" data-ans="20" style="width:68px;" /></td>
+            <td><input type="number" id="p1_5" data-ans="25" style="width:68px;" /></td>
+          </tr>
+        </table>
+      </div>
+
+      <p class="ex-instruction" style="font-size:1rem; margin-top:14px;">
+        • إِذَا كَانَ عَدَدُ تَلَامِيذِ الْقِسْمِ <span class="ltr">34</span> تِلْمِيذًا، كَمْ عُلْبَةً يَلْزَمُ لِكَيْ يَنَالَ كُلُّ تِلْمِيذٍ كُوبًا وَاحِدًا مِنَ الْعَصِيرِ؟
+      </p>
+      <div class="eq-card">
+        عَدَدُ الْعُلَبِ اللَّازِمَةِ هُوَ : &nbsp;
+        <input type="number" id="p1_6" data-ans="7" style="width:80px;" /> &nbsp; عُلَبٍ
+      </div>
+
+      <button class="btn-check" id="btn-p1" onclick="checkEx('p1')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+      <div class="feedback-msg" id="fb-p1"></div>
+    </div>
+
+    <div class="exercise-box locked-ex" id="ex-p2">
+      <p class="ex-instruction">
+        <span class="ex-num">2</span>
+        اكْتُبِ الرَّمْزَ (<span class="ltr">=</span>) بَيْنَ السِّعَاتِ الْمُتَمَاثِلَةِ (أَوْ <span class="ltr">≠</span> إِذَا كَانَتَا غَيْرَ مُتَمَاثِلَتَيْنِ) :
+      </p>
+
+      <div class="pairs-grid">
+        <div class="pair-row">
+          <span class="cap-badge ltr">300 cL</span>
+          <select id="p2_1" data-ans="≠">
+            <option value="">؟</option>
+            <option value="=">=</option>
+            <option value="≠">≠</option>
+          </select>
+          <span class="cap-badge ltr">9 L</span>
+        </div>
+
+        <div class="pair-row">
+          <span class="cap-badge ltr">900 cL</span>
+          <select id="p2_2" data-ans="≠">
+            <option value="">؟</option>
+            <option value="=">=</option>
+            <option value="≠">≠</option>
+          </select>
+          <span class="cap-badge ltr">25 cL</span>
+        </div>
+
+        <div class="pair-row">
+          <span class="cap-badge ltr">0 L 25 cL</span>
+          <select id="p2_3" data-ans="≠">
+            <option value="">؟</option>
+            <option value="=">=</option>
+            <option value="≠">≠</option>
+          </select>
+          <span class="cap-badge ltr">3 L</span>
+        </div>
+
+        <div class="pair-row">
+          <span class="cap-badge ltr">3 L + 50 cL</span>
+          <select id="p2_4" data-ans="=">
+            <option value="">؟</option>
+            <option value="=">=</option>
+            <option value="≠">≠</option>
+          </select>
+          <span class="cap-badge ltr">350 cL</span>
+        </div>
+      </div>
+
+      <button class="btn-check" id="btn-p2" onclick="checkEx('p2')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+      <div class="feedback-msg" id="fb-p2"></div>
+    </div>
+
+    <div class="station-counter" id="cnt-practice">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+  </section>
+
+  <!-- ==================== المحطة 3: تعلمت ==================== -->
+  <section class="station locked-station" id="station-learned">
+    <div class="station-header">
+      <div class="station-title title-learned">💡 تَعَلَّمْتُ</div>
+      <span class="lock-badge" id="status-learned">مُغْلَقٌ حَتَّى إِتْمَامِ أُنْجِزُ</span>
+    </div>
+
+    <div class="learned-box">
+      كَمِّيَّةُ السَّائِلِ الَّتِي يُمْكِنُنِي وَضْعُهَا فِي إِنَاءٍ هِيَ سِعَةُ هَذَا الْإِنَاءِ، أَقِيسُ السِّعَاتِ بِاللِّتْرِ (<span class="ltr">L</span>) وَالسَّنْتِيلِتْرِ (<span class="ltr">cL</span>).
+      <br />
+      <div class="learned-formula ltr">1 L = 100 cL</div>
+    </div>
+  </section>
+
+  <!-- ==================== المحطة 4: أتمرن ==================== -->
+  <section class="station locked-station" id="station-train">
+    <div class="station-header">
+      <div class="station-title title-train">📝 أَتَمَرَّنُ (كُرَّاسُ الْأَنْشِطَةِ ص 17)</div>
+      <span class="lock-badge" id="status-train">مُغْلَقٌ حَتَّى إِتْمَامِ أُنْجِزُ</span>
+    </div>
+
+    <div class="exercise-box" id="ex-t1">
+      <p class="ex-instruction">
+        <span class="ex-num">1</span>
+        اكْتُبِ الْوَحْدَةَ الْمُنَاسِبَةَ (<span class="ltr">L</span>) أَوْ (<span class="ltr">cL</span>) :
+      </p>
+
+      <div class="vessels-row">
+        <div class="vessel-card">
+          <svg width="75" height="80" viewBox="0 0 75 80">
+            <rect x="18" y="18" width="39" height="52" rx="4" fill="#cbd5e1" stroke="#475569" stroke-width="2.5"/>
+            <path d="M18 22 Q37 4 57 22" fill="none" stroke="#475569" stroke-width="2.5"/>
+          </svg>
+          <div style="font-size:0.9rem; font-weight:700;">دَلْوُ طِلَاءٍ</div>
+          <div class="ltr" style="margin-top:6px;">
+            12
+            <select id="t1_1" data-ans="L">
+              <option value="">؟</option>
+              <option value="L">L</option>
+              <option value="cL">cL</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="vessel-card">
+          <svg width="75" height="80" viewBox="0 0 75 80">
+            <rect x="30" y="6" width="15" height="8" rx="2" fill="#0284c7"/>
+            <path d="M24 14 L51 14 L55 30 L55 72 L20 72 L20 30 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="2.5"/>
+          </svg>
+          <div style="font-size:0.9rem; font-weight:700;">قَارُورَةُ مَاءٍ كَبِيرَةٌ</div>
+          <div class="ltr" style="margin-top:6px;">
+            2
+            <select id="t1_2" data-ans="L">
+              <option value="">؟</option>
+              <option value="L">L</option>
+              <option value="cL">cL</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="vessel-card">
+          <svg width="75" height="80" viewBox="0 0 75 80">
+            <rect x="28" y="6" width="19" height="9" rx="2" fill="#d97706"/>
+            <rect x="20" y="15" width="35" height="57" rx="8" fill="#fef08a" stroke="#ca8a04" stroke-width="2.5"/>
+          </svg>
+          <div style="font-size:0.9rem; font-weight:700;">قَارُورَةُ زَيْتٍ كَبِيرَةٌ</div>
+          <div class="ltr" style="margin-top:6px;">
+            500
+            <select id="t1_3" data-ans="cL">
+              <option value="">؟</option>
+              <option value="L">L</option>
+              <option value="cL">cL</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="vessel-card">
+          <svg width="75" height="80" viewBox="0 0 75 80">
+            <rect x="16" y="16" width="43" height="56" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2.5"/>
+            <rect x="44" y="8" width="10" height="8" fill="#dc2626"/>
+          </svg>
+          <div style="font-size:0.9rem; font-weight:700;">صَفِيحَةُ وَقُودٍ</div>
+          <div class="ltr" style="margin-top:6px;">
+            20
+            <select id="t1_4" data-ans="L">
+              <option value="">؟</option>
+              <option value="L">L</option>
+              <option value="cL">cL</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="vessel-card">
+          <svg width="75" height="80" viewBox="0 0 75 80">
+            <rect x="25" y="24" width="25" height="46" rx="4" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2.5"/>
+          </svg>
+          <div style="font-size:0.9rem; font-weight:700;">عُلْبَةُ عَصِيرٍ صَغِيرَةٌ</div>
+          <div class="ltr" style="margin-top:6px;">
+            25
+            <select id="t1_5" data-ans="cL">
+              <option value="">؟</option>
+              <option value="L">L</option>
+              <option value="cL">cL</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-check" id="btn-t1" onclick="checkEx('t1')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+      <div class="feedback-msg" id="fb-t1"></div>
+    </div>
+
+    <div class="exercise-box locked-ex" id="ex-t2">
+      <p class="ex-instruction">
+        <span class="ex-num">2</span>
+        رَتِّبْ هَذِهِ الْمَقَادِيرَ مِنَ الْأَكْبَرِ إِلَى الْأَصْغَرِ بِتَرْقِيمِهَا مِنْ <span class="ltr">1</span> إِلَى <span class="ltr">5</span> :
+      </p>
+
+      <div class="grid-2">
+        <div class="pair-row">
+          <span class="cap-badge ltr">2 L</span>
+          <select id="t2_1" data-ans="4">
+            <option value="">الرُّتْبَةُ</option>
+            <option value="1">1 (الْأَكْبَرُ)</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5 (الْأَصْغَرُ)</option>
+          </select>
+        </div>
+
+        <div class="pair-row">
+          <span class="cap-badge ltr">205 cL</span>
+          <select id="t2_2" data-ans="3">
+            <option value="">الرُّتْبَةُ</option>
+            <option value="1">1 (الْأَكْبَرُ)</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5 (الْأَصْغَرُ)</option>
+          </select>
+        </div>
+
+        <div class="pair-row">
+          <span class="cap-badge ltr">5 L</span>
+          <select id="t2_3" data-ans="1">
+            <option value="">الرُّتْبَةُ</option>
+            <option value="1">1 (الْأَكْبَرُ)</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5 (الْأَصْغَرُ)</option>
+          </select>
+        </div>
+
+        <div class="pair-row">
+          <span class="cap-badge ltr">2 L 50 cL</span>
+          <select id="t2_4" data-ans="2">
+            <option value="">الرُّتْبَةُ</option>
+            <option value="1">1 (الْأَكْبَرُ)</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5 (الْأَصْغَرُ)</option>
+          </select>
+        </div>
+
+        <div class="pair-row">
+          <span class="cap-badge ltr">33 cL</span>
+          <select id="t2_5" data-ans="5">
+            <option value="">الرُّتْبَةُ</option>
+            <option value="1">1 (الْأَكْبَرُ)</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5 (الْأَصْغَرُ)</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn-check" id="btn-t2" onclick="checkEx('t2')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+      <div class="feedback-msg" id="fb-t2"></div>
+    </div>
+
+    <div class="exercise-box locked-ex" id="ex-t3">
+      <p class="ex-instruction">
+        <span class="ex-num">3</span>
+        رَتِّبْ هَذِهِ الْمَقَادِيرَ مِنَ الْأَصْغَرِ إِلَى الْأَكْبَرِ (مِنَ الْيَسَارِ إِلَى الْيَمِينِ) :
+        <br />
+        <span class="ltr" style="color:#0369a1; margin-top:6px;">4 L &nbsp;؛&nbsp; 900 cL &nbsp;؛&nbsp; 12 L &nbsp;؛&nbsp; 350 cL &nbsp;؛&nbsp; 90 cL</span>
+      </p>
+
+      <div class="eq-card">
+        <span class="ltr" style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:center;">
+          <select id="t3_1" data-ans="90 cL">
+            <option value="">؟</option>
+            <option value="90 cL">90 cL</option>
+            <option value="350 cL">350 cL</option>
+            <option value="4 L">4 L</option>
+            <option value="900 cL">900 cL</option>
+            <option value="12 L">12 L</option>
+          </select>
+          <span>&lt;</span>
+          <select id="t3_2" data-ans="350 cL">
+            <option value="">؟</option>
+            <option value="90 cL">90 cL</option>
+            <option value="350 cL">350 cL</option>
+            <option value="4 L">4 L</option>
+            <option value="900 cL">900 cL</option>
+            <option value="12 L">12 L</option>
+          </select>
+          <span>&lt;</span>
+          <select id="t3_3" data-ans="4 L">
+            <option value="">؟</option>
+            <option value="90 cL">90 cL</option>
+            <option value="350 cL">350 cL</option>
+            <option value="4 L">4 L</option>
+            <option value="900 cL">900 cL</option>
+            <option value="12 L">12 L</option>
+          </select>
+          <span>&lt;</span>
+          <select id="t3_4" data-ans="900 cL">
+            <option value="">؟</option>
+            <option value="90 cL">90 cL</option>
+            <option value="350 cL">350 cL</option>
+            <option value="4 L">4 L</option>
+            <option value="900 cL">900 cL</option>
+            <option value="12 L">12 L</option>
+          </select>
+          <span>&lt;</span>
+          <select id="t3_5" data-ans="12 L">
+            <option value="">؟</option>
+            <option value="90 cL">90 cL</option>
+            <option value="350 cL">350 cL</option>
+            <option value="4 L">4 L</option>
+            <option value="900 cL">900 cL</option>
+            <option value="12 L">12 L</option>
+          </select>
+        </span>
+      </div>
+
+      <button class="btn-check" id="btn-t3" onclick="checkEx('t3')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+      <div class="feedback-msg" id="fb-t3"></div>
+    </div>
+
+    <div class="exercise-box locked-ex" id="ex-t4">
+      <p class="ex-instruction">
+        <span class="ex-num">4</span>
+        انْقُرْ لِتَشْطُبَ السِّعَةَ غَيْرَ الْمُنَاسِبَةِ لِكُلِّ إِنَاءٍ :
+      </p>
+
+      <div class="strike-grid">
+        <div class="strike-card" data-group="t4_1" data-wrong="50 cL">
+          <div style="font-weight:900;">دَلْوُ مَاءٍ</div>
+          <div class="strike-options ltr">
+            <button type="button" class="strike-btn" onclick="selectStrike(this, 't4_1', '50 cL')">50 cL</button>
+            <button type="button" class="strike-btn" onclick="selectStrike(this, 't4_1', '5 L')">5 L</button>
+          </div>
+        </div>
+
+        <div class="strike-card" data-group="t4_2" data-wrong="15 L">
+          <div style="font-weight:900;">كُوبُ عَصِيرٍ</div>
+          <div class="strike-options ltr">
+            <button type="button" class="strike-btn" onclick="selectStrike(this, 't4_2', '15 cL')">15 cL</button>
+            <button type="button" class="strike-btn" onclick="selectStrike(this, 't4_2', '15 L')">15 L</button>
+          </div>
+        </div>
+
+        <div class="strike-card" data-group="t4_3" data-wrong="20 cL">
+          <div style="font-weight:900;">صَفِيحَةٌ كَبِيرَةٌ</div>
+          <div class="strike-options ltr">
+            <button type="button" class="strike-btn" onclick="selectStrike(this, 't4_3', '20 L')">20 L</button>
+            <button type="button" class="strike-btn" onclick="selectStrike(this, 't4_3', '20 cL')">20 cL</button>
+          </div>
+        </div>
+
+        <div class="strike-card" data-group="t4_4" data-wrong="50 L">
+          <div style="font-weight:900;">قَارُورَةُ دَوَاءٍ</div>
+          <div class="strike-options ltr">
+            <button type="button" class="strike-btn" onclick="selectStrike(this, 't4_4', '50 L')">50 L</button>
+            <button type="button" class="strike-btn" onclick="selectStrike(this, 't4_4', '50 cL')">50 cL</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-check" id="btn-t4" onclick="checkStrikeEx()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+      <div class="feedback-msg" id="fb-t4"></div>
+    </div>
+
+    <div class="station-counter" id="cnt-train">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+  </section>
+
+  <!-- ==================== المحطة 5: أبحث ==================== -->
+  <section class="station locked-station" id="station-search">
+    <div class="station-header">
+      <div class="station-title title-search">🧩 أَبْحَثُ</div>
+      <span class="lock-badge" id="status-search">مُغْلَقٌ حَتَّى إِتْمَامِ أَتَمَرَّنُ</span>
+    </div>
+
+    <div class="exercise-box" id="ex-s1">
+      <p class="ex-instruction">
+        كَيْفَ تَحْصُلُ عَلَى <span class="ltr">1 L</span> مِنَ الْمَاءِ إِذَا كَانَ لَدَيْكَ إِنَاءَانِ سِعَةُ أَحَدِهِمَا <span class="ltr">2 L</span> وَسِعَةُ الْآخَرِ <span class="ltr">5 L</span> ؟
+      </p>
+
+      <div class="grid-2" style="grid-template-columns: 1fr;">
+        <div class="eq-card" style="justify-content:flex-start; gap:10px;">
+          <span>1. نَمْلَأُ الْإِنَاءَ الَّذِي سِعَتُهُ</span>
+          <select id="s1_1" data-ans="5">
+            <option value="">؟</option>
+            <option value="2">2 L</option>
+            <option value="5">5 L</option>
+          </select>
+          <span>بِالْمَاءِ كَامِلًا.</span>
+        </div>
+
+        <div class="eq-card" style="justify-content:flex-start; gap:10px;">
+          <span>2. نُفْرِغُ مِنْهُ فِي الْإِنَاءِ الَّذِي سِعَتُهُ</span>
+          <select id="s1_2" data-ans="2">
+            <option value="">؟</option>
+            <option value="2">2 L</option>
+            <option value="5">5 L</option>
+          </select>
+          <span>مَرَّتَيْنِ مُتَتَالِيَتَيْنِ (نَمْلَؤُهُ ثُمَّ نُفْرِغُهُ فِي كُلِّ مَرَّةٍ).</span>
+        </div>
+
+        <div class="eq-card" style="justify-content:flex-start; gap:10px;">
+          <span>3. فَيَبْقَى فِي الْإِنَاءِ الْكَبِيرِ :</span>
+          <span class="ltr">5 L - 2 L - 2 L = <input type="number" id="s1_3" data-ans="1" style="width:70px;" /> L</span>
+        </div>
+      </div>
+
+      <button class="btn-check" id="btn-s1" onclick="checkEx('s1')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+      <div class="feedback-msg" id="fb-s1"></div>
+    </div>
+
+    <div class="station-counter" id="cnt-search">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+  </section>
+
+  <!-- ==================== التقييم العام ==================== -->
+  <section class="final-report" id="final-report">
+    <h2>📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</h2>
+    <p style="margin:0 0 10px 0; color:#475569; font-weight:700;">
+      تُحْسَبُ النِّسْبَةُ النِّهَائِيَّةُ بِقَدْرِ الْعَدَدِ الْإِجْمَالِيِّ لِلْإِجَابَاتِ الصَّحِيحَةِ وَالْعَدَدِ الْإِجْمَالِيِّ لِلْإِجَابَاتِ الْخَاطِئَةِ (الْحَدُّ الْأَقْصَى <span class="ltr">100%</span>)
+    </p>
+
+    <div class="circle-chart-wrap">
+      <svg class="circle-svg" viewBox="0 0 160 160">
+        <circle class="circle-bg" cx="80" cy="80" r="70"></circle>
+        <circle class="circle-progress" id="circle-progress" cx="80" cy="80" r="70"></circle>
+      </svg>
+      <div class="circle-text">
+        <span class="circle-percent ltr" id="total-percent">0%</span>
+        <span class="circle-label">نِسْبَةُ النَّجَاحِ</span>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <span class="stat-val" id="total-correct" style="color:#16a34a;">0</span>
+        <span>إِجْمَالِيُّ الْإِجَابَاتِ الصَّحِيحَةِ</span>
+        <span class="stat-sub ltr" id="correct-pct-sub">(0%)</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val" id="total-wrong" style="color:#dc2626;">0</span>
+        <span>إِجْمَالِيُّ الْإِجَابَاتِ الْخَاطِئَةِ</span>
+        <span class="stat-sub ltr" id="wrong-pct-sub">(0%)</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-val ltr" id="net-score" style="color:#0284c7;">0 / 34</span>
+        <span>مَجْمُوعُ الْأَسْئِلَةِ الْمُجَابِ عَنْهَا</span>
+        <span class="stat-sub" id="final-grade-label">قَيْدَ الْإِنْجَازِ</span>
+      </div>
+    </div>
+
+    <button class="btn-reset" onclick="resetAll()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+  </section>
+
+  <!-- ========================================
+       زر العودة إلى الفهرس (أُضيف)
+       ======================================== -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+</div>
+
+<!-- ========================================
+     سكريبت الحماية (أُضيف)
+     ======================================== -->
+<script>
+  const CHANNEL_ID = "-1003910412986";
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي (كما هو دون تغيير)
+     ======================================== -->
+<script>
+  const exerciseConfig = {
+    d1: { station: 'discover', ids: ['d1_a', 'd1_b', 'd1_c', 'd1_ord1', 'd1_ord2', 'd1_ord3'], nextEx: 'd2' },
+    d2: { station: 'discover', ids: ['d2_1', 'd2_2', 'd2_3', 'd2_4', 'd2_5'], nextStation: 'practice' },
+    p1: { station: 'practice', ids: ['p1_1', 'p1_2', 'p1_3', 'p1_4', 'p1_5', 'p1_6'], nextEx: 'p2' },
+    p2: { station: 'practice', ids: ['p2_1', 'p2_2', 'p2_3', 'p2_4'], nextStation: 'train', unlockLearned: true },
+    t1: { station: 'train', ids: ['t1_1', 't1_2', 't1_3', 't1_4', 't1_5'], nextEx: 't2' },
+    t2: { station: 'train', ids: ['t2_1', 't2_2', 't2_3', 't2_4', 't2_5'], nextEx: 't3' },
+    t3: { station: 'train', ids: ['t3_1', 't3_2', 't3_3', 't3_4', 't3_5'], nextEx: 't4' },
+    t4: { station: 'train', isStrike: true, nextStation: 'search' },
+    s1: { station: 'search', ids: ['s1_1', 's1_2', 's1_3'], isLast: true }
+  };
+
+  const stationScores = {
+    discover: { correct: 0, wrong: 0 },
+    practice: { correct: 0, wrong: 0 },
+    train: { correct: 0, wrong: 0 },
+    search: { correct: 0, wrong: 0 }
+  };
+
+  const strikeSelections = {};
+  const completedExercises = new Set();
+
+  function selectStrike(btn, group, val) {
+    if (completedExercises.has('t4')) return;
+    const parent = btn.parentElement;
+    parent.querySelectorAll('.strike-btn').forEach(b => b.classList.remove('selected-strike'));
+    btn.classList.add('selected-strike');
+    strikeSelections[group] = val;
+  }
+
+  function checkEx(exKey) {
+    if (completedExercises.has(exKey)) return;
+    const cfg = exerciseConfig[exKey];
+
+    for (const id of cfg.ids) {
+      const el = document.getElementById(id);
+      if (!el.value || el.value.trim() === '') {
+        alert('يُرْجَى مَلْءُ جَمِيعِ الْخَانَاتِ أَوَّلًا قَبْلَ التَّحَقُّقِ!');
+        el.focus();
+        return;
+      }
+    }
+
+    let exCorrect = 0;
+    let exWrong = 0;
+
+    cfg.ids.forEach(id => {
+      const el = document.getElementById(id);
+      const userVal = el.value.trim();
+      const ansVal = el.getAttribute('data-ans').trim();
+
+      el.disabled = true;
+
+      if (userVal === ansVal) {
+        el.classList.add('correct-field');
+        exCorrect++;
+      } else {
+        el.classList.add('wrong-field');
+        exWrong++;
+        const hint = document.createElement('span');
+        hint.className = 'correction-hint';
+        hint.innerHTML = `الصَّوَابُ: <span class="ltr">${ansVal}</span>`;
+        el.insertAdjacentElement('afterend', hint);
+      }
+    });
+
+    finalizeExercise(exKey, cfg, exCorrect, exWrong);
+  }
+
+  function checkStrikeEx() {
+    if (completedExercises.has('t4')) return;
+    const cards = document.querySelectorAll('.strike-card');
+    for (const card of cards) {
+      const grp = card.getAttribute('data-group');
+      if (!strikeSelections[grp]) {
+        alert('يُرْجَى اخْتِيَارُ السِّعَةِ غَيْرِ الْمُنَاسِبَةِ لِشَطْبِهَا فِي كُلِّ بِطَاقَةٍ!');
+        return;
+      }
+    }
+
+    let exCorrect = 0;
+    let exWrong = 0;
+
+    cards.forEach(card => {
+      const grp = card.getAttribute('data-group');
+      const expectedWrong = card.getAttribute('data-wrong');
+      const chosen = strikeSelections[grp];
+      const btns = card.querySelectorAll('.strike-btn');
+
+      btns.forEach(b => b.disabled = true);
+
+      if (chosen === expectedWrong) {
+        card.style.backgroundColor = 'var(--correct-bg)';
+        card.style.borderColor = 'var(--correct-border)';
+        exCorrect++;
+      } else {
+        card.style.backgroundColor = 'var(--wrong-bg)';
+        card.style.borderColor = 'var(--wrong-border)';
+        exWrong++;
+        const hint = document.createElement('div');
+        hint.className = 'correction-hint';
+        hint.style.marginTop = '8px';
+        hint.innerHTML = `تُشْطَبُ: <span class="ltr">${expectedWrong}</span>`;
+        card.appendChild(hint);
+      }
+    });
+
+    finalizeExercise('t4', exerciseConfig.t4, exCorrect, exWrong);
+  }
+
+  function finalizeExercise(exKey, cfg, exCorrect, exWrong) {
+    completedExercises.add(exKey);
+    const exBox = document.getElementById(`ex-${exKey}`);
+    exBox.classList.add('frozen-ex');
+    document.getElementById(`btn-${exKey}`).disabled = true;
+
+    const fb = document.getElementById(`fb-${exKey}`);
+    if (exWrong === 0) {
+      fb.className = 'feedback-msg feedback-ok';
+      fb.textContent = `أَحْسَنْتَ! جَمِيعُ إِجَابَاتِكَ صَحِيحَةٌ (${exCorrect} / ${exCorrect + exWrong}).`;
+    } else {
+      fb.className = 'feedback-msg feedback-err';
+      fb.textContent = `تَمَّ التَّصْحِيحُ: ${exCorrect} صَحِيحَةٌ وَ ${exWrong} خَاطِئَةٌ. رَاجِعِ التَّصْحِيحَ بِالْأَخْضَرِ أَعْلَاهُ.`;
+    }
+
+    stationScores[cfg.station].correct += exCorrect;
+    stationScores[cfg.station].wrong += exWrong;
+    document.getElementById(`cnt-${cfg.station}`).textContent =
+      `✓ الصَّوَابُ: ${stationScores[cfg.station].correct} | ✗ الْخَطَأُ: ${stationScores[cfg.station].wrong}`;
+
+    if (cfg.nextEx) {
+      const nextBox = document.getElementById(`ex-${cfg.nextEx}`);
+      nextBox.classList.remove('locked-ex');
+    }
+    if (cfg.unlockLearned) {
+      const learnedSt = document.getElementById('station-learned');
+      learnedSt.classList.remove('locked-station');
+      document.getElementById('status-learned').textContent = 'مَفْتُوحٌ';
+    }
+    if (cfg.nextStation) {
+      const nextSt = document.getElementById(`station-${cfg.nextStation}`);
+      nextSt.classList.remove('locked-station');
+      document.getElementById(`status-${cfg.nextStation}`).textContent = 'مَفْتُوحٌ';
+    }
+
+    updateGlobalReport();
+  }
+
+  function updateGlobalReport() {
+    let totalC = 0;
+    let totalW = 0;
+    Object.values(stationScores).forEach(s => {
+      totalC += s.correct;
+      totalW += s.wrong;
+    });
+
+    const totalAll = 34;
+    const totalAnswered = totalC + totalW;
+
+    let finalPercent = 0;
+    let wrongPct = 0;
+    if (totalAnswered > 0) {
+      finalPercent = Math.min(100, Math.max(0, Math.round((totalC / totalAnswered) * 100)));
+      wrongPct = 100 - finalPercent;
+    }
+
+    document.getElementById('total-correct').textContent = totalC;
+    document.getElementById('correct-pct-sub').textContent = `(${finalPercent}%)`;
+
+    document.getElementById('total-wrong').textContent = totalW;
+    document.getElementById('wrong-pct-sub').textContent = `(${wrongPct}%)`;
+
+    document.getElementById('net-score').textContent = `${totalC} / ${totalAnswered || totalAll}`;
+    document.getElementById('total-percent').textContent = `${finalPercent}%`;
+
+    const circle = document.getElementById('circle-progress');
+    const circumference = 439.82;
+    const offset = circumference - (finalPercent / 100) * circumference;
+    circle.style.strokeDashoffset = offset;
+
+    const gradeLabel = document.getElementById('final-grade-label');
+    if (finalPercent === 100 && completedExercises.size === 9) {
+      circle.style.stroke = '#16a34a';
+      gradeLabel.textContent = 'مُمْتَازٌ جِدًّا 🌟';
+    } else if (finalPercent >= 80) {
+      circle.style.stroke = '#16a34a';
+      gradeLabel.textContent = 'جَيِّدٌ جِدًّا 👏';
+    } else if (finalPercent >= 50) {
+      circle.style.stroke = '#f59e0b';
+      gradeLabel.textContent = 'مُتَوَسِّطٌ 👍';
+    } else {
+      circle.style.stroke = '#dc2626';
+      gradeLabel.textContent = completedExercises.size === 9 ? 'يَحْتَاجُ مُرَاجَعَةً' : 'قَيْدَ الْإِنْجَازِ';
+    }
+  }
+
+  function resetAll() {
+    location.reload();
+  }
+</script>
+
+</body>
+</html>
