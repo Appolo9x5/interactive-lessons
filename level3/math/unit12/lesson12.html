@@ -1,0 +1,2006 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الدَّرْسُ 12 : تَمْثِيلَاتٌ بَيَانِيَّةٌ وَمُخَطَّطَاتٌ - السَّنَةُ الثَّالِثَةُ ابْتِدَائِيٌّ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --primary: #1d4ed8;
+      --primary-light: #dbeafe;
+      --secondary: #0f766e;
+      --secondary-light: #ccfbf1;
+      --accent: #d97706;
+      --accent-light: #fef3c7;
+      --purple: #7e22ce;
+      --purple-light: #f3e8ff;
+      --success: #15803d;
+      --success-bg: #dcfce7;
+      --error: #b91c1c;
+      --error-bg: #fee2e2;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #cbd5e1;
+      --shadow: 0 6px 20px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(180deg, #e0f2fe 0%, #f8fafc 30%, #f1f5f9 100%);
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    .ltr-num {
+      direction: ltr;
+      display: inline-block;
+      unicode-bidi: isolate;
+      font-weight: 800;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px 14px 50px;
+    }
+
+    .lesson-header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #0284c7 100%);
+      color: #fff;
+      border-radius: 22px;
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lesson-meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      opacity: 0.95;
+    }
+
+    .badge-num {
+      background: #facc15;
+      color: #1e293b;
+      font-weight: 900;
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 1.05rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .lesson-title {
+      margin: 4px 0 0;
+      font-size: 1.85rem;
+      font-weight: 900;
+      letter-spacing: 0.2px;
+    }
+
+    .stage-card {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 22px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      border: 2px solid #e2e8f0;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .stage-card.locked {
+      opacity: 0.55;
+      pointer-events: none;
+      filter: grayscale(0.2);
+    }
+
+    .stage-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px dashed #e2e8f0;
+    }
+
+    .stage-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 18px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 1.2rem;
+    }
+
+    .badge-discover { background: #fef3c7; color: #b45309; border: 2px solid #f59e0b; }
+    .badge-apply { background: #ccfbf1; color: #0f766e; border: 2px solid #14b8a6; }
+    .badge-learned { background: #dbeafe; color: #1d4ed8; border: 2px solid #3b82f6; }
+    .badge-practice { background: #f3e8ff; color: #7e22ce; border: 2px solid #a855f7; }
+    .badge-search { background: #ffe4e6; color: #be123c; border: 2px solid #f43f5e; }
+
+    .lock-hint {
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 700;
+      background: #f8fafc;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+    }
+
+    .problem-text {
+      font-size: 1.12rem;
+      font-weight: 700;
+      margin: 8px 0 14px;
+      color: #0f172a;
+    }
+
+    .sub-instruction {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #1e40af;
+      margin: 12px 0;
+    }
+
+    .chart-box {
+      background: #f8fafc;
+      border: 2px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 14px;
+      margin: 14px 0 18px;
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    .chart-box svg {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .question-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .q-item {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 14px 16px;
+      transition: all 0.25s ease;
+    }
+
+    .q-item.correct-box {
+      background: var(--success-bg);
+      border-color: #22c55e;
+    }
+
+    .q-item.wrong-box {
+      background: var(--error-bg);
+      border-color: #ef4444;
+    }
+
+    .q-label {
+      font-weight: 800;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      display: block;
+      color: #0f172a;
+    }
+
+    .inputs-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .field-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+    }
+
+    .field-group label {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #334155;
+    }
+
+    select, input[type="number"], input[type="text"] {
+      padding: 7px 12px;
+      border: 2px solid #94a3b8;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 800;
+      color: #0f172a;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    select:focus, input:focus {
+      border-color: var(--primary);
+    }
+
+    input[type="number"] {
+      width: 95px;
+      text-align: center;
+      direction: ltr;
+    }
+
+    input:disabled, select:disabled {
+      opacity: 0.92;
+      cursor: not-allowed;
+      background: #f1f5f9;
+    }
+
+    .input-correct {
+      border-color: #16a34a !important;
+      background-color: #dcfce7 !important;
+      color: #14532d !important;
+    }
+
+    .input-wrong {
+      border-color: #dc2626 !important;
+      background-color: #fee2e2 !important;
+      color: #7f1d1d !important;
+    }
+
+    .feedback-note {
+      margin-top: 8px;
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .feedback-note.ok { color: var(--success); }
+    .feedback-note.err { color: var(--error); }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 14px 0;
+    }
+
+    table.curriculum-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 2px solid #64748b;
+      text-align: center;
+    }
+
+    table.curriculum-table th {
+      background: #e0f2fe;
+      color: #0c4a6e;
+      font-weight: 900;
+      padding: 10px 8px;
+      border: 1.5px solid #64748b;
+      font-size: 1rem;
+    }
+
+    table.curriculum-table td {
+      padding: 9px 8px;
+      border: 1.5px solid #94a3b8;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    table.curriculum-table input[type="number"] {
+      width: 72px;
+      padding: 5px;
+      font-size: 0.98rem;
+    }
+
+    .actions-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 2px solid #e2e8f0;
+    }
+
+    .btn-check {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+      transition: transform 0.15s, background 0.2s;
+    }
+
+    .btn-check:hover:not(:disabled) {
+      transform: translateY(-2px);
+      background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    }
+
+    .btn-check:disabled {
+      background: #94a3b8;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .stage-counter {
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      padding: 7px 16px;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 0.98rem;
+      display: inline-flex;
+      gap: 14px;
+    }
+
+    .c-ok { color: var(--success); }
+    .c-err { color: var(--error); }
+
+    .learned-box {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border: 3px solid #3b82f6;
+      border-radius: 18px;
+      padding: 18px 22px;
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: #1e3a8a;
+      text-align: center;
+      box-shadow: inset 0 0 15px rgba(59, 130, 246, 0.1);
+    }
+
+    .exercise-block {
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 20px;
+      transition: opacity 0.35s ease;
+    }
+
+    .exercise-block.locked {
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .ex-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.12rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 12px;
+    }
+
+    .ex-num {
+      background: #7e22ce;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    .two-col-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .two-col-layout {
+        grid-template-columns: 1fr;
+      }
+      .lesson-title {
+        font-size: 1.45rem;
+      }
+    }
+
+    .summary-card {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #fff;
+      border-radius: 22px;
+      padding: 26px 22px;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.25);
+      margin-top: 28px;
+      border: 3px solid #38bdf8;
+    }
+
+    .summary-title {
+      margin: 0 0 20px;
+      font-size: 1.5rem;
+      font-weight: 900;
+      text-align: center;
+      color: #38bdf8;
+    }
+
+    .summary-main {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      margin-bottom: 20px;
+    }
+
+    .circle-chart-wrap {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .circle-chart-wrap svg {
+      transform: rotate(-90deg);
+      width: 170px;
+      height: 170px;
+    }
+
+    .circle-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.14);
+      stroke-width: 15;
+    }
+
+    .circle-progress {
+      fill: none;
+      stroke: #22c55e;
+      stroke-width: 15;
+      stroke-linecap: round;
+      stroke-dasharray: 439.82;
+      stroke-dashoffset: 439.82;
+      transition: stroke-dashoffset 0.6s ease, stroke 0.4s ease;
+    }
+
+    .circle-center-text {
+      position: absolute;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .circle-percent-val {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #38bdf8;
+      line-height: 1.1;
+    }
+
+    .circle-percent-lbl {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      flex: 1;
+      min-width: 260px;
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+        width: 100%;
+      }
+    }
+
+    .stat-box {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid rgba(255, 255, 255, 0.16);
+      border-radius: 16px;
+      padding: 16px 14px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 1.85rem;
+      font-weight: 900;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .stat-lbl {
+      font-size: 0.95rem;
+      color: #cbd5e1;
+      font-weight: 700;
+    }
+
+    .encouragement-msg {
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fde047;
+      margin-bottom: 18px;
+    }
+
+    .btn-reset {
+      display: block;
+      margin: 0 auto;
+      background: #f59e0b;
+      color: #0f172a;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 14px;
+      font-size: 1.08rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+      transition: transform 0.15s, background 0.2s;
+    }
+
+    .btn-reset:hover {
+      background: #fbbf24;
+      transform: translateY(-2px);
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري (أُضيفت)
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس (أُضيف) */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 20px auto 10px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<div class="container">
+  <header class="lesson-header">
+    <div class="lesson-meta">
+      <span>الرِّيَاضِيَّاتُ • السَّنَةُ الثَّالِثَةُ ابْتِدَائِيٌّ</span>
+      <span class="badge-num">الدَّرْسُ <span class="ltr-num">12</span></span>
+    </div>
+    <h1 class="lesson-title">تَمْثِيلَاتٌ بَيَانِيَّةٌ وَمُخَطَّطَاتٌ</h1>
+  </header>
+
+  <!-- ==================== 1. أَكْتَشِفُ ==================== -->
+  <section class="stage-card" id="stage-discover">
+    <div class="stage-header">
+      <span class="stage-badge badge-discover">🔍 أَكْتَشِفُ</span>
+      <span class="lock-hint" id="hint-discover">المَرْحَلَةُ الأُولَى (مَفْتُوحَةٌ)</span>
+    </div>
+
+    <p class="problem-text">
+      يُعْطِي التَّمْثِيلُ الْبَيَانِيُّ عَدَدَ التَّلَامِيذِ الَّذِينَ زَارُوا مَكْتَبَةَ الْمَدْرَسَةِ فِي السُّدَاسِيِّ الْأَوَّلِ مِنَ السَّنَةِ.
+    </p>
+
+    <div class="chart-box">
+      <svg viewBox="0 0 640 330" width="600" role="img" aria-label="التمثيل البياني لعدد زوار مكتبة المدرسة">
+        <text x="115" y="24" font-size="16" font-weight="800" fill="#0f172a" text-anchor="middle">عَدَدُ الزُّوَّارِ</text>
+        
+        <g stroke="#94a3b8" stroke-width="1.2">
+          <line x1="120" y1="45"  x2="560" y2="45" />
+          <line x1="120" y1="80"  x2="560" y2="80" />
+          <line x1="120" y1="115" x2="560" y2="115" />
+          <line x1="120" y1="150" x2="560" y2="150" />
+          <line x1="120" y1="185" x2="560" y2="185" />
+          <line x1="120" y1="220" x2="560" y2="220" />
+          <line x1="190" y1="45" x2="190" y2="255" />
+          <line x1="260" y1="45" x2="260" y2="255" />
+          <line x1="330" y1="45" x2="330" y2="255" />
+          <line x1="400" y1="45" x2="400" y2="255" />
+          <line x1="470" y1="45" x2="470" y2="255" />
+          <line x1="540" y1="45" x2="540" y2="255" />
+        </g>
+
+        <line x1="120" y1="35" x2="120" y2="255" stroke="#0f172a" stroke-width="2.5" />
+        <polygon points="120,30 115,40 125,40" fill="#0f172a" />
+        <line x1="120" y1="255" x2="575" y2="255" stroke="#0f172a" stroke-width="2.5" />
+        <polygon points="580,255 570,250 570,260" fill="#0f172a" />
+
+        <g font-size="15" font-weight="800" fill="#1e293b" text-anchor="end" direction="ltr">
+          <text x="110" y="50">300</text>
+          <text x="110" y="85">250</text>
+          <text x="110" y="120">200</text>
+          <text x="110" y="155">150</text>
+          <text x="110" y="190">100</text>
+          <text x="110" y="225">50</text>
+          <text x="110" y="260">0</text>
+        </g>
+
+        <g font-size="15" font-weight="800" fill="#0f172a" text-anchor="middle">
+          <text x="190" y="282">جَانْفِي</text>
+          <text x="260" y="282">فِيفْرِي</text>
+          <text x="330" y="282">مَارْس</text>
+          <text x="400" y="282">أَفْرِيل</text>
+          <text x="470" y="282">مَاي</text>
+          <text x="540" y="282">جُوَان</text>
+          <text x="595" y="260" text-anchor="start" fill="#1d4ed8">الشَّهْرُ</text>
+        </g>
+
+        <polyline points="190,220 260,185 330,150 400,115 470,80 540,115"
+                  fill="none" stroke="#dc2626" stroke-width="3.2" />
+
+        <g fill="#dc2626" stroke="#ffffff" stroke-width="2">
+          <circle cx="190" cy="220" r="5.5" />
+          <circle cx="260" cy="185" r="5.5" />
+          <circle cx="330" cy="150" r="5.5" />
+          <circle cx="400" cy="115" r="5.5" />
+          <circle cx="470" cy="80"  r="5.5" />
+          <circle cx="540" cy="115" r="5.5" />
+        </g>
+      </svg>
+    </div>
+
+    <p class="sub-instruction">لَاحِظْ ثُمَّ أَجِبْ عَنِ الْأَسْئِلَةِ :</p>
+
+    <div class="question-list" id="qs-discover">
+      <div class="q-item" id="disc-q1-box">
+        <span class="q-label">• مَا هُوَ عَدَدُ التَّلَامِيذِ الَّذِينَ زَارُوا الْمَكْتَبَةَ فِي شَهْرِ مَارْس ؟</span>
+        <div class="inputs-row">
+          <div class="field-group">
+            <label for="disc-q1">عَدَدُ التَّلَامِيذِ :</label>
+            <input type="number" id="disc-q1" placeholder="؟" />
+            <span>تِلْمِيذًا</span>
+          </div>
+        </div>
+        <div class="feedback-note" id="disc-q1-fb"></div>
+      </div>
+
+      <div class="q-item" id="disc-q2-box">
+        <span class="q-label">• فِي أَيِّ شَهْرٍ سُجِّلَ أَكْبَرُ عَدَدٍ لِلزُّوَّارِ ؟ كَمْ بَلَغَ عَدَدُ الزُّوَّارِ فِي هَذَا الشَّهْرِ ؟</span>
+        <div class="inputs-row">
+          <div class="field-group">
+            <label for="disc-q2a">الشَّهْرُ :</label>
+            <select id="disc-q2a">
+              <option value="">-- اخْتَرِ الشَّهْرَ --</option>
+              <option value="جانفي">جَانْفِي</option>
+              <option value="فيفري">فِيفْرِي</option>
+              <option value="مارس">مَارْس</option>
+              <option value="أفريل">أَفْرِيل</option>
+              <option value="ماي">مَاي</option>
+              <option value="جوان">جُوَان</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="disc-q2b">عَدَدُ الزُّوَّارِ :</label>
+            <input type="number" id="disc-q2b" placeholder="؟" />
+            <span>زَائِرًا</span>
+          </div>
+        </div>
+        <div class="feedback-note" id="disc-q2-fb"></div>
+      </div>
+
+      <div class="q-item" id="disc-q3-box">
+        <span class="q-label">• مَا هِيَ الْأَشْهُرُ الَّتِي سُجِّلَ فِيهَا <span class="ltr-num">200</span> زَائِرًا ؟</span>
+        <div class="inputs-row">
+          <div class="field-group">
+            <label for="disc-q3a">الشَّهْرُ الْأَوَّلُ :</label>
+            <select id="disc-q3a">
+              <option value="">-- اخْتَرِ الشَّهْرَ --</option>
+              <option value="جانفي">جَانْفِي</option>
+              <option value="فيفري">فِيفْرِي</option>
+              <option value="مارس">مَارْس</option>
+              <option value="أفريل">أَفْرِيل</option>
+              <option value="ماي">مَاي</option>
+              <option value="جوان">جُوَان</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="disc-q3b">الشَّهْرُ الثَّانِي :</label>
+            <select id="disc-q3b">
+              <option value="">-- اخْتَرِ الشَّهْرَ --</option>
+              <option value="جانفي">جَانْفِي</option>
+              <option value="فيفري">فِيفْرِي</option>
+              <option value="مارس">مَارْس</option>
+              <option value="أفريل">أَفْرِيل</option>
+              <option value="ماي">مَاي</option>
+              <option value="جوان">جُوَان</option>
+            </select>
+          </div>
+        </div>
+        <div class="feedback-note" id="disc-q3-fb"></div>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <button class="btn-check" id="btn-check-discover" onclick="checkDiscover()">تَحَقَّقْ مِنْ إِجَابَاتِي ✔</button>
+      <div class="stage-counter" id="cnt-discover">
+        <span class="c-ok">✓ الصَّوَابُ: 0</span>
+        <span class="c-err">✗ الْخَطَأُ: 0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 2. أُنْجِزُ ==================== -->
+  <section class="stage-card locked" id="stage-apply">
+    <div class="stage-header">
+      <span class="stage-badge badge-apply">✏️ أُنْجِزُ</span>
+      <span class="lock-hint" id="hint-apply">🔒 يُفْتَحُ بَعْدَ إِتْمَامِ مَرْحَلَةِ «أَكْتَشِفُ»</span>
+    </div>
+
+    <p class="problem-text">
+      يُمَثِّلُ الْمُخَطَّطُ عَدَدَ الْأَيَّامِ الْمُمْطِرَةِ فِي إِحْدَى الْمُدُنِ فِي السُّدَاسِيِّ الْأَوَّلِ مِنَ السَّنَةِ.
+    </p>
+
+    <div class="chart-box">
+      <svg viewBox="0 0 640 350" width="600" role="img" aria-label="المخطط بالأعمدة لعدد الأيام الممطرة">
+        <text x="125" y="24" font-size="16" font-weight="800" fill="#0f172a" text-anchor="middle">عَدَدُ الْأَيَّامِ الْمُمْطِرَةِ</text>
+
+        <g stroke="#94a3b8" stroke-width="1.1">
+          <line x1="115" y1="45"  x2="565" y2="45" />
+          <line x1="115" y1="73"  x2="565" y2="73" />
+          <line x1="115" y1="101" x2="565" y2="101" />
+          <line x1="115" y1="129" x2="565" y2="129" />
+          <line x1="115" y1="157" x2="565" y2="157" />
+          <line x1="115" y1="185" x2="565" y2="185" />
+          <line x1="115" y1="213" x2="565" y2="213" />
+          <line x1="115" y1="241" x2="565" y2="241" />
+        </g>
+
+        <line x1="115" y1="32" x2="115" y2="269" stroke="#0f172a" stroke-width="2.5" />
+        <polygon points="115,27 110,37 120,37" fill="#0f172a" />
+        <line x1="115" y1="269" x2="580" y2="269" stroke="#0f172a" stroke-width="2.5" />
+        <polygon points="585,269 575,264 575,274" fill="#0f172a" />
+
+        <g font-size="14" font-weight="800" fill="#1e293b" text-anchor="end" direction="ltr">
+          <text x="105" y="50">16</text>
+          <text x="105" y="78">14</text>
+          <text x="105" y="106">12</text>
+          <text x="105" y="134">10</text>
+          <text x="105" y="162">8</text>
+          <text x="105" y="190">6</text>
+          <text x="105" y="218">4</text>
+          <text x="105" y="246">2</text>
+          <text x="105" y="274">0</text>
+        </g>
+
+        <g stroke="#1e293b" stroke-width="1.5">
+          <rect x="148" y="101" width="36" height="168" fill="#16a34a" />
+          <rect x="218" y="73"  width="36" height="196" fill="#0284c7" />
+          <rect x="288" y="185" width="36" height="84"  fill="#f59e0b" />
+          <rect x="358" y="157" width="36" height="112" fill="#8b5cf6" />
+          <rect x="428" y="213" width="36" height="56"  fill="#ec4899" />
+          <rect x="498" y="241" width="36" height="28"  fill="#ef4444" />
+        </g>
+
+        <g font-size="15" font-weight="800" fill="#0f172a" text-anchor="middle">
+          <text x="166" y="295">جَانْفِي</text>
+          <text x="236" y="295">فِيفْرِي</text>
+          <text x="306" y="295">مَارْس</text>
+          <text x="376" y="295">أَفْرِيل</text>
+          <text x="446" y="295">مَاي</text>
+          <text x="516" y="295">جُوَان</text>
+          <text x="595" y="274" text-anchor="start" fill="#0f766e">الشَّهْرُ</text>
+        </g>
+      </svg>
+    </div>
+
+    <p class="sub-instruction">لَاحِظِ الْمُخَطَّطَ ثُمَّ أَجِبْ عَنِ الْأَسْئِلَةِ :</p>
+
+    <div class="question-list" id="qs-apply">
+      <div class="q-item" id="app-q1-box">
+        <span class="q-label">• مَا هُوَ الشَّهْرُ الْأَكْثَرُ أَمْطَارًا ؟ الْأَقَلُّ أَمْطَارًا ؟</span>
+        <div class="inputs-row">
+          <div class="field-group">
+            <label for="app-q1a">الشَّهْرُ الْأَكْثَرُ أَمْطَارًا :</label>
+            <select id="app-q1a">
+              <option value="">-- اخْتَرِ الشَّهْرَ --</option>
+              <option value="جانفي">جَانْفِي</option>
+              <option value="فيفري">فِيفْرِي</option>
+              <option value="مارس">مَارْس</option>
+              <option value="أفريل">أَفْرِيل</option>
+              <option value="ماي">مَاي</option>
+              <option value="جوان">جُوَان</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="app-q1b">الشَّهْرُ الْأَقَلُّ أَمْطَارًا :</label>
+            <select id="app-q1b">
+              <option value="">-- اخْتَرِ الشَّهْرَ --</option>
+              <option value="جانفي">جَانْفِي</option>
+              <option value="فيفري">فِيفْرِي</option>
+              <option value="مارس">مَارْس</option>
+              <option value="أفريل">أَفْرِيل</option>
+              <option value="ماي">مَاي</option>
+              <option value="جوان">جُوَان</option>
+            </select>
+          </div>
+        </div>
+        <div class="feedback-note" id="app-q1-fb"></div>
+      </div>
+
+      <div class="q-item" id="app-q2-box">
+        <span class="q-label">• مَا هُوَ الشَّهْرُ الَّذِي عَدَدُ أَيَّامِهِ الْمُمْطِرَةِ <span class="ltr-num">4</span> ؟</span>
+        <div class="inputs-row">
+          <div class="field-group">
+            <label for="app-q2">الشَّهْرُ :</label>
+            <select id="app-q2">
+              <option value="">-- اخْتَرِ الشَّهْرَ --</option>
+              <option value="جانفي">جَانْفِي</option>
+              <option value="فيفري">فِيفْرِي</option>
+              <option value="مارس">مَارْس</option>
+              <option value="أفريل">أَفْرِيل</option>
+              <option value="ماي">مَاي</option>
+              <option value="جوان">جُوَان</option>
+            </select>
+          </div>
+        </div>
+        <div class="feedback-note" id="app-q2-fb"></div>
+      </div>
+
+      <div class="q-item" id="app-q3-box">
+        <span class="q-label">• مَا هِيَ الْأَشْهُرُ الَّتِي يَتَعَدَّى عَدَدُ أَيَّامِهَا الْمُمْطِرَةِ <span class="ltr-num">8</span> ؟</span>
+        <div class="inputs-row">
+          <div class="field-group">
+            <label for="app-q3a">الشَّهْرُ الْأَوَّلُ :</label>
+            <select id="app-q3a">
+              <option value="">-- اخْتَرِ الشَّهْرَ --</option>
+              <option value="جانفي">جَانْفِي</option>
+              <option value="فيفري">فِيفْرِي</option>
+              <option value="مارس">مَارْس</option>
+              <option value="أفريل">أَفْرِيل</option>
+              <option value="ماي">مَاي</option>
+              <option value="جوان">جُوَان</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label for="app-q3b">الشَّهْرُ الثَّانِي :</label>
+            <select id="app-q3b">
+              <option value="">-- اخْتَرِ الشَّهْرَ --</option>
+              <option value="جانفي">جَانْفِي</option>
+              <option value="فيفري">فِيفْرِي</option>
+              <option value="مارس">مَارْس</option>
+              <option value="أفريل">أَفْرِيل</option>
+              <option value="ماي">مَاي</option>
+              <option value="جوان">جُوَان</option>
+            </select>
+          </div>
+        </div>
+        <div class="feedback-note" id="app-q3-fb"></div>
+      </div>
+    </div>
+
+    <div class="actions-bar">
+      <button class="btn-check" id="btn-check-apply" onclick="checkApply()">تَحَقَّقْ مِنْ إِجَابَاتِي ✔</button>
+      <div class="stage-counter" id="cnt-apply">
+        <span class="c-ok">✓ الصَّوَابُ: 0</span>
+        <span class="c-err">✗ الْخَطَأُ: 0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 3. تَعَلَّمْتُ ==================== -->
+  <section class="stage-card" id="stage-learned">
+    <div class="stage-header">
+      <span class="stage-badge badge-learned">💡 تَعَلَّمْتُ</span>
+      <span class="lock-hint">قَاعِدَةُ الدَّرْسِ</span>
+    </div>
+    <div class="learned-box">
+      يُقَدِّمُ التَّمْثِيلُ البَيَانِيُّ وَالْمُخَطَّطُ بِالْأَعْمِدَةِ مَعْلُومَاتٍ نَسْتَخْرِجُهَا مِنْ كُلٍّ مِنْهُمَا لِلْإِجَابَةِ عَنْ أَسْئِلَةٍ مَطْرُوحَةٍ .
+    </div>
+  </section>
+
+  <!-- ==================== 4. أَتَمَرَّنُ ==================== -->
+  <section class="stage-card locked" id="stage-practice">
+    <div class="stage-header">
+      <span class="stage-badge badge-practice">📝 أَتَمَرَّنُ (كُرَّاسُ الْأَنْشِطَةِ ص <span class="ltr-num">16</span>)</span>
+      <span class="lock-hint" id="hint-practice">🔒 يُفْتَحُ بَعْدَ إِتْمَامِ مَرْحَلَةِ «أُنْجِزُ»</span>
+    </div>
+
+    <!-- التمرين 1 -->
+    <div class="exercise-block" id="ex1-block">
+      <div class="ex-title">
+        <span class="ex-num">1</span>
+        <span>لَاحِظِ التَّمْثِيلَ الْبَيَانِيَّ ثُمَّ أَجِبْ عَنِ الْأَسْئِلَةِ .</span>
+      </div>
+
+      <div class="chart-box">
+        <svg viewBox="0 0 650 310" width="610" role="img" aria-label="التمثيل البياني لدرجات الحرارة خلال أيام الأسبوع">
+          <text x="115" y="24" font-size="15" font-weight="800" fill="#0f172a" text-anchor="middle">دَرَجَةُ الْحَرَارَةِ</text>
+
+          <g stroke="#94a3b8" stroke-width="1.1">
+            <line x1="115" y1="50"  x2="565" y2="50" />
+            <line x1="115" y1="92"  x2="565" y2="92" />
+            <line x1="115" y1="134" x2="565" y2="134" />
+            <line x1="115" y1="176" x2="565" y2="176" />
+            <line x1="115" y1="218" x2="565" y2="218" />
+            <line x1="115" y1="45" x2="115" y2="245" />
+            <line x1="185" y1="45" x2="185" y2="245" />
+            <line x1="255" y1="45" x2="255" y2="245" />
+            <line x1="325" y1="45" x2="325" y2="245" />
+            <line x1="395" y1="45" x2="395" y2="245" />
+            <line x1="465" y1="45" x2="465" y2="245" />
+            <line x1="535" y1="45" x2="535" y2="245" />
+          </g>
+
+          <line x1="115" y1="34" x2="115" y2="245" stroke="#0f172a" stroke-width="2.5" />
+          <polygon points="115,28 110,38 120,38" fill="#0f172a" />
+          <line x1="115" y1="245" x2="585" y2="245" stroke="#0f172a" stroke-width="2.5" />
+          <polygon points="590,245 580,240 580,250" fill="#0f172a" />
+
+          <g font-size="14" font-weight="800" fill="#1e293b" text-anchor="end" direction="ltr">
+            <text x="105" y="55">28</text>
+            <text x="105" y="97">26</text>
+            <text x="105" y="139">24</text>
+            <text x="105" y="181">22</text>
+            <text x="105" y="223">20</text>
+          </g>
+
+          <g font-size="14" font-weight="800" fill="#0f172a" text-anchor="middle">
+            <text x="115" y="270">الْأَحَدُ</text>
+            <text x="185" y="270">الْإِثْنَيْنِ</text>
+            <text x="255" y="270">الثُّلَاثَاءُ</text>
+            <text x="325" y="270">الْأَرْبِعَاءُ</text>
+            <text x="395" y="270">الْخَمِيسُ</text>
+            <text x="465" y="270">الْجُمُعَةُ</text>
+            <text x="535" y="270">السَّبْتُ</text>
+            <text x="595" y="249" text-anchor="start" fill="#7e22ce">الْيَوْمُ</text>
+          </g>
+
+          <polyline points="115,134 185,176 255,92 325,134 395,50 465,134 535,218"
+                    fill="none" stroke="#15803d" stroke-width="3" />
+
+          <g fill="#15803d" stroke="#fff" stroke-width="2">
+            <circle cx="115" cy="134" r="5" />
+            <circle cx="185" cy="176" r="5" />
+            <circle cx="255" cy="92"  r="5" />
+            <circle cx="325" cy="134" r="5" />
+            <circle cx="395" cy="50"  r="5" />
+            <circle cx="465" cy="134" r="5" />
+            <circle cx="535" cy="218" r="5" />
+          </g>
+
+          <g transform="translate(555, 35)">
+            <rect x="0" y="0" width="54" height="115" rx="6" fill="#bae6fd" stroke="#0284c7" stroke-width="1.5" />
+            <text x="20" y="18" font-size="10" font-weight="800" fill="#0f172a" text-anchor="end" direction="ltr">40</text>
+            <text x="20" y="38" font-size="10" font-weight="800" fill="#0f172a" text-anchor="end" direction="ltr">20</text>
+            <text x="20" y="58" font-size="10" font-weight="800" fill="#0f172a" text-anchor="end" direction="ltr">0</text>
+            <text x="20" y="78" font-size="10" font-weight="800" fill="#0f172a" text-anchor="end" direction="ltr">-20</text>
+            <text x="20" y="98" font-size="10" font-weight="800" fill="#0f172a" text-anchor="end" direction="ltr">-40</text>
+            <rect x="28" y="10" width="10" height="82" rx="5" fill="#fff" stroke="#334155" stroke-width="1.2" />
+            <rect x="30.5" y="34" width="5" height="58" fill="#dc2626" />
+            <circle cx="33" cy="96" r="8" fill="#dc2626" stroke="#334155" stroke-width="1.2" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="question-list" id="qs-ex1">
+        <div class="q-item" id="ex1-q1-box">
+          <span class="q-label"><span class="ltr-num">(1</span> مَا هِيَ دَرَجَةُ الْحَرَارَةِ الْمُسَجَّلَةِ يَوْمَ الْخَمِيسِ ؟</span>
+          <div class="inputs-row">
+            <div class="field-group">
+              <label for="ex1-q1">دَرَجَةُ الْحَرَارَةِ :</label>
+              <input type="number" id="ex1-q1" placeholder="؟" />
+              <span>دَرَجَةً</span>
+            </div>
+          </div>
+          <div class="feedback-note" id="ex1-q1-fb"></div>
+        </div>
+
+        <div class="q-item" id="ex1-q2-box">
+          <span class="q-label"><span class="ltr-num">(2</span> مَا هُوَ الْيَوْمُ الْأَقَلُّ حَرَارَةً ؟</span>
+          <div class="inputs-row">
+            <div class="field-group">
+              <label for="ex1-q2">الْيَوْمُ :</label>
+              <select id="ex1-q2">
+                <option value="">-- اخْتَرِ الْيَوْمَ --</option>
+                <option value="الأحد">الْأَحَدُ</option>
+                <option value="الإثنين">الْإِثْنَيْنِ</option>
+                <option value="الثلاثاء">الثُّلَاثَاءُ</option>
+                <option value="الأربعاء">الْأَرْبِعَاءُ</option>
+                <option value="الخميس">الْخَمِيسُ</option>
+                <option value="الجمعة">الْجُمُعَةُ</option>
+                <option value="السبت">السَّبْتُ</option>
+              </select>
+            </div>
+          </div>
+          <div class="feedback-note" id="ex1-q2-fb"></div>
+        </div>
+
+        <div class="q-item" id="ex1-q3-box">
+          <span class="q-label"><span class="ltr-num">(3</span> مَا هُوَ الْيَوْمُ الْأَعْلَى حَرَارَةً ؟</span>
+          <div class="inputs-row">
+            <div class="field-group">
+              <label for="ex1-q3">الْيَوْمُ :</label>
+              <select id="ex1-q3">
+                <option value="">-- اخْتَرِ الْيَوْمَ --</option>
+                <option value="الأحد">الْأَحَدُ</option>
+                <option value="الإثنين">الْإِثْنَيْنِ</option>
+                <option value="الثلاثاء">الثُّلَاثَاءُ</option>
+                <option value="الأربعاء">الْأَرْبِعَاءُ</option>
+                <option value="الخميس">الْخَمِيسُ</option>
+                <option value="الجمعة">الْجُمُعَةُ</option>
+                <option value="السبت">السَّبْتُ</option>
+              </select>
+            </div>
+          </div>
+          <div class="feedback-note" id="ex1-q3-fb"></div>
+        </div>
+
+        <div class="q-item" id="ex1-q4-box">
+          <span class="q-label"><span class="ltr-num">(4</span> مَا هِيَ الْأَيَّامُ الَّتِي سُجِّلَتْ فِيهَا <span class="ltr-num">24</span> دَرَجَةً ؟</span>
+          <div class="inputs-row">
+            <div class="field-group">
+              <label for="ex1-q4a">الْيَوْمُ الْأَوَّلُ :</label>
+              <select id="ex1-q4a">
+                <option value="">-- اخْتَرِ الْيَوْمَ --</option>
+                <option value="الأحد">الْأَحَدُ</option>
+                <option value="الإثنين">الْإِثْنَيْنِ</option>
+                <option value="الثلاثاء">الثُّلَاثَاءُ</option>
+                <option value="الأربعاء">الْأَرْبِعَاءُ</option>
+                <option value="الخميس">الْخَمِيسُ</option>
+                <option value="الجمعة">الْجُمُعَةُ</option>
+                <option value="السبت">السَّبْتُ</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="ex1-q4b">الْيَوْمُ الثَّانِي :</label>
+              <select id="ex1-q4b">
+                <option value="">-- اخْتَرِ الْيَوْمَ --</option>
+                <option value="الأحد">الْأَحَدُ</option>
+                <option value="الإثنين">الْإِثْنَيْنِ</option>
+                <option value="الثلاثاء">الثُّلَاثَاءُ</option>
+                <option value="الأربعاء">الْأَرْبِعَاءُ</option>
+                <option value="الخميس">الْخَمِيسُ</option>
+                <option value="الجمعة">الْجُمُعَةُ</option>
+                <option value="السبت">السَّبْتُ</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="ex1-q4c">الْيَوْمُ الثَّالِثُ :</label>
+              <select id="ex1-q4c">
+                <option value="">-- اخْتَرِ الْيَوْمَ --</option>
+                <option value="الأحد">الْأَحَدُ</option>
+                <option value="الإثنين">الْإِثْنَيْنِ</option>
+                <option value="الثلاثاء">الثُّلَاثَاءُ</option>
+                <option value="الأربعاء">الْأَرْبِعَاءُ</option>
+                <option value="الخميس">الْخَمِيسُ</option>
+                <option value="الجمعة">الْجُمُعَةُ</option>
+                <option value="السبت">السَّبْتُ</option>
+              </select>
+            </div>
+          </div>
+          <div class="feedback-note" id="ex1-q4-fb"></div>
+        </div>
+      </div>
+
+      <div class="actions-bar">
+        <button class="btn-check" id="btn-check-ex1" onclick="checkEx1()">تَحَقَّقْ مِنَ التَّمْرِينِ <span class="ltr-num">1</span> ✔</button>
+        <div class="stage-counter" id="cnt-ex1">
+          <span class="c-ok">✓ الصَّوَابُ: 0</span>
+          <span class="c-err">✗ الْخَطَأُ: 0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- التمرين 2 -->
+    <div class="exercise-block locked" id="ex2-block">
+      <div class="ex-title">
+        <span class="ex-num">2</span>
+        <span>لَاحِظِ الْمُخَطَّطَ بِالْأَعْمِدَةِ ثُمَّ أَكْمِلْ مَلْءَ الْجَدْوَلِ .</span>
+      </div>
+
+      <div class="two-col-layout">
+        <div class="chart-box" style="margin:0;">
+          <svg viewBox="0 0 360 330" width="330" role="img" aria-label="المخطط بالأعمدة لعدد تلاميذ المدارس">
+            <text x="95" y="22" font-size="14" font-weight="800" fill="#0f172a" text-anchor="middle">عَدَدُ التَّلَامِيذِ</text>
+
+            <g stroke="#3b82f6" stroke-width="1">
+              <line x1="75" y1="45"  x2="285" y2="45" />
+              <line x1="75" y1="77"  x2="285" y2="77" />
+              <line x1="75" y1="109" x2="285" y2="109" />
+              <line x1="75" y1="141" x2="285" y2="141" />
+              <line x1="75" y1="173" x2="285" y2="173" />
+              <line x1="75" y1="205" x2="285" y2="205" />
+              <line x1="75" y1="237" x2="285" y2="237" />
+            </g>
+
+            <line x1="75" y1="32" x2="75" y2="270" stroke="#0f172a" stroke-width="2.2" />
+            <line x1="75" y1="270" x2="295" y2="270" stroke="#0f172a" stroke-width="2.2" />
+
+            <g font-size="13" font-weight="800" fill="#1e293b" text-anchor="end" direction="ltr">
+              <text x="67" y="50">400</text>
+              <text x="67" y="82">350</text>
+              <text x="67" y="114">300</text>
+              <text x="67" y="146">250</text>
+              <text x="67" y="178">200</text>
+              <text x="67" y="210">150</text>
+              <text x="67" y="242">100</text>
+              <text x="67" y="276">0</text>
+            </g>
+
+            <g fill="#16a34a" stroke="#14532d" stroke-width="1.5">
+              <rect x="98"  y="77"  width="28" height="193" />
+              <rect x="148" y="109" width="28" height="161" />
+              <rect x="198" y="173" width="28" height="97" />
+              <rect x="248" y="141" width="28" height="129" />
+            </g>
+
+            <g font-size="14" font-weight="800" fill="#0f172a" text-anchor="middle" direction="ltr">
+              <text x="112" y="290">1</text>
+              <text x="162" y="290">2</text>
+              <text x="212" y="290">3</text>
+              <text x="262" y="290">4</text>
+            </g>
+            <text x="300" y="275" font-size="13" font-weight="800" fill="#0f172a">الْمَدَارِسُ</text>
+          </svg>
+        </div>
+
+        <div class="table-wrap">
+          <table class="curriculum-table">
+            <thead>
+              <tr>
+                <th>الرَّقْمُ</th>
+                <th>اسْمُ الْمَدْرَسَةِ</th>
+                <th>عَدَدُ التَّلَامِيذِ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="ltr-num">1</span></td>
+                <td>عَبْدُ الْحَمِيدِ بْنُ بَادِيسَ</td>
+                <td><input type="number" id="ex2-r1" placeholder="؟" /></td>
+              </tr>
+              <tr>
+                <td><span class="ltr-num">2</span></td>
+                <td>مُحَمَّدٌ الْبَشِيرُ الْإِبْرَاهِيمِيُّ</td>
+                <td><input type="number" id="ex2-r2" placeholder="؟" /></td>
+              </tr>
+              <tr>
+                <td><span class="ltr-num">3</span></td>
+                <td>مُصْطَفَى بْنُ بُولْعِيدٍ</td>
+                <td><input type="number" id="ex2-r3" placeholder="؟" /></td>
+              </tr>
+              <tr>
+                <td><span class="ltr-num">4</span></td>
+                <td>الْأَمِيرُ عَبْدُ الْقَادِرِ</td>
+                <td><input type="number" id="ex2-r4" placeholder="؟" /></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="feedback-note" id="ex2-fb"></div>
+        </div>
+      </div>
+
+      <div class="actions-bar">
+        <button class="btn-check" id="btn-check-ex2" onclick="checkEx2()">تَحَقَّقْ مِنَ التَّمْرِينِ <span class="ltr-num">2</span> ✔</button>
+        <div class="stage-counter" id="cnt-ex2">
+          <span class="c-ok">✓ الصَّوَابُ: 0</span>
+          <span class="c-err">✗ الْخَطَأُ: 0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- التمرين 3 -->
+    <div class="exercise-block locked" id="ex3-block" style="margin-bottom:0;">
+      <div class="ex-title">
+        <span class="ex-num">3</span>
+        <span>لَاحِظِ التَّمْثِيلَ الْبَيَانِيَّ ثُمَّ أَكْمِلْ مَلْءَ الْجَدْوَلِ لِتَجِدَ تَطَوُّرَ وَزْنِ طِفْلٍ رَضِيعٍ فِي عَامِهِ الْأَوَّلِ .</span>
+      </div>
+
+      <div class="chart-box">
+        <svg viewBox="0 0 650 310" width="610" role="img" aria-label="التمثيل البياني لتطور وزن طفل رضيع في عامه الأول">
+          <text x="80" y="22" font-size="15" font-weight="800" fill="#0f172a" text-anchor="middle">الْوَزْنُ</text>
+
+          <g stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,2">
+            <line x1="80" y1="40"  x2="585" y2="40" />
+            <line x1="80" y1="62"  x2="585" y2="62" />
+            <line x1="80" y1="84"  x2="585" y2="84" />
+            <line x1="80" y1="106" x2="585" y2="106" />
+            <line x1="80" y1="128" x2="585" y2="128" />
+            <line x1="80" y1="150" x2="585" y2="150" />
+            <line x1="80" y1="172" x2="585" y2="172" />
+            <line x1="80" y1="194" x2="585" y2="194" />
+            <line x1="80" y1="216" x2="585" y2="216" />
+            <line x1="122" y1="40" x2="122" y2="238" />
+            <line x1="164" y1="40" x2="164" y2="238" />
+            <line x1="206" y1="40" x2="206" y2="238" />
+            <line x1="248" y1="40" x2="248" y2="238" />
+            <line x1="290" y1="40" x2="290" y2="238" />
+            <line x1="332" y1="40" x2="332" y2="238" />
+            <line x1="374" y1="40" x2="374" y2="238" />
+            <line x1="416" y1="40" x2="416" y2="238" />
+            <line x1="458" y1="40" x2="458" y2="238" />
+            <line x1="500" y1="40" x2="500" y2="238" />
+            <line x1="542" y1="40" x2="542" y2="238" />
+            <line x1="584" y1="40" x2="584" y2="238" />
+          </g>
+
+          <line x1="80" y1="30" x2="80" y2="238" stroke="#0f172a" stroke-width="2.2" />
+          <line x1="80" y1="238" x2="595" y2="238" stroke="#0f172a" stroke-width="2.2" />
+
+          <g font-size="13" font-weight="800" fill="#1e293b" text-anchor="end" direction="ltr">
+            <text x="72" y="45">12</text>
+            <text x="72" y="67">11</text>
+            <text x="72" y="89">10</text>
+            <text x="72" y="111">9</text>
+            <text x="72" y="133">8</text>
+            <text x="72" y="155">7</text>
+            <text x="72" y="177">6</text>
+            <text x="72" y="199">5</text>
+            <text x="72" y="221">4</text>
+            <text x="72" y="241">3</text>
+          </g>
+
+          <g font-size="13" font-weight="800" fill="#0f172a" text-anchor="middle" direction="ltr">
+            <text x="80"  y="260">0</text>
+            <text x="122" y="260">1</text>
+            <text x="164" y="260">2</text>
+            <text x="206" y="260">3</text>
+            <text x="248" y="260">4</text>
+            <text x="290" y="260">5</text>
+            <text x="332" y="260">6</text>
+            <text x="374" y="260">7</text>
+            <text x="416" y="260">8</text>
+            <text x="458" y="260">9</text>
+            <text x="500" y="260">10</text>
+            <text x="542" y="260">11</text>
+            <text x="584" y="260">12</text>
+          </g>
+          <text x="602" y="242" font-size="14" font-weight="800" fill="#0f172a">الشَّهْرُ</text>
+
+          <polyline points="80,238 122,216 206,150 332,128 458,84 584,62"
+                    fill="none" stroke="#991b1b" stroke-width="2.8" />
+
+          <g fill="#15803d" stroke="#fff" stroke-width="1.5">
+            <circle cx="122" cy="216" r="4.5" />
+            <circle cx="206" cy="150" r="4.5" />
+            <circle cx="332" cy="128" r="4.5" />
+            <circle cx="458" cy="84"  r="4.5" />
+            <circle cx="584" cy="62"  r="4.5" />
+          </g>
+        </svg>
+      </div>
+
+      <div class="table-wrap">
+        <table class="curriculum-table" dir="ltr">
+          <thead>
+            <tr>
+              <th dir="rtl">الشَّهْرُ</th>
+              <th>1</th>
+              <th>3</th>
+              <th>6</th>
+              <th>9</th>
+              <th>12</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th dir="rtl">الْوَزْنُ (<span class="ltr-num">kg</span>)</th>
+              <td><input type="number" id="ex3-m1" placeholder="؟" /></td>
+              <td><input type="number" id="ex3-m3" placeholder="؟" /></td>
+              <td><input type="number" id="ex3-m6" placeholder="؟" /></td>
+              <td><input type="number" id="ex3-m9" placeholder="؟" /></td>
+              <td><input type="number" id="ex3-m12" placeholder="؟" /></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="feedback-note" id="ex3-fb"></div>
+      </div>
+
+      <div class="actions-bar">
+        <button class="btn-check" id="btn-check-ex3" onclick="checkEx3()">تَحَقَّقْ مِنَ التَّمْرِينِ <span class="ltr-num">3</span> ✔</button>
+        <div class="stage-counter" id="cnt-ex3">
+          <span class="c-ok">✓ الصَّوَابُ: 0</span>
+          <span class="c-err">✗ الْخَطَأُ: 0</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 5. أَبْحَثُ ==================== -->
+  <section class="stage-card locked" id="stage-search">
+    <div class="stage-header">
+      <span class="stage-badge badge-search">🔎 أَبْحَثُ</span>
+      <span class="lock-hint" id="hint-search">🔒 يُفْتَحُ بَعْدَ إِتْمَامِ مَرْحَلَةِ «أَتَمَرَّنُ»</span>
+    </div>
+
+    <p class="problem-text">
+      يُمَثِّلُ الْمُخَطَّطُ الْمُقَابِلُ عَدَدَ تَلَامِيذِ قِسْمٍ الْمَوْلُودِينَ فِي كُلِّ شَهْرٍ . سَجِّلْ هَذِهِ الْمَعْلُومَاتِ فِي جَدْوَلٍ .
+    </p>
+
+    <div class="chart-box">
+      <svg viewBox="0 0 650 265" width="610" role="img" aria-label="المخطط لعدد التلاميذ المولودين في كل شهر">
+        <text x="95" y="22" font-size="14" font-weight="800" fill="#0f172a" text-anchor="middle">عَدَدُ التَّلَامِيذِ</text>
+
+        <g stroke="#94a3b8" stroke-width="1.1">
+          <line x1="75" y1="40"  x2="585" y2="40" />
+          <line x1="75" y1="68"  x2="585" y2="68" />
+          <line x1="75" y1="96"  x2="585" y2="96" />
+          <line x1="75" y1="124" x2="585" y2="124" />
+          <line x1="75" y1="152" x2="585" y2="152" />
+          <line x1="75" y1="180" x2="585" y2="180" />
+        </g>
+
+        <line x1="75" y1="28" x2="75" y2="208" stroke="#0f172a" stroke-width="2.2" />
+        <line x1="75" y1="208" x2="595" y2="208" stroke="#0f172a" stroke-width="2.2" />
+
+        <g font-size="13" font-weight="800" fill="#1e293b" text-anchor="end" direction="ltr">
+          <text x="67" y="45">6</text>
+          <text x="67" y="73">5</text>
+          <text x="67" y="101">4</text>
+          <text x="67" y="129">3</text>
+          <text x="67" y="157">2</text>
+          <text x="67" y="185">1</text>
+          <text x="67" y="213">0</text>
+        </g>
+
+        <g stroke="#581c87" stroke-width="1.3">
+          <rect x="75"  y="152" width="40" height="56"  fill="#c084fc" />
+          <rect x="155" y="124" width="40" height="84"  fill="#c084fc" />
+          <rect x="195" y="152" width="40" height="56"  fill="#9333ea" />
+          <rect x="235" y="40"  width="40" height="168" fill="#c084fc" />
+          <rect x="275" y="124" width="40" height="84"  fill="#9333ea" />
+          <rect x="315" y="96"  width="40" height="112" fill="#c084fc" />
+          <rect x="355" y="152" width="40" height="56"  fill="#9333ea" />
+          <rect x="395" y="96"  width="40" height="112" fill="#c084fc" />
+          <rect x="475" y="124" width="40" height="84"  fill="#c084fc" />
+          <rect x="515" y="180" width="40" height="28"  fill="#9333ea" />
+        </g>
+
+        <g font-size="13" font-weight="800" fill="#0f172a" text-anchor="middle" direction="ltr">
+          <text x="72"  y="230">0</text>
+          <text x="95"  y="230">1</text>
+          <text x="135" y="230">2</text>
+          <text x="175" y="230">3</text>
+          <text x="215" y="230">4</text>
+          <text x="255" y="230">5</text>
+          <text x="295" y="230">6</text>
+          <text x="335" y="230">7</text>
+          <text x="375" y="230">8</text>
+          <text x="415" y="230">9</text>
+          <text x="455" y="230">10</text>
+          <text x="495" y="230">11</text>
+          <text x="535" y="230">12</text>
+        </g>
+        <text x="600" y="213" font-size="14" font-weight="800" fill="#be123c">الشَّهْرُ</text>
+      </svg>
+    </div>
+
+    <div class="table-wrap">
+      <table class="curriculum-table" dir="ltr">
+        <thead>
+          <tr>
+            <th dir="rtl">الشَّهْرُ</th>
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>6</th>
+            <th>7</th>
+            <th>8</th>
+            <th>9</th>
+            <th>10</th>
+            <th>11</th>
+            <th>12</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th dir="rtl">عَدَدُ التَّلَامِيذِ</th>
+            <td><input type="number" id="srch-1"  style="width:48px" placeholder="؟" /></td>
+            <td><input type="number" id="srch-2"  style="width:48px" placeholder="؟" /></td>
+            <td><input type="number" id="srch-3"  style="width:48px" placeholder="؟" /></td>
+            <td><input type="number" id="srch-4"  style="width:48px" placeholder="؟" /></td>
+            <td><input type="number" id="srch-5"  style="width:48px" placeholder="؟" /></td>
+            <td><input type="number" id="srch-6"  style="width:48px" placeholder="؟" /></td>
+            <td><input type="number" id="srch-7"  style="width:48px" placeholder="؟" /></td>
+            <td><input type="number" id="srch-8"  style="width:48px" placeholder="؟" /></td>
+            <td><input type="number" id="srch-9"  style="width:48px" placeholder="؟" /></td>
+            <td><input type="number" id="srch-10" style="width:48px" placeholder="؟" /></td>
+            <td><input type="number" id="srch-11" style="width:48px" placeholder="؟" /></td>
+            <td><input type="number" id="srch-12" style="width:48px" placeholder="؟" /></td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="feedback-note" id="srch-fb"></div>
+    </div>
+
+    <div class="actions-bar">
+      <button class="btn-check" id="btn-check-search" onclick="checkSearch()">تَحَقَّقْ مِنْ مَرْحَلَةِ «أَبْحَثُ» ✔</button>
+      <div class="stage-counter" id="cnt-search">
+        <span class="c-ok">✓ الصَّوَابُ: 0</span>
+        <span class="c-err">✗ الْخَطَأُ: 0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 6. حصيلة الدرس والتقييم العام ==================== -->
+  <section class="summary-card" id="summary-section">
+    <h2 class="summary-title">📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</h2>
+
+    <div class="summary-main">
+      <div class="circle-chart-wrap" aria-label="الدائرة النسبية للتقييم النهائي">
+        <svg viewBox="0 0 170 170">
+          <circle class="circle-bg" cx="85" cy="85" r="70"></circle>
+          <circle class="circle-progress" id="circle-progress-ring" cx="85" cy="85" r="70"></circle>
+        </svg>
+        <div class="circle-center-text">
+          <span class="circle-percent-val" id="total-percent"><span class="ltr-num">0%</span></span>
+          <span class="circle-percent-lbl">النَّتِيجَةُ النِّهَائِيَّةُ</span>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <span class="stat-val" id="total-correct" style="color:#4ade80;"><span class="ltr-num">0 / 31</span></span>
+          <span class="stat-lbl">✓ مَجْمُوعُ الْإِجَابَاتِ الصَّحِيحَةِ</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-val" id="total-wrong" style="color:#f87171;"><span class="ltr-num">0</span></span>
+          <span class="stat-lbl">✗ مَجْمُوعُ الْأَخْطَاءِ (الْمَخْصُومَةُ)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="encouragement-msg" id="encouragement-text">
+      أَكْمِلِ التَّمَارِينَ بِالتَّرْتِيبِ لِتَظْهَرَ نَتِيجَتُكَ النِّهَائِيَّةُ!
+    </div>
+
+    <button class="btn-reset" onclick="resetLesson()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+  </section>
+
+  <!-- ========================================
+       زر العودة إلى الفهرس (أُضيف)
+       ======================================== -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+</div>
+
+<!-- ========================================
+     سكريبت الحماية (أُضيف)
+     ======================================== -->
+<script>
+  // إعدادات القناة - السنة الثالثة
+  const CHANNEL_ID = "-1003910412986";
+
+  // تهيئة Telegram WebApp
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي (كما هو دون تغيير)
+     ======================================== -->
+<script>
+  const TOTAL_ITEMS = 31;
+  const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * 70;
+
+  const scores = {
+    discover: { ok: 0, err: 0, done: false },
+    apply:    { ok: 0, err: 0, done: false },
+    ex1:      { ok: 0, err: 0, done: false },
+    ex2:      { ok: 0, err: 0, done: false },
+    ex3:      { ok: 0, err: 0, done: false },
+    search:   { ok: 0, err: 0, done: false }
+  };
+
+  function updateStageCounter(key, elementId) {
+    const el = document.getElementById(elementId);
+    el.innerHTML = `
+      <span class="c-ok">✓ الصَّوَابُ: <span class="ltr-num">${scores[key].ok}</span></span>
+      <span class="c-err">✗ الْخَطَأُ: <span class="ltr-num">${scores[key].err}</span></span>
+    `;
+    updateGlobalSummary();
+  }
+
+  function updateGlobalSummary() {
+    let totalOk = 0;
+    let totalErr = 0;
+    Object.values(scores).forEach(s => {
+      totalOk += s.ok;
+      totalErr += s.err;
+    });
+
+    const netScore = Math.max(0, totalOk - totalErr);
+    const percent = Math.min(100, Math.max(0, Math.round((netScore / TOTAL_ITEMS) * 100)));
+
+    document.getElementById('total-correct').innerHTML = `<span class="ltr-num">${totalOk} / ${TOTAL_ITEMS}</span>`;
+    document.getElementById('total-wrong').innerHTML = `<span class="ltr-num">${totalErr}</span>`;
+    document.getElementById('total-percent').innerHTML = `<span class="ltr-num">${percent}%</span>`;
+
+    const ring = document.getElementById('circle-progress-ring');
+    const offset = CIRCLE_CIRCUMFERENCE - (percent / 100) * CIRCLE_CIRCUMFERENCE;
+    ring.style.strokeDashoffset = offset;
+    if (percent >= 80) {
+      ring.style.stroke = '#22c55e';
+    } else if (percent >= 50) {
+      ring.style.stroke = '#f59e0b';
+    } else {
+      ring.style.stroke = '#ef4444';
+    }
+
+    const allDone = Object.values(scores).every(s => s.done);
+    const msgEl = document.getElementById('encouragement-text');
+    if (!allDone) {
+      msgEl.textContent = 'أَكْمِلْ بَقِيَّةَ التَّمَارِينِ بِالتَّسَلْسُلِ لِإِتْمَامِ الدَّرْسِ!';
+    } else if (percent >= 90) {
+      msgEl.textContent = '🌟 مُمْتَازٌ جِدًّا! أَنْتَ بَطَلٌ فِي قِرَاءَةِ التَّمْثِيلَاتِ الْبَيَانِيَّةِ وَالْمُخَطَّطَاتِ!';
+    } else if (percent >= 70) {
+      msgEl.textContent = '👏 أَحْسَنْتَ! نَتِيجَةٌ جَيِّدَةٌ، رَاجِعِ الْأَخْطَاءَ الْمُلَوَّنَةَ بِالْأَحْمَرِ أَعْلَاهُ.';
+    } else {
+      msgEl.textContent = '💪 مُحَاوَلَةٌ طَيِّبَةٌ! اصْعَدْ لِمُرَاجَعَةِ التَّصْحِيحِ ثُمَّ أَعِدِ الْمُحَاوَلَةَ.';
+    }
+  }
+
+  function markField(el, isCorrect) {
+    el.disabled = true;
+    el.classList.add(isCorrect ? 'input-correct' : 'input-wrong');
+  }
+
+  function checkDiscover() {
+    const q1 = document.getElementById('disc-q1');
+    const q2a = document.getElementById('disc-q2a');
+    const q2b = document.getElementById('disc-q2b');
+    const q3a = document.getElementById('disc-q3a');
+    const q3b = document.getElementById('disc-q3b');
+
+    if (!q1.value || !q2a.value || !q2b.value || !q3a.value || !q3b.value) {
+      alert('يَرْجَى مَلْءُ جَمِيعِ الْإِجَابَاتِ فِي مَرْحَلَةِ «أَكْتَشِفُ» أَوَّلًا.');
+      return;
+    }
+
+    let ok = 0, err = 0;
+
+    const c1 = Number(q1.value) === 150;
+    markField(q1, c1);
+    document.getElementById('disc-q1-box').classList.add(c1 ? 'correct-box' : 'wrong-box');
+    document.getElementById('disc-q1-fb').className = 'feedback-note ' + (c1 ? 'ok' : 'err');
+    document.getElementById('disc-q1-fb').innerHTML = c1
+      ? '✓ إِجَابَةٌ صَحِيحَةٌ! (<span class="ltr-num">150</span> تِلْمِيذًا).'
+      : '✗ الصَّوَابُ هُوَ: <span class="ltr-num">150</span> تِلْمِيذًا.';
+    c1 ? ok++ : err++;
+
+    const c2a = q2a.value === 'ماي';
+    const c2b = Number(q2b.value) === 250;
+    markField(q2a, c2a);
+    markField(q2b, c2b);
+    const c2All = c2a && c2b;
+    document.getElementById('disc-q2-box').classList.add(c2All ? 'correct-box' : 'wrong-box');
+    document.getElementById('disc-q2-fb').className = 'feedback-note ' + (c2All ? 'ok' : 'err');
+    document.getElementById('disc-q2-fb').innerHTML = c2All
+      ? '✓ إِجَابَةٌ صَحِيحَةٌ! (شَهْرُ مَاي وَبَلَغَ <span class="ltr-num">250</span> زَائِرًا).'
+      : '✗ الصَّوَابُ هُوَ: شَهْرُ مَاي، وَبَلَغَ عَدَدُ الزُّوَّارِ <span class="ltr-num">250</span> زَائِرًا.';
+    c2a ? ok++ : err++;
+    c2b ? ok++ : err++;
+
+    const pair3 = [q3a.value, q3b.value];
+    const c3 = pair3.includes('أفريل') && pair3.includes('جوان');
+    markField(q3a, c3);
+    markField(q3b, c3);
+    document.getElementById('disc-q3-box').classList.add(c3 ? 'correct-box' : 'wrong-box');
+    document.getElementById('disc-q3-fb').className = 'feedback-note ' + (c3 ? 'ok' : 'err');
+    document.getElementById('disc-q3-fb').innerHTML = c3
+      ? '✓ إِجَابَةٌ صَحِيحَةٌ! (أَفْرِيل وَجُوَان).'
+      : '✗ الصَّوَابُ هُوَ: أَفْرِيل وَجُوَان.';
+    c3 ? ok++ : err++;
+
+    scores.discover = { ok, err, done: true };
+    document.getElementById('btn-check-discover').disabled = true;
+    document.getElementById('hint-discover').textContent = '✓ مُكْتَمِلَةٌ';
+    updateStageCounter('discover', 'cnt-discover');
+
+    document.getElementById('stage-apply').classList.remove('locked');
+    document.getElementById('hint-apply').textContent = '🔓 مَفْتُوحَةٌ الْآنَ';
+  }
+
+  function checkApply() {
+    const q1a = document.getElementById('app-q1a');
+    const q1b = document.getElementById('app-q1b');
+    const q2  = document.getElementById('app-q2');
+    const q3a = document.getElementById('app-q3a');
+    const q3b = document.getElementById('app-q3b');
+
+    if (!q1a.value || !q1b.value || !q2.value || !q3a.value || !q3b.value) {
+      alert('يَرْجَى مَلْءُ جَمِيعِ الْإِجَابَاتِ فِي مَرْحَلَةِ «أُنْجِزُ» أَوَّلًا.');
+      return;
+    }
+
+    let ok = 0, err = 0;
+
+    const c1a = q1a.value === 'فيفري';
+    const c1b = q1b.value === 'جوان';
+    markField(q1a, c1a);
+    markField(q1b, c1b);
+    const c1All = c1a && c1b;
+    document.getElementById('app-q1-box').classList.add(c1All ? 'correct-box' : 'wrong-box');
+    document.getElementById('app-q1-fb').className = 'feedback-note ' + (c1All ? 'ok' : 'err');
+    document.getElementById('app-q1-fb').innerHTML = c1All
+      ? '✓ إِجَابَةٌ صَحِيحَةٌ! (الْأَكْثَرُ أَمْطَارًا فِيفْرِي، وَالْأَقَلُّ أَمْطَارًا جُوَان).'
+      : '✗ الصَّوَابُ هُوَ: الْأَكْثَرُ أَمْطَارًا فِيفْرِي، وَالْأَقَلُّ أَمْطَارًا جُوَان.';
+    c1a ? ok++ : err++;
+    c1b ? ok++ : err++;
+
+    const c2 = q2.value === 'ماي';
+    markField(q2, c2);
+    document.getElementById('app-q2-box').classList.add(c2 ? 'correct-box' : 'wrong-box');
+    document.getElementById('app-q2-fb').className = 'feedback-note ' + (c2 ? 'ok' : 'err');
+    document.getElementById('app-q2-fb').innerHTML = c2
+      ? '✓ إِجَابَةٌ صَحِيحَةٌ! (شَهْرُ مَاي).'
+      : '✗ الصَّوَابُ هُوَ: شَهْرُ مَاي.';
+    c2 ? ok++ : err++;
+
+    const pair3 = [q3a.value, q3b.value];
+    const c3 = pair3.includes('جانفي') && pair3.includes('فيفري');
+    markField(q3a, c3);
+    markField(q3b, c3);
+    document.getElementById('app-q3-box').classList.add(c3 ? 'correct-box' : 'wrong-box');
+    document.getElementById('app-q3-fb').className = 'feedback-note ' + (c3 ? 'ok' : 'err');
+    document.getElementById('app-q3-fb').innerHTML = c3
+      ? '✓ إِجَابَةٌ صَحِيحَةٌ! (جَانْفِي وَفِيفْرِي).'
+      : '✗ الصَّوَابُ هُوَ: جَانْفِي وَفِيفْرِي.';
+    c3 ? ok++ : err++;
+
+    scores.apply = { ok, err, done: true };
+    document.getElementById('btn-check-apply').disabled = true;
+    document.getElementById('hint-apply').textContent = '✓ مُكْتَمِلَةٌ';
+    updateStageCounter('apply', 'cnt-apply');
+
+    document.getElementById('stage-practice').classList.remove('locked');
+    document.getElementById('hint-practice').textContent = '🔓 مَفْتُوحَةٌ الْآنَ';
+  }
+
+  function checkEx1() {
+    const q1  = document.getElementById('ex1-q1');
+    const q2  = document.getElementById('ex1-q2');
+    const q3  = document.getElementById('ex1-q3');
+    const q4a = document.getElementById('ex1-q4a');
+    const q4b = document.getElementById('ex1-q4b');
+    const q4c = document.getElementById('ex1-q4c');
+
+    if (!q1.value || !q2.value || !q3.value || !q4a.value || !q4b.value || !q4c.value) {
+      alert('يَرْجَى مَلْءُ جَمِيعِ الْإِجَابَاتِ فِي التَّمْرِينِ (1) أَوَّلًا.');
+      return;
+    }
+
+    let ok = 0, err = 0;
+
+    const c1 = Number(q1.value) === 28;
+    markField(q1, c1);
+    document.getElementById('ex1-q1-box').classList.add(c1 ? 'correct-box' : 'wrong-box');
+    document.getElementById('ex1-q1-fb').className = 'feedback-note ' + (c1 ? 'ok' : 'err');
+    document.getElementById('ex1-q1-fb').innerHTML = c1
+      ? '✓ إِجَابَةٌ صَحِيحَةٌ! (<span class="ltr-num">28</span> دَرَجَةً).'
+      : '✗ الصَّوَابُ هُوَ: <span class="ltr-num">28</span> دَرَجَةً.';
+    c1 ? ok++ : err++;
+
+    const c2 = q2.value === 'السبت';
+    markField(q2, c2);
+    document.getElementById('ex1-q2-box').classList.add(c2 ? 'correct-box' : 'wrong-box');
+    document.getElementById('ex1-q2-fb').className = 'feedback-note ' + (c2 ? 'ok' : 'err');
+    document.getElementById('ex1-q2-fb').innerHTML = c2
+      ? '✓ إِجَابَةٌ صَحِيحَةٌ! (يَوْمُ السَّبْتِ).'
+      : '✗ الصَّوَابُ هُوَ: يَوْمُ السَّبْتِ.';
+    c2 ? ok++ : err++;
+
+    const c3 = q3.value === 'الخميس';
+    markField(q3, c3);
+    document.getElementById('ex1-q3-box').classList.add(c3 ? 'correct-box' : 'wrong-box');
+    document.getElementById('ex1-q3-fb').className = 'feedback-note ' + (c3 ? 'ok' : 'err');
+    document.getElementById('ex1-q3-fb').innerHTML = c3
+      ? '✓ إِجَابَةٌ صَحِيحَةٌ! (يَوْمُ الْخَمِيسِ).'
+      : '✗ الصَّوَابُ هُوَ: يَوْمُ الْخَمِيسِ.';
+    c3 ? ok++ : err++;
+
+    const triple = [q4a.value, q4b.value, q4c.value];
+    const c4 = triple.includes('الأحد') && triple.includes('الأربعاء') && triple.includes('الجمعة');
+    markField(q4a, c4);
+    markField(q4b, c4);
+    markField(q4c, c4);
+    document.getElementById('ex1-q4-box').classList.add(c4 ? 'correct-box' : 'wrong-box');
+    document.getElementById('ex1-q4-fb').className = 'feedback-note ' + (c4 ? 'ok' : 'err');
+    document.getElementById('ex1-q4-fb').innerHTML = c4
+      ? '✓ إِجَابَةٌ صَحِيحَةٌ! (الْأَحَدُ، الْأَرْبِعَاءُ، الْجُمُعَةُ).'
+      : '✗ الصَّوَابُ هُوَ: الْأَحَدُ، الْأَرْبِعَاءُ، الْجُمُعَةُ.';
+    c4 ? ok++ : err++;
+
+    scores.ex1 = { ok, err, done: true };
+    document.getElementById('btn-check-ex1').disabled = true;
+    updateStageCounter('ex1', 'cnt-ex1');
+
+    document.getElementById('ex2-block').classList.remove('locked');
+  }
+
+  function checkEx2() {
+    const ans = {
+      'ex2-r1': 350,
+      'ex2-r2': 300,
+      'ex2-r3': 200,
+      'ex2-r4': 250
+    };
+
+    for (const id of Object.keys(ans)) {
+      if (!document.getElementById(id).value) {
+        alert('يَرْجَى مَلْءُ جَمِيعِ خَانَاتِ الْجَدْوَلِ فِي التَّمْرِينِ (2) أَوَّلًا.');
+        return;
+      }
+    }
+
+    let ok = 0, err = 0;
+    for (const [id, correctVal] of Object.entries(ans)) {
+      const inp = document.getElementById(id);
+      const isOk = Number(inp.value) === correctVal;
+      markField(inp, isOk);
+      isOk ? ok++ : err++;
+    }
+
+    const fb = document.getElementById('ex2-fb');
+    fb.className = 'feedback-note ' + (err === 0 ? 'ok' : 'err');
+    fb.innerHTML = err === 0
+      ? '✓ أَحْسَنْتَ! جَمِيعُ أَعْدَادِ التَّلَامِيذِ صَحِيحَةٌ (<span class="ltr-num">350</span> ، <span class="ltr-num">300</span> ، <span class="ltr-num">200</span> ، <span class="ltr-num">250</span>).'
+      : '✗ التَّصْحِيحُ: الْمَدْرَسَةُ <span class="ltr-num">1</span> (<span class="ltr-num">350</span>) | الْمَدْرَسَةُ <span class="ltr-num">2</span> (<span class="ltr-num">300</span>) | الْمَدْرَسَةُ <span class="ltr-num">3</span> (<span class="ltr-num">200</span>) | الْمَدْرَسَةُ <span class="ltr-num">4</span> (<span class="ltr-num">250</span>).';
+
+    scores.ex2 = { ok, err, done: true };
+    document.getElementById('btn-check-ex2').disabled = true;
+    updateStageCounter('ex2', 'cnt-ex2');
+
+    document.getElementById('ex3-block').classList.remove('locked');
+  }
+
+  function checkEx3() {
+    const ans = {
+      'ex3-m1':  4,
+      'ex3-m3':  7,
+      'ex3-m6':  8,
+      'ex3-m9':  10,
+      'ex3-m12': 11
+    };
+
+    for (const id of Object.keys(ans)) {
+      if (!document.getElementById(id).value) {
+        alert('يَرْجَى مَلْءُ جَمِيعِ خَانَاتِ الْجَدْوَلِ فِي التَّمْرِينِ (3) أَوَّلًا.');
+        return;
+      }
+    }
+
+    let ok = 0, err = 0;
+    for (const [id, correctVal] of Object.entries(ans)) {
+      const inp = document.getElementById(id);
+      const isOk = Number(inp.value) === correctVal;
+      markField(inp, isOk);
+      isOk ? ok++ : err++;
+    }
+
+    const fb = document.getElementById('ex3-fb');
+    fb.className = 'feedback-note ' + (err === 0 ? 'ok' : 'err');
+    fb.innerHTML = err === 0
+      ? '✓ رَائِعٌ! جَمِيعُ الْأَوْزَانِ صَحِيحَةٌ (<span class="ltr-num">4</span> ، <span class="ltr-num">7</span> ، <span class="ltr-num">8</span> ، <span class="ltr-num">10</span> ، <span class="ltr-num">11</span>).'
+      : '✗ التَّصْحِيحُ (مِنَ الْيَسَارِ إِلَى الْيَمِينِ): الشَّهْرُ <span class="ltr-num">1 (4 kg)</span> | الشَّهْرُ <span class="ltr-num">3 (7 kg)</span> | الشَّهْرُ <span class="ltr-num">6 (8 kg)</span> | الشَّهْرُ <span class="ltr-num">9 (10 kg)</span> | الشَّهْرُ <span class="ltr-num">12 (11 kg)</span>.';
+
+    scores.ex3 = { ok, err, done: true };
+    document.getElementById('btn-check-ex3').disabled = true;
+    document.getElementById('hint-practice').textContent = '✓ مُكْتَمِلَةٌ';
+    updateStageCounter('ex3', 'cnt-ex3');
+
+    document.getElementById('stage-search').classList.remove('locked');
+    document.getElementById('hint-search').textContent = '🔓 مَفْتُوحَةٌ الْآنَ';
+  }
+
+  function checkSearch() {
+    const ans = {
+      'srch-1':  2,
+      'srch-2':  0,
+      'srch-3':  3,
+      'srch-4':  2,
+      'srch-5':  6,
+      'srch-6':  3,
+      'srch-7':  4,
+      'srch-8':  2,
+      'srch-9':  4,
+      'srch-10': 0,
+      'srch-11': 3,
+      'srch-12': 1
+    };
+
+    for (const id of Object.keys(ans)) {
+      if (document.getElementById(id).value === '') {
+        alert('يَرْجَى مَلْءُ جَمِيعِ خَانَاتِ الْجَدْوَلِ (مِنَ الشَّهْرِ 1 إِلَى 12) أَوَّلًا.');
+        return;
+      }
+    }
+
+    let ok = 0, err = 0;
+    for (const [id, correctVal] of Object.entries(ans)) {
+      const inp = document.getElementById(id);
+      const isOk = Number(inp.value) === correctVal;
+      markField(inp, isOk);
+      isOk ? ok++ : err++;
+    }
+
+    const fb = document.getElementById('srch-fb');
+    fb.className = 'feedback-note ' + (err === 0 ? 'ok' : 'err');
+    fb.innerHTML = err === 0
+      ? '✓ عَمَلٌ مُمْتَازٌ! جَمِيعُ أَعْدَادِ التَّلَامِيذِ فِي الْأَشْهُرِ الِاثْنَيْ عَشَرَ صَحِيحَةٌ.'
+      : '✗ التَّصْحِيحُ (مِنَ الشَّهْرِ <span class="ltr-num">1</span> إِلَى <span class="ltr-num">12</span>): <span class="ltr-num">2 ، 0 ، 3 ، 2 ، 6 ، 3 ، 4 ، 2 ، 4 ، 0 ، 3 ، 1</span>.';
+
+    scores.search = { ok, err, done: true };
+    document.getElementById('btn-check-search').disabled = true;
+    document.getElementById('hint-search').textContent = '✓ مُكْتَمِلَةٌ';
+    updateStageCounter('search', 'cnt-search');
+  }
+
+  function resetLesson() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+      location.reload();
+    }, 300);
+  }
+</script>
+</body>
+</html>
