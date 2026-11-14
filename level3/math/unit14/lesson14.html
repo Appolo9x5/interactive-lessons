@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الدَّرْسُ 14: الْجَمْعُ بِالِاحْتِفَاظِ - الرِّيَاضِيَّاتُ (السَّنَةُ الثَّالِثَةُ)</title>
+  <!-- استيراد خط عربي واضح يدعم التشكيل الكامل بدقة -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root {
+      --primary-blue: #0284c7;
+      --primary-green: #16a34a;
+      --primary-orange: #ea580c;
+      --primary-purple: #7c3aed;
+      --paper-bg: #f8fafc;
+      --grid-line: #cbd5e1;
+    }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f0f9ff;
+      background-image: radial-gradient(#bae6fd 1px, transparent 1px);
+      background-size: 24px 24px;
+      color: #1e293b;
+      line-height: 1.9;
+    }
+
+    /* حماية صارمة لاتجاه العمليات الحسابية من اليسار إلى اليمين */
+    .math-ltr {
+      direction: ltr;
+      display: inline-block;
+      unicode-bidi: isolate;
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+    }
+
+    /* خلفية دفتر الكراس المخطط */
+    .notebook-grid {
+      background-color: #ffffff;
+      background-image:
+        linear-gradient(to right, #e2e8f0 1px, transparent 1px),
+        linear-gradient(to bottom, #e2e8f0 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* تنسيق خانات الأرقام والاحتفاظ */
+    .digit-input {
+      width: 2.6rem;
+      height: 2.7rem;
+      text-align: center;
+      font-size: 1.35rem;
+      font-weight: 800;
+      border: 2px solid #94a3b8;
+      border-radius: 0.5rem;
+      background-color: #ffffff;
+      color: #0f172a;
+      transition: all 0.2s ease;
+      direction: ltr;
+    }
+
+    .digit-input:focus {
+      outline: none;
+      border-color: #0284c7;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25);
+      background-color: #f0f9ff;
+    }
+
+    /* خانة الاحتفاظ الصغيرة */
+    .carry-input {
+      width: 1.85rem;
+      height: 1.85rem;
+      text-align: center;
+      font-size: 0.95rem;
+      font-weight: 800;
+      border: 1.5px dashed #ef4444;
+      border-radius: 9999px;
+      background-color: #fef2f2;
+      color: #dc2626;
+      transition: all 0.2s ease;
+      direction: ltr;
+    }
+
+    .carry-input:focus {
+      outline: none;
+      border-style: solid;
+      border-color: #dc2626;
+      box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.2);
+    }
+
+    /* حالات التصحيح */
+    .input-correct {
+      border-color: #16a34a !important;
+      background-color: #dcfce7 !important;
+      color: #15803d !important;
+    }
+
+    .input-wrong {
+      border-color: #dc2626 !important;
+      background-color: #fee2e2 !important;
+      color: #b91c1c !important;
+    }
+
+    /* جدول المراتب (م | ع | و) */
+    .place-table {
+      direction: ltr;
+      border-collapse: collapse;
+      margin: 0 auto;
+    }
+
+    .place-table th, .place-table td {
+      border-left: 2px solid #64748b;
+      border-right: 2px solid #64748b;
+      padding: 0.25rem 0.45rem;
+      text-align: center;
+      min-width: 3rem;
+    }
+
+    .place-table tr.header-row th {
+      border-top: 2px solid #64748b;
+      border-bottom: 2px solid #64748b;
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .place-table tr.line-row td {
+      border-bottom: 3px solid #0f172a;
+    }
+
+    /* إزالة أسهم الزيادة والنقصان في حقول الأرقام */
+    input[type="text"]::-webkit-inner-spin-button,
+    input[type="text"]::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* حركات الميزان */
+    .balance-beam {
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-origin: center center;
+    }
+
+    .balance-pan-group {
+      transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @media (max-width: 640px) {
+      .digit-input {
+        width: 2.2rem;
+        height: 2.4rem;
+        font-size: 1.15rem;
+      }
+      .place-table th, .place-table td {
+        min-width: 2.5rem;
+        padding: 0.2rem 0.25rem;
+      }
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري (أُضيفت)
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس (أُضيف) */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 20px auto 10px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    }
+  </style>
+</head>
+<body class="pb-16">
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+  <!-- الرأس العلوي للدرس (مستوحى من ترويسة الكتاب المدرسي الجزائري) -->
+  <header class="bg-gradient-to-l from-sky-600 via-sky-500 to-blue-600 text-white shadow-lg border-b-4 border-amber-400">
+    <div class="max-w-5xl mx-auto px-4 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-4">
+        <div class="bg-white text-sky-700 font-black text-3xl sm:text-4xl w-16 h-16 rounded-2xl flex items-center justify-center shadow-md border-4 border-sky-200 shrink-0">
+          <span class="math-ltr">14</span>
+        </div>
+        <div>
+          <span class="inline-block bg-amber-400 text-slate-900 text-xs sm:text-sm font-extrabold px-3 py-0.5 rounded-full mb-1">
+            الرِّيَاضِيَّاتُ – السَّنَةُ الثَّالِثَةُ ابْتِدَائِيٌّ
+          </span>
+          <h1 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-wide drop-shadow">
+            الْجَمْعُ بِالِاحْتِفَاظِ
+          </h1>
+          <p class="text-sky-100 text-xs sm:text-sm mt-0.5">
+            كِتَابُ التِّلْمِيذِ ص <span class="math-ltr">27</span> | دَفْتَرُ الْأَنْشِطَةِ ص <span class="math-ltr">18</span>
+          </p>
+        </div>
+      </div>
+      <div class="bg-white/15 backdrop-blur-sm px-4 py-2.5 rounded-xl border border-white/30 text-center">
+        <div class="text-xs text-sky-100 font-semibold">التَّقْيِيمُ الْمُبَاشِرُ</div>
+        <div class="text-lg font-extrabold flex items-center gap-3 justify-center mt-0.5">
+          <span class="text-emerald-200">✓ <span id="header-correct" class="math-ltr">0</span></span>
+          <span>|</span>
+          <span class="text-rose-200">✗ <span id="header-wrong" class="math-ltr">0</span></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-3 sm:px-6 mt-6 space-y-8">
+
+    <!-- ===================================================================== -->
+    <!-- القسم الأول: أَكْتَشِفُ (كتاب التلميذ ص 27) -->
+    <!-- ===================================================================== -->
+    <section id="sec-discover" class="bg-white rounded-3xl shadow-md border-2 border-emerald-600 overflow-hidden">
+      <div class="bg-emerald-600 text-white px-5 py-3 flex items-center justify-between">
+        <h2 class="text-xl sm:text-2xl font-black flex items-center gap-2">
+          <span>🔍</span> أَكْتَشِفُ
+        </h2>
+        <span class="text-xs sm:text-sm bg-emerald-800/60 px-3 py-1 rounded-full font-bold">كِتَابُ التِّلْمِيذِ ص <span class="math-ltr">27</span></span>
+      </div>
+
+      <div class="p-4 sm:p-6 space-y-6">
+        <!-- نص الوضعية المشكلة -->
+        <div class="bg-emerald-50/70 border-r-4 border-emerald-600 p-4 rounded-xl text-base sm:text-lg font-bold text-slate-800">
+          <p class="mb-2">
+            <span class="text-rose-600 font-black">◄</span> يُمْكِنُ لِتَلَامِيذِ مَدْرَسَةٍ الِاخْتِيَارُ بَيْنَ مَسْلَكَيْنِ لِلتَّنَقُّلِ مِنْ سَطِيفَ إِلَى الْجَزَائِرِ الْعَاصِمَةِ لِزِيَارَةِ مَقَامِ الشَّهِيدِ.
+          </p>
+          <p>
+            <span class="text-emerald-700 font-black">■</span> لَاحِظْ كَيْفَ قَامَ أَيْمَنُ بِحِسَابِ طُولِ <span class="text-slate-900 underline decoration-emerald-500">الْمَسْلَكِ 1</span>، ثُمَّ احْسُبْ طُولَ <span class="text-rose-700 underline decoration-rose-500">الْمَسْلَكِ 2</span>.
+          </p>
+        </div>
+
+        <!-- شبكة الخريطة + المسلك 1 + المسلك 2 -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <!-- صورة الخريطة 01.png -->
+          <div class="lg:col-span-5 flex flex-col items-center">
+            <div class="w-full bg-amber-50/50 border-2 border-amber-300 rounded-2xl p-3 shadow-inner flex flex-col items-center">
+              <img
+                id="map-image"
+                src="01.png"
+                alt="خَرِيطَةُ الْمَسَالِكِ مِنْ سَطِيفَ إِلَى الْجَزَائِرِ"
+                class="w-full max-w-sm h-auto rounded-xl object-contain"
+                onerror="this.style.display='none'; document.getElementById('map-fallback').classList.remove('hidden');"
+              />
+              <!-- رسم بديل يظهر فقط إذا لم يتوفر ملف 01.png في المجلد -->
+              <div id="map-fallback" class="hidden w-full max-w-sm bg-white rounded-xl p-2 border border-slate-200">
+                <svg viewBox="0 0 380 185" class="w-full h-auto" aria-label="رسم توضيحي للخريطة">
+                  <rect width="380" height="185" rx="12" fill="#f8fafc"/>
+                  <!-- المسلك 2 (أحمر) -->
+                  <polyline points="315,120 275,52 185,44 115,54" fill="none" stroke="#dc2626" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <!-- المسلك 1 (أسود) -->
+                  <polyline points="315,120 195,112 115,54" fill="none" stroke="#0f172a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <!-- المدن -->
+                  <circle cx="115" cy="54" r="6" fill="#dc2626"/>
+                  <text x="115" y="34" text-anchor="middle" font-family="Cairo" font-weight="900" font-size="16" fill="#0f172a">الْجَزَائِرُ</text>
+                  <circle cx="185" cy="44" r="6" fill="#dc2626"/>
+                  <text x="200" y="32" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="13" fill="#0f172a">تِيزِي وَزُّو</text>
+                  <circle cx="275" cy="52" r="6" fill="#dc2626"/>
+                  <text x="285" y="34" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="13" fill="#0f172a">بِجَايَةُ</text>
+                  <circle cx="195" cy="112" r="6" fill="#dc2626"/>
+                  <text x="190" y="138" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="13" fill="#0f172a">الْبُوَيْرَةُ</text>
+                  <circle cx="315" cy="120" r="6" fill="#dc2626"/>
+                  <text x="315" y="148" text-anchor="middle" font-family="Cairo" font-weight="900" font-size="15" fill="#0f172a">سَطِيفُ</text>
+                  <!-- المسافات -->
+                  <text x="148" y="42" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="12" fill="#dc2626" direction="ltr">107 km</text>
+                  <text x="230" y="65" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="12" fill="#dc2626" direction="ltr">121 km</text>
+                  <text x="322" y="84" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="12" fill="#dc2626" direction="ltr">108 km</text>
+                  <text x="352" y="115" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="12" fill="#dc2626">الْمَسْلَكُ 2</text>
+                  <text x="135" y="96" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="12" fill="#0f172a" direction="ltr">103 km</text>
+                  <text x="255" y="104" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="12" fill="#0f172a" direction="ltr">137 km</text>
+                  <text x="260" y="134" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="12" fill="#0f172a">الْمَسْلَكُ 1</text>
+                </svg>
+              </div>
+              <span class="text-xs text-slate-500 mt-2 font-semibold">خَرِيطَةُ الْمَسَالِكِ (مَلَفُّ الصُّورَةِ: <span class="math-ltr text-sky-700">01.png</span>)</span>
+            </div>
+          </div>
+
+          <!-- جدولا المسلك 1 والمسلك 2 -->
+          <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- المسلك 1 (مثال محلول) -->
+            <div class="bg-slate-50 border-2 border-slate-300 rounded-2xl p-4 text-center shadow-sm">
+              <div class="inline-block bg-slate-800 text-white text-sm font-extrabold px-4 py-1 rounded-full mb-3">
+                الْمَسْلَكُ 1 (مِثَالٌ مَحْلُولٌ)
+              </div>
+              <table class="place-table bg-white rounded-lg overflow-hidden shadow-xs">
+                <thead>
+                  <tr class="header-row bg-slate-100">
+                    <th class="text-sky-700">م</th>
+                    <th class="text-emerald-700">ع</th>
+                    <th class="text-amber-600">و</th>
+                  </tr>
+                </thead>
+                <tbody class="text-xl font-black">
+                  <tr>
+                    <td></td>
+                    <td class="text-rose-600 text-sm relative">
+                      <span class="inline-block bg-rose-100 border border-rose-400 rounded-full w-6 h-6 leading-6 text-xs">1</span>
+                    </td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td>1</td>
+                    <td>3</td>
+                    <td>7</td>
+                  </tr>
+                  <tr class="line-row">
+                    <td class="relative"><span class="absolute right-1 text-rose-600 font-black">+</span>1</td>
+                    <td>0</td>
+                    <td>3</td>
+                  </tr>
+                  <tr class="bg-emerald-50 text-emerald-800">
+                    <td class="relative"><span class="absolute right-1 text-slate-700 font-black">=</span>2</td>
+                    <td>4</td>
+                    <td>0</td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="mt-3 text-sm font-bold text-slate-700">
+                طُولُ الْمَسْلَكِ 1 هُوَ: <span class="math-ltr text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">137 + 103 = 240 km</span>
+              </p>
+            </div>
+
+            <!-- المسلك 2 (تفاعلي) -->
+            <div class="bg-rose-50/40 border-2 border-rose-300 rounded-2xl p-4 text-center shadow-sm">
+              <div class="inline-block bg-rose-600 text-white text-sm font-extrabold px-4 py-1 rounded-full mb-3">
+                الْمَسْلَكُ 2 (أَكْمِلِ الْحِسَابَ)
+              </div>
+              <table class="place-table bg-white rounded-lg overflow-hidden shadow-xs" id="tbl-path2">
+                <thead>
+                  <tr class="header-row bg-rose-50">
+                    <th class="text-sky-700">م</th>
+                    <th class="text-emerald-700">ع</th>
+                    <th class="text-amber-600">و</th>
+                  </tr>
+                </thead>
+                <tbody class="text-xl font-black">
+                  <!-- سطر الاحتفاظ -->
+                  <tr>
+                    <td><input type="text" maxlength="1" class="carry-input opacity-40" placeholder="0" data-ans="" title="خَانَةُ الِاحْتِفَاظِ"></td>
+                    <td><input type="text" maxlength="1" class="carry-input" data-group="discover" data-ans="1" aria-label="احتفاظ العشرات"></td>
+                    <td></td>
+                  </tr>
+                  <!-- 108 -->
+                  <tr>
+                    <td>1</td>
+                    <td>0</td>
+                    <td>8</td>
+                  </tr>
+                  <!-- 121 -->
+                  <tr>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="discover" data-ans="1" aria-label="مئات 121"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="discover" data-ans="2" aria-label="عشرات 121"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="discover" data-ans="1" aria-label="وحدات 121"></td>
+                  </tr>
+                  <!-- + 107 -->
+                  <tr class="line-row">
+                    <td class="relative">
+                      <span class="absolute right-0.5 top-2.5 text-rose-600 font-black text-base">+</span>
+                      <input type="text" maxlength="1" class="digit-input" data-group="discover" data-ans="1" aria-label="مئات 107">
+                    </td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="discover" data-ans="0" aria-label="عشرات 107"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="discover" data-ans="7" aria-label="وحدات 107"></td>
+                  </tr>
+                  <!-- = 336 -->
+                  <tr class="bg-amber-50/60">
+                    <td class="relative">
+                      <span class="absolute right-0.5 top-2.5 text-slate-800 font-black text-base">=</span>
+                      <input type="text" maxlength="1" class="digit-input" data-group="discover" data-ans="3" aria-label="مئات الناتج">
+                    </td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="discover" data-ans="3" aria-label="عشرات الناتج"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="discover" data-ans="6" aria-label="وحدات الناتج"></td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="mt-2 text-xs text-slate-600 font-semibold">
+                اُكْتُبِ الْمَسَافَتَيْنِ <span class="math-ltr text-rose-700">121</span> وَ <span class="math-ltr text-rose-700">107</span> ثُمَّ احْسُبِ الْمَجْمُوعَ.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- السؤال الثاني في أكتشف: ذهاباً وإياباً -->
+        <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-4 sm:p-5">
+          <p class="text-base sm:text-lg font-extrabold text-slate-800 mb-3">
+            <span class="text-emerald-700 font-black">■</span> أَحْسُبُ الْمَسَافَةَ الَّتِي يَقْطَعُهَا التَّلَامِيذُ <span class="text-sky-700 underline">ذَهَابًا وَإِيَابًا</span> (فِي كِلَا الْمَسْلَكَيْنِ):
+          </p>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- ذهاباً وإياباً عبر المسلك 1 -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 flex flex-col items-center gap-2">
+              <span class="text-sm font-extrabold text-slate-700 bg-slate-100 px-3 py-1 rounded-full">حَسَبَ الْمَسْلَكِ 1 (<span class="math-ltr">240 km</span> ذَهَابًا):</span>
+              <div class="flex items-center gap-2 mt-1" dir="ltr">
+                <input type="text" maxlength="3" class="digit-input !w-16" data-group="discover" data-ans="240" placeholder="...">
+                <span class="font-black text-xl text-rose-600">+</span>
+                <input type="text" maxlength="3" class="digit-input !w-16" data-group="discover" data-ans="240" placeholder="...">
+                <span class="font-black text-xl">=</span>
+                <input type="text" maxlength="3" class="digit-input !w-16" data-group="discover" data-ans="480" placeholder="...">
+                <span class="font-bold text-slate-600 text-sm">km</span>
+              </div>
+            </div>
+            <!-- ذهاباً وإياباً عبر المسلك 2 -->
+            <div class="bg-white p-4 rounded-xl border border-rose-200 flex flex-col items-center gap-2">
+              <span class="text-sm font-extrabold text-rose-700 bg-rose-50 px-3 py-1 rounded-full">حَسَبَ الْمَسْلَكِ 2 (<span class="math-ltr">336 km</span> ذَهَابًا):</span>
+              <div class="flex items-center gap-2 mt-1" dir="ltr">
+                <input type="text" maxlength="3" class="digit-input !w-16" data-group="discover" data-ans="336" placeholder="...">
+                <span class="font-black text-xl text-rose-600">+</span>
+                <input type="text" maxlength="3" class="digit-input !w-16" data-group="discover" data-ans="336" placeholder="...">
+                <span class="font-black text-xl">=</span>
+                <input type="text" maxlength="3" class="digit-input !w-16" data-group="discover" data-ans="672" placeholder="...">
+                <span class="font-bold text-slate-600 text-sm">km</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- شريط التحقق والعداد للقسم الأول -->
+        <div class="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-200">
+          <button onclick="checkGroup('discover')" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold px-6 py-2.5 rounded-xl shadow transition flex items-center gap-2">
+            <span>✔</span> تَحَقَّقْ مِنْ إِجَابَاتِ أَكْتَشِفُ
+          </button>
+          <div id="feedback-discover" class="text-sm font-bold text-slate-600"></div>
+          <div class="bg-slate-100 px-4 py-2 rounded-xl font-extrabold text-sm sm:text-base border border-slate-300">
+            <span class="text-emerald-700">✓ الصَّوَابُ: <span id="discover-correct" class="math-ltr">0</span></span>
+            <span class="mx-2 text-slate-400">|</span>
+            <span class="text-rose-600">✗ الْخَطَأُ: <span id="discover-wrong" class="math-ltr">0</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- القسم الثاني: أُنْجِزُ (كتاب التلميذ ص 27) -->
+    <!-- ===================================================================== -->
+    <section id="sec-practice" class="bg-white rounded-3xl shadow-md border-2 border-amber-500 overflow-hidden">
+      <div class="bg-amber-500 text-white px-5 py-3 flex items-center justify-between">
+        <h2 class="text-xl sm:text-2xl font-black flex items-center gap-2">
+          <span>✏️</span> أُنْجِزُ
+        </h2>
+        <span class="text-xs sm:text-sm bg-amber-700/60 px-3 py-1 rounded-full font-bold">كِتَابُ التِّلْمِيذِ ص <span class="math-ltr">27</span></span>
+      </div>
+
+      <div class="p-4 sm:p-6 space-y-8">
+        <!-- التمرين 1 -->
+        <div>
+          <h3 class="text-lg sm:text-xl font-black text-slate-800 mb-4 flex items-center gap-2">
+            <span class="bg-sky-600 text-white w-8 h-8 rounded-full inline-flex items-center justify-center text-base">1</span>
+            أَكْمِلْ وَضْعَ وَإِجْرَاءَ الْعَمَلِيَّاتِ.
+          </h3>
+
+          <!-- 3 عمليات مرتبة من اليسار إلى اليمين مطابق للكتاب -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6" dir="ltr">
+            <!-- العملية 1 (على اليسار في الكتاب): 360 + 66 + 400 -->
+            <div class="notebook-grid border-2 border-slate-300 rounded-2xl p-4 text-center shadow-xs" dir="rtl">
+              <div class="bg-sky-100 text-sky-900 font-black text-lg py-1 px-3 rounded-lg mb-3">
+                <span class="math-ltr">360 + 66 + 400</span>
+              </div>
+              <table class="place-table bg-white/90 rounded-lg">
+                <thead>
+                  <tr class="header-row bg-slate-100">
+                    <th class="text-sky-700">م</th>
+                    <th class="text-emerald-700">ع</th>
+                    <th class="text-amber-600">و</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- الاحتفاظ -->
+                  <tr>
+                    <td><input type="text" maxlength="1" class="carry-input" data-group="anjiz" data-ans="1"></td>
+                    <td><input type="text" maxlength="1" class="carry-input opacity-40" placeholder="0" data-ans=""></td>
+                    <td></td>
+                  </tr>
+                  <!-- 360 -->
+                  <tr>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="3"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="6"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="0"></td>
+                  </tr>
+                  <!-- 66 -->
+                  <tr>
+                    <td><input type="text" maxlength="1" class="digit-input opacity-50" placeholder="·" data-group="anjiz" data-ans=""></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="6"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="6"></td>
+                  </tr>
+                  <!-- + 400 -->
+                  <tr class="line-row">
+                    <td class="relative">
+                      <span class="absolute right-0.5 top-2.5 text-rose-600 font-black">+</span>
+                      <input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="4">
+                    </td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="0"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="0"></td>
+                  </tr>
+                  <!-- = 826 -->
+                  <tr class="bg-amber-50">
+                    <td class="relative">
+                      <span class="absolute right-0.5 top-2.5 text-slate-800 font-black">=</span>
+                      <input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="8">
+                    </td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="2"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="6"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- العملية 2 (في الوسط في الكتاب): 64 + 268 -->
+            <div class="notebook-grid border-2 border-slate-300 rounded-2xl p-4 text-center shadow-xs" dir="rtl">
+              <div class="bg-sky-100 text-sky-900 font-black text-lg py-1 px-3 rounded-lg mb-3">
+                <span class="math-ltr">64 + 268</span>
+              </div>
+              <table class="place-table bg-white/90 rounded-lg">
+                <thead>
+                  <tr class="header-row bg-slate-100">
+                    <th class="text-sky-700">م</th>
+                    <th class="text-emerald-700">ع</th>
+                    <th class="text-amber-600">و</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- الاحتفاظ -->
+                  <tr>
+                    <td><input type="text" maxlength="1" class="carry-input" data-group="anjiz" data-ans="1"></td>
+                    <td><input type="text" maxlength="1" class="carry-input" data-group="anjiz" data-ans="1"></td>
+                    <td></td>
+                  </tr>
+                  <!-- 64 -->
+                  <tr>
+                    <td><input type="text" maxlength="1" class="digit-input opacity-50" placeholder="·" data-group="anjiz" data-ans=""></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="6"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="4"></td>
+                  </tr>
+                  <!-- + 268 -->
+                  <tr class="line-row">
+                    <td class="relative">
+                      <span class="absolute right-0.5 top-2.5 text-rose-600 font-black">+</span>
+                      <input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="2">
+                    </td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="6"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="8"></td>
+                  </tr>
+                  <!-- = 332 -->
+                  <tr class="bg-amber-50">
+                    <td class="relative">
+                      <span class="absolute right-0.5 top-2.5 text-slate-800 font-black">=</span>
+                      <input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="3">
+                    </td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="3"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="2"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- العملية 3 (على اليمين في الكتاب): 191 + 547 -->
+            <div class="notebook-grid border-2 border-slate-300 rounded-2xl p-4 text-center shadow-xs" dir="rtl">
+              <div class="bg-sky-100 text-sky-900 font-black text-lg py-1 px-3 rounded-lg mb-3">
+                <span class="math-ltr">191 + 547</span>
+              </div>
+              <table class="place-table bg-white/90 rounded-lg">
+                <thead>
+                  <tr class="header-row bg-slate-100">
+                    <th class="text-sky-700">م</th>
+                    <th class="text-emerald-700">ع</th>
+                    <th class="text-amber-600">و</th>
+                  </tr>
+                </thead>
+                <tbody class="text-xl font-black">
+                  <!-- الاحتفاظ -->
+                  <tr>
+                    <td><input type="text" maxlength="1" class="carry-input" data-group="anjiz" data-ans="1"></td>
+                    <td><input type="text" maxlength="1" class="carry-input opacity-40" placeholder="0" data-ans=""></td>
+                    <td></td>
+                  </tr>
+                  <!-- 191 -->
+                  <tr>
+                    <td>1</td>
+                    <td>9</td>
+                    <td>1</td>
+                  </tr>
+                  <!-- + 547 -->
+                  <tr class="line-row">
+                    <td class="relative"><span class="absolute right-1 text-rose-600 font-black">+</span>5</td>
+                    <td>4</td>
+                    <td>7</td>
+                  </tr>
+                  <!-- = 738 -->
+                  <tr class="bg-amber-50">
+                    <td class="relative">
+                      <span class="absolute right-0.5 top-2.5 text-slate-800 font-black text-base">=</span>
+                      <input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="7">
+                    </td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="3"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="8"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- التمرين 2 (مشكلة أيمن ولعبة الفيديو) -->
+        <div class="border-t-2 border-dashed border-amber-300 pt-6">
+          <h3 class="text-lg sm:text-xl font-black text-slate-800 mb-3 flex items-center gap-2">
+            <span class="bg-sky-600 text-white w-8 h-8 rounded-full inline-flex items-center justify-center text-base">2</span>
+            مُشْكِلَةٌ:
+          </h3>
+          <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-4 sm:p-5 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            <div class="md:col-span-6 space-y-3">
+              <p class="text-base sm:text-lg font-bold text-slate-800">
+                سَجَّلَ أَيْمَنُ <span class="math-ltr text-sky-700 bg-white px-2 py-0.5 rounded border">258</span> نُقْطَةً ثُمَّ <span class="math-ltr text-rose-700 bg-white px-2 py-0.5 rounded border">305</span> نُقْطَةً فِي لُعْبَةِ الْفِيدْيُو.
+              </p>
+              <p class="text-base sm:text-lg font-black text-amber-900">
+                مَا هُوَ مَجْمُوعُ النِّقَاطِ الَّتِي سَجَّلَهَا أَيْمَنُ؟
+              </p>
+              <!-- العملية الأفقية -->
+              <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
+                <div class="text-xs font-extrabold text-slate-500">الْعَمَلِيَّةُ الْأُفُقِيَّةُ:</div>
+                <div class="flex items-center gap-2 flex-wrap" dir="ltr">
+                  <input type="text" maxlength="3" class="digit-input !w-16" data-group="anjiz" data-ans="258" placeholder="...">
+                  <span class="font-black text-xl text-rose-600">+</span>
+                  <input type="text" maxlength="3" class="digit-input !w-16" data-group="anjiz" data-ans="305" placeholder="...">
+                  <span class="font-black text-xl">=</span>
+                  <input type="text" maxlength="3" class="digit-input !w-16" data-group="anjiz" data-ans="563" placeholder="...">
+                </div>
+                <div class="pt-1 text-sm sm:text-base font-extrabold text-slate-800 flex items-center gap-2 flex-wrap">
+                  <span>مَجْمُوعُ النِّقَاطِ الَّتِي سَجَّلَهَا أَيْمَنُ هُوَ:</span>
+                  <input type="text" maxlength="3" class="digit-input !w-16" data-group="anjiz" data-ans="563" placeholder="...">
+                  <span>نُقْطَةً.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- العملية العمودية للمشكلة -->
+            <div class="md:col-span-6 notebook-grid border-2 border-slate-300 rounded-2xl p-4 text-center">
+              <div class="text-xs font-extrabold text-slate-500 mb-2">الْعَمَلِيَّةُ الْعَمُودِيَّةُ:</div>
+              <table class="place-table bg-white rounded-lg">
+                <thead>
+                  <tr class="header-row bg-slate-100">
+                    <th class="text-sky-700">م</th>
+                    <th class="text-emerald-700">ع</th>
+                    <th class="text-amber-600">و</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td></td>
+                    <td><input type="text" maxlength="1" class="carry-input" data-group="anjiz" data-ans="1"></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="2"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="5"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="8"></td>
+                  </tr>
+                  <tr class="line-row">
+                    <td class="relative">
+                      <span class="absolute right-0.5 top-2.5 text-rose-600 font-black">+</span>
+                      <input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="3">
+                    </td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="0"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="5"></td>
+                  </tr>
+                  <tr class="bg-emerald-50">
+                    <td class="relative">
+                      <span class="absolute right-0.5 top-2.5 text-slate-800 font-black">=</span>
+                      <input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="5">
+                    </td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="6"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="anjiz" data-ans="3"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- شريط التحقق والعداد للقسم الثاني -->
+        <div class="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-200">
+          <button onclick="checkGroup('anjiz')" class="bg-amber-600 hover:bg-amber-700 active:scale-95 text-white font-extrabold px-6 py-2.5 rounded-xl shadow transition flex items-center gap-2">
+            <span>✔</span> تَحَقَّقْ مِنْ إِجَابَاتِ أُنْجِزُ
+          </button>
+          <div id="feedback-anjiz" class="text-sm font-bold text-slate-600"></div>
+          <div class="bg-slate-100 px-4 py-2 rounded-xl font-extrabold text-sm sm:text-base border border-slate-300">
+            <span class="text-emerald-700">✓ الصَّوَابُ: <span id="anjiz-correct" class="math-ltr">0</span></span>
+            <span class="mx-2 text-slate-400">|</span>
+            <span class="text-rose-600">✗ الْخَطَأُ: <span id="anjiz-wrong" class="math-ltr">0</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- القسم الثالث: تَعَلَّمْتُ (القاعدة الذهبية - كتاب التلميذ ص 27) -->
+    <!-- ===================================================================== -->
+    <section id="sec-learned" class="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-3xl shadow-md border-2 border-purple-500 overflow-hidden">
+      <div class="bg-purple-600 text-white px-5 py-3 flex items-center justify-between">
+        <h2 class="text-xl sm:text-2xl font-black flex items-center gap-2">
+          <span>💡</span> تَعَلَّمْتُ
+        </h2>
+        <span class="text-xs sm:text-sm bg-purple-800/60 px-3 py-1 rounded-full font-bold">الْقَاعِدَةُ الْأَسَاسِيَّةُ</span>
+      </div>
+
+      <div class="p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+        <div class="lg:col-span-8 space-y-3 text-base sm:text-lg font-bold text-slate-800">
+          <p class="text-purple-900 font-black text-lg sm:text-xl">
+            كَيْفَ أَضَعُ وَأُجْرِي عَمَلِيَّةَ جَمْعٍ بِالِاحْتِفَاظِ؟
+          </p>
+          <p>
+            <span class="text-purple-700 font-black">مِثَالٌ:</span> لِكَيْ أَحْسُبَ الْمَجْمُوعَ <span class="math-ltr bg-white px-2 py-0.5 rounded border border-purple-200 text-purple-900">286 + 534</span> عَمُودِيًّا، أَضَعُ الْعَمَلِيَّةَ.
+            <br>
+            <span class="text-sm sm:text-base text-slate-600">(رَقْمُ الْوَحَدَاتِ تَحْتَ رَقْمِ الْوَحَدَاتِ وَرَقْمُ الْعَشَرَاتِ تَحْتَ رَقْمِ الْعَشَرَاتِ ...).</span>
+          </p>
+          <ul class="space-y-2 pr-2">
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-600 font-black mt-0.5">■</span>
+              <span>أَحْسُبُ عَدَدَ <span class="text-amber-600 font-black">الْوَحَدَاتِ</span>: <span class="math-ltr text-slate-900">6 + 4 = 10</span>، أَكْتُبُ <span class="math-ltr text-emerald-700">0</span> وَأَحْتَفِظُ بِالْعَشَرَةِ <span class="math-ltr text-rose-600">1</span>.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-600 font-black mt-0.5">■</span>
+              <span>أَحْسُبُ عَدَدَ <span class="text-emerald-700 font-black">الْعَشَرَاتِ</span> مَعَ الِاحْتِفَاظِ: <span class="math-ltr text-slate-900">1 + 8 + 3 = 12</span>، أَكْتُبُ <span class="math-ltr text-emerald-700">2</span> وَأَحْتَفِظُ بِالْمِئَةِ <span class="math-ltr text-rose-600">1</span>.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-emerald-600 font-black mt-0.5">■</span>
+              <span>أَحْسُبُ عَدَدَ <span class="text-sky-700 font-black">الْمِئَاتِ</span> مَعَ الِاحْتِفَاظِ: <span class="math-ltr text-slate-900">1 + 2 + 5 = 8</span>، أَكْتُبُ <span class="math-ltr text-emerald-700">8</span> فِي عَمُودِ الْمِئَاتِ.</span>
+            </li>
+          </ul>
+          <div class="pt-2">
+            <span class="inline-block bg-white border-2 border-purple-500 text-purple-900 px-4 py-1.5 rounded-full font-black text-lg shadow-xs">
+              <span class="math-ltr">286 + 534 = 820</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- جدول توضيحي للقاعدة -->
+        <div class="lg:col-span-4 bg-white p-4 rounded-2xl border-2 border-purple-200 shadow-sm text-center">
+          <table class="place-table">
+            <thead>
+              <tr class="header-row bg-purple-50">
+                <th class="text-sky-700">م</th>
+                <th class="text-emerald-700">ع</th>
+                <th class="text-amber-600">و</th>
+              </tr>
+            </thead>
+            <tbody class="text-2xl font-black">
+              <tr>
+                <td class="text-rose-600 text-sm"><span class="inline-block bg-rose-100 border border-rose-400 rounded-full w-6 h-6 leading-6 text-xs">1</span></td>
+                <td class="text-rose-600 text-sm"><span class="inline-block bg-rose-100 border border-rose-400 rounded-full w-6 h-6 leading-6 text-xs">1</span></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>8</td>
+                <td>6</td>
+              </tr>
+              <tr class="line-row">
+                <td class="relative"><span class="absolute right-1 text-rose-600 font-black">+</span>5</td>
+                <td>3</td>
+                <td>4</td>
+              </tr>
+              <tr class="bg-purple-50 text-purple-900">
+                <td class="relative"><span class="absolute right-1 text-slate-700 font-black">=</span>8</td>
+                <td>2</td>
+                <td>0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- القسم الرابع: أَتَمَرَّنُ (دفتر الأنشطة ص 18) -->
+    <!-- ===================================================================== -->
+    <section id="sec-workbook" class="bg-white rounded-3xl shadow-md border-2 border-sky-600 overflow-hidden">
+      <div class="bg-sky-600 text-white px-5 py-3 flex items-center justify-between">
+        <h2 class="text-xl sm:text-2xl font-black flex items-center gap-2">
+          <span>📝</span> أَتَمَرَّنُ
+        </h2>
+        <span class="text-xs sm:text-sm bg-sky-800/60 px-3 py-1 rounded-full font-bold">دَفْتَرُ الْأَنْشِطَةِ ص <span class="math-ltr">18</span></span>
+      </div>
+
+      <div class="p-4 sm:p-6 space-y-10">
+        <!-- التمرين 1: 8 عمليات عمودية -->
+        <div>
+          <h3 class="text-lg sm:text-xl font-black text-slate-800 mb-4 flex items-center gap-2">
+            <span class="bg-sky-600 text-white w-8 h-8 rounded-full inline-flex items-center justify-center text-base">1</span>
+            أَجْرِ عَمَلِيَّاتِ الْجَمْعِ الْآتِيَةِ.
+          </h3>
+
+          <!-- الصف الأول من العمليات (من اليسار إلى اليمين كما في الصورة) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-5" dir="ltr">
+            <!-- 1) 407 + 79 -->
+            <div class="notebook-grid border-2 border-slate-200 rounded-2xl p-3 text-center">
+              <div class="inline-flex flex-col items-end font-black text-xl">
+                <div class="flex gap-2 mb-1">
+                  <span class="w-10"></span>
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <span class="w-10"></span>
+                </div>
+                <div class="flex gap-2 tracking-widest pr-1">
+                  <span class="w-10 text-center">4</span>
+                  <span class="w-10 text-center">0</span>
+                  <span class="w-10 text-center">7</span>
+                </div>
+                <div class="flex gap-2 border-b-2 border-slate-900 pb-1 pr-1">
+                  <span class="w-10 text-center text-rose-600">+</span>
+                  <span class="w-10 text-center">7</span>
+                  <span class="w-10 text-center">9</span>
+                </div>
+                <div class="flex gap-1.5 pt-1.5 items-center">
+                  <span class="text-slate-700 mr-0.5">=</span>
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="4">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="8">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="6">
+                </div>
+              </div>
+            </div>
+
+            <!-- 2) 358 + 535 -->
+            <div class="notebook-grid border-2 border-slate-200 rounded-2xl p-3 text-center">
+              <div class="inline-flex flex-col items-end font-black text-xl">
+                <div class="flex gap-2 mb-1">
+                  <span class="w-10"></span>
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <span class="w-10"></span>
+                </div>
+                <div class="flex gap-2 pr-1">
+                  <span class="w-10 text-center">3</span>
+                  <span class="w-10 text-center">5</span>
+                  <span class="w-10 text-center">8</span>
+                </div>
+                <div class="flex gap-2 border-b-2 border-slate-900 pb-1 pr-1 relative">
+                  <span class="text-rose-600 absolute -left-3">+</span>
+                  <span class="w-10 text-center">5</span>
+                  <span class="w-10 text-center">3</span>
+                  <span class="w-10 text-center">5</span>
+                </div>
+                <div class="flex gap-1.5 pt-1.5 items-center">
+                  <span class="text-slate-700 mr-0.5">=</span>
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="8">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="9">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="3">
+                </div>
+              </div>
+            </div>
+
+            <!-- 3) 867 + 124 -->
+            <div class="notebook-grid border-2 border-slate-200 rounded-2xl p-3 text-center">
+              <div class="inline-flex flex-col items-end font-black text-xl">
+                <div class="flex gap-2 mb-1">
+                  <span class="w-10"></span>
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <span class="w-10"></span>
+                </div>
+                <div class="flex gap-2 pr-1">
+                  <span class="w-10 text-center">8</span>
+                  <span class="w-10 text-center">6</span>
+                  <span class="w-10 text-center">7</span>
+                </div>
+                <div class="flex gap-2 border-b-2 border-slate-900 pb-1 pr-1 relative">
+                  <span class="text-rose-600 absolute -left-3">+</span>
+                  <span class="w-10 text-center">1</span>
+                  <span class="w-10 text-center">2</span>
+                  <span class="w-10 text-center">4</span>
+                </div>
+                <div class="flex gap-1.5 pt-1.5 items-center">
+                  <span class="text-slate-700 mr-0.5">=</span>
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="9">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="9">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="1">
+                </div>
+              </div>
+            </div>
+
+            <!-- 4) 134 + 47 -->
+            <div class="notebook-grid border-2 border-slate-200 rounded-2xl p-3 text-center">
+              <div class="inline-flex flex-col items-end font-black text-xl">
+                <div class="flex gap-2 mb-1">
+                  <span class="w-10"></span>
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <span class="w-10"></span>
+                </div>
+                <div class="flex gap-2 pr-1">
+                  <span class="w-10 text-center">1</span>
+                  <span class="w-10 text-center">3</span>
+                  <span class="w-10 text-center">4</span>
+                </div>
+                <div class="flex gap-2 border-b-2 border-slate-900 pb-1 pr-1">
+                  <span class="w-10 text-center text-rose-600">+</span>
+                  <span class="w-10 text-center">4</span>
+                  <span class="w-10 text-center">7</span>
+                </div>
+                <div class="flex gap-1.5 pt-1.5 items-center">
+                  <span class="text-slate-700 mr-0.5">=</span>
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="1">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="8">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="1">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- الصف الثاني من العمليات (من اليسار إلى اليمين كما في الصورة) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" dir="ltr">
+            <!-- 5) 217 + 538 -->
+            <div class="notebook-grid border-2 border-slate-200 rounded-2xl p-3 text-center">
+              <div class="inline-flex flex-col items-end font-black text-xl">
+                <div class="flex gap-2 mb-1">
+                  <span class="w-10"></span>
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <span class="w-10"></span>
+                </div>
+                <div class="flex gap-2 pr-1">
+                  <span class="w-10 text-center">2</span>
+                  <span class="w-10 text-center">1</span>
+                  <span class="w-10 text-center">7</span>
+                </div>
+                <div class="flex gap-2 border-b-2 border-slate-900 pb-1 pr-1 relative">
+                  <span class="text-rose-600 absolute -left-3">+</span>
+                  <span class="w-10 text-center">5</span>
+                  <span class="w-10 text-center">3</span>
+                  <span class="w-10 text-center">8</span>
+                </div>
+                <div class="flex gap-1.5 pt-1.5 items-center">
+                  <span class="text-slate-700 mr-0.5">=</span>
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="7">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="5">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="5">
+                </div>
+              </div>
+            </div>
+
+            <!-- 6) 250 + 750 = 1000 -->
+            <div class="notebook-grid border-2 border-slate-200 rounded-2xl p-3 text-center">
+              <div class="inline-flex flex-col items-end font-black text-xl">
+                <div class="flex gap-2 mb-1">
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <span class="w-9"></span>
+                  <span class="w-9"></span>
+                </div>
+                <div class="flex gap-2 pr-1">
+                  <span class="w-9 text-center">2</span>
+                  <span class="w-9 text-center">5</span>
+                  <span class="w-9 text-center">0</span>
+                </div>
+                <div class="flex gap-2 border-b-2 border-slate-900 pb-1 pr-1 relative">
+                  <span class="text-rose-600 absolute -left-3">+</span>
+                  <span class="w-9 text-center">7</span>
+                  <span class="w-9 text-center">5</span>
+                  <span class="w-9 text-center">0</span>
+                </div>
+                <div class="flex gap-1 pt-1.5 items-center">
+                  <span class="text-slate-700">=</span>
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-10" data-group="atamarran" data-ans="1">
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-10" data-group="atamarran" data-ans="0">
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-10" data-group="atamarran" data-ans="0">
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-10" data-group="atamarran" data-ans="0">
+                </div>
+              </div>
+            </div>
+
+            <!-- 7) 672 + 328 = 1000 -->
+            <div class="notebook-grid border-2 border-slate-200 rounded-2xl p-3 text-center">
+              <div class="inline-flex flex-col items-end font-black text-xl">
+                <div class="flex gap-2 mb-1">
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <span class="w-9"></span>
+                </div>
+                <div class="flex gap-2 pr-1">
+                  <span class="w-9 text-center">6</span>
+                  <span class="w-9 text-center">7</span>
+                  <span class="w-9 text-center">2</span>
+                </div>
+                <div class="flex gap-2 border-b-2 border-slate-900 pb-1 pr-1 relative">
+                  <span class="text-rose-600 absolute -left-3">+</span>
+                  <span class="w-9 text-center">3</span>
+                  <span class="w-9 text-center">2</span>
+                  <span class="w-9 text-center">8</span>
+                </div>
+                <div class="flex gap-1 pt-1.5 items-center">
+                  <span class="text-slate-700">=</span>
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-10" data-group="atamarran" data-ans="1">
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-10" data-group="atamarran" data-ans="0">
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-10" data-group="atamarran" data-ans="0">
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-10" data-group="atamarran" data-ans="0">
+                </div>
+              </div>
+            </div>
+
+            <!-- 8) 899 + 52 = 951 -->
+            <div class="notebook-grid border-2 border-slate-200 rounded-2xl p-3 text-center">
+              <div class="inline-flex flex-col items-end font-black text-xl">
+                <div class="flex gap-2 mb-1">
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <span class="w-10"></span>
+                </div>
+                <div class="flex gap-2 pr-1">
+                  <span class="w-10 text-center">8</span>
+                  <span class="w-10 text-center">9</span>
+                  <span class="w-10 text-center">9</span>
+                </div>
+                <div class="flex gap-2 border-b-2 border-slate-900 pb-1 pr-1">
+                  <span class="w-10 text-center text-rose-600">+</span>
+                  <span class="w-10 text-center">5</span>
+                  <span class="w-10 text-center">2</span>
+                </div>
+                <div class="flex gap-1.5 pt-1.5 items-center">
+                  <span class="text-slate-700 mr-0.5">=</span>
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="9">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="5">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-10" data-group="atamarran" data-ans="1">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- التمرين 2: ضع ثم أجر عمليات الجمع الآتية (4 عمليات من اليسار لليمين) -->
+        <div class="border-t-2 border-dashed border-sky-200 pt-6">
+          <h3 class="text-lg sm:text-xl font-black text-slate-800 mb-4 flex items-center gap-2">
+            <span class="bg-sky-600 text-white w-8 h-8 rounded-full inline-flex items-center justify-center text-base">2</span>
+            ضَعْ، ثُمَّ أَجْرِ عَمَلِيَّاتِ الْجَمْعِ الْآتِيَةِ.
+          </h3>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" dir="ltr">
+            <!-- 1) 555 + 445 = 1000 -->
+            <div class="notebook-grid border-2 border-slate-300 rounded-2xl p-3 text-center" dir="rtl">
+              <div class="bg-emerald-100 text-emerald-900 font-black text-base py-1 px-2 rounded-lg mb-2 flex items-center justify-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span>
+                <span class="math-ltr">555 + 445</span>
+              </div>
+              <div class="inline-flex flex-col items-end" dir="ltr">
+                <div class="flex gap-1 mb-1">
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <span class="w-8"></span>
+                </div>
+                <div class="flex gap-1 mb-1">
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-9" data-group="atamarran" data-ans="5">
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-9" data-group="atamarran" data-ans="5">
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-9" data-group="atamarran" data-ans="5">
+                </div>
+                <div class="flex gap-1 border-b-2 border-slate-900 pb-1 items-center">
+                  <span class="text-rose-600 font-black">+</span>
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-9" data-group="atamarran" data-ans="4">
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-9" data-group="atamarran" data-ans="4">
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-9" data-group="atamarran" data-ans="5">
+                </div>
+                <div class="flex gap-1 pt-1 items-center">
+                  <span class="text-slate-800 font-black">=</span>
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-9" data-group="atamarran" data-ans="1">
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-9" data-group="atamarran" data-ans="0">
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-9" data-group="atamarran" data-ans="0">
+                  <input type="text" maxlength="1" class="digit-input !w-8 !h-9" data-group="atamarran" data-ans="0">
+                </div>
+              </div>
+            </div>
+
+            <!-- 2) 560 + 140 = 700 -->
+            <div class="notebook-grid border-2 border-slate-300 rounded-2xl p-3 text-center" dir="rtl">
+              <div class="bg-emerald-100 text-emerald-900 font-black text-base py-1 px-2 rounded-lg mb-2 flex items-center justify-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span>
+                <span class="math-ltr">560 + 140</span>
+              </div>
+              <div class="inline-flex flex-col items-end" dir="ltr">
+                <div class="flex gap-1.5 mb-1">
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <span class="w-9"></span>
+                  <span class="w-9"></span>
+                </div>
+                <div class="flex gap-1.5 mb-1">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="5">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="6">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="0">
+                </div>
+                <div class="flex gap-1.5 border-b-2 border-slate-900 pb-1 items-center">
+                  <span class="text-rose-600 font-black">+</span>
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="1">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="4">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="0">
+                </div>
+                <div class="flex gap-1.5 pt-1 items-center">
+                  <span class="text-slate-800 font-black">=</span>
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="7">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="0">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="0">
+                </div>
+              </div>
+            </div>
+
+            <!-- 3) 359 + 232 = 591 -->
+            <div class="notebook-grid border-2 border-slate-300 rounded-2xl p-3 text-center" dir="rtl">
+              <div class="bg-emerald-100 text-emerald-900 font-black text-base py-1 px-2 rounded-lg mb-2 flex items-center justify-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span>
+                <span class="math-ltr">359 + 232</span>
+              </div>
+              <div class="inline-flex flex-col items-end" dir="ltr">
+                <div class="flex gap-1.5 mb-1">
+                  <span class="w-9"></span>
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <span class="w-9"></span>
+                </div>
+                <div class="flex gap-1.5 mb-1">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="3">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="5">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="9">
+                </div>
+                <div class="flex gap-1.5 border-b-2 border-slate-900 pb-1 items-center">
+                  <span class="text-rose-600 font-black">+</span>
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="2">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="3">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="2">
+                </div>
+                <div class="flex gap-1.5 pt-1 items-center">
+                  <span class="text-slate-800 font-black">=</span>
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="5">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="9">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="1">
+                </div>
+              </div>
+            </div>
+
+            <!-- 4) 347 + 79 = 426 -->
+            <div class="notebook-grid border-2 border-slate-300 rounded-2xl p-3 text-center" dir="rtl">
+              <div class="bg-emerald-100 text-emerald-900 font-black text-base py-1 px-2 rounded-lg mb-2 flex items-center justify-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span>
+                <span class="math-ltr">347 + 79</span>
+              </div>
+              <div class="inline-flex flex-col items-end" dir="ltr">
+                <div class="flex gap-1.5 mb-1">
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1">
+                  <span class="w-9"></span>
+                </div>
+                <div class="flex gap-1.5 mb-1">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="3">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="4">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="7">
+                </div>
+                <div class="flex gap-1.5 border-b-2 border-slate-900 pb-1 items-center">
+                  <span class="text-rose-600 font-black">+</span>
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9 opacity-50" placeholder="·" data-group="atamarran" data-ans="">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="7">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="9">
+                </div>
+                <div class="flex gap-1.5 pt-1 items-center">
+                  <span class="text-slate-800 font-black">=</span>
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="4">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="2">
+                  <input type="text" maxlength="1" class="digit-input !w-9 !h-9" data-group="atamarran" data-ans="6">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- التمرين 3 (مشكلة سباق الدراجات) -->
+        <div class="border-t-2 border-dashed border-sky-200 pt-6">
+          <h3 class="text-lg sm:text-xl font-black text-slate-800 mb-3 flex items-center gap-2">
+            <span class="bg-sky-600 text-white w-8 h-8 rounded-full inline-flex items-center justify-center text-base">3</span>
+            مُشْكِلَةُ سِبَاقِ الدَّرَّاجَاتِ:
+          </h3>
+          <div class="bg-sky-50/70 border border-sky-200 rounded-2xl p-4 sm:p-5 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            <div class="md:col-span-7 space-y-3">
+              <p class="text-base sm:text-lg font-bold text-slate-800">
+                يُجْرَى سِبَاقُ دَرَّاجَاتٍ عَلَى <span class="math-ltr">3</span> مَرَاحِلَ: طُولُ الْمَرْحَلَةِ الْأُولَى <span class="math-ltr bg-white px-2 py-0.5 rounded border">186 km</span>، وَطُولُ الثَّانِيَةِ <span class="math-ltr bg-white px-2 py-0.5 rounded border">234 km</span> وَطُولُ الثَّالِثَةِ <span class="math-ltr bg-white px-2 py-0.5 rounded border">89 km</span>.
+              </p>
+              <p class="text-base sm:text-lg font-black text-sky-900">
+                مَا هِيَ الْمَسَافَةُ الَّتِي سَيَقْطَعُهَا الْمُتَسَابِقُونَ؟
+              </p>
+              <!-- العملية الأفقية -->
+              <div class="bg-white p-3 rounded-xl border border-slate-200 space-y-2">
+                <div class="text-xs font-extrabold text-slate-500">الْعَمَلِيَّةُ الْأُفُقِيَّةُ:</div>
+                <div class="flex items-center gap-1.5 flex-wrap" dir="ltr">
+                  <input type="text" maxlength="3" class="digit-input !w-14" data-group="atamarran" data-ans="186" placeholder="...">
+                  <span class="font-black text-lg text-rose-600">+</span>
+                  <input type="text" maxlength="3" class="digit-input !w-14" data-group="atamarran" data-ans="234" placeholder="...">
+                  <span class="font-black text-lg text-rose-600">+</span>
+                  <input type="text" maxlength="3" class="digit-input !w-14" data-group="atamarran" data-ans="89" placeholder="...">
+                  <span class="font-black text-lg">=</span>
+                  <input type="text" maxlength="3" class="digit-input !w-14" data-group="atamarran" data-ans="509" placeholder="...">
+                </div>
+                <div class="pt-1 text-sm sm:text-base font-extrabold text-slate-800 flex items-center gap-2 flex-wrap">
+                  <span>الْمَسَافَةُ الَّتِي سَيَقْطَعُهَا الْمُتَسَابِقُونَ هِيَ:</span>
+                  <input type="text" maxlength="3" class="digit-input !w-16" data-group="atamarran" data-ans="509" placeholder="...">
+                  <span class="math-ltr">km</span>.
+                </div>
+              </div>
+            </div>
+
+            <!-- العملية العمودية لسباق الدراجات -->
+            <div class="md:col-span-5 notebook-grid border-2 border-slate-300 rounded-2xl p-4 text-center">
+              <div class="text-xs font-extrabold text-slate-500 mb-2">الْعَمَلِيَّةُ الْعَمُودِيَّةُ:</div>
+              <table class="place-table bg-white rounded-lg">
+                <thead>
+                  <tr class="header-row bg-slate-100">
+                    <th class="text-sky-700">م</th>
+                    <th class="text-emerald-700">ع</th>
+                    <th class="text-amber-600">و</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="2"></td>
+                    <td><input type="text" maxlength="1" class="carry-input" data-group="atamarran" data-ans="1"></td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="atamarran" data-ans="1"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="atamarran" data-ans="8"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="atamarran" data-ans="6"></td>
+                  </tr>
+                  <tr>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="atamarran" data-ans="2"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="atamarran" data-ans="3"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="atamarran" data-ans="4"></td>
+                  </tr>
+                  <tr class="line-row">
+                    <td class="relative">
+                      <span class="absolute right-0.5 top-2.5 text-rose-600 font-black">+</span>
+                      <input type="text" maxlength="1" class="digit-input opacity-50" placeholder="·" data-group="atamarran" data-ans="">
+                    </td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="atamarran" data-ans="8"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="atamarran" data-ans="9"></td>
+                  </tr>
+                  <tr class="bg-sky-50">
+                    <td class="relative">
+                      <span class="absolute right-0.5 top-2.5 text-slate-800 font-black">=</span>
+                      <input type="text" maxlength="1" class="digit-input" data-group="atamarran" data-ans="5">
+                    </td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="atamarran" data-ans="0"></td>
+                    <td><input type="text" maxlength="1" class="digit-input" data-group="atamarran" data-ans="9"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- شريط التحقق والعداد للقسم الرابع -->
+        <div class="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-200">
+          <button onclick="checkGroup('atamarran')" class="bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-extrabold px-6 py-2.5 rounded-xl shadow transition flex items-center gap-2">
+            <span>✔</span> تَحَقَّقْ مِنْ إِجَابَاتِ أَتَمَرَّنُ
+          </button>
+          <div id="feedback-atamarran" class="text-sm font-bold text-slate-600"></div>
+          <div class="bg-slate-100 px-4 py-2 rounded-xl font-extrabold text-sm sm:text-base border border-slate-300">
+            <span class="text-emerald-700">✓ الصَّوَابُ: <span id="atamarran-correct" class="math-ltr">0</span></span>
+            <span class="mx-2 text-slate-400">|</span>
+            <span class="text-rose-600">✗ الْخَطَأُ: <span id="atamarran-wrong" class="math-ltr">0</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- القسم الخامس: أَبْحَثُ (دفتر الأنشطة ص 18 - الميزان التفاعلي) -->
+    <!-- ===================================================================== -->
+    <section id="sec-challenge" class="bg-white rounded-3xl shadow-md border-2 border-orange-600 overflow-hidden">
+      <div class="bg-orange-600 text-white px-5 py-3 flex items-center justify-between">
+        <h2 class="text-xl sm:text-2xl font-black flex items-center gap-2">
+          <span>⚖️</span> أَبْحَثُ
+        </h2>
+        <span class="text-xs sm:text-sm bg-orange-800/60 px-3 py-1 rounded-full font-bold">دَفْتَرُ الْأَنْشِطَةِ ص <span class="math-ltr">18</span></span>
+      </div>
+
+      <div class="p-4 sm:p-6 space-y-6">
+        <div class="bg-orange-50 border-r-4 border-orange-500 p-4 rounded-xl text-base sm:text-lg font-bold text-slate-800">
+          ضَعْ أَشْيَاءً مِنْ <span class="math-ltr text-orange-700 bg-white px-2 py-0.5 rounded border">1 kg</span>، <span class="math-ltr text-orange-700 bg-white px-2 py-0.5 rounded border">2 kg</span>، <span class="math-ltr text-orange-700 bg-white px-2 py-0.5 rounded border">3 kg</span>، <span class="math-ltr text-orange-700 bg-white px-2 py-0.5 rounded border">4 kg</span> وَ <span class="math-ltr text-orange-700 bg-white px-2 py-0.5 rounded border">5 kg</span> عَلَى كَفَّتَيِ الْمِيزَانِ حَتَّى يَكُونَ فِي تَوَازُنٍ.
+        </div>
+
+        <!-- بنك الأثقال المتاحة -->
+        <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 text-center">
+          <p class="text-sm font-extrabold text-slate-600 mb-3">
+            اِخْتَرْ ثِقْلًا ثُمَّ أَضِفْهُ إِلَى <span class="text-sky-700">الْكَفَّةِ الْيُسْرَى</span> أَوْ <span class="text-rose-700">الْكَفَّةِ الْيُمْنَى</span> (انْقُرْ عَلَى الثِّقْلِ دَاخِلَ الْكَفَّةِ لِإِزَالَتِهِ):
+          </p>
+          <div id="weights-bank" class="flex flex-wrap justify-center gap-3" dir="ltr">
+            <!-- يتم توليد الأزرار عبر JS -->
+          </div>
+        </div>
+
+        <!-- الميزان التفاعلي -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <!-- الكفة اليسرى (تحتوي 5 kg ثابتة + أماكن فارغة) -->
+          <div class="lg:col-span-4 bg-sky-50 border-2 border-sky-300 rounded-2xl p-4 text-center">
+            <div class="font-black text-sky-900 mb-2">الْكَفَّةُ الْيُسْرَى</div>
+            <div class="flex flex-wrap justify-center gap-2 min-h-[4.5rem] items-center bg-white p-3 rounded-xl border border-sky-200" dir="ltr" id="left-pan-items">
+              <span class="bg-rose-600 text-white font-black px-3 py-1.5 rounded-full text-sm shadow-xs border-2 border-rose-800" title="ثِقْلٌ ثَابِتٌ">5 kg 🔒</span>
+            </div>
+            <div class="mt-2 font-extrabold text-sm text-sky-800">
+              الْمَجْمُوعُ: <span id="left-pan-total" class="math-ltr text-lg bg-white px-3 py-0.5 rounded-full border border-sky-300">5 kg</span>
+            </div>
+          </div>
+
+          <!-- الرسم البصري للميزان -->
+          <div class="lg:col-span-4 flex flex-col items-center justify-center">
+            <svg viewBox="0 0 300 190" class="w-full max-w-xs h-auto">
+              <!-- القاعدة -->
+              <rect x="75" y="162" width="150" height="16" rx="6" fill="#334155"/>
+              <rect x="142" y="55" width="16" height="110" rx="4" fill="#475569"/>
+              <!-- مؤشر التوازن -->
+              <polygon points="150,35 143,55 157,55" fill="#ea580c"/>
+              <!-- ذراع الميزان المتحرك -->
+              <g id="scale-beam-group" class="balance-beam">
+                <line x1="45" y1="65" x2="255" y2="65" stroke="#0f172a" stroke-width="6" stroke-linecap="round"/>
+                <circle cx="150" cy="65" r="8" fill="#f59e0b" stroke="#0f172a" stroke-width="3"/>
+                <!-- الكفة اليسرى SVG -->
+                <line x1="45" y1="65" x2="25" y2="115" stroke="#64748b" stroke-width="2"/>
+                <line x1="45" y1="65" x2="65" y2="115" stroke="#64748b" stroke-width="2"/>
+                <path d="M15,115 Q45,135 75,115 Z" fill="#0284c7"/>
+                <text x="45" y="110" text-anchor="middle" font-family="Cairo" font-weight="900" font-size="13" fill="#0369a1" id="svg-left-weight">5 kg</text>
+                <!-- الكفة اليمنى SVG -->
+                <line x1="255" y1="65" x2="235" y2="115" stroke="#64748b" stroke-width="2"/>
+                <line x1="255" y1="65" x2="275" y2="115" stroke="#64748b" stroke-width="2"/>
+                <path d="M225,115 Q255,135 285,115 Z" fill="#e11d48"/>
+                <text x="255" y="110" text-anchor="middle" font-family="Cairo" font-weight="900" font-size="13" fill="#be123c" id="svg-right-weight">6 kg</text>
+              </g>
+            </svg>
+            <div id="scale-status-badge" class="mt-1 text-xs font-extrabold px-3 py-1 rounded-full bg-amber-100 text-amber-800">
+              الْمِيزَانُ غَيْرُ مُتَوَازِنٍ بَعْدُ
+            </div>
+          </div>
+
+          <!-- الكفة اليمنى (تحتوي 6 kg ثابتة + أماكن فارغة) -->
+          <div class="lg:col-span-4 bg-rose-50 border-2 border-rose-300 rounded-2xl p-4 text-center">
+            <div class="font-black text-rose-900 mb-2">الْكَفَّةُ الْيُمْنَى</div>
+            <div class="flex flex-wrap justify-center gap-2 min-h-[4.5rem] items-center bg-white p-3 rounded-xl border border-rose-200" dir="ltr" id="right-pan-items">
+              <span class="bg-rose-600 text-white font-black px-3 py-1.5 rounded-full text-sm shadow-xs border-2 border-rose-800" title="ثِقْلٌ ثَابِتٌ">6 kg 🔒</span>
+            </div>
+            <div class="mt-2 font-extrabold text-sm text-rose-800">
+              الْمَجْمُوعُ: <span id="right-pan-total" class="math-ltr text-lg bg-white px-3 py-0.5 rounded-full border border-rose-300">6 kg</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- شريط التحقق والعداد للقسم الخامس -->
+        <div class="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-200">
+          <div class="flex flex-wrap gap-2">
+            <button onclick="checkScaleBalance()" class="bg-orange-600 hover:bg-orange-700 active:scale-95 text-white font-extrabold px-6 py-2.5 rounded-xl shadow transition flex items-center gap-2">
+              <span>✔</span> تَحَقَّقْ مِنَ التَّوَازُنِ
+            </button>
+            <button onclick="resetScale()" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-4 py-2.5 rounded-xl transition">
+              إِفْرَاغُ الْكَفَّتَيْنِ
+            </button>
+          </div>
+          <div id="feedback-challenge" class="text-sm font-bold text-slate-600"></div>
+          <div class="bg-slate-100 px-4 py-2 rounded-xl font-extrabold text-sm sm:text-base border border-slate-300">
+            <span class="text-emerald-700">✓ الصَّوَابُ: <span id="challenge-correct" class="math-ltr">0</span></span>
+            <span class="mx-2 text-slate-400">|</span>
+            <span class="text-rose-600">✗ الْخَطَأُ: <span id="challenge-wrong" class="math-ltr">0</span></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- التقييم النهائي: الدائرة النسبية (بطاقة حصيلة الدرس والتقييم العام) -->
+    <!-- ===================================================================== -->
+    <section id="sec-summary" class="bg-gradient-to-br from-slate-900 via-sky-950 to-slate-900 text-white rounded-3xl shadow-xl border-4 border-amber-400 p-6 sm:p-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+        <!-- النصوص والإحصائيات -->
+        <div class="space-y-4 text-center md:text-right flex-1">
+          <div class="inline-block bg-amber-400 text-slate-950 font-black px-4 py-1 rounded-full text-sm">
+            📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-black">
+            نَتِيجَتُكَ النِّهَائِيَّةُ فِي دَرْسِ الْجَمْعِ بِالِاحْتِفَاظِ
+          </h2>
+          <p id="final-message" class="text-sky-200 text-base sm:text-lg font-semibold">
+            أَجِبْ عَنِ التَّمَارِينِ أَعْلَاهُ وَاضْغَطْ عَلَى أَزْرَارِ التَّحَقُّقِ لِتَرَى الدَّائِرَةَ النِّسْبِيَّةَ لِنَجَاحِكَ!
+          </p>
+
+          <div class="grid grid-cols-3 gap-3 max-w-md mx-auto md:mx-0 pt-2">
+            <div class="bg-white/10 rounded-2xl p-3 border border-emerald-400/40 text-center">
+              <div class="text-xs text-emerald-300 font-bold">الْإِجَابَاتُ الصَّحِيحَةُ</div>
+              <div id="total-correct-display" class="text-2xl sm:text-3xl font-black text-emerald-400 math-ltr mt-1">0</div>
+            </div>
+            <div class="bg-white/10 rounded-2xl p-3 border border-rose-400/40 text-center">
+              <div class="text-xs text-rose-300 font-bold">الْإِجَابَاتُ الْخَاطِئَةُ</div>
+              <div id="total-wrong-display" class="text-2xl sm:text-3xl font-black text-rose-400 math-ltr mt-1">0</div>
+            </div>
+            <div class="bg-white/10 rounded-2xl p-3 border border-amber-400/40 text-center">
+              <div class="text-xs text-amber-300 font-bold">نِسْبَةُ النَّجَاحِ</div>
+              <div id="total-percent-display" class="text-2xl sm:text-3xl font-black text-amber-400 math-ltr mt-1">0%</div>
+            </div>
+          </div>
+
+          <div class="pt-3 flex flex-wrap gap-3 justify-center md:justify-start">
+            <button onclick="evaluateAll()" class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-slate-950 font-black px-6 py-3 rounded-xl shadow-lg transition">
+              ✨ تَحْدِيثُ التَّقْيِيمِ النِّهَائِيِّ
+            </button>
+            <button onclick="resetAllLesson()" class="bg-white/15 hover:bg-white/25 active:scale-95 text-white font-extrabold px-6 py-3 rounded-xl border border-white/30 transition">
+              🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ
+            </button>
+          </div>
+        </div>
+
+        <!-- الدائرة النسبية (SVG Pie / Donut Chart) -->
+        <div class="flex flex-col items-center shrink-0">
+          <div class="relative w-52 h-52 sm:w-60 sm:h-60 flex items-center justify-center">
+            <svg viewBox="0 0 120 120" class="w-full h-full -rotate-90 drop-shadow-lg">
+              <!-- خلفية الدائرة (تمثل الأخطاء أو غير المجاب) -->
+              <circle
+                cx="60"
+                cy="60"
+                r="48"
+                fill="transparent"
+                stroke="#334155"
+                stroke-width="16"
+              />
+              <!-- قوس الأخطاء (أحمر) -->
+              <circle
+                id="pie-wrong-arc"
+                cx="60"
+                cy="60"
+                r="48"
+                fill="transparent"
+                stroke="#ef4444"
+                stroke-width="16"
+                stroke-dasharray="301.59"
+                stroke-dashoffset="301.59"
+                style="transition: stroke-dashoffset 0.8s ease;"
+              />
+              <!-- قوس النجاح (أخضر) -->
+              <circle
+                id="pie-correct-arc"
+                cx="60"
+                cy="60"
+                r="48"
+                fill="transparent"
+                stroke="#22c55e"
+                stroke-width="16"
+                stroke-linecap="round"
+                stroke-dasharray="301.59"
+                stroke-dashoffset="301.59"
+                style="transition: stroke-dashoffset 0.8s ease;"
+              />
+            </svg>
+            <!-- النسبة المئوية في مركز الدائرة -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span id="pie-center-percent" class="text-4xl sm:text-5xl font-black text-white math-ltr">0%</span>
+              <span class="text-xs text-sky-300 font-bold mt-1">الدَّائِرَةُ النِّسْبِيَّةُ</span>
+            </div>
+          </div>
+
+          <!-- مفتاح ألوان الدائرة النسبية -->
+          <div class="flex items-center gap-4 mt-3 text-xs font-bold">
+            <span class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span> الصَّحِيحَةُ
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span> الْخَاطِئَةُ
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         زر العودة إلى الفهرس (أُضيف)
+         ======================================== -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+  </main>
+
+  <!-- ========================================
+       سكريبت الحماية (أُضيف)
+       ======================================== -->
+  <script>
+    const CHANNEL_ID = "-1003910412986";
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+  </script>
+
+  <!-- ========================================
+       سكريبت الدرس الأصلي (كما هو دون تغيير)
+       ======================================== -->
+  <script>
+    // =========================================================================
+    // 1. إدارة الأثقال والميزان التفاعلي (قسم أبحث)
+    // =========================================================================
+    const availableWeights = [1, 2, 3, 4, 5];
+    let leftPanWeights = [];  // بالإضافة إلى 5 kg الثابتة
+    let rightPanWeights = []; // بالإضافة إلى 6 kg الثابتة
+    let challengeSolved = false;
+    let challengeWrongAttempts = 0;
+
+    function renderScaleUI() {
+      const bankEl = document.getElementById('weights-bank');
+      bankEl.innerHTML = '';
+
+      availableWeights.forEach(w => {
+        const inLeft = leftPanWeights.includes(w);
+        const inRight = rightPanWeights.includes(w);
+        const used = inLeft || inRight;
+
+        const card = document.createElement('div');
+        card.className = `flex items-center gap-1.5 px-3 py-2 rounded-xl border-2 transition ${
+          used
+            ? 'bg-slate-200 border-slate-300 opacity-50'
+            : 'bg-white border-orange-400 shadow-xs'
+        }`;
+
+        card.innerHTML = `
+          <span class="font-black text-base text-slate-800 mr-1">${w} kg</span>
+          <button type="button" ${used ? 'disabled' : ''} onclick="addWeightToPan('left', ${w})"
+            class="text-xs font-extrabold px-2 py-1 rounded-lg bg-sky-600 text-white hover:bg-sky-700 disabled:cursor-not-allowed">
+            + يَسَار
+          </button>
+          <button type="button" ${used ? 'disabled' : ''} onclick="addWeightToPan('right', ${w})"
+            class="text-xs font-extrabold px-2 py-1 rounded-lg bg-rose-600 text-white hover:bg-rose-700 disabled:cursor-not-allowed">
+            + يَمِين
+          </button>
+        `;
+        bankEl.appendChild(card);
+      });
+
+      // تحديث الكفة اليسرى
+      const leftContainer = document.getElementById('left-pan-items');
+      leftContainer.innerHTML = `<span class="bg-rose-600 text-white font-black px-3 py-1.5 rounded-full text-sm shadow-xs border-2 border-rose-800" title="ثِقْلٌ ثَابِتٌ">5 kg 🔒</span>`;
+      leftPanWeights.forEach(w => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'bg-sky-600 hover:bg-sky-700 text-white font-black px-3 py-1.5 rounded-full text-sm shadow cursor-pointer transition';
+        btn.textContent = `${w} kg ✕`;
+        btn.title = 'انْقُرْ لِإِزَالَةِ الثِّقْلِ';
+        btn.onclick = () => removeWeightFromPan('left', w);
+        leftContainer.appendChild(btn);
+      });
+
+      // تحديث الكفة اليمنى
+      const rightContainer = document.getElementById('right-pan-items');
+      rightContainer.innerHTML = `<span class="bg-rose-600 text-white font-black px-3 py-1.5 rounded-full text-sm shadow-xs border-2 border-rose-800" title="ثِقْلٌ ثَابِتٌ">6 kg 🔒</span>`;
+      rightPanWeights.forEach(w => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'bg-orange-600 hover:bg-orange-700 text-white font-black px-3 py-1.5 rounded-full text-sm shadow cursor-pointer transition';
+        btn.textContent = `${w} kg ✕`;
+        btn.title = 'انْقُرْ لِإِزَالَةِ الثِّقْلِ';
+        btn.onclick = () => removeWeightFromPan('right', w);
+        rightContainer.appendChild(btn);
+      });
+
+      // حساب المجاميع وتحريك ذراع الميزان
+      const leftSum = 5 + leftPanWeights.reduce((a, b) => a + b, 0);
+      const rightSum = 6 + rightPanWeights.reduce((a, b) => a + b, 0);
+
+      document.getElementById('left-pan-total').textContent = `${leftSum} kg`;
+      document.getElementById('right-pan-total').textContent = `${rightSum} kg`;
+      document.getElementById('svg-left-weight').textContent = `${leftSum} kg`;
+      document.getElementById('svg-right-weight').textContent = `${rightSum} kg`;
+
+      // زاوية الميلان: إذا اليسار أثقل يميل لليسار (زاوية سالبة)، وإذا اليمين أثقل يميل لليمين (زاوية موجبة)
+      const diff = rightSum - leftSum;
+      const clampedAngle = Math.max(-14, Math.min(14, diff * 3.5));
+      document.getElementById('scale-beam-group').style.transform = `rotate(${clampedAngle}deg)`;
+
+      const statusBadge = document.getElementById('scale-status-badge');
+      if (leftSum === rightSum && (leftPanWeights.length > 0 || rightPanWeights.length > 0)) {
+        statusBadge.textContent = '⚖️ الْمِيزَانُ فِي حَالَةِ تَوَازُنٍ تَامٍّ!';
+        statusBadge.className = 'mt-1 text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-400';
+      } else {
+        statusBadge.textContent = 'الْمِيزَانُ غَيْرُ مُتَوَازِنٍ بَعْدُ';
+        statusBadge.className = 'mt-1 text-xs font-extrabold px-3 py-1 rounded-full bg-amber-100 text-amber-800';
+      }
+    }
+
+    function addWeightToPan(side, weight) {
+      if (side === 'left' && leftPanWeights.length < 4) {
+        leftPanWeights.push(weight);
+      } else if (side === 'right' && rightPanWeights.length < 4) {
+        rightPanWeights.push(weight);
+      }
+      renderScaleUI();
+    }
+
+    function removeWeightFromPan(side, weight) {
+      if (side === 'left') {
+        leftPanWeights = leftPanWeights.filter(w => w !== weight);
+      } else {
+        rightPanWeights = rightPanWeights.filter(w => w !== weight);
+      }
+      renderScaleUI();
+    }
+
+    function resetScale() {
+      leftPanWeights = [];
+      rightPanWeights = [];
+      challengeSolved = false;
+      document.getElementById('feedback-challenge').textContent = '';
+      renderScaleUI();
+      updateGlobalSummary();
+    }
+
+    function checkScaleBalance() {
+      const leftSum = 5 + leftPanWeights.reduce((a, b) => a + b, 0);
+      const rightSum = 6 + rightPanWeights.reduce((a, b) => a + b, 0);
+      const fb = document.getElementById('feedback-challenge');
+
+      if (leftPanWeights.length === 0 && rightPanWeights.length === 0) {
+        fb.innerHTML = `<span class="text-amber-700">⚠️ ضَعْ بَعْضَ الْأَثْقَالِ عَلَى الْكَفَّتَيْنِ أَوَّلًا!</span>`;
+        return;
+      }
+
+      if (leftSum === rightSum) {
+        challengeSolved = true;
+        fb.innerHTML = `<span class="text-emerald-700">🌟 أَحْسَنْتَ! الْكَفَّةُ الْيُسْرَى (<span class="math-ltr">${leftSum} kg</span>) تُسَاوِي الْكَفَّةَ الْيُمْنَى (<span class="math-ltr">${rightSum} kg</span>).</span>`;
+      } else {
+        challengeSolved = false;
+        challengeWrongAttempts++;
+        fb.innerHTML = `<span class="text-rose-600">❌ غَيْرُ مُتَوَازِنٍ (<span class="math-ltr">${leftSum} kg ≠ ${rightSum} kg</span>)، حَاوِلْ تَعْدِيلَ الْأَثْقَالِ!</span>`;
+      }
+
+      document.getElementById('challenge-correct').textContent = challengeSolved ? 1 : 0;
+      document.getElementById('challenge-wrong').textContent = challengeSolved ? 0 : challengeWrongAttempts;
+      updateGlobalSummary();
+    }
+
+    // =========================================================================
+    // 2. تصحيح مجموعات التمارين (أكتشف، أنجز، أتمرن)
+    // =========================================================================
+    // تحويل الأرقام الهندية (٠١٢٣٤٥٦٧٨٩) إلى أرقام عربية قياسية (0123456789) تلقائياً
+    function normalizeDigits(str) {
+      if (!str) return '';
+      const eastern = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+      let res = str.trim();
+      eastern.forEach((char, idx) => {
+        res = res.split(char).join(String(idx));
+      });
+      return res;
+    }
+
+    // الاستماع للكتابة لتنظيف الأرقام والانتقال السلس
+    document.addEventListener('input', (e) => {
+      if (e.target.matches('input[data-ans]')) {
+        e.target.value = normalizeDigits(e.target.value).replace(/[^0-9]/g, '');
+        e.target.classList.remove('input-correct', 'input-wrong');
+      }
+    });
+
+    const groupStats = {
+      discover: { correct: 0, wrong: 0 },
+      anjiz: { correct: 0, wrong: 0 },
+      atamarran: { correct: 0, wrong: 0 }
+    };
+
+    function checkGroup(groupName) {
+      const inputs = document.querySelectorAll(`input[data-group="${groupName}"]`);
+      let correctCount = 0;
+      let wrongCount = 0;
+
+      inputs.forEach(inp => {
+        const expected = inp.getAttribute('data-ans');
+        const val = normalizeDigits(inp.value);
+
+        // الخانات الفارغة الاختيارية (مثل خانة المئات في عدد مكون من رقمين)
+        if (expected === '') {
+          if (val === '' || val === '0') {
+            inp.classList.remove('input-wrong');
+            if (val === '0') inp.classList.add('input-correct');
+          } else {
+            inp.classList.remove('input-correct');
+            inp.classList.add('input-wrong');
+            wrongCount++;
+          }
+          return;
+        }
+
+        if (val === expected) {
+          inp.classList.remove('input-wrong');
+          inp.classList.add('input-correct');
+          correctCount++;
+        } else {
+          inp.classList.remove('input-correct');
+          inp.classList.add('input-wrong');
+          wrongCount++;
+        }
+      });
+
+      groupStats[groupName] = { correct: correctCount, wrong: wrongCount };
+      document.getElementById(`${groupName}-correct`).textContent = correctCount;
+      document.getElementById(`${groupName}-wrong`).textContent = wrongCount;
+
+      const fb = document.getElementById(`feedback-${groupName}`);
+      if (wrongCount === 0 && correctCount > 0) {
+        fb.innerHTML = `<span class="text-emerald-700">🎉 مُمْتَازٌ! جَمِيعُ إِجَابَاتِ هَذَا الْقِسْمِ صَحِيحَةٌ!</span>`;
+      } else {
+        fb.innerHTML = `<span class="text-amber-700">💡 رَاجِعِ الْخَانَاتِ الْمُلَوَّنَةَ بِالْأَحْمَرِ وَصَحِّحْهَا!</span>`;
+      }
+
+      updateGlobalSummary();
+    }
+
+    // =========================================================================
+    // 3. التقييم النهائي وحساب الدائرة النسبية بدقة (لا تتجاوز 100%)
+    // =========================================================================
+    function evaluateAll() {
+      checkGroup('discover');
+      checkGroup('anjiz');
+      checkGroup('atamarran');
+      if (leftPanWeights.length > 0 || rightPanWeights.length > 0) {
+        checkScaleBalance();
+      }
+      updateGlobalSummary();
+    }
+
+    function updateGlobalSummary() {
+      const challengeCorrect = challengeSolved ? 1 : 0;
+      const challengeWrong = (!challengeSolved && challengeWrongAttempts > 0) ? 1 : 0;
+
+      const totalCorrect =
+        groupStats.discover.correct +
+        groupStats.anjiz.correct +
+        groupStats.atamarran.correct +
+        challengeCorrect;
+
+      const totalWrong =
+        groupStats.discover.wrong +
+        groupStats.anjiz.wrong +
+        groupStats.atamarran.wrong +
+        challengeWrong;
+
+      const totalAnswered = totalCorrect + totalWrong;
+
+      // حساب النسبة المئوية بحيث لا تتجاوز 100% أبداً وتكون 100% بالضبط إذا كانت كل الإجابات صحيحة
+      let successPercent = 0;
+      let wrongPercent = 0;
+
+      if (totalAnswered > 0) {
+        if (totalWrong === 0) {
+          successPercent = 100;
+          wrongPercent = 0;
+        } else {
+          successPercent = Math.min(100, Math.max(0, Math.round((totalCorrect / totalAnswered) * 100)));
+          wrongPercent = Math.min(100 - successPercent, Math.round((totalWrong / totalAnswered) * 100));
+        }
+      }
+
+      // تحديث الرأس العلوي وبطاقة الحصيلة
+      document.getElementById('header-correct').textContent = totalCorrect;
+      document.getElementById('header-wrong').textContent = totalWrong;
+      document.getElementById('total-correct-display').textContent = totalCorrect;
+      document.getElementById('total-wrong-display').textContent = totalWrong;
+      document.getElementById('total-percent-display').textContent = `${successPercent}%`;
+      document.getElementById('pie-center-percent').textContent = `${successPercent}%`;
+
+      // تحديث رسم الدائرة النسبية SVG (محيط الدائرة r=48 => 2 * π * 48 ≈ 301.59)
+      const circumference = 301.59;
+      const correctArc = document.getElementById('pie-correct-arc');
+      const wrongArc = document.getElementById('pie-wrong-arc');
+
+      if (totalAnswered === 0) {
+        correctArc.style.strokeDashoffset = circumference;
+        wrongArc.style.strokeDashoffset = circumference;
+      } else {
+        // قوس الأخطاء يغطي النسبة الكلية المجابة (الأخضر + الأحمر)، وقوس الصواب يغطي نسبة الصواب فوقه
+        const totalRatio = Math.min(1, (successPercent + wrongPercent) / 100);
+        const correctRatio = Math.min(1, successPercent / 100);
+
+        wrongArc.style.strokeDashoffset = circumference * (1 - totalRatio);
+        correctArc.style.strokeDashoffset = circumference * (1 - correctRatio);
+      }
+
+      // رسالة التقييم التشجيعية
+      const msgEl = document.getElementById('final-message');
+      if (totalAnswered === 0) {
+        msgEl.textContent = 'أَجِبْ عَنِ التَّمَارِينِ أَعْلَاهُ وَاضْغَطْ عَلَى أَزْرَارِ التَّحَقُّقِ لِتَرَى الدَّائِرَةَ النِّسْبِيَّةَ لِنَجَاحِكَ!';
+      } else if (successPercent === 100) {
+        msgEl.innerHTML = '🏆 <span class="text-emerald-300 font-black">عَبْقَرِيُّ الرِّيَاضِيَّاتِ!</span> لَقَدْ أَتْقَنْتَ الْجَمْعَ بِالِاحْتِفَاظِ بِنِسْبَةِ <span class="math-ltr text-amber-300">100%</span> دُونَ أَيِّ خَطَأٍ!';
+      } else if (successPercent >= 75) {
+        msgEl.innerHTML = '👏 <span class="text-emerald-300 font-black">نَتِيجَةٌ رَائِعَةٌ جِدًّا!</span> بَقِيَ لَكَ الْقَلِيلُ فَقَطْ لِتَصِلَ إِلَى الْعَلَامَةِ الْكَامِلَةِ.';
+      } else if (successPercent >= 50) {
+        msgEl.innerHTML = '👍 <span class="text-amber-300 font-black">عَمَلٌ جَيِّدٌ!</span> رَاجِعْ قَاعِدَةَ تَعَلَّمْتُ وَصَحِّحِ الْأَخْطَاءَ الْحَمْرَاءَ لِتَرْفَعَ نِسْبَتَكَ.';
+      } else {
+        msgEl.innerHTML = '💪 <span class="text-sky-300 font-black">لَا تَسْتَسْلِمْ!</span> تَذَكَّرْ أَنْ تَضَعَ الْوَحَدَاتِ تَحْتَ الْوَحَدَاتِ وَلَا تَنْسَ الِاحْتِفَاظَ.';
+      }
+    }
+
+    function resetAllLesson() {
+      document.querySelectorAll('input[data-ans]').forEach(inp => {
+        inp.value = '';
+        inp.classList.remove('input-correct', 'input-wrong');
+      });
+
+      ['discover', 'anjiz', 'atamarran'].forEach(g => {
+        groupStats[g] = { correct: 0, wrong: 0 };
+        document.getElementById(`${g}-correct`).textContent = '0';
+        document.getElementById(`${g}-wrong`).textContent = '0';
+        document.getElementById(`feedback-${g}`).textContent = '';
+      });
+
+      challengeWrongAttempts = 0;
+      document.getElementById('challenge-correct').textContent = '0';
+      document.getElementById('challenge-wrong').textContent = '0';
+      resetScale();
+      updateGlobalSummary();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // التهيئة عند تحميل الصفحة
+    window.addEventListener('DOMContentLoaded', () => {
+      renderScaleUI();
+      updateGlobalSummary();
+    });
+  </script>
+</body>
+</html>
