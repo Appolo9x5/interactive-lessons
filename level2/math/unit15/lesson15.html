@@ -1,0 +1,1938 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدرس 15: الأَعْدَادُ مِن 70 إِلَى 99 - السنة الثانية ابتدائي</title>
+    <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1d4ed8;
+            --primary-light: #eff6ff;
+            --secondary: #0f766e;
+            --secondary-light: #f0fdfa;
+            --accent: #d97706;
+            --accent-light: #fffbeb;
+            --purple: #6d28d9;
+            --purple-light: #f5f3ff;
+            --success: #15803d;
+            --success-bg: #dcfce7;
+            --danger: #b91c1c;
+            --danger-bg: #fee2e2;
+            --text: #1e293b;
+            --border: #cbd5e1;
+            --card-bg: #ffffff;
+            --body-bg: #f1f5f9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--body-bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 16px;
+        }
+
+        .container {
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        /* ترويسة الدرس */
+        .lesson-header {
+            background: linear-gradient(135deg, #0284c7, #1d4ed8);
+            color: white;
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 25px rgba(29, 78, 216, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .lesson-number {
+            background: white;
+            color: #1d4ed8;
+            font-size: 2.2rem;
+            font-weight: 900;
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+        }
+
+        .lesson-title-box h1 {
+            font-size: 1.9rem;
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+
+        .lesson-title-box p {
+            font-size: 1rem;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+
+        /* البطاقات والأقسام */
+        .stage-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 28px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 2px solid #e2e8f0;
+        }
+
+        .stage-badge {
+            display: inline-block;
+            padding: 6px 22px;
+            border-radius: 12px;
+            font-size: 1.35rem;
+            font-weight: 900;
+            margin-bottom: 18px;
+            color: white;
+        }
+
+        .badge-aktashif { background-color: #0f766e; }
+        .badge-onjiz { background-color: #b91c1c; }
+        .badge-taalamto { background-color: #6d28d9; }
+        .badge-atamarran { background-color: #65a30d; }
+        .badge-abhath { background-color: #15803d; }
+
+        .exercise-box {
+            background: #f8fafc;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .exercise-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ex-num {
+            background: var(--primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+
+        /* عزل الاتجاه للرياضيات */
+        .ltr-math {
+            direction: ltr;
+            unicode-bidi: isolate;
+            display: inline-block;
+        }
+
+        /* =========================================
+           أكتشف 1: شريط الأعداد على شكل حرف U مطابق للكتاب
+           ========================================= */
+        .akt1-wrapper {
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 16px;
+            padding: 18px;
+            overflow-x: auto;
+        }
+
+        .helper-hint {
+            background: #fef3c7;
+            border: 1.5px solid #f59e0b;
+            color: #92400e;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 800;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+
+        .tokens-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            padding: 12px;
+            background: #eff6ff;
+            border: 1.5px dashed #93c5fd;
+            border-radius: 14px;
+            margin-bottom: 16px;
+        }
+
+        .tokens-pool.words-pool {
+            background: #f0fdfa;
+            border-color: #5eead4;
+            margin-top: 16px;
+            margin-bottom: 0;
+        }
+
+        .token-btn {
+            background: #1d4ed8;
+            color: white;
+            border: 2.5px solid #1e40af;
+            border-radius: 10px;
+            padding: 6px 16px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            box-shadow: 0 3px 6px rgba(29, 78, 216, 0.2);
+            user-select: none;
+        }
+
+        .token-btn.word-token {
+            background: #0f766e;
+            border-color: #115e59;
+            box-shadow: 0 3px 6px rgba(15, 118, 110, 0.2);
+        }
+
+        .token-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+
+        .token-btn.selected {
+            background: #f59e0b !important;
+            border-color: #b45309 !important;
+            color: #ffffff !important;
+            transform: scale(1.08);
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.35);
+        }
+
+        .token-btn.used {
+            opacity: 0.35;
+            transform: scale(0.95);
+            box-shadow: none;
+            cursor: default;
+        }
+
+        /* شبكة شريط الأعداد على شكل حرف U (16 عمود × 8 صفوف) */
+        .u-track-scroll {
+            width: 100%;
+            overflow-x: auto;
+            padding: 8px 0;
+            direction: ltr;
+        }
+
+        .u-track-grid {
+            display: grid;
+            grid-template-columns: repeat(16, 48px);
+            grid-template-rows: repeat(8, 44px);
+            gap: 2px;
+            justify-content: center;
+            min-width: 800px;
+            margin: 0 auto;
+        }
+
+        .u-cell {
+            border: 2px solid #334155;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 1.05rem;
+            background: #ffffff;
+            position: relative;
+        }
+
+        .u-cell.fixed {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        .u-cell.slot {
+            background: #f8fafc;
+            border: 2px dashed #2563eb;
+            cursor: pointer;
+            transition: all 0.15s;
+            padding: 0;
+        }
+
+        .u-cell.slot:hover:not(.locked) {
+            background: #dbeafe;
+            transform: scale(1.05);
+            z-index: 2;
+        }
+
+        .u-cell.slot.filled {
+            background: #dbeafe;
+            border-style: solid;
+            border-color: #1d4ed8;
+            color: #1e3a8a;
+        }
+
+        .u-cell.slot.filled-word {
+            background: #ccfbf1;
+            border-style: solid;
+            border-color: #0f766e;
+            color: #115e59;
+        }
+
+        .u-cell.slot.correct-slot {
+            background: var(--success-bg) !important;
+            border: 2px solid var(--success) !important;
+            color: var(--success) !important;
+        }
+
+        .u-cell.slot.wrong-slot {
+            background: var(--danger-bg) !important;
+            border: 2px solid var(--danger) !important;
+            color: var(--danger) !important;
+        }
+
+        .slot-correction-badge {
+            position: absolute;
+            top: -10px;
+            right: -6px;
+            background: var(--success);
+            color: white;
+            font-size: 0.72rem;
+            padding: 0 4px;
+            border-radius: 4px;
+            line-height: 1.3;
+            z-index: 5;
+        }
+
+        /* =========================================
+           أكتشف 2: أزرار تفاعلية للترتيب
+           ========================================= */
+        .sort-slots-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            direction: ltr;
+            margin: 16px 0;
+            flex-wrap: wrap;
+        }
+
+        .sort-slot {
+            width: 74px;
+            height: 50px;
+            border: 2.5px dashed #2563eb;
+            border-radius: 12px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #1e3a8a;
+            cursor: pointer;
+            transition: all 0.15s;
+            position: relative;
+        }
+
+        .sort-slot:hover:not(.locked) {
+            background: #eff6ff;
+        }
+
+        .sort-slot.filled {
+            background: #dbeafe;
+            border-style: solid;
+            border-color: #1d4ed8;
+        }
+
+        .sort-slot.correct-slot {
+            background: var(--success-bg) !important;
+            border: 2.5px solid var(--success) !important;
+            color: var(--success) !important;
+        }
+
+        .sort-slot.wrong-slot {
+            background: var(--danger-bg) !important;
+            border: 2.5px solid var(--danger) !important;
+            color: var(--danger) !important;
+        }
+
+        /* حقول الإدخال لباقي التمارين */
+        input[type="text"], input[type="number"], select {
+            border: 2px solid #94a3b8;
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+            background: white;
+            transition: all 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .num-input {
+            width: 72px;
+            text-align: center;
+            direction: ltr;
+        }
+
+        .word-input {
+            width: 100%;
+            min-width: 170px;
+            text-align: center;
+            direction: rtl;
+        }
+
+        .correct-field {
+            background-color: var(--success-bg) !important;
+            border-color: var(--success) !important;
+            color: var(--success) !important;
+        }
+
+        .wrong-field {
+            background-color: var(--danger-bg) !important;
+            border-color: var(--danger) !important;
+            color: var(--danger) !important;
+        }
+
+        .correction-hint {
+            display: block;
+            font-size: 0.88rem;
+            color: var(--success);
+            font-weight: 800;
+            margin-top: 4px;
+        }
+
+        /* الجداول */
+        .math-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .math-table td, .math-table th {
+            border: 2px solid #94a3b8;
+            padding: 10px 12px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 1.15rem;
+        }
+
+        .math-table th {
+            background: #e2e8f0;
+            color: #1e293b;
+            font-size: 1rem;
+        }
+
+        /* بطاقة تعلمت */
+        .taalamto-box {
+            background: var(--purple-light);
+            border: 3px solid var(--purple);
+            border-radius: 18px;
+            padding: 22px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #3b0764;
+            line-height: 2;
+            text-align: center;
+        }
+
+        .words-match-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .word-match-item {
+            background: white;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        /* تمثيل الأعمدة والوحدات في أتمرن 2 */
+        .blocks-visual {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            background: white;
+            padding: 18px;
+            border-radius: 14px;
+            border: 2px solid #cbd5e1;
+            margin-bottom: 16px;
+            direction: ltr;
+        }
+
+        .tens-group {
+            display: flex;
+            gap: 6px;
+            padding: 10px;
+            border: 2px solid #64748b;
+            border-radius: 10px;
+            background: #f8fafc;
+        }
+
+        .ten-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            background: #15803d;
+            padding: 2px;
+            border-radius: 3px;
+        }
+
+        .ten-unit {
+            width: 12px;
+            height: 10px;
+            background: #4ade80;
+        }
+
+        .ones-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 12px;
+            border: 2px solid #64748b;
+            border-radius: 10px;
+            background: #f8fafc;
+        }
+
+        .one-cube {
+            width: 18px;
+            height: 18px;
+            background: #facc15;
+            border: 1.5px solid #a16207;
+            border-radius: 3px;
+        }
+
+        .equation-ltr-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            direction: ltr;
+            font-size: 1.4rem;
+            font-weight: 900;
+            margin: 14px 0;
+            flex-wrap: wrap;
+        }
+
+        /* المصابيح في أبحث */
+        .bulbs-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin: 16px 0;
+            direction: ltr;
+        }
+
+        .bulb-card {
+            background: #fef9c3;
+            border: 2.5px solid #ca8a04;
+            border-radius: 50% 50% 35% 35%;
+            width: 64px;
+            height: 78px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: #713f12;
+            box-shadow: 0 4px 8px rgba(202, 138, 4, 0.15);
+            position: relative;
+        }
+
+        .bulb-card::after {
+            content: '';
+            width: 24px;
+            height: 10px;
+            background: #64748b;
+            border-radius: 0 0 6px 6px;
+            position: absolute;
+            bottom: -10px;
+        }
+
+        /* أزرار التحقق والعدادات */
+        .btn-check {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+            transition: transform 0.15s;
+        }
+
+        .btn-check:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-check:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .stage-counter {
+            margin-top: 16px;
+            padding: 12px 18px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            border: 1.5px solid #cbd5e1;
+            font-weight: 800;
+            font-size: 1.05rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .count-ok { color: var(--success); }
+        .count-err { color: var(--danger); }
+
+        /* التقييم النهائي والدائرة النسبية */
+        .final-report-card {
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
+            border: 3px solid #1d4ed8;
+            border-radius: 24px;
+            padding: 28px;
+            margin-top: 32px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+
+        .final-report-card h2 {
+            font-size: 1.65rem;
+            font-weight: 900;
+            color: #1e3a8a;
+            margin-bottom: 24px;
+        }
+
+        .report-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 36px;
+            margin-bottom: 24px;
+        }
+
+        .pie-wrapper {
+            position: relative;
+            width: 190px;
+            height: 190px;
+            border-radius: 50%;
+            background: conic-gradient(#16a34a 0deg, #e2e8f0 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+            transition: background 0.5s ease;
+        }
+
+        .pie-inner {
+            width: 132px;
+            height: 132px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .pie-percent {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #0f172a;
+            direction: ltr;
+        }
+
+        .pie-label {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .stats-details {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-width: 240px;
+            text-align: right;
+        }
+
+        .stat-row {
+            padding: 12px 18px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 1.15rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-correct { background: var(--success-bg); color: var(--success); }
+        .stat-wrong { background: var(--danger-bg); color: var(--danger); }
+        .stat-total { background: #e0e7ff; color: #1e3a8a; }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #0f766e, #115e59);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 14px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 6px 16px rgba(15, 118, 110, 0.25);
+            transition: transform 0.2s;
+        }
+
+        .btn-reset:hover {
+            transform: scale(1.03);
+        }
+
+        @media (max-width: 640px) {
+            .lesson-title-box h1 { font-size: 1.45rem; }
+            .num-input { width: 60px; }
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري (أُضيفت)
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس (أُضيف) */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            max-width: 420px;
+            margin: 20px auto 10px auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+    <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+        <div class="lock-desc">
+            لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+        </div>
+        <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+            📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+        </a>
+        <button class="btn-check-sub" onclick="verifySubscription()">
+            ✅ تَأْكِيدُ الاِشْتِرَاكِ
+        </button>
+        <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- ترويسة الدرس -->
+    <header class="lesson-header">
+        <div style="display:flex; align-items:center; gap:16px;">
+            <div class="lesson-number">15</div>
+            <div class="lesson-title-box">
+                <h1>الأَعْدَادُ مِن 70 إِلَى 99</h1>
+                <p>الرِّيَاضِيَّاتُ – السَّنَةُ الثَّانِيَةُ ابْتِدَائِي | كِتَابُ التِّلْمِيذِ (ص 34) وَكَرَّاسُ الأَنْشِطَةِ (ص 21)</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- القسم الأول: أكتشف -->
+    <section class="stage-card">
+        <span class="stage-badge badge-aktashif">أَكْتَشِفُ</span>
+
+        <!-- أكتشف - التمرين 1 -->
+        <div class="exercise-box" id="ex-aktashif-1">
+            <div class="exercise-title">
+                <span class="ex-num">1</span>
+                <span>اِرْبِطْ كُلَّ عَدَدٍ بِالْخَانَةِ الْمُنَاسِبَةِ عَلَى شَرِيطِ الأَعْدَادِ:</span>
+            </div>
+
+            <div class="akt1-wrapper">
+                <div class="helper-hint">
+                    💡 اِضْغَطْ عَلَى بِطَاقَةِ الْعَدَدِ (بِالأَرْقَامِ أَوْ بِالْحُرُوفِ) ثُمَّ اِضْغَطْ عَلَى مَكَانِهِ الْمُنَاسِبِ فِي الشَّرِيطِ (وَلِإِزَالَتِهِ اِضْغَطْ عَلَى الْخَانَةِ مَرَّةً أُخْرَى).
+                </div>
+
+                <!-- أزرار الأعداد بالأرقام كما وردت في أعلى الشريط -->
+                <div class="tokens-pool" id="akt1-num-pool"></div>
+
+                <!-- شريط الأعداد الكامل من 69 إلى 99 على شكل U -->
+                <div class="u-track-scroll">
+                    <div class="u-track-grid" id="u-track-grid"></div>
+                </div>
+
+                <!-- أزرار الأعداد بالحروف كما وردت أسفل الشريط -->
+                <div class="tokens-pool words-pool" id="akt1-word-pool"></div>
+            </div>
+
+            <button class="btn-check" id="btn-aktashif-1" onclick="checkAktashif1()">تَحَقَّقْ مِنَ الإِجَابَةِ ✓</button>
+        </div>
+
+        <!-- أكتشف - التمرين 2 -->
+        <div class="exercise-box" id="ex-aktashif-2">
+            <div class="exercise-title">
+                <span class="ex-num">2</span>
+                <span>اُكْتُبِ الأَعْدَادَ مِنَ الأَصْغَرِ إِلَى الأَكْبَرِ:</span>
+            </div>
+
+            <div class="helper-hint">
+                💡 اِضْغَطْ عَلَى الْعَدَدِ ثُمَّ اِضْغَطْ عَلَى مَكَانِهِ الْمُنَاسِبِ فِي حَيِّزِ التَّرْتِيبِ (مِنَ الْيَسَارِ إِلَى الْيَمِينِ).
+            </div>
+
+            <!-- أزرار الأعداد التفاعلية -->
+            <div class="tokens-pool" id="akt2-pool"></div>
+
+            <!-- حيز الترتيب من اليسار إلى اليمين -->
+            <div class="sort-slots-container" id="akt2-slots"></div>
+
+            <button class="btn-check" id="btn-aktashif-2" onclick="checkAktashif2()">تَحَقَّقْ مِنَ الإِجَابَةِ ✓</button>
+        </div>
+
+        <div class="stage-counter">
+            <span>حَصِيلَةُ مَحَطَّةِ «أَكْتَشِفُ»:</span>
+            <span>
+                <span class="count-ok">✓ الصَّوَابُ: <span id="ok-aktashif">0</span></span> |
+                <span class="count-err">✗ الْخَطَأُ: <span id="err-aktashif">0</span></span>
+            </span>
+        </div>
+    </section>
+
+    <!-- القسم الثاني: أنجز -->
+    <section class="stage-card">
+        <span class="stage-badge badge-onjiz">أُنْجِزُ</span>
+
+        <!-- أنجز - التمرين 1 -->
+        <div class="exercise-box" id="ex-onjiz-1">
+            <div class="exercise-title">
+                <span class="ex-num">1</span>
+                <span>أَكْمِلْ:</span>
+            </div>
+
+            <table class="math-table">
+                <thead>
+                    <tr>
+                        <th>بِالْحُرُوفِ</th>
+                        <th>بِالأَرْقَامِ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>أَرْبَعَةٌ وَثَمَانُونَ</td>
+                        <td><input type="number" class="num-input" id="onj1-0" placeholder="..."></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="word-input" id="onj1-1" placeholder="اُكْتُبْ بِالْحُرُوفِ..."></td>
+                        <td><span class="ltr-math">75</span></td>
+                    </tr>
+                    <tr>
+                        <td>ثَمَانُونَ</td>
+                        <td><input type="number" class="num-input" id="onj1-2" placeholder="..."></td>
+                    </tr>
+                    <tr>
+                        <td>خَمْسَةٌ وَتِسْعُونَ</td>
+                        <td><input type="number" class="num-input" id="onj1-3" placeholder="..."></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button class="btn-check" id="btn-onjiz-1" onclick="checkOnjiz1()">تَحَقَّقْ مِنَ الإِجَابَةِ ✓</button>
+        </div>
+
+        <!-- أنجز - التمرين 2 -->
+        <div class="exercise-box" id="ex-onjiz-2">
+            <div class="exercise-title">
+                <span class="ex-num">2</span>
+                <span>اُكْتُبْ سَابِقَ الْعَدَدِ وَعَاقِبَهُ:</span>
+            </div>
+
+            <table class="math-table">
+                <thead>
+                    <tr>
+                        <th>عَاقِبُ الْعَدَدِ (الْيَمِينُ)</th>
+                        <th>الْعَدَدُ</th>
+                        <th>سَابِقُ الْعَدَدِ (الْيَسَارُ)</th>
+                    </tr>
+                </thead>
+                <tbody id="onjiz-2-body"></tbody>
+            </table>
+
+            <button class="btn-check" id="btn-onjiz-2" onclick="checkOnjiz2()">تَحَقَّقْ مِنَ الإِجَابَةِ ✓</button>
+        </div>
+
+        <div class="stage-counter">
+            <span>حَصِيلَةُ مَحَطَّةِ «أُنْجِزُ»:</span>
+            <span>
+                <span class="count-ok">✓ الصَّوَابُ: <span id="ok-onjiz">0</span></span> |
+                <span class="count-err">✗ الْخَطَأُ: <span id="err-onjiz">0</span></span>
+            </span>
+        </div>
+    </section>
+
+    <!-- القسم الثالث: تعلمت -->
+    <section class="stage-card">
+        <span class="stage-badge badge-taalamto">تَعَلَّمْتُ</span>
+        <div class="taalamto-box">
+            عِنْدَمَا أُرَتِّبُ الأَعْدَادَ مِنَ الأَصْغَرِ إِلَى الأَكْبَرِ، أُقَارِنُ فِيمَا بَيْنَهَا وَأَكْتُبُهَا كَمَا فِي الشَّرِيطِ مِنْ أَصْغَرِ عَدَدٍ إِلَى أَكْبَرِ عَدَدٍ ابْتِدَاءً مِنَ الْيَسَارِ إِلَى الْيَمِينِ.
+        </div>
+    </section>
+
+    <!-- القسم الرابع: أتمرن (كراس الأنشطة) -->
+    <section class="stage-card">
+        <span class="stage-badge badge-atamarran">أَتَمَرَّنُ</span>
+
+        <!-- أتمرن - التمرين 1 -->
+        <div class="exercise-box" id="ex-atamarran-1">
+            <div class="exercise-title">
+                <span class="ex-num">1</span>
+                <span>اِرْبِطِ الْبِطَاقَاتِ (اِخْتَرِ الْعَدَدَ الْمُنَاسِبَ لِكُلِّ بِطَاقَةٍ):</span>
+            </div>
+
+            <div class="words-match-grid" id="atamarran-1-grid"></div>
+
+            <button class="btn-check" id="btn-atamarran-1" onclick="checkAtamarran1()">تَحَقَّقْ مِنَ الإِجَابَةِ ✓</button>
+        </div>
+
+        <!-- أتمرن - التمرين 2 -->
+        <div class="exercise-box" id="ex-atamarran-2">
+            <div class="exercise-title">
+                <span class="ex-num">2</span>
+                <span>اُكْتُبِ الأَعْدَادَ بِالأَرْقَامِ أَوْ بِالْحُرُوفِ:</span>
+            </div>
+
+            <table class="math-table">
+                <thead>
+                    <tr>
+                        <th>بِالْحُرُوفِ</th>
+                        <th>بِالأَرْقَامِ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" class="word-input" id="ata2-0" placeholder="اُكْتُبْ بِالْحُرُوفِ..."></td>
+                        <td><span class="ltr-math">89</span></td>
+                    </tr>
+                    <tr>
+                        <td>خَمْسَةٌ وَثَمَانُونَ</td>
+                        <td><input type="number" class="num-input" id="ata2-1" placeholder="..."></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="word-input" id="ata2-2" placeholder="اُكْتُبْ بِالْحُرُوفِ..."></td>
+                        <td><span class="ltr-math">88</span></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" class="word-input" id="ata2-3" placeholder="اُكْتُبْ بِالْحُرُوفِ..."></td>
+                        <td><span style="font-size:0.95rem; color:#64748b;">(خَانَةٌ إِضَافِيَّةٌ فِي الْجَدْوَلِ)</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button class="btn-check" id="btn-atamarran-2" onclick="checkAtamarran2()">تَحَقَّقْ مِنَ الإِجَابَةِ ✓</button>
+        </div>
+
+        <!-- أتمرن - التمرين 3 (رقم 2 في كراس الأنشطة) -->
+        <div class="exercise-box" id="ex-atamarran-3">
+            <div class="exercise-title">
+                <span class="ex-num">2</span>
+                <span>1. اُكْتُبِ الأَعْدَادَ وَأَنْجِزِ الْعَمَلِيَّةَ. &nbsp;|&nbsp; 2. أَكْمِلِ الْجُمْلَةَ.</span>
+            </div>
+
+            <!-- الرسم البصري: 9 أعمدة عشرات + 8 وحدات -->
+            <div class="blocks-visual" id="blocks-container"></div>
+
+            <!-- العملية من اليسار إلى اليمين -->
+            <div class="equation-ltr-box">
+                <input type="number" class="num-input" id="ata3-tens" placeholder="العشرات">
+                <span>+</span>
+                <input type="number" class="num-input" id="ata3-ones" placeholder="الوحدات">
+                <span>=</span>
+                <input type="number" class="num-input" id="ata3-sum" placeholder="المجموع">
+            </div>
+
+            <div style="text-align:center; margin-top:16px; font-size:1.2rem; font-weight:800;">
+                <span>يُكْتَبُ الْعَدَدُ </span>
+                <input type="number" class="num-input" id="ata3-num-repeat" placeholder="...">
+                <span> بِالْحُرُوفِ : </span>
+                <input type="text" class="word-input" id="ata3-word" style="max-width:260px;" placeholder="اُكْتُبِ الْعَدَدَ بِالْحُرُوفِ...">
+            </div>
+
+            <button class="btn-check" id="btn-atamarran-3" onclick="checkAtamarran3()">تَحَقَّقْ مِنَ الإِجَابَةِ ✓</button>
+        </div>
+
+        <!-- أتمرن - التمرين 4 (رقم 3 في كراس الأنشطة) -->
+        <div class="exercise-box" id="ex-atamarran-4">
+            <div class="exercise-title">
+                <span class="ex-num">3</span>
+                <span>اُكْتُبْ بِالْحُرُوفِ الأَعْدَادَ:</span>
+            </div>
+
+            <div class="words-match-grid">
+                <div class="word-match-item">
+                    <span class="ltr-math" style="font-size:1.3rem; color:#1d4ed8;">73</span>
+                    <input type="text" class="word-input" id="ata4-0" placeholder="اُكْتُبْ بِالْحُرُوفِ...">
+                </div>
+                <div class="word-match-item">
+                    <span class="ltr-math" style="font-size:1.3rem; color:#1d4ed8;">83</span>
+                    <input type="text" class="word-input" id="ata4-1" placeholder="اُكْتُبْ بِالْحُرُوفِ...">
+                </div>
+                <div class="word-match-item">
+                    <span class="ltr-math" style="font-size:1.3rem; color:#1d4ed8;">97</span>
+                    <input type="text" class="word-input" id="ata4-2" placeholder="اُكْتُبْ بِالْحُرُوفِ...">
+                </div>
+                <div class="word-match-item">
+                    <span class="ltr-math" style="font-size:1.3rem; color:#1d4ed8;">87</span>
+                    <input type="text" class="word-input" id="ata4-3" placeholder="اُكْتُبْ بِالْحُرُوفِ...">
+                </div>
+            </div>
+
+            <button class="btn-check" id="btn-atamarran-4" onclick="checkAtamarran4()">تَحَقَّقْ مِنَ الإِجَابَةِ ✓</button>
+        </div>
+
+        <div class="stage-counter">
+            <span>حَصِيلَةُ مَحَطَّةِ «أَتَمَرَّنُ»:</span>
+            <span>
+                <span class="count-ok">✓ الصَّوَابُ: <span id="ok-atamarran">0</span></span> |
+                <span class="count-err">✗ الْخَطَأُ: <span id="err-atamarran">0</span></span>
+            </span>
+        </div>
+    </section>
+
+    <!-- القسم الخامس: أبحث -->
+    <section class="stage-card">
+        <span class="stage-badge badge-abhath">أَبْحَثُ</span>
+
+        <div class="exercise-box" id="ex-abhath-1">
+            <div class="exercise-title">
+                <span class="ex-num">★</span>
+                <span>رَتِّبِ الأَعْدَادَ مِنَ الأَصْغَرِ إِلَى الأَكْبَرِ:</span>
+            </div>
+
+            <!-- المصابيح كما وردت في الصفحة -->
+            <div class="bulbs-grid" id="bulbs-display"></div>
+
+            <p style="text-align:center; font-weight:800; color:#15803d; margin-top:14px;">اُكْتُبِ الأَعْدَادَ مُرَتَّبَةً مِنَ الأَصْغَرِ إِلَى الأَكْبَرِ (مِنَ الْيَسَارِ إِلَى الْيَمِينِ):</p>
+            <div class="equation-ltr-box" id="abhath-inputs"></div>
+
+            <button class="btn-check" id="btn-abhath-1" onclick="checkAbhath1()">تَحَقَّقْ مِنَ الإِجَابَةِ ✓</button>
+        </div>
+
+        <div class="stage-counter">
+            <span>حَصِيلَةُ مَحَطَّةِ «أَبْحَثُ»:</span>
+            <span>
+                <span class="count-ok">✓ الصَّوَابُ: <span id="ok-abhath">0</span></span> |
+                <span class="count-err">✗ الْخَطَأُ: <span id="err-abhath">0</span></span>
+            </span>
+        </div>
+    </section>
+
+    <!-- بطاقة التقييم النهائي والدائرة النسبية -->
+    <section class="final-report-card" id="final-report">
+        <h2>📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</h2>
+
+        <div class="report-content">
+            <!-- الدائرة النسبية -->
+            <div class="pie-wrapper" id="pie-chart">
+                <div class="pie-inner">
+                    <span class="pie-percent" id="pie-percentage">0%</span>
+                    <span class="pie-label">نِسْبَةُ النَّجَاحِ</span>
+                </div>
+            </div>
+
+            <!-- تفاصيل الإحصائيات -->
+            <div class="stats-details">
+                <div class="stat-row stat-correct">
+                    <span>✓ مَجْمُوعُ الإِجَابَاتِ الصَّحِيحَةِ:</span>
+                    <span id="total-correct">0</span>
+                </div>
+                <div class="stat-row stat-wrong">
+                    <span>✗ مَجْمُوعُ الإِجَابَاتِ الْخَاطِئَةِ:</span>
+                    <span id="total-wrong">0</span>
+                </div>
+                <div class="stat-row stat-total">
+                    <span>📝 عَدَدُ الأَسْئِلَةِ الْمُجَابِ عَنْهَا:</span>
+                    <span id="total-answered">0</span>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn-reset" onclick="resetAllExercises()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+    </section>
+
+    <!-- ========================================
+         زر العودة إلى الفهرس (أُضيف)
+         ======================================== -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+</div>
+
+<!-- ========================================
+     سكريبت الحماية (أُضيف)
+     ======================================== -->
+<script>
+    const CHANNEL_ID = "-1004461185731";
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+        tg.ready();
+        tg.expand();
+    }
+
+    async function verifySubscription() {
+        const statusMsg = document.getElementById('sub-status-msg');
+        statusMsg.style.color = "#0288d1";
+        statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+        let userId = null;
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            userId = tg.initDataUnsafe.user.id;
+        }
+
+        if (!userId) {
+            statusMsg.style.color = "#e65100";
+            statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+            return;
+        }
+
+        try {
+            const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.isSubscribed) {
+                statusMsg.style.color = "#2e7d32";
+                statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                setTimeout(() => {
+                    document.getElementById('sub-lock-screen').style.display = 'none';
+                }, 600);
+            } else {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+            }
+        } catch (error) {
+            statusMsg.style.color = "#c62828";
+            statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+        }
+    }
+
+    window.addEventListener('load', () => {
+        verifySubscription();
+    });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي (كما هو دون تغيير)
+     ======================================== -->
+<script>
+    function normalizeArabic(str) {
+        if (!str) return "";
+        return str
+            .trim()
+            .replace(/[\u064B-\u065F\u0670]/g, "")
+            .replace(/[أإآ]/g, "ا")
+            .replace(/ة/g, "ه")
+            .replace(/ى/g, "ي")
+            .replace(/\s+/g, " ");
+    }
+
+    const scores = {
+        aktashif: { ok: 0, err: 0 },
+        onjiz: { ok: 0, err: 0 },
+        atamarran: { ok: 0, err: 0 },
+        abhath: { ok: 0, err: 0 }
+    };
+
+    function updateAllStats() {
+        let totalOk = 0;
+        let totalErr = 0;
+
+        for (const key in scores) {
+            document.getElementById(`ok-${key}`).textContent = scores[key].ok;
+            document.getElementById(`err-${key}`).textContent = scores[key].err;
+            totalOk += scores[key].ok;
+            totalErr += scores[key].err;
+        }
+
+        const totalAnswered = totalOk + totalErr;
+        let percentage = 0;
+        if (totalAnswered > 0) {
+            percentage = Math.round((totalOk / totalAnswered) * 100);
+            if (percentage > 100) percentage = 100;
+        }
+
+        document.getElementById('total-correct').textContent = totalOk;
+        document.getElementById('total-wrong').textContent = totalErr;
+        document.getElementById('total-answered').textContent = totalAnswered;
+        document.getElementById('pie-percentage').textContent = `${percentage}%`;
+
+        const deg = (percentage / 100) * 360;
+        const pie = document.getElementById('pie-chart');
+        if (totalAnswered === 0) {
+            pie.style.background = `conic-gradient(#16a34a 0deg, #e2e8f0 0deg)`;
+        } else {
+            pie.style.background = `conic-gradient(#16a34a 0deg ${deg}deg, #dc2626 ${deg}deg 360deg)`;
+        }
+    }
+
+    // =========================================================================
+    // أكتشف 1: بناء شريط الأعداد الكامل من 69 إلى 99 على شكل حرف U كما في الكتاب
+    // =========================================================================
+    const uTrackCells = [
+        // الساق اليسرى النازلة (69 إلى 76)
+        { val: 69, r: 1, c: 1, fixed: true },
+        { val: 70, r: 2, c: 1, fixed: true },
+        { val: 71, r: 3, c: 1, fixed: true },
+        { val: 72, r: 4, c: 1, fixed: false },
+        { val: 73, r: 5, c: 1, fixed: false },
+        { val: 74, r: 6, c: 1, fixed: true },
+        { val: 75, r: 7, c: 1, fixed: true },
+        { val: 76, r: 8, c: 1, fixed: false },
+        // القاعدة السفلية (77 إلى 80)
+        { val: 77, r: 8, c: 2, fixed: true },
+        { val: 78, r: 8, c: 3, fixed: false },
+        { val: 79, r: 8, c: 4, fixed: false },
+        { val: 80, r: 8, c: 5, fixed: false },
+        // الساق الوسطى الصاعدة (81 إلى 87)
+        { val: 81, r: 7, c: 5, fixed: true },
+        { val: 82, r: 6, c: 5, fixed: true },
+        { val: 83, r: 5, c: 5, fixed: false },
+        { val: 84, r: 4, c: 5, fixed: false },
+        { val: 85, r: 3, c: 5, fixed: false },
+        { val: 86, r: 2, c: 5, fixed: true },
+        { val: 87, r: 1, c: 5, fixed: true },
+        // الذراع العلوية الممتدة يميناً (88 إلى 99)
+        { val: 88, r: 1, c: 6, fixed: true },
+        { val: 89, r: 1, c: 7, fixed: false },
+        { val: 90, r: 1, c: 8, fixed: true },
+        { val: 91, r: 1, c: 9, fixed: true },
+        { val: 92, r: 1, c: 10, fixed: false },
+        { val: 93, r: 1, c: 11, fixed: true },
+        { val: 94, r: 1, c: 12, fixed: true },
+        { val: 95, r: 1, c: 13, fixed: false },
+        { val: 96, r: 1, c: 14, fixed: false },
+        { val: 97, r: 1, c: 15, fixed: false },
+        { val: 98, r: 1, c: 16, fixed: true },
+        { val: 99, r: 1, c: 17, fixed: false }
+    ];
+
+    const akt1NumTokens = [
+        { id: "tok-73", label: "73", val: 73, type: "num" },
+        { id: "tok-83", label: "83", val: 83, type: "num" },
+        { id: "tok-78", label: "78", val: 78, type: "num" },
+        { id: "tok-76", label: "76", val: 76, type: "num" },
+        { id: "tok-85", label: "85", val: 85, type: "num" },
+        { id: "tok-97", label: "97", val: 97, type: "num" },
+        { id: "tok-95", label: "95", val: 95, type: "num" },
+        { id: "tok-89", label: "89", val: 89, type: "num" },
+        { id: "tok-99", label: "99", val: 99, type: "num" }
+    ];
+
+    const akt1WordTokens = [
+        { id: "tok-84", label: "أَرْبَعَةٌ وَثَمَانُونَ", val: 84, type: "word" },
+        { id: "tok-72", label: "اِثْنَانِ وَسَبْعُونَ", val: 72, type: "word" },
+        { id: "tok-79", label: "تِسْعَةٌ وَسَبْعُونَ", val: 79, type: "word" },
+        { id: "tok-96", label: "سِتَّةٌ وَتِسْعُونَ", val: 96, type: "word" },
+        { id: "tok-92", label: "اِثْنَانِ وَتِسْعُونَ", val: 92, type: "word" },
+        { id: "tok-80", label: "ثَمَانُونَ", val: 80, type: "word" }
+    ];
+
+    let selectedAkt1Token = null;
+    let akt1Locked = false;
+
+    function initAktashif1() {
+        selectedAkt1Token = null;
+        akt1Locked = false;
+
+        const numPool = document.getElementById("akt1-num-pool");
+        const wordPool = document.getElementById("akt1-word-pool");
+        numPool.innerHTML = "";
+        wordPool.innerHTML = "";
+
+        akt1NumTokens.forEach(t => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "token-btn";
+            btn.id = t.id;
+            btn.textContent = t.label;
+            btn.onclick = () => selectAkt1Token(t, btn);
+            numPool.appendChild(btn);
+        });
+
+        akt1WordTokens.forEach(t => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "token-btn word-token";
+            btn.id = t.id;
+            btn.textContent = t.label;
+            btn.onclick = () => selectAkt1Token(t, btn);
+            wordPool.appendChild(btn);
+        });
+
+        const grid = document.getElementById("u-track-grid");
+        grid.innerHTML = "";
+        grid.style.gridTemplateColumns = "repeat(17, 46px)";
+        grid.style.minWidth = "820px";
+
+        uTrackCells.forEach(cell => {
+            const div = document.createElement("div");
+            div.style.gridRow = cell.r;
+            div.style.gridColumn = cell.c;
+
+            if (cell.fixed) {
+                div.className = "u-cell fixed";
+                div.textContent = cell.val;
+            } else {
+                div.className = "u-cell slot";
+                div.id = `u-slot-${cell.val}`;
+                div.dataset.expected = cell.val;
+                div.dataset.placedVal = "";
+                div.dataset.placedTokenId = "";
+                div.textContent = "؟";
+                div.onclick = () => handleUSlotClick(div);
+            }
+            grid.appendChild(div);
+        });
+    }
+
+    function selectAkt1Token(tokenObj, btnEl) {
+        if (akt1Locked || btnEl.classList.contains("used")) return;
+
+        document.querySelectorAll("#ex-aktashif-1 .token-btn").forEach(b => b.classList.remove("selected"));
+
+        if (selectedAkt1Token && selectedAkt1Token.id === tokenObj.id) {
+            selectedAkt1Token = null;
+        } else {
+            selectedAkt1Token = tokenObj;
+            btnEl.classList.add("selected");
+        }
+    }
+
+    function handleUSlotClick(slotEl) {
+        if (akt1Locked) return;
+
+        if (slotEl.dataset.placedTokenId && !selectedAkt1Token) {
+            const oldBtn = document.getElementById(slotEl.dataset.placedTokenId);
+            if (oldBtn) oldBtn.classList.remove("used");
+            slotEl.dataset.placedVal = "";
+            slotEl.dataset.placedTokenId = "";
+            slotEl.textContent = "؟";
+            slotEl.classList.remove("filled", "filled-word");
+            return;
+        }
+
+        if (selectedAkt1Token) {
+            if (slotEl.dataset.placedTokenId) {
+                const oldBtn = document.getElementById(slotEl.dataset.placedTokenId);
+                if (oldBtn) oldBtn.classList.remove("used");
+            }
+
+            slotEl.dataset.placedVal = selectedAkt1Token.val;
+            slotEl.dataset.placedTokenId = selectedAkt1Token.id;
+            slotEl.textContent = selectedAkt1Token.val;
+            slotEl.classList.remove("filled", "filled-word");
+            slotEl.classList.add(selectedAkt1Token.type === "word" ? "filled-word" : "filled");
+
+            const usedBtn = document.getElementById(selectedAkt1Token.id);
+            if (usedBtn) {
+                usedBtn.classList.remove("selected");
+                usedBtn.classList.add("used");
+            }
+            selectedAkt1Token = null;
+        }
+    }
+
+    function checkAktashif1() {
+        akt1Locked = true;
+        document.getElementById("btn-aktashif-1").disabled = true;
+        document.querySelectorAll("#ex-aktashif-1 .token-btn").forEach(b => {
+            b.disabled = true;
+            b.classList.remove("selected");
+        });
+
+        let ok = 0, err = 0;
+        const slots = document.querySelectorAll("#u-track-grid .slot");
+        slots.forEach(slot => {
+            slot.classList.add("locked");
+            const expected = slot.dataset.expected;
+            const placed = slot.dataset.placedVal;
+
+            if (placed === expected) {
+                slot.classList.add("correct-slot");
+                ok++;
+            } else {
+                slot.classList.add("wrong-slot");
+                const badge = document.createElement("span");
+                badge.className = "slot-correction-badge";
+                badge.textContent = expected;
+                slot.appendChild(badge);
+                err++;
+            }
+        });
+
+        scores.aktashif.ok += ok;
+        scores.aktashif.err += err;
+        updateAllStats();
+    }
+
+    // =========================================================================
+    // أكتشف 2: ترتيب الأعداد بالأزرار التفاعلية (76 ، 93 ، 89 ، 73 ، 95)
+    // =========================================================================
+    const akt2InitialNumbers = [95, 73, 89, 93, 76];
+    const akt2ExpectedOrder = ["73", "76", "89", "93", "95"];
+    let selectedAkt2Btn = null;
+    let akt2Locked = false;
+
+    function initAktashif2() {
+        selectedAkt2Btn = null;
+        akt2Locked = false;
+
+        const pool = document.getElementById("akt2-pool");
+        const slotsContainer = document.getElementById("akt2-slots");
+        pool.innerHTML = "";
+        slotsContainer.innerHTML = "";
+
+        akt2InitialNumbers.forEach((num, idx) => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "token-btn";
+            btn.id = `akt2-tok-${idx}`;
+            btn.dataset.val = num;
+            btn.textContent = num;
+            btn.onclick = () => {
+                if (akt2Locked || btn.classList.contains("used")) return;
+                document.querySelectorAll("#akt2-pool .token-btn").forEach(b => b.classList.remove("selected"));
+                if (selectedAkt2Btn === btn) {
+                    selectedAkt2Btn = null;
+                } else {
+                    selectedAkt2Btn = btn;
+                    btn.classList.add("selected");
+                }
+            };
+            pool.appendChild(btn);
+        });
+
+        akt2ExpectedOrder.forEach((expectedVal, idx) => {
+            const slot = document.createElement("div");
+            slot.className = "sort-slot";
+            slot.id = `akt2-slot-${idx}`;
+            slot.dataset.expected = expectedVal;
+            slot.dataset.placedVal = "";
+            slot.dataset.placedBtnId = "";
+            slot.textContent = "؟";
+
+            slot.onclick = () => {
+                if (akt2Locked) return;
+
+                if (slot.dataset.placedBtnId && !selectedAkt2Btn) {
+                    const oldBtn = document.getElementById(slot.dataset.placedBtnId);
+                    if (oldBtn) oldBtn.classList.remove("used");
+                    slot.dataset.placedVal = "";
+                    slot.dataset.placedBtnId = "";
+                    slot.textContent = "؟";
+                    slot.classList.remove("filled");
+                    return;
+                }
+
+                if (selectedAkt2Btn) {
+                    if (slot.dataset.placedBtnId) {
+                        const oldBtn = document.getElementById(slot.dataset.placedBtnId);
+                        if (oldBtn) oldBtn.classList.remove("used");
+                    }
+                    slot.dataset.placedVal = selectedAkt2Btn.dataset.val;
+                    slot.dataset.placedBtnId = selectedAkt2Btn.id;
+                    slot.textContent = selectedAkt2Btn.dataset.val;
+                    slot.classList.add("filled");
+
+                    selectedAkt2Btn.classList.remove("selected");
+                    selectedAkt2Btn.classList.add("used");
+                    selectedAkt2Btn = null;
+                }
+            };
+
+            slotsContainer.appendChild(slot);
+
+            if (idx < akt2ExpectedOrder.length - 1) {
+                const sep = document.createElement("span");
+                sep.textContent = "؛";
+                sep.style.fontSize = "1.4rem";
+                sep.style.fontWeight = "900";
+                slotsContainer.appendChild(sep);
+            }
+        });
+    }
+
+    function checkAktashif2() {
+        akt2Locked = true;
+        document.getElementById("btn-aktashif-2").disabled = true;
+        document.querySelectorAll("#akt2-pool .token-btn").forEach(b => {
+            b.disabled = true;
+            b.classList.remove("selected");
+        });
+
+        let ok = 0, err = 0;
+        const slots = document.querySelectorAll("#akt2-slots .sort-slot");
+        slots.forEach(slot => {
+            slot.classList.add("locked");
+            const expected = slot.dataset.expected;
+            const placed = slot.dataset.placedVal;
+
+            if (placed === expected) {
+                slot.classList.add("correct-slot");
+                ok++;
+            } else {
+                slot.classList.add("wrong-slot");
+                const badge = document.createElement("span");
+                badge.className = "slot-correction-badge";
+                badge.textContent = expected;
+                slot.appendChild(badge);
+                err++;
+            }
+        });
+
+        scores.aktashif.ok += ok;
+        scores.aktashif.err += err;
+        updateAllStats();
+    }
+
+    // =========================================================================
+    // بقية التمارين (أنجز، أتمرن، أبحث)
+    // =========================================================================
+    const onjiz2Numbers = [87, 79, 70, 93, 82, 96];
+    function initOnjiz2() {
+        const tbody = document.getElementById("onjiz-2-body");
+        tbody.innerHTML = "";
+        onjiz2Numbers.forEach((num, idx) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td><input type="number" class="num-input" id="onj2-next-${idx}" data-ans="${num + 1}" placeholder="..."></td>
+                <td style="background:#f1f5f9;"><span class="ltr-math">${num}</span></td>
+                <td><input type="number" class="num-input" id="onj2-prev-${idx}" data-ans="${num - 1}" placeholder="..."></td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    const atamarran1Cards = [
+        { word: "اِثْنَانِ وَسَبْعُونَ", ans: "72" },
+        { word: "ثَمَانِيَةٌ وَسَبْعُونَ", ans: "78" },
+        { word: "خَمْسَةٌ وَثَمَانُونَ", ans: "85" },
+        { word: "تِسْعُونَ", ans: "90" }
+    ];
+    function initAtamarran1() {
+        const grid = document.getElementById("atamarran-1-grid");
+        grid.innerHTML = "";
+        atamarran1Cards.forEach((c, idx) => {
+            const div = document.createElement("div");
+            div.className = "word-match-item";
+            div.innerHTML = `
+                <span>${c.word}</span>
+                <select id="ata1-${idx}" data-ans="${c.ans}" style="direction:ltr; width:95px;">
+                    <option value="">اِخْتَرْ...</option>
+                    <option value="85">85</option>
+                    <option value="90">90</option>
+                    <option value="72">72</option>
+                    <option value="78">78</option>
+                </select>
+            `;
+            grid.appendChild(div);
+        });
+    }
+
+    function initBlocksVisual() {
+        const container = document.getElementById("blocks-container");
+        let tensHtml = `<div class="tens-group">`;
+        for (let i = 0; i < 9; i++) {
+            tensHtml += `<div class="ten-bar">`;
+            for (let j = 0; j < 10; j++) {
+                tensHtml += `<div class="ten-unit"></div>`;
+            }
+            tensHtml += `</div>`;
+        }
+        tensHtml += `</div>`;
+
+        let onesHtml = `<div class="ones-group">`;
+        for (let k = 0; k < 8; k++) {
+            onesHtml += `<div class="one-cube"></div>`;
+        }
+        onesHtml += `</div>`;
+
+        container.innerHTML = tensHtml + onesHtml;
+    }
+
+    const abhathBulbs = [69, 57, 93, 88, 96, 96, 71, 82, 79];
+    const abhathSorted = [57, 69, 71, 79, 82, 88, 93, 96, 96];
+    function initAbhath() {
+        const display = document.getElementById("bulbs-display");
+        display.innerHTML = "";
+        abhathBulbs.forEach(num => {
+            const b = document.createElement("div");
+            b.className = "bulb-card";
+            b.textContent = num;
+            display.appendChild(b);
+        });
+
+        const inputsDiv = document.getElementById("abhath-inputs");
+        inputsDiv.innerHTML = "";
+        abhathSorted.forEach((ans, idx) => {
+            const inp = document.createElement("input");
+            inp.type = "number";
+            inp.className = "num-input";
+            inp.id = `abh-${idx}`;
+            inp.dataset.ans = ans;
+            inp.placeholder = "...";
+            inputsDiv.appendChild(inp);
+            if (idx < abhathSorted.length - 1) {
+                const sep = document.createElement("span");
+                sep.textContent = "؛";
+                inputsDiv.appendChild(sep);
+            }
+        });
+    }
+
+    function markElement(el, isCorrect, correctAnswerText = "") {
+        el.disabled = true;
+        if (isCorrect) {
+            el.classList.add("correct-field");
+            return true;
+        } else {
+            el.classList.add("wrong-field");
+            if (correctAnswerText) {
+                const hint = document.createElement("span");
+                hint.className = "correction-hint";
+                hint.textContent = `الصَّوَابُ: ${correctAnswerText}`;
+                el.parentNode.appendChild(hint);
+            }
+            return false;
+        }
+    }
+
+    function checkOnjiz1() {
+        const btn = document.getElementById("btn-onjiz-1");
+        btn.disabled = true;
+        let ok = 0, err = 0;
+
+        const checks = [
+            { id: "onj1-0", type: "num", ans: "84" },
+            { id: "onj1-1", type: "word", valid: ["خمسه وسبعون"], display: "خَمْسَةٌ وَسَبْعُونَ" },
+            { id: "onj1-2", type: "num", ans: "80" },
+            { id: "onj1-3", type: "num", ans: "95" }
+        ];
+
+        checks.forEach(item => {
+            const el = document.getElementById(item.id);
+            let isOk = false;
+            if (item.type === "num") {
+                isOk = el.value.trim() === item.ans;
+                markElement(el, isOk, isOk ? "" : item.ans);
+            } else {
+                const norm = normalizeArabic(el.value);
+                isOk = item.valid.includes(norm);
+                markElement(el, isOk, isOk ? "" : item.display);
+            }
+            isOk ? ok++ : err++;
+        });
+
+        scores.onjiz.ok += ok;
+        scores.onjiz.err += err;
+        updateAllStats();
+    }
+
+    function checkOnjiz2() {
+        const btn = document.getElementById("btn-onjiz-2");
+        btn.disabled = true;
+        let ok = 0, err = 0;
+
+        const inputs = document.querySelectorAll("#onjiz-2-body input");
+        inputs.forEach(inp => {
+            const isOk = inp.value.trim() === inp.dataset.ans;
+            markElement(inp, isOk, isOk ? "" : inp.dataset.ans);
+            isOk ? ok++ : err++;
+        });
+
+        scores.onjiz.ok += ok;
+        scores.onjiz.err += err;
+        updateAllStats();
+    }
+
+    function checkAtamarran1() {
+        const btn = document.getElementById("btn-atamarran-1");
+        btn.disabled = true;
+        let ok = 0, err = 0;
+
+        const selects = document.querySelectorAll("#ex-atamarran-1 select");
+        selects.forEach(sel => {
+            const isOk = sel.value === sel.dataset.ans;
+            markElement(sel, isOk, isOk ? "" : sel.dataset.ans);
+            isOk ? ok++ : err++;
+        });
+
+        scores.atamarran.ok += ok;
+        scores.atamarran.err += err;
+        updateAllStats();
+    }
+
+    function checkAtamarran2() {
+        const btn = document.getElementById("btn-atamarran-2");
+        btn.disabled = true;
+        let ok = 0, err = 0;
+
+        const checks = [
+            { id: "ata2-0", type: "word", valid: ["تسعه وثمانون"], display: "تِسْعَةٌ وَثَمَانُونَ" },
+            { id: "ata2-1", type: "num", ans: "85" },
+            { id: "ata2-2", type: "word", valid: ["ثمانيه وثمانون"], display: "ثَمَانِيَةٌ وَثَمَانُونَ" }
+        ];
+
+        checks.forEach(item => {
+            const el = document.getElementById(item.id);
+            let isOk = false;
+            if (item.type === "num") {
+                isOk = el.value.trim() === item.ans;
+                markElement(el, isOk, isOk ? "" : item.ans);
+            } else {
+                const norm = normalizeArabic(el.value);
+                isOk = item.valid.includes(norm);
+                markElement(el, isOk, isOk ? "" : item.display);
+            }
+            isOk ? ok++ : err++;
+        });
+
+        document.getElementById("ata2-3").disabled = true;
+
+        scores.atamarran.ok += ok;
+        scores.atamarran.err += err;
+        updateAllStats();
+    }
+
+    function checkAtamarran3() {
+        const btn = document.getElementById("btn-atamarran-3");
+        btn.disabled = true;
+        let ok = 0, err = 0;
+
+        const checks = [
+            { id: "ata3-tens", type: "num", ans: "90" },
+            { id: "ata3-ones", type: "num", ans: "8" },
+            { id: "ata3-sum", type: "num", ans: "98" },
+            { id: "ata3-num-repeat", type: "num", ans: "98" },
+            { id: "ata3-word", type: "word", valid: ["ثمانيه وتسعون"], display: "ثَمَانِيَةٌ وَتِسْعُونَ" }
+        ];
+
+        checks.forEach(item => {
+            const el = document.getElementById(item.id);
+            let isOk = false;
+            if (item.type === "num") {
+                isOk = el.value.trim() === item.ans;
+                markElement(el, isOk, isOk ? "" : item.ans);
+            } else {
+                const norm = normalizeArabic(el.value);
+                isOk = item.valid.includes(norm);
+                markElement(el, isOk, isOk ? "" : item.display);
+            }
+            isOk ? ok++ : err++;
+        });
+
+        scores.atamarran.ok += ok;
+        scores.atamarran.err += err;
+        updateAllStats();
+    }
+
+    function checkAtamarran4() {
+        const btn = document.getElementById("btn-atamarran-4");
+        btn.disabled = true;
+        let ok = 0, err = 0;
+
+        const checks = [
+            { id: "ata4-0", valid: ["ثلاثه وسبعون"], display: "ثَلَاثَةٌ وَسَبْعُونَ" },
+            { id: "ata4-1", valid: ["ثلاثه وثمانون"], display: "ثَلَاثَةٌ وَثَمَانُونَ" },
+            { id: "ata4-2", valid: ["سبعه وتسعون"], display: "سَبْعَةٌ وَتِسْعُونَ" },
+            { id: "ata4-3", valid: ["سبعه وثمانون"], display: "سَبْعَةٌ وَثَمَانُونَ" }
+        ];
+
+        checks.forEach(item => {
+            const el = document.getElementById(item.id);
+            const norm = normalizeArabic(el.value);
+            const isOk = item.valid.includes(norm);
+            markElement(el, isOk, isOk ? "" : item.display);
+            isOk ? ok++ : err++;
+        });
+
+        scores.atamarran.ok += ok;
+        scores.atamarran.err += err;
+        updateAllStats();
+    }
+
+    function checkAbhath1() {
+        const btn = document.getElementById("btn-abhath-1");
+        btn.disabled = true;
+        let ok = 0, err = 0;
+
+        const inputs = document.querySelectorAll("#abhath-inputs input");
+        inputs.forEach(inp => {
+            const isOk = inp.value.trim() === inp.dataset.ans;
+            markElement(inp, isOk, isOk ? "" : inp.dataset.ans);
+            isOk ? ok++ : err++;
+        });
+
+        scores.abhath.ok += ok;
+        scores.abhath.err += err;
+        updateAllStats();
+    }
+
+    function resetAllExercises() {
+        scores.aktashif = { ok: 0, err: 0 };
+        scores.onjiz = { ok: 0, err: 0 };
+        scores.atamarran = { ok: 0, err: 0 };
+        scores.abhath = { ok: 0, err: 0 };
+
+        document.querySelectorAll(".correction-hint").forEach(el => el.remove());
+        document.querySelectorAll(".btn-check").forEach(btn => btn.disabled = false);
+
+        initAktashif1();
+        initAktashif2();
+        initOnjiz2();
+        initAtamarran1();
+        initAbhath();
+
+        document.querySelectorAll("input[type='text'], input[type='number']").forEach(inp => {
+            inp.value = "";
+            inp.disabled = false;
+            inp.classList.remove("correct-field", "wrong-field");
+        });
+
+        updateAllStats();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    window.onload = function() {
+        initAktashif1();
+        initAktashif2();
+        initOnjiz2();
+        initAtamarran1();
+        initBlocksVisual();
+        initAbhath();
+        updateAllStats();
+    };
+</script>
+
+</body>
+</html>
