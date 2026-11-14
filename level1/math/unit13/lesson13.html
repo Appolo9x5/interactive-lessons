@@ -1,0 +1,2184 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>اسْتِعْمَالُ الْعَدَدِ لِتَعْيِينِ رُتْبَةٍ | الدرس 13 - السنة الأولى ابتدائي</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0f9ff 0%, #fefce8 50%, #f0fdf4 100%);
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    .ltr-box {
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    .card-shadow {
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+    }
+
+    .selected-pulse {
+      animation: pulseRing 1.4s infinite;
+      outline: 4px solid #f59e0b !important;
+      outline-offset: 2px;
+      transform: scale(1.06);
+    }
+
+    @keyframes pulseRing {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.55); }
+      50% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+    }
+
+    @keyframes hopGrasshopper {
+      0% { transform: translateY(0) scale(1); }
+      40% { transform: translateY(-28px) scale(1.1); }
+      70% { transform: translateY(-10px) scale(1.02); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    .grasshopper-hop {
+      animation: hopGrasshopper 0.65s ease-out;
+    }
+
+    .locked-exercise {
+      pointer-events: none;
+    }
+
+    .locked-exercise .keep-interactive {
+      pointer-events: auto;
+    }
+
+    input[type="text"].digit-input {
+      caret-color: #0284c7;
+    }
+
+    .scroll-x-smooth {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+      font-family: 'Cairo', sans-serif;
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+    }
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 20px auto 30px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+      font-family: 'Cairo', sans-serif;
+    }
+  </style>
+</head>
+<body class="pb-16">
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <!-- الترويسة الرئيسية للدرس -->
+  <header class="bg-gradient-to-l from-sky-600 via-blue-600 to-indigo-600 text-white shadow-lg border-b-4 border-amber-400">
+    <div class="max-w-5xl mx-auto px-4 py-6 sm:py-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-3">
+        <span class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white text-sm sm:text-base font-bold px-4 py-1.5 rounded-full border border-white/30">
+          📘 الرِّيَاضِيَّاتُ – السَّنَةُ الأُولَى ابْتِدَائِيٌّ – الدَّرْسُ <span class="ltr-box">13</span>
+        </span>
+        <span class="inline-flex items-center gap-2 bg-amber-400 text-slate-900 text-xs sm:text-sm font-extrabold px-3.5 py-1.5 rounded-full shadow">
+          كِتَابُ التِّلْمِيذِ ص <span class="ltr-box">24</span> | كُرَّاسُ الأَنْشِطَةِ ص <span class="ltr-box">17</span>
+        </span>
+      </div>
+      <h1 class="text-2xl sm:text-4xl font-black tracking-wide text-center sm:text-right drop-shadow-sm">
+        اسْتِعْمَالُ الْعَدَدِ لِتَعْيِينِ رُتْبَةٍ
+      </h1>
+      <p class="text-sky-100 text-sm sm:text-base mt-2 text-center sm:text-right">
+        تَعَلَّمْ كَيْفَ تُعَيِّنُ رُتْبَةَ كُلِّ شَيْءٍ بِاسْتِعْمَالِ الأَعْدَادِ مِنَ الْيَسَارِ إِلَى الْيَمِينِ!
+      </p>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-3 sm:px-6 mt-8 space-y-10">
+
+    <!-- القسم الأول: كتاب التلميذ -->
+    <div class="flex items-center gap-3">
+      <div class="bg-sky-600 text-white font-extrabold px-5 py-2 rounded-2xl shadow text-lg sm:text-xl">
+        📖 أَوَّلاً : كِتَابُ التِّلْمِيذِ (ص <span class="ltr-box">24</span>)
+      </div>
+      <div class="h-1 flex-1 bg-sky-200 rounded-full"></div>
+    </div>
+
+    <!-- محطة: أكتشف -->
+    <section class="bg-white rounded-3xl p-5 sm:p-7 card-shadow border-2 border-sky-200 space-y-8">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-sky-100 pb-4">
+        <h2 class="text-xl sm:text-2xl font-black text-sky-700 flex items-center gap-2">
+          <span class="w-9 h-9 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center text-lg">🔍</span>
+          مَحَطَّةُ : أَكْتَشِفُ
+        </h2>
+        <span class="text-xs sm:text-sm text-slate-500 font-semibold">انْقُرْ لِلتَّوْصِيلِ أَوِ التَّلْوِينِ ثُمَّ اضْغَطْ عَلَى زِرِّ التَّحَقُّقِ</span>
+      </div>
+
+      <div id="ex-akt1" class="bg-slate-50/80 rounded-2xl p-4 sm:p-6 border border-slate-200 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="text-lg sm:text-xl font-extrabold text-slate-800">
+            <span class="ltr-box">1.</span> أُكْمِلُ رَبْطَ كُلِّ عَرَبَةٍ بِالرَّقْمِ الْمُنَاسِبِ لَهَا :
+          </h3>
+          <span class="text-xs bg-sky-100 text-sky-800 font-bold px-3 py-1 rounded-full">
+            اخْتَرِ الْبِطَاقَةَ ثُمَّ انْقُرْ عَلَى الْعَرَبَةِ الْمُنَاسِبَةِ
+          </span>
+        </div>
+
+        <div class="scroll-x-smooth pb-2">
+          <div id="akt1-container" class="relative min-w-[780px] bg-white rounded-2xl p-4 border border-slate-200 select-none">
+            <svg id="akt1-lines" class="absolute inset-0 w-full h-full pointer-events-none z-10"></svg>
+            <div class="ltr-box flex justify-between items-center px-6 mb-20 relative z-20" id="akt1-cards"></div>
+            <div class="ltr-box flex items-end justify-between px-2 pt-2 relative z-20" id="akt1-train">
+              <div class="flex flex-col items-center shrink-0 mr-1" title="قَاطِرَةُ الْقِطَارِ">
+                <svg width="96" height="68" viewBox="0 0 96 68" class="drop-shadow">
+                  <circle cx="24" cy="10" r="5" fill="#cbd5e1" />
+                  <circle cx="34" cy="7" r="6" fill="#e2e8f0" />
+                  <rect x="18" y="16" width="12" height="16" rx="2" fill="#334155" />
+                  <rect x="15" y="14" width="18" height="4" rx="2" fill="#ef4444" />
+                  <rect x="12" y="30" width="44" height="24" rx="4" fill="#ef4444" />
+                  <rect x="52" y="18" width="36" height="36" rx="4" fill="#2563eb" />
+                  <rect x="58" y="23" width="22" height="14" rx="3" fill="#bae6fd" />
+                  <polygon points="12,42 3,54 12,54" fill="#f59e0b" />
+                  <rect x="88" y="45" width="8" height="5" fill="#475569" />
+                  <circle cx="24" cy="57" r="8" fill="#1e293b" stroke="#facc15" stroke-width="2.5" />
+                  <circle cx="44" cy="57" r="8" fill="#1e293b" stroke="#facc15" stroke-width="2.5" />
+                  <circle cx="72" cy="57" r="9" fill="#1e293b" stroke="#facc15" stroke-width="2.5" />
+                </svg>
+              </div>
+              <div id="akt1-wagons" class="flex-1 flex justify-between items-end gap-1"></div>
+            </div>
+            <div class="h-2 bg-slate-600 rounded-full mt-0.5 mx-2"></div>
+          </div>
+        </div>
+
+        <div id="akt1-feedback" class="hidden rounded-xl p-3 text-sm font-bold"></div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <button id="akt1-reset-btn" onclick="resetAkt1Connections()" class="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm transition">
+            مسح خطوطي ↺
+          </button>
+          <button id="akt1-check-btn" onclick="checkAkt1()" class="px-6 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-extrabold shadow transition">
+            تَحَقَّقْ مِنَ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+
+      <div id="ex-akt2" class="bg-slate-50/80 rounded-2xl p-4 sm:p-6 border border-slate-200 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="text-lg sm:text-xl font-extrabold text-slate-800">
+            <span class="ltr-box">2.</span> أُكْمِلُ تَلْوِينَ الْخَانَاتِ مُرَتَّبَةً حَسَبَ أَلْوَانِ الْبِطَاقَاتِ :
+          </h3>
+          <span class="text-xs bg-amber-100 text-amber-900 font-bold px-3 py-1 rounded-full">
+            انْقُرْ عَلَى الْبِطَاقَةِ الْمُلَوَّنَةِ ثُمَّ انْقُرْ عَلَى الْخَانَةِ الْمُنَاسِبَةِ لَهَا فِي الشَّرِيطِ
+          </span>
+        </div>
+
+        <div class="ltr-box flex flex-wrap justify-center gap-3 sm:gap-4 py-3 px-2 bg-white rounded-2xl border border-slate-200" id="akt2-palette"></div>
+
+        <div class="text-center text-xs sm:text-sm text-slate-600 font-semibold">
+          مُلَاحَظَةٌ : الْبِطَاقَةُ رَقْمُ <span class="ltr-box font-extrabold text-slate-900">( 5 )</span> لَوْنُهَا أَبْيَضُ، اخْتَرْهَا وَلَوِّنْ بِهَا الْخَانَةَ الْخَامِسَةَ!
+        </div>
+
+        <div class="scroll-x-smooth pb-2">
+          <div class="ltr-box min-w-[620px] max-w-3xl mx-auto">
+            <div class="grid grid-cols-9 border-2 border-slate-700 rounded-xl overflow-hidden bg-white shadow-sm" id="akt2-strip"></div>
+            <div class="grid grid-cols-9 text-center text-xs text-slate-400 font-bold mt-1">
+              <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="akt2-feedback" class="hidden rounded-xl p-3 text-sm font-bold"></div>
+
+        <div class="flex flex-wrap items-center justify-end gap-3 pt-2">
+          <button id="akt2-check-btn" onclick="checkAkt2()" class="px-6 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-extrabold shadow transition">
+            تَحَقَّقْ مِنَ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl px-5 py-3 flex flex-wrap items-center justify-between gap-2 font-extrabold text-base sm:text-lg">
+        <span class="text-sky-900">📊 حَصِيلَةُ مَحَطَّةِ «أَكْتَشِفُ» :</span>
+        <div class="flex items-center gap-4">
+          <span class="text-green-700 bg-green-100 px-3.5 py-1 rounded-xl">✓ الصَّوَابُ : <span id="stat-akt-correct" class="ltr-box">0</span></span>
+          <span class="text-red-700 bg-red-100 px-3.5 py-1 rounded-xl">✗ الْخَطَأُ : <span id="stat-akt-wrong" class="ltr-box">0</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- محطة: أنجز -->
+    <section class="bg-white rounded-3xl p-5 sm:p-7 card-shadow border-2 border-rose-200 space-y-8">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-rose-100 pb-4">
+        <h2 class="text-xl sm:text-2xl font-black text-rose-700 flex items-center gap-2">
+          <span class="w-9 h-9 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center text-lg">✏️</span>
+          مَحَطَّةُ : أُنْجِزُ
+        </h2>
+        <span class="text-xs sm:text-sm text-slate-500 font-semibold">تَدَرَّبْ عَلَى التَّرْتِيبِ وَالْكِتَابَةِ</span>
+      </div>
+
+      <div id="ex-anj1" class="bg-slate-50/80 rounded-2xl p-4 sm:p-6 border border-slate-200 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="text-lg sm:text-xl font-extrabold text-slate-800">
+            <span class="ltr-box">1.</span> أَشْطُبُ الأَعْدَادَ النَّاقِصَةَ فِي السِّلْسِلَةِ كَمَا فِي الْمِثَالِ .
+          </h3>
+          <span class="text-xs bg-rose-100 text-rose-800 font-bold px-3 py-1 rounded-full">
+            انْقُرْ عَلَى الْعَدَدِ النَّاقِصِ فِي الشَّرِيطِ لِشَطْبِهِ
+          </span>
+        </div>
+
+        <div class="scroll-x-smooth pb-2">
+          <div class="ltr-box min-w-[540px] max-w-2xl mx-auto bg-white p-4 rounded-2xl border border-slate-200">
+            <div class="flex items-center justify-center gap-2 sm:gap-3">
+              <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border-2 border-rose-500 bg-rose-50/40 flex items-center justify-center font-black text-lg text-slate-400" title="الْخَانَةُ 1 نَاقِصَةٌ"></div>
+              <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border-2 border-rose-500 bg-rose-50/40 flex items-center justify-center font-black text-lg text-slate-400" title="الْخَانَةُ 2 نَاقِصَةٌ"></div>
+              <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border-2 border-rose-600 bg-white flex items-center justify-center font-black text-xl text-slate-800 shadow-sm">3</div>
+              <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border-2 border-rose-500 bg-rose-50/40 flex items-center justify-center font-black text-lg text-slate-400" title="الْخَانَةُ 4 نَاقِصَةٌ"></div>
+              <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border-2 border-rose-600 bg-white flex items-center justify-center font-black text-xl text-slate-800 shadow-sm">5</div>
+              <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border-2 border-rose-600 bg-white flex items-center justify-center font-black text-xl text-slate-800 shadow-sm">6</div>
+              <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border-2 border-rose-500 bg-rose-50/40 flex items-center justify-center font-black text-lg text-slate-400" title="الْخَانَةُ 7 نَاقِصَةٌ"></div>
+              <div class="flex flex-col gap-2 ml-1">
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border-2 border-rose-600 bg-white flex items-center justify-center font-black text-xl text-slate-800 shadow-sm">8</div>
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border-2 border-rose-600 bg-white flex items-center justify-center font-black text-xl text-slate-800 shadow-sm">9</div>
+                <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border-2 border-rose-500 bg-rose-50/40 flex items-center justify-center font-black text-lg text-slate-400 -ml-6" title="الْخَانَةُ 10 نَاقِصَةٌ"></div>
+              </div>
+            </div>
+
+            <div class="mt-5 flex justify-center">
+              <div id="anj1-strip" class="ltr-box inline-grid grid-cols-10 border-2 border-slate-700 rounded-xl overflow-hidden bg-white shadow"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="anj1-feedback" class="hidden rounded-xl p-3 text-sm font-bold"></div>
+
+        <div class="flex flex-wrap items-center justify-end gap-3 pt-2">
+          <button id="anj1-check-btn" onclick="checkAnj1()" class="px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold shadow transition">
+            تَحَقَّقْ مِنَ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+
+      <div id="ex-anj2" class="bg-slate-50/80 rounded-2xl p-4 sm:p-6 border border-slate-200 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="text-lg sm:text-xl font-extrabold text-slate-800">
+            <span class="ltr-box">2.</span> أُكْمِلُ وَصْلَ كُلِّ سَيَّارَةٍ بِمَكَانِ رَكْنِهَا .
+          </h3>
+          <span class="text-xs bg-rose-100 text-rose-800 font-bold px-3 py-1 rounded-full">
+            انْقُرْ عَلَى السَّيَّارَةِ ثُمَّ انْقُرْ عَلَى رَقْمِ مَكَانِ رَكْنِهَا
+          </span>
+        </div>
+
+        <div class="scroll-x-smooth pb-2">
+          <div id="anj2-container" class="relative min-w-[660px] max-w-3xl mx-auto bg-white rounded-2xl p-5 border border-slate-200 select-none">
+            <svg id="anj2-lines" class="absolute inset-0 w-full h-full pointer-events-none z-10"></svg>
+            <div id="anj2-top-cars" class="ltr-box flex justify-around items-center mb-12 relative z-20"></div>
+            <div class="ltr-box bg-slate-100 border-y-4 border-slate-400 rounded-xl py-3 px-4 my-4 relative z-20">
+              <div id="anj2-top-slots" class="grid grid-cols-5 gap-3 mb-3"></div>
+              <div class="h-1 bg-slate-400 rounded-full my-1"></div>
+              <div id="anj2-bot-slots" class="grid grid-cols-5 gap-3 mt-3"></div>
+            </div>
+            <div id="anj2-bot-cars" class="ltr-box flex justify-around items-center mt-12 relative z-20"></div>
+          </div>
+        </div>
+
+        <div id="anj2-feedback" class="hidden rounded-xl p-3 text-sm font-bold"></div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <button id="anj2-reset-btn" onclick="resetAnj2Connections()" class="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm transition">
+            مسح خطوطي ↺
+          </button>
+          <button id="anj2-check-btn" onclick="checkAnj2()" class="px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold shadow transition">
+            تَحَقَّقْ مِنَ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+
+      <div id="ex-anj3" class="bg-slate-50/80 rounded-2xl p-4 sm:p-6 border border-slate-200 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="text-lg sm:text-xl font-extrabold text-slate-800">
+            <span class="ltr-box">3.</span> أَكْتُبُ .
+          </h3>
+          <span class="text-xs bg-rose-100 text-rose-800 font-bold px-3 py-1 rounded-full">
+            اكْتُبِ الْعَدَدَيْنِ <span class="ltr-box">8</span> وَ <span class="ltr-box">9</span> فِي الْخَانَاتِ مِنَ الْيَسَارِ إِلَى الْيَمِينِ
+          </span>
+        </div>
+
+        <div class="scroll-x-smooth pb-2">
+          <div class="min-w-[540px] bg-white rounded-2xl p-4 border border-slate-200 space-y-4">
+            <div class="flex items-center gap-3">
+              <div class="w-24 text-center font-black text-xl text-rose-700 bg-rose-50 py-2 px-3 rounded-xl border border-rose-200 shrink-0">
+                ثَمَانِيَةٌ
+              </div>
+              <div class="ltr-box flex-1 grid grid-cols-7 gap-2 items-center">
+                <div class="h-12 rounded-xl bg-slate-100 border-2 border-slate-300 flex items-center justify-center font-black text-2xl text-slate-700 select-none" title="نَمُوذَجٌ">8</div>
+                <input type="text" inputmode="numeric" maxlength="1" data-expected="8" class="anj3-input digit-input h-12 w-full text-center font-black text-2xl rounded-xl border-2 border-slate-300 focus:border-rose-500 focus:outline-none bg-sky-50/30" placeholder="8" />
+                <input type="text" inputmode="numeric" maxlength="1" data-expected="8" class="anj3-input digit-input h-12 w-full text-center font-black text-2xl rounded-xl border-2 border-slate-300 focus:border-rose-500 focus:outline-none bg-sky-50/30" placeholder="8" />
+                <input type="text" inputmode="numeric" maxlength="1" data-expected="8" class="anj3-input digit-input h-12 w-full text-center font-black text-2xl rounded-xl border-2 border-slate-300 focus:border-rose-500 focus:outline-none bg-sky-50/30" placeholder="8" />
+                <input type="text" inputmode="numeric" maxlength="1" data-expected="8" class="anj3-input digit-input h-12 w-full text-center font-black text-2xl rounded-xl border-2 border-slate-300 focus:border-rose-500 focus:outline-none bg-sky-50/30" placeholder="8" />
+                <input type="text" inputmode="numeric" maxlength="1" data-expected="8" class="anj3-input digit-input h-12 w-full text-center font-black text-2xl rounded-xl border-2 border-slate-300 focus:border-rose-500 focus:outline-none bg-sky-50/30" placeholder="8" />
+                <input type="text" inputmode="numeric" maxlength="1" data-expected="8" class="anj3-input digit-input h-12 w-full text-center font-black text-2xl rounded-xl border-2 border-slate-300 focus:border-rose-500 focus:outline-none bg-sky-50/30" placeholder="8" />
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <div class="w-24 text-center font-black text-xl text-indigo-700 bg-indigo-50 py-2 px-3 rounded-xl border border-indigo-200 shrink-0">
+                تِسْعَةٌ
+              </div>
+              <div class="ltr-box flex-1 grid grid-cols-7 gap-2 items-center">
+                <div class="h-12 rounded-xl bg-slate-100 border-2 border-slate-300 flex items-center justify-center font-black text-2xl text-slate-700 select-none" title="نَمُوذَجٌ">9</div>
+                <input type="text" inputmode="numeric" maxlength="1" data-expected="9" class="anj3-input digit-input h-12 w-full text-center font-black text-2xl rounded-xl border-2 border-slate-300 focus:border-indigo-500 focus:outline-none bg-sky-50/30" placeholder="9" />
+                <input type="text" inputmode="numeric" maxlength="1" data-expected="9" class="anj3-input digit-input h-12 w-full text-center font-black text-2xl rounded-xl border-2 border-slate-300 focus:border-indigo-500 focus:outline-none bg-sky-50/30" placeholder="9" />
+                <input type="text" inputmode="numeric" maxlength="1" data-expected="9" class="anj3-input digit-input h-12 w-full text-center font-black text-2xl rounded-xl border-2 border-slate-300 focus:border-indigo-500 focus:outline-none bg-sky-50/30" placeholder="9" />
+                <input type="text" inputmode="numeric" maxlength="1" data-expected="9" class="anj3-input digit-input h-12 w-full text-center font-black text-2xl rounded-xl border-2 border-slate-300 focus:border-indigo-500 focus:outline-none bg-sky-50/30" placeholder="9" />
+                <input type="text" inputmode="numeric" maxlength="1" data-expected="9" class="anj3-input digit-input h-12 w-full text-center font-black text-2xl rounded-xl border-2 border-slate-300 focus:border-indigo-500 focus:outline-none bg-sky-50/30" placeholder="9" />
+                <input type="text" inputmode="numeric" maxlength="1" data-expected="9" class="anj3-input digit-input h-12 w-full text-center font-black text-2xl rounded-xl border-2 border-slate-300 focus:border-indigo-500 focus:outline-none bg-sky-50/30" placeholder="9" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="anj3-feedback" class="hidden rounded-xl p-3 text-sm font-bold"></div>
+
+        <div class="flex flex-wrap items-center justify-end gap-3 pt-2">
+          <button id="anj3-check-btn" onclick="checkAnj3()" class="px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold shadow transition">
+            تَحَقَّقْ مِنَ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-rose-50 border-2 border-rose-200 rounded-2xl px-5 py-3 flex flex-wrap items-center justify-between gap-2 font-extrabold text-base sm:text-lg">
+        <span class="text-rose-900">📊 حَصِيلَةُ مَحَطَّةِ «أُنْجِزُ» :</span>
+        <div class="flex items-center gap-4">
+          <span class="text-green-700 bg-green-100 px-3.5 py-1 rounded-xl">✓ الصَّوَابُ : <span id="stat-anj-correct" class="ltr-box">0</span></span>
+          <span class="text-red-700 bg-red-100 px-3.5 py-1 rounded-xl">✗ الْخَطَأُ : <span id="stat-anj-wrong" class="ltr-box">0</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- تَعَلَّمْتُ -->
+    <section class="bg-gradient-to-l from-amber-50 via-yellow-50 to-orange-50 rounded-3xl p-6 sm:p-8 card-shadow border-4 border-purple-700 relative overflow-hidden">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="w-12 h-12 rounded-2xl bg-purple-700 text-white flex items-center justify-center text-2xl shadow">💡</span>
+        <h2 class="text-2xl sm:text-3xl font-black text-purple-900">تَعَلَّمْتُ</h2>
+      </div>
+      <div class="bg-white/90 rounded-2xl p-5 sm:p-6 border-2 border-purple-200 text-center">
+        <p class="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 leading-relaxed">
+          « أُرَتِّبُ الأَشْيَاءَ بِاسْتِعْمَالِ الأَعْدَادِ مِثْلَ عَرَبَاتِ الْقِطَارِ . »
+        </p>
+      </div>
+    </section>
+
+    <!-- القسم الثاني: كراس الأنشطة -->
+    <div class="flex items-center gap-3 pt-4">
+      <div class="bg-emerald-600 text-white font-extrabold px-5 py-2 rounded-2xl shadow text-lg sm:text-xl">
+        📓 ثَانِياً : كُرَّاسُ الأَنْشِطَةِ (ص <span class="ltr-box">17</span>)
+      </div>
+      <div class="h-1 flex-1 bg-emerald-200 rounded-full"></div>
+    </div>
+
+    <!-- محطة: أتمرن -->
+    <section class="bg-white rounded-3xl p-5 sm:p-7 card-shadow border-2 border-emerald-200 space-y-8">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-emerald-100 pb-4">
+        <h2 class="text-xl sm:text-2xl font-black text-emerald-700 flex items-center gap-2">
+          <span class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-lg">🎯</span>
+          مَحَطَّةُ : أَتَمَرَّنُ
+        </h2>
+        <span class="text-xs sm:text-sm text-slate-500 font-semibold">أَنْجِزْ تَمَارِينَ كُرَّاسِ الأَنْشِطَةِ</span>
+      </div>
+
+      <div id="ex-atm1" class="bg-slate-50/80 rounded-2xl p-4 sm:p-6 border border-slate-200 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="text-lg sm:text-xl font-extrabold text-slate-800">
+            <span class="ltr-box">1.</span> أَرْبِطُ كُلَّ عَرَبَةٍ بِالْعَدَدِ الْمُنَاسِبِ .
+          </h3>
+          <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full">
+            انْقُرْ عَلَى الْعَرَبَةِ ثُمَّ انْقُرْ عَلَى الْعَدَدِ الْمُنَاسِبِ لَهَا فِي الشَّرِيطِ
+          </span>
+        </div>
+
+        <div class="scroll-x-smooth pb-2">
+          <div id="atm1-container" class="relative min-w-[720px] bg-white rounded-2xl p-4 border border-slate-200 select-none">
+            <svg id="atm1-lines" class="absolute inset-0 w-full h-full pointer-events-none z-10"></svg>
+            <div class="ltr-box flex items-end justify-start pt-4 pb-2 relative z-20">
+              <div class="relative w-28 h-24 bg-slate-700 rounded-t-full border-4 border-slate-800 flex items-end justify-end overflow-hidden shrink-0 shadow-inner" title="نَفَقُ الْقِطَارِ">
+                <div class="w-20 h-16 bg-slate-900 rounded-t-full"></div>
+              </div>
+              <div id="atm1-wagons" class="flex-1 flex items-end justify-between gap-1 -ml-4 z-20 pr-2"></div>
+            </div>
+            <div class="h-2 bg-amber-900/70 rounded-full mb-16"></div>
+            <div class="ltr-box flex justify-center relative z-20">
+              <div id="atm1-cards" class="inline-grid grid-cols-8 border-2 border-slate-700 rounded-xl overflow-hidden bg-white shadow"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="atm1-feedback" class="hidden rounded-xl p-3 text-sm font-bold"></div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <button id="atm1-reset-btn" onclick="resetAtm1Connections()" class="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm transition">
+            مسح خطوطي ↺
+          </button>
+          <button id="atm1-check-btn" onclick="checkAtm1()" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold shadow transition">
+            تَحَقَّقْ مِنَ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+
+      <div id="ex-atm2" class="bg-slate-50/80 rounded-2xl p-4 sm:p-6 border border-slate-200 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="text-lg sm:text-xl font-extrabold text-slate-800">
+            <span class="ltr-box">2.</span> صِلْ كُلَّ سَيَّارَةٍ بِمَكَانِ تَوَقُّفِهَا .
+          </h3>
+          <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full">
+            انْقُرْ عَلَى السَّيَّارَةِ ثُمَّ انْقُرْ عَلَى النُّقْطَةِ الزَّرْقَاءِ الْمُنَاسِبَةِ لِرُتْبَتِهَا (مِنْ 1 إِلَى 9)
+          </span>
+        </div>
+
+        <div class="scroll-x-smooth pb-2">
+          <div id="atm2-container" class="relative min-w-[660px] max-w-3xl mx-auto bg-white rounded-2xl p-5 border border-slate-200 select-none">
+            <svg id="atm2-lines" class="absolute inset-0 w-full h-full pointer-events-none z-10"></svg>
+            <div id="atm2-top-cars" class="ltr-box flex justify-around items-center mb-12 relative z-20"></div>
+            <div class="ltr-box relative py-4 my-2 z-20">
+              <div class="absolute left-4 right-4 top-1/2 -translate-y-1/2 h-1.5 bg-sky-600 rounded-full"></div>
+              <div id="atm2-dots" class="relative flex justify-between items-center px-6"></div>
+            </div>
+            <div id="atm2-bot-cars" class="ltr-box flex justify-between items-center px-3 mt-12 relative z-20"></div>
+          </div>
+        </div>
+
+        <div id="atm2-feedback" class="hidden rounded-xl p-3 text-sm font-bold"></div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <button id="atm2-reset-btn" onclick="resetAtm2Connections()" class="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm transition">
+            مسح خطوطي ↺
+          </button>
+          <button id="atm2-check-btn" onclick="checkAtm2()" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold shadow transition">
+            تَحَقَّقْ مِنَ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+
+      <div id="ex-atm3" class="bg-slate-50/80 rounded-2xl p-4 sm:p-6 border border-slate-200 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="text-lg sm:text-xl font-extrabold text-slate-800">
+            <span class="ltr-box">3.</span> أُكْمِلُ التَّلْوِينَ بِالتَّرْتِيبِ .
+          </h3>
+          <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full">
+            اخْتَرِ الْقُرْصَ الْمُلَوَّنَ ثُمَّ انْقُرْ عَلَى الْقِطْعَةِ الْمُنَاسِبَةِ بِالتَّرْتِيبِ
+          </span>
+        </div>
+
+        <div id="atm3-discs" class="ltr-box flex flex-wrap justify-center gap-4 sm:gap-6 py-3 bg-white rounded-2xl border border-slate-200"></div>
+
+        <div class="scroll-x-smooth pb-2">
+          <div id="atm3-blocks" class="ltr-box min-w-[540px] max-w-2xl mx-auto flex items-center justify-center gap-1 py-2"></div>
+        </div>
+
+        <div id="atm3-feedback" class="hidden rounded-xl p-3 text-sm font-bold"></div>
+
+        <div class="flex flex-wrap items-center justify-end gap-3 pt-2">
+          <button id="atm3-check-btn" onclick="checkAtm3()" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold shadow transition">
+            تَحَقَّقْ مِنَ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+
+      <div id="ex-atm4" class="bg-slate-50/80 rounded-2xl p-4 sm:p-6 border border-slate-200 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="text-lg sm:text-xl font-extrabold text-slate-800">
+            <span class="ltr-box">4.</span> رَتِّبِ الْعُلَبَ مِنَ الصُّغْرَى إِلَى الْكُبْرَى .
+          </h3>
+          <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-full">
+            انْقُرْ عَلَى الْعُلَبِ بِالتَّرْتِيبِ مِنَ الصُّغْرَى إِلَى الْكُبْرَى (أَوِ اخْتَرِ الرَّقْمَ فِي الْخَانَةِ)
+          </span>
+        </div>
+
+        <div class="scroll-x-smooth pb-2">
+          <div id="atm4-container" class="relative min-w-[640px] max-w-3xl mx-auto bg-white rounded-2xl p-5 border border-slate-200 select-none">
+            <svg id="atm4-lines" class="absolute inset-0 w-full h-full pointer-events-none z-10"></svg>
+            <div id="atm4-cubes" class="ltr-box flex items-end justify-around gap-3 pt-4 pb-16 relative z-20"></div>
+            <div id="atm4-slots" class="ltr-box grid grid-cols-6 gap-3 px-2 relative z-20"></div>
+          </div>
+        </div>
+
+        <div id="atm4-feedback" class="hidden rounded-xl p-3 text-sm font-bold"></div>
+
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-2">
+          <button id="atm4-reset-btn" onclick="resetAtm4()" class="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm transition">
+            إعادة الترتيب ↺
+          </button>
+          <button id="atm4-check-btn" onclick="checkAtm4()" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold shadow transition">
+            تَحَقَّقْ مِنَ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl px-5 py-3 flex flex-wrap items-center justify-between gap-2 font-extrabold text-base sm:text-lg">
+        <span class="text-emerald-900">📊 حَصِيلَةُ مَحَطَّةِ «أَتَمَرَّنُ» :</span>
+        <div class="flex items-center gap-4">
+          <span class="text-green-700 bg-green-100 px-3.5 py-1 rounded-xl">✓ الصَّوَابُ : <span id="stat-atm-correct" class="ltr-box">0</span></span>
+          <span class="text-red-700 bg-red-100 px-3.5 py-1 rounded-xl">✗ الْخَطَأُ : <span id="stat-atm-wrong" class="ltr-box">0</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- محطة: أبحث -->
+    <section class="bg-white rounded-3xl p-5 sm:p-7 card-shadow border-2 border-amber-300 space-y-6">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-amber-100 pb-4">
+        <h2 class="text-xl sm:text-2xl font-black text-amber-700 flex items-center gap-2">
+          <span class="w-9 h-9 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-lg">🦗</span>
+          مَحَطَّةُ : أَبْحَثُ
+        </h2>
+        <span class="text-xs sm:text-sm text-slate-500 font-semibold">فَكِّرْ جَيِّداً ثُمَّ لَوِّنْ خَانَةَ الْوُصُولِ</span>
+      </div>
+
+      <div id="ex-abh1" class="bg-amber-50/50 rounded-2xl p-4 sm:p-6 border border-amber-200 space-y-5">
+        <h3 class="text-lg sm:text-xl font-extrabold text-slate-800">
+          أَبْحَثُ : تَقْفِزُ الْجَرَادَةُ <span class="ltr-box text-amber-700">6</span> خَانَاتٍ لَوِّنْ خَانَةَ الْوُصُولِ .
+        </h3>
+
+        <div class="scroll-x-smooth pb-2">
+          <div class="ltr-box min-w-[560px] max-w-2xl mx-auto bg-white rounded-2xl p-5 border border-amber-200">
+            <div class="grid grid-cols-10 mb-1 h-14 items-end">
+              <div id="grasshopper-col-1" class="flex justify-center"></div>
+              <div id="grasshopper-col-2" class="flex justify-center">
+                <div id="grasshopper-sprite" class="text-4xl select-none transition-all duration-500" title="الْجَرَادَةُ">🦗</div>
+              </div>
+              <div id="grasshopper-col-3" class="flex justify-center"></div>
+              <div id="grasshopper-col-4" class="flex justify-center"></div>
+              <div id="grasshopper-col-5" class="flex justify-center"></div>
+              <div id="grasshopper-col-6" class="flex justify-center"></div>
+              <div id="grasshopper-col-7" class="flex justify-center"></div>
+              <div id="grasshopper-col-8" class="flex justify-center"></div>
+              <div id="grasshopper-col-9" class="flex justify-center"></div>
+              <div id="grasshopper-col-10" class="flex justify-center"></div>
+            </div>
+
+            <div id="abh1-strip" class="grid grid-cols-10 border-2 border-slate-700 rounded-xl overflow-hidden shadow"></div>
+          </div>
+        </div>
+
+        <div id="abh1-feedback" class="hidden rounded-xl p-3 text-sm font-bold"></div>
+
+        <div class="flex flex-wrap items-center justify-end gap-3 pt-2">
+          <button id="abh1-check-btn" onclick="checkAbh1()" class="px-6 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-extrabold shadow transition">
+            تَحَقَّقْ مِنَ الإِجَابَةِ ✓
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl px-5 py-3 flex flex-wrap items-center justify-between gap-2 font-extrabold text-base sm:text-lg">
+        <span class="text-amber-900">📊 حَصِيلَةُ مَحَطَّةِ «أَبْحَثُ» :</span>
+        <div class="flex items-center gap-4">
+          <span class="text-green-700 bg-green-100 px-3.5 py-1 rounded-xl">✓ الصَّوَابُ : <span id="stat-abh-correct" class="ltr-box">0</span></span>
+          <span class="text-red-700 bg-red-100 px-3.5 py-1 rounded-xl">✗ الْخَطَأُ : <span id="stat-abh-wrong" class="ltr-box">0</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- التقييم الكلي -->
+    <section id="final-evaluation" class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-2xl border-4 border-amber-400">
+      <div class="text-center mb-6">
+        <h2 class="text-2xl sm:text-3xl font-black text-amber-300">
+          📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ
+        </h2>
+        <p class="text-slate-300 text-sm sm:text-base mt-1">
+          يَتَحَدَّثُ هَذَا التَّقْيِيمُ تِلْقَائِيّاً كُلَّمَا تَحَقَّقْتَ مِنْ إِجَابَةِ تَمْرِينٍ
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+        <div class="space-y-3">
+          <div class="bg-emerald-500/20 border border-emerald-400/40 rounded-2xl p-4 flex items-center justify-between">
+            <span class="font-bold text-emerald-200 text-base sm:text-lg">✓ الإِجَابَاتُ الصَّحِيحَةُ :</span>
+            <span id="total-correct" class="ltr-box text-2xl sm:text-3xl font-black text-emerald-400">0</span>
+          </div>
+          <div class="bg-rose-500/20 border border-rose-400/40 rounded-2xl p-4 flex items-center justify-between">
+            <span class="font-bold text-rose-200 text-base sm:text-lg">✗ الإِجَابَاتُ الْخَاطِئَةُ :</span>
+            <span id="total-wrong" class="ltr-box text-2xl sm:text-3xl font-black text-rose-400">0</span>
+          </div>
+          <div class="bg-white/10 border border-white/20 rounded-2xl p-3 flex items-center justify-between text-sm">
+            <span class="text-slate-300 font-semibold">التَّمَارِينُ الْمُنْجَزَةُ :</span>
+            <span class="ltr-box font-extrabold text-amber-300"><span id="completed-count">0</span> / 9</span>
+          </div>
+        </div>
+
+        <div class="flex flex-col items-center justify-center">
+          <div class="relative w-40 h-40 flex items-center justify-center">
+            <svg class="w-40 h-40 -rotate-90" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="12" />
+              <circle id="progress-ring-circle" cx="60" cy="60" r="50" fill="none" stroke="#facc15" stroke-width="12"
+                stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16"
+                style="transition: stroke-dashoffset 0.7s ease, stroke 0.5s ease;" />
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center">
+              <span id="total-percent" class="ltr-box text-3xl font-black text-white">0%</span>
+              <span class="text-xs text-slate-300 font-bold">نِسْبَةُ النَّجَاحِ</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col items-center md:items-stretch justify-between gap-4 bg-white/10 rounded-2xl p-5 border border-white/15">
+          <div class="text-center">
+            <div class="text-xs uppercase tracking-wider text-amber-300 font-bold mb-1">الْمُلَاحَظَةُ التَّرْبَوِيَّةُ</div>
+            <p id="teacher-remark" class="text-lg sm:text-xl font-black text-white leading-snug">
+              ابْدَأْ بِحَلِّ التَّمَارِينِ لِتَظْهَرَ نَتِيجَتُكَ! 🌟
+            </p>
+          </div>
+          <button onclick="resetAllExercises()" class="w-full py-3 px-4 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-base shadow-lg transition transform active:scale-95">
+            🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- زر العودة إلى الفهرس -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+  </main>
+
+  <!-- ========================================
+       سكريبت الحماية — قفل الاشتراك الإجباري
+       ======================================== -->
+  <script>
+    const CHANNEL_ID = "-1004456852024";
+    const tg = window.Telegram?.WebApp;
+    if (tg) { tg.ready(); tg.expand(); }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+  </script>
+
+  <!-- ========================================
+       سكريبت الدرس الأصلي
+       ======================================== -->
+  <script>
+    const stationStats = {
+      akt: { correct: 0, wrong: 0 },
+      anj: { correct: 0, wrong: 0 },
+      atm: { correct: 0, wrong: 0 },
+      abh: { correct: 0, wrong: 0 }
+    };
+
+    const lockedExercises = new Set();
+
+    function lockExercise(exId, checkBtnId, resetBtnId = null) {
+      lockedExercises.add(exId);
+      const exEl = document.getElementById(exId);
+      if (exEl) exEl.classList.add('locked-exercise');
+      const btn = document.getElementById(checkBtnId);
+      if (btn) {
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+        btn.textContent = 'تَمَّ التَّحَقُّقُ ✓';
+      }
+      if (resetBtnId) {
+        const rBtn = document.getElementById(resetBtnId);
+        if (rBtn) rBtn.style.display = 'none';
+      }
+    }
+
+    function updateAllStats() {
+      ['akt', 'anj', 'atm', 'abh'].forEach(st => {
+        document.getElementById(`stat-${st}-correct`).textContent = stationStats[st].correct;
+        document.getElementById(`stat-${st}-wrong`).textContent = stationStats[st].wrong;
+      });
+
+      const totalCorrect = stationStats.akt.correct + stationStats.anj.correct + stationStats.atm.correct + stationStats.abh.correct;
+      const totalWrong = stationStats.akt.wrong + stationStats.anj.wrong + stationStats.atm.wrong + stationStats.abh.wrong;
+      const totalAnswered = totalCorrect + totalWrong;
+
+      document.getElementById('total-correct').textContent = totalCorrect;
+      document.getElementById('total-wrong').textContent = totalWrong;
+      document.getElementById('completed-count').textContent = lockedExercises.size;
+
+      const percent = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
+      document.getElementById('total-percent').textContent = `${percent}%`;
+
+      const circle = document.getElementById('progress-ring-circle');
+      const circumference = 314.16;
+      const offset = circumference - (percent / 100) * circumference;
+      circle.style.strokeDashoffset = offset;
+
+      const remarkEl = document.getElementById('teacher-remark');
+      if (totalAnswered === 0) {
+        circle.style.stroke = '#facc15';
+        remarkEl.textContent = 'ابْدَأْ بِحَلِّ التَّمَارِينِ لِتَظْهَرَ نَتِيجَتُكَ! 🌟';
+      } else if (percent >= 90) {
+        circle.style.stroke = '#22c55e';
+        remarkEl.textContent = 'مُمْتَازٌ جِدّاً! أَنْتَ بَطَلٌ فِي تَعْيِينِ الرُّتَبِ 🏆👏';
+      } else if (percent >= 75) {
+        circle.style.stroke = '#38bdf8';
+        remarkEl.textContent = 'جَيِّدٌ جِدّاً! أَحْسَنْتَ وَاصِلْ تَأَلُّقَكَ 🌟';
+      } else if (percent >= 50) {
+        circle.style.stroke = '#facc15';
+        remarkEl.textContent = 'جَيِّدٌ! يُمْكِنُكَ تَحْقِيقُ نَتِيجَةٍ أَفْضَلَ بِالتَّرْكِيزِ 💪';
+      } else {
+        circle.style.stroke = '#f87171';
+        remarkEl.textContent = 'وَاصِلِ الاجْتِهَادَ وَأَعِدِ الْمُحَاوَلَةَ لِتَتَعَلَّمَ أَكْثَرَ 📘✨';
+      }
+    }
+
+    function showFeedback(id, isAllCorrect, message) {
+      const el = document.getElementById(id);
+      el.classList.remove('hidden', 'bg-green-100', 'text-green-800', 'border-green-300', 'bg-amber-100', 'text-amber-900', 'border-amber-300', 'bg-red-100', 'text-red-800', 'border-red-300');
+      el.classList.add('border');
+      if (isAllCorrect) {
+        el.classList.add('bg-green-100', 'text-green-800', 'border-green-300');
+      } else {
+        el.classList.add('bg-amber-100', 'text-amber-900', 'border-amber-300');
+      }
+      el.innerHTML = message;
+    }
+
+    function drawLineBetween(svgEl, containerEl, el1, el2, color = '#0284c7', dashed = false) {
+      if (!svgEl || !containerEl || !el1 || !el2) return;
+      const cRect = containerEl.getBoundingClientRect();
+      const r1 = el1.getBoundingClientRect();
+      const r2 = el2.getBoundingClientRect();
+
+      const x1 = r1.left - cRect.left + r1.width / 2;
+      const y1 = r1.top - cRect.top + r1.height / 2;
+      const x2 = r2.left - cRect.left + r2.width / 2;
+      const y2 = r2.top - cRect.top + r2.height / 2;
+
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x1);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2);
+      line.setAttribute('y2', y2);
+      line.setAttribute('stroke', color);
+      line.setAttribute('stroke-width', '3');
+      line.setAttribute('stroke-linecap', 'round');
+      if (dashed) line.setAttribute('stroke-dasharray', '6,4');
+      svgEl.appendChild(line);
+    }
+
+    // ============ أكتشف 1 ============
+    const akt1CardOrder = [2, 1, 4, 3, 7, 8, 6, 9, 5];
+    const akt1Prelinked = { 1: 1, 4: 4 };
+    let akt1UserLinks = {};
+    let akt1SelectedCard = null;
+    let akt1SelectedWagon = null;
+    let akt1ResultColors = {};
+
+    function initAkt1() {
+      akt1UserLinks = {};
+      akt1SelectedCard = null;
+      akt1SelectedWagon = null;
+      akt1ResultColors = {};
+
+      const cardsWrap = document.getElementById('akt1-cards');
+      cardsWrap.innerHTML = '';
+      akt1CardOrder.forEach(num => {
+        const isPre = num === 1 || num === 4;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `akt1-card-${num}`;
+        btn.textContent = num;
+        btn.className = `w-11 h-11 rounded-xl border-2 font-black text-xl transition flex items-center justify-center shadow-sm ${
+          isPre
+            ? 'bg-slate-200 border-slate-400 text-slate-600 cursor-default'
+            : 'bg-white border-rose-400 text-slate-800 hover:bg-rose-50 cursor-pointer'
+        }`;
+        if (!isPre) btn.onclick = () => selectAkt1Card(num);
+        cardsWrap.appendChild(btn);
+      });
+
+      const wagonsWrap = document.getElementById('akt1-wagons');
+      wagonsWrap.innerHTML = '';
+      const wagonColors = ['#22c55e', '#facc15', '#3b82f6', '#ef4444', '#22c55e', '#facc15', '#3b82f6', '#ef4444', '#94a3b8'];
+      for (let i = 1; i <= 9; i++) {
+        const isPre = i === 1 || i === 4;
+        const showHintNum = (i === 1 || i === 4 || i === 7) ? i : '?';
+        const div = document.createElement('button');
+        div.type = 'button';
+        div.id = `akt1-wagon-${i}`;
+        div.className = `flex-1 flex flex-col items-center group transition ${isPre ? 'cursor-default' : 'cursor-pointer'}`;
+        div.innerHTML = `
+          <div class="w-full h-11 rounded-lg border-2 border-slate-700 flex items-center justify-center font-black text-lg text-white shadow-sm transition"
+               style="background-color: ${wagonColors[i - 1]}; text-shadow: 0 1px 2px rgba(0,0,0,0.6);">
+            ${showHintNum}
+          </div>
+          <div class="flex justify-around w-full px-1 -mt-1">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-800 border border-amber-300"></span>
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-800 border border-amber-300"></span>
+          </div>
+        `;
+        if (!isPre) div.onclick = () => selectAkt1Wagon(i);
+        wagonsWrap.appendChild(div);
+      }
+      renderAkt1Lines();
+    }
+
+    function selectAkt1Card(num) {
+      if (lockedExercises.has('ex-akt1')) return;
+      akt1SelectedCard = (akt1SelectedCard === num) ? null : num;
+      updateAkt1SelectionUI();
+      tryPairAkt1();
+    }
+
+    function selectAkt1Wagon(wagonNum) {
+      if (lockedExercises.has('ex-akt1')) return;
+      akt1SelectedWagon = (akt1SelectedWagon === wagonNum) ? null : wagonNum;
+      updateAkt1SelectionUI();
+      tryPairAkt1();
+    }
+
+    function tryPairAkt1() {
+      if (akt1SelectedCard !== null && akt1SelectedWagon !== null) {
+        for (const w in akt1UserLinks) {
+          if (akt1UserLinks[w] === akt1SelectedCard) delete akt1UserLinks[w];
+        }
+        akt1UserLinks[akt1SelectedWagon] = akt1SelectedCard;
+        akt1SelectedCard = null;
+        akt1SelectedWagon = null;
+        updateAkt1SelectionUI();
+        renderAkt1Lines();
+      }
+    }
+
+    function updateAkt1SelectionUI() {
+      akt1CardOrder.forEach(num => {
+        const el = document.getElementById(`akt1-card-${num}`);
+        if (!el) return;
+        el.classList.toggle('selected-pulse', akt1SelectedCard === num);
+      });
+      for (let i = 1; i <= 9; i++) {
+        const el = document.getElementById(`akt1-wagon-${i}`);
+        if (!el) return;
+        el.firstElementChild.classList.toggle('selected-pulse', akt1SelectedWagon === i);
+      }
+    }
+
+    function renderAkt1Lines() {
+      const svg = document.getElementById('akt1-lines');
+      const container = document.getElementById('akt1-container');
+      svg.innerHTML = '';
+      [1, 4].forEach(n => {
+        drawLineBetween(svg, container, document.getElementById(`akt1-card-${n}`), document.getElementById(`akt1-wagon-${n}`), '#64748b');
+      });
+      for (const wagonStr in akt1UserLinks) {
+        const w = Number(wagonStr);
+        const c = akt1UserLinks[w];
+        const color = akt1ResultColors[w] || '#0284c7';
+        drawLineBetween(svg, container, document.getElementById(`akt1-card-${c}`), document.getElementById(`akt1-wagon-${w}`), color);
+      }
+    }
+
+    function resetAkt1Connections() {
+      if (lockedExercises.has('ex-akt1')) return;
+      akt1UserLinks = {};
+      akt1SelectedCard = null;
+      akt1SelectedWagon = null;
+      updateAkt1SelectionUI();
+      renderAkt1Lines();
+    }
+
+    function checkAkt1() {
+      if (lockedExercises.has('ex-akt1')) return;
+      const targetWagons = [2, 3, 5, 6, 7, 8, 9];
+      let correct = 0, wrong = 0;
+      targetWagons.forEach(w => {
+        const chosenCard = akt1UserLinks[w];
+        const wagonBox = document.getElementById(`akt1-wagon-${w}`).firstElementChild;
+        wagonBox.textContent = w;
+        if (chosenCard === w) {
+          correct++;
+          akt1ResultColors[w] = '#16a34a';
+          const cardEl = document.getElementById(`akt1-card-${chosenCard}`);
+          cardEl.classList.remove('bg-white', 'border-rose-400');
+          cardEl.classList.add('bg-green-100', 'border-green-600', 'text-green-800');
+        } else {
+          wrong++;
+          if (chosenCard) {
+            akt1ResultColors[w] = '#dc2626';
+            const cardEl = document.getElementById(`akt1-card-${chosenCard}`);
+            cardEl.classList.remove('bg-white', 'border-rose-400');
+            cardEl.classList.add('bg-red-100', 'border-red-600', 'text-red-800');
+          }
+          const rightCardEl = document.getElementById(`akt1-card-${w}`);
+          if (!rightCardEl.classList.contains('bg-red-100')) {
+            rightCardEl.classList.add('ring-2', 'ring-green-600');
+          }
+        }
+      });
+      akt1SelectedCard = null;
+      akt1SelectedWagon = null;
+      updateAkt1SelectionUI();
+      renderAkt1Lines();
+      stationStats.akt.correct += correct;
+      stationStats.akt.wrong += wrong;
+      lockExercise('ex-akt1', 'akt1-check-btn', 'akt1-reset-btn');
+      updateAllStats();
+      showFeedback('akt1-feedback', wrong === 0, wrong === 0
+        ? '🎉 أَحْسَنْتَ! رَبَطْتَ جَمِيعَ الْعَرَبَاتِ بِأَرْقَامِهَا الصَّحِيحَةِ.'
+        : `أَصَبْتَ فِي <span class="ltr-box">${correct}</span> مِنْ <span class="ltr-box">7</span> عَرَبَاتٍ. تَمَّ إِظْهَارُ رُتْبَةِ كُلِّ عَرَبَةٍ عَلَيْهَا.`);
+    }
+
+    // ============ أكتشف 2 ============
+    const akt2CardsData = [
+      { num: 1, color: '#2e7d6b', name: 'أَخْضَرُ دَاكِنٌ' },
+      { num: 4, color: '#f48fb1', name: 'وَرْدِيٌّ' },
+      { num: 3, color: '#d4b46a', name: 'أَصْفَرُ رَمْلِيٌّ' },
+      { num: 5, color: '#ffffff', name: 'أَبْيَضُ' },
+      { num: 7, color: '#7cb342', name: 'أَخْضَرُ فَاتِحٌ' },
+      { num: 2, color: '#796e8c', name: 'بَنَفْسَجِيٌّ' },
+      { num: 9, color: '#c0ca33', name: 'أَخْضَرُ لَيْمُونِيٌّ' },
+      { num: 6, color: '#a94438', name: 'أَحْمَرُ بُنِّيٌّ' },
+      { num: 8, color: '#e09132', name: 'بُرْتُقَالِيٌّ' }
+    ];
+    const akt2Precolored = { 1: '#2e7d6b', 4: '#f48fb1', 7: '#7cb342', 9: '#c0ca33' };
+    let akt2SelectedColor = null;
+    let akt2SelectedNum = null;
+    let akt2CellColors = {};
+    let akt2Touched = {};
+
+    function initAkt2() {
+      akt2SelectedColor = null;
+      akt2SelectedNum = null;
+      akt2CellColors = { ...akt2Precolored };
+      akt2Touched = {};
+
+      const palette = document.getElementById('akt2-palette');
+      palette.innerHTML = '';
+      akt2CardsData.forEach((item, idx) => {
+        const rot = (idx % 2 === 0 ? -4 : 4);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `akt2-card-${item.num}`;
+        btn.style.backgroundColor = item.color;
+        btn.style.transform = `rotate(${rot}deg)`;
+        btn.className = `w-12 h-14 sm:w-14 sm:h-16 rounded-xl border-2 border-slate-600 shadow-md flex items-center justify-center font-black text-xl transition cursor-pointer ${
+          item.color === '#ffffff' ? 'text-slate-800' : 'text-white'
+        }`;
+        btn.style.textShadow = item.color === '#ffffff' ? 'none' : '0 1px 2px rgba(0,0,0,0.65)';
+        btn.textContent = item.num;
+        btn.title = `${item.num} - ${item.name}`;
+        btn.onclick = () => {
+          if (lockedExercises.has('ex-akt2')) return;
+          akt2SelectedColor = item.color;
+          akt2SelectedNum = item.num;
+          akt2CardsData.forEach(c => {
+            document.getElementById(`akt2-card-${c.num}`).classList.toggle('selected-pulse', c.num === item.num);
+          });
+        };
+        palette.appendChild(btn);
+      });
+
+      const strip = document.getElementById('akt2-strip');
+      strip.innerHTML = '';
+      for (let i = 1; i <= 9; i++) {
+        const isPre = Boolean(akt2Precolored[i]);
+        const cell = document.createElement('button');
+        cell.type = 'button';
+        cell.id = `akt2-cell-${i}`;
+        cell.style.backgroundColor = isPre ? akt2Precolored[i] : '#f8fafc';
+        cell.className = `h-14 border-r border-slate-700 last:border-r-0 flex items-center justify-center font-black text-sm transition ${
+          isPre ? 'cursor-default' : 'cursor-pointer hover:opacity-90'
+        }`;
+        if (!isPre) {
+          cell.innerHTML = '<span class="text-slate-300 text-xs">لَوِّنْ</span>';
+          cell.onclick = () => {
+            if (lockedExercises.has('ex-akt2')) return;
+            if (!akt2SelectedColor) {
+              palette.classList.add('ring-4', 'ring-amber-400');
+              setTimeout(() => palette.classList.remove('ring-4', 'ring-amber-400'), 700);
+              return;
+            }
+            akt2CellColors[i] = akt2SelectedColor;
+            akt2Touched[i] = true;
+            cell.style.backgroundColor = akt2SelectedColor;
+            cell.innerHTML = akt2SelectedColor === '#ffffff'
+              ? '<span class="text-slate-500 text-xs font-bold">أَبْيَضُ</span>'
+              : '';
+          };
+        }
+        strip.appendChild(cell);
+      }
+    }
+
+    function checkAkt2() {
+      if (lockedExercises.has('ex-akt2')) return;
+      const targetIndices = [2, 3, 5, 6, 8];
+      let correct = 0, wrong = 0;
+      targetIndices.forEach(i => {
+        const expectedObj = akt2CardsData.find(c => c.num === i);
+        const cell = document.getElementById(`akt2-cell-${i}`);
+        const chosenColor = akt2CellColors[i];
+        const isRight = (i === 5)
+          ? (chosenColor === '#ffffff' || !akt2Touched[i])
+          : (chosenColor === expectedObj.color);
+        if (isRight) {
+          correct++;
+          cell.style.backgroundColor = expectedObj.color;
+          cell.innerHTML = `<span class="w-6 h-6 rounded-full bg-green-600 text-white flex items-center justify-center text-xs shadow">✓</span>`;
+        } else {
+          wrong++;
+          cell.innerHTML = `<span class="px-1.5 py-0.5 rounded bg-red-600 text-white text-xs shadow">✗ (${i})</span>`;
+          cell.style.outline = '3px solid #dc2626';
+          cell.style.outlineOffset = '-3px';
+        }
+      });
+      akt2CardsData.forEach(c => document.getElementById(`akt2-card-${c.num}`).classList.remove('selected-pulse'));
+      stationStats.akt.correct += correct;
+      stationStats.akt.wrong += wrong;
+      lockExercise('ex-akt2', 'akt2-check-btn');
+      updateAllStats();
+      showFeedback('akt2-feedback', wrong === 0, wrong === 0
+        ? '🎉 رَائِعٌ! لَوَّنْتَ جَمِيعَ الْخَانَاتِ بِالتَّرْتِيبِ الصَّحِيحِ حَسَبَ أَرْقَامِ الْبِطَاقَاتِ.'
+        : `أَصَبْتَ فِي <span class="ltr-box">${correct}</span> مِنْ <span class="ltr-box">5</span> خَانَاتٍ.`);
+    }
+
+    // ============ أنجز 1 ============
+    let anj1Crossed = new Set([1]);
+
+    function initAnj1() {
+      anj1Crossed = new Set([1]);
+      const strip = document.getElementById('anj1-strip');
+      strip.innerHTML = '';
+      for (let i = 1; i <= 10; i++) {
+        const isExample = i === 1;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `anj1-num-${i}`;
+        btn.className = `relative w-11 h-12 sm:w-12 sm:h-14 border-r border-slate-700 last:border-r-0 flex items-center justify-center font-black text-xl transition ${
+          isExample ? 'bg-slate-100 text-slate-500 cursor-default' : 'bg-white text-slate-800 hover:bg-rose-50 cursor-pointer'
+        }`;
+        btn.innerHTML = `
+          <span>${i}</span>
+          <span id="anj1-x-${i}" class="${isExample ? '' : 'hidden'} absolute inset-0 flex items-center justify-center text-red-600 text-3xl font-black pointer-events-none">✕</span>
+        `;
+        if (!isExample) {
+          btn.onclick = () => {
+            if (lockedExercises.has('ex-anj1')) return;
+            if (anj1Crossed.has(i)) {
+              anj1Crossed.delete(i);
+              document.getElementById(`anj1-x-${i}`).classList.add('hidden');
+              btn.classList.remove('bg-rose-50');
+            } else {
+              anj1Crossed.add(i);
+              document.getElementById(`anj1-x-${i}`).classList.remove('hidden');
+              btn.classList.add('bg-rose-50');
+            }
+          };
+        }
+        strip.appendChild(btn);
+      }
+    }
+
+    function checkAnj1() {
+      if (lockedExercises.has('ex-anj1')) return;
+      const missingNumbers = [2, 4, 7, 10];
+      const presentNumbers = [3, 5, 6, 8, 9];
+      let correct = 0, wrong = 0;
+      missingNumbers.forEach(n => {
+        const btn = document.getElementById(`anj1-num-${n}`);
+        if (anj1Crossed.has(n)) {
+          correct++;
+          btn.classList.remove('bg-white', 'bg-rose-50');
+          btn.classList.add('bg-green-100', 'text-green-800');
+          document.getElementById(`anj1-x-${n}`).classList.replace('text-red-600', 'text-green-700');
+        } else {
+          wrong++;
+          btn.classList.remove('bg-white');
+          btn.classList.add('bg-red-100', 'text-red-800');
+          document.getElementById(`anj1-x-${n}`).classList.remove('hidden');
+        }
+      });
+      presentNumbers.forEach(n => {
+        const btn = document.getElementById(`anj1-num-${n}`);
+        if (anj1Crossed.has(n)) {
+          wrong++;
+          btn.classList.remove('bg-rose-50');
+          btn.classList.add('bg-red-100', 'text-red-800');
+        } else {
+          btn.classList.add('bg-emerald-50/40');
+        }
+      });
+      stationStats.anj.correct += correct;
+      stationStats.anj.wrong += wrong;
+      lockExercise('ex-anj1', 'anj1-check-btn');
+      updateAllStats();
+      showFeedback('anj1-feedback', wrong === 0, wrong === 0
+        ? '🎉 مُمْتَازٌ! شَطَبْتَ جَمِيعَ الأَعْدَادِ النَّاقِصَةِ (<span class="ltr-box">2, 4, 7, 10</span>) بِدِقَّةٍ.'
+        : `الأَعْدَادُ النَّاقِصَةُ هِيَ : <span class="ltr-box">1, 2, 4, 7, 10</span>.`);
+    }
+
+    // ============ أنجز 2 ============
+    const anj2TopCarsOrder = [1, 4, 3, 5, 2];
+    const anj2BotCarsOrder = [7, 8, 6, 10, 9];
+    let anj2UserLinks = {};
+    let anj2SelectedCar = null;
+    let anj2SelectedSlot = null;
+    let anj2ResultColors = {};
+
+    function createCarSVG(num, color = '#facc15') {
+      return `
+        <svg width="64" height="36" viewBox="0 0 64 36" class="drop-shadow-sm">
+          <path d="M14,14 L22,5 L46,5 L54,14 Z" fill="#bae6fd" stroke="#334155" stroke-width="2" />
+          <rect x="4" y="13" width="56" height="14" rx="5" fill="${color}" stroke="#334155" stroke-width="2" />
+          <circle cx="16" cy="28" r="5.5" fill="#1e293b" />
+          <circle cx="48" cy="28" r="5.5" fill="#1e293b" />
+          <text x="32" y="24" text-anchor="middle" font-size="13" font-weight="900" fill="#0f172a">${num}</text>
+        </svg>
+      `;
+    }
+
+    function initAnj2() {
+      anj2UserLinks = {};
+      anj2SelectedCar = null;
+      anj2SelectedSlot = null;
+      anj2ResultColors = {};
+
+      const topCars = document.getElementById('anj2-top-cars');
+      const botCars = document.getElementById('anj2-bot-cars');
+      const topSlots = document.getElementById('anj2-top-slots');
+      const botSlots = document.getElementById('anj2-bot-slots');
+      topCars.innerHTML = ''; botCars.innerHTML = ''; topSlots.innerHTML = ''; botSlots.innerHTML = '';
+
+      anj2TopCarsOrder.forEach(num => {
+        const isPre = num === 1;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `anj2-car-${num}`;
+        btn.innerHTML = createCarSVG(num, isPre ? '#cbd5e1' : '#facc15');
+        btn.className = `p-1 rounded-xl transition ${isPre ? 'cursor-default opacity-80' : 'cursor-pointer hover:scale-105'}`;
+        if (!isPre) btn.onclick = () => selectAnj2Car(num);
+        topCars.appendChild(btn);
+      });
+
+      anj2BotCarsOrder.forEach(num => {
+        const isPre = num === 9;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `anj2-car-${num}`;
+        btn.innerHTML = createCarSVG(num, isPre ? '#cbd5e1' : '#facc15');
+        btn.className = `p-1 rounded-xl transition ${isPre ? 'cursor-default opacity-80' : 'cursor-pointer hover:scale-105'}`;
+        if (!isPre) btn.onclick = () => selectAnj2Car(num);
+        botCars.appendChild(btn);
+      });
+
+      for (let s = 1; s <= 10; s++) {
+        const isPre = s === 1 || s === 9;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `anj2-slot-${s}`;
+        btn.textContent = s;
+        btn.className = `h-10 rounded-xl border-2 font-black text-lg transition flex items-center justify-center ${
+          isPre
+            ? 'bg-slate-200 border-slate-400 text-slate-600 cursor-default'
+            : 'bg-white border-rose-400 text-rose-700 hover:bg-rose-50 cursor-pointer'
+        }`;
+        if (!isPre) btn.onclick = () => selectAnj2Slot(s);
+        if (s <= 5) topSlots.appendChild(btn);
+        else botSlots.appendChild(btn);
+      }
+      renderAnj2Lines();
+    }
+
+    function selectAnj2Car(num) {
+      if (lockedExercises.has('ex-anj2')) return;
+      anj2SelectedCar = (anj2SelectedCar === num) ? null : num;
+      updateAnj2SelectionUI();
+      tryPairAnj2();
+    }
+
+    function selectAnj2Slot(slotNum) {
+      if (lockedExercises.has('ex-anj2')) return;
+      anj2SelectedSlot = (anj2SelectedSlot === slotNum) ? null : slotNum;
+      updateAnj2SelectionUI();
+      tryPairAnj2();
+    }
+
+    function tryPairAnj2() {
+      if (anj2SelectedCar !== null && anj2SelectedSlot !== null) {
+        for (const c in anj2UserLinks) {
+          if (anj2UserLinks[c] === anj2SelectedSlot) delete anj2UserLinks[c];
+        }
+        anj2UserLinks[anj2SelectedCar] = anj2SelectedSlot;
+        anj2SelectedCar = null;
+        anj2SelectedSlot = null;
+        updateAnj2SelectionUI();
+        renderAnj2Lines();
+      }
+    }
+
+    function updateAnj2SelectionUI() {
+      for (let i = 1; i <= 10; i++) {
+        const carEl = document.getElementById(`anj2-car-${i}`);
+        const slotEl = document.getElementById(`anj2-slot-${i}`);
+        if (carEl) carEl.classList.toggle('selected-pulse', anj2SelectedCar === i);
+        if (slotEl) slotEl.classList.toggle('selected-pulse', anj2SelectedSlot === i);
+      }
+    }
+
+    function renderAnj2Lines() {
+      const svg = document.getElementById('anj2-lines');
+      const container = document.getElementById('anj2-container');
+      svg.innerHTML = '';
+      [1, 9].forEach(n => {
+        drawLineBetween(svg, container, document.getElementById(`anj2-car-${n}`), document.getElementById(`anj2-slot-${n}`), '#64748b');
+      });
+      for (const carStr in anj2UserLinks) {
+        const c = Number(carStr);
+        const s = anj2UserLinks[c];
+        const color = anj2ResultColors[c] || '#0284c7';
+        drawLineBetween(svg, container, document.getElementById(`anj2-car-${c}`), document.getElementById(`anj2-slot-${s}`), color);
+      }
+    }
+
+    function resetAnj2Connections() {
+      if (lockedExercises.has('ex-anj2')) return;
+      anj2UserLinks = {};
+      anj2SelectedCar = null;
+      anj2SelectedSlot = null;
+      updateAnj2SelectionUI();
+      renderAnj2Lines();
+    }
+
+    function checkAnj2() {
+      if (lockedExercises.has('ex-anj2')) return;
+      const targetCars = [4, 3, 5, 2, 7, 8, 6, 10];
+      let correct = 0, wrong = 0;
+      targetCars.forEach(c => {
+        const chosenSlot = anj2UserLinks[c];
+        const slotEl = document.getElementById(`anj2-slot-${c}`);
+        if (chosenSlot === c) {
+          correct++;
+          anj2ResultColors[c] = '#16a34a';
+          slotEl.classList.remove('bg-white', 'border-rose-400', 'text-rose-700');
+          slotEl.classList.add('bg-green-100', 'border-green-600', 'text-green-800');
+        } else {
+          wrong++;
+          if (chosenSlot) anj2ResultColors[c] = '#dc2626';
+          slotEl.classList.remove('bg-white', 'border-rose-400', 'text-rose-700');
+          slotEl.classList.add('bg-red-100', 'border-red-600', 'text-red-800');
+        }
+      });
+      anj2SelectedCar = null;
+      anj2SelectedSlot = null;
+      updateAnj2SelectionUI();
+      renderAnj2Lines();
+      stationStats.anj.correct += correct;
+      stationStats.anj.wrong += wrong;
+      lockExercise('ex-anj2', 'anj2-check-btn', 'anj2-reset-btn');
+      updateAllStats();
+      showFeedback('anj2-feedback', wrong === 0, wrong === 0
+        ? '🎉 رَائِعٌ! أَوْصَلْتَ كُلَّ سَيَّارَةٍ إِلَى مَكَانِ رَكْنِهَا الصَّحِيحِ.'
+        : `أَصَبْتَ فِي <span class="ltr-box">${correct}</span> مِنْ <span class="ltr-box">8</span> سَيَّارَاتٍ.`);
+    }
+
+    // ============ أنجز 3 ============
+    function initAnj3() {
+      document.querySelectorAll('.anj3-input').forEach(inp => {
+        inp.value = '';
+        inp.disabled = false;
+        inp.className = 'anj3-input digit-input h-12 w-full text-center font-black text-2xl rounded-xl border-2 border-slate-300 focus:border-rose-500 focus:outline-none bg-sky-50/30';
+        inp.oninput = () => {
+          const map = { '٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9' };
+          inp.value = inp.value.replace(/[٠-٩]/g, d => map[d]).replace(/[^0-9]/g, '');
+        };
+      });
+    }
+
+    function checkAnj3() {
+      if (lockedExercises.has('ex-anj3')) return;
+      const inputs = document.querySelectorAll('.anj3-input');
+      let correct = 0, wrong = 0;
+      inputs.forEach(inp => {
+        const expected = inp.dataset.expected;
+        const val = inp.value.trim();
+        inp.disabled = true;
+        if (val === expected) {
+          correct++;
+          inp.classList.remove('border-slate-300', 'bg-sky-50/30');
+          inp.classList.add('border-green-600', 'bg-green-100', 'text-green-800');
+        } else {
+          wrong++;
+          inp.classList.remove('border-slate-300', 'bg-sky-50/30');
+          inp.classList.add('border-red-600', 'bg-red-100', 'text-red-800');
+          inp.value = val ? `${val}→${expected}` : expected;
+          inp.classList.replace('text-2xl', 'text-base');
+        }
+      });
+      stationStats.anj.correct += correct;
+      stationStats.anj.wrong += wrong;
+      lockExercise('ex-anj3', 'anj3-check-btn');
+      updateAllStats();
+      showFeedback('anj3-feedback', wrong === 0, wrong === 0
+        ? '🎉 خَطٌّ جَمِيلٌ وَصَحِيحٌ! كَتَبْتَ الْعَدَدَيْنِ <span class="ltr-box">8</span> وَ <span class="ltr-box">9</span> بِإِتْقَانٍ.'
+        : `أَصَبْتَ فِي <span class="ltr-box">${correct}</span> مِنْ <span class="ltr-box">12</span> خَانَةً.`);
+    }
+
+    // ============ أتمرن 1 ============
+    const atm1CardsOrder = [4, 2, 7, 6, 3, 5, 9, 8];
+    let atm1UserLinks = {};
+    let atm1SelectedWagon = null;
+    let atm1SelectedCard = null;
+    let atm1ResultColors = {};
+
+    function initAtm1() {
+      atm1UserLinks = {};
+      atm1SelectedWagon = null;
+      atm1SelectedCard = null;
+      atm1ResultColors = {};
+
+      const wagonsWrap = document.getElementById('atm1-wagons');
+      wagonsWrap.innerHTML = '';
+      for (let w = 2; w <= 9; w++) {
+        const isPre = w === 2;
+        const bg = w % 2 === 0 ? '#d97757' : '#84a94c';
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `atm1-wagon-${w}`;
+        btn.className = `flex-1 flex flex-col items-center transition ${isPre ? 'cursor-default' : 'cursor-pointer'}`;
+        btn.innerHTML = `
+          <div class="w-full h-11 rounded-md border-2 border-slate-800 flex items-center justify-center font-black text-lg text-white shadow-sm transition"
+               style="background-color: ${bg}; text-shadow: 0 1px 2px rgba(0,0,0,0.6);">
+            ${isPre ? '2' : '?'}
+          </div>
+          <div class="flex justify-around w-full px-1 -mt-1">
+            <span class="w-3.5 h-3.5 rounded-full bg-amber-600 border border-slate-900"></span>
+            <span class="w-3.5 h-3.5 rounded-full bg-amber-600 border border-slate-900"></span>
+          </div>
+        `;
+        if (!isPre) {
+          btn.onclick = () => {
+            if (lockedExercises.has('ex-atm1')) return;
+            atm1SelectedWagon = (atm1SelectedWagon === w) ? null : w;
+            updateAtm1SelectionUI();
+            tryPairAtm1();
+          };
+        }
+        wagonsWrap.appendChild(btn);
+      }
+
+      const cardsWrap = document.getElementById('atm1-cards');
+      cardsWrap.innerHTML = '';
+      atm1CardsOrder.forEach(num => {
+        const isPre = num === 2;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `atm1-card-${num}`;
+        btn.textContent = num;
+        btn.className = `w-12 h-12 border-r border-slate-700 last:border-r-0 font-black text-xl flex items-center justify-center transition ${
+          isPre ? 'bg-slate-200 text-slate-600 cursor-default' : 'bg-white text-slate-800 hover:bg-emerald-50 cursor-pointer'
+        }`;
+        if (!isPre) {
+          btn.onclick = () => {
+            if (lockedExercises.has('ex-atm1')) return;
+            atm1SelectedCard = (atm1SelectedCard === num) ? null : num;
+            updateAtm1SelectionUI();
+            tryPairAtm1();
+          };
+        }
+        cardsWrap.appendChild(btn);
+      });
+      renderAtm1Lines();
+    }
+
+    function tryPairAtm1() {
+      if (atm1SelectedWagon !== null && atm1SelectedCard !== null) {
+        for (const w in atm1UserLinks) {
+          if (atm1UserLinks[w] === atm1SelectedCard) delete atm1UserLinks[w];
+        }
+        atm1UserLinks[atm1SelectedWagon] = atm1SelectedCard;
+        atm1SelectedWagon = null;
+        atm1SelectedCard = null;
+        updateAtm1SelectionUI();
+        renderAtm1Lines();
+      }
+    }
+
+    function updateAtm1SelectionUI() {
+      for (let w = 2; w <= 9; w++) {
+        const el = document.getElementById(`atm1-wagon-${w}`);
+        if (el) el.firstElementChild.classList.toggle('selected-pulse', atm1SelectedWagon === w);
+      }
+      atm1CardsOrder.forEach(num => {
+        const el = document.getElementById(`atm1-card-${num}`);
+        if (el) el.classList.toggle('selected-pulse', atm1SelectedCard === num);
+      });
+    }
+
+    function renderAtm1Lines() {
+      const svg = document.getElementById('atm1-lines');
+      const container = document.getElementById('atm1-container');
+      svg.innerHTML = '';
+      drawLineBetween(svg, container, document.getElementById('atm1-wagon-2'), document.getElementById('atm1-card-2'), '#64748b');
+      for (const wStr in atm1UserLinks) {
+        const w = Number(wStr);
+        const c = atm1UserLinks[w];
+        const color = atm1ResultColors[w] || '#059669';
+        drawLineBetween(svg, container, document.getElementById(`atm1-wagon-${w}`), document.getElementById(`atm1-card-${c}`), color);
+      }
+    }
+
+    function resetAtm1Connections() {
+      if (lockedExercises.has('ex-atm1')) return;
+      atm1UserLinks = {};
+      atm1SelectedWagon = null;
+      atm1SelectedCard = null;
+      updateAtm1SelectionUI();
+      renderAtm1Lines();
+    }
+
+    function checkAtm1() {
+      if (lockedExercises.has('ex-atm1')) return;
+      const targetWagons = [3, 4, 5, 6, 7, 8, 9];
+      let correct = 0, wrong = 0;
+      targetWagons.forEach(w => {
+        const chosenCard = atm1UserLinks[w];
+        const wagonBox = document.getElementById(`atm1-wagon-${w}`).firstElementChild;
+        wagonBox.textContent = w;
+        if (chosenCard === w) {
+          correct++;
+          atm1ResultColors[w] = '#16a34a';
+          const cardEl = document.getElementById(`atm1-card-${chosenCard}`);
+          cardEl.classList.remove('bg-white');
+          cardEl.classList.add('bg-green-100', 'text-green-800');
+        } else {
+          wrong++;
+          if (chosenCard) {
+            atm1ResultColors[w] = '#dc2626';
+            const cardEl = document.getElementById(`atm1-card-${chosenCard}`);
+            cardEl.classList.remove('bg-white');
+            cardEl.classList.add('bg-red-100', 'text-red-800');
+          }
+        }
+      });
+      atm1SelectedWagon = null;
+      atm1SelectedCard = null;
+      updateAtm1SelectionUI();
+      renderAtm1Lines();
+      stationStats.atm.correct += correct;
+      stationStats.atm.wrong += wrong;
+      lockExercise('ex-atm1', 'atm1-check-btn', 'atm1-reset-btn');
+      updateAllStats();
+      showFeedback('atm1-feedback', wrong === 0, wrong === 0
+        ? '🎉 أَحْسَنْتَ! رَبَطْتَ جَمِيعَ عَرَبَاتِ الْقِطَارِ بِأَعْدَادِهَا الصَّحِيحَةِ.'
+        : `أَصَبْتَ فِي <span class="ltr-box">${correct}</span> مِنْ <span class="ltr-box">7</span> عَرَبَاتٍ.`);
+    }
+
+    // ============ أتمرن 2 ============
+    const atm2TopCarsOrder = [
+      { num: 1, color: '#e17055' },
+      { num: 4, color: '#9b89b3' },
+      { num: 8, color: '#e84393' }
+    ];
+    const atm2BotCarsOrder = [
+      { num: 7, color: '#e67e22' },
+      { num: 6, color: '#636e72' },
+      { num: 2, color: '#d63031' },
+      { num: 5, color: '#74b9ff' },
+      { num: 3, color: '#8e44ad' },
+      { num: 9, color: '#7cb342' }
+    ];
+    let atm2UserLinks = {};
+    let atm2SelectedCar = null;
+    let atm2SelectedDot = null;
+    let atm2ResultColors = {};
+
+    function createTopViewCarSVG(num, color) {
+      return `
+        <svg width="46" height="62" viewBox="0 0 46 62" class="drop-shadow-sm">
+          <rect x="2" y="12" width="5" height="12" rx="2" fill="#1e293b" />
+          <rect x="39" y="12" width="5" height="12" rx="2" fill="#1e293b" />
+          <rect x="2" y="40" width="5" height="12" rx="2" fill="#1e293b" />
+          <rect x="39" y="40" width="5" height="12" rx="2" fill="#1e293b" />
+          <rect x="6" y="4" width="34" height="54" rx="10" fill="${color}" stroke="#1e293b" stroke-width="2" />
+          <rect x="10" y="11" width="26" height="10" rx="3" fill="#bae6fd" />
+          <rect x="11" y="43" width="24" height="8" rx="3" fill="#bae6fd" />
+          <rect x="11" y="22" width="24" height="19" rx="4" fill="#1e293b" />
+          <text x="23" y="36" text-anchor="middle" font-size="14" font-weight="900" fill="#ffffff">${num}</text>
+        </svg>
+      `;
+    }
+
+    function initAtm2() {
+      atm2UserLinks = {};
+      atm2SelectedCar = null;
+      atm2SelectedDot = null;
+      atm2ResultColors = {};
+
+      const topCars = document.getElementById('atm2-top-cars');
+      const botCars = document.getElementById('atm2-bot-cars');
+      const dotsWrap = document.getElementById('atm2-dots');
+      topCars.innerHTML = ''; botCars.innerHTML = ''; dotsWrap.innerHTML = '';
+
+      atm2TopCarsOrder.forEach(item => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `atm2-car-${item.num}`;
+        btn.innerHTML = createTopViewCarSVG(item.num, item.color);
+        btn.className = 'p-1 rounded-xl cursor-pointer hover:scale-105 transition';
+        btn.onclick = () => selectAtm2Car(item.num);
+        topCars.appendChild(btn);
+      });
+
+      atm2BotCarsOrder.forEach(item => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `atm2-car-${item.num}`;
+        btn.innerHTML = createTopViewCarSVG(item.num, item.color);
+        btn.className = 'p-1 rounded-xl cursor-pointer hover:scale-105 transition';
+        btn.onclick = () => selectAtm2Car(item.num);
+        botCars.appendChild(btn);
+      });
+
+      for (let d = 1; d <= 9; d++) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `atm2-dot-${d}`;
+        btn.title = `مَكَانُ التَّوَقُّفِ رَقْمُ ${d}`;
+        btn.className = 'w-7 h-7 rounded-full bg-sky-600 border-4 border-white shadow-md hover:scale-125 transition cursor-pointer flex items-center justify-center text-[10px] font-black text-transparent';
+        btn.textContent = d;
+        btn.onclick = () => selectAtm2Dot(d);
+        dotsWrap.appendChild(btn);
+      }
+      renderAtm2Lines();
+    }
+
+    function selectAtm2Car(num) {
+      if (lockedExercises.has('ex-atm2')) return;
+      atm2SelectedCar = (atm2SelectedCar === num) ? null : num;
+      updateAtm2SelectionUI();
+      tryPairAtm2();
+    }
+
+    function selectAtm2Dot(dotNum) {
+      if (lockedExercises.has('ex-atm2')) return;
+      atm2SelectedDot = (atm2SelectedDot === dotNum) ? null : dotNum;
+      updateAtm2SelectionUI();
+      tryPairAtm2();
+    }
+
+    function tryPairAtm2() {
+      if (atm2SelectedCar !== null && atm2SelectedDot !== null) {
+        for (const c in atm2UserLinks) {
+          if (atm2UserLinks[c] === atm2SelectedDot) delete atm2UserLinks[c];
+        }
+        atm2UserLinks[atm2SelectedCar] = atm2SelectedDot;
+        atm2SelectedCar = null;
+        atm2SelectedDot = null;
+        updateAtm2SelectionUI();
+        renderAtm2Lines();
+      }
+    }
+
+    function updateAtm2SelectionUI() {
+      for (let i = 1; i <= 9; i++) {
+        const carEl = document.getElementById(`atm2-car-${i}`);
+        const dotEl = document.getElementById(`atm2-dot-${i}`);
+        if (carEl) carEl.classList.toggle('selected-pulse', atm2SelectedCar === i);
+        if (dotEl) dotEl.classList.toggle('selected-pulse', atm2SelectedDot === i);
+      }
+    }
+
+    function renderAtm2Lines() {
+      const svg = document.getElementById('atm2-lines');
+      const container = document.getElementById('atm2-container');
+      svg.innerHTML = '';
+      for (const cStr in atm2UserLinks) {
+        const c = Number(cStr);
+        const d = atm2UserLinks[c];
+        const color = atm2ResultColors[c] || '#0284c7';
+        drawLineBetween(svg, container, document.getElementById(`atm2-car-${c}`), document.getElementById(`atm2-dot-${d}`), color);
+      }
+    }
+
+    function resetAtm2Connections() {
+      if (lockedExercises.has('ex-atm2')) return;
+      atm2UserLinks = {};
+      atm2SelectedCar = null;
+      atm2SelectedDot = null;
+      updateAtm2SelectionUI();
+      renderAtm2Lines();
+    }
+
+    function checkAtm2() {
+      if (lockedExercises.has('ex-atm2')) return;
+      let correct = 0, wrong = 0;
+      for (let c = 1; c <= 9; c++) {
+        const chosenDot = atm2UserLinks[c];
+        const dotEl = document.getElementById(`atm2-dot-${c}`);
+        dotEl.classList.remove('text-transparent');
+        dotEl.classList.add('text-white');
+        if (chosenDot === c) {
+          correct++;
+          atm2ResultColors[c] = '#16a34a';
+          dotEl.classList.replace('bg-sky-600', 'bg-green-600');
+        } else {
+          wrong++;
+          if (chosenDot) atm2ResultColors[c] = '#dc2626';
+          dotEl.classList.replace('bg-sky-600', 'bg-red-600');
+        }
+      }
+      atm2SelectedCar = null;
+      atm2SelectedDot = null;
+      updateAtm2SelectionUI();
+      renderAtm2Lines();
+      stationStats.atm.correct += correct;
+      stationStats.atm.wrong += wrong;
+      lockExercise('ex-atm2', 'atm2-check-btn', 'atm2-reset-btn');
+      updateAllStats();
+      showFeedback('atm2-feedback', wrong === 0, wrong === 0
+        ? '🎉 مُمْتَازٌ! وَصَلْتَ كُلَّ سَيَّارَةٍ بِمَكَانِ تَوَقُّفِهَا الصَّحِيحِ.'
+        : `أَصَبْتَ فِي <span class="ltr-box">${correct}</span> مِنْ <span class="ltr-box">9</span> سَيَّارَاتٍ. تَمَّ إِظْهَارُ أَرْقَامِ النِّقَاطِ.`);
+    }
+
+    // ============ أتمرن 3 ============
+    const atm3DiscsData = [
+      { num: 1, color: '#689f38', name: 'أَخْضَرُ' },
+      { num: 2, color: '#78909c', name: 'أَزْرَقُ رَمَادِيٌّ' },
+      { num: 5, color: '#e67e22', name: 'بُرْتُقَالِيٌّ' },
+      { num: 3, color: '#795548', name: 'بُنِّيٌّ' },
+      { num: 6, color: '#cfd8dc', name: 'رَمَادِيٌّ فَاتِحٌ' },
+      { num: 4, color: '#fbc02d', name: 'أَصْفَرُ' }
+    ];
+    let atm3SelectedColor = null;
+    let atm3BlockColors = {};
+
+    function initAtm3() {
+      atm3SelectedColor = null;
+      atm3BlockColors = { 1: '#689f38' };
+
+      const discsWrap = document.getElementById('atm3-discs');
+      discsWrap.innerHTML = '';
+      atm3DiscsData.forEach(d => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `atm3-disc-${d.num}`;
+        btn.style.backgroundColor = d.color;
+        btn.className = `w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-slate-700 shadow-md flex items-center justify-center font-black text-xl transition cursor-pointer ${
+          d.num === 6 ? 'text-slate-800' : 'text-white'
+        }`;
+        btn.style.textShadow = d.num === 6 ? 'none' : '0 1px 2px rgba(0,0,0,0.6)';
+        btn.textContent = d.num;
+        btn.title = `${d.num} - ${d.name}`;
+        btn.onclick = () => {
+          if (lockedExercises.has('ex-atm3')) return;
+          atm3SelectedColor = d.color;
+          atm3DiscsData.forEach(x => {
+            document.getElementById(`atm3-disc-${x.num}`).classList.toggle('selected-pulse', x.num === d.num);
+          });
+        };
+        discsWrap.appendChild(btn);
+      });
+
+      const blocksWrap = document.getElementById('atm3-blocks');
+      blocksWrap.innerHTML = '';
+      for (let b = 1; b <= 6; b++) {
+        const isPre = b === 1;
+        const wrap = document.createElement('div');
+        wrap.className = 'flex items-center';
+
+        const blockBtn = document.createElement('button');
+        blockBtn.type = 'button';
+        blockBtn.id = `atm3-block-${b}`;
+        blockBtn.style.backgroundColor = isPre ? '#689f38' : '#ffffff';
+        blockBtn.className = `w-16 h-24 sm:w-20 sm:h-28 rounded-lg border-2 border-slate-800 shadow-sm flex flex-col items-center justify-center font-black text-sm transition ${
+          isPre ? 'cursor-default' : 'cursor-pointer hover:opacity-90'
+        }`;
+        if (!isPre) {
+          blockBtn.innerHTML = `<span class="text-slate-300 text-xs">${b}</span>`;
+          blockBtn.onclick = () => {
+            if (lockedExercises.has('ex-atm3')) return;
+            if (!atm3SelectedColor) {
+              discsWrap.classList.add('ring-4', 'ring-amber-400');
+              setTimeout(() => discsWrap.classList.remove('ring-4', 'ring-amber-400'), 700);
+              return;
+            }
+            atm3BlockColors[b] = atm3SelectedColor;
+            blockBtn.style.backgroundColor = atm3SelectedColor;
+            blockBtn.innerHTML = '';
+          };
+        }
+
+        const studs = document.createElement('div');
+        studs.className = 'flex flex-col justify-around h-16 -ml-0.5';
+        studs.innerHTML = `
+          <span class="w-2.5 h-4 border-y-2 border-r-2 border-slate-800 rounded-r bg-white"></span>
+          <span class="w-2.5 h-4 border-y-2 border-r-2 border-slate-800 rounded-r bg-white"></span>
+        `;
+
+        wrap.appendChild(blockBtn);
+        wrap.appendChild(studs);
+        blocksWrap.appendChild(wrap);
+      }
+    }
+
+    function checkAtm3() {
+      if (lockedExercises.has('ex-atm3')) return;
+      let correct = 0, wrong = 0;
+      for (let b = 2; b <= 6; b++) {
+        const expectedObj = atm3DiscsData.find(d => d.num === b);
+        const blockBtn = document.getElementById(`atm3-block-${b}`);
+        if (atm3BlockColors[b] === expectedObj.color) {
+          correct++;
+          blockBtn.innerHTML = `<span class="w-7 h-7 rounded-full bg-green-600 text-white flex items-center justify-center text-sm shadow">✓</span>`;
+        } else {
+          wrong++;
+          blockBtn.innerHTML = `<span class="px-2 py-0.5 rounded bg-red-600 text-white text-xs shadow">✗ (${b})</span>`;
+          blockBtn.style.outline = '3px solid #dc2626';
+          blockBtn.style.outlineOffset = '-3px';
+        }
+      }
+      atm3DiscsData.forEach(x => document.getElementById(`atm3-disc-${x.num}`).classList.remove('selected-pulse'));
+      stationStats.atm.correct += correct;
+      stationStats.atm.wrong += wrong;
+      lockExercise('ex-atm3', 'atm3-check-btn');
+      updateAllStats();
+      showFeedback('atm3-feedback', wrong === 0, wrong === 0
+        ? '🎉 أَحْسَنْتَ! لَوَّنْتَ جَمِيعَ الْقِطَعِ بِالتَّرْتِيبِ الصَّحِيحِ (<span class="ltr-box">1, 2, 3, 4, 5, 6</span>).'
+        : `أَصَبْتَ فِي <span class="ltr-box">${correct}</span> مِنْ <span class="ltr-box">5</span> قِطَعٍ.`);
+    }
+
+    // ============ أتمرن 4 ============
+    const atm4CubesData = [
+      { id: 'c0', rank: 6, size: 84, color: '#eab308', label: 'أَصْفَرُ' },
+      { id: 'c1', rank: 4, size: 54, color: '#ea580c', label: 'بُرْتُقَالِيٌّ' },
+      { id: 'c2', rank: 1, size: 22, color: '#15803d', label: 'أَخْضَرُ' },
+      { id: 'c3', rank: 5, size: 68, color: '#6d28d9', label: 'بَنَفْسَجِيٌّ' },
+      { id: 'c4', rank: 2, size: 32, color: '#2563eb', label: 'أَزْرَقُ' },
+      { id: 'c5', rank: 3, size: 42, color: '#e11d48', label: 'أَحْمَرُ' }
+    ];
+    let atm4SlotAssignments = {};
+    let atm4ResultColors = {};
+
+    function createCubeSVG(size, color) {
+      const w = size + 16;
+      const h = size + 16;
+      const d = Math.round(size * 0.25);
+      return `
+        <svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" class="drop-shadow">
+          <polygon points="${d},4 ${w - 2},4 ${w - 2 - d},${4 + d} 2,${4 + d}" fill="${color}" fill-opacity="0.75" stroke="#1e293b" stroke-width="1.5" />
+          <rect x="2" y="${4 + d}" width="${w - 2 - d}" height="${size - d + 8}" fill="${color}" stroke="#1e293b" stroke-width="1.5" />
+          <polygon points="${w - 2 - d},${4 + d} ${w - 2},4 ${w - 2},${size + 12 - d} ${w - 2 - d},${size + 12}" fill="${color}" fill-opacity="0.88" stroke="#1e293b" stroke-width="1.5" />
+        </svg>
+      `;
+    }
+
+    function initAtm4() {
+      atm4SlotAssignments = {};
+      atm4ResultColors = {};
+
+      const cubesWrap = document.getElementById('atm4-cubes');
+      cubesWrap.innerHTML = '';
+      atm4CubesData.forEach(cube => {
+        const isPre = cube.rank === 1;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `atm4-cube-${cube.id}`;
+        btn.innerHTML = createCubeSVG(cube.size, cube.color);
+        btn.className = `p-1.5 rounded-xl transition flex flex-col items-center ${
+          isPre ? 'cursor-default' : 'cursor-pointer hover:scale-105'
+        }`;
+        if (!isPre) btn.onclick = () => assignNextAtm4Cube(cube.id);
+        cubesWrap.appendChild(btn);
+      });
+
+      const slotsWrap = document.getElementById('atm4-slots');
+      slotsWrap.innerHTML = '';
+      for (let s = 0; s < 6; s++) {
+        const isPre = s === 0;
+        const slotEl = document.createElement('div');
+        slotEl.id = `atm4-slot-${s}`;
+        slotEl.className = `h-14 rounded-xl border-2 flex items-center justify-center font-black text-2xl transition ${
+          isPre
+            ? 'border-solid border-slate-700 bg-slate-100 text-slate-800'
+            : 'border-dashed border-slate-500 bg-slate-50 text-emerald-700 cursor-pointer hover:bg-emerald-50'
+        }`;
+        if (isPre) {
+          slotEl.textContent = '1';
+        } else {
+          slotEl.innerHTML = '<span class="text-slate-300 text-lg">......</span>';
+          slotEl.title = 'انْقُرْ لإِزَالَةِ التَّعْيِينِ مِنْ هَذِهِ الْخَانَةِ';
+          slotEl.onclick = () => {
+            if (lockedExercises.has('ex-atm4')) return;
+            if (atm4SlotAssignments[s]) {
+              delete atm4SlotAssignments[s];
+              updateAtm4UI();
+            }
+          };
+        }
+        slotsWrap.appendChild(slotEl);
+      }
+      renderAtm4Lines();
+    }
+
+    function assignNextAtm4Cube(cubeId) {
+      if (lockedExercises.has('ex-atm4')) return;
+      for (let s = 1; s <= 5; s++) {
+        if (atm4SlotAssignments[s] === cubeId) {
+          delete atm4SlotAssignments[s];
+          updateAtm4UI();
+          return;
+        }
+      }
+      for (let s = 1; s <= 5; s++) {
+        if (!atm4SlotAssignments[s]) {
+          atm4SlotAssignments[s] = cubeId;
+          updateAtm4UI();
+          return;
+        }
+      }
+    }
+
+    function updateAtm4UI() {
+      const assignedIds = new Set(Object.values(atm4SlotAssignments));
+      atm4CubesData.forEach(c => {
+        const el = document.getElementById(`atm4-cube-${c.id}`);
+        if (c.rank !== 1) {
+          el.classList.toggle('ring-4', assignedIds.has(c.id));
+          el.classList.toggle('ring-emerald-400', assignedIds.has(c.id));
+        }
+      });
+      for (let s = 1; s <= 5; s++) {
+        const slotEl = document.getElementById(`atm4-slot-${s}`);
+        if (atm4SlotAssignments[s]) {
+          slotEl.textContent = s + 1;
+          slotEl.classList.remove('border-dashed');
+          slotEl.classList.add('border-solid', 'bg-emerald-50', 'border-emerald-500');
+        } else {
+          slotEl.innerHTML = '<span class="text-slate-300 text-lg">......</span>';
+          slotEl.classList.add('border-dashed');
+          slotEl.classList.remove('border-solid', 'bg-emerald-50', 'border-emerald-500');
+        }
+      }
+      renderAtm4Lines();
+    }
+
+    function renderAtm4Lines() {
+      const svg = document.getElementById('atm4-lines');
+      const container = document.getElementById('atm4-container');
+      svg.innerHTML = '';
+      drawLineBetween(svg, container, document.getElementById('atm4-cube-c2'), document.getElementById('atm4-slot-0'), '#475569');
+      for (let s = 1; s <= 5; s++) {
+        const cubeId = atm4SlotAssignments[s];
+        if (cubeId) {
+          const color = atm4ResultColors[s] || '#059669';
+          drawLineBetween(svg, container, document.getElementById(`atm4-cube-${cubeId}`), document.getElementById(`atm4-slot-${s}`), color);
+        }
+      }
+    }
+
+    function resetAtm4() {
+      if (lockedExercises.has('ex-atm4')) return;
+      atm4SlotAssignments = {};
+      updateAtm4UI();
+    }
+
+    function checkAtm4() {
+      if (lockedExercises.has('ex-atm4')) return;
+      let correct = 0, wrong = 0;
+      for (let s = 1; s <= 5; s++) {
+        const expectedRank = s + 1;
+        const chosenCubeId = atm4SlotAssignments[s];
+        const chosenCube = atm4CubesData.find(c => c.id === chosenCubeId);
+        const slotEl = document.getElementById(`atm4-slot-${s}`);
+        if (chosenCube && chosenCube.rank === expectedRank) {
+          correct++;
+          atm4ResultColors[s] = '#16a34a';
+          slotEl.classList.remove('bg-emerald-50', 'border-emerald-500', 'text-emerald-700');
+          slotEl.classList.add('bg-green-100', 'border-green-600', 'text-green-800');
+        } else {
+          wrong++;
+          if (chosenCubeId) atm4ResultColors[s] = '#dc2626';
+          slotEl.textContent = expectedRank;
+          slotEl.classList.remove('border-dashed', 'bg-slate-50', 'bg-emerald-50', 'text-emerald-700');
+          slotEl.classList.add('border-solid', 'bg-red-100', 'border-red-600', 'text-red-800');
+        }
+      }
+      renderAtm4Lines();
+      stationStats.atm.correct += correct;
+      stationStats.atm.wrong += wrong;
+      lockExercise('ex-atm4', 'atm4-check-btn', 'atm4-reset-btn');
+      updateAllStats();
+      showFeedback('atm4-feedback', wrong === 0, wrong === 0
+        ? '🎉 أَحْسَنْتَ! رَتَّبْتَ الْعُلَبَ مِنَ الصُّغْرَى (<span class="ltr-box">1</span>) إِلَى الْكُبْرَى (<span class="ltr-box">6</span>) بِصُورَةٍ صَحِيحَةٍ.'
+        : `أَصَبْتَ فِي <span class="ltr-box">${correct}</span> مِنْ <span class="ltr-box">5</span> عُلَبٍ.`);
+    }
+
+    // ============ أبحث ============
+    let abh1SelectedCell = null;
+
+    function initAbh1() {
+      abh1SelectedCell = null;
+      for (let i = 1; i <= 10; i++) {
+        document.getElementById(`grasshopper-col-${i}`).innerHTML = '';
+      }
+      document.getElementById('grasshopper-col-2').innerHTML =
+        '<div id="grasshopper-sprite" class="text-4xl select-none transition-all duration-500" title="الْجَرَادَةُ">🦗</div>';
+
+      const strip = document.getElementById('abh1-strip');
+      strip.innerHTML = '';
+      for (let i = 1; i <= 10; i++) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.id = `abh1-cell-${i}`;
+        btn.textContent = i;
+        btn.className = `h-14 border-r border-slate-700 last:border-r-0 font-black text-xl transition cursor-pointer flex items-center justify-center ${
+          i === 2 ? 'bg-amber-100/60 text-slate-800' : 'bg-white text-slate-800 hover:bg-amber-100'
+        }`;
+        btn.onclick = () => {
+          if (lockedExercises.has('ex-abh1')) return;
+          abh1SelectedCell = i;
+          for (let j = 1; j <= 10; j++) {
+            const c = document.getElementById(`abh1-cell-${j}`);
+            c.classList.remove('bg-amber-400', 'text-slate-950');
+            if (j === i) c.classList.add('bg-amber-400', 'text-slate-950');
+          }
+        };
+        strip.appendChild(btn);
+      }
+    }
+
+    function checkAbh1() {
+      if (lockedExercises.has('ex-abh1')) return;
+      const target = 8;
+      const isRight = abh1SelectedCell === target;
+
+      document.getElementById('grasshopper-col-2').innerHTML = '';
+      document.getElementById('grasshopper-col-8').innerHTML =
+        '<div id="grasshopper-sprite" class="text-4xl select-none grasshopper-hop" title="الْجَرَادَةُ">🦗</div>';
+
+      const targetBtn = document.getElementById(`abh1-cell-${target}`);
+      if (isRight) {
+        stationStats.abh.correct += 1;
+        targetBtn.classList.remove('bg-amber-400', 'bg-white');
+        targetBtn.classList.add('bg-green-500', 'text-white');
+      } else {
+        stationStats.abh.wrong += 1;
+        if (abh1SelectedCell) {
+          const wrongBtn = document.getElementById(`abh1-cell-${abh1SelectedCell}`);
+          wrongBtn.classList.remove('bg-amber-400', 'bg-white');
+          wrongBtn.classList.add('bg-red-500', 'text-white');
+        }
+        targetBtn.classList.remove('bg-white');
+        targetBtn.classList.add('bg-green-200', 'text-green-900', 'ring-2', 'ring-green-600');
+      }
+
+      lockExercise('ex-abh1', 'abh1-check-btn');
+      updateAllStats();
+      showFeedback('abh1-feedback', isRight, isRight
+        ? '🎉 عَبْقَرِيٌّ! كَانَتِ الْجَرَادَةُ فِي الْخَانَةِ <span class="ltr-box">2</span> وَقَفَزَتْ <span class="ltr-box">6</span> خَانَاتٍ فَوَصَلَتْ إِلَى الْخَانَةِ <span class="ltr-box">8</span> (<span class="ltr-box">2 + 6 = 8</span>).'
+        : 'خَانَةُ الْوُصُولِ الصَّحِيحَةُ هِيَ <span class="ltr-box">8</span> لأَنَّ الْجَرَادَةَ انْطَلَقَتْ مِنَ الْخَانَةِ <span class="ltr-box">2</span> وَقَفَزَتْ <span class="ltr-box">6</span> خَانَاتٍ (<span class="ltr-box">2 + 6 = 8</span>).');
+    }
+
+    // ============ إعادة الضبط ============
+    function resetAllExercises() {
+      stationStats.akt = { correct: 0, wrong: 0 };
+      stationStats.anj = { correct: 0, wrong: 0 };
+      stationStats.atm = { correct: 0, wrong: 0 };
+      stationStats.abh = { correct: 0, wrong: 0 };
+      lockedExercises.clear();
+
+      const exercises = [
+        { ex: 'ex-akt1', check: 'akt1-check-btn', reset: 'akt1-reset-btn', fb: 'akt1-feedback' },
+        { ex: 'ex-akt2', check: 'akt2-check-btn', reset: null, fb: 'akt2-feedback' },
+        { ex: 'ex-anj1', check: 'anj1-check-btn', reset: null, fb: 'anj1-feedback' },
+        { ex: 'ex-anj2', check: 'anj2-check-btn', reset: 'anj2-reset-btn', fb: 'anj2-feedback' },
+        { ex: 'ex-anj3', check: 'anj3-check-btn', reset: null, fb: 'anj3-feedback' },
+        { ex: 'ex-atm1', check: 'atm1-check-btn', reset: 'atm1-reset-btn', fb: 'atm1-feedback' },
+        { ex: 'ex-atm2', check: 'atm2-check-btn', reset: 'atm2-reset-btn', fb: 'atm2-feedback' },
+        { ex: 'ex-atm3', check: 'atm3-check-btn', reset: null, fb: 'atm3-feedback' },
+        { ex: 'ex-atm4', check: 'atm4-check-btn', reset: 'atm4-reset-btn', fb: 'atm4-feedback' },
+        { ex: 'ex-abh1', check: 'abh1-check-btn', reset: null, fb: 'abh1-feedback' }
+      ];
+
+      exercises.forEach(item => {
+        const exEl = document.getElementById(item.ex);
+        if (exEl) exEl.classList.remove('locked-exercise');
+        const btn = document.getElementById(item.check);
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('opacity-50', 'cursor-not-allowed');
+          btn.textContent = 'تَحَقَّقْ مِنَ الإِجَابَةِ ✓';
+        }
+        if (item.reset) {
+          const rBtn = document.getElementById(item.reset);
+          if (rBtn) rBtn.style.display = '';
+        }
+        const fbEl = document.getElementById(item.fb);
+        if (fbEl) fbEl.classList.add('hidden');
+      });
+
+      initAkt1();
+      initAkt2();
+      initAnj1();
+      initAnj2();
+      initAnj3();
+      initAtm1();
+      initAtm2();
+      initAtm3();
+      initAtm4();
+      initAbh1();
+      updateAllStats();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.addEventListener('resize', () => {
+      renderAkt1Lines();
+      renderAnj2Lines();
+      renderAtm1Lines();
+      renderAtm2Lines();
+      renderAtm4Lines();
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initAkt1();
+      initAkt2();
+      initAnj1();
+      initAnj2();
+      initAnj3();
+      initAtm1();
+      initAtm2();
+      initAtm3();
+      initAtm4();
+      initAbh1();
+      updateAllStats();
+    });
+  </script>
+</body>
+</html>
