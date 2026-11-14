@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدرس 13: تَفْكِيكٌ جَمْعِيٌّ لِلْأَعْدَادِ إِلَى 69</title>
+<!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800;900&display=swap');
+
+  :root {
+    --primary: #1565c0;
+    --primary-light: #e3f2fd;
+    --discover: #2e7d32;
+    --discover-bg: #f1f8e9;
+    --practice: #c62828;
+    --practice-bg: #ffebee;
+    --learn: #6a1b9a;
+    --learn-bg: #f3e5f5;
+    --train: #ef6c00;
+    --train-bg: #fff3e0;
+    --search: #00695c;
+    --search-bg: #e0f2f1;
+    --correct: #2e7d32;
+    --correct-bg: #c8e6c9;
+    --wrong: #c62828;
+    --wrong-bg: #ffcdd2;
+    --bg: #f4f7fb;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Cairo', 'Segoe UI', Tahoma, sans-serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  /* Header */
+  .lesson-header {
+    background: linear-gradient(135deg, #1976d2, #0d47a1);
+    color: white;
+    border-radius: 20px;
+    padding: 22px 26px;
+    margin-bottom: 24px;
+    box-shadow: 0 8px 20px rgba(21, 101, 192, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .lesson-badge {
+    background: #ffffff;
+    color: #0d47a1;
+    font-size: 2rem;
+    font-weight: 900;
+    width: 68px;
+    height: 68px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+  }
+
+  .lesson-title-box {
+    flex: 1;
+    text-align: center;
+  }
+
+  .lesson-title-box h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 900;
+    letter-spacing: 0.3px;
+  }
+
+  .lesson-meta {
+    font-size: 0.95rem;
+    opacity: 0.92;
+    margin-top: 4px;
+  }
+
+  /* Section Cards */
+  .section-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 22px;
+    margin-bottom: 26px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    border-top: 6px solid var(--primary);
+    transition: opacity 0.35s ease;
+  }
+
+  .section-card.locked {
+    opacity: 0.52;
+    pointer-events: none;
+    user-select: none;
+    position: relative;
+  }
+
+  .lock-banner {
+    display: none;
+    background: #fff8e1;
+    border: 2px dashed #ffb300;
+    color: #795548;
+    padding: 10px 16px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+
+  .section-card.locked .lock-banner {
+    display: block;
+  }
+
+  .sec-discover { border-top-color: var(--discover); }
+  .sec-practice { border-top-color: var(--practice); }
+  .sec-learn { border-top-color: var(--learn); background: #fcf7ff; }
+  .sec-train { border-top-color: var(--train); }
+  .sec-search { border-top-color: var(--search); }
+
+  .section-title {
+    display: inline-block;
+    padding: 6px 22px;
+    border-radius: 30px;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+
+  .sec-discover .section-title { background: var(--discover); }
+  .sec-practice .section-title { background: var(--practice); }
+  .sec-learn .section-title { background: var(--learn); }
+  .sec-train .section-title { background: var(--train); }
+  .sec-search .section-title { background: var(--search); }
+
+  .exercise-box {
+    background: #fafbfd;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 18px;
+  }
+
+  .exercise-box.locked-ex {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .ex-instruction {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ex-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #1e293b;
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+
+  /* Strict LTR Math Container */
+  .math-ltr {
+    direction: ltr;
+    unicode-bidi: isolate;
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #0f172a;
+    margin: 6px 0;
+  }
+
+  .math-block-ltr {
+    direction: ltr;
+    unicode-bidi: isolate;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-weight: 800;
+    font-size: 1.2rem;
+    margin: 10px 0;
+  }
+
+  /* Input fields */
+  input.math-input {
+    width: 56px;
+    height: 42px;
+    text-align: center;
+    font-size: 1.18rem;
+    font-weight: 800;
+    border: 2px solid #94a3b8;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #0f172a;
+    direction: ltr;
+    transition: all 0.2s;
+  }
+
+  input.math-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.2);
+  }
+
+  input.math-input.correct {
+    background-color: var(--correct-bg) !important;
+    border-color: var(--correct) !important;
+    color: #1b5e20 !important;
+  }
+
+  input.math-input.wrong {
+    background-color: var(--wrong-bg) !important;
+    border-color: var(--wrong) !important;
+    color: #b71c1c !important;
+  }
+
+  input.math-input:disabled {
+    cursor: not-allowed;
+    opacity: 0.95;
+  }
+
+  .correction-hint {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--correct);
+    background: #e8f5e9;
+    padding: 2px 8px;
+    border-radius: 6px;
+    border: 1px solid #a5d6a7;
+    display: none;
+  }
+
+  /* Two-column split */
+  .split-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 18px;
+  }
+
+  .sub-panel {
+    background: #ffffff;
+    border: 2px dashed #cbd5e1;
+    border-radius: 14px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  /* Candy Bags SVG & Visuals */
+  .candy-scene {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .bags-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .candy-bag {
+    width: 54px;
+    height: 64px;
+    background: linear-gradient(180deg, #f3e5f5 0%, #ce93d8 100%);
+    border: 2px solid #8e24aa;
+    border-radius: 12px 12px 18px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.25rem;
+    color: #4a148c;
+    position: relative;
+    margin-top: 10px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+  }
+
+  .candy-bag::before {
+    content: "🎀";
+    position: absolute;
+    top: -15px;
+    font-size: 1.1rem;
+  }
+
+  .loose-candies {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    font-size: 1.5rem;
+  }
+
+  /* Choice checkboxes for Discover Q2 */
+  .choice-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .choice-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 12px 18px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 700;
+    transition: all 0.2s;
+  }
+
+  .choice-card:hover:not(.disabled) {
+    border-color: var(--primary);
+    background: #f0f7ff;
+  }
+
+  .choice-box {
+    width: 34px;
+    height: 34px;
+    border: 2px solid #64748b;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--primary);
+    background: #f8fafc;
+  }
+
+  .choice-card.selected .choice-box {
+    border-color: var(--primary);
+    background: #e3f2fd;
+  }
+
+  .choice-card.correct-choice {
+    background: var(--correct-bg);
+    border-color: var(--correct);
+    color: #1b5e20;
+  }
+
+  .choice-card.wrong-choice {
+    background: var(--wrong-bg);
+    border-color: var(--wrong);
+    color: #b71c1c;
+  }
+
+  .choice-card.disabled {
+    cursor: not-allowed;
+  }
+
+  /* Tens Rods & Units Squares */
+  .blocks-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin: 12px 0;
+    direction: ltr;
+  }
+
+  .tens-group {
+    display: flex;
+    gap: 6px;
+    align-items: flex-end;
+  }
+
+  .ten-rod {
+    display: flex;
+    flex-direction: column;
+    border: 1.5px solid #1b5e20;
+    background: #2e7d32;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .ten-rod span {
+    width: 14px;
+    height: 9px;
+    border-bottom: 1px solid #a5d6a7;
+    display: block;
+  }
+  .ten-rod span:last-child { border-bottom: none; }
+
+  .ten-rod-horizontal {
+    display: flex;
+    flex-direction: row;
+    border: 1.5px solid #1b5e20;
+    background: #2e7d32;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .ten-rod-horizontal span {
+    width: 11px;
+    height: 14px;
+    border-right: 1px solid #a5d6a7;
+    display: block;
+  }
+  .ten-rod-horizontal span:last-child { border-right: none; }
+
+  .units-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 16px);
+    gap: 5px;
+    align-items: center;
+  }
+
+  .unit-square {
+    width: 15px;
+    height: 15px;
+    background: #f59e0b;
+    border: 1.5px solid #b45309;
+    border-radius: 2px;
+  }
+
+  /* Learn Card */
+  .learn-content {
+    background: #ffffff;
+    border: 3px solid #8e24aa;
+    border-radius: 16px;
+    padding: 20px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2e1065;
+    line-height: 2.1;
+  }
+
+  /* Table for Train Ex 3 */
+  .math-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    background: #fff;
+  }
+
+  .math-table th, .math-table td {
+    border: 2px solid #94a3b8;
+    padding: 12px;
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .math-table th {
+    background: #fff3e0;
+    color: #e65100;
+    font-weight: 800;
+    font-size: 1.1rem;
+  }
+
+  /* Buttons & Stage Counter */
+  .btn-check {
+    background: linear-gradient(135deg, #1976d2, #0d47a1);
+    color: #fff;
+    border: none;
+    padding: 10px 26px;
+    border-radius: 12px;
+    font-size: 1.08rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(21, 101, 192, 0.25);
+    transition: transform 0.15s, opacity 0.2s;
+    margin-top: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-check:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+
+  .btn-check:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .stage-counter {
+    margin-top: 14px;
+    padding: 10px 16px;
+    background: #f1f5f9;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1.05rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .count-ok { color: var(--correct); }
+  .count-err { color: var(--wrong); }
+
+  /* Final Evaluation Card */
+  .eval-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f0f7ff 100%);
+    border: 3px solid #1565c0;
+    border-radius: 22px;
+    padding: 26px;
+    margin-top: 30px;
+    box-shadow: 0 10px 28px rgba(13, 71, 161, 0.15);
+    text-align: center;
+  }
+
+  .eval-card h2 {
+    margin-top: 0;
+    color: #0d47a1;
+    font-size: 1.6rem;
+    font-weight: 900;
+  }
+
+  .eval-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 36px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  /* Pie Chart Circle */
+  .pie-wrapper {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: conic-gradient(#e2e8f0 0% 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    transition: background 0.5s ease;
+  }
+
+  .pie-inner {
+    width: 118px;
+    height: 118px;
+    border-radius: 50%;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.08);
+  }
+
+  .pie-percent {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #0d47a1;
+    direction: ltr;
+  }
+
+  .pie-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #64748b;
+  }
+
+  .stats-list {
+    text-align: right;
+    font-size: 1.15rem;
+    font-weight: 800;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .stat-pill {
+    padding: 8px 16px;
+    border-radius: 12px;
+    background: #fff;
+    border: 2px solid #cbd5e1;
+  }
+
+  .progress-bar-wrap {
+    width: 100%;
+    max-width: 520px;
+    height: 16px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 14px auto;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #2e7d32, #66bb6a);
+    transition: width 0.4s ease;
+  }
+
+  .btn-reset {
+    background: linear-gradient(135deg, #ef6c00, #e65100);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 14px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(230, 81, 0, 0.25);
+    margin-top: 10px;
+  }
+
+  .btn-reset:hover {
+    opacity: 0.92;
+  }
+
+  @media (max-width: 600px) {
+    input.math-input { width: 46px; height: 38px; font-size: 1.05rem; }
+    .math-ltr, .math-block-ltr { font-size: 1.05rem; gap: 4px; }
+    .lesson-title-box h1 { font-size: 1.35rem; }
+  }
+
+  /* ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== */
+  #sub-lock-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .lock-box {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+    border: 2px solid #e1f5fe;
+    max-width: 380px;
+    width: 100%;
+  }
+  .lock-icon { font-size: 50px; margin-bottom: 12px; }
+  .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+  .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+  .btn-channel {
+    display: block;
+    width: 100%;
+    background: #0288d1;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+  }
+  .btn-check-sub {
+    width: 100%;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 13px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .sub-status-msg {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-height: 24px;
+  }
+
+  /* زر العودة إلى الفهرس (أُضيف) */
+  .btn-back-home {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin: 20px auto 10px auto;
+    background: #0d47a1;
+    color: #ffffff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- رأس الدرس -->
+  <header class="lesson-header">
+    <div class="lesson-badge">13</div>
+    <div class="lesson-title-box">
+      <h1>تَفْكِيكٌ جَمْعِيٌّ لِلْأَعْدَادِ إِلَى 69</h1>
+      <div class="lesson-meta">الرِّيَاضِيَّاتُ – السَّنَةُ الثَّانِيَةُ ابْتِدَائِيٌّ | المَرْجِعُ: الصَّفْحَةُ رَقْمُ 32 مِنْ كِتَابِ التِّلْمِيذِ</div>
+    </div>
+  </header>
+
+  <!-- ==================== المحطة 1: أكتشف ==================== -->
+  <section class="section-card sec-discover" id="sec-discover">
+    <div class="section-title">أَكْتَشِفُ</div>
+
+    <!-- التمرين 1 -->
+    <div class="exercise-box" id="ex-disc-1">
+      <div class="ex-instruction">
+        <span class="ex-num">1</span>
+        <span>لِتَحْضِيرِ حَفْلِ نِهَايَةِ الْفَصْلِ، اشْتَرَى رَائِدٌ <span dir="ltr">34</span> حَبَّةَ حَلْوَى. وَاشْتَرَتْ إِيمَانُ <span dir="ltr">53</span> حَبَّةَ حَلْوَى. ثُمَّ وَضَعَا كُلَّ <span dir="ltr">10</span> حَبَّاتٍ فِي كِيسٍ.</span>
+      </div>
+
+      <div class="split-grid">
+        <!-- إيمـان -->
+        <div class="sub-panel">
+          <div style="font-weight:900; color:#8e24aa; font-size:1.15rem; margin-bottom:6px;">حَلْوَيَاتُ إِيمَانَ</div>
+          <div class="candy-scene">
+            <div class="bags-row">
+              <div class="candy-bag">10</div>
+              <div class="candy-bag">10</div>
+              <div class="candy-bag">10</div>
+              <div class="candy-bag">10</div>
+              <div class="candy-bag">10</div>
+            </div>
+            <div class="loose-candies">🍬 🍬 🍬</div>
+          </div>
+          <div style="font-weight:800; margin-bottom:4px;">أُكْمِلُ:</div>
+          <div class="math-block-ltr">
+            <input type="number" class="math-input" data-ex="disc1" data-ans="10">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="disc1" data-ans="10">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="disc1" data-ans="10">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="disc1" data-ans="10">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="disc1" data-ans="10">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="disc1" data-ans="3">
+            <span>=</span>
+            <input type="number" class="math-input" data-ex="disc1" data-ans="53">
+          </div>
+          <div class="correction-hint" id="hint-disc1-a">الصَّوَابُ: <span dir="ltr">10 + 10 + 10 + 10 + 10 + 3 = 53</span></div>
+        </div>
+
+        <!-- رائـد -->
+        <div class="sub-panel">
+          <div style="font-weight:900; color:#1565c0; font-size:1.15rem; margin-bottom:6px;">حَلْوَيَاتُ رَائِدٍ</div>
+          <div class="candy-scene">
+            <div class="bags-row">
+              <div class="candy-bag">10</div>
+              <div class="candy-bag">10</div>
+              <div class="candy-bag">10</div>
+            </div>
+            <div class="loose-candies">🍬 🍬 🍬 🍬</div>
+          </div>
+          <div style="font-weight:800; margin-bottom:4px;">أُكْمِلُ:</div>
+          <div class="math-block-ltr">
+            <input type="number" class="math-input" data-ex="disc1" data-ans="10">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="disc1" data-ans="10">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="disc1" data-ans="10">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="disc1" data-ans="4">
+            <span>=</span>
+            <input type="number" class="math-input" data-ex="disc1" data-ans="34">
+          </div>
+          <div class="correction-hint" id="hint-disc1-b">الصَّوَابُ: <span dir="ltr">10 + 10 + 10 + 4 = 34</span></div>
+        </div>
+      </div>
+
+      <button class="btn-check" id="btn-disc1" onclick="checkDisc1()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+    </div>
+
+    <!-- التمرين 2 -->
+    <div class="exercise-box locked-ex" id="ex-disc-2">
+      <div class="ex-instruction">
+        <span class="ex-num">2</span>
+        <span>ضَعْ إِشَارَةَ (<span dir="ltr">×</span>) فِي الْخَانَةِ الْمُنَاسِبَةِ:</span>
+      </div>
+
+      <div class="choice-group" id="disc2-choices">
+        <div class="choice-card" id="choice-iman" onclick="selectChoice('iman')">
+          <span>اشْتَرَتْ إِيمَانُ حَلْوَيَاتٍ أَكْثَرَ مِنْ رَائِدٍ ؟</span>
+          <div class="choice-box" id="box-iman"></div>
+        </div>
+        <div class="choice-card" id="choice-raid" onclick="selectChoice('raid')">
+          <span>اشْتَرَى رَائِدٌ حَلْوَيَاتٍ أَكْثَرَ مِنْ إِيمَانَ ؟</span>
+          <div class="choice-box" id="box-raid"></div>
+        </div>
+      </div>
+      <div class="correction-hint" id="hint-disc2" style="margin-top:10px; text-align:center;">الصَّوَابُ: اشْتَرَتْ إِيمَانُ حَلْوَيَاتٍ أَكْثَرَ مِنْ رَائِدٍ (لِأَنَّ <span dir="ltr">53 &gt; 34</span>).</div>
+
+      <button class="btn-check" id="btn-disc2" onclick="checkDisc2()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+    </div>
+
+    <div class="stage-counter" id="counter-discover">
+      <span>حَصِيلَةُ مَرْحَلَةِ (أَكْتَشِفُ):</span>
+      <span><span class="count-ok" id="ok-discover">✓ الصَّوَابُ: 0</span> | <span class="count-err" id="err-discover">✗ الْخَطَأُ: 0</span></span>
+    </div>
+  </section>
+
+  <!-- ==================== المحطة 2: أنجز ==================== -->
+  <section class="section-card sec-practice locked" id="sec-practice">
+    <div class="lock-banner">🔒 أَتْمِمْ مَرْحَلَةَ (أَكْتَشِفُ) أَوَّلًا لِفَتْحِ هَذِهِ الْمَرْحَلَةِ</div>
+    <div class="section-title">أُنْجِزُ</div>
+
+    <!-- التمرين 1 -->
+    <div class="exercise-box" id="ex-prac-1">
+      <div class="ex-instruction">
+        <span class="ex-num">1</span>
+        <span>أُكْمِلُ الْمَجْمُوعَ.</span>
+      </div>
+
+      <div class="split-grid">
+        <!-- اليمين: 67 -->
+        <div class="sub-panel">
+          <div class="blocks-container">
+            <div style="display:flex; flex-direction:column; gap:5px;">
+              <div class="ten-rod-horizontal"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="ten-rod-horizontal"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="ten-rod-horizontal"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="ten-rod-horizontal"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:5px;">
+              <div class="ten-rod-horizontal"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="ten-rod-horizontal"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="units-grid">
+              <div class="unit-square"></div><div class="unit-square"></div><div class="unit-square"></div>
+              <div class="unit-square"></div><div class="unit-square"></div><div class="unit-square"></div>
+              <div class="unit-square"></div>
+            </div>
+          </div>
+          <div class="math-block-ltr">
+            <span>67</span>
+            <span>=</span>
+            <span>40</span>
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="prac1" data-ans="20">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="prac1" data-ans="7">
+          </div>
+          <div class="correction-hint" id="hint-prac1-a">الصَّوَابُ: <span dir="ltr">67 = 40 + 20 + 7</span></div>
+        </div>
+
+        <!-- اليسار: 35 -->
+        <div class="sub-panel">
+          <div class="blocks-container">
+            <div style="display:flex; flex-direction:column; gap:5px;">
+              <div class="ten-rod-horizontal"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="ten-rod-horizontal"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:5px;">
+              <div class="ten-rod-horizontal"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="units-grid">
+              <div class="unit-square"></div><div class="unit-square"></div>
+              <div class="unit-square"></div><div class="unit-square"></div>
+              <div class="unit-square"></div>
+            </div>
+          </div>
+          <div class="math-block-ltr">
+            <span>35</span>
+            <span>=</span>
+            <span>20</span>
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="prac1" data-ans="10">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="prac1" data-ans="5">
+          </div>
+          <div class="correction-hint" id="hint-prac1-b">الصَّوَابُ: <span dir="ltr">35 = 20 + 10 + 5</span></div>
+        </div>
+      </div>
+
+      <button class="btn-check" id="btn-prac1" onclick="checkPrac1()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+    </div>
+
+    <!-- التمرين 2 -->
+    <div class="exercise-box locked-ex" id="ex-prac-2">
+      <div class="ex-instruction">
+        <span class="ex-num">2</span>
+        <span>أُكْمِلُ.</span>
+      </div>
+
+      <div class="split-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
+        <div class="sub-panel">
+          <div class="math-block-ltr">
+            <span>68</span>
+            <span>=</span>
+            <span>10</span>
+            <span>+</span>
+            <span>50</span>
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="prac2" data-ans="8">
+          </div>
+          <div class="correction-hint" id="hint-prac2-1">الصَّوَابُ: <span dir="ltr">68 = 10 + 50 + 8</span></div>
+        </div>
+
+        <div class="sub-panel">
+          <div class="math-block-ltr">
+            <span>65</span>
+            <span>=</span>
+            <input type="number" class="math-input" data-ex="prac2" data-ans="50">
+            <span>+</span>
+            <span>10</span>
+            <span>+</span>
+            <span>5</span>
+          </div>
+          <div class="correction-hint" id="hint-prac2-2">الصَّوَابُ: <span dir="ltr">65 = 50 + 10 + 5</span></div>
+        </div>
+
+        <div class="sub-panel">
+          <div class="math-block-ltr">
+            <span>23</span>
+            <span>=</span>
+            <span>10</span>
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="prac2" data-ans="10">
+            <span>+</span>
+            <span>3</span>
+          </div>
+          <div class="correction-hint" id="hint-prac2-3">الصَّوَابُ: <span dir="ltr">23 = 10 + 10 + 3</span></div>
+        </div>
+      </div>
+
+      <div class="split-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); margin-top: 14px;">
+        <div class="sub-panel" style="font-size:1.15rem; font-weight:800;">
+          <span>▪ <span dir="ltr">68</span> هُوَ </span>
+          <input type="number" class="math-input" data-ex="prac2" data-ans="8">
+          <span> وَحَدَاتٍ وَ </span>
+          <input type="number" class="math-input" data-ex="prac2" data-ans="6">
+          <span> عَشَرَاتٍ.</span>
+          <div class="correction-hint" id="hint-prac2-4">الصَّوَابُ: 8 وَحَدَاتٍ وَ 6 عَشَرَاتٍ</div>
+        </div>
+
+        <div class="sub-panel" style="font-size:1.15rem; font-weight:800;">
+          <span>▪ <span dir="ltr">60</span> هُوَ </span>
+          <input type="number" class="math-input" data-ex="prac2" data-ans="6">
+          <span> عَشَرَاتٍ فَقَطْ.</span>
+          <div class="correction-hint" id="hint-prac2-5">الصَّوَابُ: 6 عَشَرَاتٍ فَقَطْ</div>
+        </div>
+
+        <div class="sub-panel" style="font-size:1.15rem; font-weight:800;">
+          <span>▪ <span dir="ltr">40</span> هُوَ </span>
+          <input type="number" class="math-input" data-ex="prac2" data-ans="4">
+          <span> عَشَرَاتٍ فَقَطْ.</span>
+          <div class="correction-hint" id="hint-prac2-6">الصَّوَابُ: 4 عَشَرَاتٍ فَقَطْ</div>
+        </div>
+      </div>
+
+      <button class="btn-check" id="btn-prac2" onclick="checkPrac2()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+    </div>
+
+    <div class="stage-counter" id="counter-practice">
+      <span>حَصِيلَةُ مَرْحَلَةِ (أُنْجِزُ):</span>
+      <span><span class="count-ok" id="ok-practice">✓ الصَّوَابُ: 0</span> | <span class="count-err" id="err-practice">✗ الْخَطَأُ: 0</span></span>
+    </div>
+  </section>
+
+  <!-- ==================== المحطة 3: تعلمت ==================== -->
+  <section class="section-card sec-learn locked" id="sec-learn">
+    <div class="lock-banner">🔒 أَتْمِمْ مَرْحَلَةَ (أُنْجِزُ) أَوَّلًا لِفَتْحِ قَاعِدَةِ (تَعَلَّمْتُ)</div>
+    <div class="section-title">تَعَلَّمْتُ</div>
+    <div class="learn-content">
+      <div>أُفَكِّكُ كُلَّ عَدَدٍ يُكْتَبُ بِرَقْمَيْنِ إِلَى وَحَدَاتٍ وَعَشَرَاتٍ.</div>
+      <div>الْعَدَدُ <span dir="ltr">53</span>، فِيهِ <span dir="ltr">3</span> وَحَدَاتٍ وَ<span dir="ltr">5</span> عَشَرَاتٍ.</div>
+      <div>الْعَدَدُ، <span dir="ltr">30</span> فِيهِ <span dir="ltr">3</span> عَشَرَاتٍ فَقَطْ، وَالْعَدَدُ <span dir="ltr">34</span> فِيهِ <span dir="ltr">4</span> وَحَدَاتٍ وَ<span dir="ltr">3</span> عَشَرَاتٍ.</div>
+    </div>
+  </section>
+
+  <!-- ==================== المحطة 4: أتمرن ==================== -->
+  <section class="section-card sec-train locked" id="sec-train">
+    <div class="lock-banner">🔒 أَتْمِمْ مَرْحَلَةَ (أُنْجِزُ) أَوَّلًا لِفَتْحِ تَمَارِينِ (أَتَمَرَّنُ)</div>
+    <div class="section-title">أَتَمَرَّنُ</div>
+
+    <!-- التمرين 1 -->
+    <div class="exercise-box" id="ex-train-1">
+      <div class="ex-instruction">
+        <span class="ex-num">1</span>
+        <span>أُكْمِلُ وَأَحْسُبُ الْمَجْمُوعَ</span>
+      </div>
+
+      <div class="split-grid">
+        <!-- اليمين: 64 -->
+        <div class="sub-panel">
+          <div class="blocks-container">
+            <div class="tens-group">
+              <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+              <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="tens-group">
+              <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="tens-group">
+              <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="units-grid" style="grid-template-columns: repeat(2, 16px);">
+              <div class="unit-square"></div><div class="unit-square"></div>
+              <div class="unit-square"></div><div class="unit-square"></div>
+            </div>
+          </div>
+          <div class="math-block-ltr">
+            <input type="number" class="math-input" data-ex="train1" data-ans="40">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="train1" data-ans="10">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="train1" data-ans="10">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="train1" data-ans="4">
+            <span>=</span>
+            <input type="number" class="math-input" data-ex="train1" data-ans="64">
+          </div>
+          <div class="correction-hint" id="hint-train1-a">الصَّوَابُ: <span dir="ltr">40 + 10 + 10 + 4 = 64</span></div>
+        </div>
+
+        <!-- اليسار: 38 -->
+        <div class="sub-panel">
+          <div class="blocks-container">
+            <div class="tens-group">
+              <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="tens-group">
+              <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="tens-group">
+              <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+            </div>
+            <div class="units-grid">
+              <div class="unit-square"></div><div class="unit-square"></div><div class="unit-square"></div>
+              <div class="unit-square"></div><div class="unit-square"></div><div class="unit-square"></div>
+              <div class="unit-square"></div><div class="unit-square"></div>
+            </div>
+          </div>
+          <div class="math-block-ltr">
+            <input type="number" class="math-input" data-ex="train1" data-ans="10">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="train1" data-ans="10">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="train1" data-ans="10">
+            <span>+</span>
+            <input type="number" class="math-input" data-ex="train1" data-ans="8">
+            <span>=</span>
+            <input type="number" class="math-input" data-ex="train1" data-ans="38">
+          </div>
+          <div class="correction-hint" id="hint-train1-b">الصَّوَابُ: <span dir="ltr">10 + 10 + 10 + 8 = 38</span></div>
+        </div>
+      </div>
+
+      <button class="btn-check" id="btn-train1" onclick="checkTrain1()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+    </div>
+
+    <!-- التمرين 2 -->
+    <div class="exercise-box locked-ex" id="ex-train-2">
+      <div class="ex-instruction">
+        <span class="ex-num">2</span>
+        <span>أُكْمِلُ كَمَا فِي الْمِثَالِ :</span>
+      </div>
+
+      <div class="split-grid">
+        <!-- العمود الأيمن -->
+        <div class="sub-panel" style="display:flex; flex-direction:column; gap:12px;">
+          <div>
+            <div class="math-block-ltr">
+              <span>33</span>
+              <span>=</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="3">
+            </div>
+            <div class="correction-hint" id="hint-train2-r1">الصَّوَابُ: <span dir="ltr">33 = 10 + 10 + 10 + 3</span></div>
+          </div>
+
+          <div>
+            <div class="math-block-ltr">
+              <span>25</span>
+              <span>=</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="5">
+            </div>
+            <div class="correction-hint" id="hint-train2-r2">الصَّوَابُ: <span dir="ltr">25 = 10 + 10 + 5</span></div>
+          </div>
+
+          <div>
+            <div class="math-block-ltr">
+              <span>25</span>
+              <span>=</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="20">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="5">
+            </div>
+            <div class="correction-hint" id="hint-train2-r3">الصَّوَابُ: <span dir="ltr">25 = 20 + 5</span></div>
+          </div>
+        </div>
+
+        <!-- العمود الأيسر (المثال + 56 + 67) -->
+        <div class="sub-panel" style="display:flex; flex-direction:column; gap:12px;">
+          <div style="background:#fff8e1; padding:6px 12px; border-radius:10px; border:1px dashed #ffb300;">
+            <span style="font-size:0.9rem; color:#e65100; font-weight:800;">مِثَالٌ: </span>
+            <span class="math-ltr">42 = 10 + 10 + 10 + 10 + 2</span>
+          </div>
+
+          <div>
+            <div class="math-block-ltr">
+              <span>56</span>
+              <span>=</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="6">
+            </div>
+            <div class="correction-hint" id="hint-train2-l1">الصَّوَابُ: <span dir="ltr">56 = 10 + 10 + 10 + 10 + 10 + 6</span></div>
+          </div>
+
+          <div>
+            <div class="math-block-ltr">
+              <span>67</span>
+              <span>=</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="10">
+              <span>+</span>
+              <input type="number" class="math-input" data-ex="train2" data-ans="7">
+            </div>
+            <div class="correction-hint" id="hint-train2-l2">الصَّوَابُ: <span dir="ltr">67 = 10 + 10 + 10 + 10 + 10 + 10 + 7</span></div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-check" id="btn-train2" onclick="checkTrain2()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+    </div>
+
+    <!-- التمرين 3 -->
+    <div class="exercise-box locked-ex" id="ex-train-3">
+      <div class="ex-instruction">
+        <span class="ex-num">3</span>
+        <span>أُكْمِلُ الْجَدْوَلَ كَمَا فِي الْمِثَالِ</span>
+      </div>
+
+      <div style="overflow-x:auto;">
+        <table class="math-table">
+          <thead>
+            <tr>
+              <th style="width:18%;">الْعَدَدُ</th>
+              <th style="width:34%;">الْأَعْمِدَةُ وَالْمُرَبَّعَاتُ (الْعَشَرَاتُ وَالْوَحَدَاتُ)</th>
+              <th style="width:48%;">كِتَابَاتٌ جَمْعِيَّةٌ</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- سطر المثال: 65 -->
+            <tr style="background:#fffdf7;">
+              <td style="font-size:1.5rem; font-weight:900;"><span dir="ltr">65</span></td>
+              <td>
+                <div class="blocks-container" style="margin:0;">
+                  <div class="units-grid">
+                    <div class="unit-square"></div><div class="unit-square"></div><div class="unit-square"></div>
+                    <div class="unit-square"></div><div class="unit-square"></div>
+                  </div>
+                  <div class="tens-group">
+                    <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                    <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                    <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                    <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                    <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                    <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                  </div>
+                </div>
+              </td>
+              <td style="text-align:left; direction:ltr; font-weight:800; font-size:1.1rem;">
+                <div>• 10 + 10 + 10 + 10 + 10 + 10 + 5</div>
+                <div>• 60 + 5</div>
+              </td>
+            </tr>
+
+            <!-- السطر الثاني: 55 -->
+            <tr>
+              <td>
+                <input type="number" class="math-input" data-ex="train3" data-ans="55" style="width:68px;">
+                <div class="correction-hint" id="hint-train3-num1">55</div>
+              </td>
+              <td>
+                <div class="blocks-container" style="margin:0;">
+                  <div class="units-grid">
+                    <div class="unit-square"></div><div class="unit-square"></div><div class="unit-square"></div>
+                    <div class="unit-square"></div><div class="unit-square"></div>
+                  </div>
+                  <div class="tens-group">
+                    <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                    <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                    <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                  </div>
+                  <div class="tens-group">
+                    <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                    <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="math-block-ltr" style="justify-content:flex-start;">
+                  <span>•</span>
+                  <input type="number" class="math-input" data-ex="train3" data-ans="10">
+                  <span>+</span>
+                  <input type="number" class="math-input" data-ex="train3" data-ans="10">
+                  <span>+</span>
+                  <input type="number" class="math-input" data-ex="train3" data-ans="10">
+                  <span>+</span>
+                  <input type="number" class="math-input" data-ex="train3" data-ans="10">
+                  <span>+</span>
+                  <input type="number" class="math-input" data-ex="train3" data-ans="10">
+                  <span>+</span>
+                  <input type="number" class="math-input" data-ex="train3" data-ans="5">
+                </div>
+                <div class="math-block-ltr" style="justify-content:flex-start;">
+                  <span>•</span>
+                  <input type="number" class="math-input" data-ex="train3" data-ans="50">
+                  <span>+</span>
+                  <input type="number" class="math-input" data-ex="train3" data-ans="5">
+                </div>
+                <div class="correction-hint" id="hint-train3-dec1">الصَّوَابُ: <span dir="ltr">10+10+10+10+10+5</span> وَ <span dir="ltr">50+5</span></div>
+              </td>
+            </tr>
+
+            <!-- السطر الثالث: 30 -->
+            <tr>
+              <td>
+                <input type="number" class="math-input" data-ex="train3" data-ans="30" style="width:68px;">
+                <div class="correction-hint" id="hint-train3-num2">30</div>
+              </td>
+              <td>
+                <div class="blocks-container" style="margin:0;">
+                  <div class="tens-group" style="gap:10px;">
+                    <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                    <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                    <div class="ten-rod"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="math-block-ltr" style="justify-content:flex-start;">
+                  <span>•</span>
+                  <input type="number" class="math-input" data-ex="train3" data-ans="10">
+                  <span>+</span>
+                  <input type="number" class="math-input" data-ex="train3" data-ans="10">
+                  <span>+</span>
+                  <input type="number" class="math-input" data-ex="train3" data-ans="10">
+                </div>
+                <div class="math-block-ltr" style="justify-content:flex-start;">
+                  <span>•</span>
+                  <input type="number" class="math-input" data-ex="train3" data-ans="20">
+                  <span>+</span>
+                  <input type="number" class="math-input" data-ex="train3" data-ans="10">
+                </div>
+                <div class="correction-hint" id="hint-train3-dec2">الصَّوَابُ: <span dir="ltr">10+10+10</span> وَ <span dir="ltr">20+10</span></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button class="btn-check" id="btn-train3" onclick="checkTrain3()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+    </div>
+
+    <div class="stage-counter" id="counter-train">
+      <span>حَصِيلَةُ مَرْحَلَةِ (أَتَمَرَّنُ):</span>
+      <span><span class="count-ok" id="ok-train">✓ الصَّوَابُ: 0</span> | <span class="count-err" id="err-train">✗ الْخَطَأُ: 0</span></span>
+    </div>
+  </section>
+
+  <!-- ==================== المحطة 5: أبحث ==================== -->
+  <section class="section-card sec-search locked" id="sec-search">
+    <div class="lock-banner">🔒 أَتْمِمْ مَرْحَلَةَ (أَتَمَرَّنُ) أَوَّلًا لِفَتْحِ مَرْحَلَةِ (أَبْحَثُ)</div>
+    <div class="section-title">أَبْحَثُ</div>
+
+    <div class="exercise-box" id="ex-search-1">
+      <div style="display:flex; flex-direction:column; gap:16px; font-size:1.18rem; font-weight:800;">
+        <div class="sub-panel" style="text-align:right; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+          <span><span dir="ltr">1</span> . أُكْتُبِ الْعَدَدَ الَّذِي يَتَكَوَّنُ مِنْ خَمْسِ عَشَرَاتٍ وَتِسْعِ وَحَدَاتٍ.</span>
+          <div class="math-ltr">
+            <input type="number" class="math-input" data-ex="search" data-ans="59" style="width:74px;">
+            <span class="correction-hint" id="hint-search-1">الصَّوَابُ: 59</span>
+          </div>
+        </div>
+
+        <div class="sub-panel" style="text-align:right; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+          <span><span dir="ltr">2</span> . أُكْتُبِ الْعَدَدَ الَّذِي يَتَكَوَّنُ مِنْ سِتِّ عَشَرَاتٍ وَثَلَاثِ وَحَدَاتٍ.</span>
+          <div class="math-ltr">
+            <input type="number" class="math-input" data-ex="search" data-ans="63" style="width:74px;">
+            <span class="correction-hint" id="hint-search-2">الصَّوَابُ: 63</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-check" id="btn-search" onclick="checkSearch()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✔</button>
+    </div>
+
+    <div class="stage-counter" id="counter-search">
+      <span>حَصِيلَةُ مَرْحَلَةِ (أَبْحَثُ):</span>
+      <span><span class="count-ok" id="ok-search">✓ الصَّوَابُ: 0</span> | <span class="count-err" id="err-search">✗ الْخَطَأُ: 0</span></span>
+    </div>
+  </section>
+
+  <!-- ==================== التقييم النهائي الشامل ==================== -->
+  <section class="eval-card" id="final-eval">
+    <h2>📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</h2>
+    <div class="eval-body">
+      <div class="pie-wrapper" id="pie-chart">
+        <div class="pie-inner">
+          <div class="pie-percent" id="eval-percent">0%</div>
+          <div class="pie-label">نِسْبَةُ النَّجَاحِ</div>
+        </div>
+      </div>
+
+      <div class="stats-list">
+        <div class="stat-pill" style="color:#2e7d32; border-color:#a5d6a7;">✓ مَجْمُوعُ الْإِجَابَاتِ الصَّحِيحَةِ: <span id="total-correct" dir="ltr">0</span></div>
+        <div class="stat-pill" style="color:#c62828; border-color:#ef9a9a;">✗ مَجْمُوعُ الْإِجَابَاتِ الْخَاطِئَةِ: <span id="total-wrong" dir="ltr">0</span></div>
+        <div class="stat-pill" style="color:#1565c0; border-color:#90caf9;">📝 الْعَدَدُ الْإِجْمَالِيُّ لِلْأَسْئِلَةِ: <span id="total-questions" dir="ltr">49</span></div>
+      </div>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="eval-progress"></div>
+    </div>
+
+    <div id="eval-message" style="font-weight:800; font-size:1.15rem; color:#0f172a; margin:10px 0;">
+      أَجِبْ عَنِ التَّمَارِينِ بِالتَّسَلْسُلِ لِرُؤْيَةِ نَتِيجَتِكَ النِّهَائِيَّةِ!
+    </div>
+
+    <button class="btn-reset" onclick="resetAll()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+  </section>
+
+  <!-- ========================================
+       زر العودة إلى الفهرس (أُضيف)
+       ======================================== -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</div>
+
+<!-- ========================================
+     سكريبت الحماية (أُضيف)
+     ======================================== -->
+<script>
+  const CHANNEL_ID = "-1004461185731";
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي (كما هو دون تغيير)
+     ======================================== -->
+<script>
+  const state = {
+    discover: { ok: 0, err: 0 },
+    practice: { ok: 0, err: 0 },
+    train:    { ok: 0, err: 0 },
+    search:   { ok: 0, err: 0 },
+    disc2Selected: null,
+    completed: {
+      disc1: false,
+      disc2: false,
+      prac1: false,
+      prac2: false,
+      train1: false,
+      train2: false,
+      train3: false,
+      search: false
+    }
+  };
+
+  function validateInputs(exName) {
+    const inputs = document.querySelectorAll(`input.math-input[data-ex="${exName}"]`);
+    let ok = 0, err = 0;
+    inputs.forEach(inp => {
+      const expected = parseInt(inp.getAttribute('data-ans'), 10);
+      const val = inp.value.trim() === '' ? NaN : parseInt(inp.value.trim(), 10);
+      if (val === expected) {
+        inp.classList.add('correct');
+        ok++;
+      } else {
+        inp.classList.add('wrong');
+        err++;
+      }
+      inp.disabled = true;
+    });
+    return { ok, err };
+  }
+
+  function updateCounters() {
+    document.getElementById('ok-discover').textContent = `✓ الصَّوَابُ: ${state.discover.ok}`;
+    document.getElementById('err-discover').textContent = `✗ الْخَطَأُ: ${state.discover.err}`;
+
+    document.getElementById('ok-practice').textContent = `✓ الصَّوَابُ: ${state.practice.ok}`;
+    document.getElementById('err-practice').textContent = `✗ الْخَطَأُ: ${state.practice.err}`;
+
+    document.getElementById('ok-train').textContent = `✓ الصَّوَابُ: ${state.train.ok}`;
+    document.getElementById('err-train').textContent = `✗ الْخَطَأُ: ${state.train.err}`;
+
+    document.getElementById('ok-search').textContent = `✓ الصَّوَابُ: ${state.search.ok}`;
+    document.getElementById('err-search').textContent = `✗ الْخَطَأُ: ${state.search.err}`;
+
+    const totalOk = state.discover.ok + state.practice.ok + state.train.ok + state.search.ok;
+    const totalErr = state.discover.err + state.practice.err + state.train.err + state.search.err;
+    const totalAnswered = totalOk + totalErr;
+    const totalQuestions = document.querySelectorAll('input.math-input').length + 1;
+
+    document.getElementById('total-correct').textContent = totalOk;
+    document.getElementById('total-wrong').textContent = totalErr;
+    document.getElementById('total-questions').textContent = totalQuestions;
+
+    let pct = 0;
+    if (totalAnswered > 0) {
+      pct = Math.min(100, Math.round((totalOk / totalQuestions) * 100));
+    }
+    if (totalOk === totalQuestions && totalErr === 0) {
+      pct = 100;
+    }
+
+    const okDeg = (totalOk / totalQuestions) * 360;
+    const errDeg = (totalErr / totalQuestions) * 360;
+    const pie = document.getElementById('pie-chart');
+    pie.style.background = `conic-gradient(#2e7d32 0deg ${okDeg}deg, #c62828 ${okDeg}deg ${okDeg + errDeg}deg, #e2e8f0 ${okDeg + errDeg}deg 360deg)`;
+
+    document.getElementById('eval-percent').textContent = `${pct}%`;
+    document.getElementById('eval-progress').style.width = `${pct}%`;
+
+    const msgEl = document.getElementById('eval-message');
+    if (totalAnswered === totalQuestions) {
+      if (pct === 100) {
+        msgEl.textContent = "🌟 مُمْتَازٌ جِدًّا! لَقَدْ أَجَبْتَ عَنْ جَمِيعِ الْأَسْئِلَةِ بِشَكْلٍ صَحِيحٍ 100%.";
+        msgEl.style.color = "#1b5e20";
+      } else if (pct >= 70) {
+        msgEl.textContent = "👏 أَحْسَنْتَ! نَتِيجَةٌ جَيِّدَةٌ، رَاجِعِ الْأَخْطَاءَ الْمُظَلَّلَةَ بِالْأَحْمَرِ أَعْلَاهُ.";
+        msgEl.style.color = "#1565c0";
+      } else {
+        msgEl.textContent = "💪 واصِلِ التَّدَرُّبَ! رَاجِعْ قَاعِدَةَ (تَعَلَّمْتُ) وَأَعِدِ الْمُحَاوَلَةَ.";
+        msgEl.style.color = "#c62828";
+      }
+    }
+  }
+
+  /* Discover 1 */
+  function checkDisc1() {
+    if (state.completed.disc1) return;
+    const res = validateInputs('disc1');
+    state.discover.ok += res.ok;
+    state.discover.err += res.err;
+    state.completed.disc1 = true;
+
+    document.getElementById('btn-disc1').disabled = true;
+    if (res.err > 0) {
+      document.getElementById('hint-disc1-a').style.display = 'inline-block';
+      document.getElementById('hint-disc1-b').style.display = 'inline-block';
+    }
+    document.getElementById('ex-disc-2').classList.remove('locked-ex');
+    updateCounters();
+  }
+
+  /* Discover 2 */
+  function selectChoice(who) {
+    if (state.completed.disc2) return;
+    state.disc2Selected = who;
+    document.getElementById('choice-iman').classList.remove('selected');
+    document.getElementById('choice-raid').classList.remove('selected');
+    document.getElementById('box-iman').textContent = '';
+    document.getElementById('box-raid').textContent = '';
+
+    document.getElementById(`choice-${who}`).classList.add('selected');
+    document.getElementById(`box-${who}`).textContent = '×';
+  }
+
+  function checkDisc2() {
+    if (state.completed.disc2) return;
+    state.completed.disc2 = true;
+    document.getElementById('btn-disc2').disabled = true;
+    document.getElementById('choice-iman').classList.add('disabled');
+    document.getElementById('choice-raid').classList.add('disabled');
+
+    if (state.disc2Selected === 'iman') {
+      state.discover.ok += 1;
+      document.getElementById('choice-iman').classList.add('correct-choice');
+    } else {
+      state.discover.err += 1;
+      if (state.disc2Selected === 'raid') {
+        document.getElementById('choice-raid').classList.add('wrong-choice');
+      }
+      document.getElementById('choice-iman').classList.add('correct-choice');
+      document.getElementById('hint-disc2').style.display = 'block';
+    }
+
+    document.getElementById('sec-practice').classList.remove('locked');
+    updateCounters();
+  }
+
+  /* Practice 1 */
+  function checkPrac1() {
+    if (state.completed.prac1) return;
+    const res = validateInputs('prac1');
+    state.practice.ok += res.ok;
+    state.practice.err += res.err;
+    state.completed.prac1 = true;
+
+    document.getElementById('btn-prac1').disabled = true;
+    if (res.err > 0) {
+      document.getElementById('hint-prac1-a').style.display = 'inline-block';
+      document.getElementById('hint-prac1-b').style.display = 'inline-block';
+    }
+    document.getElementById('ex-prac-2').classList.remove('locked-ex');
+    updateCounters();
+  }
+
+  /* Practice 2 */
+  function checkPrac2() {
+    if (state.completed.prac2) return;
+    const res = validateInputs('prac2');
+    state.practice.ok += res.ok;
+    state.practice.err += res.err;
+    state.completed.prac2 = true;
+
+    document.getElementById('btn-prac2').disabled = true;
+    if (res.err > 0) {
+      ['hint-prac2-1','hint-prac2-2','hint-prac2-3','hint-prac2-4','hint-prac2-5','hint-prac2-6'].forEach(id => {
+        document.getElementById(id).style.display = 'inline-block';
+      });
+    }
+    document.getElementById('sec-learn').classList.remove('locked');
+    document.getElementById('sec-train').classList.remove('locked');
+    updateCounters();
+  }
+
+  /* Train 1 */
+  function checkTrain1() {
+    if (state.completed.train1) return;
+    const res = validateInputs('train1');
+    state.train.ok += res.ok;
+    state.train.err += res.err;
+    state.completed.train1 = true;
+
+    document.getElementById('btn-train1').disabled = true;
+    if (res.err > 0) {
+      document.getElementById('hint-train1-a').style.display = 'inline-block';
+      document.getElementById('hint-train1-b').style.display = 'inline-block';
+    }
+    document.getElementById('ex-train-2').classList.remove('locked-ex');
+    updateCounters();
+  }
+
+  /* Train 2 */
+  function checkTrain2() {
+    if (state.completed.train2) return;
+    const res = validateInputs('train2');
+    state.train.ok += res.ok;
+    state.train.err += res.err;
+    state.completed.train2 = true;
+
+    document.getElementById('btn-train2').disabled = true;
+    if (res.err > 0) {
+      ['hint-train2-r1','hint-train2-r2','hint-train2-r3','hint-train2-l1','hint-train2-l2'].forEach(id => {
+        document.getElementById(id).style.display = 'inline-block';
+      });
+    }
+    document.getElementById('ex-train-3').classList.remove('locked-ex');
+    updateCounters();
+  }
+
+  /* Train 3 */
+  function checkTrain3() {
+    if (state.completed.train3) return;
+    const res = validateInputs('train3');
+    state.train.ok += res.ok;
+    state.train.err += res.err;
+    state.completed.train3 = true;
+
+    document.getElementById('btn-train3').disabled = true;
+    if (res.err > 0) {
+      ['hint-train3-num1','hint-train3-num2','hint-train3-dec1','hint-train3-dec2'].forEach(id => {
+        document.getElementById(id).style.display = 'inline-block';
+      });
+    }
+    document.getElementById('sec-search').classList.remove('locked');
+    updateCounters();
+  }
+
+  /* Search */
+  function checkSearch() {
+    if (state.completed.search) return;
+    const res = validateInputs('search');
+    state.search.ok += res.ok;
+    state.search.err += res.err;
+    state.completed.search = true;
+
+    document.getElementById('btn-search').disabled = true;
+    if (res.err > 0) {
+      document.getElementById('hint-search-1').style.display = 'inline-block';
+      document.getElementById('hint-search-2').style.display = 'inline-block';
+    }
+    updateCounters();
+  }
+
+  function resetAll() {
+    location.reload();
+  }
+
+  // Initialize total questions count on load
+  window.addEventListener('DOMContentLoaded', () => {
+    const totalQuestions = document.querySelectorAll('input.math-input').length + 1;
+    document.getElementById('total-questions').textContent = totalQuestions;
+  });
+</script>
+
+</body>
+</html>
