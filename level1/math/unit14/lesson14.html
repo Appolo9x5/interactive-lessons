@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اسْتِخْرَاجُ مَعْلُومَاتٍ - السنة الأولى ابتدائي</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1e88e5;
+    --primary-dark: #1565c0;
+    --secondary: #ff8f00;
+    --success: #2e7d32;
+    --success-bg: #e8f5e9;
+    --error: #c62828;
+    --error-bg: #ffebee;
+    --bg: #f4f7fb;
+    --card-bg: #ffffff;
+    --text: #1f2937;
+    --border: #cbd5e1;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .container {
+    max-width: 920px;
+    margin: 20px auto;
+    padding: 0 16px 40px;
+  }
+
+  .lesson-header {
+    background: linear-gradient(135deg, #2b5876 0%, #4e4376 100%);
+    color: #fff;
+    border-radius: 20px;
+    padding: 24px 28px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(43, 88, 118, 0.25);
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .lesson-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 16px;
+    border-radius: 50px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .lesson-header h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  .stage-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 24px;
+    margin-bottom: 26px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    border: 2px solid #e2e8f0;
+    transition: opacity 0.3s ease;
+  }
+
+  .stage-card.locked {
+    opacity: 0.55;
+    pointer-events: none;
+    position: relative;
+  }
+
+  .stage-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.45rem;
+    font-weight: 900;
+    padding: 6px 22px;
+    border-radius: 14px;
+    margin-bottom: 18px;
+  }
+
+  .stage-aktashif { background: #e3f2fd; color: #0d47a1; border: 2px solid #90caf9; }
+  .stage-onjiz { background: #fce4ec; color: #880e4f; border: 2px solid #f48fb1; }
+  .stage-taalamt { background: #fff8e1; color: #e65100; border: 2px solid #ffe082; }
+  .stage-atamarran { background: #e8f5e9; color: #1b5e20; border: 2px solid #a5d6a7; }
+  .stage-abhath { background: #f3e5f5; color: #4a148c; border: 2px solid #ce93d8; }
+
+  .instruction {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .num-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background: #334155;
+    color: #fff;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .ltr-box {
+    display: inline-block;
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  .tv-scene {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    background: #f8fafc;
+    border: 2px solid #cbd5e1;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 20px;
+  }
+
+  .tv-unit {
+    background: #334155;
+    border-radius: 18px;
+    padding: 14px;
+    width: 320px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    border: 4px solid #64748b;
+  }
+
+  .tv-screen {
+    background: #1e293b;
+    color: #f8fafc;
+    border-radius: 10px;
+    padding: 14px;
+    border: 2px solid #475569;
+  }
+
+  .tv-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 8px;
+    border-bottom: 1px dashed #475569;
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+
+  .tv-row:last-child { border-bottom: none; }
+
+  .tv-time {
+    background: #3b82f6;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-weight: 800;
+    font-family: monospace;
+    font-size: 1.05rem;
+  }
+
+  .thought-bubble {
+    background: #fff;
+    border: 3px solid #94a3b8;
+    border-radius: 30px;
+    padding: 12px 20px;
+    text-align: center;
+    font-weight: 800;
+    color: #1e293b;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+    position: relative;
+  }
+
+  .question-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .q-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    background: #f8fafc;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: 1.5px solid #e2e8f0;
+    gap: 12px;
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  select.ans-select, input.ans-input {
+    padding: 8px 14px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    border: 2px solid #94a3b8;
+    border-radius: 10px;
+    background: #fff;
+    color: #0f172a;
+    text-align: center;
+    min-width: 110px;
+    transition: all 0.2s;
+  }
+
+  input.ans-input {
+    width: 72px;
+    min-width: 72px;
+  }
+
+  select.ans-select:focus, input.ans-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.2);
+  }
+
+  .correct-field {
+    background-color: var(--success-bg) !important;
+    border-color: var(--success) !important;
+    color: var(--success) !important;
+  }
+
+  .wrong-field {
+    background-color: var(--error-bg) !important;
+    border-color: var(--error) !important;
+    color: var(--error) !important;
+  }
+
+  .feedback-badge {
+    font-size: 0.98rem;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 8px;
+    display: inline-block;
+  }
+  .fb-ok { background: var(--success-bg); color: var(--success); }
+  .fb-err { background: var(--error-bg); color: var(--error); }
+
+  .school-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    background: #fff;
+    text-align: center;
+  }
+
+  .school-table th, .school-table td {
+    border: 2px solid #334155;
+    padding: 10px 8px;
+    font-size: 1.15rem;
+    font-weight: 800;
+  }
+
+  .school-table th {
+    background: #f1f5f9;
+  }
+
+  .taalamt-box {
+    background: linear-gradient(to left, #fffdf5, #fff8e1);
+    border: 3px solid #f59e0b;
+    border-radius: 18px;
+    padding: 20px 24px;
+    margin-bottom: 26px;
+    box-shadow: 0 6px 15px rgba(245, 158, 11, 0.12);
+  }
+
+  .taalamt-text {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 8px 0 0;
+  }
+
+  .btn-check {
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 10px 26px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 16px;
+    box-shadow: 0 4px 10px rgba(30, 136, 229, 0.3);
+    transition: transform 0.15s, background 0.2s;
+  }
+
+  .btn-check:hover:not(:disabled) {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+  }
+
+  .btn-check:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .stage-counter {
+    margin-top: 14px;
+    padding: 8px 16px;
+    background: #f1f5f9;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 1.05rem;
+    display: inline-block;
+    color: #334155;
+  }
+
+  .divider {
+    border: none;
+    border-top: 2px dashed #cbd5e1;
+    margin: 24px 0;
+  }
+
+  .abhath-layout {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+    gap: 24px;
+    margin-top: 16px;
+  }
+
+  .color-palette {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin: 14px 0;
+    flex-wrap: wrap;
+  }
+
+  .color-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    border-radius: 50px;
+    border: 3px solid transparent;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    background: #f8fafc;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+  }
+
+  .color-btn.active {
+    border-color: #0f172a;
+    transform: scale(1.06);
+    background: #e2e8f0;
+  }
+
+  .swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid #334155;
+  }
+
+  .shape-target {
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .shape-target:hover {
+    opacity: 0.85;
+  }
+
+  .summary-card {
+    background: #ffffff;
+    border: 3px solid #1e88e5;
+    border-radius: 22px;
+    padding: 28px;
+    text-align: center;
+    box-shadow: 0 12px 30px rgba(30, 136, 229, 0.15);
+    margin-top: 30px;
+  }
+
+  .summary-title {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #0d47a1;
+    margin-bottom: 20px;
+  }
+
+  .summary-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+  }
+
+  .circle-wrap {
+    position: relative;
+    width: 150px;
+    height: 150px;
+  }
+
+  .circle-wrap svg {
+    width: 150px;
+    height: 150px;
+    transform: rotate(-90deg);
+  }
+
+  .circle-bg {
+    fill: none;
+    stroke: #e2e8f0;
+    stroke-width: 12;
+  }
+
+  .circle-progress {
+    fill: none;
+    stroke: #2e7d32;
+    stroke-width: 12;
+    stroke-linecap: round;
+    stroke-dasharray: 408.4;
+    stroke-dashoffset: 408.4;
+    transition: stroke-dashoffset 0.8s ease, stroke 0.4s ease;
+  }
+
+  .circle-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: #1e293b;
+  }
+
+  .stats-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 240px;
+  }
+
+  .stat-item {
+    padding: 12px 20px;
+    border-radius: 14px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .stat-correct { background: var(--success-bg); color: var(--success); border: 2px solid #a5d6a7; }
+  .stat-wrong { background: var(--error-bg); color: var(--error); border: 2px solid #ef9a9a; }
+
+  .remark-box {
+    background: #f8fafc;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 14px 20px;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 18px;
+  }
+
+  .btn-reset {
+    background: #ff8f00;
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 143, 0, 0.3);
+  }
+  .btn-reset:hover { background: #ef6c00; }
+
+  @media (max-width: 600px) {
+    .q-row { flex-direction: column; align-items: stretch; text-align: right; }
+    .tv-unit { width: 100%; }
+  }
+
+  /* ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== */
+  #sub-lock-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .lock-box {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+    border: 2px solid #e1f5fe;
+    max-width: 380px;
+    width: 100%;
+  }
+  .lock-icon { font-size: 50px; margin-bottom: 12px; }
+  .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+  .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+  .btn-channel {
+    display: block;
+    width: 100%;
+    background: #0288d1;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    font-family: 'Tajawal', sans-serif;
+  }
+  .btn-check-sub {
+    width: 100%;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 13px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    font-family: 'Tajawal', sans-serif;
+  }
+  .sub-status-msg {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-height: 24px;
+  }
+  .btn-back-home {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin: 20px auto 30px auto;
+    background: #0d47a1;
+    color: #ffffff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    font-family: 'Tajawal', sans-serif;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- ترويسة الدرس -->
+  <header class="lesson-header">
+    <div class="lesson-badge">الرِّيَاضِيَّاتُ • السَّنَةُ الْأُولَى ابْتِدَائِي • الدَّرْسُ 14</div>
+    <h1>اسْتِخْرَاجُ مَعْلُومَاتٍ</h1>
+  </header>
+
+  <!-- ==================== 1. أكتشف ==================== -->
+  <section class="stage-card" id="stage-1">
+    <div class="stage-title stage-aktashif">🔍 أَكْتَشِفُ</div>
+    <div class="instruction">▪ لَاحِظِ الصُّورَةَ وَأَكْمِلِ الْإِجَابَةَ عَنِ الْأَسْئِلَةِ :</div>
+
+    <div class="tv-scene">
+      <div class="tv-unit">
+        <div class="tv-screen">
+          <div class="tv-row">
+            <span class="tv-time ltr-box">07:00</span>
+            <span>صَبَاحُ الْخَيْرِ يَا أَطْفَالُ</span>
+          </div>
+          <div class="tv-row">
+            <span class="tv-time ltr-box">08:00</span>
+            <span>الْعَبَاقِرَةُ الصِّغَارُ</span>
+          </div>
+          <div class="tv-row">
+            <span class="tv-time ltr-box">09:00</span>
+            <span>رُسُومٌ مُتَحَرِّكَةٌ</span>
+          </div>
+          <div class="tv-row">
+            <span class="tv-time ltr-box">10:00</span>
+            <span>مُسَابَقَاتٌ وَأَلْغَازٌ</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="thought-bubble">
+        💭 بَرْنَامَجُ التِّلْفِزْيُونِ<br>صَبِيحَةَ يَوْمِ الْجُمُعَةِ
+      </div>
+    </div>
+
+    <div class="question-list">
+      <div class="q-row">
+        <span>الرُّسُومُ الْمُتَحَرِّكَةُ عَلَى السَّاعَةِ :</span>
+        <div>
+          <select id="q1_1" class="ans-select ltr-box">
+            <option value="">-- اخْتَرْ --</option>
+            <option value="07:00">07:00</option>
+            <option value="08:00">08:00</option>
+            <option value="09:00">09:00</option>
+            <option value="10:00">10:00</option>
+          </select>
+          <span id="fb_q1_1"></span>
+        </div>
+      </div>
+
+      <div class="q-row">
+        <span>الْعَبَاقِرَةُ الصِّغَارُ عَلَى السَّاعَةِ :</span>
+        <div>
+          <select id="q1_2" class="ans-select ltr-box">
+            <option value="">-- اخْتَرْ --</option>
+            <option value="07:00">07:00</option>
+            <option value="08:00">08:00</option>
+            <option value="09:00">09:00</option>
+            <option value="10:00">10:00</option>
+          </select>
+          <span id="fb_q1_2"></span>
+        </div>
+      </div>
+
+      <div class="q-row">
+        <span>مُسَابَقَاتٌ وَأَلْغَازٌ عَلَى السَّاعَةِ :</span>
+        <div>
+          <select id="q1_3" class="ans-select ltr-box">
+            <option value="">-- اخْتَرْ --</option>
+            <option value="07:00">07:00</option>
+            <option value="08:00">08:00</option>
+            <option value="09:00">09:00</option>
+            <option value="10:00">10:00</option>
+          </select>
+          <span id="fb_q1_3"></span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-check" id="btn-stage-1" onclick="checkStage1()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+    <br>
+    <div class="stage-counter" id="counter-1">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+  </section>
+
+  <!-- ==================== 2. أنجز ==================== -->
+  <section class="stage-card locked" id="stage-2">
+    <div class="stage-title stage-onjiz">✏️ أُنْجِزُ</div>
+
+    <div class="instruction"><span class="num-badge">1</span> لَاحِظِ الصُّورَةَ وَأَكْمِلِ الْإِجَابَةَ :</div>
+
+    <div style="display:flex; justify-content:center; margin: 12px 0;">
+      <svg width="360" height="145" viewBox="0 0 360 145" style="max-width:100%;">
+        <g transform="translate(20, 10)">
+          <rect x="18" y="0" width="54" height="10" rx="3" fill="#b71c1c"/>
+          <rect x="8" y="10" width="74" height="110" rx="16" fill="#e2e8f0" fill-opacity="0.45" stroke="#94a3b8" stroke-width="2.5"/>
+          <circle cx="26" cy="95" r="8" fill="#d32f2f"/>
+          <circle cx="43" cy="98" r="8" fill="#d32f2f"/>
+          <circle cx="62" cy="95" r="8" fill="#d32f2f"/>
+          <circle cx="45" cy="82" r="8" fill="#d32f2f"/>
+        </g>
+        <g transform="translate(135, 10)">
+          <rect x="18" y="0" width="54" height="10" rx="3" fill="#b71c1c"/>
+          <rect x="8" y="10" width="74" height="110" rx="16" fill="#e2e8f0" fill-opacity="0.45" stroke="#94a3b8" stroke-width="2.5"/>
+          <circle cx="24" cy="98" r="7.5" fill="#1976d2"/>
+          <circle cx="40" cy="98" r="7.5" fill="#1976d2"/>
+          <circle cx="56" cy="98" r="7.5" fill="#1976d2"/>
+          <circle cx="67" cy="90" r="7.5" fill="#1976d2"/>
+          <circle cx="32" cy="84" r="7.5" fill="#1976d2"/>
+          <circle cx="49" cy="84" r="7.5" fill="#1976d2"/>
+          <circle cx="24" cy="70" r="7.5" fill="#1976d2"/>
+          <circle cx="42" cy="70" r="7.5" fill="#1976d2"/>
+          <circle cx="60" cy="70" r="7.5" fill="#1976d2"/>
+        </g>
+        <g transform="translate(250, 10)">
+          <rect x="18" y="0" width="54" height="10" rx="3" fill="#b71c1c"/>
+          <rect x="8" y="10" width="74" height="110" rx="16" fill="#e2e8f0" fill-opacity="0.45" stroke="#94a3b8" stroke-width="2.5"/>
+          <circle cx="28" cy="96" r="8" fill="#d32f2f"/>
+          <circle cx="46" cy="98" r="8" fill="#d32f2f"/>
+          <circle cx="62" cy="94" r="8" fill="#d32f2f"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="q-row">
+      <span>عَدَدُ الْكُرَيَّاتِ الْحَمْرَاءِ هُوَ :</span>
+      <div class="ltr-box" style="font-size: 1.3rem; font-weight: 900;">
+        <input type="number" id="q2_1_a" class="ans-input" min="0" max="20">
+        <span> + </span>
+        <input type="number" id="q2_1_b" class="ans-input" min="0" max="20">
+        <span> = </span>
+        <input type="number" id="q2_1_c" class="ans-input" min="0" max="20">
+      </div>
+      <span id="fb_q2_1"></span>
+    </div>
+
+    <hr class="divider">
+
+    <div class="instruction"><span class="num-badge">2</span> لَاحِظِ الْجَدْوَلَ وَأَجِبْ عَنِ الْأَسْئِلَةِ :</div>
+
+    <table class="school-table">
+      <thead>
+        <tr>
+          <th colspan="4" style="background:#e2e8f0;">السَّنَةُ الْأُولَى</th>
+        </tr>
+        <tr>
+          <th colspan="2">السِّبَاحَةُ</th>
+          <th colspan="2">كُرَةُ السَّلَّةِ</th>
+        </tr>
+        <tr>
+          <th>بَنَاتٌ</th>
+          <th>أَوْلَادٌ</th>
+          <th>بَنَاتٌ</th>
+          <th>أَوْلَادٌ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="ltr-box">2</span></td>
+          <td><span class="ltr-box">4</span></td>
+          <td><span class="ltr-box">6</span></td>
+          <td><span class="ltr-box">5</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="question-list">
+      <div class="q-row">
+        <span>عَدَدُ الْبَنَاتِ فِي الْقِسْمِ هُوَ :</span>
+        <div class="ltr-box" style="font-size: 1.3rem; font-weight: 900;">
+          <input type="number" id="q2_2_a" class="ans-input" min="0" max="20">
+          <span> + </span>
+          <input type="number" id="q2_2_b" class="ans-input" min="0" max="20">
+          <span> = </span>
+          <input type="number" id="q2_2_c" class="ans-input" min="0" max="20">
+        </div>
+        <span id="fb_q2_2"></span>
+      </div>
+
+      <div class="q-row">
+        <span>عَدَدُ الْأَطْفَالِ الَّذِينَ يُمَارِسُونَ السِّبَاحَةَ هُوَ :</span>
+        <div class="ltr-box" style="font-size: 1.3rem; font-weight: 900;">
+          <input type="number" id="q2_3_a" class="ans-input" min="0" max="20">
+          <span> + </span>
+          <input type="number" id="q2_3_b" class="ans-input" min="0" max="20">
+          <span> = </span>
+          <input type="number" id="q2_3_c" class="ans-input" min="0" max="20">
+        </div>
+        <span id="fb_q2_3"></span>
+      </div>
+    </div>
+
+    <button class="btn-check" id="btn-stage-2" onclick="checkStage2()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+    <br>
+    <div class="stage-counter" id="counter-2">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+  </section>
+
+  <!-- ==================== تَعَلَّمْتُ ==================== -->
+  <section class="taalamt-box">
+    <div class="stage-title stage-taalamt" style="margin-bottom:8px;">💡 تَعَلَّمْتُ</div>
+    <p class="taalamt-text">يُمْكِنُنِي اسْتِخْرَاجُ مَعْلُومَاتٍ مِنْ صُورَةٍ أَوْ جَدْوَلٍ.</p>
+  </section>
+
+  <!-- ==================== 3. أتمرن ==================== -->
+  <section class="stage-card locked" id="stage-3">
+    <div class="stage-title stage-atamarran">📝 أَتَمَرَّنُ</div>
+
+    <div class="instruction"><span class="num-badge">1</span> لَاحِظِ الْجَدْوَلَ وَأَكْمِلْ مَلْءَ الْفَرَاغِ :</div>
+
+    <table class="school-table">
+      <tbody>
+        <tr>
+          <td style="font-size:2.3rem;">🍐</td>
+          <td style="font-size:2.3rem;">🍊</td>
+          <td style="font-size:2.3rem;">🍎</td>
+          <td style="font-size:2.3rem;">🍋</td>
+          <td style="font-size:2.3rem;">🍌</td>
+        </tr>
+        <tr>
+          <td><span class="ltr-box">1</span></td>
+          <td><span class="ltr-box">4</span></td>
+          <td><span class="ltr-box">3</span></td>
+          <td><span class="ltr-box">5</span></td>
+          <td><span class="ltr-box">2</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="question-list">
+      <div class="q-row">
+        <span>– عَدَدُ حَبَّاتِ اللَّيْمُونِ هُوَ :</span>
+        <div>
+          <input type="number" id="q3_1_1" class="ans-input ltr-box" min="0" max="20">
+          <span id="fb_q3_1_1"></span>
+        </div>
+      </div>
+      <div class="q-row">
+        <span>– عَدَدُ حَبَّاتِ الْمَوْزِ هُوَ :</span>
+        <div>
+          <input type="number" id="q3_1_2" class="ans-input ltr-box" min="0" max="20">
+          <span id="fb_q3_1_2"></span>
+        </div>
+      </div>
+      <div class="q-row">
+        <span>– عَدَدُ حَبَّاتِ الْبُرْتُقَالِ هُوَ :</span>
+        <div>
+          <input type="number" id="q3_1_3" class="ans-input ltr-box" min="0" max="20">
+          <span id="fb_q3_1_3"></span>
+        </div>
+      </div>
+      <div class="q-row">
+        <span>– عَدَدُ حَبَّاتِ الْإِجَّاصِ هُوَ :</span>
+        <div>
+          <input type="number" id="q3_1_4" class="ans-input ltr-box" min="0" max="20">
+          <span id="fb_q3_1_4"></span>
+        </div>
+      </div>
+      <div class="q-row">
+        <span>– عَدَدُ حَبَّاتِ التُّفَّاحِ هُوَ :</span>
+        <div>
+          <input type="number" id="q3_1_5" class="ans-input ltr-box" min="0" max="20">
+          <span id="fb_q3_1_5"></span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="instruction"><span class="num-badge">2</span> لَاحِظِ الْجَدْوَلَ وَأَكْمِلْ مَلْءَ الْفَرَاغِ :</div>
+
+    <div style="overflow-x:auto;">
+      <table class="school-table" style="min-width: 580px;">
+        <tbody>
+          <tr>
+            <td style="font-size:1.35rem; line-height:1.3;">🍏🍏<br>🍏🍏<br>🍏🍏<br>🍏🍏</td>
+            <td style="font-size:1.45rem; line-height:1.4;">🥬🥬<br>🥬🥬<br>🥬🥬</td>
+            <td style="font-size:1.35rem; line-height:1.3;">🥦🥦🥦<br>🥦🥦🥦<br>🥦🥦🥦🥦</td>
+            <td style="font-size:1.5rem; line-height:1.4;">🥕🥕<br>🥕🥕</td>
+            <td style="font-size:1.4rem; line-height:1.35;">🍅🍅<br>🍅🍅🍅<br>🍅🍅</td>
+          </tr>
+          <tr>
+            <td>
+              <input type="number" id="q3_2_1" class="ans-input ltr-box" min="0" max="20">
+              <div id="fb_q3_2_1"></div>
+            </td>
+            <td>
+              <input type="number" id="q3_2_2" class="ans-input ltr-box" min="0" max="20">
+              <div id="fb_q3_2_2"></div>
+            </td>
+            <td>
+              <span class="ltr-box" style="font-size:1.25rem; font-weight:900;">10</span>
+            </td>
+            <td>
+              <input type="number" id="q3_2_3" class="ans-input ltr-box" min="0" max="20">
+              <div id="fb_q3_2_3"></div>
+            </td>
+            <td>
+              <input type="number" id="q3_2_4" class="ans-input ltr-box" min="0" max="20">
+              <div id="fb_q3_2_4"></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <button class="btn-check" id="btn-stage-3" onclick="checkStage3()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+    <br>
+    <div class="stage-counter" id="counter-3">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+  </section>
+
+  <!-- ==================== 4. أبحث ==================== -->
+  <section class="stage-card locked" id="stage-4">
+    <div class="stage-title stage-abhath">🧩 أَبْحَثُ</div>
+    <div class="instruction">لَوِّنِ الْأَشْكَالَ حَسْبَ الْمَعْلُومَاتِ الَّتِي فِي الْجَدْوَلِ :</div>
+
+    <div class="color-palette" id="palette">
+      <button type="button" class="color-btn active" data-color="blue" onclick="selectColor('blue', this)">
+        <span class="swatch" style="background:#2196f3;"></span> أَزْرَقُ
+      </button>
+      <button type="button" class="color-btn" data-color="red" onclick="selectColor('red', this)">
+        <span class="swatch" style="background:#e53935;"></span> أَحْمَرُ
+      </button>
+      <button type="button" class="color-btn" data-color="green" onclick="selectColor('green', this)">
+        <span class="swatch" style="background:#43a047;"></span> أَخْضَرُ
+      </button>
+    </div>
+
+    <div class="abhath-layout">
+      <table class="school-table" style="width:auto; min-width:300px;">
+        <thead>
+          <tr>
+            <th style="background:#fff;"></th>
+            <th><svg width="32" height="32"><rect x="4" y="4" width="24" height="24" fill="none" stroke="#1e293b" stroke-width="2.5"/></svg></th>
+            <th><svg width="32" height="32"><polygon points="16,4 28,28 4,28" fill="none" stroke="#1e293b" stroke-width="2.5"/></svg></th>
+            <th><svg width="32" height="32"><circle cx="16" cy="16" r="12" fill="none" stroke="#1e293b" stroke-width="2.5"/></svg></th>
+            <th><svg width="42" height="32"><rect x="3" y="8" width="36" height="16" fill="none" stroke="#1e293b" stroke-width="2.5"/></svg></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><svg width="36" height="24"><path d="M2,6 Q10,2 18,6 T34,6 L34,18 Q26,22 18,18 T2,18 Z" fill="#2196f3" stroke="#1e293b" stroke-width="1.5"/></svg></td>
+            <td></td>
+            <td style="font-size:1.3rem; font-weight:900;">X</td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><svg width="36" height="24"><path d="M2,6 Q10,2 18,6 T34,6 L34,18 Q26,22 18,18 T2,18 Z" fill="#e53935" stroke="#1e293b" stroke-width="1.5"/></svg></td>
+            <td style="font-size:1.3rem; font-weight:900;">X</td>
+            <td></td>
+            <td style="font-size:1.3rem; font-weight:900;">X</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><svg width="36" height="24"><path d="M2,6 Q10,2 18,6 T34,6 L34,18 Q26,22 18,18 T2,18 Z" fill="#43a047" stroke="#1e293b" stroke-width="1.5"/></svg></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td style="font-size:1.3rem; font-weight:900;">X</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="text-align:center;">
+        <p style="font-weight:700; color:#475569; margin-bottom:8px;">👆 اخْتَرِ اللَّوْنَ ثُمَّ انْقُرْ عَلَى كُلِّ شَكْلٍ لِتَلْوِينِهِ :</p>
+        <svg id="shapes-svg" width="280" height="210" viewBox="0 0 280 210" style="background:#fff; border:2px dashed #cbd5e1; border-radius:16px;">
+          <rect id="shape-rect" class="shape-target" x="15" y="18" width="110" height="50" fill="#ffffff" stroke="#1e293b" stroke-width="3" onclick="paintShape('rect')"/>
+          <rect id="shape-square" class="shape-target" x="165" y="20" width="80" height="80" fill="#ffffff" stroke="#1e293b" stroke-width="3" onclick="paintShape('square')"/>
+          <circle id="shape-circle" class="shape-target" cx="75" cy="145" r="44" fill="#ffffff" stroke="#1e293b" stroke-width="3" onclick="paintShape('circle')"/>
+          <polygon id="shape-triangle" class="shape-target" points="205,112 255,192 155,192" fill="#ffffff" stroke="#1e293b" stroke-width="3" onclick="paintShape('triangle')"/>
+        </svg>
+        <div id="fb_stage4" style="margin-top:10px;"></div>
+      </div>
+    </div>
+
+    <button class="btn-check" id="btn-stage-4" onclick="checkStage4()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+    <br>
+    <div class="stage-counter" id="counter-4">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+  </section>
+
+  <!-- ==================== التقييم الكلي ==================== -->
+  <section class="summary-card" id="summary-section">
+    <div class="summary-title">📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</div>
+
+    <div class="summary-grid">
+      <div class="circle-wrap">
+        <svg viewBox="0 0 150 150">
+          <circle class="circle-bg" cx="75" cy="75" r="65"></circle>
+          <circle class="circle-progress" id="progress-ring" cx="75" cy="75" r="65"></circle>
+        </svg>
+        <div class="circle-text ltr-box" id="percent-text">0%</div>
+      </div>
+
+      <div class="stats-boxes">
+        <div class="stat-item stat-correct">
+          <span>✓ الْإِجَابَاتُ الصَّحِيحَةُ :</span>
+          <span class="ltr-box" id="total-correct">0</span>
+        </div>
+        <div class="stat-item stat-wrong">
+          <span>✗ الْإِجَابَاتُ الْخَاطِئَةُ :</span>
+          <span class="ltr-box" id="total-wrong">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="remark-box" id="final-remark">
+      أَجِبْ عَنْ جَمِيعِ التَّمَارِينِ بِالتَّرْتِيبِ لِظُهُورِ التَّقْيِيمِ النِّهَائِيِّ 🌟
+    </div>
+
+    <button class="btn-reset" onclick="resetAll()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+  </section>
+
+  <!-- زر العودة إلى الفهرس -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+</div>
+
+<!-- ========================================
+     سكريبت الحماية — قفل الاشتراك الإجباري
+     ======================================== -->
+<script>
+  const CHANNEL_ID = "-1004456852024";
+  const tg = window.Telegram?.WebApp;
+  if (tg) { tg.ready(); tg.expand(); }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي
+     ======================================== -->
+<script>
+  let totalCorrect = 0;
+  let totalWrong = 0;
+  let currentColor = 'blue';
+  const colorHex = {
+    blue: '#2196f3',
+    red: '#e53935',
+    green: '#43a047'
+  };
+  const colorNames = {
+    blue: 'أَزْرَقُ',
+    red: 'أَحْمَرُ',
+    green: 'أَخْضَرُ'
+  };
+
+  let userColors = {
+    rect: null,
+    square: null,
+    circle: null,
+    triangle: null
+  };
+
+  let stage4Locked = false;
+
+  function showFeedback(elId, isOk, correctText) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    if (isOk) {
+      el.innerHTML = `<span class="feedback-badge fb-ok">✓ صَحِيحٌ</span>`;
+    } else {
+      el.innerHTML = `<span class="feedback-badge fb-err">✗ خَطَأٌ (الصَّوَابُ: <span class="ltr-box">${correctText}</span>)</span>`;
+    }
+  }
+
+  function updateSummary() {
+    document.getElementById('total-correct').textContent = totalCorrect;
+    document.getElementById('total-wrong').textContent = totalWrong;
+
+    const totalAnswered = totalCorrect + totalWrong;
+    const pct = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
+
+    document.getElementById('percent-text').textContent = pct + '%';
+
+    const circumference = 2 * Math.PI * 65;
+    const offset = circumference - (pct / 100) * circumference;
+    const ring = document.getElementById('progress-ring');
+    ring.style.strokeDashoffset = offset;
+
+    if (pct >= 80) ring.style.stroke = '#2e7d32';
+    else if (pct >= 50) ring.style.stroke = '#f59e0b';
+    else ring.style.stroke = '#c62828';
+
+    const remarkEl = document.getElementById('final-remark');
+    if (totalAnswered === 0) {
+      remarkEl.textContent = 'أَجِبْ عَنْ جَمِيعِ التَّمَارِينِ بِالتَّرْتِيبِ لِظُهُورِ التَّقْيِيمِ النِّهَائِيِّ 🌟';
+    } else if (pct === 100) {
+      remarkEl.textContent = 'مُمْتَازٌ جِدًّا! أَنْتَ عَبْقَرِيٌّ فِي اسْتِخْرَاجِ الْمَعْلُومَاتِ 🏆🌟';
+    } else if (pct >= 80) {
+      remarkEl.textContent = 'أَحْسَنْتَ! نَتِيجَةٌ رَائِعَةٌ وَمُشَرِّفَةٌ 👏🎉';
+    } else if (pct >= 60) {
+      remarkEl.textContent = 'جَيِّدٌ! واصِلِ التَّدَرُّبَ لِتُحَقِّقَ الْعَلَامَةَ الْكَامِلَةَ 👍✨';
+    } else if (pct >= 40) {
+      remarkEl.textContent = 'مُحَاوَلَةٌ لَا بَأْسَ بِهَا، رَاجِعْ أَخْطَاءَكَ وَحَاوِلْ مَرَّةً أُخْرَى 💪📖';
+    } else {
+      remarkEl.textContent = 'تَحْتَاجُ إِلَى مُرَاجَعَةِ الدَّرْسِ جَيِّدًا، لَا تَسْتَسْلِمْ وَأَعِدِ الْمُحَاوَلَةَ 🔄🌱';
+    }
+  }
+
+  function checkStage1() {
+    const questions = [
+      { id: 'q1_1', ans: '09:00', fb: 'fb_q1_1' },
+      { id: 'q1_2', ans: '08:00', fb: 'fb_q1_2' },
+      { id: 'q1_3', ans: '10:00', fb: 'fb_q1_3' }
+    ];
+
+    for (let q of questions) {
+      if (!document.getElementById(q.id).value) {
+        alert('يَرْجَى اخْتِيَارُ جَمِيعِ الْإِجَابَاتِ أَوَّلاً!');
+        return;
+      }
+    }
+
+    let c = 0, w = 0;
+    questions.forEach(q => {
+      const sel = document.getElementById(q.id);
+      sel.disabled = true;
+      if (sel.value === q.ans) {
+        sel.classList.add('correct-field');
+        showFeedback(q.fb, true, q.ans);
+        c++;
+      } else {
+        sel.classList.add('wrong-field');
+        showFeedback(q.fb, false, q.ans);
+        w++;
+      }
+    });
+
+    totalCorrect += c;
+    totalWrong += w;
+    document.getElementById('counter-1').textContent = `✓ الصَّوَابُ: ${c} | ✗ الْخَطَأُ: ${w}`;
+    document.getElementById('btn-stage-1').disabled = true;
+    document.getElementById('stage-2').classList.remove('locked');
+    updateSummary();
+  }
+
+  function checkStage2() {
+    const inputs = ['q2_1_a','q2_1_b','q2_1_c','q2_2_a','q2_2_b','q2_2_c','q2_3_a','q2_3_b','q2_3_c'];
+    for (let id of inputs) {
+      if (document.getElementById(id).value.trim() === '') {
+        alert('يَرْجَى مَلْءُ جَمِيعِ الْخَانَاتِ أَوَّلاً!');
+        return;
+      }
+    }
+
+    let c = 0, w = 0;
+
+    const a1 = Number(document.getElementById('q2_1_a').value);
+    const b1 = Number(document.getElementById('q2_1_b').value);
+    const c1 = Number(document.getElementById('q2_1_c').value);
+    const ok1 = (a1 === 4 && b1 === 3 && c1 === 7);
+    ['q2_1_a','q2_1_b','q2_1_c'].forEach(id => {
+      const el = document.getElementById(id);
+      el.disabled = true;
+      el.classList.add(ok1 ? 'correct-field' : 'wrong-field');
+    });
+    showFeedback('fb_q2_1', ok1, '4 + 3 = 7');
+    ok1 ? c++ : w++;
+
+    const a2 = Number(document.getElementById('q2_2_a').value);
+    const b2 = Number(document.getElementById('q2_2_b').value);
+    const c2 = Number(document.getElementById('q2_2_c').value);
+    const ok2 = (((a2 === 2 && b2 === 6) || (a2 === 6 && b2 === 2)) && c2 === 8);
+    ['q2_2_a','q2_2_b','q2_2_c'].forEach(id => {
+      const el = document.getElementById(id);
+      el.disabled = true;
+      el.classList.add(ok2 ? 'correct-field' : 'wrong-field');
+    });
+    showFeedback('fb_q2_2', ok2, '2 + 6 = 8');
+    ok2 ? c++ : w++;
+
+    const a3 = Number(document.getElementById('q2_3_a').value);
+    const b3 = Number(document.getElementById('q2_3_b').value);
+    const c3 = Number(document.getElementById('q2_3_c').value);
+    const ok3 = (((a3 === 2 && b3 === 4) || (a3 === 4 && b3 === 2)) && c3 === 6);
+    ['q2_3_a','q2_3_b','q2_3_c'].forEach(id => {
+      const el = document.getElementById(id);
+      el.disabled = true;
+      el.classList.add(ok3 ? 'correct-field' : 'wrong-field');
+    });
+    showFeedback('fb_q2_3', ok3, '2 + 4 = 6');
+    ok3 ? c++ : w++;
+
+    totalCorrect += c;
+    totalWrong += w;
+    document.getElementById('counter-2').textContent = `✓ الصَّوَابُ: ${c} | ✗ الْخَطَأُ: ${w}`;
+    document.getElementById('btn-stage-2').disabled = true;
+    document.getElementById('stage-3').classList.remove('locked');
+    updateSummary();
+  }
+
+  function checkStage3() {
+    const items = [
+      { id: 'q3_1_1', ans: 5, fb: 'fb_q3_1_1' },
+      { id: 'q3_1_2', ans: 2, fb: 'fb_q3_1_2' },
+      { id: 'q3_1_3', ans: 4, fb: 'fb_q3_1_3' },
+      { id: 'q3_1_4', ans: 1, fb: 'fb_q3_1_4' },
+      { id: 'q3_1_5', ans: 3, fb: 'fb_q3_1_5' },
+      { id: 'q3_2_1', ans: 8, fb: 'fb_q3_2_1' },
+      { id: 'q3_2_2', ans: 6, fb: 'fb_q3_2_2' },
+      { id: 'q3_2_3', ans: 4, fb: 'fb_q3_2_3' },
+      { id: 'q3_2_4', ans: 7, fb: 'fb_q3_2_4' }
+    ];
+
+    for (let item of items) {
+      if (document.getElementById(item.id).value.trim() === '') {
+        alert('يَرْجَى مَلْءُ جَمِيعِ الْفَرَاغَاتِ فِي التَّمْرِينَيْنِ أَوَّلاً!');
+        return;
+      }
+    }
+
+    let c = 0, w = 0;
+    items.forEach(item => {
+      const inp = document.getElementById(item.id);
+      inp.disabled = true;
+      if (Number(inp.value) === item.ans) {
+        inp.classList.add('correct-field');
+        showFeedback(item.fb, true, item.ans);
+        c++;
+      } else {
+        inp.classList.add('wrong-field');
+        showFeedback(item.fb, false, item.ans);
+        w++;
+      }
+    });
+
+    totalCorrect += c;
+    totalWrong += w;
+    document.getElementById('counter-3').textContent = `✓ الصَّوَابُ: ${c} | ✗ الْخَطَأُ: ${w}`;
+    document.getElementById('btn-stage-3').disabled = true;
+    document.getElementById('stage-4').classList.remove('locked');
+    updateSummary();
+  }
+
+  function selectColor(color, btn) {
+    if (stage4Locked) return;
+    currentColor = color;
+    document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function paintShape(shapeKey) {
+    if (stage4Locked) return;
+    userColors[shapeKey] = currentColor;
+    document.getElementById('shape-' + shapeKey).setAttribute('fill', colorHex[currentColor]);
+  }
+
+  function checkStage4() {
+    if (!userColors.rect || !userColors.square || !userColors.circle || !userColors.triangle) {
+      alert('يَرْجَى تَلْوِينُ جَمِيعِ الْأَشْكَالِ الْأَرْبَعَةِ أَوَّلاً!');
+      return;
+    }
+
+    stage4Locked = true;
+    const expected = {
+      square: { color: 'red', label: 'الْمُرَبَّعُ' },
+      triangle: { color: 'blue', label: 'الْمُثَلَّثُ' },
+      circle: { color: 'red', label: 'الدَّائِرَةُ' },
+      rect: { color: 'green', label: 'الْمُسْتَطِيلُ' }
+    };
+
+    let c = 0, w = 0;
+    let detailsHtml = '';
+
+    for (let key of ['square', 'triangle', 'circle', 'rect']) {
+      const el = document.getElementById('shape-' + key);
+      const isOk = userColors[key] === expected[key].color;
+      if (isOk) {
+        el.setAttribute('stroke', '#2e7d32');
+        el.setAttribute('stroke-width', '5');
+        detailsHtml += `<div class="feedback-badge fb-ok" style="margin:3px;">✓ ${expected[key].label}: صَحِيحٌ</div>`;
+        c++;
+      } else {
+        el.setAttribute('stroke', '#c62828');
+        el.setAttribute('stroke-width', '5');
+        detailsHtml += `<div class="feedback-badge fb-err" style="margin:3px;">✗ ${expected[key].label}: الصَّوَابُ (${colorNames[expected[key].color]})</div>`;
+        w++;
+      }
+    }
+
+    document.getElementById('fb_stage4').innerHTML = detailsHtml;
+    totalCorrect += c;
+    totalWrong += w;
+    document.getElementById('counter-4').textContent = `✓ الصَّوَابُ: ${c} | ✗ الْخَطَأُ: ${w}`;
+    document.getElementById('btn-stage-4').disabled = true;
+    updateSummary();
+  }
+
+  function resetAll() {
+    location.reload();
+  }
+</script>
+</body>
+</html>
