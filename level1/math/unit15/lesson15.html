@@ -1,0 +1,1751 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تَعْيِينُ مَوْقِعٍ فِي الْفَضَاءِ (3) - السنة الأولى ابتدائي</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2e7d32;
+    --primary-light: #e8f5e9;
+    --secondary: #ef6c00;
+    --secondary-light: #fff3e0;
+    --accent: #1565c0;
+    --accent-light: #e3f2fd;
+    --correct: #2e7d32;
+    --correct-bg: #c8e6c9;
+    --wrong: #c62828;
+    --wrong-bg: #ffcdd2;
+    --bg: #f4f7f5;
+    --card-bg: #ffffff;
+    --text: #1f2937;
+    --border: #d1d5db;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Cairo', sans-serif;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  header {
+    background: linear-gradient(135deg, #2e7d32, #43a047);
+    color: white;
+    padding: 20px 16px;
+    text-align: center;
+    border-bottom: 5px solid #1b5e20;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  header .badge-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+
+  header .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 3px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  header h1 {
+    margin: 4px 0;
+    font-size: 1.75rem;
+    font-weight: 900;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 20px auto;
+    padding: 0 14px 40px;
+  }
+
+  .section-card {
+    background: var(--card-bg);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    border: 2px solid #e5e7eb;
+    position: relative;
+    transition: opacity 0.3s ease;
+  }
+
+  .section-card.locked {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .section-card.locked::after {
+    content: "🔒 أَكْمِلِ التَّمْرِينَ السَّابِقَ لِفَتْحِ هَذَا التَّمْرِينِ";
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: #374151;
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .section-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--secondary);
+    color: white;
+    padding: 6px 20px;
+    border-radius: 12px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    margin-top: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 0 #b34d00;
+  }
+
+  .section-title.green {
+    background: var(--primary);
+    box-shadow: 0 3px 0 #1b5e20;
+  }
+
+  .exercise-box {
+    background: #fafafa;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 18px;
+  }
+
+  .exercise-box.locked-ex {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .instruction {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #111827;
+    margin-top: 0;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .num-badge {
+    background: var(--primary);
+    color: white;
+    min-width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 800;
+    margin-top: 2px;
+  }
+
+  .word-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  .word-card-btn {
+    background: #ffffff;
+    border: 2.5px solid #9ca3af;
+    border-radius: 10px;
+    padding: 6px 20px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #1f2937;
+  }
+
+  .word-card-btn:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  .word-card-btn.selected {
+    background: #fde047;
+    border-color: #ca8a04;
+    color: #713f12;
+    transform: scale(1.04);
+  }
+
+  .word-card-btn.correct-ans {
+    background: var(--correct-bg) !important;
+    border-color: var(--correct) !important;
+    color: #14532d !important;
+  }
+
+  .word-card-btn.wrong-ans {
+    background: var(--wrong-bg) !important;
+    border-color: var(--wrong) !important;
+    color: #7f1d1d !important;
+  }
+
+  .palette-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    background: #eef2ff;
+    padding: 8px 14px;
+    border-radius: 12px;
+    border: 1px solid #c7d2fe;
+  }
+
+  .palette-label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #3730a3;
+  }
+
+  .color-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 2.5px solid transparent;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  .color-btn.active {
+    border-color: #111827;
+    transform: scale(1.06);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+
+  .c-blue { background: #3b82f6; color: white; }
+  .c-green { background: #22c55e; color: white; }
+  .c-red { background: #ef4444; color: white; }
+  .c-yellow { background: #eab308; color: #111; }
+  .c-eraser { background: #f3f4f6; color: #374151; border: 1.5px solid #9ca3af; }
+
+  .marker-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 16px;
+    border-radius: 10px;
+    border: 2px solid #cbd5e1;
+    background: white;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  .marker-btn.active {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+
+  .check-options {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 10px 0;
+  }
+
+  .check-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    border: 2px solid #cbd5e1;
+    padding: 8px 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 1.1rem;
+    transition: all 0.2s;
+  }
+
+  .check-box-visual {
+    width: 28px;
+    height: 28px;
+    border: 2.5px solid #64748b;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.2rem;
+    color: var(--accent);
+    background: #f8fafc;
+  }
+
+  .check-item.selected {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
+
+  .check-item.correct-ans {
+    background: var(--correct-bg) !important;
+    border-color: var(--correct) !important;
+    color: #14532d !important;
+  }
+
+  .check-item.wrong-ans {
+    background: var(--wrong-bg) !important;
+    border-color: var(--wrong) !important;
+    color: #7f1d1d !important;
+  }
+
+  .svg-stage {
+    width: 100%;
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: 10px 0;
+  }
+
+  .svg-stage svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .clickable-svg {
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .clickable-svg:hover {
+    opacity: 0.85;
+  }
+
+  .verify-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 10px 26px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #0d47a1;
+    transition: transform 0.1s;
+    margin-top: 10px;
+  }
+
+  .verify-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #0d47a1;
+  }
+
+  .verify-btn:disabled {
+    background: #9ca3af;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  .feedback-msg {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    display: none;
+  }
+
+  .feedback-msg.show {
+    display: block;
+  }
+
+  .feedback-msg.ok {
+    background: var(--correct-bg);
+    color: #14532d;
+    border: 1.5px solid var(--correct);
+  }
+
+  .feedback-msg.err {
+    background: var(--wrong-bg);
+    color: #7f1d1d;
+    border: 1.5px solid var(--wrong);
+  }
+
+  .station-counter {
+    background: #f1f5f9;
+    border-top: 2px dashed #cbd5e1;
+    padding: 10px 16px;
+    border-radius: 0 0 14px 14px;
+    margin: 16px -20px -20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 800;
+    font-size: 1rem;
+  }
+
+  .cnt-ok { color: var(--correct); }
+  .cnt-err { color: var(--wrong); }
+
+  .taallamtu-card {
+    background: linear-gradient(135deg, #fffbeb, #fef3c7);
+    border: 3px solid #f59e0b;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.15);
+  }
+
+  .taallamtu-header {
+    display: inline-block;
+    background: #d97706;
+    color: white;
+    padding: 5px 22px;
+    border-radius: 12px;
+    font-size: 1.3rem;
+    font-weight: 900;
+    margin-bottom: 12px;
+  }
+
+  .taallamtu-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #78350f;
+    margin: 0;
+    line-height: 1.9;
+  }
+
+  .summary-card {
+    background: linear-gradient(180deg, #ffffff, #f0fdf4);
+    border: 3px solid var(--primary);
+    border-radius: 20px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(46, 125, 50, 0.15);
+  }
+
+  .summary-title {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--primary);
+    margin-top: 0;
+    margin-bottom: 18px;
+  }
+
+  .summary-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .circle-wrap {
+    position: relative;
+    width: 140px;
+    height: 140px;
+  }
+
+  .circle-wrap svg {
+    width: 140px;
+    height: 140px;
+    transform: rotate(-90deg);
+  }
+
+  .circle-bg {
+    fill: none;
+    stroke: #e5e7eb;
+    stroke-width: 12;
+  }
+
+  .circle-progress {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 12;
+    stroke-linecap: round;
+    stroke-dasharray: 377;
+    stroke-dashoffset: 377;
+    transition: stroke-dashoffset 0.8s ease;
+  }
+
+  .circle-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.6rem;
+    color: #111827;
+  }
+
+  .stats-boxes {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .stat-box {
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 14px 22px;
+    min-width: 140px;
+  }
+
+  .stat-box.ok-box { border-color: var(--correct); background: #f0fdf4; }
+  .stat-box.err-box { border-color: var(--wrong); background: #fef2f2; }
+
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 900;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+
+  .remark-banner {
+    background: #e0f2fe;
+    border: 2px solid #0284c7;
+    color: #0369a1;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 18px;
+  }
+
+  .restart-btn {
+    background: var(--secondary);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 14px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #b34d00;
+  }
+
+  .frozen {
+    pointer-events: none !important;
+  }
+
+  @media (max-width: 600px) {
+    header h1 { font-size: 1.4rem; }
+    .instruction { font-size: 1.05rem; }
+    .taallamtu-text { font-size: 1.1rem; }
+  }
+
+  /* ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== */
+  #sub-lock-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .lock-box {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+    border: 2px solid #e1f5fe;
+    max-width: 380px;
+    width: 100%;
+  }
+  .lock-icon { font-size: 50px; margin-bottom: 12px; }
+  .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+  .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+  .btn-channel {
+    display: block;
+    width: 100%;
+    background: #0288d1;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    font-family: 'Cairo', sans-serif;
+  }
+  .btn-check-sub {
+    width: 100%;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 13px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+  }
+  .sub-status-msg {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-height: 24px;
+  }
+  .btn-back-home {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin: 20px auto 30px auto;
+    background: #0d47a1;
+    color: #ffffff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    font-family: 'Cairo', sans-serif;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<header>
+  <div class="badge-row">
+    <span class="badge">الرِّيَاضِيَّاتُ</span>
+    <span class="badge">السَّنَةُ الْأُولَى ابْتِدَائِي</span>
+    <span class="badge">الدَّرْسُ 15</span>
+  </div>
+  <h1>تَعْيِينُ مَوْقِعٍ فِي الْفَضَاءِ (3)</h1>
+</header>
+
+<div class="container">
+
+  <!-- ==================== 1. أَكْتَشِفُ ==================== -->
+  <section class="section-card" id="sec-aktashif">
+    <h2 class="section-title">أَكْتَشِفُ</h2>
+
+    <div class="exercise-box" id="ex-ak-1">
+      <p class="instruction"><span class="num-badge">1</span> لَوِّنْ بِطَاقَةَ الْكَلِمَةِ الْمُنَاسِبَةِ :</p>
+
+      <div class="svg-stage">
+        <svg viewBox="0 0 460 190" width="460" height="190">
+          <rect x="20" y="95" width="165" height="75" rx="8" fill="#8d6e63" stroke="#4e342e" stroke-width="2.5"/>
+          <rect x="28" y="80" width="45" height="22" rx="4" fill="#a1887f" stroke="#4e342e" stroke-width="2"/>
+          <circle cx="42" cy="78" r="8" fill="#ef4444"/><circle cx="58" cy="78" r="8" fill="#ef4444"/><circle cx="50" cy="70" r="8" fill="#dc2626"/>
+          <rect x="80" y="80" width="45" height="22" rx="4" fill="#a1887f" stroke="#4e342e" stroke-width="2"/>
+          <circle cx="94" cy="78" r="8" fill="#22c55e"/><circle cx="110" cy="78" r="8" fill="#22c55e"/><circle cx="102" cy="70" r="8" fill="#16a34a"/>
+          <rect x="132" y="80" width="45" height="22" rx="4" fill="#a1887f" stroke="#4e342e" stroke-width="2"/>
+          <circle cx="146" cy="78" r="8" fill="#f97316"/><circle cx="162" cy="78" r="8" fill="#f97316"/>
+
+          <g transform="translate(295, 15)">
+            <rect x="26" y="115" width="14" height="45" rx="4" fill="#1e3a8a"/>
+            <rect x="46" y="115" width="14" height="45" rx="4" fill="#1e3a8a"/>
+            <ellipse cx="31" cy="162" rx="10" ry="5" fill="#374151"/>
+            <ellipse cx="55" cy="162" rx="10" ry="5" fill="#374151"/>
+            <rect x="20" y="55" width="46" height="65" rx="10" fill="#f8fafc" stroke="#334155" stroke-width="2"/>
+            <rect x="24" y="65" width="38" height="52" rx="6" fill="#15803d"/>
+            <circle cx="43" cy="30" r="20" fill="#fed7aa" stroke="#9a3412" stroke-width="2"/>
+            <path d="M23 24 Q43 8 63 24 Z" fill="#1e293b"/>
+            <rect x="18" y="22" width="50" height="5" rx="2" fill="#0f172a"/>
+            <circle cx="36" cy="30" r="2.2" fill="#1e293b"/>
+            <circle cx="50" cy="30" r="2.2" fill="#1e293b"/>
+            <path d="M36 39 Q43 44 50 39" fill="none" stroke="#9a3412" stroke-width="2" stroke-linecap="round"/>
+
+            <path d="M20 65 L-15 58" stroke="#fed7aa" stroke-width="11" stroke-linecap="round"/>
+            <circle cx="-18" cy="58" r="6" fill="#fed7aa"/>
+            <g transform="translate(-32, 62)">
+              <path d="M14 -4 L14 3" stroke="#15803d" stroke-width="2.5"/>
+              <circle cx="8" cy="7" r="5" fill="#7e22ce"/>
+              <circle cx="16" cy="7" r="5" fill="#7e22ce"/>
+              <circle cx="22" cy="7" r="5" fill="#9333ea"/>
+              <circle cx="11" cy="14" r="5" fill="#9333ea"/>
+              <circle cx="19" cy="14" r="5" fill="#7e22ce"/>
+              <circle cx="15" cy="21" r="5" fill="#6b21a8"/>
+            </g>
+
+            <path d="M66 65 L100 58" stroke="#fed7aa" stroke-width="11" stroke-linecap="round"/>
+            <circle cx="103" cy="58" r="6" fill="#fed7aa"/>
+            <g transform="translate(96, 42)">
+              <path d="M4 25 Q18 28 24 8 Q16 18 4 21 Z" fill="#facc15" stroke="#ca8a04" stroke-width="1.5"/>
+              <path d="M6 27 Q22 32 30 12 Q20 22 6 23 Z" fill="#fde047" stroke="#ca8a04" stroke-width="1.5"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="word-row" id="ak1-row1">
+        <span>يَحْمِلُ الْخَضَّارُ فِي يَدِهِ الْيُمْنَى</span>
+        <button type="button" class="word-card-btn" data-row="1" data-val="موزا" onclick="selectWord(1, this)">مَوْزًا</button>
+        <button type="button" class="word-card-btn" data-row="1" data-val="عنبا" onclick="selectWord(1, this)">عِنَبًا</button>
+      </div>
+
+      <div class="word-row" id="ak1-row2">
+        <span>وَفِي يَدِهِ الْيُسْرَى</span>
+        <button type="button" class="word-card-btn" data-row="2" data-val="موزا" onclick="selectWord(2, this)">مَوْزًا</button>
+        <button type="button" class="word-card-btn" data-row="2" data-val="عنبا" onclick="selectWord(2, this)">عِنَبًا</button>
+      </div>
+
+      <button type="button" class="verify-btn" id="btn-ak-1" onclick="verifyAk1()">تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      <div class="feedback-msg" id="fb-ak-1"></div>
+    </div>
+
+    <div class="exercise-box locked-ex" id="ex-ak-2">
+      <p class="instruction"><span class="num-badge">2</span> لَوِّنْ بِالْأَزْرَقِ الْقِطَّ الَّذِي عَنْ يَمِينِ الطِّفْلِ وَبِالْأَخْضَرِ الَّذِي عَنْ يَسَارِهِ .</p>
+
+      <div class="palette-bar" id="pal-ak-2">
+        <span class="palette-label">اخْتَرِ اللَّوْنَ ثُمَّ انْقُرْ عَلَى الْقِطِّ:</span>
+        <button type="button" class="color-btn c-blue active" onclick="setBrush('ak2', '#3b82f6', this)">🔵 أَزْرَق</button>
+        <button type="button" class="color-btn c-green" onclick="setBrush('ak2', '#22c55e', this)">🟢 أَخْضَر</button>
+      </div>
+
+      <div class="svg-stage">
+        <svg viewBox="0 0 420 190" width="420" height="190">
+          <g id="cat-right-of-child" class="clickable-svg" onclick="paintCat('cat-right')">
+            <title>انقر لتلوين هذا القط</title>
+            <path d="M55 155 Q30 140 38 115" fill="none" stroke="#334155" stroke-width="6" stroke-linecap="round"/>
+            <ellipse id="cat-right-body" cx="75" cy="142" rx="22" ry="26" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <circle id="cat-right-head" cx="75" cy="105" r="18" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <polygon points="60,93 64,77 72,89" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <polygon points="90,93 86,77 78,89" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <circle cx="69" cy="103" r="2.2" fill="#1e293b"/>
+            <circle cx="81" cy="103" r="2.2" fill="#1e293b"/>
+            <polygon points="73,108 77,108 75,111" fill="#ec4899"/>
+            <path d="M70 113 Q75 117 80 113" fill="none" stroke="#1e293b" stroke-width="1.8"/>
+          </g>
+
+          <g transform="translate(175, 15)">
+            <rect x="20" y="110" width="14" height="45" rx="4" fill="#9a3412"/>
+            <rect x="38" y="110" width="14" height="45" rx="4" fill="#9a3412"/>
+            <ellipse cx="25" cy="157" rx="10" ry="5" fill="#1e293b"/>
+            <ellipse cx="47" cy="157" rx="10" ry="5" fill="#1e293b"/>
+            <rect x="15" y="55" width="42" height="58" rx="8" fill="#facc15" stroke="#ca8a04" stroke-width="2"/>
+            <rect x="3" y="60" width="11" height="42" rx="5" fill="#fed7aa" stroke="#9a3412" stroke-width="1.5"/>
+            <rect x="58" y="60" width="11" height="42" rx="5" fill="#fed7aa" stroke="#9a3412" stroke-width="1.5"/>
+            <circle cx="36" cy="32" r="20" fill="#fed7aa" stroke="#9a3412" stroke-width="2"/>
+            <path d="M16 26 Q36 8 56 26 Z" fill="#475569"/>
+            <rect x="14" y="23" width="44" height="5" rx="2" fill="#334155"/>
+            <circle cx="29" cy="32" r="2.2" fill="#1e293b"/>
+            <circle cx="43" cy="32" r="2.2" fill="#1e293b"/>
+            <path d="M30 41 Q36 46 42 41" fill="none" stroke="#9a3412" stroke-width="2" stroke-linecap="round"/>
+          </g>
+
+          <g id="cat-left-of-child" class="clickable-svg" onclick="paintCat('cat-left')">
+            <title>انقر لتلوين هذا القط</title>
+            <path d="M365 155 Q390 140 382 115" fill="none" stroke="#334155" stroke-width="6" stroke-linecap="round"/>
+            <ellipse id="cat-left-body" cx="345" cy="142" rx="22" ry="26" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <circle id="cat-left-head" cx="345" cy="105" r="18" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <polygon points="330,93 334,77 342,89" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <polygon points="360,93 356,77 348,89" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <circle cx="339" cy="103" r="2.2" fill="#1e293b"/>
+            <circle cx="351" cy="103" r="2.2" fill="#1e293b"/>
+            <polygon points="343,108 347,108 345,111" fill="#ec4899"/>
+            <path d="M340 113 Q345 117 350 113" fill="none" stroke="#1e293b" stroke-width="1.8"/>
+          </g>
+        </svg>
+      </div>
+
+      <button type="button" class="verify-btn" id="btn-ak-2" onclick="verifyAk2()">تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      <div class="feedback-msg" id="fb-ak-2"></div>
+    </div>
+
+    <div class="station-counter">
+      <span>حَصِيلَةُ مَحَطَّةِ (أَكْتَشِفُ):</span>
+      <div>
+        <span class="cnt-ok" id="cnt-ok-aktashif">✓ الصَّوَابُ: 0</span> |
+        <span class="cnt-err" id="cnt-err-aktashif">✗ الْخَطَأُ: 0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 2. أُنْجِزُ ==================== -->
+  <section class="section-card locked" id="sec-anjiz">
+    <h2 class="section-title">أُنْجِزُ</h2>
+
+    <div class="exercise-box" id="ex-an-1">
+      <p class="instruction"><span class="num-badge">1</span> ضَعِ الْإِشَارَةَ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">×</span>) عَلَى الْيَدِ الْيُمْنَى، وَالْإِشَارَةَ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">○</span>) عَلَى الرِّجْلِ الْيُسْرَى لِكُلِّ طِفْلٍ .</p>
+
+      <div class="palette-bar">
+        <span class="palette-label">اخْتَرِ الْإِشَارَةَ ثُمَّ انْقُرْ عَلَى الْيَدِ أَوِ الرِّجْلِ:</span>
+        <button type="button" class="marker-btn active" id="mk-x" onclick="setMarker('X', this)">❌ إِشَارَةُ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">×</span>) لِلْيَدِ الْيُمْنَى</button>
+        <button type="button" class="marker-btn" id="mk-o" onclick="setMarker('O', this)">⭕ إِشَارَةُ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">○</span>) لِلرِّجْلِ الْيُسْرَى</button>
+      </div>
+
+      <div class="svg-stage">
+        <svg viewBox="0 0 540 210" width="540" height="210">
+          <g transform="translate(30, 15)">
+            <text x="55" y="185" text-anchor="middle" font-size="13" font-weight="bold" fill="#475569">الطِّفْلُ (1)</text>
+            <circle cx="55" cy="30" r="18" fill="#fed7aa" stroke="#1e293b" stroke-width="2"/>
+            <path d="M38 25 Q55 8 72 22 Q55 18 38 25 Z" fill="#1e293b"/>
+            <circle cx="65" cy="28" r="2" fill="#1e293b"/>
+            <rect x="42" y="48" width="26" height="52" rx="8" fill="#93c5fd" stroke="#1e293b" stroke-width="2"/>
+            <g class="clickable-svg" onclick="markPart('c1_left_hand')">
+              <path d="M66 56 L86 34" stroke="#fed7aa" stroke-width="9" stroke-linecap="round"/>
+              <circle cx="88" cy="32" r="11" fill="rgba(255,255,255,0.7)" stroke="#64748b" stroke-dasharray="3,2"/>
+              <text id="lbl_c1_left_hand" x="88" y="37" text-anchor="middle" font-size="16" font-weight="900"></text>
+            </g>
+            <g class="clickable-svg" onclick="markPart('c1_right_hand')">
+              <path d="M52 58 L46 92" stroke="#fed7aa" stroke-width="9" stroke-linecap="round"/>
+              <circle cx="45" cy="95" r="11" fill="rgba(255,255,255,0.85)" stroke="#64748b" stroke-dasharray="3,2"/>
+              <text id="lbl_c1_right_hand" x="45" y="100" text-anchor="middle" font-size="16" font-weight="900"></text>
+            </g>
+            <g class="clickable-svg" onclick="markPart('c1_left_leg')">
+              <path d="M60 100 L68 148" stroke="#475569" stroke-width="11" stroke-linecap="round"/>
+              <circle cx="70" cy="152" r="11" fill="rgba(255,255,255,0.85)" stroke="#64748b" stroke-dasharray="3,2"/>
+              <text id="lbl_c1_left_leg" x="70" y="157" text-anchor="middle" font-size="16" font-weight="900"></text>
+            </g>
+            <g class="clickable-svg" onclick="markPart('c1_right_leg')">
+              <path d="M48 100 L44 148" stroke="#334155" stroke-width="11" stroke-linecap="round"/>
+              <circle cx="42" cy="152" r="11" fill="rgba(255,255,255,0.85)" stroke="#64748b" stroke-dasharray="3,2"/>
+              <text id="lbl_c1_right_leg" x="42" y="157" text-anchor="middle" font-size="16" font-weight="900"></text>
+            </g>
+          </g>
+
+          <g transform="translate(215, 15)">
+            <text x="55" y="185" text-anchor="middle" font-size="13" font-weight="bold" fill="#475569">الطِّفْلُ (2)</text>
+            <circle cx="55" cy="30" r="18" fill="#fed7aa" stroke="#1e293b" stroke-width="2"/>
+            <path d="M37 28 Q42 10 68 18 Q58 22 37 28 Z" fill="#78350f"/>
+            <circle cx="62" cy="29" r="2" fill="#1e293b"/>
+            <rect x="42" y="48" width="26" height="50" rx="8" fill="#f9a8d4" stroke="#1e293b" stroke-width="2"/>
+            <g class="clickable-svg" onclick="markPart('c2_right_hand')">
+              <path d="M43 58 L24 78" stroke="#fed7aa" stroke-width="9" stroke-linecap="round"/>
+              <circle cx="21" cy="81" r="11" fill="rgba(255,255,255,0.85)" stroke="#64748b" stroke-dasharray="3,2"/>
+              <text id="lbl_c2_right_hand" x="21" y="86" text-anchor="middle" font-size="16" font-weight="900"></text>
+            </g>
+            <g class="clickable-svg" onclick="markPart('c2_left_hand')">
+              <path d="M67 58 L86 44" stroke="#fed7aa" stroke-width="9" stroke-linecap="round"/>
+              <circle cx="89" cy="42" r="11" fill="rgba(255,255,255,0.85)" stroke="#64748b" stroke-dasharray="3,2"/>
+              <text id="lbl_c2_left_hand" x="89" y="47" text-anchor="middle" font-size="16" font-weight="900"></text>
+            </g>
+            <g class="clickable-svg" onclick="markPart('c2_right_leg')">
+              <path d="M48 98 L42 148" stroke="#1e3a8a" stroke-width="11" stroke-linecap="round"/>
+              <circle cx="40" cy="152" r="11" fill="rgba(255,255,255,0.85)" stroke="#64748b" stroke-dasharray="3,2"/>
+              <text id="lbl_c2_right_leg" x="40" y="157" text-anchor="middle" font-size="16" font-weight="900"></text>
+            </g>
+            <g class="clickable-svg" onclick="markPart('c2_left_leg')">
+              <path d="M62 98 L78 124 L68 146" fill="none" stroke="#2563eb" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="68" cy="150" r="11" fill="rgba(255,255,255,0.85)" stroke="#64748b" stroke-dasharray="3,2"/>
+              <text id="lbl_c2_left_leg" x="68" y="155" text-anchor="middle" font-size="16" font-weight="900"></text>
+            </g>
+          </g>
+
+          <g transform="translate(390, 15)">
+            <text x="55" y="185" text-anchor="middle" font-size="13" font-weight="bold" fill="#475569">الطِّفْلُ (3)</text>
+            <circle cx="55" cy="30" r="18" fill="#fed7aa" stroke="#1e293b" stroke-width="2"/>
+            <path d="M38 24 Q55 10 72 24 Z" fill="#0f172a"/>
+            <circle cx="49" cy="29" r="2" fill="#1e293b"/>
+            <circle cx="61" cy="29" r="2" fill="#1e293b"/>
+            <rect x="38" y="48" width="34" height="50" rx="8" fill="#86efac" stroke="#1e293b" stroke-width="2"/>
+            <g class="clickable-svg" onclick="markPart('c3_right_hand')">
+              <path d="M38 56 L18 76" stroke="#fed7aa" stroke-width="9" stroke-linecap="round"/>
+              <circle cx="15" cy="79" r="11" fill="rgba(255,255,255,0.85)" stroke="#64748b" stroke-dasharray="3,2"/>
+              <text id="lbl_c3_right_hand" x="15" y="84" text-anchor="middle" font-size="16" font-weight="900"></text>
+            </g>
+            <g class="clickable-svg" onclick="markPart('c3_left_hand')">
+              <path d="M72 56 L92 76" stroke="#fed7aa" stroke-width="9" stroke-linecap="round"/>
+              <circle cx="95" cy="79" r="11" fill="rgba(255,255,255,0.85)" stroke="#64748b" stroke-dasharray="3,2"/>
+              <text id="lbl_c3_left_hand" x="95" y="84" text-anchor="middle" font-size="16" font-weight="900"></text>
+            </g>
+            <g class="clickable-svg" onclick="markPart('c3_right_leg')">
+              <path d="M46 98 L40 148" stroke="#1e293b" stroke-width="11" stroke-linecap="round"/>
+              <circle cx="38" cy="152" r="11" fill="rgba(255,255,255,0.85)" stroke="#64748b" stroke-dasharray="3,2"/>
+              <text id="lbl_c3_right_leg" x="38" y="157" text-anchor="middle" font-size="16" font-weight="900"></text>
+            </g>
+            <g class="clickable-svg" onclick="markPart('c3_left_leg')">
+              <path d="M64 98 L70 148" stroke="#1e293b" stroke-width="11" stroke-linecap="round"/>
+              <circle cx="72" cy="152" r="11" fill="rgba(255,255,255,0.85)" stroke="#64748b" stroke-dasharray="3,2"/>
+              <text id="lbl_c3_left_leg" x="72" y="157" text-anchor="middle" font-size="16" font-weight="900"></text>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <button type="button" class="verify-btn" id="btn-an-1" onclick="verifyAn1()">تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      <div class="feedback-msg" id="fb-an-1"></div>
+    </div>
+
+    <div class="exercise-box locked-ex" id="ex-an-2">
+      <p class="instruction"><span class="num-badge">2</span> ضَعِ الْإِشَارَةَ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">×</span>) فِي الْخَانَةِ الْمُنَاسِبَةِ، مِقْوَدُ السَّيَّارَةِ مَوْجُودٌ عَلَى :</p>
+
+      <div class="check-options" id="an2-opts">
+        <div class="check-item" data-val="اليسار" onclick="selectCarSteering(this)">
+          <span>الْيَسَارِ</span>
+          <span class="check-box-visual" id="box-steer-left"></span>
+        </div>
+        <div class="check-item" data-val="اليمين" onclick="selectCarSteering(this)">
+          <span>الْيَمِينِ</span>
+          <span class="check-box-visual" id="box-steer-right"></span>
+        </div>
+      </div>
+
+      <p class="instruction" style="margin-top: 14px;">– لَوِّنْ بِالْأَحْمَرِ الضَّوْءَ الْأَيْمَنَ لِلسَّيَّارَةِ .</p>
+
+      <div class="svg-stage">
+        <svg viewBox="0 0 420 200" width="420" height="200">
+          <path d="M120 55 L260 35 L335 72 L345 125 L165 162 L75 132 L85 92 Z" fill="#fef08a" stroke="#1e293b" stroke-width="2.5" stroke-linejoin="round"/>
+          <polygon points="105,88 145,52 245,42 200,82" fill="#bae6fd" stroke="#1e293b" stroke-width="2"/>
+          <ellipse cx="182" cy="70" rx="11" ry="7" transform="rotate(-20 182 70)" fill="none" stroke="#1e293b" stroke-width="3.5"/>
+          <line x1="182" y1="70" x2="178" y2="78" stroke="#1e293b" stroke-width="3"/>
+          <polygon points="212,80 258,43 305,66 255,95" fill="#e0f2fe" stroke="#1e293b" stroke-width="2"/>
+          <circle cx="215" cy="148" r="24" fill="#1e293b"/>
+          <circle cx="215" cy="148" r="11" fill="#e2e8f0"/>
+          <circle cx="305" cy="128" r="22" fill="#1e293b"/>
+          <circle cx="305" cy="128" r="10" fill="#e2e8f0"/>
+
+          <g class="clickable-svg" onclick="paintLight('right-light')">
+            <title>انقر لتلوين هذا الضوء بالأحمر</title>
+            <circle id="car-light-right" cx="92" cy="112" r="12" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+          </g>
+
+          <g class="clickable-svg" onclick="paintLight('left-light')">
+            <title>انقر لتلوين هذا الضوء بالأحمر</title>
+            <circle id="car-light-left" cx="156" cy="132" r="12" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+          </g>
+        </svg>
+      </div>
+
+      <button type="button" class="verify-btn" id="btn-an-2" onclick="verifyAn2()">تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      <div class="feedback-msg" id="fb-an-2"></div>
+    </div>
+
+    <div class="station-counter">
+      <span>حَصِيلَةُ مَحَطَّةِ (أُنْجِزُ):</span>
+      <div>
+        <span class="cnt-ok" id="cnt-ok-anjiz">✓ الصَّوَابُ: 0</span> |
+        <span class="cnt-err" id="cnt-err-anjiz">✗ الْخَطَأُ: 0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 3. تَعَلَّمْتُ ==================== -->
+  <section class="taallamtu-card">
+    <div class="taallamtu-header">تَعَلَّمْتُ</div>
+    <p class="taallamtu-text">
+      يُمْكِنُ تَحْدِيدُ مَوْقِعِ شَيْءٍ بِالنِّسْبَةِ إِلَى آخَرَ بِاسْتِعْمَالِ مُفْرَدَاتٍ ، مِثْلَ : يَمِين، يَسَار، عَنْ يَمِين، عَنْ يَسَار.
+    </p>
+  </section>
+
+  <!-- ==================== 4. أَتَمَرَّنُ ==================== -->
+  <section class="section-card locked" id="sec-atamarran">
+    <h2 class="section-title green">أَتَمَرَّنُ</h2>
+
+    <div class="exercise-box" id="ex-at-1">
+      <p class="instruction"><span class="num-badge">1</span> ضَعِ الْإِشَارَةَ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">×</span>) فِي الْخَانَةِ الْمُنَاسِبَةِ .</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px;">
+        <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px; text-align: center;">
+          <svg viewBox="0 0 180 150" width="180" height="150">
+            <rect x="25" y="105" width="130" height="35" rx="6" fill="#fef3c7" stroke="#92400e" stroke-width="2"/>
+            <polygon points="55,108 125,108 132,132 48,132" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+            <circle cx="90" cy="36" r="20" fill="#fed7aa" stroke="#1e293b" stroke-width="2"/>
+            <path d="M70 30 Q90 10 110 30 Z" fill="#1e293b"/>
+            <circle cx="83" cy="36" r="2" fill="#1e293b"/>
+            <circle cx="97" cy="36" r="2" fill="#1e293b"/>
+            <path d="M84 44 Q90 49 96 44" fill="none" stroke="#1e293b" stroke-width="2"/>
+            <rect x="64" y="56" width="52" height="50" rx="10" fill="#22c55e" stroke="#1e293b" stroke-width="2"/>
+            <path d="M64 68 L54 114 L74 118" fill="none" stroke="#fed7aa" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="74" y1="118" x2="82" y2="124" stroke="#ef4444" stroke-width="4" stroke-linecap="round"/>
+            <path d="M116 68 L124 112 L110 116" fill="none" stroke="#fed7aa" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+
+          <div style="text-align: right; margin-top: 8px;">
+            <div class="check-item" style="width: 100%; justify-content: space-between; margin-bottom: 8px;" data-person="raid" data-val="اليمنى" onclick="selectWriter('raid', this)">
+              <span>يَكْتُبُ رَائِدٌ بِالْيَدِ الْيُمْنَى</span>
+              <span class="check-box-visual" id="box-raid-right"></span>
+            </div>
+            <div class="check-item" style="width: 100%; justify-content: space-between;" data-person="raid" data-val="اليسرى" onclick="selectWriter('raid', this)">
+              <span>يَكْتُبُ رَائِدٌ بِالْيَدِ الْيُسْرَى</span>
+              <span class="check-box-visual" id="box-raid-left"></span>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: white; border: 1.5px solid #cbd5e1; border-radius: 12px; padding: 12px; text-align: center;">
+          <svg viewBox="0 0 180 150" width="180" height="150">
+            <rect x="25" y="105" width="130" height="35" rx="6" fill="#fef3c7" stroke="#92400e" stroke-width="2"/>
+            <polygon points="55,108 125,108 132,132 48,132" fill="#ffffff" stroke="#64748b" stroke-width="1.5"/>
+            <path d="M66 36 Q66 12 90 12 Q114 12 114 36 L116 65 L64 65 Z" fill="#7f1d1d"/>
+            <circle cx="90" cy="36" r="19" fill="#fed7aa" stroke="#1e293b" stroke-width="2"/>
+            <circle cx="83" cy="36" r="2" fill="#1e293b"/>
+            <circle cx="97" cy="36" r="2" fill="#1e293b"/>
+            <path d="M84 44 Q90 49 96 44" fill="none" stroke="#1e293b" stroke-width="2"/>
+            <rect x="64" y="56" width="52" height="50" rx="10" fill="#a855f7" stroke="#1e293b" stroke-width="2"/>
+            <path d="M64 68 L56 112 L70 116" fill="none" stroke="#fed7aa" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M116 68 L126 114 L106 118" fill="none" stroke="#fed7aa" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="106" y1="118" x2="98" y2="124" stroke="#2563eb" stroke-width="4" stroke-linecap="round"/>
+          </svg>
+
+          <div style="text-align: right; margin-top: 8px;">
+            <div class="check-item" style="width: 100%; justify-content: space-between; margin-bottom: 8px;" data-person="maryam" data-val="اليمنى" onclick="selectWriter('maryam', this)">
+              <span>تَكْتُبُ مَرْيَمُ بِالْيَدِ الْيُمْنَى</span>
+              <span class="check-box-visual" id="box-maryam-right"></span>
+            </div>
+            <div class="check-item" style="width: 100%; justify-content: space-between;" data-person="maryam" data-val="اليسرى" onclick="selectWriter('maryam', this)">
+              <span>تَكْتُبُ مَرْيَمُ بِالْيَدِ الْيُسْرَى</span>
+              <span class="check-box-visual" id="box-maryam-left"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="verify-btn" id="btn-at-1" onclick="verifyAt1()">تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      <div class="feedback-msg" id="fb-at-1"></div>
+    </div>
+
+    <div class="exercise-box locked-ex" id="ex-at-2">
+      <p class="instruction"><span class="num-badge">2</span> لَوِّنِ الْحَيَوَانَ الَّذِي عَلَى يَسَارِ الْوَلَدِ .</p>
+
+      <div class="svg-stage">
+        <svg viewBox="0 0 420 200" width="420" height="200">
+          <g id="at2-cat" class="clickable-svg" onclick="toggleAnimal('cat')">
+            <title>انقر لتلوين القط</title>
+            <path d="M85 162 Q65 148 72 125" fill="none" stroke="#1e293b" stroke-width="5" stroke-linecap="round"/>
+            <ellipse id="at2-cat-body" cx="105" cy="150" rx="22" ry="24" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <circle id="at2-cat-head" cx="105" cy="116" r="17" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <polygon points="91,104 95,88 102,100" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <polygon points="119,104 115,88 108,100" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <circle cx="99" cy="114" r="2" fill="#1e293b"/>
+            <circle cx="111" cy="114" r="2" fill="#1e293b"/>
+            <path d="M100 122 Q105 126 110 122" fill="none" stroke="#1e293b" stroke-width="1.8"/>
+          </g>
+
+          <g transform="translate(175, 15)">
+            <circle cx="35" cy="28" r="18" fill="#fed7aa" stroke="#1e293b" stroke-width="2"/>
+            <path d="M18 22 Q35 6 52 22 Z" fill="#451a03"/>
+            <circle cx="29" cy="28" r="2" fill="#1e293b"/>
+            <circle cx="41" cy="28" r="2" fill="#1e293b"/>
+            <path d="M29 35 Q35 41 41 35" fill="none" stroke="#1e293b" stroke-width="2"/>
+            <rect x="16" y="46" width="38" height="48" rx="8" fill="#22c55e" stroke="#1e293b" stroke-width="2"/>
+            <path d="M16 54 L-4 28" stroke="#fed7aa" stroke-width="10" stroke-linecap="round"/>
+            <path d="M54 54 L74 28" stroke="#fed7aa" stroke-width="10" stroke-linecap="round"/>
+            <path d="M25 94 L16 144" stroke="#64748b" stroke-width="11" stroke-linecap="round"/>
+            <path d="M45 94 L58 122 L48 140" fill="none" stroke="#64748b" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+
+          <g id="at2-hen" class="clickable-svg" onclick="toggleAnimal('hen')">
+            <title>انقر لتلوين الدجاجة</title>
+            <ellipse id="at2-hen-body" cx="315" cy="152" rx="24" ry="18" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <circle id="at2-hen-head" cx="298" cy="128" r="13" fill="#ffffff" stroke="#1e293b" stroke-width="2.5"/>
+            <path d="M294 115 Q298 107 303 115" fill="#ef4444" stroke="#1e293b" stroke-width="1.5"/>
+            <polygon points="285,127 276,130 285,133" fill="#f97316" stroke="#1e293b" stroke-width="1.5"/>
+            <circle cx="294" cy="126" r="2" fill="#1e293b"/>
+            <line x1="310" y1="170" x2="310" y2="182" stroke="#f97316" stroke-width="3"/>
+            <line x1="322" y1="170" x2="322" y2="182" stroke="#f97316" stroke-width="3"/>
+          </g>
+        </svg>
+      </div>
+
+      <button type="button" class="verify-btn" id="btn-at-2" onclick="verifyAt2()">تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      <div class="feedback-msg" id="fb-at-2"></div>
+    </div>
+
+    <div class="station-counter">
+      <span>حَصِيلَةُ مَحَطَّةِ (أَتَمَرَّنُ):</span>
+      <div>
+        <span class="cnt-ok" id="cnt-ok-atamarran">✓ الصَّوَابُ: 0</span> |
+        <span class="cnt-err" id="cnt-err-atamarran">✗ الْخَطَأُ: 0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 5. أَبْحَثُ ==================== -->
+  <section class="section-card locked" id="sec-abhath">
+    <h2 class="section-title green">أَبْحَثُ</h2>
+
+    <div class="exercise-box" id="ex-ab-1">
+      <p class="instruction"><span class="num-badge">1</span> تُشِيرُ هَذِهِ اللَّافِتَةُ إِلَى اتِّجَاهَيْنِ مُتَعَاكِسَيْنِ . لَوِّنْ بِالْأَحْمَرِ اتِّجَاهَ الْيَمِينِ، وَبِالْأَخْضَرِ اتِّجَاهَ الْيَسَارِ .</p>
+
+      <div class="palette-bar">
+        <span class="palette-label">اخْتَرِ اللَّوْنَ ثُمَّ انْقُرْ عَلَى السَّهْمِ الْمُنَاسِبِ:</span>
+        <button type="button" class="color-btn c-red active" onclick="setBrush('ab1', '#ef4444', this)">🔴 أَحْمَر (اتِّجَاهُ الْيَمِينِ)</button>
+        <button type="button" class="color-btn c-green" onclick="setBrush('ab1', '#22c55e', this)">🟢 أَخْضَر (اتِّجَاهُ الْيَسَارِ)</button>
+      </div>
+
+      <div class="svg-stage">
+        <svg viewBox="0 0 260 220" width="260" height="220">
+          <circle cx="130" cy="110" r="95" fill="#3b82f6" stroke="#1e3a8a" stroke-width="4"/>
+          <circle cx="130" cy="110" r="88" fill="none" stroke="#ffffff" stroke-width="3"/>
+          <rect x="120" y="105" width="20" height="75" fill="#ffffff"/>
+
+          <g class="clickable-svg" onclick="paintArrow('left')">
+            <title>انقر لتلوين هذا الاتجاه</title>
+            <path id="sign-arrow-left" d="M130 125 Q130 85 95 75 L95 92 L58 65 L95 38 L95 55 Q130 65 130 105 Z" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
+          </g>
+
+          <g class="clickable-svg" onclick="paintArrow('right')">
+            <title>انقر لتلوين هذا الاتجاه</title>
+            <path id="sign-arrow-right" d="M130 125 Q130 85 165 75 L165 92 L202 65 L165 38 L165 55 Q130 65 130 105 Z" fill="#ffffff" stroke="#1e293b" stroke-width="2"/>
+          </g>
+        </svg>
+      </div>
+
+      <button type="button" class="verify-btn" id="btn-ab-1" onclick="verifyAb1()">تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      <div class="feedback-msg" id="fb-ab-1"></div>
+    </div>
+
+    <div class="exercise-box locked-ex" id="ex-ab-2">
+      <p class="instruction"><span class="num-badge">2</span> أُرْسُمْ قُرْصًا وَاحِدًا عَنْ يَمِينِ الْوَلَدِ وَعَنْ يَمِينِ الْبِنْتِ فِي آنٍ وَاحِدٍ .</p>
+      <p style="font-size: 0.95rem; color: #475569; margin-top: -8px; margin-bottom: 10px; font-weight: 700;">💡 انْقُرْ فِي الْمَكَانِ الْمُنَاسِبِ (عَنْ يَسَارِ الْبِنْتِ، أَوْ بَيْنَهُمَا، أَوْ عَنْ يَسَارِ الْوَلَدِ) لِرَسْمِ الْقُرْصِ:</p>
+
+      <div class="svg-stage">
+        <svg viewBox="0 0 460 200" width="460" height="200">
+          <g class="clickable-svg" onclick="placeDisc('left')">
+            <rect x="20" y="30" width="110" height="145" rx="14" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,4"/>
+            <circle id="disc-left" cx="75" cy="105" r="22" fill="transparent" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4,3"/>
+          </g>
+
+          <g transform="translate(145, 20)">
+            <rect x="28" y="46" width="12" height="8" fill="#fed7aa"/>
+            <rect x="11" y="54" width="7" height="38" rx="3.5" fill="#fed7aa" stroke="#1e293b" stroke-width="1.5"/>
+            <rect x="50" y="54" width="7" height="38" rx="3.5" fill="#fed7aa" stroke="#1e293b" stroke-width="1.5"/>
+            <circle cx="34" cy="31" r="17" fill="#451a03" stroke="#1e293b" stroke-width="2"/>
+            <path d="M15 32 Q15 10 34 10 Q53 10 53 32 L57 62 Q34 57 11 62 Z" fill="#5c2408" stroke="#1e293b" stroke-width="2" stroke-linejoin="round"/>
+            <circle cx="34" cy="42" r="4" fill="#f472b6" stroke="#1e293b" stroke-width="1.5"/>
+            <polygon points="20,50 48,50 56,112 12,112" fill="#f472b6" stroke="#1e293b" stroke-width="2"/>
+            <line x1="34" y1="50" x2="34" y2="112" stroke="#db2777" stroke-width="1.5" stroke-dasharray="4,3"/>
+            <rect x="22" y="112" width="9" height="34" fill="#fed7aa" stroke="#1e293b" stroke-width="1.5"/>
+            <rect x="37" y="112" width="9" height="34" fill="#fed7aa" stroke="#1e293b" stroke-width="1.5"/>
+            <rect x="20" y="144" width="12" height="7" rx="3" fill="#be185d" stroke="#1e293b" stroke-width="1.5"/>
+            <rect x="36" y="144" width="12" height="7" rx="3" fill="#be185d" stroke="#1e293b" stroke-width="1.5"/>
+          </g>
+
+          <g class="clickable-svg" onclick="placeDisc('middle')">
+            <rect x="215" y="30" width="85" height="145" rx="14" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,4"/>
+            <circle id="disc-middle" cx="257" cy="105" r="22" fill="transparent" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4,3"/>
+          </g>
+
+          <g transform="translate(305, 20)">
+            <circle cx="34" cy="32" r="17" fill="#fed7aa" stroke="#1e293b" stroke-width="2"/>
+            <path d="M17 26 Q34 8 51 26 Z" fill="#1e293b"/>
+            <circle cx="28" cy="32" r="2" fill="#1e293b"/>
+            <circle cx="40" cy="32" r="2" fill="#1e293b"/>
+            <path d="M29 39 Q34 43 39 39" fill="none" stroke="#1e293b" stroke-width="2"/>
+            <rect x="10" y="54" width="7" height="38" rx="3.5" fill="#fed7aa" stroke="#1e293b" stroke-width="1.5"/>
+            <rect x="51" y="54" width="7" height="38" rx="3.5" fill="#fed7aa" stroke="#1e293b" stroke-width="1.5"/>
+            <rect x="17" y="50" width="34" height="48" rx="6" fill="#93c5fd" stroke="#1e293b" stroke-width="2"/>
+            <rect x="20" y="98" width="11" height="48" fill="#1e3a8a" stroke="#1e293b" stroke-width="1.5"/>
+            <rect x="37" y="98" width="11" height="48" fill="#1e3a8a" stroke="#1e293b" stroke-width="1.5"/>
+            <ellipse cx="25" cy="148" rx="8" ry="4" fill="#334155"/>
+            <ellipse cx="43" cy="148" rx="8" ry="4" fill="#334155"/>
+          </g>
+
+          <g class="clickable-svg" onclick="placeDisc('right')">
+            <rect x="380" y="30" width="65" height="145" rx="14" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,4"/>
+            <circle id="disc-right" cx="412" cy="105" r="22" fill="transparent" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4,3"/>
+          </g>
+        </svg>
+      </div>
+
+      <button type="button" class="verify-btn" id="btn-ab-2" onclick="verifyAb2()">تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      <div class="feedback-msg" id="fb-ab-2"></div>
+    </div>
+
+    <div class="station-counter">
+      <span>حَصِيلَةُ مَحَطَّةِ (أَبْحَثُ):</span>
+      <div>
+        <span class="cnt-ok" id="cnt-ok-abhath">✓ الصَّوَابُ: 0</span> |
+        <span class="cnt-err" id="cnt-err-abhath">✗ الْخَطَأُ: 0</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 6. التقييم الكلي ==================== -->
+  <section class="summary-card" id="summary-section">
+    <h2 class="summary-title">📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</h2>
+
+    <div class="summary-grid">
+      <div class="circle-wrap">
+        <svg viewBox="0 0 140 140">
+          <circle class="circle-bg" cx="70" cy="70" r="60"></circle>
+          <circle class="circle-progress" id="score-ring" cx="70" cy="70" r="60"></circle>
+        </svg>
+        <div class="circle-text">
+          <span id="score-pct" dir="ltr" style="display:inline-block; unicode-bidi:isolate;">0%</span>
+        </div>
+      </div>
+
+      <div class="stats-boxes">
+        <div class="stat-box ok-box">
+          <span class="stat-num cnt-ok" id="total-ok" dir="ltr" style="display:inline-block; unicode-bidi:isolate;">0</span>
+          <span class="stat-label">الْإِجَابَاتُ الصَّحِيحَةُ</span>
+        </div>
+        <div class="stat-box err-box">
+          <span class="stat-num cnt-err" id="total-err" dir="ltr" style="display:inline-block; unicode-bidi:isolate;">0</span>
+          <span class="stat-label">الْإِجَابَاتُ الْخَاطِئَةُ</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="remark-banner" id="final-remark">
+      أَجِبْ عَنِ التَّمَارِينِ بِالتَّرْتِيبِ لِحِسَابِ نَتِيجَتِكَ النِّهَائِيَّةِ!
+    </div>
+
+    <button type="button" class="restart-btn" onclick="location.reload()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+  </section>
+
+  <!-- زر العودة إلى الفهرس -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</div>
+
+<!-- ========================================
+     سكريبت الحماية — قفل الاشتراك الإجباري
+     ======================================== -->
+<script>
+  const CHANNEL_ID = "-1004456852024";
+  const tg = window.Telegram?.WebApp;
+  if (tg) { tg.ready(); tg.expand(); }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي
+     ======================================== -->
+<script>
+  const scores = {
+    aktashif: { ok: 0, err: 0 },
+    anjiz: { ok: 0, err: 0 },
+    atamarran: { ok: 0, err: 0 },
+    abhath: { ok: 0, err: 0 }
+  };
+
+  function updateAllStats() {
+    for (const sec of ['aktashif', 'anjiz', 'atamarran', 'abhath']) {
+      document.getElementById(`cnt-ok-${sec}`).textContent = `✓ الصَّوَابُ: ${scores[sec].ok}`;
+      document.getElementById(`cnt-err-${sec}`).textContent = `✗ الْخَطَأُ: ${scores[sec].err}`;
+    }
+
+    const totalOk = Object.values(scores).reduce((acc, s) => acc + s.ok, 0);
+    const totalErr = Object.values(scores).reduce((acc, s) => acc + s.err, 0);
+    const total = totalOk + totalErr;
+    const pct = total > 0 ? Math.round((totalOk / total) * 100) : 0;
+
+    document.getElementById('total-ok').textContent = totalOk;
+    document.getElementById('total-err').textContent = totalErr;
+    document.getElementById('score-pct').textContent = `${pct}%`;
+
+    const circumference = 377;
+    const offset = circumference - (pct / 100) * circumference;
+    const ring = document.getElementById('score-ring');
+    ring.style.strokeDashoffset = offset;
+
+    if (total > 0) {
+      let remark = '';
+      if (pct >= 90) {
+        remark = '🌟 مُمْتَازٌ! أَنْتَ بَطَلٌ فِي تَعْيِينِ الْمَوَاقِعِ (يَمِينٌ وَيَسَارٌ)!';
+        ring.style.stroke = '#2e7d32';
+      } else if (pct >= 70) {
+        remark = '👏 جَيِّدٌ جِدًّا! أَحْسَنْتَ، واصِلِ التَّدَرُّبَ لِتَكُونَ أَفْضَلَ.';
+        ring.style.stroke = '#1565c0';
+      } else if (pct >= 50) {
+        remark = '👍 نَتِيجَةٌ مَقْبُولَةٌ، رَاجِعْ أَخْطَاءَكَ فِي الْأَعْلَى لِتَتَعَلَّمَ مِنْهَا.';
+        ring.style.stroke = '#ef6c00';
+      } else {
+        remark = '💪 تَحْتَاجُ إِلَى مَزِيدٍ مِنَ التَّرْكِيزِ بَيْنَ الْيَمِينِ وَالْيَسَارِ، أَعِدِ الْمُحَاوَلَةَ!';
+        ring.style.stroke = '#c62828';
+      }
+      document.getElementById('final-remark').textContent = remark;
+    }
+  }
+
+  function showFeedback(id, isOk, msg) {
+    const fb = document.getElementById(id);
+    fb.textContent = msg;
+    fb.className = `feedback-msg show ${isOk ? 'ok' : 'err'}`;
+  }
+
+  const ak1State = { 1: null, 2: null };
+
+  function selectWord(row, btn) {
+    document.querySelectorAll(`#ak1-row${row} .word-card-btn`).forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    ak1State[row] = btn.dataset.val;
+  }
+
+  function verifyAk1() {
+    if (!ak1State[1] || !ak1State[2]) {
+      alert('اخْتَرْ بِطَاقَةً فِي كُلِّ سَطْرٍ أَوَّلًا!');
+      return;
+    }
+    const ex = document.getElementById('ex-ak-1');
+    ex.classList.add('frozen');
+    document.getElementById('btn-ak-1').disabled = true;
+
+    const ok1 = ak1State[1] === 'عنبا';
+    const ok2 = ak1State[2] === 'موزا';
+
+    document.querySelectorAll('#ak1-row1 .word-card-btn').forEach(b => {
+      if (b.dataset.val === 'عنبا') b.classList.add('correct-ans');
+      else if (b.classList.contains('selected')) b.classList.add('wrong-ans');
+    });
+    document.querySelectorAll('#ak1-row2 .word-card-btn').forEach(b => {
+      if (b.dataset.val === 'موزا') b.classList.add('correct-ans');
+      else if (b.classList.contains('selected')) b.classList.add('wrong-ans');
+    });
+
+    if (ok1) scores.aktashif.ok++; else scores.aktashif.err++;
+    if (ok2) scores.aktashif.ok++; else scores.aktashif.err++;
+    updateAllStats();
+
+    const allOk = ok1 && ok2;
+    showFeedback('fb-ak-1', allOk, allOk
+      ? '✓ أَحْسَنْتَ! يَحْمِلُ الْخَضَّارُ فِي يَدِهِ الْيُمْنَى عِنَبًا وَفِي يَدِهِ الْيُسْرَى مَوْزًا.'
+      : '✗ رَكِّزْ جَيِّدًا: الْخَضَّارُ يَنْظُرُ إِلَيْنَا، فَيَدُهُ الْيُمْنَى تَحْمِلُ عِنَبًا وَيَدُهُ الْيُسْرَى تَحْمِلُ مَوْزًا.');
+
+    document.getElementById('ex-ak-2').classList.remove('locked-ex');
+  }
+
+  const brushes = { ak2: '#3b82f6', ab1: '#ef4444' };
+  const ak2State = { 'cat-right': null, 'cat-left': null };
+
+  function setBrush(exKey, color, btn) {
+    brushes[exKey] = color;
+    btn.parentElement.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function paintCat(catId) {
+    const color = brushes.ak2;
+    ak2State[catId] = color;
+    document.getElementById(`${catId}-body`).setAttribute('fill', color);
+    document.getElementById(`${catId}-head`).setAttribute('fill', color);
+  }
+
+  function verifyAk2() {
+    if (!ak2State['cat-right'] || !ak2State['cat-left']) {
+      alert('لَوِّنِ الْقِطَّيْنِ كِلَيْهِمَا أَوَّلًا!');
+      return;
+    }
+    const ex = document.getElementById('ex-ak-2');
+    ex.classList.add('frozen');
+    document.getElementById('btn-ak-2').disabled = true;
+
+    const okRight = ak2State['cat-right'] === '#3b82f6';
+    const okLeft = ak2State['cat-left'] === '#22c55e';
+
+    if (!okRight) {
+      document.getElementById('cat-right-body').setAttribute('stroke', '#c62828');
+      document.getElementById('cat-right-body').setAttribute('stroke-width', '4');
+    } else {
+      document.getElementById('cat-right-body').setAttribute('stroke', '#1b5e20');
+      document.getElementById('cat-right-body').setAttribute('stroke-width', '4');
+    }
+
+    if (!okLeft) {
+      document.getElementById('cat-left-body').setAttribute('stroke', '#c62828');
+      document.getElementById('cat-left-body').setAttribute('stroke-width', '4');
+    } else {
+      document.getElementById('cat-left-body').setAttribute('stroke', '#1b5e20');
+      document.getElementById('cat-left-body').setAttribute('stroke-width', '4');
+    }
+
+    if (okRight) scores.aktashif.ok++; else scores.aktashif.err++;
+    if (okLeft) scores.aktashif.ok++; else scores.aktashif.err++;
+    updateAllStats();
+
+    const allOk = okRight && okLeft;
+    showFeedback('fb-ak-2', allOk, allOk
+      ? '✓ رَائِعٌ! الْقِطُّ الَّذِي عَنْ يَمِينِ الطِّفْلِ أَزْرَقُ، وَالَّذِي عَنْ يَسَارِهِ أَخْضَرُ.'
+      : '✗ انْتَبِهْ لِوَقْفَةِ الطِّفْلِ: الْقِطُّ الَّذِي عَنْ يَمِينِهِ يَكُونُ بِالْأَزْرَقِ، وَالَّذِي عَنْ يَسَارِهِ بِالْأَخْضَرِ.');
+
+    document.getElementById('sec-anjiz').classList.remove('locked');
+  }
+
+  let currentMarker = 'X';
+  const an1Marks = {};
+
+  function setMarker(mk, btn) {
+    currentMarker = mk;
+    document.querySelectorAll('.marker-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function markPart(partId) {
+    const lbl = document.getElementById(`lbl_${partId}`);
+    if (an1Marks[partId] === currentMarker) {
+      delete an1Marks[partId];
+      lbl.textContent = '';
+    } else {
+      an1Marks[partId] = currentMarker;
+      lbl.textContent = currentMarker === 'X' ? '×' : '○';
+      lbl.setAttribute('fill', currentMarker === 'X' ? '#1565c0' : '#d97706');
+    }
+  }
+
+  function verifyAn1() {
+    if (Object.keys(an1Marks).length === 0) {
+      alert('ضَعِ الْإِشَارَاتِ (×) وَ (○) عَلَى الْأَطْفَالِ أَوَّلًا!');
+      return;
+    }
+    const ex = document.getElementById('ex-an-1');
+    ex.classList.add('frozen');
+    document.getElementById('btn-an-1').disabled = true;
+
+    const expected = {
+      c1_right_hand: 'X',
+      c1_left_leg: 'O',
+      c2_right_hand: 'X',
+      c2_left_leg: 'O',
+      c3_right_hand: 'X',
+      c3_left_leg: 'O'
+    };
+
+    let allOk = true;
+    for (const [key, reqVal] of Object.entries(expected)) {
+      const lbl = document.getElementById(`lbl_${key}`);
+      if (an1Marks[key] === reqVal) {
+        scores.anjiz.ok++;
+        lbl.setAttribute('fill', '#2e7d32');
+      } else {
+        scores.anjiz.err++;
+        allOk = false;
+        lbl.textContent = reqVal === 'X' ? '×' : '○';
+        lbl.setAttribute('fill', '#c62828');
+      }
+    }
+
+    for (const key of Object.keys(an1Marks)) {
+      if (!expected[key]) {
+        scores.anjiz.err++;
+        allOk = false;
+        document.getElementById(`lbl_${key}`).setAttribute('fill', '#c62828');
+      }
+    }
+
+    updateAllStats();
+    showFeedback('fb-an-1', allOk, allOk
+      ? '✓ مُمْتَازٌ! لَقَدْ حَدَّدْتَ الْيَدَ الْيُمْنَى (×) وَالرِّجْلَ الْيُسْرَى (○) لِكُلِّ طِفْلٍ بِدِقَّةٍ.'
+      : '✗ تَمَّ تَوْضِيحُ الْمَوَاضِعِ الصَّحِيحَةِ لِلْيَدِ الْيُمْنَى (×) وَالرِّجْلِ الْيُسْرَى (○) بِاللَّوْنِ الْأَحْمَرِ.');
+
+    document.getElementById('ex-an-2').classList.remove('locked-ex');
+  }
+
+  let selectedSteer = null;
+  let coloredLight = null;
+
+  function selectCarSteering(el) {
+    selectedSteer = el.dataset.val;
+    document.querySelectorAll('#an2-opts .check-item').forEach(i => i.classList.remove('selected'));
+    document.getElementById('box-steer-left').textContent = '';
+    document.getElementById('box-steer-right').textContent = '';
+
+    el.classList.add('selected');
+    el.querySelector('.check-box-visual').textContent = '×';
+  }
+
+  function paintLight(lightId) {
+    coloredLight = lightId;
+    document.getElementById('car-light-right').setAttribute('fill', lightId === 'right-light' ? '#ef4444' : '#ffffff');
+    document.getElementById('car-light-left').setAttribute('fill', lightId === 'left-light' ? '#ef4444' : '#ffffff');
+  }
+
+  function verifyAn2() {
+    if (!selectedSteer || !coloredLight) {
+      alert('أَجِبْ عَنِ السُّؤَالَيْنِ (اخْتِيَارُ مَكَانِ الْمِقْوَدِ وَتَلْوِينُ الضَّوْءِ الْأَيْمَنِ)!');
+      return;
+    }
+    const ex = document.getElementById('ex-an-2');
+    ex.classList.add('frozen');
+    document.getElementById('btn-an-2').disabled = true;
+
+    const okSteer = selectedSteer === 'اليسار';
+    const okLight = coloredLight === 'right-light';
+
+    document.querySelectorAll('#an2-opts .check-item').forEach(i => {
+      if (i.dataset.val === 'اليسار') i.classList.add('correct-ans');
+      else if (i.classList.contains('selected')) i.classList.add('wrong-ans');
+    });
+
+    if (!okLight) {
+      document.getElementById('car-light-right').setAttribute('stroke', '#2e7d32');
+      document.getElementById('car-light-right').setAttribute('stroke-width', '4');
+    }
+
+    if (okSteer) scores.anjiz.ok++; else scores.anjiz.err++;
+    if (okLight) scores.anjiz.ok++; else scores.anjiz.err++;
+    updateAllStats();
+
+    const allOk = okSteer && okLight;
+    showFeedback('fb-an-2', allOk, allOk
+      ? '✓ أَحْسَنْتَ! مِقْوَدُ السَّيَّارَةِ مَوْجُودٌ عَلَى الْيَسَارِ، وَقَدْ لَوَّنْتَ الضَّوْءَ الْأَيْمَنَ لِلسَّيَّارَةِ.'
+      : '✗ تَذَكَّرْ: مِقْوَدُ السَّيَّارَةِ عَلَى الْيَسَارِ، وَالضَّوْءُ الْأَيْمَنُ لِلسَّيَّارَةِ هُوَ الَّذِي عَلَى يَمِينِ السَّائِقِ (يَسَارِ الصُّورَةِ).');
+
+    document.getElementById('sec-atamarran').classList.remove('locked');
+  }
+
+  const writersState = { raid: null, maryam: null };
+
+  function selectWriter(person, el) {
+    writersState[person] = el.dataset.val;
+    document.querySelectorAll(`.check-item[data-person="${person}"]`).forEach(i => {
+      i.classList.remove('selected');
+      i.querySelector('.check-box-visual').textContent = '';
+    });
+    el.classList.add('selected');
+    el.querySelector('.check-box-visual').textContent = '×';
+  }
+
+  function verifyAt1() {
+    if (!writersState.raid || !writersState.maryam) {
+      alert('ضَعِ الْإِشَارَةَ (×) لِرَائِدٍ وَلِمَرْيَمَ أَوَّلًا!');
+      return;
+    }
+    const ex = document.getElementById('ex-at-1');
+    ex.classList.add('frozen');
+    document.getElementById('btn-at-1').disabled = true;
+
+    const okRaid = writersState.raid === 'اليمنى';
+    const okMaryam = writersState.maryam === 'اليسرى';
+
+    document.querySelectorAll('.check-item[data-person="raid"]').forEach(i => {
+      if (i.dataset.val === 'اليمنى') i.classList.add('correct-ans');
+      else if (i.classList.contains('selected')) i.classList.add('wrong-ans');
+    });
+    document.querySelectorAll('.check-item[data-person="maryam"]').forEach(i => {
+      if (i.dataset.val === 'اليسرى') i.classList.add('correct-ans');
+      else if (i.classList.contains('selected')) i.classList.add('wrong-ans');
+    });
+
+    if (okRaid) scores.atamarran.ok++; else scores.atamarran.err++;
+    if (okMaryam) scores.atamarran.ok++; else scores.atamarran.err++;
+    updateAllStats();
+
+    const allOk = okRaid && okMaryam;
+    showFeedback('fb-at-1', allOk, allOk
+      ? '✓ صَحِيحٌ! يَكْتُبُ رَائِدٌ بِالْيَدِ الْيُمْنَى، وَتَكْتُبُ مَرْيَمُ بِالْيَدِ الْيُسْرَى.'
+      : '✗ رَاجِعِ الصُّورَةَ: يَكْتُبُ رَائِدٌ بِالْيَدِ الْيُمْنَى، وَتَكْتُبُ مَرْيَمُ بِالْيَدِ الْيُسْرَى.');
+
+    document.getElementById('ex-at-2').classList.remove('locked-ex');
+  }
+
+  let selectedAnimal = null;
+
+  function toggleAnimal(animal) {
+    selectedAnimal = animal;
+    document.getElementById('at2-cat-body').setAttribute('fill', animal === 'cat' ? '#facc15' : '#ffffff');
+    document.getElementById('at2-cat-head').setAttribute('fill', animal === 'cat' ? '#facc15' : '#ffffff');
+    document.getElementById('at2-hen-body').setAttribute('fill', animal === 'hen' ? '#facc15' : '#ffffff');
+    document.getElementById('at2-hen-head').setAttribute('fill', animal === 'hen' ? '#facc15' : '#ffffff');
+  }
+
+  function verifyAt2() {
+    if (!selectedAnimal) {
+      alert('انْقُرْ عَلَى الْحَيَوَانِ الَّذِي عَلَى يَسَارِ الْوَلَدِ لِتَلْوِينِهِ!');
+      return;
+    }
+    const ex = document.getElementById('ex-at-2');
+    ex.classList.add('frozen');
+    document.getElementById('btn-at-2').disabled = true;
+
+    const isOk = selectedAnimal === 'hen';
+    if (isOk) {
+      scores.atamarran.ok++;
+      document.getElementById('at2-hen-body').setAttribute('fill', '#4ade80');
+      document.getElementById('at2-hen-head').setAttribute('fill', '#4ade80');
+    } else {
+      scores.atamarran.err++;
+      document.getElementById('at2-cat-body').setAttribute('fill', '#f87171');
+      document.getElementById('at2-cat-head').setAttribute('fill', '#f87171');
+      document.getElementById('at2-hen-body').setAttribute('stroke', '#2e7d32');
+      document.getElementById('at2-hen-body').setAttribute('stroke-width', '4');
+    }
+    updateAllStats();
+
+    showFeedback('fb-at-2', isOk, isOk
+      ? '✓ أَحْسَنْتَ! الدَّجَاجَةُ هِيَ الْحَيَوَانُ الَّذِي عَلَى يَسَارِ الْوَلَدِ.'
+      : '✗ الدَّجَاجَةُ هِيَ الَّتِي عَلَى يَسَارِ الْوَلَدِ، أَمَّا الْقِطُّ فَهُوَ عَلَى يَمِينِهِ.');
+
+    document.getElementById('sec-abhath').classList.remove('locked');
+  }
+
+  const ab1Arrows = { left: null, right: null };
+
+  function paintArrow(side) {
+    const color = brushes.ab1;
+    ab1Arrows[side] = color;
+    document.getElementById(`sign-arrow-${side}`).setAttribute('fill', color);
+  }
+
+  function verifyAb1() {
+    if (!ab1Arrows.left || !ab1Arrows.right) {
+      alert('لَوِّنِ السَّهْمَيْنِ كِلَيْهِمَا أَوَّلًا!');
+      return;
+    }
+    const ex = document.getElementById('ex-ab-1');
+    ex.classList.add('frozen');
+    document.getElementById('btn-ab-1').disabled = true;
+
+    const okRight = ab1Arrows.right === '#ef4444';
+    const okLeft = ab1Arrows.left === '#22c55e';
+
+    if (okRight) scores.abhath.ok++; else scores.abhath.err++;
+    if (okLeft) scores.abhath.ok++; else scores.abhath.err++;
+    updateAllStats();
+
+    const allOk = okRight && okLeft;
+    showFeedback('fb-ab-1', allOk, allOk
+      ? '✓ رَائِعٌ! السَّهْمُ الْمُتَّجِهُ نَحْوَ الْيَمِينِ بِالْأَحْمَرِ، وَالْمُتَّجِهُ نَحْوَ الْيَسَارِ بِالْأَخْضَرِ.'
+      : '✗ انْتَبِهْ: اتِّجَاهُ الْيَمِينِ يُلَوَّنُ بِالْأَحْمَرِ، وَاتِّجَاهُ الْيَسَارِ يُلَوَّنُ بِالْأَخْضَرِ.');
+
+    document.getElementById('ex-ab-2').classList.remove('locked-ex');
+  }
+
+  let selectedDiscPos = null;
+
+  function placeDisc(pos) {
+    selectedDiscPos = pos;
+    ['left', 'middle', 'right'].forEach(p => {
+      const c = document.getElementById(`disc-${p}`);
+      if (p === pos) {
+        c.setAttribute('fill', '#3b82f6');
+        c.setAttribute('stroke', '#1d4ed8');
+        c.setAttribute('stroke-dasharray', 'none');
+      } else {
+        c.setAttribute('fill', 'transparent');
+        c.setAttribute('stroke', '#cbd5e1');
+        c.setAttribute('stroke-dasharray', '4,3');
+      }
+    });
+  }
+
+  function verifyAb2() {
+    if (!selectedDiscPos) {
+      alert('انْقُرْ لِرَسْمِ الْقُرْصِ فِي الْمَكَانِ الْمُنَاسِبِ أَوَّلًا!');
+      return;
+    }
+    const ex = document.getElementById('ex-ab-2');
+    ex.classList.add('frozen');
+    document.getElementById('btn-ab-2').disabled = true;
+
+    const isOk = selectedDiscPos === 'middle';
+
+    if (isOk) {
+      scores.abhath.ok++;
+      document.getElementById('disc-middle').setAttribute('fill', '#22c55e');
+      document.getElementById('disc-middle').setAttribute('stroke', '#15803d');
+    } else {
+      scores.abhath.err++;
+      document.getElementById(`disc-${selectedDiscPos}`).setAttribute('fill', '#ef4444');
+      document.getElementById('disc-middle').setAttribute('fill', '#86efac');
+      document.getElementById('disc-middle').setAttribute('stroke', '#15803d');
+      document.getElementById('disc-middle').setAttribute('stroke-dasharray', 'none');
+    }
+    updateAllStats();
+
+    showFeedback('fb-ab-2', isOk, isOk
+      ? '✓ عَبْقَرِيٌّ! لِأَنَّ الْبِنْتَ تُدِيرُ ظَهْرَهَا إِلَيْنَا فَيَمِينُهَا بَيْنَهُمَا، وَالْوَلَدُ يَتَّجِهُ نَحْوَنَا فَيَمِينُهُ أَيْضًا بَيْنَهُمَا!'
+      : '✗ انْتَبِهْ: الْبِنْتُ تُدِيرُ ظَهْرَهَا إِلَيْنَا فَيَمِينُهَا فِي الْوَسَطِ، وَالْوَلَدُ يَتَّجِهُ نَحْوَنَا فَيَمِينُهُ أَيْضًا فِي الْوَسَطِ بَيْنَهُمَا.');
+
+    document.getElementById('summary-section').scrollIntoView({ behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
