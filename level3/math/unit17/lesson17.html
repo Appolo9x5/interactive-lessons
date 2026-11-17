@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>الدرس 17: الاسْتِقَامِيَّةُ - رياضيات السنة الثالثة ابتدائي</title>
+<!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root {
+    --primary: #1b8a5a;
+    --primary-light: #e6f5ee;
+    --primary-dark: #12613f;
+    --secondary: #f59e0b;
+    --secondary-light: #fef3c7;
+    --blue: #2563eb;
+    --blue-light: #dbeafe;
+    --red: #dc2626;
+    --red-light: #fee2e2;
+    --green: #16a34a;
+    --green-light: #dcfce7;
+    --bg: #f4f7f6;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #cbd5e1;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 0 0 90px 0;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Header */
+  .lesson-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    padding: 18px 20px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    box-shadow: 0 4px 14px rgba(27, 138, 90, 0.25);
+    position: relative;
+  }
+
+  .lesson-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+
+  .lesson-title {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 800;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+
+  .lesson-subtitle {
+    text-align: center;
+    font-size: 0.95rem;
+    opacity: 0.95;
+    margin-top: 4px;
+  }
+
+  /* Ruler Dock & Interactive Floating Ruler */
+  .ruler-dock {
+    position: sticky;
+    top: 8px;
+    z-index: 900;
+    max-width: 820px;
+    margin: 12px auto 0;
+    padding: 0 12px;
+  }
+
+  .ruler-toolbar {
+    background: #ffffff;
+    border: 2px solid var(--primary);
+    border-radius: 14px;
+    padding: 8px 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  }
+
+  .ruler-btn {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border: 1px solid var(--primary);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 0.88rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.15s;
+  }
+
+  .ruler-btn:active {
+    transform: scale(0.96);
+  }
+
+  .ruler-btn.active {
+    background: var(--primary);
+    color: white;
+  }
+
+  .ruler-controls-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+  }
+
+  #interactive-ruler {
+    position: fixed;
+    top: 140px;
+    left: 20px;
+    width: 454px;
+    height: 62px;
+    background: linear-gradient(180deg, rgba(254, 243, 199, 0.94) 0%, rgba(253, 230, 138, 0.92) 100%);
+    border: 2px solid #b45309;
+    border-top: 3px solid #78350f;
+    border-radius: 4px 4px 10px 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+    z-index: 1000;
+    direction: ltr;
+    transform-origin: 2px 0px;
+    touch-action: none;
+    user-select: none;
+    display: none;
+  }
+
+  #interactive-ruler.visible {
+    display: block;
+  }
+
+  #ruler-ticks {
+    width: 100%;
+    height: 28px;
+    display: block;
+    pointer-events: none;
+  }
+
+  #ruler-handle {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    cursor: grab;
+    font-size: 12px;
+    font-weight: bold;
+    color: #78350f;
+    direction: rtl;
+  }
+
+  #ruler-handle:active {
+    cursor: grabbing;
+  }
+
+  /* Main Container */
+  .container {
+    max-width: 820px;
+    margin: 16px auto;
+    padding: 0 12px;
+  }
+
+  /* Section Cards */
+  .section-card {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 22px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+    border: 1px solid #e2e8f0;
+    position: relative;
+    transition: opacity 0.3s;
+  }
+
+  .section-card.locked {
+    opacity: 0.62;
+    pointer-events: none;
+  }
+
+  .lock-banner {
+    display: none;
+    background: #f1f5f9;
+    color: #475569;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 12px;
+    border: 1px dashed #94a3b8;
+  }
+
+  .section-card.locked .lock-banner {
+    display: block;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: 10px;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--primary-dark);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title.orange { color: #b45309; }
+  .section-title.purple { color: #6d28d9; }
+
+  .exercise-box {
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 15px;
+    margin-bottom: 16px;
+  }
+
+  .exercise-box.disabled-ex {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .ex-instruction {
+    font-size: 1.08rem;
+    font-weight: 700;
+    margin: 0 0 12px 0;
+    color: #0f172a;
+  }
+
+  .ex-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    font-size: 0.95rem;
+    margin-left: 6px;
+    font-weight: bold;
+  }
+
+  /* Interactive Canvases / SVGs */
+  .svg-stage {
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 540px;
+    margin: 0 auto 12px;
+    display: block;
+    touch-action: manipulation;
+  }
+
+  .btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .btn {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: transform 0.1s, opacity 0.2s;
+  }
+
+  .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .btn-check { background: var(--primary); color: white; }
+  .btn-undo { background: #e2e8f0; color: #334155; }
+  .btn-clear { background: #fee2e2; color: #b91c1c; }
+  .btn-color-red { background: #fee2e2; color: #dc2626; border: 2px solid #dc2626; }
+  .btn-color-red.selected { background: #dc2626; color: white; }
+  .btn-color-green { background: #dcfce7; color: #16a34a; border: 2px solid #16a34a; }
+  .btn-color-green.selected { background: #16a34a; color: white; }
+  .btn-color-blue { background: #dbeafe; color: #2563eb; border: 2px solid #2563eb; }
+  .btn-color-blue.selected { background: #2563eb; color: white; }
+  .btn-color-orange { background: #ffedd5; color: #ea580c; border: 2px solid #ea580c; }
+  .btn-color-orange.selected { background: #ea580c; color: white; }
+
+  .feedback-msg {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    display: none;
+    font-size: 0.98rem;
+  }
+
+  .feedback-msg.correct {
+    display: block;
+    background: var(--green-light);
+    color: #14532d;
+    border: 1.5px solid var(--green);
+  }
+
+  .feedback-msg.wrong {
+    display: block;
+    background: var(--red-light);
+    color: #7f1d1d;
+    border: 1.5px solid var(--red);
+  }
+
+  /* Stage Counter */
+  .stage-counter {
+    background: #f1f5f9;
+    border-radius: 10px;
+    padding: 8px 14px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 1rem;
+    color: #334155;
+    margin-top: 8px;
+    border: 1px solid #cbd5e1;
+  }
+
+  .c-ok { color: var(--green); }
+  .c-err { color: var(--red); }
+
+  /* Rule Card (تَعَلَّمْتُ) */
+  .learned-box {
+    background: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 100%);
+    border: 2px solid #8b5cf6;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 22px;
+  }
+
+  .learned-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #3b0764;
+    margin: 8px 0;
+  }
+
+  /* Dual Grid Layout */
+  .dual-grid-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .grid-panel {
+    flex: 1 1 240px;
+    max-width: 340px;
+    text-align: center;
+  }
+
+  .grid-label {
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  /* Summary Report Card */
+  .summary-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
+    border: 2.5px solid var(--primary);
+    border-radius: 20px;
+    padding: 22px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(27, 138, 90, 0.15);
+  }
+
+  .pie-wrapper {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    margin: 14px auto;
+  }
+
+  .pie-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: conic-gradient(var(--green) 0% 0%, #e2e8f0 0% 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
+    transition: background 0.5s ease;
+  }
+
+  .pie-inner {
+    width: 118px;
+    height: 118px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  }
+
+  .pie-percent {
+    font-size: 1.7rem;
+    font-weight: 900;
+    color: var(--primary-dark);
+    direction: ltr;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .stat-item {
+    background: white;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 10px;
+  }
+
+  .stat-val {
+    font-size: 1.4rem;
+    font-weight: 800;
+    display: block;
+    direction: ltr;
+  }
+
+  .progress-bar-bg {
+    width: 100%;
+    height: 14px;
+    background: #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 12px 0 18px;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--primary), #22c55e);
+    transition: width 0.4s ease;
+  }
+
+  /* Quiz Options for MCQ */
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  .opt-btn {
+    background: white;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 10px;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: inherit;
+    color: var(--text);
+  }
+
+  .opt-btn.selected {
+    border-color: var(--blue);
+    background: var(--blue-light);
+    color: #1e3a8a;
+  }
+
+  .opt-btn.correct-opt {
+    border-color: var(--green) !important;
+    background: var(--green-light) !important;
+    color: #14532d !important;
+  }
+
+  .opt-btn.wrong-opt {
+    border-color: var(--red) !important;
+    background: var(--red-light) !important;
+    color: #7f1d1d !important;
+  }
+
+  /* ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== */
+  #sub-lock-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .lock-box {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+    border: 2px solid #e1f5fe;
+    max-width: 380px;
+    width: 100%;
+  }
+  .lock-icon { font-size: 50px; margin-bottom: 12px; }
+  .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+  .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+  .btn-channel {
+    display: block;
+    width: 100%;
+    background: #0288d1;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+  }
+  .btn-check-sub {
+    width: 100%;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 13px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .sub-status-msg {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-height: 24px;
+  }
+
+  /* زر العودة إلى الفهرس (أُضيف) */
+  .btn-back-home {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin: 20px auto 10px auto;
+    background: #0d47a1;
+    color: #ffffff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<header class="lesson-header">
+  <div style="text-align:center;">
+    <span class="lesson-badge">الرِّيَاضِيَّاتُ – السَّنَةُ الثَّالِثَةُ ابْتِدَائِيٌّ – الدَّرْسُ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">17</span></span>
+  </div>
+  <h1 class="lesson-title">الاسْتِقَامِيَّةُ</h1>
+  <div class="lesson-subtitle">كِتَابُ التِّلْمِيذِ ص <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">30</span> وَدَفْتَرُ الأَنْشِطَةِ ص <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">21</span></div>
+</header>
+
+<!-- شريط أدوات المسطرة الرقمية التفاعلية -->
+<div class="ruler-dock">
+  <div class="ruler-toolbar">
+    <button id="toggle-ruler-btn" class="ruler-btn" onclick="toggleRuler()">📏 إِظْهَارُ المِسْطَرَةِ الرَّقْمِيَّةِ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">15 cm</span>)</button>
+    <div class="ruler-controls-group" id="ruler-controls" style="display:none;">
+      <button class="ruler-btn" onclick="moveRuler(0, -5)" title="أعلى">⬆️</button>
+      <button class="ruler-btn" onclick="moveRuler(0, 5)" title="أسفل">⬇️</button>
+      <button class="ruler-btn" onclick="moveRuler(-5, 0)" title="يسار">⬅️</button>
+      <button class="ruler-btn" onclick="moveRuler(5, 0)" title="يمين">➡️</button>
+      <button class="ruler-btn" onclick="rotateRuler(-15)"><span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">↺ 15°</span></button>
+      <button class="ruler-btn" onclick="rotateRuler(-1)"><span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">↺ 1°</span></button>
+      <button class="ruler-btn" onclick="rotateRuler(1)"><span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">↻ 1°</span></button>
+      <button class="ruler-btn" onclick="rotateRuler(15)"><span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">↻ 15°</span></button>
+      <button class="ruler-btn" onclick="resetRuler()">🔄 إِعَادَةُ الضَّبْطِ</button>
+    </div>
+  </div>
+</div>
+
+<!-- المسطرة الرقمية العائمة (1 سم = 30 بكسل) -->
+<div id="interactive-ruler">
+  <svg id="ruler-ticks" viewBox="0 0 454 28"></svg>
+  <div id="ruler-handle">
+    <span>✋ اسْحَبِ المِسْطَرَةَ أَوْ دَوِّرْهَا بِإِصْبَعَيْنِ</span>
+    <span id="ruler-angle-display" dir="ltr" style="display:inline-block; unicode-bidi:isolate;">0°</span>
+  </div>
+</div>
+
+<main class="container">
+
+  <!-- ==================== المحطة 1: أَكْتَشِفُ ==================== -->
+  <section class="section-card" id="sec-aktashif">
+    <div class="section-header">
+      <h2 class="section-title">🔍 أَكْتَشِفُ (كِتَابُ التِّلْمِيذِ ص <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">30</span>)</h2>
+    </div>
+
+    <!-- التمرين 1 من أكتشف -->
+    <div class="exercise-box" id="ex-ak-1">
+      <p class="ex-instruction"><span class="ex-num">1</span> ثَلَاثُ قُرَيْصَاتٍ فِي اسْتِقَامِيَّةٍ، تَعَرَّفْ عَلَيْهَا. تَحَقَّقْ مِنْ إِجَابَتِكَ بِاسْتِعْمَالِ مِسْطَرَتِكَ.</p>
+      <p style="font-size:0.9rem; color:var(--muted); margin-top:-6px;">(انْقُرْ عَلَى القُرَيْصَاتِ الثَّلَاثِ الَّتِي تَقَعُ عَلَى اسْتِقَامَةٍ وَاحِدَةٍ، وَاسْتَعِنْ بِالمِسْطَرَةِ الرَّقْمِيَّةِ)</p>
+      <svg id="svg-ak-1" class="svg-stage" viewBox="0 0 420 240"></svg>
+      <div class="btn-row">
+        <button class="btn btn-check" id="btn-ak-1" onclick="checkAk1()">✔ تَحَقَّقْ مِنَ الإِجَابَةِ</button>
+      </div>
+      <div class="feedback-msg" id="fb-ak-1"></div>
+    </div>
+
+    <!-- التمرين 2 من أكتشف -->
+    <div class="exercise-box disabled-ex" id="ex-ak-2">
+      <p class="ex-instruction"><span class="ex-num">2</span> أُنْقُلِ الشَّكْلَ المُرْفَقَ بِاسْتِعْمَالِ الوَرَقِ الشَّفَّافِ وَأَكْمِلْهُ وَفْقًا لِلنَّمُوذَجِ.</p>
+      <p style="font-size:0.9rem; color:var(--muted); margin-top:-6px;">(انْقُرْ عَلَى نُقْطَةِ البِدَايَةِ ثُمَّ نُقْطَةِ النِّهَايَةِ لِرَسْمِ القِطَعِ النَّاقِصَةِ بِاسْتِعْمَالِ مِسْطَرَتِكَ)</p>
+      <div class="dual-grid-wrap">
+        <div class="grid-panel">
+          <div class="grid-label">النَّمُوذَجُ</div>
+          <svg id="svg-ak-2-model" class="svg-stage" viewBox="0 0 220 160"></svg>
+        </div>
+        <div class="grid-panel">
+          <div class="grid-label">الشَّكْلُ المُرادُ إِكْمَالُهُ</div>
+          <svg id="svg-ak-2-work" class="svg-stage" viewBox="0 0 260 190"></svg>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-undo" id="undo-ak-2" onclick="undoAk2()">↩ تَرَاجُعٌ</button>
+        <button class="btn btn-clear" id="clear-ak-2" onclick="clearAk2()">🗑 مَسْحٌ</button>
+        <button class="btn btn-check" id="btn-ak-2" onclick="checkAk2()">✔ تَحَقَّقْ مِنَ الإِجَابَةِ</button>
+      </div>
+      <div class="feedback-msg" id="fb-ak-2"></div>
+    </div>
+
+    <div class="stage-counter" id="cnt-aktashif">✓ الصَّوَابُ: <span class="c-ok" dir="ltr">0</span> | ✗ الخَطَأُ: <span class="c-err" dir="ltr">0</span></div>
+  </section>
+
+  <!-- ==================== المحطة 2: أُنْجِزُ ==================== -->
+  <section class="section-card locked" id="sec-unjiz">
+    <div class="lock-banner">🔒 أَتْمِمْ مَرْحَلَةَ (أَكْتَشِفُ) أَوَّلًا لِفَتْحِ هَذِهِ المَرْحَلَةِ</div>
+    <div class="section-header">
+      <h2 class="section-title orange">✏️ أُنْجِزُ (كِتَابُ التِّلْمِيذِ ص <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">30</span>)</h2>
+    </div>
+
+    <!-- التمرين 1 من أنجز -->
+    <div class="exercise-box" id="ex-un-1">
+      <p class="ex-instruction"><span class="ex-num" style="background:#d97706;">1</span> وَضَعَ رَائِدٌ عَلَى المَرْصُوفَةِ النُّقَطَ المُلَوَّنَةَ بِنَفْسِ اللَّوْنِ فِي اسْتِقَامِيَّةٍ.<br>أَنْجِزْ عَلَى وَرَقَةِ مَرْصُوفَةٍ مَثِيلَاتِ هَذِهِ النُّقَطِ، ثُمَّ ضَعْ نُقَطًا أُخْرَى مِنْ كُلِّ لَوْنٍ.</p>
+      <p style="font-size:0.9rem; color:var(--muted); margin-top:-6px;">(اخْتَرِ اللَّوْنَ ثُمَّ انْقُرْ عَلَى عُقْدَةٍ عَلَى المَرْصُوفَةِ لإِضَافَةِ نُقْطَةٍ جَدِيدَةٍ فِي اسْتِقَامِيَّةٍ مَعَ نُقَطِ نَفْسِ اللَّوْنِ: بُرْتُقَالِيٌّ، أَزْرَقُ، أَخْضَرُ)</p>
+      <div class="btn-row" style="margin-bottom:10px;">
+        <button class="btn btn-color-orange selected" id="col-un1-orange" onclick="setUn1Color('orange')">🟠 بُرْتُقَالِيٌّ</button>
+        <button class="btn btn-color-blue" id="col-un1-blue" onclick="setUn1Color('blue')">🔵 أَزْرَقُ</button>
+        <button class="btn btn-color-green" id="col-un1-green" onclick="setUn1Color('green')">🟢 أَخْضَرُ</button>
+      </div>
+      <svg id="svg-un-1" class="svg-stage" viewBox="0 0 360 320"></svg>
+      <div class="btn-row">
+        <button class="btn btn-undo" id="undo-un-1" onclick="undoUn1()">↩ تَرَاجُعٌ</button>
+        <button class="btn btn-check" id="btn-un-1" onclick="checkUn1()">✔ تَحَقَّقْ مِنَ الإِجَابَةِ</button>
+      </div>
+      <div class="feedback-msg" id="fb-un-1"></div>
+    </div>
+
+    <!-- التمرين 2 من أنجز -->
+    <div class="exercise-box disabled-ex" id="ex-un-2">
+      <p class="ex-instruction"><span class="ex-num" style="background:#d97706;">2</span> ضَعْ نُقْطَةً هِيَ فِي آنٍ وَاحِدٍ فِي اسْتِقَامِيَّةٍ مَعَ النُّقَطِ الزَّرْقَاءِ وَالنُّقَطِ الخَضْرَاءِ.</p>
+      <p style="font-size:0.9rem; color:var(--muted); margin-top:-6px;">(انْقُرْ عَلَى العُقْدَةِ الَّتِي يَتَقَاطَعُ عِنْدَهَا امْتِدَادُ النُّقَطِ الزَّرْقَاءِ مَعَ امْتِدَادِ النُّقَطِ الخَضْرَاءِ)</p>
+      <svg id="svg-un-2" class="svg-stage" viewBox="0 0 360 320"></svg>
+      <div class="btn-row">
+        <button class="btn btn-check" id="btn-un-2" onclick="checkUn2()">✔ تَحَقَّقْ مِنَ الإِجَابَةِ</button>
+      </div>
+      <div class="feedback-msg" id="fb-un-2"></div>
+    </div>
+
+    <div class="stage-counter" id="cnt-unjiz">✓ الصَّوَابُ: <span class="c-ok" dir="ltr">0</span> | ✗ الخَطَأُ: <span class="c-err" dir="ltr">0</span></div>
+  </section>
+
+  <!-- ==================== المحطة 3: تَعَلَّمْتُ ==================== -->
+  <section class="learned-box" id="sec-taalamtu">
+    <h2 class="section-title purple" style="margin-bottom:10px;">💡 تَعَلَّمْتُ</h2>
+    <p class="learned-text">• تَكُونُ نُقَطٌ فِي اسْتِقَامِيَّةٍ إِذَا لَامَسَتْ كُلُّهَا حَافَّةَ مِسْطَرَةٍ.</p>
+    <p class="learned-text">• يُمْكِنُ رَسْمُ نُقَطٍ كَثِيرَةٍ فِي اسْتِقَامِيَّةٍ.</p>
+  </section>
+
+  <!-- ==================== المحطة 4: أَتَمَرَّنُ ==================== -->
+  <section class="section-card locked" id="sec-atamarran">
+    <div class="lock-banner">🔒 أَتْمِمْ مَرْحَلَةَ (أُنْجِزُ) أَوَّلًا لِفَتْحِ مَرْحَلَةِ التَّمَارِينِ</div>
+    <div class="section-header">
+      <h2 class="section-title">📝 أَتَمَرَّنُ (دَفْتَرُ الأَنْشِطَةِ ص <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">21</span>)</h2>
+    </div>
+
+    <!-- التمرين 1 من أتمرن -->
+    <div class="exercise-box" id="ex-at-1">
+      <p class="ex-instruction">
+        <span class="ex-num">1</span>
+        <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">(1</span> أَرْبَعُ قُرَيْصَاتٍ فِي اسْتِقَامِيَّةٍ لَوِّنْ كُلًّا مِنْهَا بِالأَحْمَرِ.<br>
+        <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">(2</span> ثَلَاثُ قُرَيْصَاتٍ أُخْرَى فِي اسْتِقَامِيَّةٍ لَوِّنْ كُلًّا مِنْهَا بِالأَخْضَرِ.<br>
+        <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">(3</span> أُرْسُمْ قُرَيْصَةً هِيَ فِي آنٍ وَاحِدٍ فِي اسْتِقَامِيَّةٍ مَعَ القُرَيْصَاتِ الحَمْرَاءِ وَمَعَ القُرَيْصَاتِ الخَضْرَاءِ.
+      </p>
+      <div class="btn-row" style="margin-bottom:10px;">
+        <button class="btn btn-color-red selected" id="tool-at1-red" onclick="setAt1Tool('red')">🔴 تَلْوِينٌ بِالأَحْمَرِ (<span dir="ltr">4</span>)</button>
+        <button class="btn btn-color-green" id="tool-at1-green" onclick="setAt1Tool('green')">🟢 تَلْوِينٌ بِالأَخْضَرِ (<span dir="ltr">3</span>)</button>
+        <button class="btn btn-color-blue" id="tool-at1-draw" onclick="setAt1Tool('draw')">⭕ رَسْمُ القُرَيْصَةِ المُشْتَرَكَةِ</button>
+      </div>
+      <svg id="svg-at-1" class="svg-stage" viewBox="0 0 420 220"></svg>
+      <div class="btn-row">
+        <button class="btn btn-clear" id="clear-at-1" onclick="resetAt1()">🗑 إِعَادَةُ التَّلْوِينِ</button>
+        <button class="btn btn-check" id="btn-at-1" onclick="checkAt1()">✔ تَحَقَّقْ مِنَ الإِجَابَةِ</button>
+      </div>
+      <div class="feedback-msg" id="fb-at-1"></div>
+    </div>
+
+    <!-- التمرين 2 من أتمرن -->
+    <div class="exercise-box disabled-ex" id="ex-at-2">
+      <p class="ex-instruction">
+        <span class="ex-num">2</span>
+        <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">(1</span> تَحَقَّقْ مِنْ أَنَّ العَلَامَاتِ المُلَوَّنَةَ بِنَفْسِ اللَّوْنِ فِي اسْتِقَامِيَّةٍ.<br>
+        <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">(2</span> ضَعْ نُقَطًا أُخْرَى مِنْ كُلِّ لَوْنٍ بِحَيْثُ تَبْقَى العَلَامَاتُ المُلَوَّنَةُ بِنَفْسِ اللَّوْنِ فِي اسْتِقَامِيَّةٍ.
+      </p>
+      <div class="btn-row" style="margin-bottom:10px;">
+        <button class="btn btn-color-red selected" id="tool-at2-red" onclick="setAt2Color('red')">❌ عَلَامَةٌ حَمْرَاءُ</button>
+        <button class="btn btn-color-green" id="tool-at2-green" onclick="setAt2Color('green')">❌ عَلَامَةٌ خَضْرَاءُ</button>
+        <button class="btn btn-color-blue" id="tool-at2-blue" onclick="setAt2Color('blue')">❌ عَلَامَةٌ زَرْقَاءُ</button>
+      </div>
+      <svg id="svg-at-2" class="svg-stage" viewBox="0 0 420 230"></svg>
+      <div class="btn-row">
+        <button class="btn btn-undo" id="undo-at-2" onclick="undoAt2()">↩ تَرَاجُعٌ</button>
+        <button class="btn btn-check" id="btn-at-2" onclick="checkAt2()">✔ تَحَقَّقْ مِنَ الإِجَابَةِ</button>
+      </div>
+      <div class="feedback-msg" id="fb-at-2"></div>
+    </div>
+
+    <!-- التمرين 3 من أتمرن -->
+    <div class="exercise-box disabled-ex" id="ex-at-3">
+      <p class="ex-instruction"><span class="ex-num">3</span> أَكْمِلِ الشَّكْلَ وَفْقًا لِلنَّمُوذَجِ.</p>
+      <p style="font-size:0.9rem; color:var(--muted); margin-top:-6px;">(انْقُرْ عَلَى نُقْطَةِ البِدَايَةِ ثُمَّ نُقْطَةِ النِّهَايَةِ لإِكْمَالِ رَسْمِ الشَّكْلِ بِمِسْطَرَتِكَ)</p>
+      <div class="dual-grid-wrap">
+        <div class="grid-panel">
+          <div class="grid-label">نَمُوذَجٌ</div>
+          <svg id="svg-at-3-model" class="svg-stage" viewBox="0 0 180 180"></svg>
+        </div>
+        <div class="grid-panel">
+          <div class="grid-label">الشَّكْلُ المُرادُ إِكْمَالُهُ</div>
+          <svg id="svg-at-3-work" class="svg-stage" viewBox="0 0 220 220"></svg>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-undo" id="undo-at-3" onclick="undoAt3()">↩ تَرَاجُعٌ</button>
+        <button class="btn btn-clear" id="clear-at-3" onclick="clearAt3()">🗑 مَسْحٌ</button>
+        <button class="btn btn-check" id="btn-at-3" onclick="checkAt3()">✔ تَحَقَّقْ مِنَ الإِجَابَةِ</button>
+      </div>
+      <div class="feedback-msg" id="fb-at-3"></div>
+    </div>
+
+    <div class="stage-counter" id="cnt-atamarran">✓ الصَّوَابُ: <span class="c-ok" dir="ltr">0</span> | ✗ الخَطَأُ: <span class="c-err" dir="ltr">0</span></div>
+  </section>
+
+  <!-- ==================== المحطة 5: أَبْحَثُ ==================== -->
+  <section class="section-card locked" id="sec-abhath">
+    <div class="lock-banner">🔒 أَتْمِمْ مَرْحَلَةَ (أَتَمَرَّنُ) أَوَّلًا لِفَتْحِ تَحَدِّي (أَبْحَثُ)</div>
+    <div class="section-header">
+      <h2 class="section-title orange">🏆 أَبْحَثُ (دَفْتَرُ الأَنْشِطَةِ ص <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">21</span>)</h2>
+    </div>
+
+    <div class="exercise-box" id="ex-ab-1">
+      <p class="ex-instruction">عَيِّنْ مَكَانَ نُقْطَةٍ تَكُونُ فِي آنٍ وَاحِدٍ فِي اسْتِقَامِيَّةٍ مَعَ النُّقَطِ الحَمْرَاءِ وَمَعَ النُّقَطِ الخَضْرَاءِ وَمَعَ النُّقَطِ الزَّرْقَاءِ.</p>
+      <p style="font-size:0.9rem; color:var(--muted); margin-top:-6px;">(اسْتَعْمِلِ المِسْطَرَةَ الرَّقْمِيَّةَ لِتَمْدِيدِ خُطُوطِ النُّقَطِ الثَّلَاثِ، ثُمَّ انْقُرْ عَلَى نُقْطَةِ التَّقَاطُعِ المُشْتَرَكَةِ)</p>
+      <svg id="svg-ab-1" class="svg-stage" viewBox="0 0 420 250"></svg>
+      <div class="btn-row">
+        <button class="btn btn-check" id="btn-ab-1" onclick="checkAb1()">✔ تَحَقَّقْ مِنَ الإِجَابَةِ</button>
+      </div>
+      <div class="feedback-msg" id="fb-ab-1"></div>
+    </div>
+
+    <div class="stage-counter" id="cnt-abhath">✓ الصَّوَابُ: <span class="c-ok" dir="ltr">0</span> | ✗ الخَطَأُ: <span class="c-err" dir="ltr">0</span></div>
+  </section>
+
+  <!-- ==================== التقييم النهائي الشامل ==================== -->
+  <section class="summary-card" id="sec-summary">
+    <h2 style="margin:0; color:var(--primary-dark); font-size:1.45rem;">📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ العَامُّ</h2>
+    <p style="color:var(--muted); font-size:0.95rem; margin-top:4px;">نَتِيجَةُ أَدَائِكَ فِي جَمِيعِ مَحَطَّاتِ الدَّرْسِ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">8</span> تَمَارِينَ)</p>
+
+    <!-- الدائرة النسبية -->
+    <div class="pie-wrapper">
+      <div class="pie-circle" id="pie-chart">
+        <div class="pie-inner">
+          <span class="pie-percent" id="final-percent">0%</span>
+          <span style="font-size:0.8rem; color:var(--muted); font-weight:bold;">نِسْبَةُ النَّجَاحِ</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-item">
+        <span style="font-size:0.85rem; color:var(--muted); font-weight:bold;">الإِجَابَاتُ الصَّحِيحَةُ</span>
+        <span class="stat-val c-ok" id="total-correct">0</span>
+      </div>
+      <div class="stat-item">
+        <span style="font-size:0.85rem; color:var(--muted); font-weight:bold;">الإِجَابَاتُ الخَاطِئَةُ</span>
+        <span class="stat-val c-err" id="total-wrong">0</span>
+      </div>
+      <div class="stat-item">
+        <span style="font-size:0.85rem; color:var(--muted); font-weight:bold;">مَجْمُوعُ التَّمَارِينِ</span>
+        <span class="stat-val" style="color:var(--blue);" id="total-exercises">8</span>
+      </div>
+    </div>
+
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+
+    <div id="final-badge-msg" style="font-weight:800; font-size:1.1rem; color:var(--primary-dark); margin-bottom:14px;">
+      أَكْمِلْ حَلَّ التَّمَارِينِ بِالتَّرْتِيبِ لِمَعْرِفَةِ نَتِيجَتِكَ النِّهَائِيَّةِ!
+    </div>
+
+    <button class="btn btn-check" style="font-size:1.05rem; padding:12px 24px;" onclick="location.reload()">🔄 إِعَادَةُ المُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+  </section>
+
+  <!-- ========================================
+       زر العودة إلى الفهرس (أُضيف)
+       ======================================== -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</main>
+
+<!-- ========================================
+     سكريبت الحماية (أُضيف)
+     ======================================== -->
+<script>
+  const CHANNEL_ID = "-1003910412986";
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي (كما هو دون تغيير)
+     ======================================== -->
+<script>
+// ==================== 1. المسطرة الرقمية التفاعلية (1cm = 30px) ====================
+const CM_PX = 30;
+const rulerEl = document.getElementById('interactive-ruler');
+const ticksSvg = document.getElementById('ruler-ticks');
+let rulerX = 24, rulerY = 135, rulerAngle = 0;
+
+function drawRulerTicks() {
+  let html = '';
+  for (let mm = 0; mm <= 150; mm++) {
+    const x = 2 + mm * (CM_PX / 10);
+    const isCm = mm % 10 === 0;
+    const isHalf = mm % 5 === 0 && !isCm;
+    const h = isCm ? 16 : (isHalf ? 11 : 7);
+    html += `<line x1="${x}" y1="0" x2="${x}" y2="${h}" stroke="#78350f" stroke-width="${isCm ? 1.6 : 1}" />`;
+    if (isCm) {
+      html += `<text x="${x}" y="26" font-size="10" font-weight="bold" fill="#78350f" text-anchor="middle">${mm / 10}</text>`;
+    }
+  }
+  ticksSvg.innerHTML = html;
+}
+drawRulerTicks();
+
+function updateRulerTransform() {
+  rulerEl.style.left = rulerX + 'px';
+  rulerEl.style.top = rulerY + 'px';
+  rulerEl.style.transform = `rotate(${rulerAngle}deg)`;
+  document.getElementById('ruler-angle-display').textContent = Math.round(rulerAngle) + '°';
+}
+
+function toggleRuler() {
+  const vis = rulerEl.classList.toggle('visible');
+  document.getElementById('toggle-ruler-btn').classList.toggle('active', vis);
+  document.getElementById('ruler-controls').style.display = vis ? 'flex' : 'none';
+  updateRulerTransform();
+}
+
+function moveRuler(dx, dy) {
+  rulerX += dx;
+  rulerY += dy;
+  updateRulerTransform();
+}
+
+function rotateRuler(da) {
+  rulerAngle = (rulerAngle + da) % 360;
+  updateRulerTransform();
+}
+
+function resetRuler() {
+  rulerX = 24;
+  rulerY = 135;
+  rulerAngle = 0;
+  updateRulerTransform();
+}
+
+// السحب بالماوس/اللمس الأحادي + التدوير بإصبعين
+let isDragging = false, dragStartX = 0, dragStartY = 0;
+let initialPinchAngle = null, startRulerAngle = 0;
+
+const handleEl = document.getElementById('ruler-handle');
+handleEl.addEventListener('pointerdown', (e) => {
+  if (e.pointerType === 'touch' && !e.isPrimary) return;
+  isDragging = true;
+  dragStartX = e.clientX - rulerX;
+  dragStartY = e.clientY - rulerY;
+  handleEl.setPointerCapture(e.pointerId);
+});
+
+handleEl.addEventListener('pointermove', (e) => {
+  if (!isDragging) return;
+  rulerX = e.clientX - dragStartX;
+  rulerY = e.clientY - dragStartY;
+  updateRulerTransform();
+});
+
+handleEl.addEventListener('pointerup', () => { isDragging = false; });
+
+rulerEl.addEventListener('touchstart', (e) => {
+  if (e.touches.length === 2) {
+    isDragging = false;
+    const t1 = e.touches[0], t2 = e.touches[1];
+    initialPinchAngle = Math.atan2(t2.clientY - t1.clientY, t2.clientX - t1.clientX) * (180 / Math.PI);
+    startRulerAngle = rulerAngle;
+  }
+}, { passive: true });
+
+rulerEl.addEventListener('touchmove', (e) => {
+  if (e.touches.length === 2 && initialPinchAngle !== null) {
+    const t1 = e.touches[0], t2 = e.touches[1];
+    const currentAngle = Math.atan2(t2.clientY - t1.clientY, t2.clientX - t1.clientX) * (180 / Math.PI);
+    rulerAngle = startRulerAngle + (currentAngle - initialPinchAngle);
+    updateRulerTransform();
+  }
+}, { passive: true });
+
+rulerEl.addEventListener('touchend', (e) => {
+  if (e.touches.length < 2) initialPinchAngle = null;
+});
+
+// ==================== 2. نظام التتبع والتقييم العام ====================
+const TOTAL_EXERCISES = 8;
+const stageScores = {
+  aktashif: { ok: 0, err: 0 },
+  unjiz: { ok: 0, err: 0 },
+  atamarran: { ok: 0, err: 0 },
+  abhath: { ok: 0, err: 0 }
+};
+const completedExercises = {};
+
+function recordExercise(exId, stage, isCorrect, nextExEl, nextSectionEl) {
+  if (completedExercises[exId]) return;
+  completedExercises[exId] = true;
+
+  if (isCorrect) stageScores[stage].ok++;
+  else stageScores[stage].err++;
+
+  // تحديث عداد المحطة
+  const cntEl = document.getElementById('cnt-' + stage);
+  cntEl.innerHTML = `✓ الصَّوَابُ: <span class="c-ok" dir="ltr">${stageScores[stage].ok}</span> | ✗ الخَطَأُ: <span class="c-err" dir="ltr">${stageScores[stage].err}</span>`;
+
+  // تفعيل التمرين أو المحطة الموالية
+  if (nextExEl) {
+    nextExEl.classList.remove('disabled-ex');
+  }
+  if (nextSectionEl) {
+    nextSectionEl.classList.remove('locked');
+  }
+
+  updateSummary();
+}
+
+function updateSummary() {
+  const totalOk = stageScores.aktashif.ok + stageScores.unjiz.ok + stageScores.atamarran.ok + stageScores.abhath.ok;
+  const totalErr = stageScores.aktashif.err + stageScores.unjiz.err + stageScores.atamarran.err + stageScores.abhath.err;
+  const answered = totalOk + totalErr;
+
+  // النسبة المئوية لا تتجاوز 100% وتحسب على أساس العدد الإجمالي للتمارين
+  let pct = Math.round((totalOk / TOTAL_EXERCISES) * 100);
+  if (pct > 100) pct = 100;
+
+  document.getElementById('total-correct').textContent = totalOk;
+  document.getElementById('total-wrong').textContent = totalErr;
+  document.getElementById('final-percent').textContent = pct + '%';
+  document.getElementById('progress-fill').style.width = Math.round((answered / TOTAL_EXERCISES) * 100) + '%';
+
+  // تحديث الدائرة النسبية (Conic Gradient)
+  const okDeg = (totalOk / TOTAL_EXERCISES) * 100;
+  const errDeg = okDeg + (totalErr / TOTAL_EXERCISES) * 100;
+  const pie = document.getElementById('pie-chart');
+  pie.style.background = `conic-gradient(var(--green) 0% ${okDeg}%, var(--red) ${okDeg}% ${errDeg}%, #e2e8f0 ${errDeg}% 100%)`;
+
+  if (answered === TOTAL_EXERCISES) {
+    const msgEl = document.getElementById('final-badge-msg');
+    if (pct === 100) {
+      msgEl.textContent = '🌟 مُمْتَازٌ! لَقَدْ أَجَبْتَ عَنْ جَمِيعِ التَّمَارِينِ بِشَكْلٍ صَحِيحٍ (%100)!';
+    } else if (pct >= 75) {
+      msgEl.textContent = '👏 أَحْسَنْتَ! نَتِيجَةٌ جَيِّدَةٌ جِدًّا، رَاجِعِ الأَخْطَاءَ المُحَدَّدَةَ بِالأَحْمَرِ أَعْلَاهُ.';
+    } else {
+      msgEl.textContent = '💪 مُحَاوَلَةٌ طَيِّبَةٌ! اسْتَعْمِلِ المِسْطَرَةَ الرَّقْمِيَّةَ وَأَعِدِ المُحَاوَلَةَ لِتَحْسِينِ نَتِيجَتِكَ.';
+    }
+  }
+}
+
+// ==================== 3. أكتشف - التمرين 1 ====================
+const ak1Dots = [
+  { id: 0, x: 90,  y: 45,  color: '#15803d', aligned: false },
+  { id: 1, x: 145, y: 78,  color: '#15803d', aligned: true  },
+  { id: 2, x: 245, y: 120, color: '#15803d', aligned: true  },
+  { id: 3, x: 345, y: 162, color: '#15803d', aligned: true  },
+  { id: 4, x: 85,  y: 155, color: '#b91c1c', aligned: false },
+  { id: 5, x: 175, y: 155, color: '#b91c1c', aligned: false },
+  { id: 6, x: 255, y: 205, color: '#b91c1c', aligned: false }
+];
+let ak1Selected = new Set();
+
+function renderAk1(locked = false, showSolution = false) {
+  const svg = document.getElementById('svg-ak-1');
+  let html = '';
+  if (showSolution) {
+    html += `<line x1="95" y1="57" x2="385" y2="179" stroke="#16a34a" stroke-width="3" stroke-dasharray="6,4" />`;
+  }
+  ak1Dots.forEach(d => {
+    const isSel = ak1Selected.has(d.id);
+    let ring = '';
+    if (showSolution) {
+      if (d.aligned) ring = `<circle cx="${d.x}" cy="${d.y}" r="18" fill="none" stroke="#16a34a" stroke-width="3.5" />`;
+      else if (isSel) ring = `<circle cx="${d.x}" cy="${d.y}" r="18" fill="none" stroke="#dc2626" stroke-width="3.5" />`;
+    } else if (isSel) {
+      ring = `<circle cx="${d.x}" cy="${d.y}" r="17" fill="none" stroke="#2563eb" stroke-width="3" />`;
+    }
+    html += `<g style="cursor:${locked ? 'default' : 'pointer'}" onclick="toggleAk1Dot(${d.id}, ${locked})">
+      ${ring}
+      <circle cx="${d.x}" cy="${d.y}" r="11" fill="${d.color}" />
+    </g>`;
+  });
+  svg.innerHTML = html;
+}
+
+function toggleAk1Dot(id, locked) {
+  if (locked || completedExercises['ak1']) return;
+  if (ak1Selected.has(id)) ak1Selected.delete(id);
+  else if (ak1Selected.size < 3) ak1Selected.add(id);
+  renderAk1(false, false);
+}
+
+function checkAk1() {
+  if (completedExercises['ak1']) return;
+  if (ak1Selected.size !== 3) {
+    alert('اخْتَرْ ثَلَاثَ قُرَيْصَاتٍ أَوَّلًا!');
+    return;
+  }
+  const correctIds = [1, 2, 3];
+  const isOk = correctIds.every(id => ak1Selected.has(id));
+  renderAk1(true, true);
+  document.getElementById('btn-ak-1').disabled = true;
+
+  const fb = document.getElementById('fb-ak-1');
+  if (isOk) {
+    fb.className = 'feedback-msg correct';
+    fb.textContent = '✓ أَحْسَنْتَ! القُرَيْصَاتُ الخَضْرَاءُ الثَّلَاثُ المَائِلَةُ تَقَعُ عَلَى اسْتِقَامَةٍ وَاحِدَةٍ وَتُلَامِسُ حَافَّةَ المِسْطَرَةِ.';
+  } else {
+    fb.className = 'feedback-msg wrong';
+    fb.textContent = '✗ إِجَابَةٌ خَاطِئَةٌ. القُرَيْصَاتُ الصَّحِيحَةُ هِيَ القُرَيْصَاتُ الخَضْرَاءُ الثَّلَاثُ المُحَاطَةُ بِالأَخْضَرِ.';
+  }
+  recordExercise('ak1', 'aktashif', isOk, document.getElementById('ex-ak-2'), null);
+}
+renderAk1();
+
+// ==================== 4. أكتشف - التمرين 2 ====================
+function drawAk2Model() {
+  const svg = document.getElementById('svg-ak-2-model');
+  svg.innerHTML = `
+    <g transform="scale(0.84) translate(10,10)">
+      <rect x="30" y="25" width="200" height="130" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+      <line x1="30" y1="155" x2="230" y2="25" stroke="#1e293b" stroke-width="2.2"/>
+      <line x1="30" y1="155" x2="130" y2="25" stroke="#1e293b" stroke-width="2.2"/>
+      <line x1="130" y1="155" x2="230" y2="25" stroke="#1e293b" stroke-width="2.2"/>
+      <line x1="80" y1="90" x2="180" y2="90" stroke="#1e293b" stroke-width="2.2"/>
+    </g>
+  `;
+}
+drawAk2Model();
+
+const ak2Nodes = [
+  { id: 'A', x: 30,  y: 25 },
+  { id: 'M1', x: 130, y: 25 },
+  { id: 'B', x: 230, y: 25 },
+  { id: 'P1', x: 80,  y: 90 },
+  { id: 'P_start', x: 105, y: 90 },
+  { id: 'P_end', x: 130, y: 90 },
+  { id: 'P2', x: 180, y: 90 },
+  { id: 'D', x: 30,  y: 155 },
+  { id: 'M2', x: 130, y: 155 },
+  { id: 'C', x: 230, y: 155 }
+];
+
+let ak2UserLines = [];
+let ak2StartNode = null;
+
+function renderAk2Work(locked = false, showSolution = false) {
+  const svg = document.getElementById('svg-ak-2-work');
+  let html = `
+    <rect x="30" y="25" width="200" height="130" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+    <line x1="30" y1="155" x2="230" y2="25" stroke="#1e293b" stroke-width="2.2"/>
+    <line x1="105" y1="90" x2="130" y2="90" stroke="#1e293b" stroke-width="2.2"/>
+  `;
+
+  if (showSolution) {
+    html += `
+      <line x1="30" y1="155" x2="130" y2="25" stroke="#16a34a" stroke-width="3" stroke-dasharray="5,3"/>
+      <line x1="130" y1="155" x2="230" y2="25" stroke="#16a34a" stroke-width="3" stroke-dasharray="5,3"/>
+      <line x1="80" y1="90" x2="180" y2="90" stroke="#16a34a" stroke-width="3" stroke-dasharray="5,3"/>
+    `;
+  }
+
+  ak2UserLines.forEach(l => {
+    html += `<line x1="${l.x1}" y1="${l.y1}" x2="${l.x2}" y2="${l.y2}" stroke="#2563eb" stroke-width="2.8" />`;
+  });
+
+  if (!locked) {
+    ak2Nodes.forEach(n => {
+      const isSel = ak2StartNode && ak2StartNode.id === n.id;
+      html += `<circle cx="${n.x}" cy="${n.y}" r="${isSel ? 7 : 5}" fill="${isSel ? '#dc2626' : '#2563eb'}" opacity="0.85" style="cursor:pointer" onclick="clickAk2Node('${n.id}')" />`;
+    });
+  }
+  svg.innerHTML = html;
+}
+
+function clickAk2Node(nodeId) {
+  if (completedExercises['ak2']) return;
+  const node = ak2Nodes.find(n => n.id === nodeId);
+  if (!ak2StartNode) {
+    ak2StartNode = node;
+  } else {
+    if (ak2StartNode.id !== node.id) {
+      ak2UserLines.push({ x1: ak2StartNode.x, y1: ak2StartNode.y, x2: node.x, y2: node.y });
+    }
+    ak2StartNode = null;
+  }
+  renderAk2Work(false, false);
+}
+
+function undoAk2() {
+  if (completedExercises['ak2']) return;
+  ak2UserLines.pop();
+  ak2StartNode = null;
+  renderAk2Work(false, false);
+}
+
+function clearAk2() {
+  if (completedExercises['ak2']) return;
+  ak2UserLines = [];
+  ak2StartNode = null;
+  renderAk2Work(false, false);
+}
+
+function sameSeg(l, ax, ay, bx, by) {
+  return (Math.hypot(l.x1 - ax, l.y1 - ay) < 5 && Math.hypot(l.x2 - bx, l.y2 - by) < 5) ||
+         (Math.hypot(l.x1 - bx, l.y1 - by) < 5 && Math.hypot(l.x2 - ax, l.y2 - ay) < 5);
+}
+
+function checkAk2() {
+  if (completedExercises['ak2']) return;
+  if (ak2UserLines.length === 0) {
+    alert('ارْسُمِ القِطَعَ النَّاقِصَةَ عَلَى الشَّكْلِ أَوَّلًا!');
+    return;
+  }
+  const hasSeg1 = ak2UserLines.some(l => sameSeg(l, 30, 155, 130, 25));
+  const hasSeg2 = ak2UserLines.some(l => sameSeg(l, 130, 155, 230, 25));
+  const hasHorizFull = ak2UserLines.some(l => sameSeg(l, 80, 90, 180, 90)) ||
+                       (ak2UserLines.some(l => sameSeg(l, 80, 90, 105, 90)) && ak2UserLines.some(l => sameSeg(l, 130, 90, 180, 90)));
+
+  const isOk = hasSeg1 && hasSeg2 && hasHorizFull;
+  renderAk2Work(true, true);
+  document.getElementById('btn-ak-2').disabled = true;
+  document.getElementById('undo-ak-2').disabled = true;
+  document.getElementById('clear-ak-2').disabled = true;
+
+  const fb = document.getElementById('fb-ak-2');
+  if (isOk) {
+    fb.className = 'feedback-msg correct';
+    fb.textContent = '✓ رَائِعٌ! لَقَدْ أَكْمَلْتَ رَسْمَ القِطَعِ الثَّلَاثِ النَّاقِصَةِ بِدِقَّةٍ وَفْقًا لِلنَّمُوذَجِ.';
+  } else {
+    fb.className = 'feedback-msg wrong';
+    fb.textContent = '✗ إِجَابَةٌ غَيْرُ مُكْتَمِلَةٍ أَوْ خَاطِئَةٌ. لَاحِظِ القِطَعَ الخَضْرَاءَ المُنَقَّطَةَ الَّتِي تُكْمِلُ الشَّكْلَ.';
+  }
+  recordExercise('ak2', 'aktashif', isOk, null, document.getElementById('sec-unjiz'));
+}
+renderAk2Work();
+
+// ==================== 5. أنجز - التمرين 1 ====================
+const G1_STEP = 30, G1_OFF = 30;
+const un1Given = [
+  { gx: 4, gy: 3, c: 'orange' }, { gx: 4, gy: 5, c: 'orange' }, { gx: 4, gy: 6, c: 'orange' },
+  { gx: 2, gy: 7, c: 'blue' },   { gx: 5, gy: 4, c: 'blue' },
+  { gx: 6, gy: 5, c: 'green' },  { gx: 8, gy: 6, c: 'green' },  { gx: 10, gy: 7, c: 'green' }
+];
+let un1Color = 'orange';
+let un1Added = [];
+
+function setUn1Color(c) {
+  un1Color = c;
+  ['orange', 'blue', 'green'].forEach(col => {
+    document.getElementById('col-un1-' + col).classList.toggle('selected', col === c);
+  });
+}
+
+function renderUn1(locked = false, showSolution = false) {
+  const svg = document.getElementById('svg-un-1');
+  let html = '';
+  for (let i = 0; i <= 10; i++) {
+    const x = G1_OFF + i * G1_STEP;
+    html += `<line x1="${x}" y1="${G1_OFF}" x2="${x}" y2="${G1_OFF + 8 * G1_STEP}" stroke="#cbd5e1" stroke-width="1.2" />`;
+  }
+  for (let j = 0; j <= 8; j++) {
+    const y = G1_OFF + j * G1_STEP;
+    html += `<line x1="${G1_OFF}" y1="${y}" x2="${G1_OFF + 10 * G1_STEP}" y2="${y}" stroke="#cbd5e1" stroke-width="1.2" />`;
+  }
+
+  if (showSolution) {
+    html += `<line x1="${G1_OFF+4*G1_STEP}" y1="${G1_OFF}" x2="${G1_OFF+4*G1_STEP}" y2="${G1_OFF+8*G1_STEP}" stroke="#ea580c" stroke-width="2" stroke-dasharray="4,3" />`;
+    html += `<line x1="${G1_OFF+1*G1_STEP}" y1="${G1_OFF+8*G1_STEP}" x2="${G1_OFF+9*G1_STEP}" y2="${G1_OFF}" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,3" />`;
+    html += `<line x1="${G1_OFF}" y1="${G1_OFF+2*G1_STEP}" x2="${G1_OFF+10*G1_STEP}" y2="${G1_OFF+7*G1_STEP}" stroke="#16a34a" stroke-width="2" stroke-dasharray="4,3" />`;
+  }
+
+  const colorMap = { orange: '#ea580c', blue: '#2563eb', green: '#16a34a' };
+  un1Given.forEach(p => {
+    html += `<circle cx="${G1_OFF + p.gx * G1_STEP}" cy="${G1_OFF + p.gy * G1_STEP}" r="6.5" fill="${colorMap[p.c]}" />`;
+  });
+
+  un1Added.forEach(p => {
+    html += `<circle cx="${G1_OFF + p.gx * G1_STEP}" cy="${G1_OFF + p.gy * G1_STEP}" r="7" fill="${colorMap[p.c]}" stroke="#0f172a" stroke-width="2" />`;
+  });
+
+  if (!locked) {
+    for (let gx = 0; gx <= 10; gx++) {
+      for (let gy = 0; gy <= 8; gy++) {
+        const occupied = un1Given.some(p => p.gx === gx && p.gy === gy) || un1Added.some(p => p.gx === gx && p.gy === gy);
+        if (!occupied) {
+          html += `<circle cx="${G1_OFF + gx * G1_STEP}" cy="${G1_OFF + gy * G1_STEP}" r="9" fill="transparent" style="cursor:pointer" onclick="addUn1Dot(${gx}, ${gy})" />`;
+        }
+      }
+    }
+  }
+  svg.innerHTML = html;
+}
+
+function addUn1Dot(gx, gy) {
+  if (completedExercises['un1']) return;
+  un1Added.push({ gx, gy, c: un1Color });
+  renderUn1(false, false);
+}
+
+function undoUn1() {
+  if (completedExercises['un1']) return;
+  un1Added.pop();
+  renderUn1(false, false);
+}
+
+function isCollinearUn1(p) {
+  if (p.c === 'orange') return p.gx === 4;
+  if (p.c === 'blue') return (p.gx + p.gy) === 9;
+  if (p.c === 'green') return (p.gx - 2 * p.gy) === -4;
+  return false;
+}
+
+function checkUn1() {
+  if (completedExercises['un1']) return;
+  const hasOrange = un1Added.some(p => p.c === 'orange');
+  const hasBlue = un1Added.some(p => p.c === 'blue');
+  const hasGreen = un1Added.some(p => p.c === 'green');
+  if (!hasOrange || !hasBlue || !hasGreen) {
+    alert('ضَعْ نُقْطَةً وَاحِدَةً عَلَى الأَقَلِّ مِنْ كُلِّ لَوْنٍ (بُرْتُقَالِيٌّ، أَزْرَقُ، أَخْضَرُ)!');
+    return;
+  }
+  const isOk = un1Added.every(isCollinearUn1);
+  renderUn1(true, true);
+  document.getElementById('btn-un-1').disabled = true;
+  document.getElementById('undo-un-1').disabled = true;
+
+  const fb = document.getElementById('fb-un-1');
+  if (isOk) {
+    fb.className = 'feedback-msg correct';
+    fb.textContent = '✓ مُمْتَازٌ! جَمِيعُ النُّقَطِ الَّتِي وَضَعْتَهَا تَقَعُ فِي اسْتِقَامِيَّةٍ مَعَ نُقَطِ نَفْسِ اللَّوْنِ.';
+  } else {
+    fb.className = 'feedback-msg wrong';
+    fb.textContent = '✗ بَعْضُ النُّقَطِ لَيْسَتْ فِي اسْتِقَامِيَّةٍ مَعَ لَوْنِهَا. لَاحِظِ الخُطُوطَ المُنَقَّطَةَ التَّوْضِيحِيَّةَ.';
+  }
+  recordExercise('un1', 'unjiz', isOk, document.getElementById('ex-un-2'), null);
+}
+renderUn1();
+
+// ==================== 6. أنجز - التمرين 2 ====================
+const un2Blue = [{ gx: 2, gy: 7 }, { gx: 3, gy: 6 }];
+const un2Green = [{ gx: 7, gy: 5 }, { gx: 9, gy: 6 }];
+let un2SelectedNode = null;
+
+function renderUn2(locked = false, showSolution = false) {
+  const svg = document.getElementById('svg-un-2');
+  let html = '';
+  for (let i = 0; i <= 10; i++) {
+    const x = G1_OFF + i * G1_STEP;
+    html += `<line x1="${x}" y1="${G1_OFF}" x2="${x}" y2="${G1_OFF + 8 * G1_STEP}" stroke="#cbd5e1" stroke-width="1.2" />`;
+  }
+  for (let j = 0; j <= 8; j++) {
+    const y = G1_OFF + j * G1_STEP;
+    html += `<line x1="${G1_OFF}" y1="${y}" x2="${G1_OFF + 10 * G1_STEP}" y2="${y}" stroke="#cbd5e1" stroke-width="1.2" />`;
+  }
+
+  if (showSolution) {
+    html += `<line x1="${G1_OFF+1*G1_STEP}" y1="${G1_OFF+8*G1_STEP}" x2="${G1_OFF+8*G1_STEP}" y2="${G1_OFF+1*G1_STEP}" stroke="#2563eb" stroke-width="2.2" stroke-dasharray="4,3" />`;
+    html += `<line x1="${G1_OFF+1*G1_STEP}" y1="${G1_OFF+2*G1_STEP}" x2="${G1_OFF+10*G1_STEP}" y2="${G1_OFF+6.5*G1_STEP}" stroke="#16a34a" stroke-width="2.2" stroke-dasharray="4,3" />`;
+    html += `<circle cx="${G1_OFF+5*G1_STEP}" cy="${G1_OFF+4*G1_STEP}" r="11" fill="none" stroke="#16a34a" stroke-width="3.5" />`;
+  }
+
+  un2Blue.forEach(p => {
+    html += `<circle cx="${G1_OFF + p.gx * G1_STEP}" cy="${G1_OFF + p.gy * G1_STEP}" r="6.5" fill="#2563eb" />`;
+  });
+  un2Green.forEach(p => {
+    html += `<circle cx="${G1_OFF + p.gx * G1_STEP}" cy="${G1_OFF + p.gy * G1_STEP}" r="6.5" fill="#16a34a" />`;
+  });
+
+  if (un2SelectedNode) {
+    html += `<circle cx="${G1_OFF + un2SelectedNode.gx * G1_STEP}" cy="${G1_OFF + un2SelectedNode.gy * G1_STEP}" r="7.5" fill="#dc2626" stroke="#0f172a" stroke-width="2" />`;
+  }
+
+  if (!locked) {
+    for (let gx = 0; gx <= 10; gx++) {
+      for (let gy = 0; gy <= 8; gy++) {
+        html += `<circle cx="${G1_OFF + gx * G1_STEP}" cy="${G1_OFF + gy * G1_STEP}" r="9" fill="transparent" style="cursor:pointer" onclick="selectUn2Node(${gx}, ${gy})" />`;
+      }
+    }
+  }
+  svg.innerHTML = html;
+}
+
+function selectUn2Node(gx, gy) {
+  if (completedExercises['un2']) return;
+  un2SelectedNode = { gx, gy };
+  renderUn2(false, false);
+}
+
+function checkUn2() {
+  if (completedExercises['un2']) return;
+  if (!un2SelectedNode) {
+    alert('انْقُرْ عَلَى عُقْدَةٍ عَلَى المَرْصُوفَةِ لِتَعْيِينِ النُّقْطَةِ المُشْتَرَكَةِ!');
+    return;
+  }
+  const isOk = (un2SelectedNode.gx === 5 && un2SelectedNode.gy === 4);
+  renderUn2(true, true);
+  document.getElementById('btn-un-2').disabled = true;
+
+  const fb = document.getElementById('fb-un-2');
+  if (isOk) {
+    fb.className = 'feedback-msg correct';
+    fb.textContent = '✓ رَائِعٌ! هَذِهِ النُّقْطَةُ هِيَ نُقْطَةُ تَقَاطُعِ اسْتِقَامِيَّةِ النُّقَطِ الزَّرْقَاءِ وَالخَضْرَاءِ فِي آنٍ وَاحِدٍ.';
+  } else {
+    fb.className = 'feedback-msg wrong';
+    fb.textContent = '✗ مَوْضِعٌ غَيْرُ صَحِيحٍ. النُّقْطَةُ المُشْتَرَكَةُ مُحَاطَةٌ بِدَائِرَةٍ خَضْرَاءَ عِنْدَ تَقَاطُعِ الخَطَّيْنِ.';
+  }
+  recordExercise('un2', 'unjiz', isOk, null, document.getElementById('sec-atamarran'));
+}
+renderUn2();
+
+// ==================== 7. أتمرن - التمرين 1 ====================
+const at1Circles = [
+  { id: 0, x: 45,  y: 45,  group: 'red' },
+  { id: 1, x: 110, y: 45,  group: 'red' },
+  { id: 2, x: 195, y: 45,  group: 'red' },
+  { id: 3, x: 270, y: 45,  group: 'red' },
+  { id: 4, x: 95,  y: 105, group: 'green' },
+  { id: 5, x: 160, y: 90,  group: 'green' },
+  { id: 6, x: 225, y: 75,  group: 'green' },
+  { id: 7, x: 115, y: 138, group: 'none' },
+  { id: 8, x: 50,  y: 175, group: 'none' },
+  { id: 9, x: 175, y: 175, group: 'none' },
+  { id: 10, x: 235, y: 175, group: 'none' }
+];
+let at1Colors = {};
+let at1Tool = 'red';
+let at1DrawnCircle = null;
+
+function setAt1Tool(t) {
+  at1Tool = t;
+  ['red', 'green', 'draw'].forEach(k => {
+    document.getElementById('tool-at1-' + k).classList.toggle('selected', k === t);
+  });
+}
+
+function renderAt1(locked = false, showSolution = false) {
+  const svg = document.getElementById('svg-at-1');
+  let html = `<rect x="0" y="0" width="420" height="220" fill="transparent" onclick="clickAt1Bg(event, ${locked})" />`;
+
+  if (showSolution) {
+    html += `<line x1="25" y1="45" x2="385" y2="45" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,4" />`;
+    html += `<line x1="65" y1="112" x2="385" y2="38" stroke="#16a34a" stroke-width="2" stroke-dasharray="5,4" />`;
+    html += `<circle cx="355" cy="45" r="15" fill="none" stroke="#16a34a" stroke-width="3" stroke-dasharray="3,2" />`;
+  }
+
+  at1Circles.forEach(c => {
+    const col = at1Colors[c.id];
+    const fill = col === 'red' ? '#dc2626' : (col === 'green' ? '#16a34a' : '#ffffff');
+    html += `<circle cx="${c.x}" cy="${c.y}" r="10" fill="${fill}" stroke="#1e293b" stroke-width="2.2" style="cursor:${locked ? 'default' : 'pointer'}" onclick="clickAt1Circle(${c.id}, ${locked})" />`;
+  });
+
+  if (at1DrawnCircle) {
+    html += `<circle cx="${at1DrawnCircle.x}" cy="${at1DrawnCircle.y}" r="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2.8" />`;
+  }
+
+  svg.innerHTML = html;
+}
+
+function clickAt1Circle(id, locked) {
+  if (locked || completedExercises['at1']) return;
+  if (at1Tool === 'red' || at1Tool === 'green') {
+    if (at1Colors[id] === at1Tool) delete at1Colors[id];
+    else at1Colors[id] = at1Tool;
+    renderAt1(false, false);
+  }
+}
+
+function clickAt1Bg(evt, locked) {
+  if (locked || completedExercises['at1'] || at1Tool !== 'draw') return;
+  const svg = document.getElementById('svg-at-1');
+  const rect = svg.getBoundingClientRect();
+  const x = ((evt.clientX - rect.left) / rect.width) * 420;
+  const y = ((evt.clientY - rect.top) / rect.height) * 220;
+  at1DrawnCircle = { x, y };
+  renderAt1(false, false);
+}
+
+function resetAt1() {
+  if (completedExercises['at1']) return;
+  at1Colors = {};
+  at1DrawnCircle = null;
+  renderAt1(false, false);
+}
+
+function checkAt1() {
+  if (completedExercises['at1']) return;
+  const redIds = Object.keys(at1Colors).filter(k => at1Colors[k] === 'red').map(Number);
+  const greenIds = Object.keys(at1Colors).filter(k => at1Colors[k] === 'green').map(Number);
+
+  if (redIds.length !== 4 || greenIds.length !== 3 || !at1DrawnCircle) {
+    alert('لَوِّنْ 4 قُرَيْصَاتٍ بِالأَحْمَرِ، وَ3 قُرَيْصَاتٍ بِالأَخْضَرِ، ثُمَّ ارْسُمِ القُرَيْصَةَ المُشْتَرَكَةَ!');
+    return;
+  }
+
+  const redOk = [0, 1, 2, 3].every(id => redIds.includes(id));
+  const greenOk = [4, 5, 6].every(id => greenIds.includes(id));
+  const drawnOk = Math.hypot(at1DrawnCircle.x - 355, at1DrawnCircle.y - 45) <= 22;
+
+  const isOk = redOk && greenOk && drawnOk;
+  renderAt1(true, true);
+  document.getElementById('btn-at-1').disabled = true;
+  document.getElementById('clear-at-1').disabled = true;
+
+  const fb = document.getElementById('fb-at-1');
+  if (isOk) {
+    fb.className = 'feedback-msg correct';
+    fb.textContent = '✓ مُمْتَازٌ! لَقَدْ لَوَّنْتَ القُرَيْصَاتِ بِشَكْلٍ صَحِيحٍ وَعَيَّنْتَ مَوْضِعَ القُرَيْصَةِ المُشْتَرَكَةِ بِدِقَّةٍ.';
+  } else {
+    fb.className = 'feedback-msg wrong';
+    fb.textContent = '✗ هُنَاكَ خَطَأٌ فِي التَّلْوِينِ أَوْ فِي مَوْضِعِ القُرَيْصَةِ المَرْسُومَةِ. لَاحِظْ تَقَاطُعَ الخَطَّيْنِ المُنَقَّطَيْنِ.';
+  }
+  recordExercise('at1', 'atamarran', isOk, document.getElementById('ex-at-2'), null);
+}
+renderAt1();
+
+// ==================== 8. أتمرن - التمرين 2 ====================
+const at2Given = [
+  { x: 45,  y: 115, c: 'red' },   { x: 90,  y: 115, c: 'red' },   { x: 275, y: 115, c: 'red' },
+  { x: 125, y: 92,  c: 'green' }, { x: 180, y: 130, c: 'green' }, { x: 235, y: 168, c: 'green' },
+  { x: 170, y: 185, c: 'blue' },  { x: 275, y: 92,  c: 'blue' },  { x: 325, y: 48,  c: 'blue' }
+];
+let at2Color = 'red';
+let at2Added = [];
+
+function setAt2Color(c) {
+  at2Color = c;
+  ['red', 'green', 'blue'].forEach(k => {
+    document.getElementById('tool-at2-' + k).classList.toggle('selected', k === c);
+  });
+}
+
+function drawXMark(x, y, color, bold = false) {
+  const s = 5;
+  const w = bold ? 3 : 2.2;
+  return `<g stroke="${color}" stroke-width="${w}" stroke-linecap="round">
+    <line x1="${x-s}" y1="${y-s}" x2="${x+s}" y2="${y+s}" />
+    <line x1="${x+s}" y1="${y-s}" x2="${x-s}" y2="${y+s}" />
+  </g>`;
+}
+
+function renderAt2(locked = false, showSolution = false) {
+  const svg = document.getElementById('svg-at-2');
+  let html = `<rect x="0" y="0" width="420" height="230" fill="transparent" onclick="clickAt2Bg(event, ${locked})" />`;
+
+  if (showSolution) {
+    html += `<line x1="20" y1="115" x2="400" y2="115" stroke="#dc2626" stroke-width="1.8" stroke-dasharray="5,4" />`;
+    html += `<line x1="70" y1="54" x2="290" y2="206" stroke="#16a34a" stroke-width="1.8" stroke-dasharray="5,4" />`;
+    html += `<line x1="140" y1="211" x2="365" y2="13" stroke="#2563eb" stroke-width="1.8" stroke-dasharray="5,4" />`;
+  }
+
+  const cmap = { red: '#dc2626', green: '#16a34a', blue: '#2563eb' };
+  at2Given.forEach(m => { html += drawXMark(m.x, m.y, cmap[m.c], false); });
+  at2Added.forEach(m => { html += drawXMark(m.x, m.y, cmap[m.c], true); });
+
+  svg.innerHTML = html;
+}
+
+function clickAt2Bg(evt, locked) {
+  if (locked || completedExercises['at2']) return;
+  const svg = document.getElementById('svg-at-2');
+  const rect = svg.getBoundingClientRect();
+  const x = ((evt.clientX - rect.left) / rect.width) * 420;
+  const y = ((evt.clientY - rect.top) / rect.height) * 230;
+  at2Added.push({ x, y, c: at2Color });
+  renderAt2(false, false);
+}
+
+function undoAt2() {
+  if (completedExercises['at2']) return;
+  at2Added.pop();
+  renderAt2(false, false);
+}
+
+function distToLine(px, py, x1, y1, x2, y2) {
+  const num = Math.abs((y2 - y1) * px - (x2 - x1) * py + x2 * y1 - y2 * x1);
+  const den = Math.hypot(y2 - y1, x2 - x1);
+  return num / den;
+}
+
+function checkAt2() {
+  if (completedExercises['at2']) return;
+  const hasRed = at2Added.some(m => m.c === 'red');
+  const hasGreen = at2Added.some(m => m.c === 'green');
+  const hasBlue = at2Added.some(m => m.c === 'blue');
+  if (!hasRed || !hasGreen || !hasBlue) {
+    alert('ضَعْ عَلَامَةً وَاحِدَةً عَلَى الأَقَلِّ مِنْ كُلِّ لَوْنٍ (أَحْمَرُ، أَخْضَرُ، أَزْرَقُ)!');
+    return;
+  }
+
+  const isOk = at2Added.every(m => {
+    if (m.c === 'red') return distToLine(m.x, m.y, 45, 115, 275, 115) <= 13;
+    if (m.c === 'green') return distToLine(m.x, m.y, 125, 92, 235, 168) <= 13;
+    if (m.c === 'blue') return distToLine(m.x, m.y, 170, 185, 325, 48) <= 13;
+    return false;
+  });
+
+  renderAt2(true, true);
+  document.getElementById('btn-at-2').disabled = true;
+  document.getElementById('undo-at-2').disabled = true;
+
+  const fb = document.getElementById('fb-at-2');
+  if (isOk) {
+    fb.className = 'feedback-msg correct';
+    fb.textContent = '✓ رَائِعٌ! جَمِيعُ العَلَامَاتِ الجَدِيدَةِ تَقَعُ فِي اسْتِقَامِيَّةٍ مَعَ عَلَامَاتِ لَوْنِهَا.';
+  } else {
+    fb.className = 'feedback-msg wrong';
+    fb.textContent = '✗ بَعْضُ العَلَامَاتِ لَمْ تَقَعْ عَلَى حَافَّةِ المِسْطَرَةِ مَعَ بَقِيَّةِ عَلَامَاتِ لَوْنِهَا.';
+  }
+  recordExercise('at2', 'atamarran', isOk, document.getElementById('ex-at-3'), null);
+}
+renderAt2();
+
+// ==================== 9. أتمرن - التمرين 3 ====================
+function drawAt3Model() {
+  const svg = document.getElementById('svg-at-3-model');
+  svg.innerHTML = `
+    <g transform="scale(0.82) translate(0,0)">
+      <rect x="30" y="30" width="160" height="160" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+      <line x1="30" y1="190" x2="190" y2="30" stroke="#1e293b" stroke-width="2.2"/>
+      <line x1="30" y1="30" x2="110" y2="110" stroke="#1e293b" stroke-width="2.2"/>
+      <line x1="30" y1="110" x2="110" y2="110" stroke="#1e293b" stroke-width="2.2"/>
+      <line x1="110" y1="110" x2="110" y2="190" stroke="#1e293b" stroke-width="2.2"/>
+      <line x1="110" y1="190" x2="190" y2="110" stroke="#1e293b" stroke-width="2.2"/>
+    </g>
+  `;
+}
+drawAt3Model();
+
+const at3Nodes = [
+  { id: 'TL', x: 30,  y: 30 },
+  { id: 'TR', x: 190, y: 30 },
+  { id: 'BL', x: 30,  y: 190 },
+  { id: 'BR', x: 190, y: 190 },
+  { id: 'ML', x: 30,  y: 110 },
+  { id: 'MR', x: 190, y: 110 },
+  { id: 'MB', x: 110, y: 190 },
+  { id: 'C',  x: 110, y: 110 },
+  { id: 'H1', x: 65,  y: 110 },
+  { id: 'V1', x: 110, y: 160 },
+  { id: 'D1', x: 145, y: 75 }
+];
+
+let at3UserLines = [];
+let at3StartNode = null;
+
+function renderAt3Work(locked = false, showSolution = false) {
+  const svg = document.getElementById('svg-at-3-work');
+  let html = `
+    <rect x="30" y="30" width="160" height="160" fill="none" stroke="#1e293b" stroke-width="2.5"/>
+    <line x1="145" y1="75" x2="190" y2="30" stroke="#1e293b" stroke-width="2.2"/>
+    <line x1="30" y1="110" x2="65" y2="110" stroke="#1e293b" stroke-width="2.2"/>
+    <line x1="110" y1="160" x2="110" y2="190" stroke="#1e293b" stroke-width="2.2"/>
+  `;
+
+  if (showSolution) {
+    html += `
+      <line x1="30" y1="190" x2="190" y2="30" stroke="#16a34a" stroke-width="2.8" stroke-dasharray="5,3"/>
+      <line x1="30" y1="30" x2="110" y2="110" stroke="#16a34a" stroke-width="2.8" stroke-dasharray="5,3"/>
+      <line x1="30" y1="110" x2="110" y2="110" stroke="#16a34a" stroke-width="2.8" stroke-dasharray="5,3"/>
+      <line x1="110" y1="110" x2="110" y2="190" stroke="#16a34a" stroke-width="2.8" stroke-dasharray="5,3"/>
+      <line x1="110" y1="190" x2="190" y2="110" stroke="#16a34a" stroke-width="2.8" stroke-dasharray="5,3"/>
+    `;
+  }
+
+  at3UserLines.forEach(l => {
+    html += `<line x1="${l.x1}" y1="${l.y1}" x2="${l.x2}" y2="${l.y2}" stroke="#2563eb" stroke-width="2.8" />`;
+  });
+
+  if (!locked) {
+    at3Nodes.forEach(n => {
+      const isSel = at3StartNode && at3StartNode.id === n.id;
+      html += `<circle cx="${n.x}" cy="${n.y}" r="${isSel ? 7 : 5}" fill="${isSel ? '#dc2626' : '#2563eb'}" opacity="0.85" style="cursor:pointer" onclick="clickAt3Node('${n.id}')" />`;
+    });
+  }
+  svg.innerHTML = html;
+}
+
+function clickAt3Node(nodeId) {
+  if (completedExercises['at3']) return;
+  const node = at3Nodes.find(n => n.id === nodeId);
+  if (!at3StartNode) {
+    at3StartNode = node;
+  } else {
+    if (at3StartNode.id !== node.id) {
+      at3UserLines.push({ x1: at3StartNode.x, y1: at3StartNode.y, x2: node.x, y2: node.y });
+    }
+    at3StartNode = null;
+  }
+  renderAt3Work(false, false);
+}
+
+function undoAt3() {
+  if (completedExercises['at3']) return;
+  at3UserLines.pop();
+  at3StartNode = null;
+  renderAt3Work(false, false);
+}
+
+function clearAt3() {
+  if (completedExercises['at3']) return;
+  at3UserLines = [];
+  at3StartNode = null;
+  renderAt3Work(false, false);
+}
+
+function checkAt3() {
+  if (completedExercises['at3']) return;
+  if (at3UserLines.length === 0) {
+    alert('أَكْمِلْ رَسْمَ القِطَعِ النَّاقِصَةِ عَلَى المُرَبَّعِ أَوَّلًا!');
+    return;
+  }
+  const hasDiag = at3UserLines.some(l => sameSeg(l, 30, 190, 190, 30) || sameSeg(l, 30, 190, 145, 75) || sameSeg(l, 30, 190, 110, 110));
+  const hasHalfDiag = at3UserLines.some(l => sameSeg(l, 30, 30, 110, 110));
+  const hasHoriz = at3UserLines.some(l => sameSeg(l, 30, 110, 110, 110) || sameSeg(l, 65, 110, 110, 110));
+  const hasVert = at3UserLines.some(l => sameSeg(l, 110, 110, 110, 190) || sameSeg(l, 110, 110, 110, 160));
+  const hasBottomDiag = at3UserLines.some(l => sameSeg(l, 110, 190, 190, 110));
+
+  const isOk = hasDiag && hasHalfDiag && hasHoriz && hasVert && hasBottomDiag;
+  renderAt3Work(true, true);
+  document.getElementById('btn-at-3').disabled = true;
+  document.getElementById('undo-at-3').disabled = true;
+  document.getElementById('clear-at-3').disabled = true;
+
+  const fb = document.getElementById('fb-at-3');
+  if (isOk) {
+    fb.className = 'feedback-msg correct';
+    fb.textContent = '✓ أَحْسَنْتَ! لَقَدْ أَكْمَلْتَ الشَّكْلَ بِشَكْلٍ مُطَابِقٍ تَمَامًا لِلنَّمُوذَجِ.';
+  } else {
+    fb.className = 'feedback-msg wrong';
+    fb.textContent = '✗ إِجَابَةٌ غَيْرُ مُكْتَمِلَةٍ. لَاحِظِ القِطَعَ الخَضْرَاءَ المُنَقَّطَةَ الَّتِي تُطَابِقُ النَّمُوذَجَ.';
+  }
+  recordExercise('at3', 'atamarran', isOk, null, document.getElementById('sec-abhath'));
+}
+renderAt3Work();
+
+// ==================== 10. أبحث ====================
+const ab1Marks = [
+  { x: 90,  y: 115, c: '#dc2626' },
+  { x: 170, y: 115, c: '#dc2626' },
+  { x: 135, y: 175, c: '#16a34a' },
+  { x: 217, y: 151, c: '#16a34a' },
+  { x: 195, y: 45,  c: '#2563eb' },
+  { x: 253, y: 73,  c: '#2563eb' }
+];
+let ab1Point = null;
+
+function renderAb1(locked = false, showSolution = false) {
+  const svg = document.getElementById('svg-ab-1');
+  let html = `<rect x="0" y="0" width="420" height="250" fill="transparent" onclick="clickAb1(event, ${locked})" />`;
+
+  if (showSolution) {
+    html += `<line x1="40" y1="115" x2="390" y2="115" stroke="#dc2626" stroke-width="1.8" stroke-dasharray="5,4" />`;
+    html += `<line x1="70" y1="194" x2="390" y2="100" stroke="#16a34a" stroke-width="1.8" stroke-dasharray="5,4" />`;
+    html += `<line x1="150" y1="23" x2="390" y2="139" stroke="#2563eb" stroke-width="1.8" stroke-dasharray="5,4" />`;
+    html += `<circle cx="340" cy="115" r="14" fill="none" stroke="#16a34a" stroke-width="3.2" stroke-dasharray="3,2" />`;
+  }
+
+  ab1Marks.forEach(m => {
+    html += drawXMark(m.x, m.y, m.c, false);
+  });
+
+  if (ab1Point) {
+    html += `<circle cx="${ab1Point.x}" cy="${ab1Point.y}" r="7.5" fill="#f59e0b" stroke="#0f172a" stroke-width="2.2" />`;
+  }
+
+  svg.innerHTML = html;
+}
+
+function clickAb1(evt, locked) {
+  if (locked || completedExercises['ab1']) return;
+  const svg = document.getElementById('svg-ab-1');
+  const rect = svg.getBoundingClientRect();
+  const x = ((evt.clientX - rect.left) / rect.width) * 420;
+  const y = ((evt.clientY - rect.top) / rect.height) * 250;
+  ab1Point = { x, y };
+  renderAb1(false, false);
+}
+
+function checkAb1() {
+  if (completedExercises['ab1']) return;
+  if (!ab1Point) {
+    alert('انْقُرْ عَلَى اللُّوحَةِ لِتَعْيِينِ مَكَانِ النُّقْطَةِ المُشْتَرَكَةِ!');
+    return;
+  }
+  const isOk = Math.hypot(ab1Point.x - 340, ab1Point.y - 115) <= 20;
+  renderAb1(true, true);
+  document.getElementById('btn-ab-1').disabled = true;
+
+  const fb = document.getElementById('fb-ab-1');
+  if (isOk) {
+    fb.className = 'feedback-msg correct';
+    fb.textContent = '🏆 عَبْقَرِيٌّ! لَقَدْ وَجَدْتَ نُقْطَةَ التَّقَاطُعِ الوَحِيدَةَ الَّتِي تَقَعُ فِي اسْتِقَامِيَّةٍ مَعَ النُّقَطِ الحَمْرَاءِ وَالخَضْرَاءِ وَالزَّرْقَاءِ فِي آنٍ وَاحِدٍ!';
+  } else {
+    fb.className = 'feedback-msg wrong';
+    fb.textContent = '✗ إِجَابَةٌ خَاطِئَةٌ. لَاحِظْ نُقْطَةَ تَقَاطُعِ المُسْتَقِيمَاتِ الثَّلَاثَةِ المُحَاطَةَ بِالأَخْضَرِ.';
+  }
+  recordExercise('ab1', 'abhath', isOk, null, null);
+}
+renderAb1();
+</script>
+</body>
+</html>
