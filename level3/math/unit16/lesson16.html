@@ -1,0 +1,1781 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدرس 16: الْعَدَدُ 1000 - السنة الثالثة ابتدائي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root {
+    --primary: #0f766e;
+    --primary-light: #ccfbf1;
+    --secondary: #0369a1;
+    --accent: #d97706;
+    --success: #16a34a;
+    --success-bg: #dcfce7;
+    --error: #dc2626;
+    --error-bg: #fee2e2;
+    --bg-body: #f0f9ff;
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --border-color: #cbd5e1;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.7;
+  }
+
+  /* الترويسة */
+  header {
+    background: linear-gradient(135deg, #0284c7, #0f766e);
+    color: white;
+    padding: 20px 15px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    border-bottom: 5px solid #f59e0b;
+  }
+
+  .lesson-badge {
+    display: inline-block;
+    background: #f59e0b;
+    color: #fff;
+    font-weight: 900;
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 1rem;
+    margin-bottom: 6px;
+  }
+
+  header h1 {
+    margin: 5px 0;
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+  }
+
+  header p {
+    margin: 0;
+    font-size: 1rem;
+    opacity: 0.95;
+  }
+
+  .container {
+    max-width: 920px;
+    margin: 20px auto;
+    padding: 0 15px 40px;
+  }
+
+  /* البطاقات والمحطات */
+  .section-card {
+    background: var(--card-bg);
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 26px;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+    border: 2px solid #e2e8f0;
+    transition: opacity 0.3s ease;
+  }
+
+  .section-card.locked {
+    opacity: 0.55;
+    pointer-events: none;
+    position: relative;
+  }
+
+  .section-card.locked::after {
+    content: "🔒 أَتْمِمْ التَّمْرِينَ السَّابِقَ لِفَتْحِ هَذِهِ الْمَحَطَّةِ";
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: #334155;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 12px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 3px dashed #cbd5e1;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin: 0;
+    padding: 4px 18px;
+    border-radius: 12px;
+    color: white;
+  }
+
+  .title-aktashif { background-color: #16a34a; }
+  .title-onjiz { background-color: #ea580c; }
+  .title-taalamt { background-color: #7c3aed; }
+  .title-atamarran { background-color: #be185d; }
+  .title-abhath { background-color: #b45309; }
+
+  .num-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: #0284c7;
+    color: white;
+    border-radius: 50%;
+    font-weight: 900;
+    margin-left: 8px;
+    font-size: 1.05rem;
+  }
+
+  .num-square {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: #be185d;
+    color: white;
+    border-radius: 8px;
+    font-weight: 900;
+    margin-left: 8px;
+    font-size: 1.05rem;
+  }
+
+  .instruction {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 14px;
+  }
+
+  /* عزل الاتجاه للعمليات والأعداد */
+  .math-ltr {
+    direction: ltr;
+    display: inline-block;
+    unicode-bidi: isolate;
+    font-weight: 800;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  .equation-ltr-box {
+    direction: ltr;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: white;
+    padding: 14px;
+    border-radius: 12px;
+    border: 2px solid #cbd5e1;
+    margin: 10px 0;
+    font-size: 1.25rem;
+    font-weight: 900;
+  }
+
+  /* رف الكتب في أكتشف */
+  .books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin: 16px 0;
+    background: #f8fafc;
+    padding: 16px;
+    border-radius: 14px;
+    border: 2px solid #cbd5e1;
+  }
+
+  .book-item {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    text-align: center;
+    border: 2px solid #e2e8f0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+
+  .book-icon {
+    font-size: 2.5rem;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .book-name {
+    font-weight: 800;
+    font-size: 1rem;
+    color: #334155;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .book-price {
+    background: #fef3c7;
+    color: #92400e;
+    border: 1px solid #f59e0b;
+    padding: 3px 12px;
+    border-radius: 8px;
+    font-weight: 900;
+    font-size: 1.05rem;
+  }
+
+  /* صندوق السؤال الفرعي */
+  .question-box {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  .question-text {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: #1e293b;
+  }
+
+  input[type="number"], input[type="text"], select {
+    padding: 8px 10px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    border: 2px solid #94a3b8;
+    border-radius: 10px;
+    text-align: center;
+    width: 96px;
+    background: white;
+    color: #0f172a;
+    transition: all 0.2s;
+  }
+
+  input:focus, select:focus {
+    outline: none;
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+  }
+
+  input.correct, select.correct, .card-option.correct, .choice-btn.correct {
+    background-color: var(--success-bg) !important;
+    border-color: var(--success) !important;
+    color: #14532d !important;
+  }
+
+  input.incorrect, select.incorrect, .card-option.incorrect, .choice-btn.incorrect {
+    background-color: var(--error-bg) !important;
+    border-color: var(--error) !important;
+    color: #7f1d1d !important;
+  }
+
+  .btn-check {
+    background: #0284c7;
+    color: white;
+    border: none;
+    padding: 9px 22px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 8px;
+  }
+
+  .btn-check:hover:not(:disabled) {
+    background: #0369a1;
+  }
+
+  .btn-check:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  .btn-check:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+  }
+
+  .feedback-msg {
+    margin-top: 10px;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 8px 14px;
+    border-radius: 8px;
+    display: none;
+  }
+
+  .feedback-msg.show { display: block; }
+  .feedback-msg.ok { background: var(--success-bg); color: #15803d; border: 1px solid #86efac; }
+  .feedback-msg.err { background: var(--error-bg); color: #b91c1c; border: 1px solid #fca5a5; }
+
+  /* جدول المراتب المعكوس (LTR) والورقة النقدية في أكتشف */
+  .aktashif-split {
+    display: grid;
+    grid-template-columns: 1fr 1.35fr;
+    gap: 18px;
+    align-items: center;
+    margin-top: 14px;
+  }
+
+  @media (max-width: 720px) {
+    .aktashif-split { grid-template-columns: 1fr; }
+  }
+
+  .banknote-visual {
+    background: linear-gradient(135deg, #fecdd3, #fda4af);
+    border: 3px double #9f1239;
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    color: #881337;
+    box-shadow: inset 0 0 12px rgba(159, 18, 57, 0.15);
+  }
+
+  .banknote-visual .amount {
+    font-size: 1.9rem;
+    font-weight: 900;
+    display: block;
+  }
+
+  /* جدول المراتب من اليسار إلى اليمين */
+  .place-table-ltr {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-weight: 800;
+    background: white;
+    direction: ltr;
+  }
+
+  .place-table-ltr th, .place-table-ltr td {
+    border: 2px solid #94a3b8;
+    padding: 7px 6px;
+    font-size: 1.05rem;
+  }
+
+  .place-table-ltr th.manzila-alam { background: #fef08a; color: #854d0e; }
+  .place-table-ltr th.manzila-miat { background: #fed7aa; color: #9a3412; }
+  .place-table-ltr th.manzila-asharat { background: #bae6fd; color: #075985; }
+  .place-table-ltr th.manzila-wahdat { background: #e9d5ff; color: #581c87; }
+  .place-table-ltr .sub-th { background: #f1f5f9; font-size: 0.95rem; }
+
+  .carry-row td {
+    background: #fff1f2;
+    padding: 4px;
+    border-bottom: 1px dashed #fca5a5;
+  }
+
+  .carry-badge {
+    display: inline-block;
+    background: #dc2626;
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 0.9rem;
+    padding: 1px 8px;
+    border-radius: 50px;
+    box-shadow: 0 2px 4px rgba(220, 38, 38, 0.35);
+  }
+
+  .op-symbol-cell {
+    font-weight: 900;
+    color: #0284c7;
+    background: #f8fafc;
+    width: 42px;
+  }
+
+  .place-table-ltr .result-row td {
+    background: #dcfce7;
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #166534;
+    border-top: 3px solid #16a34a;
+  }
+
+  /* خيارات الاختيار من متعدد */
+  .choices-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .choice-btn {
+    text-align: right;
+    background: white;
+    border: 2px solid #cbd5e1;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .choice-btn:hover:not(:disabled) {
+    border-color: #0284c7;
+    background: #f0f9ff;
+  }
+
+  .choice-btn.selected {
+    border-color: #0284c7;
+    background: #e0f2fe;
+  }
+
+  /* جدول المتفوقين في أنجز */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    text-align: center;
+    font-weight: 800;
+  }
+
+  .data-table th {
+    background: #ffedd5;
+    color: #9a3412;
+    border: 2px solid #fdba74;
+    padding: 10px;
+  }
+
+  .data-table td {
+    background: white;
+    border: 2px solid #fdba74;
+    padding: 10px;
+    font-size: 1.2rem;
+  }
+
+  /* معادلات الإكمال */
+  .eq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 14px;
+    margin-top: 12px;
+  }
+
+  .eq-card {
+    background: #fff;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+    font-size: 1.2rem;
+  }
+
+  .eq-card input {
+    width: 78px;
+    padding: 5px;
+    font-size: 1.1rem;
+  }
+
+  /* فقرة تعلمت */
+  .taalamt-box {
+    background: #f5f3ff;
+    border: 3px solid #8b5cf6;
+    border-radius: 16px;
+    padding: 20px;
+  }
+
+  .taalamt-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #4c1d95;
+    margin-bottom: 16px;
+  }
+
+  .hundreds-visual {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    background: white;
+    padding: 16px;
+    border-radius: 14px;
+    border: 2px dashed #a78bfa;
+  }
+
+  .hundreds-pills {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+
+  .pill-100 {
+    background: #dcfce7;
+    border: 2px solid #16a34a;
+    color: #14532d;
+    font-weight: 900;
+    padding: 6px 12px;
+    border-radius: 20px;
+    text-align: center;
+    font-size: 1.05rem;
+  }
+
+  .thousand-box {
+    background: #fef3c7;
+    border: 2px dashed #d97706;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 900;
+    font-size: 1.25rem;
+    color: #92400e;
+  }
+
+  /* بطاقات التلوين في أتمرن 1 */
+  .cards-wall {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .card-option {
+    background: white;
+    border: 3px solid #94a3b8;
+    border-radius: 12px;
+    padding: 12px 22px;
+    font-size: 1.2rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .card-option.colored {
+    background: #fde047;
+    border-color: #eab308;
+    color: #713f12;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(234, 179, 8, 0.3);
+  }
+
+  /* متتالية الأعداد في أتمرن 3 */
+  .sequence-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0;
+    direction: ltr;
+  }
+
+  .seq-node {
+    background: white;
+    border: 3px solid #0284c7;
+    border-radius: 50%;
+    width: 82px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    font-weight: 900;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+  }
+
+  .seq-node.up { transform: translateY(-14px); }
+  .seq-node.down { transform: translateY(14px); }
+
+  .seq-node input {
+    width: 66px;
+    border: none;
+    border-bottom: 2px dashed #64748b;
+    border-radius: 4px;
+    padding: 2px;
+    font-size: 1.1rem;
+    background: transparent;
+  }
+
+  .seq-arrow {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #0284c7;
+  }
+
+  /* جدول النقود في أبحث */
+  .coins-showcase {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    background: #fffbeb;
+    padding: 12px;
+    border-radius: 12px;
+    border: 2px solid #fde68a;
+  }
+
+  .coin-badge {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.95rem;
+    border: 3px solid #b45309;
+    background: radial-gradient(circle, #fef3c7, #f59e0b);
+    color: #78350f;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+  }
+
+  .coins-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    font-weight: 800;
+  }
+
+  .coins-table th {
+    background: #fef3c7;
+    color: #92400e;
+    border: 2px solid #f59e0b;
+    padding: 10px;
+    font-size: 1.1rem;
+  }
+
+  .coins-table td {
+    border: 2px solid #cbd5e1;
+    padding: 10px;
+    font-size: 1.1rem;
+    background: white;
+  }
+
+  .coins-table tfoot td {
+    background: #dcfce7;
+    color: #14532d;
+    font-weight: 900;
+    font-size: 1.2rem;
+    border-color: #16a34a;
+  }
+
+  /* عداد المحطة */
+  .station-counter {
+    margin-top: 16px;
+    padding: 10px 16px;
+    background: #f1f5f9;
+    border-radius: 10px;
+    font-weight: 800;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #cbd5e1;
+  }
+
+  .count-ok { color: var(--success); }
+  .count-err { color: var(--error); }
+
+  /* بطاقة التقييم النهائي والدائرة النسبية */
+  .final-report-card {
+    background: linear-gradient(180deg, #ffffff, #f0fdf4);
+    border: 3px solid #16a34a;
+    border-radius: 20px;
+    padding: 26px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(22, 163, 74, 0.12);
+  }
+
+  .final-report-card h2 {
+    margin-top: 0;
+    color: #14532d;
+    font-size: 1.7rem;
+    font-weight: 900;
+  }
+
+  .report-body {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin: 20px 0;
+  }
+
+  /* الدائرة النسبية */
+  .pie-wrapper {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    background: conic-gradient(#16a34a 0% 0%, #e2e8f0 0% 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    transition: background 0.5s ease;
+  }
+
+  .pie-inner {
+    width: 124px;
+    height: 124px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.06);
+  }
+
+  .pie-percent {
+    font-size: 1.9rem;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1.1;
+  }
+
+  .pie-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #64748b;
+  }
+
+  .stats-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 240px;
+  }
+
+  .stat-item {
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1.15rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .stat-correct { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+  .stat-wrong { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+  .stat-total { background: #e0f2fe; color: #075985; border: 1px solid #7dd3fc; }
+
+  .btn-reset {
+    background: #0f766e;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 4px 10px rgba(15, 118, 110, 0.25);
+  }
+
+  .btn-reset:hover {
+    background: #115e59;
+  }
+
+  /* ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== */
+  #sub-lock-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .lock-box {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+    border: 2px solid #e1f5fe;
+    max-width: 380px;
+    width: 100%;
+  }
+  .lock-icon { font-size: 50px; margin-bottom: 12px; }
+  .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+  .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+  .btn-channel {
+    display: block;
+    width: 100%;
+    background: #0288d1;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+  }
+  .btn-check-sub {
+    width: 100%;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 13px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .sub-status-msg {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-height: 24px;
+  }
+
+  /* زر العودة إلى الفهرس (أُضيف) */
+  .btn-back-home {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin: 20px auto 10px auto;
+    background: #0d47a1;
+    color: #ffffff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<header>
+  <div class="lesson-badge">السَّنَةُ الثَّالِثَةُ ابْتِدَائِيٌّ • الدَّرْسُ 16</div>
+  <h1>الْعَدَدُ <span class="math-ltr">1000</span></h1>
+  <p>كِتَابُ التِّلْمِيذِ ص 29 • كُرَّاسُ الْأَنْشِطَةِ ص 20</p>
+</header>
+
+<div class="container">
+
+  <!-- ==================== 1. أكتشف ==================== -->
+  <section class="section-card" id="sec-aktashif">
+    <div class="section-header">
+      <h2 class="section-title title-aktashif">أَكْتَشِفُ</h2>
+    </div>
+
+    <p class="instruction">◄ هَذِهِ عَنَاوِينُ كُتُبٍ عُرِضَتْ عَلَى رَفِّ الْمَكْتَبَةِ :</p>
+
+    <div class="books-grid">
+      <div class="book-item">
+        <span class="book-icon">📗</span>
+        <span class="book-name">قَامُوسُ اللُّغَةِ الْعَرَبِيَّةِ</span>
+        <span class="book-price"><span class="math-ltr">630 DA</span></span>
+      </div>
+      <div class="book-item">
+        <span class="book-icon">📙</span>
+        <span class="book-name">حَيَوَانَاتُ الْبِيئَةِ</span>
+        <span class="book-price"><span class="math-ltr">240 DA</span></span>
+      </div>
+      <div class="book-item">
+        <span class="book-icon">📕</span>
+        <span class="book-name">قِصَّةٌ</span>
+        <span class="book-price"><span class="math-ltr">152 DA</span></span>
+      </div>
+      <div class="book-item">
+        <span class="book-icon">📘</span>
+        <span class="book-name">حَلُّ مُشْكِلَاتٍ</span>
+        <span class="book-price"><span class="math-ltr">217 DA</span></span>
+      </div>
+    </div>
+
+    <p class="instruction">أَرَادَتْ سَلْمَى شِرَاءَ الْقِصَّةِ وَالْقَامُوسِ وَكِتَابِ حَلِّ الْمُشْكِلَاتِ.</p>
+
+    <!-- السؤال 1 في أكتشف -->
+    <div class="question-box" id="q-akt-1">
+      <div class="question-text">▪ مَا هُوَ ثَمَنُ الْكُتُبِ الَّتِي اشْتَرَتْهَا سَلْمَى ؟ (أَكْمِلْ مَرَاحِلَ الْعَمَلِيَّةِ مِنَ الْيَسَارِ إِلَى الْيَمِينِ)</div>
+      <div class="equation-ltr-box">
+        <input type="number" id="in-akt-1a" placeholder="؟">
+        <span>+</span>
+        <input type="number" id="in-akt-1b" placeholder="؟">
+        <span>+</span>
+        <input type="number" id="in-akt-1c" placeholder="؟">
+        <span>=</span>
+        <input type="number" id="in-akt-1res" placeholder="؟">
+        <span>DA</span>
+      </div>
+      <button class="btn-check" id="btn-akt-1" onclick="checkAktashif1()">تَحَقَّقْ</button>
+      <div class="feedback-msg" id="fb-akt-1"></div>
+    </div>
+
+    <!-- السؤال 2 في أكتشف -->
+    <div class="question-box" id="q-akt-2">
+      <div class="question-text">▪ لِدَفْعِ ثَمَنِ الْكُتُبِ أَعْطَتْ سَلْمَى لِلْبَائِعِ الْوَرَقَةَ النَّقْدِيَّةَ الْمُقَابِلَةَ فَأَرْجَعَ لَهَا دِينَارًا وَاحِدًا.</div>
+      
+      <div class="aktashif-split">
+        <div class="banknote-visual">
+          <div>بَنْكُ الْجَزَائِرِ</div>
+          <span class="amount"><span class="math-ltr">1000 DA</span></span>
+          <div>أَلْفُ دِينَارٍ</div>
+        </div>
+
+        <div>
+          <div style="font-weight:800; margin-bottom:6px; text-align:center;">◄ لَاحِظِ الْجَدْوَلَ وَالْعَمَلِيَّةَ الْعَمُودِيَّةَ (مِنَ الْيَسَارِ إِلَى الْيَمِينِ) ثُمَّ اشْرَحْ كَيْفِيَّةَ الِانْتِقَالِ مِنْ <span class="math-ltr">999</span> إِلَى <span class="math-ltr">1000</span> :</div>
+          <table class="place-table-ltr">
+            <tr>
+              <th class="op-symbol-cell" rowspan="2">الْعَمَلِيَّةُ</th>
+              <th class="manzila-alam">مَنْزِلَةُ الْآلَافِ</th>
+              <th class="manzila-miat">مَنْزِلَةُ الْمِئَاتِ</th>
+              <th class="manzila-asharat">مَنْزِلَةُ الْعَشَرَاتِ</th>
+              <th class="manzila-wahdat">مَنْزِلَةُ الْوَحَدَاتِ</th>
+            </tr>
+            <tr class="sub-th">
+              <td>آ</td>
+              <td>م</td>
+              <td>ع</td>
+              <td>و</td>
+            </tr>
+            <!-- سطر الاحتفاظ باللون الأحمر -->
+            <tr class="carry-row">
+              <td style="font-size:0.8rem; color:#dc2626; font-weight:900;">الِاحْتِفَاظُ</td>
+              <td><span class="carry-badge">+1</span></td>
+              <td><span class="carry-badge">+1</span></td>
+              <td><span class="carry-badge">+1</span></td>
+              <td></td>
+            </tr>
+            <!-- 999 -->
+            <tr>
+              <td class="op-symbol-cell"></td>
+              <td></td>
+              <td>9</td>
+              <td>9</td>
+              <td>9</td>
+            </tr>
+            <!-- + 1 -->
+            <tr>
+              <td class="op-symbol-cell">+</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>1</td>
+            </tr>
+            <!-- النتيجة 1000 -->
+            <tr class="result-row">
+              <td class="op-symbol-cell">=</td>
+              <td>1</td>
+              <td>0</td>
+              <td>0</td>
+              <td>0</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div style="margin-top:14px; font-weight:800;">اخْتَرِ الشَّرْحَ الصَّحِيحَ لِلِانْتِقَالِ مِنْ <span class="math-ltr">999</span> إِلَى <span class="math-ltr">1000</span> :</div>
+      <div class="choices-list" id="choices-akt-2">
+        <button type="button" class="choice-btn" data-val="0" onclick="selectChoice('choices-akt-2', 0)">عِنْدَمَا نُضِيفُ <span class="math-ltr">1</span> إِلَى <span class="math-ltr">999</span> نَحْصُلُ عَلَى <span class="math-ltr">10</span> وَحَدَاتٍ فَنَحْتَفِظُ بِـ <span class="math-ltr">1</span> فِي الْعَشَرَاتِ، ثُمَّ <span class="math-ltr">10</span> عَشَرَاتٍ فَنَحْتَفِظُ بِـ <span class="math-ltr">1</span> فِي الْمِئَاتِ، ثُمَّ <span class="math-ltr">10</span> مِئَاتٍ فَنُبَادِلُهَا بِـ <span class="math-ltr">1</span> أَلْفٍ فَيُصْبِحُ الْعَدَدُ <span class="math-ltr">1000</span>.</button>
+        <button type="button" class="choice-btn" data-val="1" onclick="selectChoice('choices-akt-2', 1)">عِنْدَمَا نُضِيفُ <span class="math-ltr">1</span> إِلَى <span class="math-ltr">999</span> يَبْقَى الرَّقْمُ <span class="math-ltr">9</span> فِي مَنْزِلَةِ الْمِئَاتِ.</button>
+        <button type="button" class="choice-btn" data-val="2" onclick="selectChoice('choices-akt-2', 2)">نُضِيفُ <span class="math-ltr">10</span> إِلَى <span class="math-ltr">999</span> لِلْحُصُولِ عَلَى <span class="math-ltr">1000</span>.</button>
+      </div>
+      <button class="btn-check" id="btn-akt-2" onclick="checkAktashif2()">تَحَقَّقْ</button>
+      <div class="feedback-msg" id="fb-akt-2"></div>
+    </div>
+
+    <div class="station-counter" id="cnt-aktashif">
+      <span>حَصِيلَةُ «أَكْتَشِفُ»:</span>
+      <span><span class="count-ok">✓ الصَّوَابُ: 0</span> | <span class="count-err">✗ الْخَطَأُ: 0</span></span>
+    </div>
+  </section>
+
+  <!-- ==================== 2. أنجز ==================== -->
+  <section class="section-card locked" id="sec-onjiz">
+    <div class="section-header">
+      <h2 class="section-title title-onjiz">أُنْجِزُ</h2>
+    </div>
+
+    <!-- التمرين 1 في أنجز -->
+    <div class="question-box" id="q-onj-1">
+      <div class="instruction"><span class="num-badge">1</span> كَرَّمَتِ الْبَلَدِيَّةُ الْمُتَفَوِّقِينَ فِي امْتِحَانَاتِ نِهَايَةِ السَّنَةِ، وَكَانَ عَدَدُهُمْ كَالْآتِي :</div>
+      <table class="data-table">
+        <tr>
+          <th>شَهَادَةُ الْبَكَالُورْيَا</th>
+          <th>شَهَادَةُ التَّعْلِيمِ الْمُتَوَسِّطِ</th>
+          <th>شَهَادَةُ التَّعْلِيمِ الِابْتِدَائِيِّ</th>
+        </tr>
+        <tr>
+          <td><span class="math-ltr">540</span></td>
+          <td><span class="math-ltr">320</span></td>
+          <td><span class="math-ltr">140</span></td>
+        </tr>
+      </table>
+      <div class="question-text">▪ مَا هُوَ عَدَدُ التَّلَامِيذِ الْمُكَرَّمِينَ ؟ (أَكْمِلْ مَرَاحِلَ الْعَمَلِيَّةِ مِنَ الْيَسَارِ إِلَى الْيَمِينِ)</div>
+      <div class="equation-ltr-box">
+        <input type="number" id="in-onj-1a" placeholder="؟">
+        <span>+</span>
+        <input type="number" id="in-onj-1b" placeholder="؟">
+        <span>+</span>
+        <input type="number" id="in-onj-1c" placeholder="؟">
+        <span>=</span>
+        <input type="number" id="in-onj-1res" placeholder="؟">
+        <span style="font-size:1rem;">تِلْمِيذًا</span>
+      </div>
+      <button class="btn-check" id="btn-onj-1" onclick="checkOnjiz1()">تَحَقَّقْ</button>
+      <div class="feedback-msg" id="fb-onj-1"></div>
+    </div>
+
+    <!-- التمرين 2 في أنجز -->
+    <div class="question-box" id="q-onj-2">
+      <div class="instruction"><span class="num-badge">2</span> أُنْقُلْ ثُمَّ أَكْمِلْ بِالْعَدَدِ الْمُنَاسِبِ :</div>
+      <div class="eq-grid">
+        <div class="eq-card">
+          <span class="math-ltr">900 + <input type="number" id="in-onj-2a" placeholder="؟"> = 1000</span>
+        </div>
+        <div class="eq-card">
+          <span class="math-ltr">1000 = 800 + <input type="number" id="in-onj-2b" placeholder="؟"> + 60</span>
+        </div>
+        <div class="eq-card">
+          <span class="math-ltr">600 + <input type="number" id="in-onj-2c" placeholder="؟"> = 1000</span>
+        </div>
+      </div>
+      <div style="margin-top:14px;">
+        <button class="btn-check" id="btn-onj-2" onclick="checkOnjiz2()">تَحَقَّقْ</button>
+      </div>
+      <div class="feedback-msg" id="fb-onj-2"></div>
+    </div>
+
+    <div class="station-counter" id="cnt-onjiz">
+      <span>حَصِيلَةُ «أُنْجِزُ»:</span>
+      <span><span class="count-ok">✓ الصَّوَابُ: 0</span> | <span class="count-err">✗ الْخَطَأُ: 0</span></span>
+    </div>
+  </section>
+
+  <!-- ==================== 3. تعلمت ==================== -->
+  <section class="section-card locked" id="sec-taalamt">
+    <div class="section-header">
+      <h2 class="section-title title-taalamt">تَعَلَّمْتُ</h2>
+    </div>
+    <div class="taalamt-box">
+      <div class="taalamt-text">
+        الْأَلْفُ <span class="math-ltr" style="background:white; padding:2px 10px; border-radius:8px; border:2px solid #8b5cf6;">1000</span> هِيَ مَرْتَبَةٌ مِنْ مَرَاتِبِ الْأَعْدَادِ بَعْدَ الْوَحَدَاتِ وَالْعَشَرَاتِ وَالْمِئَاتِ.
+      </div>
+      <div class="hundreds-visual">
+        <div class="hundreds-pills">
+          <span class="pill-100 math-ltr">100</span>
+          <span class="pill-100 math-ltr">100</span>
+          <span class="pill-100 math-ltr">100</span>
+          <span class="pill-100 math-ltr">100</span>
+          <span class="pill-100 math-ltr">100</span>
+          <span class="pill-100 math-ltr">100</span>
+          <span class="pill-100 math-ltr">100</span>
+          <span class="pill-100 math-ltr">100</span>
+          <span class="pill-100 math-ltr">100</span>
+          <span class="pill-100 math-ltr">100</span>
+        </div>
+        <div style="font-size:1.8rem; font-weight:900; color:#dc2626;">⟷</div>
+        <div class="thousand-box">
+          <div class="math-ltr">1000</div>
+          <div>أَلْفٌ</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 4. أتمرن ==================== -->
+  <section class="section-card locked" id="sec-atamarran">
+    <div class="section-header">
+      <h2 class="section-title title-atamarran">أَتَمَرَّنُ (كُرَّاسُ الْأَنْشِطَةِ ص 20)</h2>
+    </div>
+
+    <!-- التمرين 1 في أتمرن -->
+    <div class="question-box" id="q-atm-1">
+      <div class="instruction"><span class="num-square">1</span> لَوِّنِ الْبِطَاقَاتِ الْمُسَاوِيَةَ لِـ <span class="math-ltr">1000</span> (انْقُرْ عَلَى الْبِطَاقَةِ لِتَلْوِينِهَا) :</div>
+      <div class="cards-wall" id="cards-atm-1">
+        <div class="card-option math-ltr" data-sum="1050" onclick="toggleCard(this)">450 + 600</div>
+        <div class="card-option math-ltr" data-sum="1000" onclick="toggleCard(this)">500 + 500</div>
+        <div class="card-option math-ltr" data-sum="1000" onclick="toggleCard(this)">600 + 400</div>
+        <div class="card-option math-ltr" data-sum="110" onclick="toggleCard(this)">100 + 10</div>
+        <div class="card-option math-ltr" data-sum="1000" onclick="toggleCard(this)">10 + 990</div>
+        <div class="card-option math-ltr" data-sum="200" onclick="toggleCard(this)">100 + 100</div>
+        <div class="card-option math-ltr" data-sum="1000" onclick="toggleCard(this)">1000 + 0</div>
+        <div class="card-option math-ltr" data-sum="1000" onclick="toggleCard(this)">700 + 300</div>
+        <div class="card-option math-ltr" data-sum="1000" onclick="toggleCard(this)">899 + 101</div>
+        <div class="card-option math-ltr" data-sum="730" onclick="toggleCard(this)">700 + 30</div>
+      </div>
+      <button class="btn-check" id="btn-atm-1" onclick="checkAtamarran1()">تَحَقَّقْ</button>
+      <div class="feedback-msg" id="fb-atm-1"></div>
+    </div>
+
+    <!-- التمرين 2 في أتمرن -->
+    <div class="question-box" id="q-atm-2">
+      <div class="instruction"><span class="num-square">2</span> أُكْتُبِ الْعَدَدَ الْمُنَاسِبَ مَكَانَ النِّقَاطِ لِتَحْصُلَ عَلَى <span class="math-ltr">1000</span> :</div>
+      <div class="eq-grid">
+        <div class="eq-card">
+          <span class="math-ltr">200 + 200 + <input type="number" id="in-atm-2a" placeholder="؟"> = 1000</span>
+        </div>
+        <div class="eq-card">
+          <span class="math-ltr">600 + 300 + <input type="number" id="in-atm-2b" placeholder="؟"> + 50 = 1000</span>
+        </div>
+        <div class="eq-card">
+          <span class="math-ltr"><input type="number" id="in-atm-2c1" placeholder="؟"> + <input type="number" id="in-atm-2c2" placeholder="؟"> = 1000</span>
+        </div>
+        <div class="eq-card">
+          <span class="math-ltr">250 + 250 + <input type="number" id="in-atm-2d" placeholder="؟"> = 1000</span>
+        </div>
+        <div class="eq-card">
+          <span class="math-ltr"><input type="number" id="in-atm-2e1" placeholder="؟"> + <input type="number" id="in-atm-2e2" placeholder="؟"> + <input type="number" id="in-atm-2e3" placeholder="؟"> = 1000</span>
+        </div>
+        <div class="eq-card">
+          <span class="math-ltr"><input type="number" id="in-atm-2f1" placeholder="؟"> + 400 + <input type="number" id="in-atm-2f2" placeholder="؟"> = 1000</span>
+        </div>
+      </div>
+      <div style="margin-top:14px;">
+        <button class="btn-check" id="btn-atm-2" onclick="checkAtamarran2()">تَحَقَّقْ</button>
+      </div>
+      <div class="feedback-msg" id="fb-atm-2"></div>
+    </div>
+
+    <!-- التمرين 3 في أتمرن -->
+    <div class="question-box" id="q-atm-3">
+      <div class="instruction"><span class="num-square">3</span> أَكْمِلْ مُتَتَالِيَةَ الْأَعْدَادِ لِتَصِلَ إِلَى الْعَدَدِ <span class="math-ltr">1000</span> :</div>
+      <div class="sequence-container">
+        <div class="seq-node down">600</div>
+        <span class="seq-arrow">↗</span>
+        <div class="seq-node up">650</div>
+        <span class="seq-arrow">↘</span>
+        <div class="seq-node down"><input type="number" id="in-seq-1" placeholder="؟"></div>
+        <span class="seq-arrow">↗</span>
+        <div class="seq-node up"><input type="number" id="in-seq-2" placeholder="؟"></div>
+        <span class="seq-arrow">↘</span>
+        <div class="seq-node down">800</div>
+        <span class="seq-arrow">↗</span>
+        <div class="seq-node up"><input type="number" id="in-seq-3" placeholder="؟"></div>
+        <span class="seq-arrow">↘</span>
+        <div class="seq-node down"><input type="number" id="in-seq-4" placeholder="؟"></div>
+        <span class="seq-arrow">↗</span>
+        <div class="seq-node up">950</div>
+        <span class="seq-arrow">↘</span>
+        <div class="seq-node down" style="border-color:#16a34a; background:#dcfce7;">1000</div>
+      </div>
+      <div style="margin-top:16px;">
+        <button class="btn-check" id="btn-atm-3" onclick="checkAtamarran3()">تَحَقَّقْ</button>
+      </div>
+      <div class="feedback-msg" id="fb-atm-3"></div>
+    </div>
+
+    <div class="station-counter" id="cnt-atamarran">
+      <span>حَصِيلَةُ «أَتَمَرَّنُ»:</span>
+      <span><span class="count-ok">✓ الصَّوَابُ: 0</span> | <span class="count-err">✗ الْخَطَأُ: 0</span></span>
+    </div>
+  </section>
+
+  <!-- ==================== 5. أبحث ==================== -->
+  <section class="section-card locked" id="sec-abhath">
+    <div class="section-header">
+      <h2 class="section-title title-abhath">أَبْحَثُ</h2>
+    </div>
+
+    <div class="question-box" id="q-abh-1">
+      <div class="instruction">أَكْمِلْ مَلْءَ الْفَرَاغَاتِ فِي الْجَدْوَلِ بِمَا يُنَاسِبُ مِنْ كُلِّ قِطْعَةٍ نَقْدِيَّةٍ لِتُشَكِّلَ مَبْلَغَ <span class="math-ltr">1000 DA</span> :</div>
+      
+      <div class="coins-showcase">
+        <div class="coin-badge"><span class="math-ltr">200</span><span>دِينَارٍ</span></div>
+        <div class="coin-badge"><span class="math-ltr">100</span><span>دِينَارٍ</span></div>
+        <div class="coin-badge"><span class="math-ltr">50</span><span>دِينَارًا</span></div>
+        <div class="coin-badge"><span class="math-ltr">20</span><span>دِينَارًا</span></div>
+        <div class="coin-badge"><span class="math-ltr">10</span><span>دَنَانِيرَ</span></div>
+      </div>
+
+      <table class="coins-table">
+        <thead>
+          <tr>
+            <th>نَوْعُ الْقِطْعَةِ</th>
+            <th>عَدَدُ الْقِطَعِ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>قِطْعَةٌ ذَاتُ <span class="math-ltr">200</span> دِينَارٍ</td>
+            <td><input type="number" id="coin-cnt-1" min="0" placeholder="؟"></td>
+          </tr>
+          <tr>
+            <td>قِطْعَةٌ ذَاتُ <span class="math-ltr">100</span> دِينَارٍ</td>
+            <td><input type="number" id="coin-cnt-2" min="0" placeholder="؟"></td>
+          </tr>
+          <tr>
+            <td>قِطْعَةٌ ذَاتُ <span class="math-ltr">50</span> دِينَارًا</td>
+            <td><input type="number" id="coin-cnt-3" min="0" placeholder="؟"></td>
+          </tr>
+          <tr>
+            <td>قِطْعَةٌ ذَاتُ <span class="math-ltr">20</span> دِينَارًا</td>
+            <td><input type="number" id="coin-cnt-4" min="0" placeholder="؟"></td>
+          </tr>
+          <tr>
+            <td>قِطْعَةٌ ذَاتُ <span class="math-ltr">10</span> دَنَانِيرَ</td>
+            <td><input type="number" id="coin-cnt-5" min="0" placeholder="؟"></td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>الْمَجْمُوعُ</td>
+            <td><span class="math-ltr">1000</span> دِينَارٍ</td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div style="margin-top:14px;">
+        <button class="btn-check" id="btn-abh-1" onclick="checkAbhath()">تَحَقَّقْ</button>
+      </div>
+      <div class="feedback-msg" id="fb-abh-1"></div>
+    </div>
+
+    <div class="station-counter" id="cnt-abhath">
+      <span>حَصِيلَةُ «أَبْحَثُ»:</span>
+      <span><span class="count-ok">✓ الصَّوَابُ: 0</span> | <span class="count-err">✗ الْخَطَأُ: 0</span></span>
+    </div>
+  </section>
+
+  <!-- ==================== 6. التقييم النهائي ==================== -->
+  <section class="final-report-card" id="final-report">
+    <h2>📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</h2>
+    <p style="font-weight:700; color:#475569; margin-top:-8px;">يُمْكِنُكَ الصُّعُودُ لِمُرَاجَعَةِ إِجَابَاتِكَ الصَّحِيحَةِ وَالْخَاطِئَةِ فِي كُلِّ مَحَطَّةٍ</p>
+
+    <div class="report-body">
+      <!-- الدائرة النسبية -->
+      <div class="pie-wrapper" id="pie-chart">
+        <div class="pie-inner">
+          <span class="pie-percent math-ltr" id="pie-percent-text">0%</span>
+          <span class="pie-label">نِسْبَةُ النَّجَاحِ</span>
+        </div>
+      </div>
+
+      <div class="stats-boxes">
+        <div class="stat-item stat-correct">
+          <span>✓ الْإِجَابَاتُ الصَّحِيحَةُ:</span>
+          <span class="math-ltr" id="total-correct">0</span>
+        </div>
+        <div class="stat-item stat-wrong">
+          <span>✗ الْإِجَابَاتُ الْخَاطِئَةُ:</span>
+          <span class="math-ltr" id="total-wrong">0</span>
+        </div>
+        <div class="stat-item stat-total">
+          <span>📝 مَجْمُوعُ الْأَسْئِلَةِ:</span>
+          <span class="math-ltr" id="total-questions">28</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-reset" onclick="location.reload()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+  </section>
+
+  <!-- ========================================
+       زر العودة إلى الفهرس (أُضيف)
+       ======================================== -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</div>
+
+<!-- ========================================
+     سكريبت الحماية (أُضيف)
+     ======================================== -->
+<script>
+  const CHANNEL_ID = "-1003910412986";
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي (كما هو دون تغيير)
+     ======================================== -->
+<script>
+  // إجمالي وحدات التقييم في الدرس = 28 وحدة دقيقة
+  // أكتشف: 5 (4 خانات لمعادلة ثمن الكتب + 1 اختيار شرح الانتقال)
+  // أنجز: 7 (4 خانات لمعادلة عدد المكرمين + 3 معادلات إكمال)
+  // أتمرن: 11 (تمرين 1: 1 تقييم البطاقات + تمرين 2: 6 معادلات + تمرين 3: 4 خانات متتالية)
+  // أبحث: 5 (5 صفوف جدول القطع النقدية)
+  const TOTAL_ITEMS = 28;
+
+  let stats = {
+    aktashif: { ok: 0, err: 0, done: 0, total: 2 },
+    onjiz:    { ok: 0, err: 0, done: 0, total: 2 },
+    atamarran:{ ok: 0, err: 0, done: 0, total: 3 },
+    abhath:   { ok: 0, err: 0, done: 0, total: 1 }
+  };
+
+  let selectedChoices = {};
+
+  function selectChoice(groupId, val) {
+    const container = document.getElementById(groupId);
+    const btns = container.querySelectorAll('.choice-btn');
+    btns.forEach(b => b.classList.remove('selected'));
+    btns[val].classList.add('selected');
+    selectedChoices[groupId] = val;
+  }
+
+  function toggleCard(el) {
+    if (el.dataset.locked === "true") return;
+    el.classList.toggle('colored');
+  }
+
+  function updateUI() {
+    // تحديث عدادات المحطات
+    document.getElementById('cnt-aktashif').innerHTML = `<span>حَصِيلَةُ «أَكْتَشِفُ»:</span><span><span class="count-ok">✓ الصَّوَابُ: ${stats.aktashif.ok}</span> | <span class="count-err">✗ الْخَطَأُ: ${stats.aktashif.err}</span></span>`;
+    document.getElementById('cnt-onjiz').innerHTML = `<span>حَصِيلَةُ «أُنْجِزُ»:</span><span><span class="count-ok">✓ الصَّوَابُ: ${stats.onjiz.ok}</span> | <span class="count-err">✗ الْخَطَأُ: ${stats.onjiz.err}</span></span>`;
+    document.getElementById('cnt-atamarran').innerHTML = `<span>حَصِيلَةُ «أَتَمَرَّنُ»:</span><span><span class="count-ok">✓ الصَّوَابُ: ${stats.atamarran.ok}</span> | <span class="count-err">✗ الْخَطَأُ: ${stats.atamarran.err}</span></span>`;
+    document.getElementById('cnt-abhath').innerHTML = `<span>حَصِيلَةُ «أَبْحَثُ»:</span><span><span class="count-ok">✓ الصَّوَابُ: ${stats.abhath.ok}</span> | <span class="count-err">✗ الْخَطَأُ: ${stats.abhath.err}</span></span>`;
+
+    // فتح المراحل بالتسلسل
+    if (stats.aktashif.done === stats.aktashif.total) {
+      document.getElementById('sec-onjiz').classList.remove('locked');
+    }
+    if (stats.onjiz.done === stats.onjiz.total) {
+      document.getElementById('sec-taalamt').classList.remove('locked');
+      document.getElementById('sec-atamarran').classList.remove('locked');
+    }
+    if (stats.atamarran.done === stats.atamarran.total) {
+      document.getElementById('sec-abhath').classList.remove('locked');
+    }
+
+    // حساب الإحصائيات الكلية والدائرة النسبية (لا تتجاوز 100%)
+    const totalOk = stats.aktashif.ok + stats.onjiz.ok + stats.atamarran.ok + stats.abhath.ok;
+    const totalErr = stats.aktashif.err + stats.onjiz.err + stats.atamarran.err + stats.abhath.err;
+
+    let percentage = Math.round((totalOk / TOTAL_ITEMS) * 100);
+    if (percentage > 100) percentage = 100;
+    if (totalOk === TOTAL_ITEMS && totalErr === 0) percentage = 100;
+
+    const wrongDeg = Math.round((totalErr / TOTAL_ITEMS) * 100);
+    const okEnd = percentage;
+    const errEnd = Math.min(100, okEnd + wrongDeg);
+
+    document.getElementById('total-correct').textContent = totalOk;
+    document.getElementById('total-wrong').textContent = totalErr;
+    document.getElementById('pie-percent-text').textContent = percentage + '%';
+
+    const pie = document.getElementById('pie-chart');
+    pie.style.background = `conic-gradient(#16a34a 0% ${okEnd}%, #dc2626 ${okEnd}% ${errEnd}%, #e2e8f0 ${errEnd}% 100%)`;
+  }
+
+  function showFeedback(id, isOk, text) {
+    const fb = document.getElementById(id);
+    fb.innerHTML = text;
+    fb.className = 'feedback-msg show ' + (isOk ? 'ok' : 'err');
+  }
+
+  // --- 1. أكتشف ---
+  function checkAktashif1() {
+    const el1 = document.getElementById('in-akt-1a');
+    const el2 = document.getElementById('in-akt-1b');
+    const el3 = document.getElementById('in-akt-1c');
+    const elRes = document.getElementById('in-akt-1res');
+
+    if (el1.value.trim() === '' || el2.value.trim() === '' || el3.value.trim() === '' || elRes.value.trim() === '') {
+      alert('أَكْمِلْ جَمِيعَ خَانَاتِ الْعَمَلِيَّةِ أَوَّلًا!');
+      return;
+    }
+
+    [el1, el2, el3, elRes].forEach(el => el.disabled = true);
+    document.getElementById('btn-akt-1').disabled = true;
+
+    const validPrices = [152, 630, 217];
+    let remaining = [...validPrices];
+    const inputs = [el1, el2, el3];
+    let termsOk = 0;
+
+    inputs.forEach(inp => {
+      const val = Number(inp.value);
+      const idx = remaining.indexOf(val);
+      if (idx !== -1) {
+        inp.classList.add('correct');
+        stats.aktashif.ok++;
+        termsOk++;
+        remaining.splice(idx, 1);
+      } else {
+        inp.classList.add('incorrect');
+        stats.aktashif.err++;
+      }
+    });
+
+    const resOk = (Number(elRes.value) === 999);
+    if (resOk) {
+      elRes.classList.add('correct');
+      stats.aktashif.ok++;
+    } else {
+      elRes.classList.add('incorrect');
+      stats.aktashif.err++;
+    }
+
+    if (termsOk === 3 && resOk) {
+      showFeedback('fb-akt-1', true, '✓ أَحْسَنْتَ! الْعَمَلِيَّةُ وَالنَّتِيجَةُ صَحِيحَتَانِ: <span class="math-ltr">152 + 630 + 217 = 999 DA</span>.');
+    } else {
+      showFeedback('fb-akt-1', false, '✗ الصَّوَابُ: <span class="math-ltr">152 + 630 + 217 = 999 DA</span> (ثَمَنُ الْقِصَّةِ + ثَمَنُ الْقَامُوسِ + ثَمَنُ كِتَابِ حَلِّ الْمُشْكِلَاتِ).');
+    }
+
+    stats.aktashif.done++;
+    updateUI();
+  }
+
+  function checkAktashif2() {
+    const choice = selectedChoices['choices-akt-2'];
+    if (choice === undefined) { alert('اخْتَرْ إِجَابَةً أَوَّلًا!'); return; }
+    const btns = document.getElementById('choices-akt-2').querySelectorAll('.choice-btn');
+    btns.forEach(b => b.disabled = true);
+    document.getElementById('btn-akt-2').disabled = true;
+
+    if (choice === 0) {
+      btns[0].classList.add('correct');
+      stats.aktashif.ok++;
+      showFeedback('fb-akt-2', true, '✓ إِجَابَةٌ صَحِيحَةٌ! <span class="math-ltr">999 + 1 = 1000</span> (عَشَرُ مِئَاتٍ تُبَادَلُ بِأَلْفٍ وَاحِدٍ).');
+    } else {
+      btns[choice].classList.add('incorrect');
+      btns[0].classList.add('correct');
+      stats.aktashif.err++;
+      showFeedback('fb-akt-2', false, '✗ إِجَابَةٌ خَاطِئَةٌ. الصَّوَابُ هُوَ الْخِيَارُ الْأَوَّلُ.');
+    }
+    stats.aktashif.done++;
+    updateUI();
+  }
+
+  // --- 2. أنجز ---
+  function checkOnjiz1() {
+    const el1 = document.getElementById('in-onj-1a');
+    const el2 = document.getElementById('in-onj-1b');
+    const el3 = document.getElementById('in-onj-1c');
+    const elRes = document.getElementById('in-onj-1res');
+
+    if (el1.value.trim() === '' || el2.value.trim() === '' || el3.value.trim() === '' || elRes.value.trim() === '') {
+      alert('أَكْمِلْ جَمِيعَ خَانَاتِ الْعَمَلِيَّةِ أَوَّلًا!');
+      return;
+    }
+
+    [el1, el2, el3, elRes].forEach(el => el.disabled = true);
+    document.getElementById('btn-onj-1').disabled = true;
+
+    const validNums = [140, 320, 540];
+    let remaining = [...validNums];
+    const inputs = [el1, el2, el3];
+    let termsOk = 0;
+
+    inputs.forEach(inp => {
+      const val = Number(inp.value);
+      const idx = remaining.indexOf(val);
+      if (idx !== -1) {
+        inp.classList.add('correct');
+        stats.onjiz.ok++;
+        termsOk++;
+        remaining.splice(idx, 1);
+      } else {
+        inp.classList.add('incorrect');
+        stats.onjiz.err++;
+      }
+    });
+
+    const resOk = (Number(elRes.value) === 1000);
+    if (resOk) {
+      elRes.classList.add('correct');
+      stats.onjiz.ok++;
+    } else {
+      elRes.classList.add('incorrect');
+      stats.onjiz.err++;
+    }
+
+    if (termsOk === 3 && resOk) {
+      showFeedback('fb-onj-1', true, '✓ مُمْتَازٌ! الْعَمَلِيَّةُ وَالنَّتِيجَةُ صَحِيحَتَانِ: <span class="math-ltr">140 + 320 + 540 = 1000</span> تِلْمِيذًا.');
+    } else {
+      showFeedback('fb-onj-1', false, '✗ الصَّوَابُ: <span class="math-ltr">140 + 320 + 540 = 1000</span> (تَلَامِيذُ شَهَادَةِ الِابْتِدَائِيِّ + تَلَامِيذُ شَهَادَةِ التَّعْلِيمِ الْمُتَوَسِّطِ + تَلَامِيذُ شَهَادَةِ الْبَكَالُورْيَا).');
+    }
+
+    stats.onjiz.done++;
+    updateUI();
+  }
+
+  function checkOnjiz2() {
+    const a = document.getElementById('in-onj-2a');
+    const b = document.getElementById('in-onj-2b');
+    const c = document.getElementById('in-onj-2c');
+    if (a.value.trim() === '' || b.value.trim() === '' || c.value.trim() === '') {
+      alert('أَكْمِلْ جَمِيعَ الْفَرَاغَاتِ أَوَّلًا!'); return;
+    }
+    [a, b, c].forEach(el => el.disabled = true);
+    document.getElementById('btn-onj-2').disabled = true;
+
+    let localOk = 0;
+    if (Number(a.value) === 100) { a.classList.add('correct'); localOk++; stats.onjiz.ok++; }
+    else { a.classList.add('incorrect'); stats.onjiz.err++; }
+
+    if (Number(b.value) === 140) { b.classList.add('correct'); localOk++; stats.onjiz.ok++; }
+    else { b.classList.add('incorrect'); stats.onjiz.err++; }
+
+    if (Number(c.value) === 400) { c.classList.add('correct'); localOk++; stats.onjiz.ok++; }
+    else { c.classList.add('incorrect'); stats.onjiz.err++; }
+
+    if (localOk === 3) {
+      showFeedback('fb-onj-2', true, '✓ أَحْسَنْتَ! جَمِيعُ الْمُعَادَلَاتِ صَحِيحَةٌ.');
+    } else {
+      showFeedback('fb-onj-2', false, '✗ الصَّوَابُ: <span class="math-ltr">900 + 100 = 1000</span> | <span class="math-ltr">1000 = 800 + 140 + 60</span> | <span class="math-ltr">600 + 400 = 1000</span>.');
+    }
+    stats.onjiz.done++;
+    updateUI();
+  }
+
+  // --- 4. أتمرن ---
+  function checkAtamarran1() {
+    const cards = document.querySelectorAll('#cards-atm-1 .card-option');
+    let allPerfect = true;
+
+    cards.forEach(card => {
+      card.dataset.locked = "true";
+      const is1000 = Number(card.dataset.sum) === 1000;
+      const isColored = card.classList.contains('colored');
+
+      if (is1000 && isColored) {
+        card.classList.add('correct');
+      } else if (!is1000 && !isColored) {
+        // صحيح
+      } else {
+        allPerfect = false;
+        if (isColored && !is1000) card.classList.add('incorrect');
+        if (!isColored && is1000) card.classList.add('correct');
+      }
+    });
+
+    document.getElementById('btn-atm-1').disabled = true;
+
+    if (allPerfect) {
+      stats.atamarran.ok++;
+      showFeedback('fb-atm-1', true, '✓ رَائِعٌ! لَوَّنْتَ جَمِيعَ الْبِطَاقَاتِ الْمُسَاوِيَةِ لِـ <span class="math-ltr">1000</span> بِدِقَّةٍ.');
+    } else {
+      stats.atamarran.err++;
+      showFeedback('fb-atm-1', false, '✗ الْبِطَاقَاتُ الصَّحِيحَةُ هِيَ: <span class="math-ltr">500+500</span> ، <span class="math-ltr">600+400</span> ، <span class="math-ltr">10+990</span> ، <span class="math-ltr">1000+0</span> ، <span class="math-ltr">700+300</span> ، <span class="math-ltr">899+101</span>.');
+    }
+    stats.atamarran.done++;
+    updateUI();
+  }
+
+  function checkAtamarran2() {
+    const ids = ['in-atm-2a', 'in-atm-2b', 'in-atm-2c1', 'in-atm-2c2', 'in-atm-2d', 'in-atm-2e1', 'in-atm-2e2', 'in-atm-2e3', 'in-atm-2f1', 'in-atm-2f2'];
+    for (let id of ids) {
+      if (document.getElementById(id).value.trim() === '') {
+        alert('أَكْمِلْ جَمِيعَ الْفَرَاغَاتِ فِي الْمُعَادَلَاتِ أَوَّلًا!');
+        return;
+      }
+    }
+    ids.forEach(id => document.getElementById(id).disabled = true);
+    document.getElementById('btn-atm-2').disabled = true;
+
+    const a = document.getElementById('in-atm-2a');
+    if (Number(a.value) === 600) { a.classList.add('correct'); stats.atamarran.ok++; }
+    else { a.classList.add('incorrect'); stats.atamarran.err++; }
+
+    const b = document.getElementById('in-atm-2b');
+    if (Number(b.value) === 50) { b.classList.add('correct'); stats.atamarran.ok++; }
+    else { b.classList.add('incorrect'); stats.atamarran.err++; }
+
+    const c1 = document.getElementById('in-atm-2c1');
+    const c2 = document.getElementById('in-atm-2c2');
+    if (Number(c1.value) >= 0 && Number(c2.value) >= 0 && (Number(c1.value) + Number(c2.value) === 1000)) {
+      c1.classList.add('correct'); c2.classList.add('correct'); stats.atamarran.ok++;
+    } else {
+      c1.classList.add('incorrect'); c2.classList.add('incorrect'); stats.atamarran.err++;
+    }
+
+    const d = document.getElementById('in-atm-2d');
+    if (Number(d.value) === 500) { d.classList.add('correct'); stats.atamarran.ok++; }
+    else { d.classList.add('incorrect'); stats.atamarran.err++; }
+
+    const e1 = document.getElementById('in-atm-2e1');
+    const e2 = document.getElementById('in-atm-2e2');
+    const e3 = document.getElementById('in-atm-2e3');
+    if (Number(e1.value) >= 0 && Number(e2.value) >= 0 && Number(e3.value) >= 0 && (Number(e1.value) + Number(e2.value) + Number(e3.value) === 1000)) {
+      e1.classList.add('correct'); e2.classList.add('correct'); e3.classList.add('correct'); stats.atamarran.ok++;
+    } else {
+      e1.classList.add('incorrect'); e2.classList.add('incorrect'); e3.classList.add('incorrect'); stats.atamarran.err++;
+    }
+
+    const f1 = document.getElementById('in-atm-2f1');
+    const f2 = document.getElementById('in-atm-2f2');
+    if (Number(f1.value) >= 0 && Number(f2.value) >= 0 && (Number(f1.value) + 400 + Number(f2.value) === 1000)) {
+      f1.classList.add('correct'); f2.classList.add('correct'); stats.atamarran.ok++;
+    } else {
+      f1.classList.add('incorrect'); f2.classList.add('incorrect'); stats.atamarran.err++;
+    }
+
+    showFeedback('fb-atm-2', true, 'تَمَّ تَصْحِيحُ الْمُعَادَلَاتِ! (مِثَالٌ لِلْإِكْمَالِ الْحُرِّ: <span class="math-ltr">500 + 500 = 1000</span> ، <span class="math-ltr">400 + 400 + 200 = 1000</span> ، <span class="math-ltr">300 + 400 + 300 = 1000</span>).');
+    stats.atamarran.done++;
+    updateUI();
+  }
+
+  function checkAtamarran3() {
+    const seqInputs = [
+      { id: 'in-seq-1', ans: 700 },
+      { id: 'in-seq-2', ans: 750 },
+      { id: 'in-seq-3', ans: 850 },
+      { id: 'in-seq-4', ans: 900 }
+    ];
+    for (let item of seqInputs) {
+      if (document.getElementById(item.id).value.trim() === '') {
+        alert('أَكْمِلْ جَمِيعَ خَانَاتِ الْمُتَتَالِيَةِ أَوَّلًا!');
+        return;
+      }
+    }
+    document.getElementById('btn-atm-3').disabled = true;
+
+    let okCount = 0;
+    seqInputs.forEach(item => {
+      const el = document.getElementById(item.id);
+      el.disabled = true;
+      if (Number(el.value) === item.ans) {
+        el.classList.add('correct');
+        stats.atamarran.ok++;
+        okCount++;
+      } else {
+        el.classList.add('incorrect');
+        stats.atamarran.err++;
+      }
+    });
+
+    if (okCount === 4) {
+      showFeedback('fb-atm-3', true, '✓ أَحْسَنْتَ! الْمُتَتَالِيَةُ تَزِيدُ بِـ <span class="math-ltr">50</span> فِي كُلِّ مَرَّةٍ: <span class="math-ltr">600 - 650 - 700 - 750 - 800 - 850 - 900 - 950 - 1000</span>.');
+    } else {
+      showFeedback('fb-atm-3', false, '✗ الْأَعْدَادُ النَّاقِصَةُ هِيَ بِالتَّرْتِيبِ: <span class="math-ltr">700 ، 750 ، 850 ، 900</span>.');
+    }
+    stats.atamarran.done++;
+    updateUI();
+  }
+
+  // --- 5. أبحث ---
+  function checkAbhath() {
+    const coins = [
+      { id: 'coin-cnt-1', val: 200 },
+      { id: 'coin-cnt-2', val: 100 },
+      { id: 'coin-cnt-3', val: 50 },
+      { id: 'coin-cnt-4', val: 20 },
+      { id: 'coin-cnt-5', val: 10 }
+    ];
+
+    for (let c of coins) {
+      if (document.getElementById(c.id).value.trim() === '') {
+        alert('أَدْخِلْ عَدَدَ الْقِطَعِ لِكُلِّ فِئَةٍ أَوَّلًا (ضَعْ 0 إِذَا لَمْ تَسْتَعْمِلْهَا)!');
+        return;
+      }
+    }
+
+    document.getElementById('btn-abh-1').disabled = true;
+
+    let totalMoney = 0;
+    coins.forEach(c => {
+      const el = document.getElementById(c.id);
+      const cnt = Number(el.value);
+      totalMoney += cnt * c.val;
+    });
+
+    const isTotal1000 = (totalMoney === 1000);
+
+    coins.forEach(c => {
+      const el = document.getElementById(c.id);
+      el.disabled = true;
+      const cnt = Number(el.value);
+      if (isTotal1000 && cnt >= 0) {
+        el.classList.add('correct');
+        stats.abhath.ok++;
+      } else {
+        el.classList.add('incorrect');
+        stats.abhath.err++;
+      }
+    });
+
+    if (isTotal1000) {
+      showFeedback('fb-abh-1', true, '✓ عَمَلٌ رَائِعٌ! مَجْمُوعُ الْقِطَعِ النَّقْدِيَّةِ الَّتِي اخْتَرْتَهَا يُسَاوِي <span class="math-ltr">1000</span> دِينَارٍ بِالضَّبْطِ.');
+    } else {
+      showFeedback('fb-abh-1', false, `✗ مَجْمُوعُ مَا كَوَّنْتَهُ هُوَ <span class="math-ltr">${totalMoney}</span> دِينَارٍ وَلَيْسَ <span class="math-ltr">1000</span> دِينَارٍ. (مِثَالٌ صَحِيحٌ: <span class="math-ltr">3×200 + 2×100 + 2×50 + 4×20 + 2×10 = 1000</span>).`);
+    }
+    stats.abhath.done++;
+    updateUI();
+  }
+</script>
+
+</body>
+</html>
