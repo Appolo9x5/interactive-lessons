@@ -1,0 +1,2021 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>الدَّرْسُ 16: التَّعَرُّفُ عَلَى اسْتِقَامِيَّةِ أَشْيَاءٍ - السنة الثانية ابتدائي</title>
+  <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      background: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 50%, #fef9c3 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 60px;
+    }
+
+    /* عزل الاتجاه للأرقام والعمليات */
+    .ltr-num {
+      direction: ltr;
+      display: inline-block;
+      unicode-bidi: isolate;
+      font-weight: 800;
+    }
+
+    /* المسطرة الرقمية العائمة */
+    #digital-ruler {
+      position: fixed;
+      top: 110px;
+      left: 50%;
+      width: 460px;
+      max-width: 92vw;
+      height: 68px;
+      background: linear-gradient(180deg, rgba(254, 240, 138, 0.94) 0%, rgba(253, 224, 71, 0.92) 100%);
+      border: 2px solid #b45309;
+      border-top: 3px solid #dc2626; /* حافة القياس العلوية الحمراء الواضحة */
+      border-radius: 4px 4px 10px 10px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+      z-index: 9999;
+      cursor: grab;
+      user-select: none;
+      touch-action: none;
+      transform-origin: 0px 0px;
+      transition: box-shadow 0.2s;
+    }
+    #digital-ruler:active {
+      cursor: grabbing;
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.35);
+    }
+    #digital-ruler.hidden-ruler {
+      display: none !important;
+    }
+
+    /* القفل التسلسلي للتمارين */
+    .exercise-locked {
+      opacity: 0.55;
+      pointer-events: none;
+      filter: grayscale(0.4);
+      position: relative;
+    }
+    .exercise-locked::after {
+      content: "🔒 أَكْمِلِ التَّمْرِينَ السَّابِقَ لِفَتْحِ هَذَا التَّمْرِينِ";
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: #334155;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      z-index: 20;
+    }
+
+    /* العناصر التفاعلية في SVG */
+    .clickable-item {
+      cursor: pointer;
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+    .clickable-item:hover {
+      filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.6));
+    }
+
+    /* شبكة القريصات */
+    .grid-cell {
+      width: 44px;
+      height: 44px;
+      border: 2px solid #334155;
+      background-color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.15s;
+    }
+    .grid-cell:hover {
+      background-color: #f1f5f9;
+    }
+    .disc-red {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #f87171, #dc2626);
+      border: 2px solid #7f1d1d;
+      box-shadow: inset 0 -2px 4px rgba(0,0,0,0.3);
+    }
+    .disc-green {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #4ade80, #16a34a);
+      border: 2px solid #14532d;
+      box-shadow: inset 0 -2px 4px rgba(0,0,0,0.3);
+    }
+
+    /* أزرار التحكم بالمسطرة */
+    .ruler-btn {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 4px 9px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #1e293b;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+      transition: all 0.15s;
+    }
+    .ruler-btn:hover {
+      background: #eff6ff;
+      border-color: #3b82f6;
+      color: #1d4ed8;
+    }
+    .ruler-btn:active {
+      transform: scale(0.95);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .pop-in {
+      animation: popIn 0.25s ease-out forwards;
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري (أُضيفت)
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس (أُضيف) */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 20px auto 10px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    }
+  </style>
+</head>
+<body class="text-slate-800">
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري (أُضيفت)
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <!-- شريط أدوات المسطرة الرقمية العائم في أعلى الصفحة -->
+  <div class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b-2 border-emerald-500 shadow-md px-3 py-2">
+    <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <button id="toggle-ruler-btn" onclick="toggleRuler()" class="bg-amber-500 hover:bg-amber-600 text-white font-bold px-3 py-1.5 rounded-xl shadow flex items-center gap-1.5 text-sm sm:text-base">
+          <span>📏</span>
+          <span id="toggle-ruler-text">إِخْفَاءُ الْمِسْطَرَةِ</span>
+        </button>
+        <button onclick="resetRuler()" class="ruler-btn bg-slate-100" title="إعادة ضبط موقع المسطرة">
+          🔄 إِعَادَةُ الضَّبْطِ
+        </button>
+      </div>
+
+      <!-- أزرار التحريك والتدوير الدقيق للمسطرة -->
+      <div id="ruler-controls-group" class="flex flex-wrap items-center gap-1.5">
+        <span class="text-xs font-bold text-slate-500 hidden md:inline">التَّحْرِيكُ:</span>
+        <button onclick="moveRuler(0, -10)" class="ruler-btn" title="أعلى">⬆️</button>
+        <button onclick="moveRuler(0, 10)" class="ruler-btn" title="أسفل">⬇️</button>
+        <button onclick="moveRuler(10, 0)" class="ruler-btn" title="يمين">➡️</button>
+        <button onclick="moveRuler(-10, 0)" class="ruler-btn" title="يسار">⬅️</button>
+
+        <span class="text-xs font-bold text-slate-500 mr-1 hidden md:inline">التَّدْوِيرُ:</span>
+        <button onclick="rotateRuler(-15)" class="ruler-btn"><span class="ltr-num">↺ 15°</span></button>
+        <button onclick="rotateRuler(-1)" class="ruler-btn"><span class="ltr-num">↺ 1°</span></button>
+        <button onclick="rotateRuler(1)" class="ruler-btn"><span class="ltr-num">↻ 1°</span></button>
+        <button onclick="rotateRuler(15)" class="ruler-btn"><span class="ltr-num">↻ 15°</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- المسطرة الرقمية التفاعلية (15 سم) -->
+  <div id="digital-ruler" title="اسحب المسطرة بالماوس أو الإصبع، واستخدم إصبعين أو الأزرار للتدوير">
+    <svg id="ruler-svg" width="100%" height="100%" viewBox="0 0 460 68" preserveAspectRatio="none"></svg>
+  </div>
+
+  <!-- الحاوية الرئيسية للدرس -->
+  <main class="max-w-4xl mx-auto px-3 sm:px-6 pt-5 space-y-8">
+
+    <!-- ترويسة الدرس المطابقة للكتاب المدرسي -->
+    <header class="bg-gradient-to-l from-emerald-600 via-green-600 to-teal-600 text-white rounded-3xl p-5 sm:p-6 shadow-xl border-4 border-white relative overflow-hidden">
+      <div class="flex items-center justify-between gap-4">
+        <div class="bg-white text-emerald-700 font-black text-3xl sm:text-4xl w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center shadow-inner shrink-0 border-2 border-emerald-200">
+          <span class="ltr-num">16</span>
+        </div>
+        <div class="flex-1 text-center">
+          <h1 class="text-2xl sm:text-4xl font-black tracking-wide drop-shadow">
+            التَّعَرُّفُ عَلَى اسْتِقَامِيَّةِ أَشْيَاءٍ
+          </h1>
+          <p class="mt-2 text-emerald-100 text-sm sm:text-base font-semibold">
+            الرِّيَاضِيَّاتُ – السَّنَةُ الثَّانِيَةُ ابْتِدَائِيٌّ | الْمَرْجِعُ: الصَّفْحَةُ رَقْمُ <span class="ltr-num">35</span> مِنْ كِتَابِ التِّلْمِيذِ وَالصَّفْحَةُ <span class="ltr-num">22</span> مِنْ كُرَّاسِ الْأَنْشِطَةِ
+          </p>
+        </div>
+      </div>
+      <div class="mt-3 bg-emerald-800/40 rounded-xl px-3 py-1.5 text-center text-xs sm:text-sm text-amber-200 font-bold">
+        💡 نَصِيحَةٌ: اسْتَعْمِلِ الْمِسْطَرَةَ الرَّقْمِيَّةَ فِي الْأَعْلَى (اسْحَبْهَا وَدَوِّرْهَا) لِلتَّحَقُّقِ مِنَ اسْتِقَامِيَّةِ الْأَشْيَاءِ!
+      </div>
+    </header>
+
+    <!-- ========================================================= -->
+    <!-- المحطة الأولى: أَكْتَشِفُ (كتاب التلميذ ص 35)             -->
+    <!-- ========================================================= -->
+    <section id="station-aktashif" class="bg-white rounded-3xl shadow-lg border-4 border-emerald-500 p-4 sm:p-6 space-y-6">
+      <div class="flex items-center gap-3 border-b-2 border-emerald-100 pb-3">
+        <span class="bg-emerald-600 text-white font-black text-xl sm:text-2xl px-5 py-1.5 rounded-2xl shadow">
+          أَكْتَشِفُ
+        </span>
+        <span class="text-sm font-bold text-slate-500">كِتَابُ التِّلْمِيذِ – ص <span class="ltr-num">35</span></span>
+      </div>
+
+      <!-- التمرين 1 من أكتشف (تمهيد بصري تفاعلي) -->
+      <div id="ex-aktashif-1" class="bg-emerald-50/60 rounded-2xl p-4 border-2 border-emerald-200 space-y-3">
+        <p class="text-lg sm:text-xl font-bold text-slate-800 leading-relaxed">
+          <span class="ltr-num text-emerald-700">1-</span> تَسْتَعْمِلُ مَرْيَمُ وَإِيمَانُ الْحَبْلَ الْمَشْدُودَ لِتَجِدَا الْمِزْهَرِيَّاتِ الَّتِي تُوجَدُ فِي اسْتِقَامِيَّةٍ.
+        </p>
+
+        <div class="bg-white rounded-2xl border border-emerald-200 p-3 flex flex-col items-center">
+          <svg id="svg-aktashif-1" viewBox="0 0 420 190" class="w-full max-w-md h-auto">
+            <!-- خلفية لطيفة -->
+            <rect x="0" y="0" width="420" height="190" rx="14" fill="#f8fafc" />
+            <!-- إيمان على اليمين -->
+            <g transform="translate(365, 65)">
+              <circle cx="0" cy="0" r="14" fill="#fed7aa" stroke="#9a3412" stroke-width="1.5"/>
+              <path d="M-14,-4 Q0,-22 14,-4" fill="#451a03"/>
+              <circle cx="-4" cy="-2" r="1.5" fill="#000"/>
+              <circle cx="4" cy="-2" r="1.5" fill="#000"/>
+              <path d="M-4,4 Q0,8 4,4" fill="none" stroke="#9a3412" stroke-width="1.5"/>
+              <rect x="-12" y="15" width="24" height="32" rx="6" fill="#9333ea"/>
+              <line x1="-12" y1="22" x2="-35" y2="28" stroke="#fed7aa" stroke-width="5" stroke-linecap="round"/>
+              <text x="0" y="64" text-anchor="middle" font-size="12" font-weight="bold" fill="#581c87">إِيمَانُ</text>
+            </g>
+
+            <!-- مريم على اليسار -->
+            <g transform="translate(55, 115)">
+              <circle cx="0" cy="0" r="13" fill="#fed7aa" stroke="#9a3412" stroke-width="1.5"/>
+              <path d="M-13,-3 Q0,-20 13,-3" fill="#7c2d12"/>
+              <circle cx="-4" cy="-2" r="1.5" fill="#000"/>
+              <circle cx="4" cy="-2" r="1.5" fill="#000"/>
+              <path d="M-4,4 Q0,8 4,4" fill="none" stroke="#9a3412" stroke-width="1.5"/>
+              <rect x="-11" y="14" width="22" height="28" rx="6" fill="#e11d48"/>
+              <line x1="11" y1="20" x2="35" y2="16" stroke="#fed7aa" stroke-width="5" stroke-linecap="round"/>
+              <text x="0" y="58" text-anchor="middle" font-size="12" font-weight="bold" fill="#881337">مَرْيَمُ</text>
+            </g>
+
+            <!-- المزهريات الخمس -->
+            <!-- مزهرية خارج الاستقامة 1 (أعلى اليسار) -->
+            <g transform="translate(135, 38)">
+              <polygon points="-8,15 8,15 5,0 -5,0" fill="#94a3b8" stroke="#334155" stroke-width="1.5"/>
+              <circle cx="0" cy="-6" r="5" fill="#f43f5e"/>
+              <circle cx="-6" cy="-3" r="4" fill="#fb7185"/>
+              <circle cx="6" cy="-3" r="4" fill="#fda4af"/>
+            </g>
+
+            <!-- مزهرية خارج الاستقامة 2 (أعلى الوسط) -->
+            <g transform="translate(205, 28)">
+              <polygon points="-8,15 8,15 5,0 -5,0" fill="#94a3b8" stroke="#334155" stroke-width="1.5"/>
+              <circle cx="0" cy="-6" r="5" fill="#f43f5e"/>
+              <circle cx="-6" cy="-3" r="4" fill="#fb7185"/>
+              <circle cx="6" cy="-3" r="4" fill="#fda4af"/>
+            </g>
+
+            <!-- المزهريات الثلاث في استقامية على الخط الواصل بين (90, 131) و (330, 93) -->
+            <!-- y = 131 - 0.1583*(x - 90) -->
+            <!-- مزهرية 1 على الاستقامة: x=145, y=122 -->
+            <g id="vase-aligned-1" transform="translate(145, 106)">
+              <polygon points="-8,16 8,16 5,0 -5,0" fill="#64748b" stroke="#1e293b" stroke-width="1.5"/>
+              <circle cx="0" cy="-6" r="5" fill="#ec4899"/>
+              <circle cx="-6" cy="-3" r="4" fill="#f472b6"/>
+              <circle cx="6" cy="-3" r="4" fill="#38bdf8"/>
+            </g>
+
+            <!-- مزهرية 2 على الاستقامة: x=210, y=112 -->
+            <g id="vase-aligned-2" transform="translate(210, 96)">
+              <polygon points="-8,16 8,16 5,0 -5,0" fill="#64748b" stroke="#1e293b" stroke-width="1.5"/>
+              <circle cx="0" cy="-6" r="5" fill="#ec4899"/>
+              <circle cx="-6" cy="-3" r="4" fill="#f472b6"/>
+              <circle cx="6" cy="-3" r="4" fill="#38bdf8"/>
+            </g>
+
+            <!-- مزهرية 3 على الاستقامة: x=275, y=102 -->
+            <g id="vase-aligned-3" transform="translate(275, 86)">
+              <polygon points="-8,16 8,16 5,0 -5,0" fill="#64748b" stroke="#1e293b" stroke-width="1.5"/>
+              <circle cx="0" cy="-6" r="5" fill="#ec4899"/>
+              <circle cx="-6" cy="-3" r="4" fill="#f472b6"/>
+              <circle cx="6" cy="-3" r="4" fill="#38bdf8"/>
+            </g>
+
+            <!-- الحبل المشدود -->
+            <line id="rope-line" x1="90" y1="131" x2="330" y2="93" stroke="#dc2626" stroke-width="3" stroke-dasharray="6,4" />
+            <!-- حلقات التوضيح عند الشد -->
+            <g id="rope-highlights" opacity="0">
+              <circle cx="145" cy="112" r="18" fill="none" stroke="#16a34a" stroke-width="3"/>
+              <circle cx="210" cy="102" r="18" fill="none" stroke="#16a34a" stroke-width="3"/>
+              <circle cx="275" cy="92" r="18" fill="none" stroke="#16a34a" stroke-width="3"/>
+            </g>
+          </svg>
+
+          <button id="btn-pull-rope" onclick="pullRopeDemo()" class="mt-2 bg-rose-600 hover:bg-rose-700 text-white font-bold px-4 py-2 rounded-xl shadow transition flex items-center gap-2 text-sm sm:text-base">
+            <span>🪢</span>
+            <span>شُدَّ الْحَبْلَ لِمُعَايَنَةِ الْمِزْهَرِيَّاتِ الَّتِي فِي اسْتِقَامِيَّةٍ</span>
+          </button>
+          <p id="rope-msg" class="hidden mt-2 text-emerald-700 font-bold text-sm text-center">
+            ✨ أَحْسَنْتَ! الْمِزْهَرِيَّاتُ الثَّلَاثُ تُلَامِسُ الْحَبْلَ الْمَشْدُودَ وَهِيَ فِي نَفْسِ الْجِهَةِ مِنْهُ، فَهِيَ فِي اسْتِقَامِيَّةٍ!
+          </p>
+        </div>
+      </div>
+
+      <!-- التمرين 2 من أكتشف -->
+      <div id="ex-aktashif-2" class="bg-sky-50/60 rounded-2xl p-4 border-2 border-sky-200 space-y-3 exercise-locked">
+        <p class="text-lg sm:text-xl font-bold text-slate-800 leading-relaxed">
+          <span class="ltr-num text-sky-700">2-</span> مَاذَا يَسْتَعْمِلُ رَائِدٌ لِيَجِدَ الْقُرَيْصَاتِ الَّتِي هِيَ فِي اسْتِقَامِيَّةٍ ؟ <span id="aktashif-2-blank" class="text-sky-700 underline decoration-dotted">....................</span>
+        </p>
+
+        <div class="bg-white rounded-2xl border border-sky-200 p-3 flex flex-col items-center">
+          <svg viewBox="0 0 400 175" class="w-full max-w-md h-auto">
+            <rect x="0" y="0" width="400" height="175" rx="14" fill="#f8fafc" />
+            <!-- رائد على اليمين -->
+            <g transform="translate(340, 85)">
+              <circle cx="0" cy="0" r="15" fill="#fed7aa" stroke="#9a3412" stroke-width="1.5"/>
+              <path d="M-15,-4 Q0,-22 15,-4" fill="#292524"/>
+              <circle cx="-5" cy="-2" r="1.5" fill="#000"/>
+              <circle cx="4" cy="-2" r="1.5" fill="#000"/>
+              <path d="M-5,5 Q0,9 5,5" fill="none" stroke="#9a3412" stroke-width="1.5"/>
+              <rect x="-13" y="16" width="26" height="36" rx="6" fill="#22c55e"/>
+              <line x1="-13" y1="24" x2="-45" y2="18" stroke="#fed7aa" stroke-width="6" stroke-linecap="round"/>
+              <text x="0" y="70" text-anchor="middle" font-size="13" font-weight="bold" fill="#14532d">رَائِدٌ</text>
+            </g>
+
+            <!-- المسطرة المائلة التي يمسكها رائد -->
+            <g transform="translate(95, 38) rotate(18)">
+              <rect x="0" y="0" width="215" height="22" rx="3" fill="#ea580c" stroke="#7c2d12" stroke-width="1.5"/>
+              <!-- تدريجات المسطرة -->
+              <line x1="15" y1="0" x2="15" y2="7" stroke="#fff" stroke-width="1.5"/>
+              <line x1="35" y1="0" x2="35" y2="7" stroke="#fff" stroke-width="1.5"/>
+              <line x1="55" y1="0" x2="55" y2="7" stroke="#fff" stroke-width="1.5"/>
+              <line x1="75" y1="0" x2="75" y2="7" stroke="#fff" stroke-width="1.5"/>
+              <line x1="95" y1="0" x2="95" y2="7" stroke="#fff" stroke-width="1.5"/>
+              <line x1="115" y1="0" x2="115" y2="7" stroke="#fff" stroke-width="1.5"/>
+              <line x1="135" y1="0" x2="135" y2="7" stroke="#fff" stroke-width="1.5"/>
+              <line x1="155" y1="0" x2="155" y2="7" stroke="#fff" stroke-width="1.5"/>
+              <line x1="175" y1="0" x2="175" y2="7" stroke="#fff" stroke-width="1.5"/>
+              <line x1="195" y1="0" x2="195" y2="7" stroke="#fff" stroke-width="1.5"/>
+            </g>
+
+            <!-- القريصات الأربع الخضراء الملامسة لحافة المسطرة العلوية -->
+            <circle cx="115" cy="36" r="7" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+            <circle cx="163" cy="52" r="7" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+            <circle cx="211" cy="67" r="7" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+            <circle cx="258" cy="83" r="7" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+
+            <!-- قريصتان حمراوان خارج الاستقامة -->
+            <circle cx="170" cy="105" r="7" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.5"/>
+            <circle cx="220" cy="130" r="7" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.5"/>
+          </svg>
+
+          <!-- خيارات الإجابة -->
+          <div id="aktashif-2-options" class="mt-3 flex flex-wrap justify-center gap-3">
+            <button type="button" onclick="selectAktashif2('مِسْطَرَةً', this)" class="opt-btn-a2 px-5 py-2.5 rounded-xl border-2 border-slate-300 bg-white font-bold text-lg hover:border-sky-500 transition">
+              مِسْطَرَةً
+            </button>
+            <button type="button" onclick="selectAktashif2('حَبْلًا مَشْدُودًا', this)" class="opt-btn-a2 px-5 py-2.5 rounded-xl border-2 border-slate-300 bg-white font-bold text-lg hover:border-sky-500 transition">
+              حَبْلًا مَشْدُودًا
+            </button>
+            <button type="button" onclick="selectAktashif2('مِقَصًّا', this)" class="opt-btn-a2 px-5 py-2.5 rounded-xl border-2 border-slate-300 bg-white font-bold text-lg hover:border-sky-500 transition">
+              مِقَصًّا
+            </button>
+          </div>
+
+          <div class="mt-4 flex flex-col items-center gap-2">
+            <button id="btn-check-a2" onclick="checkAktashif2()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2 rounded-xl shadow transition">
+              ✓ تَحَقَّقْ مِنَ الْإِجَابَةِ
+            </button>
+            <p id="feedback-a2" class="font-bold text-base text-center"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- التمرين 3 من أكتشف -->
+      <div id="ex-aktashif-3" class="bg-amber-50/60 rounded-2xl p-4 border-2 border-amber-200 space-y-3 exercise-locked">
+        <p class="text-lg sm:text-xl font-bold text-slate-800 leading-relaxed">
+          <span class="ltr-num text-amber-700">3-</span> لَوِّنِ الشُّمُوعَ الَّتِي تُوجَدُ فِي اسْتِقَامِيَّةٍ مَعَ الشَّمْعَةِ الصَّفْرَاءِ.
+        </p>
+        <p class="text-xs sm:text-sm font-semibold text-amber-800">
+          👆 انْقُرْ عَلَى الشُّمُوعِ الثَّلَاثِ الَّتِي تَقَعُ عَلَى اسْتِقَامَةٍ وَاحِدَةٍ مَعَ الشَّمْعَةِ الصَّفْرَاءِ لِتَلْوِينِهَا (اسْتَعْمِلِ الْمِسْطَرَةَ الرَّقْمِيَّةَ).
+        </p>
+
+        <div class="bg-white rounded-2xl border border-amber-200 p-3 flex flex-col items-center">
+          <svg id="svg-candles" viewBox="0 0 400 240" class="w-full max-w-md h-auto">
+            <rect x="0" y="0" width="400" height="240" rx="14" fill="#f8fafc" />
+            <!-- خط الإرشاد المخفي (يظهر بعد التصحيح) -->
+            <line id="candles-guide-line" x1="45" y1="142" x2="355" y2="60" stroke="#16a34a" stroke-width="3" stroke-dasharray="6,4" opacity="0" />
+
+            <!-- الشمعة الصفراء المرجعية عند (80, 120) -->
+            <g transform="translate(80, 120)">
+              <rect x="-7" y="0" width="14" height="42" rx="3" fill="#facc15" stroke="#854d0e" stroke-width="1.5"/>
+              <line x1="0" y1="0" x2="0" y2="-6" stroke="#1e293b" stroke-width="1.5"/>
+              <path d="M0,-16 Q5,-9 0,-5 Q-5,-9 0,-16" fill="#f97316"/>
+              <text x="0" y="55" text-anchor="middle" font-size="10" font-weight="bold" fill="#854d0e">صَفْرَاءُ</text>
+            </g>
+
+            <!-- الشموع القابلة للنقر (7 شموع) -->
+            <!-- على الاستقامة: c1=(155, 100), c2=(230, 80), c3=(305, 60) -->
+            <!-- خارج الاستقامة: c4=(125, 125), c5=(195, 175), c6=(250, 165), c7=(305, 175) -->
+            <g id="candles-container"></g>
+          </svg>
+
+          <div class="mt-3 flex flex-col items-center gap-2">
+            <button id="btn-check-a3" onclick="checkAktashif3()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2 rounded-xl shadow transition">
+              ✓ تَحَقَّقْ مِنَ الْإِجَابَةِ
+            </button>
+            <p id="feedback-a3" class="font-bold text-base text-center"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- عداد محطة أكتشف -->
+      <div class="bg-emerald-100/80 border border-emerald-300 rounded-xl px-4 py-2 text-center font-extrabold text-emerald-900 text-base sm:text-lg">
+        <span id="counter-aktashif">✓ الصَّوَابُ: <span class="ltr-num">0</span> &nbsp;|&nbsp; ✗ الْخَطَأُ: <span class="ltr-num">0</span></span>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- المحطة الثانية: أُنْجِزُ (كتاب التلميذ ص 35)               -->
+    <!-- ========================================================= -->
+    <section id="station-onjiz" class="bg-white rounded-3xl shadow-lg border-4 border-rose-500 p-4 sm:p-6 space-y-6">
+      <div class="flex items-center gap-3 border-b-2 border-rose-100 pb-3">
+        <span class="bg-rose-600 text-white font-black text-xl sm:text-2xl px-5 py-1.5 rounded-2xl shadow">
+          أُنْجِزُ
+        </span>
+        <span class="text-sm font-bold text-slate-500">كِتَابُ التِّلْمِيذِ – ص <span class="ltr-num">35</span></span>
+      </div>
+
+      <!-- التمرين 1 من أنجز -->
+      <div id="ex-onjiz-1" class="bg-rose-50/50 rounded-2xl p-4 border-2 border-rose-200 space-y-3 exercise-locked">
+        <p class="text-lg sm:text-xl font-bold text-slate-800 leading-relaxed">
+          <span class="ltr-num text-rose-700">1-</span> <span class="ltr-num">4</span> قِنِّينَاتٍ فِي اسْتِقَامِيَّةٍ. جِدْهَا وَلَوِّنْهَا.
+        </p>
+        <p class="text-xs sm:text-sm font-semibold text-rose-800">
+          👆 انْقُرْ عَلَى الْقِنِّينَاتِ الْأَرْبَعِ الَّتِي تَقَعُ فِي اسْتِقَامِيَّةٍ لِتَلْوِينِهَا.
+        </p>
+
+        <div class="bg-white rounded-2xl border border-rose-200 p-3 flex flex-col items-center">
+          <svg id="svg-bottles" viewBox="0 0 400 260" class="w-full max-w-md h-auto">
+            <rect x="0" y="0" width="400" height="260" rx="14" fill="#f8fafc" />
+            <!-- خط الإرشاد المخفي -->
+            <line id="bottles-guide-line" x1="55" y1="228" x2="345" y2="73" stroke="#16a34a" stroke-width="3" stroke-dasharray="6,4" opacity="0" />
+            <g id="bottles-container"></g>
+          </svg>
+
+          <div class="mt-3 flex flex-col items-center gap-2">
+            <button id="btn-check-o1" onclick="checkOnjiz1()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-6 py-2 rounded-xl shadow transition">
+              ✓ تَحَقَّقْ مِنَ الْإِجَابَةِ
+            </button>
+            <p id="feedback-o1" class="font-bold text-base text-center"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- التمرين 2 من أنجز -->
+      <div id="ex-onjiz-2" class="bg-indigo-50/50 rounded-2xl p-4 border-2 border-indigo-200 space-y-4 exercise-locked">
+        <div class="text-lg sm:text-xl font-bold text-slate-800 leading-relaxed space-y-1">
+          <p><span class="ltr-num text-indigo-700">2-</span> لُعْبَةُ <span class="ltr-num">4</span> قُرَيْصَاتٍ فِي اسْتِقَامِيَّةٍ تَرْبَحُ.</p>
+          <p>الْآنَ دَوْرُ اللَّاعِبِ الْأَخْضَرِ.</p>
+          <p class="text-emerald-700">أُرْسُمْ قُرَيْصَتَهُ فِي كُلِّ حَالَةٍ لِكَيْ يَرْبَحَ.</p>
+        </div>
+        <p class="text-xs sm:text-sm font-semibold text-indigo-800">
+          👆 انْقُرْ عَلَى الْخَانَةِ الْفَارِغَةِ الْمُنَاسِبَةِ فِي كُلِّ شَبَكَةٍ لِوَضْعِ الْقُرَيْصَةِ الْخَضْرَاءِ الرَّابِعَةِ.
+        </p>
+
+        <!-- الشبكات الثلاث مرتبة من اليمين إلى اليسار: 1 ، 2 ، 3 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 justify-items-center pt-2">
+          <!-- الحالة 1 (اليمين) -->
+          <div class="flex flex-col items-center gap-2 bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+            <div id="onjiz2-grid-1" class="grid grid-cols-4 border-2 border-slate-700"></div>
+            <span class="w-9 h-9 rounded-lg border-2 border-emerald-600 bg-emerald-50 text-red-600 font-black text-xl flex items-center justify-center shadow-sm">
+              <span class="ltr-num">1</span>
+            </span>
+          </div>
+
+          <!-- الحالة 2 (الوسط) -->
+          <div class="flex flex-col items-center gap-2 bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+            <div id="onjiz2-grid-2" class="grid grid-cols-4 border-2 border-slate-700"></div>
+            <span class="w-9 h-9 rounded-lg border-2 border-emerald-600 bg-emerald-50 text-red-600 font-black text-xl flex items-center justify-center shadow-sm">
+              <span class="ltr-num">2</span>
+            </span>
+          </div>
+
+          <!-- الحالة 3 (اليسار) -->
+          <div class="flex flex-col items-center gap-2 bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+            <div id="onjiz2-grid-3" class="grid grid-cols-4 border-2 border-slate-700"></div>
+            <span class="w-9 h-9 rounded-lg border-2 border-emerald-600 bg-emerald-50 text-red-600 font-black text-xl flex items-center justify-center shadow-sm">
+              <span class="ltr-num">3</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="mt-3 flex flex-col items-center gap-2">
+          <button id="btn-check-o2" onclick="checkOnjiz2()" class="bg-rose-600 hover:bg-rose-700 text-white font-bold px-6 py-2 rounded-xl shadow transition">
+            ✓ تَحَقَّقْ مِنَ الْإِجَابَةِ
+          </button>
+          <p id="feedback-o2" class="font-bold text-base text-center"></p>
+        </div>
+      </div>
+
+      <!-- عداد محطة أنجز -->
+      <div class="bg-rose-100/80 border border-rose-300 rounded-xl px-4 py-2 text-center font-extrabold text-rose-900 text-base sm:text-lg">
+        <span id="counter-onjiz">✓ الصَّوَابُ: <span class="ltr-num">0</span> &nbsp;|&nbsp; ✗ الْخَطَأُ: <span class="ltr-num">0</span></span>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- بطاقة تَعَلَّمْتُ (مطابقة تماماً للكتاب المدرسي)            -->
+    <!-- ========================================================= -->
+    <section class="bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 rounded-3xl shadow-lg border-4 border-indigo-700 p-5 sm:p-6 relative">
+      <div class="flex items-center gap-2 mb-3">
+        <span class="bg-indigo-800 text-white font-black text-xl sm:text-2xl px-5 py-1.5 rounded-2xl shadow">
+          تَعَلَّمْتُ
+        </span>
+      </div>
+      <p class="text-xl sm:text-2xl font-extrabold text-indigo-950 leading-loose text-justify">
+        تَكُونُ الْأَشْيَاءُ فِي اسْتِقَامِيَّةٍ إِذَا لَامَسَتْ حَافَّةَ مِسْطَرَةٍ، أَوْ حَبْلًا أَوْ خَيْطًا مَشْدُودَيْنِ، وَكَانَتْ فِي نَفْسِ الْجِهَةِ مِنْهُ.
+      </p>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- المحطة الثالثة: أَتَمَرَّنُ (كراس الأنشطة ص 22)           -->
+    <!-- ========================================================= -->
+    <section id="station-atamarran" class="bg-white rounded-3xl shadow-lg border-4 border-amber-500 p-4 sm:p-6 space-y-6">
+      <div class="flex items-center gap-3 border-b-2 border-amber-100 pb-3">
+        <span class="bg-amber-500 text-white font-black text-xl sm:text-2xl px-5 py-1.5 rounded-2xl shadow">
+          أَتَمَرَّنُ
+        </span>
+        <span class="text-sm font-bold text-slate-500">كُرَّاسُ الْأَنْشِطَةِ – ص <span class="ltr-num">22</span></span>
+      </div>
+
+      <!-- التمرين 1 من أتمرن -->
+      <div id="ex-atamarran-1" class="bg-amber-50/50 rounded-2xl p-4 border-2 border-amber-200 space-y-4 exercise-locked">
+        <p class="text-lg sm:text-xl font-bold text-slate-800 leading-relaxed">
+          <span class="inline-block bg-amber-500 text-white w-7 h-7 rounded-md text-center leading-7 ml-1"><span class="ltr-num">1</span></span>
+          فِي لُعْبَةِ <span class="ltr-num">3</span> قُرَيْصَاتٍ فِي اسْتِقَامِيَّةٍ تَرْبَحُ، كَمْ مَرَّةً :
+        </p>
+
+        <div class="flex flex-col md:flex-row items-center justify-around gap-6 bg-white p-4 rounded-2xl border border-amber-200">
+          <!-- الشبكة 4×4 المطابقة لكراس الأنشطة -->
+          <div class="relative">
+            <svg id="svg-atamarran-1" width="200" height="200" viewBox="0 0 200 200" class="border-2 border-slate-800 bg-white">
+              <!-- خطوط الشبكة -->
+              <line x1="50" y1="0" x2="50" y2="200" stroke="#334155" stroke-width="2"/>
+              <line x1="100" y1="0" x2="100" y2="200" stroke="#334155" stroke-width="2"/>
+              <line x1="150" y1="0" x2="150" y2="200" stroke="#334155" stroke-width="2"/>
+              <line x1="0" y1="50" x2="200" y2="50" stroke="#334155" stroke-width="2"/>
+              <line x1="0" y1="100" x2="200" y2="100" stroke="#334155" stroke-width="2"/>
+              <line x1="0" y1="150" x2="200" y2="150" stroke="#334155" stroke-width="2"/>
+
+              <!-- القريصات حسب الصورة تماماً (4 صفوف × 4 أعمدة) -->
+              <!-- الصف 1: أخضر، أخضر، أحمر، أحمر -->
+              <circle cx="25" cy="25" r="17" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+              <circle cx="75" cy="25" r="17" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+              <circle cx="125" cy="25" r="17" fill="#b91c1c" stroke="#7f1d1d" stroke-width="1.5"/>
+              <circle cx="175" cy="25" r="17" fill="#b91c1c" stroke="#7f1d1d" stroke-width="1.5"/>
+
+              <!-- الصف 2: أخضر، أحمر، أحمر، أحمر -->
+              <circle cx="25" cy="75" r="17" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+              <circle cx="75" cy="75" r="17" fill="#b91c1c" stroke="#7f1d1d" stroke-width="1.5"/>
+              <circle cx="125" cy="75" r="17" fill="#b91c1c" stroke="#7f1d1d" stroke-width="1.5"/>
+              <circle cx="175" cy="75" r="17" fill="#b91c1c" stroke="#7f1d1d" stroke-width="1.5"/>
+
+              <!-- الصف 3: أخضر، أحمر، أخضر، أخضر -->
+              <circle cx="25" cy="125" r="17" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+              <circle cx="75" cy="125" r="17" fill="#b91c1c" stroke="#7f1d1d" stroke-width="1.5"/>
+              <circle cx="125" cy="125" r="17" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+              <circle cx="175" cy="125" r="17" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+
+              <!-- الصف 4: أحمر، أحمر، أخضر، أحمر -->
+              <circle cx="25" cy="175" r="17" fill="#b91c1c" stroke="#7f1d1d" stroke-width="1.5"/>
+              <circle cx="75" cy="175" r="17" fill="#b91c1c" stroke="#7f1d1d" stroke-width="1.5"/>
+              <circle cx="125" cy="175" r="17" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+              <circle cx="175" cy="175" r="17" fill="#b91c1c" stroke="#7f1d1d" stroke-width="1.5"/>
+
+              <!-- خطوط التوضيح عند التصحيح -->
+              <g id="atamarran1-lines" opacity="0">
+                <!-- صف 2 أحمر -->
+                <line x1="65" y1="75" x2="185" y2="75" stroke="#facc15" stroke-width="4" stroke-linecap="round"/>
+                <!-- قطر صاعد (4,1)-(3,2)-(2,3)-(1,4) -->
+                <line x1="20" y1="180" x2="180" y2="20" stroke="#38bdf8" stroke-width="4" stroke-linecap="round"/>
+                <!-- عمود 1 أخضر (1,1)-(2,1)-(3,1) -->
+                <line x1="25" y1="15" x2="25" y2="135" stroke="#ffffff" stroke-width="4" stroke-dasharray="4,3" stroke-linecap="round"/>
+              </g>
+            </svg>
+          </div>
+
+          <!-- الأسئلة -->
+          <div class="space-y-4 text-lg font-bold flex-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <span>• <span class="ltr-num">3</span> قُرَيْصَاتٍ حَمْرَاءَ فِي اسْتِقَامِيَّةٍ ؟</span>
+              <input id="input-red-count" type="number" min="0" max="10" dir="ltr" class="w-20 text-center font-black text-xl border-2 border-slate-400 rounded-xl py-1 focus:border-amber-500 outline-none" placeholder="؟" />
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <span>• <span class="ltr-num">3</span> قُرَيْصَاتٍ خَضْرَاءَ فِي اسْتِقَامِيَّةٍ ؟</span>
+              <input id="input-green-count" type="number" min="0" max="10" dir="ltr" class="w-20 text-center font-black text-xl border-2 border-slate-400 rounded-xl py-1 focus:border-amber-500 outline-none" placeholder="؟" />
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3 flex flex-col items-center gap-2">
+          <button id="btn-check-t1" onclick="checkAtamarran1()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2 rounded-xl shadow transition">
+            ✓ تَحَقَّقْ مِنَ الْإِجَابَةِ
+          </button>
+          <p id="feedback-t1" class="font-bold text-base text-center"></p>
+        </div>
+      </div>
+
+      <!-- التمرين 2 من أتمرن -->
+      <div id="ex-atamarran-2" class="bg-sky-50/50 rounded-2xl p-4 border-2 border-sky-200 space-y-3 exercise-locked">
+        <div class="text-lg sm:text-xl font-bold text-slate-800 leading-relaxed space-y-1">
+          <p>
+            <span class="inline-block bg-amber-500 text-white w-7 h-7 rounded-md text-center leading-7 ml-1"><span class="ltr-num">2</span></span>
+            اِرْبِطِ النُّقْطَتَيْنِ الْخَضْرَاوَيْنِ بِخَطٍّ مُسْتَقِيمٍ.
+          </p>
+          <p>جُنُودٌ غَيْرُ مَوْجُودِينَ فِي اسْتِقَامِيَّةٍ عَلَى هَذَا الْخَطِّ.</p>
+          <p class="text-sky-700">أَحِطْ كُلَّ وَاحِدٍ مِنْهُمْ.</p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-sky-200 p-3 flex flex-col items-center">
+          <button id="btn-draw-soldiers-line" onclick="drawSoldiersLine()" class="mb-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-1.5 rounded-xl shadow text-sm sm:text-base flex items-center gap-2">
+            <span>✏️</span>
+            <span>اِرْبِطِ النُّقْطَتَيْنِ الْخَضْرَاوَيْنِ بِخَطٍّ مُسْتَقِيمٍ</span>
+          </button>
+
+          <svg id="svg-soldiers" viewBox="0 0 420 260" class="w-full max-w-md h-auto">
+            <rect x="0" y="0" width="420" height="260" rx="14" fill="#f8fafc" />
+
+            <!-- الخط المستقيم الواصل بين النقطة الخضراء الأولى (40, 30) والثانية (340, 230) -->
+            <line id="soldiers-line" x1="40" y1="30" x2="340" y2="230" stroke="#16a34a" stroke-width="2.5" stroke-dasharray="6,4" opacity="0" />
+
+            <!-- النقطتان الخضراوان -->
+            <circle cx="40" cy="30" r="6" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+            <circle cx="340" cy="230" r="6" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+
+            <!-- حاوية الجنود الـ 8 -->
+            <g id="soldiers-container"></g>
+          </svg>
+
+          <p class="text-xs sm:text-sm font-semibold text-slate-600 mt-1">
+            👆 انْقُرْ عَلَى الْجُنُودِ الَّذِينَ لَا يَقَعُونَ عَلَى الْخَطِّ الْمُسْتَقِيمِ لِإِحَاطَتِهِمْ بِدَائِرَةٍ.
+          </p>
+
+          <div class="mt-3 flex flex-col items-center gap-2">
+            <button id="btn-check-t2" onclick="checkAtamarran2()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2 rounded-xl shadow transition">
+              ✓ تَحَقَّقْ مِنَ الْإِجَابَةِ
+            </button>
+            <p id="feedback-t2" class="font-bold text-base text-center"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- التمرين 3 من أتمرن -->
+      <div id="ex-atamarran-3" class="bg-purple-50/50 rounded-2xl p-4 border-2 border-purple-200 space-y-4 exercise-locked">
+        <div class="text-lg sm:text-xl font-bold text-slate-800 leading-relaxed space-y-1">
+          <p>
+            <span class="inline-block bg-amber-500 text-white w-7 h-7 rounded-md text-center leading-7 ml-1"><span class="ltr-num">3</span></span>
+            ضَعِ الْإِشَارَةَ ( <span class="ltr-num">×</span> ) أَسْفَلَ الرِّيَاضِيِّ الَّذِي سَيُصِيبُ سَهْمُهُ الدَّائِرَةَ.
+          </p>
+          <p>هَلْ سَيُصِيبُ سَهْمُ الرِّيَاضِيِّ الْآخَرِ الدَّائِرَةَ ؟</p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-purple-200 p-3 flex flex-col items-center">
+          <svg id="svg-archers" viewBox="0 0 420 200" class="w-full max-w-md h-auto">
+            <rect x="0" y="0" width="420" height="200" rx="14" fill="#f8fafc" />
+            <!-- خط الأرض -->
+            <line x1="40" y1="175" x2="380" y2="175" stroke="#475569" stroke-width="2"/>
+
+            <!-- الهدف الدائري في الوسط (x=165, y=105) -->
+            <g transform="translate(165, 105)">
+              <line x1="-10" y1="14" x2="-16" y2="32" stroke="#334155" stroke-width="2.5"/>
+              <line x1="10" y1="14" x2="16" y2="32" stroke="#334155" stroke-width="2.5"/>
+              <circle cx="0" cy="0" r="18" fill="#1e293b"/>
+              <circle cx="0" cy="0" r="12" fill="#0284c7"/>
+              <circle cx="0" cy="0" r="6" fill="#dc2626"/>
+              <circle cx="0" cy="0" r="2.5" fill="#facc15"/>
+            </g>
+
+            <!-- الرياضي الأيسر (سهمه مصوب أفقياً نحو الدائرة y=105) -->
+            <g transform="translate(75, 70)">
+              <circle cx="0" cy="0" r="12" fill="#fed7aa" stroke="#9a3412" stroke-width="1.5"/>
+              <rect x="-10" y="13" width="20" height="38" rx="4" fill="#84cc16"/>
+              <rect x="-9" y="51" width="8" height="48" fill="#64748b"/>
+              <rect x="1" y="51" width="8" height="48" fill="#64748b"/>
+              <!-- القوس -->
+              <path d="M22,12 Q35,35 22,58" fill="none" stroke="#78350f" stroke-width="2.5"/>
+              <line x1="22" y1="12" x2="22" y2="58" stroke="#475569" stroke-width="1"/>
+              <!-- السهم الأفقي -->
+              <line x1="5" y1="35" x2="42" y2="35" stroke="#dc2626" stroke-width="2.5"/>
+              <polygon points="46,35 39,31 39,39" fill="#dc2626"/>
+            </g>
+
+            <!-- الرياضي الأيمن (سهمه مائل للأعلى فوق الدائرة) -->
+            <g transform="translate(320, 70)">
+              <circle cx="0" cy="0" r="12" fill="#fed7aa" stroke="#9a3412" stroke-width="1.5"/>
+              <rect x="-10" y="13" width="20" height="38" rx="4" fill="#a3e635"/>
+              <rect x="-9" y="51" width="8" height="48" fill="#dc2626"/>
+              <rect x="1" y="51" width="8" height="48" fill="#dc2626"/>
+              <!-- القوس -->
+              <path d="M-22,12 Q-35,35 -22,58" fill="none" stroke="#78350f" stroke-width="2.5"/>
+              <line x1="-22" y1="12" x2="-22" y2="58" stroke="#475569" stroke-width="1"/>
+              <!-- السهم المائل للأعلى -->
+              <line x1="-5" y1="35" x2="-42" y2="18" stroke="#dc2626" stroke-width="2.5"/>
+              <polygon points="-46,16 -38,16 -41,23" fill="#dc2626"/>
+            </g>
+
+            <!-- مسارات الأسهم للتوضيح بعد التصحيح -->
+            <g id="archers-trajectories" opacity="0">
+              <line x1="117" y1="105" x2="165" y2="105" stroke="#16a34a" stroke-width="2.5" stroke-dasharray="5,4"/>
+              <line x1="278" y1="88" x2="140" y2="25" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="5,4"/>
+            </g>
+          </svg>
+
+          <!-- مربعا الاختيار أسفل الرياضيين -->
+          <div class="w-full max-w-md flex justify-between px-12 sm:px-16 mt-2">
+            <!-- مربع الرياضي الأيمن -->
+            <button type="button" id="archer-box-right" onclick="selectArcher('right')" class="w-12 h-12 border-2 border-slate-700 rounded-xl bg-slate-50 hover:bg-purple-50 text-2xl font-black flex items-center justify-center shadow-sm">
+              
+            </button>
+            <!-- مربع الرياضي الأيسر -->
+            <button type="button" id="archer-box-left" onclick="selectArcher('left')" class="w-12 h-12 border-2 border-slate-700 rounded-xl bg-slate-50 hover:bg-purple-50 text-2xl font-black flex items-center justify-center shadow-sm">
+              
+            </button>
+          </div>
+
+          <!-- السؤال الثاني: نعم [ ] لا [ ] -->
+          <div class="mt-5 flex items-center justify-center gap-8 text-xl font-bold">
+            <button type="button" id="archer-yn-yes" onclick="selectArcherYN('yes')" class="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-slate-300 hover:border-purple-500">
+              <span>نَعَمْ</span>
+              <span id="box-yn-yes" class="w-7 h-7 border-2 border-slate-700 rounded inline-flex items-center justify-center text-lg font-black"></span>
+            </button>
+
+            <button type="button" id="archer-yn-no" onclick="selectArcherYN('no')" class="flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-slate-300 hover:border-purple-500">
+              <span>لَا</span>
+              <span id="box-yn-no" class="w-7 h-7 border-2 border-slate-700 rounded inline-flex items-center justify-center text-lg font-black"></span>
+            </button>
+          </div>
+
+          <div class="mt-4 flex flex-col items-center gap-2">
+            <button id="btn-check-t3" onclick="checkAtamarran3()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2 rounded-xl shadow transition">
+              ✓ تَحَقَّقْ مِنَ الْإِجَابَةِ
+            </button>
+            <p id="feedback-t3" class="font-bold text-base text-center"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- عداد محطة أتمرن -->
+      <div class="bg-amber-100/80 border border-amber-300 rounded-xl px-4 py-2 text-center font-extrabold text-amber-900 text-base sm:text-lg">
+        <span id="counter-atamarran">✓ الصَّوَابُ: <span class="ltr-num">0</span> &nbsp;|&nbsp; ✗ الْخَطَأُ: <span class="ltr-num">0</span></span>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- المحطة الرابعة: أَبْحَثُ (كراس الأنشطة ص 22)              -->
+    <!-- ========================================================= -->
+    <section id="station-abhath" class="bg-white rounded-3xl shadow-lg border-4 border-teal-600 p-4 sm:p-6 space-y-5">
+      <div class="flex items-center gap-3 border-b-2 border-teal-100 pb-3">
+        <span class="bg-teal-600 text-white font-black text-xl sm:text-2xl px-5 py-1.5 rounded-2xl shadow">
+          أَبْحَثُ
+        </span>
+        <span class="text-sm font-bold text-slate-500">كُرَّاسُ الْأَنْشِطَةِ – ص <span class="ltr-num">22</span></span>
+      </div>
+
+      <div id="ex-abhath-1" class="bg-teal-50/50 rounded-2xl p-4 border-2 border-teal-200 space-y-3 exercise-locked">
+        <p class="text-lg sm:text-xl font-bold text-slate-800 leading-relaxed">
+          أُرْسُمْ قُرَيْصَةً تَكُونُ فِي آنٍ وَاحِدٍ فِي اسْتِقَامِيَّةٍ مَعَ النُّقَطِ الْحَمْرَاءِ وَمَعَ النُّقَطِ الْخَضْرَاءِ وَمَعَ النُّقَطِ الزَّرْقَاءِ.
+        </p>
+        <p class="text-xs sm:text-sm font-semibold text-teal-800">
+          👆 اسْتَعْمِلِ الْمِسْطَرَةَ الرَّقْمِيَّةَ لِتَحْدِيدِ نُقْطَةِ التَّقَاطُعِ، ثُمَّ انْقُرْ عَلَى اللُّوحَةِ لِرَسْمِ الْقُرَيْصَةِ.
+        </p>
+
+        <div class="bg-white rounded-2xl border border-teal-200 p-3 flex flex-col items-center">
+          <svg id="svg-abhath" viewBox="0 0 380 260" class="w-full max-w-md h-auto cursor-crosshair">
+            <rect x="0" y="0" width="380" height="260" rx="14" fill="#f8fafc" />
+
+            <!-- المستقيمات الثلاثة المتقاطعة عند (190, 130) - تظهر عند التصحيح -->
+            <g id="abhath-lines" opacity="0">
+              <!-- المستقيم الأحمر -->
+              <line x1="40" y1="85" x2="340" y2="175" stroke="#dc2626" stroke-width="2" stroke-dasharray="5,4"/>
+              <!-- المستقيم الأخضر -->
+              <line x1="45" y1="202.5" x2="335" y2="57.5" stroke="#16a34a" stroke-width="2" stroke-dasharray="5,4"/>
+              <!-- المستقيم الأزرق -->
+              <line x1="115" y1="30" x2="265" y2="230" stroke="#2563eb" stroke-width="2" stroke-dasharray="5,4"/>
+            </g>
+
+            <!-- النقط الحمراء على المستقيم y = 130 + 0.3*(x - 190) -->
+            <circle cx="80" cy="97" r="6" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.5"/>
+            <circle cx="140" cy="115" r="6" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.5"/>
+            <circle cx="290" cy="160" r="6" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.5"/>
+
+            <!-- النقط الخضراء على المستقيم y = 130 - 0.5*(x - 190) -->
+            <circle cx="70" cy="190" r="6" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+            <circle cx="250" cy="100" r="6" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+            <circle cx="310" cy="70" r="6" fill="#16a34a" stroke="#14532d" stroke-width="1.5"/>
+
+            <!-- النقط الزرقاء على المستقيم y = 130 + 1.333*(x - 190) -->
+            <circle cx="130" cy="50" r="6" fill="#2563eb" stroke="#1e3a8a" stroke-width="1.5"/>
+            <circle cx="160" cy="90" r="6" fill="#2563eb" stroke="#1e3a8a" stroke-width="1.5"/>
+            <circle cx="235" cy="190" r="6" fill="#2563eb" stroke="#1e3a8a" stroke-width="1.5"/>
+
+            <!-- القريصة التي يرسمها التلميذ -->
+            <g id="user-abhath-disc" opacity="0">
+              <circle cx="0" cy="0" r="9" fill="#facc15" stroke="#854d0e" stroke-width="2.5"/>
+            </g>
+
+            <!-- موضع القريصة الصحيحة للتوضيح عند الخطأ -->
+            <g id="correct-abhath-disc" opacity="0" transform="translate(190, 130)">
+              <circle cx="0" cy="0" r="11" fill="none" stroke="#16a34a" stroke-width="3"/>
+              <circle cx="0" cy="0" r="5" fill="#16a34a"/>
+            </g>
+          </svg>
+
+          <div class="mt-3 flex flex-col items-center gap-2">
+            <button id="btn-check-ab1" onclick="checkAbhath1()" class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-6 py-2 rounded-xl shadow transition">
+              ✓ تَحَقَّقْ مِنَ الْإِجَابَةِ
+            </button>
+            <p id="feedback-ab1" class="font-bold text-base text-center"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- عداد محطة أبحث -->
+      <div class="bg-teal-100/80 border border-teal-300 rounded-xl px-4 py-2 text-center font-extrabold text-teal-900 text-base sm:text-lg">
+        <span id="counter-abhath">✓ الصَّوَابُ: <span class="ltr-num">0</span> &nbsp;|&nbsp; ✗ الْخَطَأُ: <span class="ltr-num">0</span></span>
+      </div>
+    </section>
+
+    <!-- ========================================================= -->
+    <!-- التقييم النهائي الشامل (مباشرة في أسفل الصفحة الرئيسية)    -->
+    <!-- ========================================================= -->
+    <section id="final-evaluation" class="bg-white rounded-3xl shadow-2xl border-4 border-slate-800 p-6 sm:p-8 space-y-6">
+      <div class="text-center border-b-2 border-slate-100 pb-4">
+        <h2 class="text-2xl sm:text-3xl font-black text-slate-800">
+          📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ
+        </h2>
+        <p class="text-slate-500 font-semibold text-sm sm:text-base mt-1">
+          مُلَخَّصُ نَتَائِجِ التِّلْمِيذِ فِي جَمِيعِ مَحَطَّاتِ الدَّرْسِ
+        </p>
+      </div>
+
+      <div class="flex flex-col md:flex-row items-center justify-around gap-8">
+        <!-- الدائرة النسبية الحقيقية (SVG Circular Progress Ring) -->
+        <div class="relative w-48 h-48 flex items-center justify-center">
+          <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+            <!-- خلفية الدائرة -->
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#e2e8f0" stroke-width="14" />
+            <!-- قوس الإجابات الخاطئة (أحمر) -->
+            <circle id="ring-wrong" cx="60" cy="60" r="50" fill="none" stroke="#ef4444" stroke-width="14"
+                    stroke-dasharray="314.16" stroke-dashoffset="314.16" stroke-linecap="butt"
+                    style="transition: stroke-dashoffset 0.6s ease;" />
+            <!-- قوس الإجابات الصحيحة (أخضر) -->
+            <circle id="ring-correct" cx="60" cy="60" r="50" fill="none" stroke="#16a34a" stroke-width="14"
+                    stroke-dasharray="314.16" stroke-dashoffset="314.16" stroke-linecap="butt"
+                    style="transition: stroke-dashoffset 0.6s ease;" />
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+            <span id="final-percentage" class="text-3xl sm:text-4xl font-black text-slate-800 ltr-num">0%</span>
+            <span class="text-xs font-bold text-slate-500 mt-0.5">نِسْبَةُ النَّجَاحِ</span>
+          </div>
+        </div>
+
+        <!-- تفاصيل الأرقام والتقدير -->
+        <div class="flex-1 space-y-4 w-full max-w-md">
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-3 text-center">
+              <div class="text-sm font-bold text-emerald-700">✓ الْإِجَابَاتُ الصَّحِيحَةُ</div>
+              <div id="final-correct-count" class="text-3xl font-black text-emerald-600 mt-1 ltr-num">0</div>
+            </div>
+            <div class="bg-rose-50 border-2 border-rose-300 rounded-2xl p-3 text-center">
+              <div class="text-sm font-bold text-rose-700">✗ الْإِجَابَاتُ الْخَاطِئَةُ</div>
+              <div id="final-wrong-count" class="text-3xl font-black text-rose-600 mt-1 ltr-num">0</div>
+            </div>
+          </div>
+
+          <div class="bg-slate-100 rounded-2xl p-4 text-center border border-slate-200">
+            <p id="final-encouragement" class="text-lg font-extrabold text-slate-700">
+              🚀 اِبْدَأْ بِحَلِّ التَّمَارِينِ بِالتَّسَلْسُلِ لِتَظْهَرَ نَتِيجَتُكَ هُنَا!
+            </p>
+            <p class="text-xs font-semibold text-slate-500 mt-1">
+              الْعَدَدُ الْإِجْمَالِيُّ لِلْأَسْئِلَةِ الْمُقَيَّمَةِ: <span id="total-questions-label" class="ltr-num">12</span>
+            </p>
+          </div>
+
+          <div class="text-center pt-1">
+            <button onclick="resetAllExercises()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-900 text-white font-bold px-6 py-3 rounded-2xl shadow-lg transition flex items-center justify-center gap-2 mx-auto">
+              <span>🔄</span>
+              <span>إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         زر العودة إلى الفهرس (أُضيف)
+         ======================================== -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+  </main>
+
+  <!-- ========================================
+       سكريبت الحماية (أُضيف)
+       ======================================== -->
+  <script>
+    const CHANNEL_ID = "-1004461185731";
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+  </script>
+
+  <!-- ========================================
+       سكريبت الدرس الأصلي (كما هو دون تغيير)
+       ======================================== -->
+  <script>
+    /* =====================================================================
+       1. تهيئة وبناء المسطرة الرقمية التفاعلية (15 سم)
+       ===================================================================== */
+    const rulerEl = document.getElementById('digital-ruler');
+    const rulerSvg = document.getElementById('ruler-svg');
+
+    let rulerState = {
+      x: Math.max(20, (window.innerWidth - 460) / 2),
+      y: 95,
+      angle: 0,
+      visible: true
+    };
+
+    function buildRulerTicks() {
+      let html = '';
+      // 15 سم = 450px (كل 1 سم = 30px) + 5px هامش من كل طرف
+      for (let mm = 0; mm <= 150; mm++) {
+        const x = 5 + mm * 3;
+        let h = 8;
+        let sw = 1;
+        if (mm % 10 === 0) {
+          h = 22;
+          sw = 1.6;
+          const cm = mm / 10;
+          html += `<text x="${x}" y="38" text-anchor="middle" font-size="12" font-weight="800" fill="#78350f" direction="ltr">${cm}</text>`;
+        } else if (mm % 5 === 0) {
+          h = 15;
+          sw = 1.2;
+        }
+        html += `<line x1="${x}" y1="0" x2="${x}" y2="${h}" stroke="#78350f" stroke-width="${sw}" />`;
+      }
+      html += `<text x="230" y="58" text-anchor="middle" font-size="11" font-weight="700" fill="#92400e">مِسْطَرَةٌ رَقْمِيَّةٌ (15 cm) – اسْحَبْ وَدَوِّرْ</text>`;
+      rulerSvg.innerHTML = html;
+    }
+
+    function applyRulerTransform() {
+      rulerEl.style.left = `${rulerState.x}px`;
+      rulerEl.style.top = `${rulerState.y}px`;
+      rulerEl.style.transform = `rotate(${rulerState.angle}deg)`;
+    }
+
+    function moveRuler(dx, dy) {
+      rulerState.x += dx;
+      rulerState.y += dy;
+      applyRulerTransform();
+    }
+
+    function rotateRuler(deg) {
+      rulerState.angle = (rulerState.angle + deg) % 360;
+      applyRulerTransform();
+    }
+
+    function resetRuler() {
+      const w = rulerEl.offsetWidth || 460;
+      rulerState.x = Math.max(15, (window.innerWidth - w) / 2);
+      rulerState.y = 95;
+      rulerState.angle = 0;
+      applyRulerTransform();
+    }
+
+    function toggleRuler() {
+      rulerState.visible = !rulerState.visible;
+      const btnText = document.getElementById('toggle-ruler-text');
+      const controls = document.getElementById('ruler-controls-group');
+      if (rulerState.visible) {
+        rulerEl.classList.remove('hidden-ruler');
+        btnText.textContent = 'إِخْفَاءُ الْمِسْطَرَةِ';
+        controls.style.visibility = 'visible';
+      } else {
+        rulerEl.classList.add('hidden-ruler');
+        btnText.textContent = 'إِظْهَارُ الْمِسْطَرَةِ';
+        controls.style.visibility = 'hidden';
+      }
+    }
+
+    // السحب بالماوس واللمس + التدوير بإصبعين (Two-finger rotation)
+    let isDraggingRuler = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let initialRulerX = 0;
+    let initialRulerY = 0;
+
+    let initialPinchAngle = null;
+    let initialRulerAngle = 0;
+
+    function getTouchAngle(t1, t2) {
+      return Math.atan2(t2.clientY - t1.clientY, t2.clientX - t1.clientX) * 180 / Math.PI;
+    }
+
+    rulerEl.addEventListener('mousedown', (e) => {
+      isDraggingRuler = true;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      initialRulerX = rulerState.x;
+      initialRulerY = rulerState.y;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDraggingRuler) return;
+      rulerState.x = initialRulerX + (e.clientX - dragStartX);
+      rulerState.y = initialRulerY + (e.clientY - dragStartY);
+      applyRulerTransform();
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDraggingRuler = false;
+    });
+
+    rulerEl.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        isDraggingRuler = true;
+        dragStartX = e.touches[0].clientX;
+        dragStartY = e.touches[0].clientY;
+        initialRulerX = rulerState.x;
+        initialRulerY = rulerState.y;
+      } else if (e.touches.length === 2) {
+        isDraggingRuler = false;
+        initialPinchAngle = getTouchAngle(e.touches[0], e.touches[1]);
+        initialRulerAngle = rulerState.angle;
+      }
+    }, { passive: false });
+
+    rulerEl.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      if (e.touches.length === 1 && isDraggingRuler) {
+        rulerState.x = initialRulerX + (e.touches[0].clientX - dragStartX);
+        rulerState.y = initialRulerY + (e.touches[0].clientY - dragStartY);
+        applyRulerTransform();
+      } else if (e.touches.length === 2 && initialPinchAngle !== null) {
+        const currentAngle = getTouchAngle(e.touches[0], e.touches[1]);
+        rulerState.angle = initialRulerAngle + (currentAngle - initialPinchAngle);
+        applyRulerTransform();
+      }
+    }, { passive: false });
+
+    rulerEl.addEventListener('touchend', () => {
+      isDraggingRuler = false;
+      initialPinchAngle = null;
+    });
+
+    /* =====================================================================
+       2. حالة التقدم والدرجات والتسلسل
+       ===================================================================== */
+    const TOTAL_QUESTIONS = 12;
+
+    const scores = {
+      aktashif: { correct: 0, wrong: 0 },
+      onjiz: { correct: 0, wrong: 0 },
+      atamarran: { correct: 0, wrong: 0 },
+      abhath: { correct: 0, wrong: 0 }
+    };
+
+    const doneFlags = {
+      a1: false,
+      a2: false,
+      a3: false,
+      o1: false,
+      o2: false,
+      t1: false,
+      t2: false,
+      t3: false,
+      ab1: false
+    };
+
+    function unlockExercise(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('exercise-locked');
+    }
+
+    function updateCountersAndRing() {
+      document.getElementById('counter-aktashif').innerHTML =
+        `✓ الصَّوَابُ: <span class="ltr-num">${scores.aktashif.correct}</span> &nbsp;|&nbsp; ✗ الْخَطَأُ: <span class="ltr-num">${scores.aktashif.wrong}</span>`;
+      document.getElementById('counter-onjiz').innerHTML =
+        `✓ الصَّوَابُ: <span class="ltr-num">${scores.onjiz.correct}</span> &nbsp;|&nbsp; ✗ الْخَطَأُ: <span class="ltr-num">${scores.onjiz.wrong}</span>`;
+      document.getElementById('counter-atamarran').innerHTML =
+        `✓ الصَّوَابُ: <span class="ltr-num">${scores.atamarran.correct}</span> &nbsp;|&nbsp; ✗ الْخَطَأُ: <span class="ltr-num">${scores.atamarran.wrong}</span>`;
+      document.getElementById('counter-abhath').innerHTML =
+        `✓ الصَّوَابُ: <span class="ltr-num">${scores.abhath.correct}</span> &nbsp;|&nbsp; ✗ الْخَطَأُ: <span class="ltr-num">${scores.abhath.wrong}</span>`;
+
+      const totalCorrect = scores.aktashif.correct + scores.onjiz.correct + scores.atamarran.correct + scores.abhath.correct;
+      const totalWrong = scores.aktashif.wrong + scores.onjiz.wrong + scores.atamarran.wrong + scores.abhath.wrong;
+
+      document.getElementById('final-correct-count').textContent = totalCorrect;
+      document.getElementById('final-wrong-count').textContent = totalWrong;
+      document.getElementById('total-questions-label').textContent = TOTAL_QUESTIONS;
+
+      let pct = Math.round((totalCorrect / TOTAL_QUESTIONS) * 100);
+      if (pct > 100) pct = 100;
+      if (pct < 0) pct = 0;
+
+      document.getElementById('final-percentage').textContent = `${pct}%`;
+
+      const C = 314.16;
+      const correctRatio = Math.min(1, totalCorrect / TOTAL_QUESTIONS);
+      const wrongRatio = Math.min(1 - correctRatio, totalWrong / TOTAL_QUESTIONS);
+
+      const correctLen = correctRatio * C;
+      const wrongLen = wrongRatio * C;
+
+      const ringCorrect = document.getElementById('ring-correct');
+      const ringWrong = document.getElementById('ring-wrong');
+
+      ringCorrect.style.strokeDashoffset = C - correctLen;
+      ringWrong.style.strokeDashoffset = C - (correctLen + wrongLen);
+
+      const encEl = document.getElementById('final-encouragement');
+      const answeredCount = totalCorrect + totalWrong;
+      if (answeredCount === 0) {
+        encEl.textContent = '🚀 اِبْدَأْ بِحَلِّ التَّمَارِينِ بِالتَّسَلْسُلِ لِتَظْهَرَ نَتِيجَتُكَ هُنَا!';
+        encEl.className = 'text-lg font-extrabold text-slate-700';
+      } else if (answeredCount < TOTAL_QUESTIONS) {
+        encEl.textContent = `👍 أَحْسَنْتَ! أَجَبْتَ عَنْ ${answeredCount} مِنْ ${TOTAL_QUESTIONS} سُؤَالًا، وَاصِلِ التَّقَدُّمَ!`;
+        encEl.className = 'text-lg font-extrabold text-sky-700';
+      } else if (pct === 100) {
+        encEl.textContent = '🏆 مُمْتَازٌ جِدًّا! نَتِيجَةٌ كَامِلَةٌ 100%، أَنْتَ بَطَلُ الرِّيَاضِيَّاتِ!';
+        encEl.className = 'text-lg font-extrabold text-emerald-700';
+      } else if (pct >= 75) {
+        encEl.textContent = '🌟 رَائِعٌ! أَدَاءٌ جَيِّدٌ جِدًّا، رَاجِعِ الْأَخْطَاءَ الْبَسِيطَةَ لِتَتَفَوَّقَ أَكْثَرَ!';
+        encEl.className = 'text-lg font-extrabold text-emerald-600';
+      } else {
+        encEl.textContent = '💪 مُحَاوَلَةٌ طَيِّبَةٌ! رَاجِعِ الْأَخْطَاءَ الْمُلَوَّنَةَ بِالْأَحْمَرِ وَحَاوِلْ مِنْ جَدِيدٍ!';
+        encEl.className = 'text-lg font-extrabold text-amber-700';
+      }
+    }
+
+    /* =====================================================================
+       3. منطق المحطة الأولى: أَكْتَشِفُ
+       ===================================================================== */
+    function pullRopeDemo() {
+      document.getElementById('rope-line').setAttribute('stroke-dasharray', 'none');
+      document.getElementById('rope-line').setAttribute('stroke-width', '4');
+      document.getElementById('rope-highlights').setAttribute('opacity', '1');
+      document.getElementById('rope-msg').classList.remove('hidden');
+      if (!doneFlags.a1) {
+        doneFlags.a1 = true;
+        unlockExercise('ex-aktashif-2');
+      }
+    }
+
+    let selectedA2 = null;
+    function selectAktashif2(val, btn) {
+      if (doneFlags.a2) return;
+      selectedA2 = val;
+      document.getElementById('aktashif-2-blank').textContent = val;
+      document.querySelectorAll('.opt-btn-a2').forEach(b => {
+        b.classList.remove('bg-sky-100', 'border-sky-600', 'text-sky-900');
+      });
+      btn.classList.add('bg-sky-100', 'border-sky-600', 'text-sky-900');
+    }
+
+    function checkAktashif2() {
+      if (doneFlags.a2) return;
+      const fb = document.getElementById('feedback-a2');
+      if (!selectedA2) {
+        fb.textContent = '⚠️ اِخْتَرْ إِجَابَةً أَوَّلًا!';
+        fb.className = 'font-bold text-amber-600 text-base';
+        return;
+      }
+      doneFlags.a2 = true;
+      document.getElementById('btn-check-a2').disabled = true;
+      document.getElementById('btn-check-a2').classList.add('opacity-50', 'cursor-not-allowed');
+
+      document.querySelectorAll('.opt-btn-a2').forEach(b => {
+        b.disabled = true;
+        const txt = b.textContent.trim();
+        if (txt === 'مِسْطَرَةً') {
+          b.classList.remove('bg-sky-100', 'border-sky-600');
+          b.classList.add('bg-emerald-500', 'text-white', 'border-emerald-700');
+        } else if (txt === selectedA2 && selectedA2 !== 'مِسْطَرَةً') {
+          b.classList.remove('bg-sky-100', 'border-sky-600');
+          b.classList.add('bg-rose-500', 'text-white', 'border-rose-700');
+        }
+      });
+
+      if (selectedA2 === 'مِسْطَرَةً') {
+        scores.aktashif.correct++;
+        fb.textContent = '✓ إِجَابَةٌ صَحِيحَةٌ! يَسْتَعْمِلُ رَائِدٌ مِسْطَرَةً.';
+        fb.className = 'font-bold text-emerald-600 text-base';
+      } else {
+        scores.aktashif.wrong++;
+        document.getElementById('aktashif-2-blank').textContent = 'مِسْطَرَةً';
+        fb.textContent = '✗ إِجَابَةٌ خَاطِئَةٌ! الصَّوَابُ هُوَ: مِسْطَرَةً.';
+        fb.className = 'font-bold text-rose-600 text-base';
+      }
+      updateCountersAndRing();
+      unlockExercise('ex-aktashif-3');
+    }
+
+    const candlesData = [
+      { id: 'c1', x: 155, y: 100, aligned: true, selected: false },
+      { id: 'c2', x: 230, y: 80,  aligned: true, selected: false },
+      { id: 'c3', x: 305, y: 60,  aligned: true, selected: false },
+      { id: 'c4', x: 125, y: 128, aligned: false, selected: false },
+      { id: 'c5', x: 185, y: 175, aligned: false, selected: false },
+      { id: 'c6', x: 245, y: 162, aligned: false, selected: false },
+      { id: 'c7', x: 305, y: 175, aligned: false, selected: false }
+    ];
+
+    function renderCandles() {
+      const container = document.getElementById('candles-container');
+      container.innerHTML = '';
+      candlesData.forEach(c => {
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('transform', `translate(${c.x}, ${c.y})`);
+        g.setAttribute('class', 'clickable-item');
+        g.setAttribute('id', `candle-${c.id}`);
+
+        const bodyFill = c.selected ? '#facc15' : '#ffffff';
+        const bodyStroke = c.selected ? '#ca8a04' : '#334155';
+
+        g.innerHTML = `
+          <rect x="-12" y="-20" width="24" height="68" fill="transparent" />
+          <rect x="-7" y="0" width="14" height="42" rx="3" fill="${bodyFill}" stroke="${bodyStroke}" stroke-width="2"/>
+          <line x1="0" y1="0" x2="0" y2="-6" stroke="#1e293b" stroke-width="1.5"/>
+          <path d="M0,-16 Q5,-9 0,-5 Q-5,-9 0,-16" fill="#f97316"/>
+        `;
+        g.addEventListener('click', () => {
+          if (doneFlags.a3) return;
+          c.selected = !c.selected;
+          renderCandles();
+        });
+        container.appendChild(g);
+      });
+    }
+
+    function checkAktashif3() {
+      if (doneFlags.a3) return;
+      const selectedCount = candlesData.filter(c => c.selected).length;
+      const fb = document.getElementById('feedback-a3');
+      if (selectedCount === 0) {
+        fb.textContent = '⚠️ انْقُرْ عَلَى الشُّمُوعِ الَّتِي فِي اسْتِقَامِيَّةٍ أَوَّلًا!';
+        fb.className = 'font-bold text-amber-600 text-base';
+        return;
+      }
+
+      doneFlags.a3 = true;
+      document.getElementById('btn-check-a3').disabled = true;
+      document.getElementById('btn-check-a3').classList.add('opacity-50', 'cursor-not-allowed');
+      document.getElementById('candles-guide-line').setAttribute('opacity', '1');
+
+      const allAlignedSelected = candlesData.every(c => c.aligned === c.selected);
+
+      candlesData.forEach(c => {
+        const g = document.getElementById(`candle-${c.id}`);
+        const rect = g.querySelectorAll('rect')[1];
+        if (c.aligned) {
+          rect.setAttribute('fill', '#4ade80');
+          rect.setAttribute('stroke', '#14532d');
+        } else if (c.selected && !c.aligned) {
+          rect.setAttribute('fill', '#f87171');
+          rect.setAttribute('stroke', '#7f1d1d');
+        }
+      });
+
+      if (allAlignedSelected) {
+        scores.aktashif.correct++;
+        fb.textContent = '✓ أَحْسَنْتَ! لَوَّنْتَ الشُّمُوعَ الثَّلَاثَ الَّتِي فِي اسْتِقَامِيَّةٍ مَعَ الشَّمْعَةِ الصَّفْرَاءِ.';
+        fb.className = 'font-bold text-emerald-600 text-base';
+      } else {
+        scores.aktashif.wrong++;
+        fb.textContent = '✗ إِجَابَةٌ خَاطِئَةٌ! الشُّمُوعُ الصَّحِيحَةُ مُوَضَّحَةٌ بِالْأَخْضَرِ عَلَى الْخَطِّ الْمُسْتَقِيمِ.';
+        fb.className = 'font-bold text-rose-600 text-base';
+      }
+      updateCountersAndRing();
+      unlockExercise('ex-onjiz-1');
+    }
+
+    /* =====================================================================
+       4. منطق المحطة الثانية: أُنْجِزُ
+       ===================================================================== */
+    const bottlesData = [
+      { id: 'b1', x: 85,  y: 192, aligned: true, selected: false },
+      { id: 'b2', x: 162, y: 151, aligned: true, selected: false },
+      { id: 'b3', x: 238, y: 110, aligned: true, selected: false },
+      { id: 'b4', x: 315, y: 69,  aligned: true, selected: false },
+      { id: 'b5', x: 115, y: 95,  aligned: false, selected: false },
+      { id: 'b6', x: 195, y: 205, aligned: false, selected: false },
+      { id: 'b7', x: 285, y: 185, aligned: false, selected: false }
+    ];
+
+    function renderBottles() {
+      const container = document.getElementById('bottles-container');
+      container.innerHTML = '';
+      bottlesData.forEach(b => {
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('transform', `translate(${b.x}, ${b.y})`);
+        g.setAttribute('class', 'clickable-item');
+        g.setAttribute('id', `bottle-${b.id}`);
+
+        const fill = b.selected ? '#38bdf8' : '#ffffff';
+        const stroke = b.selected ? '#0369a1' : '#1e293b';
+
+        g.innerHTML = `
+          <rect x="-14" y="-22" width="28" height="65" fill="transparent"/>
+          <path d="M-4,-18 L4,-18 L4,-8 L10,0 L10,36 Q10,40 6,40 L-6,40 Q-10,40 -10,36 L-10,0 L-4,-8 Z"
+                fill="${fill}" stroke="${stroke}" stroke-width="2"/>
+          <rect x="-5" y="-20" width="10" height="3" rx="1" fill="${stroke}"/>
+        `;
+        g.addEventListener('click', () => {
+          if (doneFlags.o1) return;
+          b.selected = !b.selected;
+          renderBottles();
+        });
+        container.appendChild(g);
+      });
+    }
+
+    function checkOnjiz1() {
+      if (doneFlags.o1) return;
+      const selectedCount = bottlesData.filter(b => b.selected).length;
+      const fb = document.getElementById('feedback-o1');
+      if (selectedCount === 0) {
+        fb.textContent = '⚠️ انْقُرْ عَلَى الْقِنِّينَاتِ الَّتِي فِي اسْتِقَامِيَّةٍ أَوَّلًا!';
+        fb.className = 'font-bold text-amber-600 text-base';
+        return;
+      }
+
+      doneFlags.o1 = true;
+      document.getElementById('btn-check-o1').disabled = true;
+      document.getElementById('btn-check-o1').classList.add('opacity-50', 'cursor-not-allowed');
+      document.getElementById('bottles-guide-line').setAttribute('opacity', '1');
+
+      const allCorrect = bottlesData.every(b => b.aligned === b.selected);
+
+      bottlesData.forEach(b => {
+        const g = document.getElementById(`bottle-${b.id}`);
+        const path = g.querySelector('path');
+        if (b.aligned) {
+          path.setAttribute('fill', '#4ade80');
+          path.setAttribute('stroke', '#14532d');
+        } else if (b.selected && !b.aligned) {
+          path.setAttribute('fill', '#f87171');
+          path.setAttribute('stroke', '#7f1d1d');
+        }
+      });
+
+      if (allCorrect) {
+        scores.onjiz.correct++;
+        fb.textContent = '✓ مُتَفَوِّقٌ! وَجَدْتَ الْقِنِّينَاتِ الْأَرْبَعَ الَّتِي فِي اسْتِقَامِيَّةٍ.';
+        fb.className = 'font-bold text-emerald-600 text-base';
+      } else {
+        scores.onjiz.wrong++;
+        fb.textContent = '✗ إِجَابَةٌ خَاطِئَةٌ! الْقِنِّينَاتُ الْأَرْبَعُ الصَّحِيحَةُ مُلَوَّنَةٌ بِالْأَخْضَرِ.';
+        fb.className = 'font-bold text-rose-600 text-base';
+      }
+      updateCountersAndRing();
+      unlockExercise('ex-onjiz-2');
+    }
+
+    const onjiz2Boards = {
+      1: {
+        cells: [
+          ['G', '',  '',  ''],
+          ['R', 'G', 'R', 'G'],
+          ['R', 'R', '',  'R'],
+          ['',  '',  'R', 'G']
+        ],
+        target: [2, 2],
+        choice: null
+      },
+      2: {
+        cells: [
+          ['R', 'R', 'R', 'G'],
+          ['',  '',  'G', 'R'],
+          ['',  'G', 'R', ''],
+          ['',  'R', '',  '']
+        ],
+        target: [3, 0],
+        choice: null
+      },
+      3: {
+        cells: [
+          ['G', '',  'G', 'G'],
+          ['',  '',  'G', 'R'],
+          ['G', 'G', '',  'R'],
+          ['',  '',  'R', '']
+        ],
+        target: [0, 1],
+        choice: null
+      }
+    };
+
+    function renderOnjiz2Grids() {
+      [1, 2, 3].forEach(num => {
+        const container = document.getElementById(`onjiz2-grid-${num}`);
+        container.innerHTML = '';
+        const board = onjiz2Boards[num];
+
+        for (let r = 0; r < 4; r++) {
+          for (let c = 0; c < 4; c++) {
+            const cell = document.createElement('div');
+            cell.className = 'grid-cell';
+            cell.id = `o2-g${num}-r${r}-c${c}`;
+            const val = board.cells[r][c];
+
+            if (val === 'G') {
+              cell.innerHTML = '<div class="disc-green"></div>';
+            } else if (val === 'R') {
+              cell.innerHTML = '<div class="disc-red"></div>';
+            } else if (board.choice && board.choice[0] === r && board.choice[1] === c) {
+              cell.innerHTML = '<div class="disc-green ring-4 ring-amber-400 pop-in"></div>';
+            }
+
+            if (val === '') {
+              cell.addEventListener('click', () => {
+                if (doneFlags.o2) return;
+                board.choice = [r, c];
+                renderOnjiz2Grids();
+              });
+            }
+            container.appendChild(cell);
+          }
+        }
+      });
+    }
+
+    function checkOnjiz2() {
+      if (doneFlags.o2) return;
+      const fb = document.getElementById('feedback-o2');
+      if (!onjiz2Boards[1].choice || !onjiz2Boards[2].choice || !onjiz2Boards[3].choice) {
+        fb.textContent = '⚠️ ضَعْ قُرَيْصَةً خَضْرَاءَ فِي كُلِّ شَبَكَةٍ مِنَ الشَّبَكَاتِ الثَّلَاثِ أَوَّلًا!';
+        fb.className = 'font-bold text-amber-600 text-base';
+        return;
+      }
+
+      doneFlags.o2 = true;
+      document.getElementById('btn-check-o2').disabled = true;
+      document.getElementById('btn-check-o2').classList.add('opacity-50', 'cursor-not-allowed');
+
+      let correctBoards = 0;
+      [1, 2, 3].forEach(num => {
+        const board = onjiz2Boards[num];
+        const isRight = (board.choice[0] === board.target[0] && board.choice[1] === board.target[1]);
+        const chosenCell = document.getElementById(`o2-g${num}-r${board.choice[0]}-c${board.choice[1]}`);
+        const targetCell = document.getElementById(`o2-g${num}-r${board.target[0]}-c${board.target[1]}`);
+
+        if (isRight) {
+          correctBoards++;
+          scores.onjiz.correct++;
+          chosenCell.classList.add('bg-emerald-200');
+        } else {
+          scores.onjiz.wrong++;
+          chosenCell.classList.add('bg-rose-200');
+          targetCell.classList.add('bg-emerald-200');
+          targetCell.innerHTML = '<div class="disc-green ring-2 ring-emerald-700"></div>';
+        }
+      });
+
+      if (correctBoards === 3) {
+        fb.textContent = '✓ رَائِعٌ جِدًّا! أَكْمَلْتَ الْقُرَيْصَاتِ الْأَرْبَعَ فِي اسْتِقَامِيَّةٍ فِي جَمِيعِ الْحَالَاتِ!';
+        fb.className = 'font-bold text-emerald-600 text-base';
+      } else {
+        fb.textContent = `أَصَبْتَ فِي ${correctBoards} مِنْ 3 حَالَاتٍ. الْخَانَاتُ الصَّحِيحَةُ مُلَوَّنَةٌ بِالْأَخْضَرِ.`;
+        fb.className = 'font-bold text-rose-600 text-base';
+      }
+      updateCountersAndRing();
+      unlockExercise('ex-atamarran-1');
+    }
+
+    /* =====================================================================
+       5. منطق المحطة الثالثة: أَتَمَرَّنُ (كراس الأنشطة ص 22)
+       ===================================================================== */
+    function checkAtamarran1() {
+      if (doneFlags.t1) return;
+      const redInput = document.getElementById('input-red-count');
+      const greenInput = document.getElementById('input-green-count');
+      const fb = document.getElementById('feedback-t1');
+
+      if (redInput.value === '' || greenInput.value === '') {
+        fb.textContent = '⚠️ اُكْتُبِ الْعَدَدَ فِي كِلَا الْخَانَتَيْنِ أَوَّلًا!';
+        fb.className = 'font-bold text-amber-600 text-base';
+        return;
+      }
+
+      doneFlags.t1 = true;
+      redInput.disabled = true;
+      greenInput.disabled = true;
+      document.getElementById('btn-check-t1').disabled = true;
+      document.getElementById('btn-check-t1').classList.add('opacity-50', 'cursor-not-allowed');
+      document.getElementById('atamarran1-lines').setAttribute('opacity', '1');
+
+      const redVal = parseInt(redInput.value, 10);
+      const greenVal = parseInt(greenInput.value, 10);
+
+      if (redVal === 2 || redVal === 3) {
+        scores.atamarran.correct++;
+        redInput.classList.add('bg-emerald-100', 'border-emerald-600', 'text-emerald-800');
+      } else {
+        scores.atamarran.wrong++;
+        redInput.classList.add('bg-rose-100', 'border-rose-600', 'text-rose-800');
+      }
+
+      if (greenVal === 1) {
+        scores.atamarran.correct++;
+        greenInput.classList.add('bg-emerald-100', 'border-emerald-600', 'text-emerald-800');
+      } else {
+        scores.atamarran.wrong++;
+        greenInput.classList.add('bg-rose-100', 'border-rose-600', 'text-rose-800');
+      }
+
+      fb.innerHTML = `الْإِجَابَةُ الصَّحِيحَةُ: قُرَيْصَاتٌ حَمْرَاءُ فِي اسْتِقَامِيَّةٍ = <span class="ltr-num text-emerald-700">2</span> مَرَّتَيْنِ | قُرَيْصَاتٌ خَضْرَاءُ فِي اسْتِقَامِيَّةٍ = <span class="ltr-num text-emerald-700">1</span> مَرَّةً وَاحِدَةً.`;
+      fb.className = 'font-bold text-slate-800 text-base';
+
+      updateCountersAndRing();
+      unlockExercise('ex-atamarran-2');
+    }
+
+    const soldiersData = [
+      { id: 's1', x: 70,  y: 50,  offLine: false, circled: false },
+      { id: 's2', x: 130, y: 90,  offLine: false, circled: false },
+      { id: 's3', x: 190, y: 130, offLine: false, circled: false },
+      { id: 's4', x: 250, y: 170, offLine: false, circled: false },
+      { id: 's5', x: 310, y: 210, offLine: false, circled: false },
+      { id: 's6', x: 45,  y: 115, offLine: true,  circled: false },
+      { id: 's7', x: 165, y: 55,  offLine: true,  circled: false },
+      { id: 's8', x: 205, y: 195, offLine: true,  circled: false }
+    ];
+
+    function drawSoldiersLine() {
+      document.getElementById('soldiers-line').setAttribute('opacity', '1');
+      document.getElementById('soldiers-line').setAttribute('stroke-dasharray', 'none');
+    }
+
+    function renderSoldiers() {
+      const container = document.getElementById('soldiers-container');
+      container.innerHTML = '';
+      soldiersData.forEach(s => {
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('transform', `translate(${s.x}, ${s.y})`);
+        g.setAttribute('class', 'clickable-item');
+        g.setAttribute('id', `soldier-${s.id}`);
+
+        const ringOpacity = s.circled ? '1' : '0';
+
+        g.innerHTML = `
+          <circle cx="0" cy="0" r="20" fill="transparent" />
+          <circle cx="0" cy="-10" r="4.5" fill="#2563eb"/>
+          <path d="M-5,-5 L5,-5 L4,6 L-4,6 Z" fill="#1d4ed8"/>
+          <line x1="-2" y1="6" x2="-3" y2="15" stroke="#1e3a8a" stroke-width="2.5"/>
+          <line x1="2" y1="6" x2="3" y2="15" stroke="#1e3a8a" stroke-width="2.5"/>
+          <line x1="-4" y1="-2" x2="-11" y2="-6" stroke="#1e3a8a" stroke-width="2"/>
+          <circle class="soldier-ring" cx="0" cy="2" r="21" fill="none" stroke="#dc2626" stroke-width="2.5" opacity="${ringOpacity}" />
+        `;
+        g.addEventListener('click', () => {
+          if (doneFlags.t2) return;
+          s.circled = !s.circled;
+          renderSoldiers();
+        });
+        container.appendChild(g);
+      });
+    }
+
+    function checkAtamarran2() {
+      if (doneFlags.t2) return;
+      const circledCount = soldiersData.filter(s => s.circled).length;
+      const fb = document.getElementById('feedback-t2');
+      if (circledCount === 0) {
+        fb.textContent = '⚠️ اِنْقُرْ عَلَى الْجُنُودِ الَّذِينَ لَا يَقَعُونَ عَلَى الْخَطِّ أَوَّلًا!';
+        fb.className = 'font-bold text-amber-600 text-base';
+        return;
+      }
+
+      doneFlags.t2 = true;
+      drawSoldiersLine();
+      document.getElementById('btn-check-t2').disabled = true;
+      document.getElementById('btn-check-t2').classList.add('opacity-50', 'cursor-not-allowed');
+
+      const allCorrect = soldiersData.every(s => s.offLine === s.circled);
+
+      soldiersData.forEach(s => {
+        const g = document.getElementById(`soldier-${s.id}`);
+        const ring = g.querySelector('.soldier-ring');
+        if (s.offLine) {
+          ring.setAttribute('opacity', '1');
+          ring.setAttribute('stroke', '#16a34a');
+        } else if (s.circled && !s.offLine) {
+          ring.setAttribute('opacity', '1');
+          ring.setAttribute('stroke', '#dc2626');
+          ring.setAttribute('stroke-dasharray', '4,3');
+        }
+      });
+
+      if (allCorrect) {
+        scores.atamarran.correct++;
+        fb.textContent = '✓ مُمتَازٌ! أَحَطْتَ الْجُنُودَ الثَّلَاثَةَ غَيْرَ الْمَوْجُودِينَ فِي اسْتِقَامِيَّةٍ.';
+        fb.className = 'font-bold text-emerald-600 text-base';
+      } else {
+        scores.atamarran.wrong++;
+        fb.textContent = '✗ إِجَابَةٌ خَاطِئَةٌ! الْجُنُودُ الثَّلَاثَةُ خَارِجَ الْخَطِّ مُحَاطُونَ بِالْأَخْضَرِ.';
+        fb.className = 'font-bold text-rose-600 text-base';
+      }
+      updateCountersAndRing();
+      unlockExercise('ex-atamarran-3');
+    }
+
+    let selectedArcherSide = null;
+    let selectedArcherYN = null;
+
+    function selectArcher(side) {
+      if (doneFlags.t3) return;
+      selectedArcherSide = side;
+      document.getElementById('archer-box-left').textContent = (side === 'left') ? '×' : '';
+      document.getElementById('archer-box-right').textContent = (side === 'right') ? '×' : '';
+    }
+
+    function selectArcherYN(ans) {
+      if (doneFlags.t3) return;
+      selectedArcherYN = ans;
+      document.getElementById('box-yn-yes').textContent = (ans === 'yes') ? '×' : '';
+      document.getElementById('box-yn-no').textContent = (ans === 'no') ? '×' : '';
+    }
+
+    function checkAtamarran3() {
+      if (doneFlags.t3) return;
+      const fb = document.getElementById('feedback-t3');
+      if (!selectedArcherSide || !selectedArcherYN) {
+        fb.textContent = '⚠️ أَجِبْ عَنِ السُّؤَالَيْنِ (وَضْعُ الْإِشَارَةِ × وَاخْتِيَارُ نَعَمْ أَوْ لَا) أَوَّلًا!';
+        fb.className = 'font-bold text-amber-600 text-base';
+        return;
+      }
+
+      doneFlags.t3 = true;
+      document.getElementById('btn-check-t3').disabled = true;
+      document.getElementById('btn-check-t3').classList.add('opacity-50', 'cursor-not-allowed');
+      document.getElementById('archers-trajectories').setAttribute('opacity', '1');
+
+      const boxLeft = document.getElementById('archer-box-left');
+      const boxRight = document.getElementById('archer-box-right');
+      boxLeft.disabled = true;
+      boxRight.disabled = true;
+
+      if (selectedArcherSide === 'left') {
+        scores.atamarran.correct++;
+        boxLeft.classList.add('bg-emerald-200', 'border-emerald-700', 'text-emerald-800');
+      } else {
+        scores.atamarran.wrong++;
+        boxRight.classList.add('bg-rose-200', 'border-rose-700', 'text-rose-800');
+        boxLeft.textContent = '×';
+        boxLeft.classList.add('bg-emerald-200', 'border-emerald-700', 'text-emerald-800');
+      }
+
+      const btnYes = document.getElementById('archer-yn-yes');
+      const btnNo = document.getElementById('archer-yn-no');
+      btnYes.disabled = true;
+      btnNo.disabled = true;
+
+      if (selectedArcherYN === 'no') {
+        scores.atamarran.correct++;
+        btnNo.classList.add('bg-emerald-200', 'border-emerald-700', 'text-emerald-900');
+      } else {
+        scores.atamarran.wrong++;
+        btnYes.classList.add('bg-rose-200', 'border-rose-700', 'text-rose-900');
+        btnNo.classList.add('bg-emerald-200', 'border-emerald-700', 'text-emerald-900');
+      }
+
+      if (selectedArcherSide === 'left' && selectedArcherYN === 'no') {
+        fb.textContent = '✓ أَحْسَنْتَ! الرِّيَاضِيُّ الْأَيْسَرُ سَهْمُهُ فِي اسْتِقَامِيَّةٍ مَعَ الدَّائِرَةِ، أَمَّا الْآخَرُ فَلَا.';
+        fb.className = 'font-bold text-emerald-600 text-base';
+      } else {
+        fb.textContent = 'الْإِجَابَةُ الصَّحِيحَةُ مُوَضَّحَةٌ بِالْأَخْضَرِ (الرِّيَاضِيُّ الْأَيْسَرُ، وَلَا يُصِيبُ سَهْمُ الْآخَرِ الدَّائِرَةَ).';
+        fb.className = 'font-bold text-rose-600 text-base';
+      }
+
+      updateCountersAndRing();
+      unlockExercise('ex-abhath-1');
+    }
+
+    /* =====================================================================
+       6. منطق المحطة الرابعة: أَبْحَثُ (كراس الأنشطة ص 22)
+       ===================================================================== */
+    let userAbhathPos = null;
+    const TARGET_ABHATH = { x: 190, y: 130 };
+
+    const svgAbhath = document.getElementById('svg-abhath');
+    svgAbhath.addEventListener('click', (e) => {
+      if (doneFlags.ab1) return;
+      const pt = svgAbhath.createSVGPoint();
+      pt.x = e.clientX;
+      pt.y = e.clientY;
+      const svgP = pt.matrixTransform(svgAbhath.getScreenCTM().inverse());
+      userAbhathPos = { x: svgP.x, y: svgP.y };
+
+      const disc = document.getElementById('user-abhath-disc');
+      disc.setAttribute('transform', `translate(${svgP.x}, ${svgP.y})`);
+      disc.setAttribute('opacity', '1');
+    });
+
+    function checkAbhath1() {
+      if (doneFlags.ab1) return;
+      const fb = document.getElementById('feedback-ab1');
+      if (!userAbhathPos) {
+        fb.textContent = '⚠️ انْقُرْ عَلَى اللُّوحَةِ لِرَسْمِ الْقُرَيْصَةِ أَوَّلًا!';
+        fb.className = 'font-bold text-amber-600 text-base';
+        return;
+      }
+
+      doneFlags.ab1 = true;
+      document.getElementById('btn-check-ab1').disabled = true;
+      document.getElementById('btn-check-ab1').classList.add('opacity-50', 'cursor-not-allowed');
+      document.getElementById('abhath-lines').setAttribute('opacity', '1');
+
+      const dist = Math.hypot(userAbhathPos.x - TARGET_ABHATH.x, userAbhathPos.y - TARGET_ABHATH.y);
+      if (dist <= 18) {
+        scores.abhath.correct++;
+        document.getElementById('user-abhath-disc').setAttribute('transform', `translate(${TARGET_ABHATH.x}, ${TARGET_ABHATH.y})`);
+        fb.textContent = '🏆 عَبْقَرِيٌّ! وَضَعْتَ الْقُرَيْصَةَ فِي نُقْطَةِ تَقَاطُعِ الْمُسْتَقِيمَاتِ الثَّلَاثَةِ بِدِقَّةٍ!';
+        fb.className = 'font-bold text-emerald-600 text-base';
+      } else {
+        scores.abhath.wrong++;
+        document.getElementById('correct-abhath-disc').setAttribute('opacity', '1');
+        fb.textContent = '✗ لَيْسَتْ فِي نُقْطَةِ التَّقَاطُعِ! النُّقْطَةُ الصَّحِيحَةُ مُوَضَّحَةٌ بِالدَّائِرَةِ الْخَضْرَاءِ.';
+        fb.className = 'font-bold text-rose-600 text-base';
+      }
+
+      updateCountersAndRing();
+    }
+
+    /* =====================================================================
+       7. إعادة الضبط الشاملة لجميع التمارين
+       ===================================================================== */
+    function resetAllExercises() {
+      scores.aktashif = { correct: 0, wrong: 0 };
+      scores.onjiz = { correct: 0, wrong: 0 };
+      scores.atamarran = { correct: 0, wrong: 0 };
+      scores.abhath = { correct: 0, wrong: 0 };
+
+      Object.keys(doneFlags).forEach(k => doneFlags[k] = false);
+
+      ['ex-aktashif-2', 'ex-aktashif-3', 'ex-onjiz-1', 'ex-onjiz-2', 'ex-atamarran-1', 'ex-atamarran-2', 'ex-atamarran-3', 'ex-abhath-1']
+        .forEach(id => document.getElementById(id).classList.add('exercise-locked'));
+
+      document.getElementById('rope-line').setAttribute('stroke-dasharray', '6,4');
+      document.getElementById('rope-line').setAttribute('stroke-width', '3');
+      document.getElementById('rope-highlights').setAttribute('opacity', '0');
+      document.getElementById('rope-msg').classList.add('hidden');
+
+      selectedA2 = null;
+      document.getElementById('aktashif-2-blank').textContent = '....................';
+      document.getElementById('feedback-a2').textContent = '';
+      const btnA2 = document.getElementById('btn-check-a2');
+      btnA2.disabled = false;
+      btnA2.classList.remove('opacity-50', 'cursor-not-allowed');
+      document.querySelectorAll('.opt-btn-a2').forEach(b => {
+        b.disabled = false;
+        b.className = 'opt-btn-a2 px-5 py-2.5 rounded-xl border-2 border-slate-300 bg-white font-bold text-lg hover:border-sky-500 transition';
+      });
+
+      candlesData.forEach(c => c.selected = false);
+      renderCandles();
+      document.getElementById('candles-guide-line').setAttribute('opacity', '0');
+      document.getElementById('feedback-a3').textContent = '';
+      const btnA3 = document.getElementById('btn-check-a3');
+      btnA3.disabled = false;
+      btnA3.classList.remove('opacity-50', 'cursor-not-allowed');
+
+      bottlesData.forEach(b => b.selected = false);
+      renderBottles();
+      document.getElementById('bottles-guide-line').setAttribute('opacity', '0');
+      document.getElementById('feedback-o1').textContent = '';
+      const btnO1 = document.getElementById('btn-check-o1');
+      btnO1.disabled = false;
+      btnO1.classList.remove('opacity-50', 'cursor-not-allowed');
+
+      [1, 2, 3].forEach(n => onjiz2Boards[n].choice = null);
+      renderOnjiz2Grids();
+      document.getElementById('feedback-o2').textContent = '';
+      const btnO2 = document.getElementById('btn-check-o2');
+      btnO2.disabled = false;
+      btnO2.classList.remove('opacity-50', 'cursor-not-allowed');
+
+      const rIn = document.getElementById('input-red-count');
+      const gIn = document.getElementById('input-green-count');
+      rIn.value = ''; rIn.disabled = false;
+      gIn.value = ''; gIn.disabled = false;
+      rIn.className = 'w-20 text-center font-black text-xl border-2 border-slate-400 rounded-xl py-1 focus:border-amber-500 outline-none';
+      gIn.className = 'w-20 text-center font-black text-xl border-2 border-slate-400 rounded-xl py-1 focus:border-amber-500 outline-none';
+      document.getElementById('atamarran1-lines').setAttribute('opacity', '0');
+      document.getElementById('feedback-t1').textContent = '';
+      const btnT1 = document.getElementById('btn-check-t1');
+      btnT1.disabled = false;
+      btnT1.classList.remove('opacity-50', 'cursor-not-allowed');
+
+      soldiersData.forEach(s => s.circled = false);
+      renderSoldiers();
+      document.getElementById('soldiers-line').setAttribute('opacity', '0');
+      document.getElementById('feedback-t2').textContent = '';
+      const btnT2 = document.getElementById('btn-check-t2');
+      btnT2.disabled = false;
+      btnT2.classList.remove('opacity-50', 'cursor-not-allowed');
+
+      selectedArcherSide = null;
+      selectedArcherYN = null;
+      document.getElementById('archers-trajectories').setAttribute('opacity', '0');
+      const boxL = document.getElementById('archer-box-left');
+      const boxR = document.getElementById('archer-box-right');
+      boxL.textContent = ''; boxL.disabled = false;
+      boxR.textContent = ''; boxR.disabled = false;
+      boxL.className = 'w-12 h-12 border-2 border-slate-700 rounded-xl bg-slate-50 hover:bg-purple-50 text-2xl font-black flex items-center justify-center shadow-sm';
+      boxR.className = 'w-12 h-12 border-2 border-slate-700 rounded-xl bg-slate-50 hover:bg-purple-50 text-2xl font-black flex items-center justify-center shadow-sm';
+
+      const bYes = document.getElementById('archer-yn-yes');
+      const bNo = document.getElementById('archer-yn-no');
+      bYes.disabled = false; bNo.disabled = false;
+      bYes.className = 'flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-slate-300 hover:border-purple-500';
+      bNo.className = 'flex items-center gap-2 px-4 py-2 rounded-xl border-2 border-slate-300 hover:border-purple-500';
+      document.getElementById('box-yn-yes').textContent = '';
+      document.getElementById('box-yn-no').textContent = '';
+      document.getElementById('feedback-t3').textContent = '';
+      const btnT3 = document.getElementById('btn-check-t3');
+      btnT3.disabled = false;
+      btnT3.classList.remove('opacity-50', 'cursor-not-allowed');
+
+      userAbhathPos = null;
+      document.getElementById('user-abhath-disc').setAttribute('opacity', '0');
+      document.getElementById('correct-abhath-disc').setAttribute('opacity', '0');
+      document.getElementById('abhath-lines').setAttribute('opacity', '0');
+      document.getElementById('feedback-ab1').textContent = '';
+      const btnAb1 = document.getElementById('btn-check-ab1');
+      btnAb1.disabled = false;
+      btnAb1.classList.remove('opacity-50', 'cursor-not-allowed');
+
+      updateCountersAndRing();
+      resetRuler();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* =====================================================================
+       8. التشغيل الابتدائي عند تحميل الصفحة
+       ===================================================================== */
+    window.onload = function () {
+      buildRulerTicks();
+      resetRuler();
+      renderCandles();
+      renderBottles();
+      renderOnjiz2Grids();
+      renderSoldiers();
+      updateCountersAndRing();
+    };
+  </script>
+</body>
+</html>
