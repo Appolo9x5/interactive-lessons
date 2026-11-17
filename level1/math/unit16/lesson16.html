@@ -1,0 +1,2123 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>مُتَتَالِيَةُ الْأَعْدَادِ إِلَى 10 - السنة الأولى ابتدائي</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0f6cbd;
+      --primary-dark: #094a85;
+      --accent: #f59e0b;
+      --discover: #0284c7;
+      --apply: #e11d48;
+      --practice: #0d9488;
+      --search: #65a30d;
+      --learn: #7c3aed;
+      --correct: #16a34a;
+      --correct-bg: #dcfce7;
+      --wrong: #dc2626;
+      --wrong-bg: #fee2e2;
+      --bg: #f1f5f9;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #cbd5e1;
+      --shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(180deg, #e0f2fe 0%, #f8fafc 22%, #f1f5f9 100%);
+      color: var(--text);
+      line-height: 1.7;
+      padding-bottom: 40px;
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 14px;
+    }
+
+    .lesson-header {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #fff;
+      border-radius: 22px;
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      border: 3px solid #bae6fd;
+    }
+
+    .header-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .badge-num {
+      background: #fef08a;
+      color: #854d0e;
+      font-weight: 900;
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+
+    .badge-grade {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .lesson-title {
+      margin: 6px 0 4px;
+      font-size: 1.75rem;
+      font-weight: 900;
+      text-align: center;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.18);
+    }
+
+    .lesson-sub {
+      text-align: center;
+      font-size: 0.92rem;
+      color: #e0f2fe;
+      margin: 0;
+    }
+
+    .section-card {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 18px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow);
+      border: 2px solid #e2e8f0;
+      transition: opacity 0.3s ease;
+    }
+
+    .section-card.locked-section {
+      opacity: 0.62;
+      pointer-events: none;
+      position: relative;
+    }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #fff;
+      font-weight: 900;
+      font-size: 1.25rem;
+      padding: 6px 20px;
+      border-radius: 14px;
+      margin-bottom: 14px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+    }
+
+    .bg-discover { background: linear-gradient(135deg, #0284c7, #0369a1); }
+    .bg-apply { background: linear-gradient(135deg, #e11d48, #be123c); }
+    .bg-learn { background: linear-gradient(135deg, #7c3aed, #5b21b6); }
+    .bg-practice { background: linear-gradient(135deg, #0d9488, #0f766e); }
+    .bg-search { background: linear-gradient(135deg, #65a30d, #4d7c0f); }
+
+    .exercise-box {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 15px;
+      margin-bottom: 16px;
+      transition: all 0.25s ease;
+    }
+
+    .exercise-box.locked-ex {
+      opacity: 0.55;
+      pointer-events: none;
+      filter: grayscale(0.25);
+    }
+
+    .ex-title {
+      font-size: 1.12rem;
+      font-weight: 800;
+      margin: 0 0 12px;
+      color: #0f172a;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .ex-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 900;
+      font-size: 1rem;
+      margin-top: 2px;
+    }
+
+    .scene-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 540px) {
+      .scene-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .kid-card {
+      background: #fff;
+      border: 2px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .kid-name {
+      font-weight: 900;
+      font-size: 1.15rem;
+      color: #0369a1;
+      margin-bottom: 6px;
+      display: inline-block;
+      background: #e0f2fe;
+      padding: 2px 14px;
+      border-radius: 999px;
+    }
+
+    .marbles-box {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      background: #fefce8;
+      border: 2px dashed #fde047;
+      border-radius: 12px;
+      margin-top: 8px;
+    }
+
+    .marble {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      box-shadow: inset -3px -3px 5px rgba(0,0,0,0.25), 0 2px 3px rgba(0,0,0,0.15);
+    }
+
+    .choice-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .choice-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fff;
+      border: 2px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-size: 1.08rem;
+      font-weight: 700;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .choice-option:hover:not(.disabled) {
+      border-color: var(--primary);
+      background: #f0f9ff;
+    }
+
+    .choice-option.selected {
+      border-color: var(--primary);
+      background: #e0f2fe;
+    }
+
+    .choice-box-mark {
+      width: 32px;
+      height: 32px;
+      border: 2px solid #64748b;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.2rem;
+      background: #fff;
+      color: var(--primary);
+    }
+
+    .word-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: #fff;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1.5px solid #e2e8f0;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .word-card-btn {
+      padding: 6px 18px;
+      border: 2px solid #64748b;
+      border-radius: 10px;
+      background: #fff;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.08rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .word-card-btn.selected {
+      background: #fde047;
+      border-color: #ca8a04;
+      color: #713f12;
+      transform: scale(1.03);
+    }
+
+    .is-correct {
+      background: var(--correct-bg) !important;
+      border-color: var(--correct) !important;
+      color: #14532d !important;
+    }
+
+    .is-wrong {
+      background: var(--wrong-bg) !important;
+      border-color: var(--wrong) !important;
+      color: #7f1d1d !important;
+    }
+
+    .disabled {
+      pointer-events: none;
+      cursor: default;
+    }
+
+    .btn-check {
+      margin-top: 12px;
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 22px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 3px 8px rgba(22, 163, 74, 0.25);
+      transition: transform 0.15s;
+    }
+
+    .btn-check:active {
+      transform: scale(0.97);
+    }
+
+    .btn-check:disabled {
+      background: #94a3b8;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .feedback-msg {
+      margin-top: 10px;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 8px 12px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .feedback-msg.show {
+      display: block;
+    }
+
+    .fruit-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 520px) {
+      .fruit-cards-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .fruit-card {
+      background: #fff;
+      border: 2.5px solid #cbd5e1;
+      border-radius: 16px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .fruit-card.selected {
+      border-color: var(--primary);
+      background: #f0f9ff;
+    }
+
+    .fruit-items {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      justify-items: center;
+      align-items: center;
+      min-height: 92px;
+      padding: 8px;
+      background: #fffbeb;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      font-size: 1.7rem;
+    }
+
+    .circle-check {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2.5px solid #64748b;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.2rem;
+      background: #fff;
+    }
+
+    .match-area {
+      background: #fff;
+      border: 2px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .match-hint {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin: 0 0 10px;
+      font-weight: 700;
+    }
+
+    .insect-cards-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 540px) {
+      .insect-cards-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .insect-card {
+      border: 2.5px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      background: #fafafa;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .insect-card.active-target {
+      border-color: #f59e0b;
+      background: #fef3c7;
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
+    }
+
+    .insect-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      font-size: 1.35rem;
+      min-height: 76px;
+      align-items: center;
+    }
+
+    .linked-badge {
+      margin-top: 8px;
+      display: inline-block;
+      padding: 2px 14px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      color: #334155;
+      font-weight: 900;
+      font-size: 1rem;
+    }
+
+    .numbers-bubbles {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      direction: ltr;
+    }
+
+    .num-bubble {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2.5px solid #475569;
+      background: #fff;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.18s;
+    }
+
+    .num-bubble:hover:not(.disabled) {
+      background: #e0f2fe;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .num-bubble.used-bubble {
+      background: #dbeafe;
+      border-color: #2563eb;
+      color: #1e40af;
+    }
+
+    .writing-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: #fff;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1.5px solid #e2e8f0;
+      margin-bottom: 10px;
+    }
+
+    .word-label {
+      font-size: 1.25rem;
+      font-weight: 900;
+      min-width: 72px;
+      color: #0f172a;
+    }
+
+    .models-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .model-num {
+      font-size: 1.35rem;
+      font-weight: 900;
+      padding: 2px 10px;
+      border-radius: 8px;
+      background: #f1f5f9;
+      border-bottom: 2px solid #94a3b8;
+    }
+
+    .model-num.faded {
+      color: #94a3b8;
+    }
+
+    .write-input {
+      width: 52px;
+      height: 42px;
+      text-align: center;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 900;
+      border: 2px solid #94a3b8;
+      border-radius: 10px;
+      background: #fff;
+      color: #0f172a;
+    }
+
+    .write-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #f0f9ff;
+    }
+
+    .learn-box {
+      background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+      border: 3px solid #8b5cf6;
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .learn-text {
+      font-size: 1.35rem;
+      font-weight: 900;
+      color: #3b0764;
+      margin: 6px 0 0;
+      text-align: center;
+      line-height: 1.9;
+    }
+
+    .seq-strip {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      direction: ltr;
+      vertical-align: middle;
+      margin: 0 6px;
+    }
+
+    .seq-chip {
+      background: #fff;
+      border: 2px solid #7c3aed;
+      color: #5b21b6;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-weight: 900;
+    }
+
+    .groups-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      direction: ltr;
+    }
+
+    @media (max-width: 500px) {
+      .groups-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .num-group-card {
+      background: #fff;
+      border: 2.5px solid #64748b;
+      border-radius: 999px;
+      padding: 14px 18px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 36px);
+      align-items: center;
+      justify-items: center;
+      min-height: 138px;
+      position: relative;
+    }
+
+    .num-group-card.dotted-rect {
+      border-radius: 16px;
+      border-style: dotted;
+      border-width: 3px;
+    }
+
+    .group-example-tag {
+      position: absolute;
+      top: -11px;
+      right: 16px;
+      background: #fef08a;
+      color: #854d0e;
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 1px 10px;
+      border-radius: 999px;
+      border: 1px solid #eab308;
+      direction: rtl;
+    }
+
+    .g-num {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      background: transparent;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.15s;
+    }
+
+    .g-num:hover:not(.disabled) {
+      background: #f1f5f9;
+    }
+
+    .g-num.circled {
+      border: 3px solid #2563eb;
+      background: #dbeafe;
+      color: #1e3a8a;
+    }
+
+    .g-num.crossed {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 2px solid #ef4444;
+    }
+
+    .g-num.crossed::after {
+      content: "╱";
+      position: absolute;
+      font-size: 1.6rem;
+      color: #dc2626;
+      font-weight: 900;
+    }
+
+    .train-wrapper {
+      overflow-x: auto;
+      padding: 10px 4px;
+      direction: ltr;
+    }
+
+    .train-track {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      min-width: 620px;
+      padding-bottom: 6px;
+    }
+
+    .locomotive {
+      background: linear-gradient(180deg, #ef4444, #b91c1c);
+      color: #fff;
+      border-radius: 14px 18px 8px 8px;
+      padding: 10px 12px;
+      min-width: 78px;
+      text-align: center;
+      font-weight: 900;
+      border: 2.5px solid #7f1d1d;
+      position: relative;
+    }
+
+    .wagon-card {
+      flex: 1;
+      border-radius: 12px;
+      padding: 8px 6px;
+      text-align: center;
+      border: 2.5px solid #334155;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      min-width: 74px;
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .wagon-card.active-target {
+      transform: translateY(-5px);
+      box-shadow: 0 0 0 4px #f59e0b;
+    }
+
+    .wagon-slot {
+      margin-top: 6px;
+      background: #fff;
+      color: #0f172a;
+      border-radius: 8px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.15rem;
+      font-weight: 900;
+      border: 2px dashed #64748b;
+    }
+
+    .legend-circles {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 12px 0 18px;
+      direction: ltr;
+    }
+
+    .legend-ball {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: 900;
+      border: 2.5px solid rgba(0,0,0,0.2);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .ball-yellow { background: #fde047; color: #713f12; }
+    .ball-green { background: #22c55e; color: #fff; }
+    .ball-red { background: #ef4444; color: #fff; }
+
+    .palette-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+      background: #fff;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1.5px solid #cbd5e1;
+    }
+
+    .color-brush {
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 3px solid transparent;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 800;
+      font-size: 0.98rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .color-brush.selected-brush {
+      border-color: #0f172a;
+      transform: scale(1.06);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+
+    .strip-grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      border: 3px solid #334155;
+      border-radius: 10px;
+      overflow: hidden;
+      direction: ltr;
+      background: #fff;
+    }
+
+    .strip-cell {
+      height: 54px;
+      border-right: 2px solid #475569;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 900;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s;
+      position: relative;
+    }
+
+    .strip-cell:last-child {
+      border-right: none;
+    }
+
+    .strip-cell.cell-yellow { background: #fde047; color: #713f12; }
+    .strip-cell.cell-green { background: #22c55e; color: #fff; }
+    .strip-cell.cell-red { background: #ef4444; color: #fff; }
+
+    .stage-counter {
+      margin-top: 12px;
+      padding: 8px 14px;
+      background: #f1f5f9;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 0.98rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      border: 1px solid #cbd5e1;
+    }
+
+    .final-eval-card {
+      background: linear-gradient(135deg, #ffffff, #f8fafc);
+      border: 3px solid #0284c7;
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.15);
+      margin-top: 26px;
+      text-align: center;
+    }
+
+    .eval-title {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: #0369a1;
+      margin: 0 0 16px;
+    }
+
+    .eval-body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .donut-wrap {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .donut-wrap svg {
+      transform: rotate(-90deg);
+      width: 140px;
+      height: 140px;
+    }
+
+    .donut-percent {
+      position: absolute;
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    .stats-boxes {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 210px;
+    }
+
+    .stat-pill {
+      padding: 10px 16px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 1.08rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stat-correct {
+      background: #dcfce7;
+      color: #166534;
+      border: 2px solid #86efac;
+    }
+
+    .stat-wrong {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 2px solid #fca5a5;
+    }
+
+    .eval-remark {
+      background: #fef9c3;
+      border: 2px solid #fde047;
+      color: #854d0e;
+      font-size: 1.18rem;
+      font-weight: 900;
+      padding: 12px 18px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+    }
+
+    .btn-reset-all {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 26px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.08rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+      font-family: 'Cairo', sans-serif;
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+    }
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 20px auto 30px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+      font-family: 'Cairo', sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <div class="container">
+    <header class="lesson-header">
+      <div class="header-top">
+        <span class="badge-num">الدَّرْسُ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">16</span></span>
+        <span class="badge-grade">السَّنَةُ الْأُولَى ابْتِدَائِي - رِيَاضِيَّاتٌ</span>
+      </div>
+      <h1 class="lesson-title">مُتَتَالِيَةُ الْأَعْدَادِ إِلَى <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">10</span></h1>
+      <p class="lesson-sub">كِتَابُ التِّلْمِيذِ (ص <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">27</span>) وَدَفْتَرُ الْأَنْشِطَةِ (ص <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">20</span>)</p>
+    </header>
+
+    <!-- المحطة 1: أكتشف -->
+    <section class="section-card" id="sec-discover">
+      <div class="section-badge bg-discover">🔍 أَكْتَشِفُ</div>
+
+      <p style="font-size:1.12rem; font-weight:800; margin-top:0;">يَلْعَبُ أَمِينٌ وَرَائِدٌ بِالْكُرَيَّاتِ.</p>
+
+      <div class="scene-grid">
+        <div class="kid-card">
+          <div class="kid-name">👦 أَمِينٌ</div>
+          <div class="marbles-box" aria-label="كريات أمين">
+            <span class="marble" style="background:#ef4444;"></span>
+            <span class="marble" style="background:#3b82f6;"></span>
+            <span class="marble" style="background:#22c55e;"></span>
+            <span class="marble" style="background:#f59e0b;"></span>
+            <span class="marble" style="background:#a855f7;"></span>
+            <span class="marble" style="background:#06b6d4;"></span>
+            <span class="marble" style="background:#ec4899;"></span>
+            <span class="marble" style="background:#84cc16;"></span>
+            <span class="marble" style="background:#f97316;"></span>
+            <span class="marble" style="background:#6366f1;"></span>
+          </div>
+        </div>
+        <div class="kid-card">
+          <div class="kid-name">🧒 رَائِدٌ</div>
+          <div class="marbles-box" aria-label="كريات رائد">
+            <span class="marble" style="background:#22c55e;"></span>
+            <span class="marble" style="background:#f59e0b;"></span>
+            <span class="marble" style="background:#3b82f6;"></span>
+            <span class="marble" style="background:#ef4444;"></span>
+            <span class="marble" style="background:#a855f7;"></span>
+            <span class="marble" style="background:#06b6d4;"></span>
+            <span class="marble" style="background:#ec4899;"></span>
+            <span class="marble" style="background:#84cc16;"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="exercise-box" id="ex-disc-1">
+        <h3 class="ex-title"><span class="ex-num">1</span><span>ضَعِ الْعَلَامَةَ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">X</span>) فِي الْخَانَةِ الْمُنَاسِبَةِ :</span></h3>
+        <div class="choice-list" id="disc1-list">
+          <div class="choice-option" data-val="more" onclick="selectDisc1(this)">
+            <span>كُرَيَّاتُ أَمِينَ أَكْثَرُ مِنْ كُرَيَّاتِ رَائِدٍ</span>
+            <span class="choice-box-mark"></span>
+          </div>
+          <div class="choice-option" data-val="less" onclick="selectDisc1(this)">
+            <span>كُرَيَّاتُ أَمِينَ أَقَلُّ مِنْ كُرَيَّاتِ رَائِدٍ</span>
+            <span class="choice-box-mark"></span>
+          </div>
+        </div>
+        <button class="btn-check" id="btn-disc-1" onclick="checkDisc1()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+        <div class="feedback-msg" id="fb-disc-1"></div>
+      </div>
+
+      <div class="exercise-box locked-ex" id="ex-disc-2">
+        <h3 class="ex-title"><span class="ex-num">2</span><span>لَوِّنِ الْبِطَاقَةَ الصَّحِيحَةَ :</span></h3>
+
+        <div class="word-row" id="disc2-row1">
+          <span>عِنْدَ أَمِينَ</span>
+          <button type="button" class="word-card-btn" data-val="7" onclick="selectWordCard('disc2-row1', this)">سَبْعُ</button>
+          <button type="button" class="word-card-btn" data-val="10" onclick="selectWordCard('disc2-row1', this)">عَشْرُ</button>
+          <span>كُرَيَّاتٍ .</span>
+        </div>
+
+        <div class="word-row" id="disc2-row2">
+          <span>عِنْدَ رَائِدٍ</span>
+          <button type="button" class="word-card-btn" data-val="9" onclick="selectWordCard('disc2-row2', this)">تِسْعُ</button>
+          <button type="button" class="word-card-btn" data-val="8" onclick="selectWordCard('disc2-row2', this)">ثَمَانُ</button>
+          <span>كُرَيَّاتٍ .</span>
+        </div>
+
+        <button class="btn-check" id="btn-disc-2" onclick="checkDisc2()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+        <div class="feedback-msg" id="fb-disc-2"></div>
+      </div>
+
+      <div class="stage-counter" id="counter-discover">
+        <span>حَصِيلَةُ مَحَطَّةِ أَكْتَشِفُ:</span>
+        <span>✓ الصَّوَابُ: <strong id="disc-ok">0</strong> | ✗ الْخَطَأُ: <strong id="disc-err">0</strong></span>
+      </div>
+    </section>
+
+    <!-- المحطة 2: أنجز -->
+    <section class="section-card locked-section" id="sec-apply">
+      <div class="section-badge bg-apply">✏️ أُنْجِزُ</div>
+
+      <div class="exercise-box" id="ex-app-1">
+        <h3 class="ex-title"><span class="ex-num">1</span><span>ضَعِ الْعَلَامَةَ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">X</span>) تَحْتَ الْبِطَاقَةِ الَّتِي بِهَا أَصْغَرُ عَدَدٍ مِنْ حَبَّاتِ الْفَاكِهَةِ .</span></h3>
+        <div class="fruit-cards-grid" id="app1-grid">
+          <div class="fruit-card" data-val="oranges" onclick="selectApp1(this)">
+            <div class="fruit-items" aria-label="7 حبات برتقال">
+              <span>🍊</span><span>🍊</span><span>🍊</span><span></span>
+              <span>🍊</span><span>🍊</span><span>🍊</span><span>🍊</span>
+            </div>
+            <div class="circle-check"></div>
+          </div>
+          <div class="fruit-card" data-val="apples" onclick="selectApp1(this)">
+            <div class="fruit-items" aria-label="8 حبات تفاح">
+              <span>🍎</span><span>🍎</span><span>🍎</span><span>🍎</span>
+              <span>🍎</span><span>🍎</span><span>🍎</span><span>🍎</span>
+            </div>
+            <div class="circle-check"></div>
+          </div>
+        </div>
+        <button class="btn-check" id="btn-app-1" onclick="checkApp1()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+        <div class="feedback-msg" id="fb-app-1"></div>
+      </div>
+
+      <div class="exercise-box locked-ex" id="ex-app-2">
+        <h3 class="ex-title"><span class="ex-num">2</span><span>اُرْبُطْ كُلَّ بِطَاقَةٍ بِالْعَدَدِ الْمُنَاسِبِ كَمَا فِي الْمِثَالِ .</span></h3>
+        <div class="match-area">
+          <p class="match-hint">اُنْقُرْ عَلَى الْبِطَاقَةِ ثُمَّ اخْتَرِ الْعَدَدَ الْمُنَاسِبَ لَهَا مِنَ الْأَسْفَلِ (بِطَاقَةُ النَّمْلِ مَرْبُوطَةٌ بِالْعَدَدِ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">9</span> كَمِثَالٍ):</p>
+
+          <div class="insect-cards-row">
+            <div class="insect-card" id="icard-beetles" onclick="activateInsectCard('beetles')">
+              <div class="insect-grid" aria-label="8 خنافس">
+                <span>🐞</span><span>🐞</span><span>🐞</span><span>🐞</span>
+                <span>🐞</span><span>🐞</span><span>🐞</span><span>🐞</span>
+              </div>
+              <div class="linked-badge" id="badge-beetles">اخْتَرِ الْعَدَدَ</div>
+            </div>
+
+            <div class="insect-card" id="icard-snails" onclick="activateInsectCard('snails')">
+              <div class="insect-grid" aria-label="6 حلزونات">
+                <span>🐌</span><span>🐌</span><span>🐌</span>
+                <span>🐌</span><span>🐌</span><span>🐌</span>
+              </div>
+              <div class="linked-badge" id="badge-snails">اخْتَرِ الْعَدَدَ</div>
+            </div>
+
+            <div class="insect-card is-correct disabled" id="icard-ants">
+              <div class="insect-grid" aria-label="9 نملات">
+                <span>🐜</span><span>🐜</span><span>🐜</span>
+                <span>🐜</span><span>🐜</span><span>🐜</span>
+                <span>🐜</span><span>🐜</span><span>🐜</span>
+              </div>
+              <div class="linked-badge" style="background:#16a34a; color:#fff;">مِثَالٌ: <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">9</span></div>
+            </div>
+          </div>
+
+          <div class="numbers-bubbles" id="app2-bubbles">
+            <button type="button" class="num-bubble" data-num="4" onclick="pickApp2Num(4)">4</button>
+            <button type="button" class="num-bubble" data-num="5" onclick="pickApp2Num(5)">5</button>
+            <button type="button" class="num-bubble" data-num="6" onclick="pickApp2Num(6)">6</button>
+            <button type="button" class="num-bubble" data-num="7" onclick="pickApp2Num(7)">7</button>
+            <button type="button" class="num-bubble" data-num="8" onclick="pickApp2Num(8)">8</button>
+            <button type="button" class="num-bubble used-bubble disabled" data-num="9">9</button>
+            <button type="button" class="num-bubble" data-num="10" onclick="pickApp2Num(10)">10</button>
+          </div>
+        </div>
+        <button class="btn-check" id="btn-app-2" onclick="checkApp2()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+        <div class="feedback-msg" id="fb-app-2"></div>
+      </div>
+
+      <div class="exercise-box locked-ex" id="ex-app-3">
+        <h3 class="ex-title"><span class="ex-num">3</span><span>أُكْتُبْ :</span></h3>
+
+        <div class="writing-row">
+          <span class="word-label">ثَمَانِيَةٌ</span>
+          <div class="models-group" dir="ltr">
+            <span class="model-num">8</span>
+            <span class="model-num faded">8</span>
+            <span class="model-num faded">8</span>
+            <span class="model-num faded">8</span>
+            <input type="text" inputmode="numeric" maxlength="2" class="write-input app3-in" data-expected="8" aria-label="اكتب 8" />
+            <input type="text" inputmode="numeric" maxlength="2" class="write-input app3-in" data-expected="8" aria-label="اكتب 8" />
+            <input type="text" inputmode="numeric" maxlength="2" class="write-input app3-in" data-expected="8" aria-label="اكتب 8" />
+            <input type="text" inputmode="numeric" maxlength="2" class="write-input app3-in" data-expected="8" aria-label="اكتب 8" />
+          </div>
+        </div>
+
+        <div class="writing-row">
+          <span class="word-label">عَشَرَةٌ</span>
+          <div class="models-group" dir="ltr">
+            <span class="model-num">10</span>
+            <span class="model-num faded">10</span>
+            <span class="model-num faded">10</span>
+            <span class="model-num faded">10</span>
+            <input type="text" inputmode="numeric" maxlength="2" class="write-input app3-in" data-expected="10" aria-label="اكتب 10" />
+            <input type="text" inputmode="numeric" maxlength="2" class="write-input app3-in" data-expected="10" aria-label="اكتب 10" />
+            <input type="text" inputmode="numeric" maxlength="2" class="write-input app3-in" data-expected="10" aria-label="اكتب 10" />
+            <input type="text" inputmode="numeric" maxlength="2" class="write-input app3-in" data-expected="10" aria-label="اكتب 10" />
+          </div>
+        </div>
+
+        <button class="btn-check" id="btn-app-3" onclick="checkApp3()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+        <div class="feedback-msg" id="fb-app-3"></div>
+      </div>
+
+      <div class="stage-counter" id="counter-apply">
+        <span>حَصِيلَةُ مَحَطَّةِ أُنْجِزُ:</span>
+        <span>✓ الصَّوَابُ: <strong id="app-ok">0</strong> | ✗ الْخَطَأُ: <strong id="app-err">0</strong></span>
+      </div>
+    </section>
+
+    <!-- بطاقة تعلمت -->
+    <section class="learn-box" id="sec-learn">
+      <div class="section-badge bg-learn">💡 تَعَلَّمْتُ</div>
+      <p class="learn-text">
+        أَقْرَأُ الْأَعْدَادَ
+        <span class="seq-strip" dir="ltr">
+          <span class="seq-chip">1</span>
+          <span class="seq-chip">2</span>
+          <span class="seq-chip">3</span>
+          <span class="seq-chip">4</span>
+          <span class="seq-chip">5</span>
+          <span class="seq-chip">6</span>
+          <span class="seq-chip">7</span>
+          <span class="seq-chip">8</span>
+          <span class="seq-chip">9</span>
+          <span class="seq-chip">10</span>
+        </span>
+        وَأَكْتُبُهَا .
+      </p>
+    </section>
+
+    <!-- المحطة 3: أتمرن -->
+    <section class="section-card locked-section" id="sec-practice">
+      <div class="section-badge bg-practice">🎯 أَتَمَرَّنُ</div>
+
+      <div class="exercise-box" id="ex-prac-1">
+        <h3 class="ex-title"><span class="ex-num">1</span><span>أَحِطْ أَكْبَرَ عَدَدٍ فِي كُلِّ حَالَةٍ كَمَا فِي الْمِثَالِ .</span></h3>
+        <div class="groups-grid" id="prac1-grid">
+          <div class="num-group-card disabled">
+            <span class="group-example-tag">مِثَالٌ</span>
+            <span></span><span class="g-num">3</span><span></span>
+            <span class="g-num">5</span><span></span><span class="g-num">7</span>
+            <span></span><span class="g-num circled">8</span><span></span>
+          </div>
+
+          <div class="num-group-card" data-group="p1-g1" data-ans="7">
+            <span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'circled')">2</button><span></span>
+            <button type="button" class="g-num" onclick="selectGroupNum(this, 'circled')">4</button><span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'circled')">7</button>
+            <span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'circled')">5</button><span></span>
+          </div>
+
+          <div class="num-group-card" data-group="p1-g2" data-ans="9">
+            <span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'circled')">9</button><span></span>
+            <button type="button" class="g-num" onclick="selectGroupNum(this, 'circled')">4</button><span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'circled')">6</button>
+            <span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'circled')">2</button><span></span>
+          </div>
+
+          <div class="num-group-card" data-group="p1-g3" data-ans="9">
+            <span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'circled')">9</button><span></span>
+            <button type="button" class="g-num" onclick="selectGroupNum(this, 'circled')">3</button><span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'circled')">6</button>
+            <span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'circled')">8</button><span></span>
+          </div>
+        </div>
+        <button class="btn-check" id="btn-prac-1" onclick="checkPrac1()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+        <div class="feedback-msg" id="fb-prac-1"></div>
+      </div>
+
+      <div class="exercise-box locked-ex" id="ex-prac-2">
+        <h3 class="ex-title"><span class="ex-num">2</span><span>اُشْطُبْ أَصْغَرَ عَدَدٍ فِي كُلِّ حَالَةٍ كَمَا فِي الْمِثَالِ .</span></h3>
+        <div class="groups-grid" id="prac2-grid">
+          <div class="num-group-card dotted-rect disabled">
+            <span class="group-example-tag">مِثَالٌ</span>
+            <span></span><span class="g-num">7</span><span></span>
+            <span class="g-num">9</span><span></span><span></span>
+            <span></span><span class="g-num">6</span><span class="g-num crossed">5</span>
+          </div>
+
+          <div class="num-group-card dotted-rect" data-group="p2-g1" data-ans="2">
+            <span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'crossed')">6</button><span></span>
+            <button type="button" class="g-num" onclick="selectGroupNum(this, 'crossed')">3</button><span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'crossed')">2</button>
+            <span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'crossed')">5</button><span></span>
+          </div>
+
+          <div class="num-group-card dotted-rect" data-group="p2-g2" data-ans="1">
+            <span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'crossed')">4</button><span></span>
+            <button type="button" class="g-num" onclick="selectGroupNum(this, 'crossed')">7</button><span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'crossed')">1</button>
+            <span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'crossed')">8</button><span></span>
+          </div>
+
+          <div class="num-group-card dotted-rect" data-group="p2-g3" data-ans="3">
+            <span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'crossed')">3</button><span></span>
+            <button type="button" class="g-num" onclick="selectGroupNum(this, 'crossed')">6</button><span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'crossed')">4</button>
+            <span></span><button type="button" class="g-num" onclick="selectGroupNum(this, 'crossed')">5</button><span></span>
+          </div>
+        </div>
+        <button class="btn-check" id="btn-prac-2" onclick="checkPrac2()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+        <div class="feedback-msg" id="fb-prac-2"></div>
+      </div>
+
+      <div class="exercise-box locked-ex" id="ex-prac-3">
+        <h3 class="ex-title"><span class="ex-num">3</span><span>اُرْبُطْ كُلَّ عَرَبَةٍ بِالرَّقْمِ الْمُنَاسِبِ .</span></h3>
+        <div class="match-area">
+          <p class="match-hint">اُنْقُرْ عَلَى الْعَرَبَةِ ثُمَّ اخْتَرْ رَقْمَهَا الْمُنَاسِبَ مِنَ الْأَعْلَى (تَمَّ رَبْطُ الْعَرَبَةِ الْأُولَى بِالرَّقْمِ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1</span>):</p>
+
+          <div class="numbers-bubbles" id="prac3-bubbles" style="margin-bottom:14px;">
+            <button type="button" class="num-bubble used-bubble disabled" data-num="1">1</button>
+            <button type="button" class="num-bubble" data-num="3" onclick="pickTrainNum(3)">3</button>
+            <button type="button" class="num-bubble" data-num="7" onclick="pickTrainNum(7)">7</button>
+            <button type="button" class="num-bubble" data-num="2" onclick="pickTrainNum(2)">2</button>
+            <button type="button" class="num-bubble" data-num="4" onclick="pickTrainNum(4)">4</button>
+            <button type="button" class="num-bubble" data-num="6" onclick="pickTrainNum(6)">6</button>
+            <button type="button" class="num-bubble" data-num="5" onclick="pickTrainNum(5)">5</button>
+          </div>
+
+          <div class="train-wrapper">
+            <div class="train-track">
+              <div class="locomotive">🚂<br/>الْقَاطِرَةُ</div>
+
+              <div class="wagon-card is-correct disabled" style="background:#22c55e;">
+                <div>الْعَرَبَةُ</div>
+                <div class="wagon-slot">1</div>
+              </div>
+
+              <div class="wagon-card" id="wagon-2" style="background:#f97316;" onclick="activateWagon(2)">
+                <div>الْعَرَبَةُ</div>
+                <div class="wagon-slot" id="wslot-2">؟</div>
+              </div>
+
+              <div class="wagon-card" id="wagon-3" style="background:#3b82f6;" onclick="activateWagon(3)">
+                <div>الْعَرَبَةُ</div>
+                <div class="wagon-slot" id="wslot-3">؟</div>
+              </div>
+
+              <div class="wagon-card" id="wagon-4" style="background:#ef4444;" onclick="activateWagon(4)">
+                <div>الْعَرَبَةُ</div>
+                <div class="wagon-slot" id="wslot-4">؟</div>
+              </div>
+
+              <div class="wagon-card" id="wagon-5" style="background:#0284c7;" onclick="activateWagon(5)">
+                <div>الْعَرَبَةُ</div>
+                <div class="wagon-slot" id="wslot-5">؟</div>
+              </div>
+
+              <div class="wagon-card" id="wagon-6" style="background:#ea580c;" onclick="activateWagon(6)">
+                <div>الْعَرَبَةُ</div>
+                <div class="wagon-slot" id="wslot-6">؟</div>
+              </div>
+
+              <div class="wagon-card" id="wagon-7" style="background:#4f46e5;" onclick="activateWagon(7)">
+                <div>الْعَرَبَةُ</div>
+                <div class="wagon-slot" id="wslot-7">؟</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="btn-check" id="btn-prac-3" onclick="checkPrac3()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+        <div class="feedback-msg" id="fb-prac-3"></div>
+      </div>
+
+      <div class="stage-counter" id="counter-practice">
+        <span>حَصِيلَةُ مَحَطَّةِ أَتَمَرَّنُ:</span>
+        <span>✓ الصَّوَابُ: <strong id="prac-ok">0</strong> | ✗ الْخَطَأُ: <strong id="prac-err">0</strong></span>
+      </div>
+    </section>
+
+    <!-- المحطة 4: أبحث -->
+    <section class="section-card locked-section" id="sec-search">
+      <div class="section-badge bg-search">🧠 أَبْحَثُ</div>
+
+      <div class="exercise-box" id="ex-search-1">
+        <h3 class="ex-title"><span class="ex-num">★</span><span>لَاحِظْ ثُمَّ أَكْمِلْ تَلْوِينَ الْخَانَاتِ .</span></h3>
+
+        <div class="legend-circles" aria-label="مفتاح الألوان">
+          <div class="legend-ball ball-yellow">1</div>
+          <div class="legend-ball ball-green">5</div>
+          <div class="legend-ball ball-red">2</div>
+          <div class="legend-ball ball-red">4</div>
+          <div class="legend-ball ball-yellow">3</div>
+          <div class="legend-ball ball-red">8</div>
+          <div class="legend-ball ball-yellow">9</div>
+          <div class="legend-ball ball-green">7</div>
+        </div>
+
+        <div class="palette-bar">
+          <span style="font-weight:800;">اخْتَرِ اللَّوْنَ ثُمَّ انْقُرْ عَلَى الْخَانَةِ:</span>
+          <button type="button" class="color-brush ball-yellow selected-brush" data-color="yellow" onclick="selectBrush('yellow', this)">🟡 أَصْفَرُ</button>
+          <button type="button" class="color-brush ball-red" data-color="red" onclick="selectBrush('red', this)">🔴 أَحْمَرُ</button>
+          <button type="button" class="color-brush ball-green" data-color="green" onclick="selectBrush('green', this)">🟢 أَخْضَرُ</button>
+        </div>
+
+        <div class="strip-grid" id="search-strip">
+          <div class="strip-cell cell-yellow disabled" data-pos="1" data-color="yellow">1</div>
+          <div class="strip-cell" data-pos="2" data-color="" onclick="paintCell(this)"></div>
+          <div class="strip-cell" data-pos="3" data-color="" onclick="paintCell(this)"></div>
+          <div class="strip-cell" data-pos="4" data-color="" onclick="paintCell(this)"></div>
+          <div class="strip-cell cell-green disabled" data-pos="5" data-color="green"></div>
+          <div class="strip-cell cell-green disabled" data-pos="6" data-color="green"></div>
+          <div class="strip-cell" data-pos="7" data-color="" onclick="paintCell(this)"></div>
+          <div class="strip-cell" data-pos="8" data-color="" onclick="paintCell(this)"></div>
+          <div class="strip-cell" data-pos="9" data-color="" onclick="paintCell(this)"></div>
+          <div class="strip-cell" data-pos="10" data-color="" onclick="paintCell(this)"></div>
+        </div>
+
+        <button class="btn-check" id="btn-search-1" onclick="checkSearch1()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+        <div class="feedback-msg" id="fb-search-1"></div>
+      </div>
+
+      <div class="stage-counter" id="counter-search">
+        <span>حَصِيلَةُ مَحَطَّةِ أَبْحَثُ:</span>
+        <span>✓ الصَّوَابُ: <strong id="search-ok">0</strong> | ✗ الْخَطَأُ: <strong id="search-err">0</strong></span>
+      </div>
+    </section>
+
+    <!-- التقييم الكلي -->
+    <section class="final-eval-card" id="final-eval-section">
+      <h2 class="eval-title">📊 التَّقْيِيمُ الْكُلِّيُّ لِلدَّرْسِ</h2>
+      <div class="eval-body">
+        <div class="donut-wrap">
+          <svg viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#e2e8f0" stroke-width="14"></circle>
+            <circle id="donut-progress" cx="60" cy="60" r="50" fill="none" stroke="#16a34a" stroke-width="14"
+              stroke-dasharray="314.16" stroke-dashoffset="314.16" stroke-linecap="round"></circle>
+          </svg>
+          <div class="donut-percent" id="total-percent">0%</div>
+        </div>
+
+        <div class="stats-boxes">
+          <div class="stat-pill stat-correct">
+            <span>✅ الْإِجَابَاتُ الصَّحِيحَةُ:</span>
+            <strong id="total-correct">0</strong>
+          </div>
+          <div class="stat-pill stat-wrong">
+            <span>❌ الْإِجَابَاتُ الْخَاطِئَةُ:</span>
+            <strong id="total-wrong">0</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="eval-remark" id="eval-remark">
+        أَبْدَأُ حَلَّ التَّمَارِينِ بِالتَّرْتِيبِ لِتَظْهَرَ نَتِيجَتِي وَمُلَاحَظَةُ الْأُسْتَاذِ!
+      </div>
+
+      <button type="button" class="btn-reset-all" onclick="location.reload()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+    </section>
+
+    <!-- زر العودة إلى الفهرس -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+  </div>
+
+  <!-- ========================================
+       سكريبت الحماية — قفل الاشتراك الإجباري
+       ======================================== -->
+  <script>
+    const CHANNEL_ID = "-1004456852024";
+    const tg = window.Telegram?.WebApp;
+    if (tg) { tg.ready(); tg.expand(); }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+  </script>
+
+  <!-- ========================================
+       سكريبت الدرس الأصلي
+       ======================================== -->
+  <script>
+    const scores = {
+      disc: { ok: 0, err: 0 },
+      app: { ok: 0, err: 0 },
+      prac: { ok: 0, err: 0 },
+      search: { ok: 0, err: 0 }
+    };
+
+    function updateCountersAndEval() {
+      document.getElementById('disc-ok').textContent = scores.disc.ok;
+      document.getElementById('disc-err').textContent = scores.disc.err;
+
+      document.getElementById('app-ok').textContent = scores.app.ok;
+      document.getElementById('app-err').textContent = scores.app.err;
+
+      document.getElementById('prac-ok').textContent = scores.prac.ok;
+      document.getElementById('prac-err').textContent = scores.prac.err;
+
+      document.getElementById('search-ok').textContent = scores.search.ok;
+      document.getElementById('search-err').textContent = scores.search.err;
+
+      const totalOk = scores.disc.ok + scores.app.ok + scores.prac.ok + scores.search.ok;
+      const totalErr = scores.disc.err + scores.app.err + scores.prac.err + scores.search.err;
+      const totalAll = totalOk + totalErr;
+
+      document.getElementById('total-correct').textContent = totalOk;
+      document.getElementById('total-wrong').textContent = totalErr;
+
+      const pct = totalAll > 0 ? Math.round((totalOk / totalAll) * 100) : 0;
+      document.getElementById('total-percent').textContent = pct + '%';
+
+      const circumference = 314.16;
+      const offset = circumference - (pct / 100) * circumference;
+      const circle = document.getElementById('donut-progress');
+      circle.style.strokeDashoffset = offset;
+
+      if (pct >= 80) {
+        circle.style.stroke = '#16a34a';
+      } else if (pct >= 50) {
+        circle.style.stroke = '#f59e0b';
+      } else {
+        circle.style.stroke = '#dc2626';
+      }
+
+      const remarkEl = document.getElementById('eval-remark');
+      if (totalAll === 0) {
+        remarkEl.textContent = 'أَبْدَأُ حَلَّ التَّمَارِينِ بِالتَّرْتِيبِ لِتَظْهَرَ نَتِيجَتِي وَمُلَاحَظَةُ الْأُسْتَاذِ!';
+      } else if (pct === 100) {
+        remarkEl.textContent = '🌟 مُمْتَازٌ جِدًّا! تَحَكُّمٌ كَامِلٌ فِي مُتَتَالِيَةِ الْأَعْدَادِ إِلَى 10!';
+      } else if (pct >= 80) {
+        remarkEl.textContent = '👏 جَيِّدٌ جِدًّا! نَتِيجَةٌ رَائِعَةٌ، وَاصِلِ التَّأَلُّقَ يَا بَطَلُ!';
+      } else if (pct >= 60) {
+        remarkEl.textContent = '👍 جَيِّدٌ! أَحْسَنْتَ، رَاجِعِ الْأَخْطَاءَ الْبَسِيطَةَ لِتَكُونَ أَفْضَلَ.';
+      } else if (pct >= 50) {
+        remarkEl.textContent = '💪 مُتَوَسِّطٌ! حَاوِلْ مَرَّةً أُخْرَى بَعْدَ مُرَاجَعَةِ بَطَاقَةِ تَعَلَّمْتُ.';
+      } else {
+        remarkEl.textContent = '📚 يَحْتَاجُ إِلَى مُرَاجَعَةٍ! أَعِدِ الْمُحَاوَلَةَ وَعُدَّ بِتَأَنٍّ.';
+      }
+    }
+
+    function showFeedback(id, ok, msg) {
+      const fb = document.getElementById(id);
+      fb.textContent = msg;
+      fb.className = 'feedback-msg show ' + (ok ? 'is-correct' : 'is-wrong');
+    }
+
+    function unlockNext(elementId) {
+      const el = document.getElementById(elementId);
+      if (el) {
+        el.classList.remove('locked-ex', 'locked-section');
+      }
+    }
+
+    let disc1Choice = null;
+    function selectDisc1(el) {
+      if (el.classList.contains('disabled')) return;
+      document.querySelectorAll('#disc1-list .choice-option').forEach(opt => {
+        opt.classList.remove('selected');
+        opt.querySelector('.choice-box-mark').textContent = '';
+      });
+      el.classList.add('selected');
+      el.querySelector('.choice-box-mark').textContent = 'X';
+      disc1Choice = el.dataset.val;
+    }
+
+    function checkDisc1() {
+      if (!disc1Choice) {
+        alert('اخْتَرْ إِجَابَةً أَوَّلًا بِالنَّقْرِ عَلَيْهَا.');
+        return;
+      }
+      document.getElementById('btn-disc-1').disabled = true;
+      const opts = document.querySelectorAll('#disc1-list .choice-option');
+      opts.forEach(opt => {
+        opt.classList.add('disabled');
+        if (opt.dataset.val === 'more') {
+          opt.classList.add('is-correct');
+          opt.querySelector('.choice-box-mark').textContent = 'X';
+        } else if (opt.dataset.val === disc1Choice) {
+          opt.classList.add('is-wrong');
+        }
+      });
+
+      if (disc1Choice === 'more') {
+        scores.disc.ok += 1;
+        showFeedback('fb-disc-1', true, 'أَحْسَنْتَ! كُرَيَّاتُ أَمِينَ (10) أَكْثَرُ مِنْ كُرَيَّاتِ رَائِدٍ (8).');
+      } else {
+        scores.disc.err += 1;
+        showFeedback('fb-disc-1', false, 'خَطَأٌ! الصَّوَابُ: كُرَيَّاتُ أَمِينَ أَكْثَرُ مِنْ كُرَيَّاتِ رَائِدٍ.');
+      }
+      updateCountersAndEval();
+      unlockNext('ex-disc-2');
+    }
+
+    const disc2Answers = { 'disc2-row1': null, 'disc2-row2': null };
+    function selectWordCard(rowId, btn) {
+      if (btn.classList.contains('disabled')) return;
+      document.querySelectorAll(`#${rowId} .word-card-btn`).forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      disc2Answers[rowId] = btn.dataset.val;
+    }
+
+    function checkDisc2() {
+      if (!disc2Answers['disc2-row1'] || !disc2Answers['disc2-row2']) {
+        alert('لَوِّنِ الْبِطَاقَةَ الْمُنَاسِبَةَ فِي كِلَا السَّطْرَيْنِ أَوَّلًا.');
+        return;
+      }
+      document.getElementById('btn-disc-2').disabled = true;
+
+      let r1Ok = disc2Answers['disc2-row1'] === '10';
+      document.querySelectorAll('#disc2-row1 .word-card-btn').forEach(b => {
+        b.classList.add('disabled');
+        if (b.dataset.val === '10') b.classList.add('is-correct');
+        else if (b.classList.contains('selected')) b.classList.add('is-wrong');
+      });
+
+      let r2Ok = disc2Answers['disc2-row2'] === '8';
+      document.querySelectorAll('#disc2-row2 .word-card-btn').forEach(b => {
+        b.classList.add('disabled');
+        if (b.dataset.val === '8') b.classList.add('is-correct');
+        else if (b.classList.contains('selected')) b.classList.add('is-wrong');
+      });
+
+      scores.disc.ok += (r1Ok ? 1 : 0) + (r2Ok ? 1 : 0);
+      scores.disc.err += (!r1Ok ? 1 : 0) + (!r2Ok ? 1 : 0);
+
+      if (r1Ok && r2Ok) {
+        showFeedback('fb-disc-2', true, 'مُمْتَازٌ! عِنْدَ أَمِينَ عَشْرُ كُرَيَّاتٍ، وَعِنْدَ رَائِدٍ ثَمَانُ كُرَيَّاتٍ.');
+      } else {
+        showFeedback('fb-disc-2', false, 'رَاجِعِ التَّلْوِينَ الْأَخْضَرَ: عِنْدَ أَمِينَ عَشْرُ كُرَيَّاتٍ، وَعِنْدَ رَائِدٍ ثَمَانُ كُرَيَّاتٍ.');
+      }
+      updateCountersAndEval();
+      unlockNext('sec-apply');
+    }
+
+    let app1Choice = null;
+    function selectApp1(card) {
+      if (card.classList.contains('disabled')) return;
+      document.querySelectorAll('#app1-grid .fruit-card').forEach(c => {
+        c.classList.remove('selected');
+        c.querySelector('.circle-check').textContent = '';
+      });
+      card.classList.add('selected');
+      card.querySelector('.circle-check').textContent = 'X';
+      app1Choice = card.dataset.val;
+    }
+
+    function checkApp1() {
+      if (!app1Choice) {
+        alert('ضَعِ الْعَلَامَةَ (X) تَحْتَ إِحْدَى الْبِطَاقَتَيْنِ أَوَّلًا.');
+        return;
+      }
+      document.getElementById('btn-app-1').disabled = true;
+      document.querySelectorAll('#app1-grid .fruit-card').forEach(c => {
+        c.classList.add('disabled');
+        if (c.dataset.val === 'oranges') {
+          c.classList.add('is-correct');
+          c.querySelector('.circle-check').textContent = 'X';
+        } else if (c.dataset.val === app1Choice) {
+          c.classList.add('is-wrong');
+        }
+      });
+
+      if (app1Choice === 'oranges') {
+        scores.app.ok += 1;
+        showFeedback('fb-app-1', true, 'صَحِيحٌ! بِطَاقَةُ الْبُرْتُقَالِ بِهَا 7 حَبَّاتٍ وَهِيَ أَصْغَرُ مِنْ 8.');
+      } else {
+        scores.app.err += 1;
+        showFeedback('fb-app-1', false, 'خَطَأٌ! بِطَاقَةُ الْبُرْتُقَالِ بِهَا 7 حَبَّاتٍ وَهِيَ أَصْغَرُ عَدَدٍ.');
+      }
+      updateCountersAndEval();
+      unlockNext('ex-app-2');
+    }
+
+    let activeInsect = 'beetles';
+    const app2Links = { beetles: null, snails: null };
+    document.getElementById('icard-beetles').classList.add('active-target');
+
+    function activateInsectCard(type) {
+      const card = document.getElementById('icard-' + type);
+      if (card.classList.contains('disabled')) return;
+      document.querySelectorAll('.insect-card').forEach(c => c.classList.remove('active-target'));
+      card.classList.add('active-target');
+      activeInsect = type;
+    }
+
+    function pickApp2Num(num) {
+      if (!activeInsect) return;
+      const btn = document.querySelector(`#app2-bubbles .num-bubble[data-num="${num}"]`);
+      if (btn.classList.contains('disabled')) return;
+
+      if (app2Links[activeInsect] !== null) {
+        const oldBtn = document.querySelector(`#app2-bubbles .num-bubble[data-num="${app2Links[activeInsect]}"]`);
+        if (oldBtn) oldBtn.classList.remove('used-bubble');
+      }
+
+      for (const k of ['beetles', 'snails']) {
+        if (app2Links[k] === num) {
+          app2Links[k] = null;
+          document.getElementById('badge-' + k).textContent = 'اخْتَرِ الْعَدَدَ';
+        }
+      }
+
+      app2Links[activeInsect] = num;
+      btn.classList.add('used-bubble');
+      const badge = document.getElementById('badge-' + activeInsect);
+      badge.innerHTML = `مَرْبُوطٌ بِـ : <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">${num}</span>`;
+
+      if (activeInsect === 'beetles' && app2Links.snails === null) {
+        activateInsectCard('snails');
+      }
+    }
+
+    function checkApp2() {
+      if (app2Links.beetles === null || app2Links.snails === null) {
+        alert('اُرْبُطْ بِطَاقَةَ الْخَنَافِسِ وَبِطَاقَةَ الْحَلَزُونَاتِ بِالْأَعْدَادِ أَوَّلًا.');
+        return;
+      }
+      document.getElementById('btn-app-2').disabled = true;
+      document.querySelectorAll('.insect-card, #app2-bubbles .num-bubble').forEach(el => {
+        el.classList.add('disabled');
+        el.classList.remove('active-target');
+      });
+
+      const bOk = app2Links.beetles === 8;
+      const sOk = app2Links.snails === 6;
+
+      const bCard = document.getElementById('icard-beetles');
+      bCard.classList.add(bOk ? 'is-correct' : 'is-wrong');
+      if (!bOk) {
+        document.getElementById('badge-beetles').innerHTML = `إِجَابَتُكَ: <span dir="ltr">${app2Links.beetles}</span> | الصَّوَابُ: <span dir="ltr">8</span>`;
+      }
+
+      const sCard = document.getElementById('icard-snails');
+      sCard.classList.add(sOk ? 'is-correct' : 'is-wrong');
+      if (!sOk) {
+        document.getElementById('badge-snails').innerHTML = `إِجَابَتُكَ: <span dir="ltr">${app2Links.snails}</span> | الصَّوَابُ: <span dir="ltr">6</span>`;
+      }
+
+      scores.app.ok += (bOk ? 1 : 0) + (sOk ? 1 : 0);
+      scores.app.err += (!bOk ? 1 : 0) + (!sOk ? 1 : 0);
+
+      if (bOk && sOk) {
+        showFeedback('fb-app-2', true, 'رَائِعٌ! عَدَدُ الْخَنَافِسِ 8، وَعَدَدُ الْحَلَزُونَاتِ 6.');
+      } else {
+        showFeedback('fb-app-2', false, 'رَاجِعِ التَّصْحِيحَ: الْخَنَافِسُ 8 وَالْحَلَزُونَاتُ 6.');
+      }
+      updateCountersAndEval();
+      unlockNext('ex-app-3');
+    }
+
+    function checkApp3() {
+      const inputs = document.querySelectorAll('.app3-in');
+      let emptyFound = false;
+      inputs.forEach(inp => {
+        if (inp.value.trim() === '') emptyFound = true;
+      });
+      if (emptyFound) {
+        alert('أَكْمِلْ كِتَابَةَ جَمِيعِ الْأَعْدَادِ فِي الْفَرَاغَاتِ أَوَّلًا.');
+        return;
+      }
+
+      document.getElementById('btn-app-3').disabled = true;
+      let okCount = 0;
+      let errCount = 0;
+
+      inputs.forEach(inp => {
+        inp.disabled = true;
+        const val = inp.value.trim();
+        const exp = inp.dataset.expected;
+        if (val === exp) {
+          inp.classList.add('is-correct');
+          okCount++;
+        } else {
+          inp.classList.add('is-wrong');
+          inp.value = `${val}←${exp}`;
+          errCount++;
+        }
+      });
+
+      scores.app.ok += okCount;
+      scores.app.err += errCount;
+
+      if (errCount === 0) {
+        showFeedback('fb-app-3', true, 'أَحْسَنْتَ! كَتَبْتَ الْعَدَدَيْنِ 8 وَ 10 بِشَكْلٍ صَحِيحٍ.');
+      } else {
+        showFeedback('fb-app-3', false, 'تَمَّ تَصْحِيحُ الْخَانَاتِ الْخَاطِئَةِ بِالْأَحْمَرِ.');
+      }
+      updateCountersAndEval();
+      unlockNext('sec-practice');
+    }
+
+    function selectGroupNum(btn, modeClass) {
+      if (btn.classList.contains('disabled')) return;
+      const parent = btn.closest('.num-group-card');
+      parent.querySelectorAll('.g-num').forEach(b => b.classList.remove(modeClass));
+      btn.classList.add(modeClass);
+    }
+
+    function checkPrac1() {
+      const groups = document.querySelectorAll('#prac1-grid .num-group-card[data-group]');
+      let allSelected = true;
+      groups.forEach(g => {
+        if (!g.querySelector('.circled')) allSelected = false;
+      });
+      if (!allSelected) {
+        alert('أَحِطْ أَكْبَرَ عَدَدٍ فِي كُلِّ دَائِرَةٍ أَوَّلًا.');
+        return;
+      }
+
+      document.getElementById('btn-prac-1').disabled = true;
+      let ok = 0, err = 0;
+
+      groups.forEach(g => {
+        const expected = g.dataset.ans;
+        const chosen = g.querySelector('.circled');
+        g.querySelectorAll('.g-num').forEach(b => {
+          b.classList.add('disabled');
+          if (b.textContent.trim() === expected) {
+            b.classList.add('is-correct');
+          }
+        });
+
+        if (chosen.textContent.trim() === expected) {
+          ok++;
+        } else {
+          chosen.classList.add('is-wrong');
+          err++;
+        }
+      });
+
+      scores.prac.ok += ok;
+      scores.prac.err += err;
+
+      if (err === 0) {
+        showFeedback('fb-prac-1', true, 'مُمْتَازٌ! أَحَطْتَ أَكْبَرَ عَدَدٍ فِي جَمِيعِ الْحَالَاتِ (7، 9، 9).');
+      } else {
+        showFeedback('fb-prac-1', false, 'رَاجِعِ الْأَعْدَادَ الْمُلَوَّنَةَ بِالْأَخْضَرِ (7، 9، 9).');
+      }
+      updateCountersAndEval();
+      unlockNext('ex-prac-2');
+    }
+
+    function checkPrac2() {
+      const groups = document.querySelectorAll('#prac2-grid .num-group-card[data-group]');
+      let allSelected = true;
+      groups.forEach(g => {
+        if (!g.querySelector('.crossed')) allSelected = false;
+      });
+      if (!allSelected) {
+        alert('اُشْطُبْ أَصْغَرَ عَدَدٍ فِي كُلِّ حَالَةٍ أَوَّلًا.');
+        return;
+      }
+
+      document.getElementById('btn-prac-2').disabled = true;
+      let ok = 0, err = 0;
+
+      groups.forEach(g => {
+        const expected = g.dataset.ans;
+        const chosen = g.querySelector('.crossed');
+        g.querySelectorAll('.g-num').forEach(b => {
+          b.classList.add('disabled');
+          if (b.textContent.trim() === expected) {
+            b.classList.add('is-correct');
+          }
+        });
+
+        if (chosen.textContent.trim() === expected) {
+          ok++;
+        } else {
+          chosen.classList.add('is-wrong');
+          err++;
+        }
+      });
+
+      scores.prac.ok += ok;
+      scores.prac.err += err;
+
+      if (err === 0) {
+        showFeedback('fb-prac-2', true, 'بَارَكَ اللَّهُ فِيكَ! شَطَبْتَ أَصْغَرَ عَدَدٍ فِي جَمِيعِ الْحَالَاتِ (2، 1، 3).');
+      } else {
+        showFeedback('fb-prac-2', false, 'رَاجِعِ الْأَعْدَادَ الصَّحِيحَةَ بِالْأَخْضَرِ (2، 1، 3).');
+      }
+      updateCountersAndEval();
+      unlockNext('ex-prac-3');
+    }
+
+    let activeWagon = 2;
+    const wagonAnswers = { 2: null, 3: null, 4: null, 5: null, 6: null, 7: null };
+    document.getElementById('wagon-2').classList.add('active-target');
+
+    function activateWagon(idx) {
+      const w = document.getElementById('wagon-' + idx);
+      if (w.classList.contains('disabled')) return;
+      document.querySelectorAll('.wagon-card').forEach(c => c.classList.remove('active-target'));
+      w.classList.add('active-target');
+      activeWagon = idx;
+    }
+
+    function pickTrainNum(num) {
+      if (!activeWagon) return;
+      const btn = document.querySelector(`#prac3-bubbles .num-bubble[data-num="${num}"]`);
+      if (btn.classList.contains('disabled')) return;
+
+      if (wagonAnswers[activeWagon] !== null) {
+        const oldBtn = document.querySelector(`#prac3-bubbles .num-bubble[data-num="${wagonAnswers[activeWagon]}"]`);
+        if (oldBtn) oldBtn.classList.remove('used-bubble');
+      }
+
+      for (let i = 2; i <= 7; i++) {
+        if (wagonAnswers[i] === num) {
+          wagonAnswers[i] = null;
+          document.getElementById('wslot-' + i).textContent = '؟';
+        }
+      }
+
+      wagonAnswers[activeWagon] = num;
+      btn.classList.add('used-bubble');
+      document.getElementById('wslot-' + activeWagon).textContent = num;
+
+      for (let i = 2; i <= 7; i++) {
+        if (wagonAnswers[i] === null) {
+          activateWagon(i);
+          break;
+        }
+      }
+    }
+
+    function checkPrac3() {
+      for (let i = 2; i <= 7; i++) {
+        if (wagonAnswers[i] === null) {
+          alert('أَكْمِلْ رَبْطَ جَمِيعِ عَرَبَاتِ الْقِطَارِ بِالْأَرْقَامِ أَوَّلًا.');
+          return;
+        }
+      }
+
+      document.getElementById('btn-prac-3').disabled = true;
+      document.querySelectorAll('.wagon-card, #prac3-bubbles .num-bubble').forEach(el => {
+        el.classList.add('disabled');
+        el.classList.remove('active-target');
+      });
+
+      let ok = 0, err = 0;
+      for (let i = 2; i <= 7; i++) {
+        const slot = document.getElementById('wslot-' + i);
+        if (wagonAnswers[i] === i) {
+          slot.classList.add('is-correct');
+          ok++;
+        } else {
+          slot.classList.add('is-wrong');
+          slot.textContent = `${wagonAnswers[i]}→${i}`;
+          err++;
+        }
+      }
+
+      scores.prac.ok += ok;
+      scores.prac.err += err;
+
+      if (err === 0) {
+        showFeedback('fb-prac-3', true, 'رَائِعٌ جِدًّا! رَتَّبْتَ عَرَبَاتِ الْقِطَارِ بِالصَّوَابِ: 1، 2، 3، 4، 5، 6، 7.');
+      } else {
+        showFeedback('fb-prac-3', false, 'تَمَّ تَوْضِيحُ التَّرْتِيبِ الصَّحِيحِ عَلَى الْعَرَبَاتِ.');
+      }
+      updateCountersAndEval();
+      unlockNext('sec-search');
+    }
+
+    let currentBrush = 'yellow';
+    const expectedStripColors = {
+      2: 'red',
+      3: 'yellow',
+      4: 'red',
+      7: 'green',
+      8: 'red',
+      9: 'yellow',
+      10: 'red'
+    };
+
+    function selectBrush(color, btn) {
+      currentBrush = color;
+      document.querySelectorAll('.color-brush').forEach(b => b.classList.remove('selected-brush'));
+      btn.classList.add('selected-brush');
+    }
+
+    function paintCell(cell) {
+      if (cell.classList.contains('disabled')) return;
+      cell.classList.remove('cell-yellow', 'cell-green', 'cell-red');
+      cell.classList.add('cell-' + currentBrush);
+      cell.dataset.color = currentBrush;
+    }
+
+    function checkSearch1() {
+      const cells = document.querySelectorAll('#search-strip .strip-cell:not(.disabled)');
+      let allPainted = true;
+      cells.forEach(c => {
+        if (!c.dataset.color) allPainted = false;
+      });
+      if (!allPainted) {
+        alert('لَوِّنْ جَمِيعَ الْخَانَاتِ الْفَارِغَةِ فِي الشَّرِيطِ أَوَّلًا.');
+        return;
+      }
+
+      document.getElementById('btn-search-1').disabled = true;
+      let ok = 0, err = 0;
+
+      cells.forEach(c => {
+        c.classList.add('disabled');
+        const pos = Number(c.dataset.pos);
+        const exp = expectedStripColors[pos];
+        const chosen = c.dataset.color;
+
+        if (chosen === exp) {
+          ok++;
+          c.innerHTML = '✓';
+        } else {
+          err++;
+          c.classList.remove('cell-yellow', 'cell-green', 'cell-red');
+          c.classList.add('cell-' + exp);
+          c.innerHTML = '✗';
+        }
+      });
+
+      scores.search.ok += ok;
+      scores.search.err += err;
+
+      if (err === 0) {
+        showFeedback('fb-search-1', true, 'عَبْقَرِيٌّ! لَوَّنْتَ جَمِيعَ الْخَانَاتِ بِحَسَبِ الْأَعْدَادِ الصَّحِيحَةِ.');
+      } else {
+        showFeedback('fb-search-1', false, 'تَمَّ تَصْحِيحُ الْخَانَاتِ الَّتِي كَانَتْ بِهَا أَخْطَاءٌ (✗) بِأَلْوَانِهَا الصَّحِيحَةِ.');
+      }
+      updateCountersAndEval();
+    }
+  </script>
+</body>
+</html>
