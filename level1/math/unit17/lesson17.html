@@ -1,1 +1,1564 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مُقَارَنَةُ أَطْوَالٍ (1) - الرياضيات السنة الأولى</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #6c3483;
+    --primary-light: #f4ecf7;
+    --secondary: #2e86c1;
+    --accent: #f39c12;
+    --success: #27ae60;
+    --success-bg: #eafaf1;
+    --danger: #e74c3c;
+    --danger-bg: #fdedec;
+    --bg: #f8f9fa;
+    --card-bg: #ffffff;
+    --text: #2c3e50;
+    --border: #dcdde1;
+  }
 
+  * {
+    box-sizing: border-box;
+    font-family: 'Cairo', sans-serif;
+    user-select: none;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  header {
+    background: linear-gradient(135deg, #6c3483, #8e44ad);
+    color: white;
+    padding: 18px 20px;
+    text-align: center;
+    border-bottom: 5px solid #f1c40f;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  header .meta {
+    font-size: 0.95rem;
+    opacity: 0.9;
+    margin-bottom: 4px;
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 800;
+  }
+
+  .container {
+    max-width: 850px;
+    margin: 20px auto;
+    padding: 0 15px 40px;
+  }
+
+  .section-card {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    border: 2px solid #eee;
+    transition: opacity 0.3s ease;
+  }
+
+  .section-card.locked {
+    opacity: 0.55;
+    pointer-events: none;
+    position: relative;
+  }
+
+  .section-card.locked::after {
+    content: "🔒 أَكْمِلِ التَّمْرِينَ السَّابِقَ لِفَتْحِ هَذَا التَّمْرِينِ";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(44, 62, 80, 0.9);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+    z-index: 10;
+  }
+
+  .stage-badge {
+    display: inline-block;
+    background: #d35400;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 800;
+    padding: 4px 18px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+  }
+
+  .stage-badge.activities {
+    background: #8e44ad;
+  }
+
+  .stage-badge.search {
+    background: #27ae60;
+  }
+
+  .instruction {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1a252f;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ex-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #6c3483;
+    color: white;
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    font-weight: 800;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    background: #f4f6f7;
+    padding: 10px 15px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    border: 1px dashed #bdc3c7;
+  }
+
+  .palette-label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-left: 6px;
+  }
+
+  .color-swatch {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .color-swatch.active {
+    transform: scale(1.2);
+    border-color: #2c3e50;
+    box-shadow: 0 0 0 3px #f1c40f;
+  }
+
+  .strips-display {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+    background: #fdfefe;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #e5e8e8;
+    margin-bottom: 18px;
+  }
+
+  .strip-bar {
+    height: 22px;
+    border-radius: 3px;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.1);
+  }
+
+  .cards-row {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  .card-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .color-box {
+    width: 75px;
+    height: 26px;
+    border: 2px solid #34495e;
+    border-radius: 4px;
+    background-color: #ffffff;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  .color-box:hover {
+    transform: scale(1.05);
+  }
+
+  .circle-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #2c3e50;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.95rem;
+  }
+
+  .anjiz-strips {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 15px;
+    background: #fdfefe;
+    border: 1px solid #e5e8e8;
+    border-radius: 12px;
+    margin-bottom: 15px;
+  }
+
+  .anjiz-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .paintable-strip {
+    height: 26px;
+    border: 2px solid #2c3e50;
+    background-color: #ffffff;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: transform 0.1s;
+  }
+
+  .paintable-strip:hover {
+    filter: brightness(0.96);
+  }
+
+  .legend-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    background: #f8f9f9;
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid #e5e7e9;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    font-size: 0.92rem;
+  }
+
+  .legend-box {
+    width: 38px;
+    height: 20px;
+    border-radius: 3px;
+    border: 1px solid #7f8c8d;
+  }
+
+  .taalamtu-box {
+    background: linear-gradient(to left, #fef9e7, #fcf3cf);
+    border: 3px solid #f1c40f;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(241, 196, 15, 0.15);
+  }
+
+  .taalamtu-title {
+    display: inline-block;
+    background: #e67e22;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: 800;
+    padding: 3px 16px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .taalamtu-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+  }
+
+  .svg-stage {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 24px;
+    padding: 15px;
+    background: #fdfefe;
+    border: 1px solid #e5e8e8;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+  }
+
+  .pencil-svg {
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  .pencil-svg:hover {
+    transform: translateY(-4px);
+  }
+
+  .labeled-strip-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .strip-letter {
+    font-weight: 800;
+    font-size: 1.15rem;
+    width: 24px;
+    text-align: center;
+  }
+
+  .order-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #f4f6f7;
+    padding: 12px 18px;
+    border-radius: 12px;
+    border: 2px dashed #95a5a6;
+    flex-wrap: wrap;
+    font-size: 1.2rem;
+    font-weight: 800;
+  }
+
+  select.order-select {
+    font-size: 1.15rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 2px solid #34495e;
+    background: white;
+    color: #2c3e50;
+    cursor: pointer;
+  }
+
+  .candle-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .candle-fixed {
+    width: 48px;
+    height: 44px;
+    border: 2px dotted #34495e;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: 800;
+    background: #ecf0f1;
+  }
+
+  .ex4-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    border: 2px solid #34495e;
+    cursor: pointer;
+  }
+
+  .abhath-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    padding: 25px 15px;
+    background: #fdfefe;
+    border: 1px solid #e5e8e8;
+    border-radius: 12px;
+    overflow-x: auto;
+  }
+
+  .abhath-strip {
+    height: 28px;
+    border: 2.5px solid #2c3e50;
+    background: #ffffff;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  .actions-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .btn-check {
+    background: #2980b9;
+    color: white;
+    border: none;
+    padding: 10px 26px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #1f618d;
+    transition: all 0.15s;
+  }
+
+  .btn-check:hover:not(:disabled) {
+    background: #3498db;
+  }
+
+  .btn-check:active:not(:disabled) {
+    transform: translateY(3px);
+    box-shadow: 0 1px 0 #1f618d;
+  }
+
+  .btn-check:disabled {
+    background: #95a5a6;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  .counter-badge {
+    background: #f2f4f4;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border: 1px solid #d5dbdb;
+  }
+
+  .feedback-msg {
+    margin-top: 12px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    font-weight: 700;
+    display: none;
+  }
+
+  .feedback-msg.success {
+    display: block;
+    background: var(--success-bg);
+    color: var(--success);
+    border: 2px solid var(--success);
+  }
+
+  .feedback-msg.error {
+    display: block;
+    background: var(--danger-bg);
+    color: var(--danger);
+    border: 2px solid var(--danger);
+  }
+
+  .is-correct {
+    outline: 4px solid #27ae60 !important;
+    outline-offset: 2px;
+    background-color: #eafaf1 !important;
+  }
+
+  .is-wrong {
+    outline: 4px solid #e74c3c !important;
+    outline-offset: 2px;
+    background-color: #fdedec !important;
+  }
+
+  .svg-correct rect, .svg-correct polygon {
+    stroke: #27ae60 !important;
+    stroke-width: 3.5 !important;
+  }
+
+  .svg-wrong rect, .svg-wrong polygon {
+    stroke: #e74c3c !important;
+    stroke-width: 3.5 !important;
+  }
+
+  .evaluation-card {
+    background: linear-gradient(135deg, #ffffff, #f4ecf7);
+    border: 3px solid #8e44ad;
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(142, 68, 173, 0.15);
+    margin-top: 30px;
+  }
+
+  .evaluation-card h2 {
+    color: #6c3483;
+    margin-top: 0;
+    font-size: 1.6rem;
+    font-weight: 800;
+  }
+
+  .eval-grid {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+  }
+
+  .circle-progress {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: conic-gradient(#27ae60 0deg, #e0e0e0 0deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .circle-progress::before {
+    content: "";
+    width: 110px;
+    height: 110px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+  }
+
+  .circle-text {
+    position: relative;
+    z-index: 2;
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #2c3e50;
+  }
+
+  .stats-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 220px;
+  }
+
+  .stat-item {
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .stat-correct {
+    background: #eafaf1;
+    color: #1e8449;
+    border: 2px solid #27ae60;
+  }
+
+  .stat-wrong {
+    background: #fdedec;
+    color: #c0392b;
+    border: 2px solid #e74c3c;
+  }
+
+  .eval-remark {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #6c3483;
+    background: #fff;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 2px dashed #8e44ad;
+    margin: 15px auto;
+    max-width: 550px;
+  }
+
+  .btn-reset {
+    background: #8e44ad;
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #5b2c6f;
+    margin-top: 10px;
+  }
+
+  .btn-reset:hover {
+    background: #9b59b6;
+  }
+
+  @media (max-width: 600px) {
+    .color-box { width: 52px; height: 22px; }
+    .svg-stage { gap: 14px; }
+    .section-card.locked::after { font-size: 0.85rem; padding: 8px 14px; }
+  }
+
+  /* ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== */
+  #sub-lock-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .lock-box {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+    border: 2px solid #e1f5fe;
+    max-width: 380px;
+    width: 100%;
+  }
+  .lock-icon { font-size: 50px; margin-bottom: 12px; }
+  .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+  .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+  .btn-channel {
+    display: block;
+    width: 100%;
+    background: #0288d1;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    font-family: 'Cairo', sans-serif;
+  }
+  .btn-check-sub {
+    width: 100%;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 13px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+  }
+  .sub-status-msg {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-height: 24px;
+  }
+  .btn-back-home {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin: 20px auto 30px auto;
+    background: #0d47a1;
+    color: #ffffff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    font-family: 'Cairo', sans-serif;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<header>
+  <div class="meta">الرِّيَاضِيَّاتُ – السَّنَةُ الأُولَى ابْتِدَائِيٌّ – الدَّرْسُ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">17</span></div>
+  <h1>مُقَارَنَةُ أَطْوَالٍ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">(1)</span></h1>
+</header>
+
+<div class="container">
+
+  <!-- أَكْتَشِفُ -->
+  <div class="section-card" id="sec-1">
+    <div class="stage-badge">أَكْتَشِفُ</div>
+    <div class="instruction">
+      <span>▪ لَاحِظِ الْأَشْرِطَةَ ثُمَّ لَوِّنِ الْبِطَاقَاتِ حَسْبَ طُولِ كُلِّ شَرِيطٍ، مِنَ الْأَقْصَرِ إِلَى الْأَطْوَلِ.</span>
+    </div>
+
+    <div class="strips-display">
+      <div class="strip-bar" style="width: 92%; background-color: #5dade2;" title="شريط أزرق"></div>
+      <div class="strip-bar" style="width: 62%; background-color: #af7ac5;" title="شريط بنفسجي"></div>
+      <div class="strip-bar" style="width: 48%; background-color: #d4ac0d;" title="شريط أصفر"></div>
+      <div class="strip-bar" style="width: 30%; background-color: #dc7633;" title="شريط برتقالي"></div>
+      <div class="strip-bar" style="width: 78%; background-color: #82e0aa;" title="شريط أخضر"></div>
+    </div>
+
+    <div class="palette" id="palette-1">
+      <span class="palette-label">اخْتَرِ اللَّوْنَ ثُمَّ انْقُرْ عَلَى الْبِطَاقَةِ:</span>
+      <div class="color-swatch active" data-color="#af7ac5" data-name="purple" style="background-color: #af7ac5;" title="بنفسجي"></div>
+      <div class="color-swatch" data-color="#5dade2" data-name="blue" style="background-color: #5dade2;" title="أزرق"></div>
+      <div class="color-swatch" data-color="#dc7633" data-name="orange" style="background-color: #dc7633;" title="برتقالي"></div>
+      <div class="color-swatch" data-color="#82e0aa" data-name="green" style="background-color: #82e0aa;" title="أخضر"></div>
+      <div class="color-swatch" data-color="#d4ac0d" data-name="yellow" style="background-color: #d4ac0d;" title="أصفر"></div>
+    </div>
+
+    <div class="cards-row">
+      <div class="card-item">
+        <div class="color-box" id="c1-box-1" data-selected="" onclick="paintElement(this, 'palette-1')"></div>
+        <div class="circle-num"><span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1</span></div>
+      </div>
+      <div class="card-item">
+        <div class="color-box" id="c1-box-2" data-selected="" onclick="paintElement(this, 'palette-1')"></div>
+        <div class="circle-num"><span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">2</span></div>
+      </div>
+      <div class="card-item">
+        <div class="color-box" id="c1-box-3" data-selected="" onclick="paintElement(this, 'palette-1')"></div>
+        <div class="circle-num"><span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">3</span></div>
+      </div>
+      <div class="card-item">
+        <div class="color-box" id="c1-box-4" data-selected="" onclick="paintElement(this, 'palette-1')"></div>
+        <div class="circle-num"><span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">4</span></div>
+      </div>
+      <div class="card-item">
+        <div class="color-box" id="c1-box-5" data-selected="blue" style="background-color: #5dade2; cursor: default;" title="مُلَوَّنٌ مُسْبَقاً فِي الْكِتَابِ"></div>
+        <div class="circle-num"><span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">5</span></div>
+      </div>
+    </div>
+
+    <div class="actions-row">
+      <button class="btn-check" id="btn-check-1" onclick="checkSec1()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      <div class="counter-badge" id="counter-1">✓ الصَّوَابُ: <span dir="ltr">0</span> | ✗ الْخَطَأُ: <span dir="ltr">0</span></div>
+    </div>
+    <div class="feedback-msg" id="fb-1"></div>
+  </div>
+
+  <!-- أُنْجِزُ -->
+  <div class="section-card locked" id="sec-2">
+    <div class="stage-badge">أُنْجِزُ</div>
+    <div class="instruction">
+      <span>▪ لَوِّنِ الْأَشْرِطَةَ مِنَ الْأَقْصَرِ إِلَى الْأَطْوَلِ حَسْبَ التَّرْتِيبِ التَّالِي:</span>
+    </div>
+
+    <div class="palette" id="palette-2">
+      <span class="palette-label">اخْتَرِ اللَّوْنَ ثُمَّ انْقُرْ عَلَى الشَّرِيطِ:</span>
+      <div class="color-swatch active" data-color="#d4ac0d" data-name="yellow" style="background-color: #d4ac0d;" title="أصفر"></div>
+      <div class="color-swatch" data-color="#82e0aa" data-name="green" style="background-color: #82e0aa;" title="أخضر"></div>
+      <div class="color-swatch" data-color="#5dade2" data-name="blue" style="background-color: #5dade2;" title="أزرق"></div>
+      <div class="color-swatch" data-color="#ec7063" data-name="pink" style="background-color: #ec7063;" title="وردي"></div>
+      <div class="color-swatch" data-color="#e5b887" data-name="beige" style="background-color: #e5b887;" title="بني فاتح"></div>
+    </div>
+
+    <div class="anjiz-strips">
+      <div class="anjiz-row">
+        <div class="paintable-strip" id="s2-1" data-selected="" style="width: 65%;" onclick="paintElement(this, 'palette-2')"></div>
+      </div>
+      <div class="anjiz-row">
+        <div class="paintable-strip" id="s2-2" data-selected="" style="width: 80%;" onclick="paintElement(this, 'palette-2')"></div>
+      </div>
+      <div class="anjiz-row">
+        <div class="paintable-strip" id="s2-3" data-selected="" style="width: 52%;" onclick="paintElement(this, 'palette-2')"></div>
+        <div class="paintable-strip" id="s2-4" data-selected="" style="width: 38%;" onclick="paintElement(this, 'palette-2')"></div>
+      </div>
+      <div class="anjiz-row">
+        <div class="paintable-strip" id="s2-5" data-selected="" style="width: 96%;" onclick="paintElement(this, 'palette-2')"></div>
+      </div>
+    </div>
+
+    <div class="legend-row">
+      <div class="legend-item">
+        <span>الشَّرِيطُ الْأَقْصَرُ</span>
+        <div class="legend-box" style="background-color: #5dade2;" title="1 - أزرق"></div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-box" style="background-color: #e5b887;" title="2 - بني فاتح"></div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-box" style="background-color: #d4ac0d;" title="3 - أصفر"></div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-box" style="background-color: #82e0aa;" title="4 - أخضر"></div>
+      </div>
+      <div class="legend-item">
+        <div class="legend-box" style="background-color: #ec7063;" title="5 - وردي"></div>
+        <span>الشَّرِيطُ الْأَطْوَلُ</span>
+      </div>
+    </div>
+
+    <div class="actions-row">
+      <button class="btn-check" id="btn-check-2" onclick="checkSec2()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      <div class="counter-badge" id="counter-2">✓ الصَّوَابُ: <span dir="ltr">0</span> | ✗ الْخَطَأُ: <span dir="ltr">0</span></div>
+    </div>
+    <div class="feedback-msg" id="fb-2"></div>
+  </div>
+
+  <!-- تَعَلَّمْتُ -->
+  <div class="taalamtu-box">
+    <div class="taalamtu-title">تَعَلَّمْتُ</div>
+    <p class="taalamtu-text">لِمُقَارَنَةِ أَشْيَاءَ حَسَبَ الطُّولِ أَسْتَعْمِلُ التَّعْبِيرَ: « أَقْصَرُ » وَ « أَطْوَلُ » .</p>
+  </div>
+
+  <!-- أَتَمَرَّنُ - تمرين 1 -->
+  <div class="section-card locked" id="sec-3">
+    <div class="stage-badge activities">أَتَمَرَّنُ</div>
+    <div class="instruction">
+      <span class="ex-num"><span dir="ltr">1</span></span>
+      <span>لَوِّنِ الْقَلَمَ الْأَطْوَلَ بِالْأَخْضَرِ وَالْأَقْصَرَ بِالْأَزْرَقِ.</span>
+    </div>
+
+    <div class="palette" id="palette-3">
+      <span class="palette-label">اخْتَرِ اللَّوْنَ ثُمَّ انْقُرْ عَلَى الْقَلَمِ:</span>
+      <div class="color-swatch active" data-color="#2ecc71" data-name="green" style="background-color: #2ecc71;" title="أخضر (للأطول)"></div>
+      <div class="color-swatch" data-color="#3498db" data-name="blue" style="background-color: #3498db;" title="أزرق (للأقصر)"></div>
+      <div class="color-swatch" data-color="#ffffff" data-name="none" style="background-color: #ffffff; border: 2px solid #999;" title="ممحاة"></div>
+    </div>
+
+    <div class="svg-stage">
+      <svg class="pencil-svg" id="p1-1" data-selected="none" onclick="paintPencil(this, 'palette-3')" width="40" height="190" viewBox="0 0 40 190">
+        <polygon points="20,40 11,65 29,65" fill="#f5cba7" stroke="#2c3e50" stroke-width="2"/>
+        <polygon points="20,40 17,48 23,48" fill="#2c3e50"/>
+        <rect class="p-body" x="11" y="65" width="18" height="95" fill="#ffffff" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="160" width="18" height="8" fill="#bdc3c7" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="168" width="18" height="12" rx="2" fill="#e67e22" stroke="#2c3e50" stroke-width="2"/>
+      </svg>
+
+      <svg class="pencil-svg" id="p1-2" data-selected="none" onclick="paintPencil(this, 'palette-3')" width="40" height="190" viewBox="0 0 40 190">
+        <polygon points="20,55 11,80 29,80" fill="#f5cba7" stroke="#2c3e50" stroke-width="2"/>
+        <polygon points="20,55 17,63 23,63" fill="#2c3e50"/>
+        <rect class="p-body" x="11" y="80" width="18" height="80" fill="#ffffff" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="160" width="18" height="8" fill="#bdc3c7" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="168" width="18" height="12" rx="2" fill="#e67e22" stroke="#2c3e50" stroke-width="2"/>
+      </svg>
+
+      <svg class="pencil-svg" id="p1-3" data-selected="none" onclick="paintPencil(this, 'palette-3')" width="40" height="190" viewBox="0 0 40 190">
+        <polygon points="20,85 11,110 29,110" fill="#f5cba7" stroke="#2c3e50" stroke-width="2"/>
+        <polygon points="20,85 17,93 23,93" fill="#2c3e50"/>
+        <rect class="p-body" x="11" y="110" width="18" height="50" fill="#ffffff" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="160" width="18" height="8" fill="#bdc3c7" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="168" width="18" height="12" rx="2" fill="#e67e22" stroke="#2c3e50" stroke-width="2"/>
+      </svg>
+
+      <svg class="pencil-svg" id="p1-4" data-selected="none" onclick="paintPencil(this, 'palette-3')" width="44" height="190" viewBox="0 0 44 190">
+        <polygon points="22,8 11,38 33,38" fill="#f5cba7" stroke="#2c3e50" stroke-width="2"/>
+        <polygon points="22,8 18,19 26,19" fill="#2c3e50"/>
+        <rect class="p-body" x="11" y="38" width="22" height="122" fill="#ffffff" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="160" width="22" height="8" fill="#bdc3c7" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="168" width="22" height="12" rx="2" fill="#e67e22" stroke="#2c3e50" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <div class="actions-row">
+      <button class="btn-check" id="btn-check-3" onclick="checkSec3()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      <div class="counter-badge" id="counter-3">✓ الصَّوَابُ: <span dir="ltr">0</span> | ✗ الْخَطَأُ: <span dir="ltr">0</span></div>
+    </div>
+    <div class="feedback-msg" id="fb-3"></div>
+  </div>
+
+  <!-- أَتَمَرَّنُ - تمرين 2 -->
+  <div class="section-card locked" id="sec-4">
+    <div class="instruction">
+      <span class="ex-num"><span dir="ltr">2</span></span>
+      <span>رَتِّبِ الْأَشْرِطَةَ مِنَ الْأَقْصَرِ إِلَى الْأَطْوَلِ.</span>
+    </div>
+
+    <div class="strips-display">
+      <div class="labeled-strip-row">
+        <span class="strip-letter">ب</span>
+        <div class="strip-bar" style="width: 72%; background-color: #82e0aa;"></div>
+      </div>
+      <div class="labeled-strip-row">
+        <span class="strip-letter">ت</span>
+        <div class="strip-bar" style="width: 45%; background-color: #5dade2;"></div>
+      </div>
+      <div class="labeled-strip-row">
+        <span class="strip-letter">ج</span>
+        <div class="strip-bar" style="width: 58%; background-color: #f4d03f;"></div>
+      </div>
+      <div class="labeled-strip-row">
+        <span class="strip-letter">د</span>
+        <div class="strip-bar" style="width: 88%; background-color: #ec7063;"></div>
+      </div>
+    </div>
+
+    <div class="order-box">
+      <span>ت</span>
+      <span>،</span>
+      <select class="order-select" id="ord2-1">
+        <option value="">....</option>
+        <option value="ب">ب</option>
+        <option value="ج">ج</option>
+        <option value="د">د</option>
+      </select>
+      <span>،</span>
+      <select class="order-select" id="ord2-2">
+        <option value="">....</option>
+        <option value="ب">ب</option>
+        <option value="ج">ج</option>
+        <option value="د">د</option>
+      </select>
+      <span>،</span>
+      <select class="order-select" id="ord2-3">
+        <option value="">....</option>
+        <option value="ب">ب</option>
+        <option value="ج">ج</option>
+        <option value="د">د</option>
+      </select>
+    </div>
+
+    <div class="actions-row">
+      <button class="btn-check" id="btn-check-4" onclick="checkSec4()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      <div class="counter-badge" id="counter-4">✓ الصَّوَابُ: <span dir="ltr">0</span> | ✗ الْخَطَأُ: <span dir="ltr">0</span></div>
+    </div>
+    <div class="feedback-msg" id="fb-4"></div>
+  </div>
+
+  <!-- أَتَمَرَّنُ - تمرين 3 -->
+  <div class="section-card locked" id="sec-5">
+    <div class="instruction">
+      <span class="ex-num"><span dir="ltr">3</span></span>
+      <span>أَكْمِلْ تَرْتِيبَ الشَّمْعَاتِ.</span>
+    </div>
+
+    <div class="svg-stage">
+      <div class="candle-item">
+        <svg width="45" height="145" viewBox="0 0 45 145">
+          <path d="M22.5,38 C17,48 18,56 22.5,58 C27,56 28,48 22.5,38 Z" fill="#f39c12"/>
+          <line x1="22.5" y1="58" x2="22.5" y2="65" stroke="#2c3e50" stroke-width="2"/>
+          <rect x="16" y="65" width="13" height="75" fill="#d6eaf8" stroke="#2c3e50" stroke-width="2"/>
+          <line x1="16" y1="80" x2="29" y2="75" stroke="#5dade2" stroke-width="3"/>
+          <line x1="16" y1="100" x2="29" y2="95" stroke="#5dade2" stroke-width="3"/>
+          <line x1="16" y1="120" x2="29" y2="115" stroke="#5dade2" stroke-width="3"/>
+        </svg>
+        <select class="order-select" id="cnd-1">
+          <option value="">؟</option>
+          <option value="2"><span dir="ltr">2</span></option>
+          <option value="3"><span dir="ltr">3</span></option>
+          <option value="4"><span dir="ltr">4</span></option>
+        </select>
+      </div>
+
+      <div class="candle-item">
+        <svg width="45" height="145" viewBox="0 0 45 145">
+          <path d="M22.5,8 C17,18 18,26 22.5,28 C27,26 28,18 22.5,8 Z" fill="#e74c3c"/>
+          <line x1="22.5" y1="28" x2="22.5" y2="35" stroke="#2c3e50" stroke-width="2"/>
+          <rect x="16" y="35" width="13" height="105" fill="#d6eaf8" stroke="#2c3e50" stroke-width="2"/>
+          <line x1="16" y1="50" x2="29" y2="45" stroke="#5dade2" stroke-width="3"/>
+          <line x1="16" y1="70" x2="29" y2="65" stroke="#5dade2" stroke-width="3"/>
+          <line x1="16" y1="90" x2="29" y2="85" stroke="#5dade2" stroke-width="3"/>
+          <line x1="16" y1="110" x2="29" y2="105" stroke="#5dade2" stroke-width="3"/>
+        </svg>
+        <div class="candle-fixed"><span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1</span></div>
+      </div>
+
+      <div class="candle-item">
+        <svg width="45" height="145" viewBox="0 0 45 145">
+          <path d="M22.5,23 C17,33 18,41 22.5,43 C27,41 28,33 22.5,23 Z" fill="#f39c12"/>
+          <line x1="22.5" y1="43" x2="22.5" y2="50" stroke="#2c3e50" stroke-width="2"/>
+          <rect x="16" y="50" width="13" height="90" fill="#d6eaf8" stroke="#2c3e50" stroke-width="2"/>
+          <line x1="16" y1="65" x2="29" y2="60" stroke="#5dade2" stroke-width="3"/>
+          <line x1="16" y1="85" x2="29" y2="80" stroke="#5dade2" stroke-width="3"/>
+          <line x1="16" y1="105" x2="29" y2="100" stroke="#5dade2" stroke-width="3"/>
+        </svg>
+        <select class="order-select" id="cnd-3">
+          <option value="">؟</option>
+          <option value="2"><span dir="ltr">2</span></option>
+          <option value="3"><span dir="ltr">3</span></option>
+          <option value="4"><span dir="ltr">4</span></option>
+        </select>
+      </div>
+
+      <div class="candle-item">
+        <svg width="45" height="145" viewBox="0 0 45 145">
+          <path d="M22.5,60 C17,70 18,78 22.5,80 C27,78 28,70 22.5,60 Z" fill="#f39c12"/>
+          <line x1="22.5" y1="80" x2="22.5" y2="87" stroke="#2c3e50" stroke-width="2"/>
+          <rect x="16" y="87" width="13" height="53" fill="#d6eaf8" stroke="#2c3e50" stroke-width="2"/>
+          <line x1="16" y1="102" x2="29" y2="97" stroke="#5dade2" stroke-width="3"/>
+          <line x1="16" y1="122" x2="29" y2="117" stroke="#5dade2" stroke-width="3"/>
+        </svg>
+        <select class="order-select" id="cnd-4">
+          <option value="">؟</option>
+          <option value="2"><span dir="ltr">2</span></option>
+          <option value="3"><span dir="ltr">3</span></option>
+          <option value="4"><span dir="ltr">4</span></option>
+        </select>
+      </div>
+    </div>
+
+    <div class="actions-row">
+      <button class="btn-check" id="btn-check-5" onclick="checkSec5()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      <div class="counter-badge" id="counter-5">✓ الصَّوَابُ: <span dir="ltr">0</span> | ✗ الْخَطَأُ: <span dir="ltr">0</span></div>
+    </div>
+    <div class="feedback-msg" id="fb-5"></div>
+  </div>
+
+  <!-- أَتَمَرَّنُ - تمرين 4 -->
+  <div class="section-card locked" id="sec-6">
+    <div class="instruction">
+      <span class="ex-num"><span dir="ltr">4</span></span>
+      <span>لَوِّنِ الْأَقْلَامَ مِنَ الْأَقْصَرِ إِلَى الْأَطْوَلِ.</span>
+    </div>
+
+    <div class="palette" id="palette-6" style="justify-content: center;">
+      <span class="palette-label">اخْتَرِ اللَّوْنَ:</span>
+      <div class="ex4-chip color-swatch active" data-color="#f5b7b1" data-name="1" style="background-color: #f5b7b1; width: auto; height: auto; border-radius: 8px; padding: 4px 14px;">
+        <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1</span>
+      </div>
+      <div class="ex4-chip color-swatch" data-color="#82e0aa" data-name="2" style="background-color: #82e0aa; width: auto; height: auto; border-radius: 8px; padding: 4px 14px;">
+        <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">2</span>
+      </div>
+      <div class="ex4-chip color-swatch" data-color="#5dade2" data-name="3" style="background-color: #5dade2; width: auto; height: auto; border-radius: 8px; padding: 4px 14px;">
+        <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">3</span>
+      </div>
+      <div class="ex4-chip color-swatch" data-color="#d4ac0d" data-name="4" style="background-color: #d4ac0d; width: auto; height: auto; border-radius: 8px; padding: 4px 14px;">
+        <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">4</span>
+      </div>
+    </div>
+
+    <div class="svg-stage">
+      <svg class="pencil-svg" id="p4-1" data-selected="" onclick="paintPencil(this, 'palette-6')" width="40" height="190" viewBox="0 0 40 190">
+        <polygon points="20,40 11,65 29,65" fill="#f5cba7" stroke="#2c3e50" stroke-width="2"/>
+        <polygon points="20,40 17,48 23,48" fill="#2c3e50"/>
+        <rect class="p-body" x="11" y="65" width="18" height="95" fill="#ffffff" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="160" width="18" height="8" fill="#bdc3c7" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="168" width="18" height="12" rx="2" fill="#e67e22" stroke="#2c3e50" stroke-width="2"/>
+      </svg>
+
+      <svg class="pencil-svg" id="p4-2" data-selected="" onclick="paintPencil(this, 'palette-6')" width="40" height="190" viewBox="0 0 40 190">
+        <polygon points="20,55 11,80 29,80" fill="#f5cba7" stroke="#2c3e50" stroke-width="2"/>
+        <polygon points="20,55 17,63 23,63" fill="#2c3e50"/>
+        <rect class="p-body" x="11" y="80" width="18" height="80" fill="#ffffff" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="160" width="18" height="8" fill="#bdc3c7" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="168" width="18" height="12" rx="2" fill="#e67e22" stroke="#2c3e50" stroke-width="2"/>
+      </svg>
+
+      <svg class="pencil-svg" id="p4-3" data-selected="" onclick="paintPencil(this, 'palette-6')" width="40" height="190" viewBox="0 0 40 190">
+        <polygon points="20,85 11,110 29,110" fill="#f5cba7" stroke="#2c3e50" stroke-width="2"/>
+        <polygon points="20,85 17,93 23,93" fill="#2c3e50"/>
+        <rect class="p-body" x="11" y="110" width="18" height="50" fill="#ffffff" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="160" width="18" height="8" fill="#bdc3c7" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="168" width="18" height="12" rx="2" fill="#e67e22" stroke="#2c3e50" stroke-width="2"/>
+      </svg>
+
+      <svg class="pencil-svg" id="p4-4" data-selected="" onclick="paintPencil(this, 'palette-6')" width="44" height="190" viewBox="0 0 44 190">
+        <polygon points="22,8 11,38 33,38" fill="#f5cba7" stroke="#2c3e50" stroke-width="2"/>
+        <polygon points="22,8 18,19 26,19" fill="#2c3e50"/>
+        <rect class="p-body" x="11" y="38" width="22" height="122" fill="#ffffff" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="160" width="22" height="8" fill="#bdc3c7" stroke="#2c3e50" stroke-width="2"/>
+        <rect x="11" y="168" width="22" height="12" rx="2" fill="#e67e22" stroke="#2c3e50" stroke-width="2"/>
+      </svg>
+    </div>
+
+    <div class="actions-row">
+      <button class="btn-check" id="btn-check-6" onclick="checkSec6()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      <div class="counter-badge" id="counter-6">✓ الصَّوَابُ: <span dir="ltr">0</span> | ✗ الْخَطَأُ: <span dir="ltr">0</span></div>
+    </div>
+    <div class="feedback-msg" id="fb-6"></div>
+  </div>
+
+  <!-- أَبْحَثُ -->
+  <div class="section-card locked" id="sec-7">
+    <div class="stage-badge search">أَبْحَثُ</div>
+    <div class="instruction">
+      <span>لَوِّنِ الشَّرِيطَ الْأَقْصَرَ.</span>
+    </div>
+
+    <div class="palette" id="palette-7">
+      <span class="palette-label">اخْتَرْ لَوْنَ التَّلْوِينِ ثُمَّ انْقُرْ عَلَى الشَّرِيطِ الْأَقْصَرِ:</span>
+      <div class="color-swatch active" data-color="#f39c12" data-name="colored" style="background-color: #f39c12;" title="برتقالي"></div>
+      <div class="color-swatch" data-color="#2ecc71" data-name="colored" style="background-color: #2ecc71;" title="أخضر"></div>
+      <div class="color-swatch" data-color="#9b59b6" data-name="colored" style="background-color: #9b59b6;" title="بنفسجي"></div>
+      <div class="color-swatch" data-color="#ffffff" data-name="none" style="background-color: #ffffff; border: 2px solid #999;" title="ممحاة"></div>
+    </div>
+
+    <div class="abhath-stage">
+      <div class="abhath-strip" id="ab-top" data-selected="none" style="width: 340px;" onclick="paintElement(this, 'palette-7')"></div>
+      <div class="abhath-strip" id="ab-bottom" data-selected="none" style="width: 312px; transform: rotate(2.2deg);" onclick="paintElement(this, 'palette-7')"></div>
+    </div>
+
+    <div class="actions-row">
+      <button class="btn-check" id="btn-check-7" onclick="checkSec7()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      <div class="counter-badge" id="counter-7">✓ الصَّوَابُ: <span dir="ltr">0</span> | ✗ الْخَطَأُ: <span dir="ltr">0</span></div>
+    </div>
+    <div class="feedback-msg" id="fb-7"></div>
+  </div>
+
+  <!-- التقييم العام -->
+  <div class="evaluation-card" id="final-eval">
+    <h2>📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</h2>
+    <div class="eval-grid">
+      <div class="circle-progress" id="progress-circle">
+        <span class="circle-text" id="percent-text"><span dir="ltr">0%</span></span>
+      </div>
+      <div class="stats-boxes">
+        <div class="stat-item stat-correct">
+          <span>✓ الْإِجَابَاتُ الصَّحِيحَةُ:</span>
+          <span id="total-correct" dir="ltr">0</span>
+        </div>
+        <div class="stat-item stat-wrong">
+          <span>✗ الْإِجَابَاتُ الْخَاطِئَةُ:</span>
+          <span id="total-wrong" dir="ltr">0</span>
+        </div>
+      </div>
+    </div>
+    <div class="eval-remark" id="eval-remark">أَكْمِلْ جَمِيعَ التَّمَارِينِ أَعْلَاهُ لِمُشَاهَدَةِ نَتِيجَتِكَ النِّهَائِيَّةِ!</div>
+    <button class="btn-reset" onclick="resetLesson()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+  </div>
+
+  <!-- زر العودة إلى الفهرس -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</div>
+
+<!-- ========================================
+     سكريبت الحماية — قفل الاشتراك الإجباري
+     ======================================== -->
+<script>
+  const CHANNEL_ID = "-1004456852024";
+  const tg = window.Telegram?.WebApp;
+  if (tg) { tg.ready(); tg.expand(); }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي
+     ======================================== -->
+<script>
+  document.querySelectorAll('.palette').forEach(palette => {
+    palette.querySelectorAll('.color-swatch').forEach(swatch => {
+      swatch.addEventListener('click', () => {
+        palette.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('active'));
+        swatch.classList.add('active');
+      });
+    });
+  });
+
+  function getActiveColor(paletteId) {
+    const active = document.querySelector(`#${paletteId} .color-swatch.active`);
+    return {
+      color: active.getAttribute('data-color'),
+      name: active.getAttribute('data-name')
+    };
+  }
+
+  function paintElement(el, paletteId) {
+    if (el.dataset.locked === "true") return;
+    const { color, name } = getActiveColor(paletteId);
+    el.style.backgroundColor = color;
+    el.dataset.selected = name;
+  }
+
+  function paintPencil(svgEl, paletteId) {
+    if (svgEl.dataset.locked === "true") return;
+    const { color, name } = getActiveColor(paletteId);
+    const body = svgEl.querySelector('.p-body');
+    body.setAttribute('fill', color);
+    svgEl.dataset.selected = name;
+  }
+
+  let totalCorrect = 0;
+  let totalWrong = 0;
+  let completedSections = 0;
+
+  function updateGlobalStats() {
+    document.getElementById('total-correct').textContent = totalCorrect;
+    document.getElementById('total-wrong').textContent = totalWrong;
+    const totalAttempts = totalCorrect + totalWrong;
+    const percent = totalAttempts > 0 ? Math.round((totalCorrect / totalAttempts) * 100) : 0;
+
+    document.getElementById('percent-text').innerHTML = `<span dir="ltr">${percent}%</span>`;
+    const deg = (percent / 100) * 360;
+    const circleColor = percent >= 80 ? '#27ae60' : (percent >= 50 ? '#f39c12' : '#e74c3c');
+    document.getElementById('progress-circle').style.background = `conic-gradient(${circleColor} ${deg}deg, #e0e0e0 ${deg}deg)`;
+
+    const remarkEl = document.getElementById('eval-remark');
+    if (completedSections < 7) {
+      remarkEl.textContent = `أَنْجَزْتَ ${completedSections} مِنْ 7 تَمَارِينَ. وَاصِلِ الْحَلَّ!`;
+    } else {
+      if (percent === 100) {
+        remarkEl.textContent = "مُمْتَازٌ جِدّاً! أَنْتَ بَطَلُ الرِّيَاضِيَّاتِ، جَمِيعُ إِجَابَاتِكَ صَحِيحَةٌ 🌟";
+      } else if (percent >= 80) {
+        remarkEl.textContent = "أَحْسَنْتَ! نَتِيجَةٌ رَائِعَةٌ جِدّاً، واصِلْ تَأَلُّقَكَ 👏";
+      } else if (percent >= 50) {
+        remarkEl.textContent = "جَيِّدٌ! يُمْكِنُكَ مُرَاجَعَةُ الْأَخْطَاءِ بِاللَّوْنِ الْأَحْمَرِ لِتَتَعَلَّمَ أَكْثَرَ 👍";
+      } else {
+        remarkEl.textContent = "لَا بَأْسَ! رَاجِعِ الْإِجَابَاتِ الصَّحِيحَةَ وَحَاوِلْ مَرَّةً أُخْرَى 💪";
+      }
+    }
+  }
+
+  function unlockNext(nextSecId) {
+    const nextSec = document.getElementById(nextSecId);
+    if (nextSec) {
+      nextSec.classList.remove('locked');
+    }
+  }
+
+  function showFeedback(id, okCount, errCount, text) {
+    const fb = document.getElementById(`fb-${id}`);
+    fb.textContent = text;
+    fb.className = 'feedback-msg ' + (errCount === 0 ? 'success' : 'error');
+    document.getElementById(`counter-${id}`).innerHTML = `✓ الصَّوَابُ: <span dir="ltr">${okCount}</span> | ✗ الْخَطَأُ: <span dir="ltr">${errCount}</span>`;
+    document.getElementById(`btn-check-${id}`).disabled = true;
+    totalCorrect += okCount;
+    totalWrong += errCount;
+    completedSections++;
+    updateGlobalStats();
+  }
+
+  function checkSec1() {
+    const expected = {
+      'c1-box-1': 'orange',
+      'c1-box-2': 'yellow',
+      'c1-box-3': 'purple',
+      'c1-box-4': 'green'
+    };
+    for (let id in expected) {
+      if (!document.getElementById(id).dataset.selected) {
+        alert("لَوِّنْ جَمِيعَ الْبِطَاقَاتِ الْأَرْبَعِ أَوَّلًا!");
+        return;
+      }
+    }
+
+    let ok = 0, err = 0;
+    for (let id in expected) {
+      const el = document.getElementById(id);
+      el.dataset.locked = "true";
+      if (el.dataset.selected === expected[id]) {
+        el.classList.add('is-correct');
+        ok++;
+      } else {
+        el.classList.add('is-wrong');
+        err++;
+      }
+    }
+
+    const msg = err === 0
+      ? "أَحْسَنْتَ! التَّرْتِيبُ الصَّحِيحُ مِنَ الْأَقْصَرِ إِلَى الْأَطْوَلِ: بُرْتُقَالِيٌّ، أَصْفَرُ، بَنَفْسَجِيٌّ، أَخْضَرُ، أَزْرَقُ."
+      : "تَحَقَّقْ مِنَ الْأَلْوَانِ: 1 بُرْتُقَالِيٌّ، 2 أَصْفَرُ، 3 بَنَفْسَجِيٌّ، 4 أَخْضَرُ.";
+    showFeedback(1, ok, err, msg);
+    unlockNext('sec-2');
+  }
+
+  function checkSec2() {
+    const expected = {
+      's2-4': 'blue',
+      's2-3': 'beige',
+      's2-1': 'yellow',
+      's2-2': 'green',
+      's2-5': 'pink'
+    };
+
+    for (let id in expected) {
+      if (!document.getElementById(id).dataset.selected) {
+        alert("لَوِّنْ جَمِيعَ الْأَشْرِطَةِ الْخَمْسَةِ أَوَّلًا!");
+        return;
+      }
+    }
+
+    let ok = 0, err = 0;
+    for (let id in expected) {
+      const el = document.getElementById(id);
+      el.dataset.locked = "true";
+      if (el.dataset.selected === expected[id]) {
+        el.classList.add('is-correct');
+        ok++;
+      } else {
+        el.classList.add('is-wrong');
+        err++;
+      }
+    }
+
+    const msg = err === 0
+      ? "رَائِعٌ! لَوَّنْتَ الْأَشْرِطَةَ الْخَمْسَةَ مِنَ الْأَقْصَرِ إِلَى الْأَطْوَلِ بِدِقَّةٍ."
+      : "انْتَبِهْ لِطُولِ كُلِّ شَرِيطٍ: الْأَقْصَرُ أَزْرَقُ، ثُمَّ بُنِّيٌّ فَاتِحٌ، ثُمَّ أَصْفَرُ، ثُمَّ أَخْضَرُ، وَالْأَطْوَلُ وَرْدِيٌّ.";
+    showFeedback(2, ok, err, msg);
+    unlockNext('sec-3');
+  }
+
+  function checkSec3() {
+    const p1 = document.getElementById('p1-1');
+    const p2 = document.getElementById('p1-2');
+    const p3 = document.getElementById('p1-3');
+    const p4 = document.getElementById('p1-4');
+
+    if (p3.dataset.selected === 'none' && p4.dataset.selected === 'none' && p1.dataset.selected === 'none' && p2.dataset.selected === 'none') {
+      alert("لَوِّنِ الْقَلَمَ الْأَطْوَلَ وَالْقَلَمَ الْأَقْصَرَ أَوَّلًا!");
+      return;
+    }
+
+    const pencils = [
+      { el: p1, expected: 'none' },
+      { el: p2, expected: 'none' },
+      { el: p3, expected: 'blue' },
+      { el: p4, expected: 'green' }
+    ];
+
+    let ok = 0, err = 0;
+    pencils.forEach(item => {
+      item.el.dataset.locked = "true";
+      if (item.el.dataset.selected === item.expected) {
+        if (item.expected !== 'none') item.el.classList.add('svg-correct');
+        ok++;
+      } else {
+        item.el.classList.add('svg-wrong');
+        err++;
+      }
+    });
+
+    const msg = err === 0
+      ? "مُمْتَازٌ! الْقَلَمُ الْأَطْوَلُ عَلَى الْيَسَارِ بِالْأَخْضَرِ وَالْأَقْصَرُ بِالْأَزْرَقِ."
+      : "تَذَكَّرْ: نُلَوِّنُ الْقَلَمَ الْأَطْوَلَ فَقَطْ بِالْأَخْضَرِ وَالْقَلَمَ الْأَقْصَرَ فَقَطْ بِالْأَزْرَقِ.";
+    showFeedback(3, ok, err, msg);
+    unlockNext('sec-4');
+  }
+
+  function checkSec4() {
+    const s1 = document.getElementById('ord2-1');
+    const s2 = document.getElementById('ord2-2');
+    const s3 = document.getElementById('ord2-3');
+
+    if (!s1.value || !s2.value || !s3.value) {
+      alert("أَكْمِلِ اخْتِيَارَ جَمِيعِ الْحُرُوفِ لِتَرْتِيبِ الْأَشْرِطَةِ!");
+      return;
+    }
+
+    const items = [
+      { el: s1, expected: 'ج' },
+      { el: s2, expected: 'ب' },
+      { el: s3, expected: 'د' }
+    ];
+
+    let ok = 0, err = 0;
+    items.forEach(item => {
+      item.el.disabled = true;
+      if (item.el.value === item.expected) {
+        item.el.classList.add('is-correct');
+        ok++;
+      } else {
+        item.el.classList.add('is-wrong');
+        err++;
+      }
+    });
+
+    const msg = err === 0
+      ? "أَحْسَنْتَ! التَّرْتِيبُ الصَّحِيحُ مِنَ الْأَقْصَرِ إِلَى الْأَطْوَلِ هُوَ: ت ، ج ، ب ، د."
+      : "التَّرْتِيبُ الصَّحِيحُ مِنَ الْأَقْصَرِ إِلَى الْأَطْوَلِ هُوَ: ت ، ج ، ب ، د.";
+    showFeedback(4, ok, err, msg);
+    unlockNext('sec-5');
+  }
+
+  function checkSec5() {
+    const c1 = document.getElementById('cnd-1');
+    const c3 = document.getElementById('cnd-3');
+    const c4 = document.getElementById('cnd-4');
+
+    if (!c1.value || !c3.value || !c4.value) {
+      alert("أَكْمِلْ تَرْقِيمَ الشَّمْعَاتِ الثَّلَاثِ أَوَّلًا!");
+      return;
+    }
+
+    const items = [
+      { el: c1, expected: '3' },
+      { el: c3, expected: '2' },
+      { el: c4, expected: '4' }
+    ];
+
+    let ok = 0, err = 0;
+    items.forEach(item => {
+      item.el.disabled = true;
+      if (item.el.value === item.expected) {
+        item.el.classList.add('is-correct');
+        ok++;
+      } else {
+        item.el.classList.add('is-wrong');
+        err++;
+      }
+    });
+
+    const msg = err === 0
+      ? "بَارَكَ اللَّهُ فِيكَ! رَتَّبْتَ الشَّمْعَاتِ مِنَ الْأَطْوَلِ (1) إِلَى الْأَقْصَرِ (4) بِصُورَةٍ صَحِيحَةٍ."
+      : "لَاحِظْ أَنَّ الشَّمْعَةَ الْأَطْوَلَ رَقْمُهَا 1، تَلِيهَا 2، ثُمَّ 3، وَالْأَقْصَرُ رَقْمُهَا 4.";
+    showFeedback(5, ok, err, msg);
+    unlockNext('sec-6');
+  }
+
+  function checkSec6() {
+    const items = [
+      { el: document.getElementById('p4-1'), expected: '3' },
+      { el: document.getElementById('p4-2'), expected: '2' },
+      { el: document.getElementById('p4-3'), expected: '1' },
+      { el: document.getElementById('p4-4'), expected: '4' }
+    ];
+
+    for (let item of items) {
+      if (!item.el.dataset.selected) {
+        alert("لَوِّنْ جَمِيعَ الْأَقْلَامِ الْأَرْبَعَةِ حَسْبَ طُولِهَا أَوَّلًا!");
+        return;
+      }
+    }
+
+    let ok = 0, err = 0;
+    items.forEach(item => {
+      item.el.dataset.locked = "true";
+      if (item.el.dataset.selected === item.expected) {
+        item.el.classList.add('svg-correct');
+        ok++;
+      } else {
+        item.el.classList.add('svg-wrong');
+        err++;
+      }
+    });
+
+    const msg = err === 0
+      ? "مُذْهِلٌ! لَوَّنْتَ الْأَقْلَامَ مِنَ الْأَقْصَرِ (1) إِلَى الْأَطْوَلِ (4) بِإِتْقَانٍ."
+      : "تَأَكَّدْ مِنَ الْأَطْوَالِ: الْقَلَمُ الْأَقْصَرُ بِاللَّوْنِ 1، يَلِيهِ 2، ثُمَّ 3، وَالْأَطْوَلُ بِاللَّوْنِ 4.";
+    showFeedback(6, ok, err, msg);
+    unlockNext('sec-7');
+  }
+
+  function checkSec7() {
+    const top = document.getElementById('ab-top');
+    const bottom = document.getElementById('ab-bottom');
+
+    if (top.dataset.selected === 'none' && bottom.dataset.selected === 'none') {
+      alert("لَوِّنِ الشَّرِيطَ الْأَقْصَرَ أَوَّلًا!");
+      return;
+    }
+
+    top.dataset.locked = "true";
+    bottom.dataset.locked = "true";
+
+    let ok = 0, err = 0;
+    if (bottom.dataset.selected === 'colored' && top.dataset.selected === 'none') {
+      bottom.classList.add('is-correct');
+      ok = 1;
+    } else {
+      if (top.dataset.selected === 'colored') top.classList.add('is-wrong');
+      if (bottom.dataset.selected === 'none') bottom.classList.add('is-wrong');
+      else bottom.classList.add('is-correct');
+      err = 1;
+    }
+
+    const msg = err === 0
+      ? "عَبْقَرِيٌّ! رَغْمَ مَيَلَانِ الشَّرِيطِ السُّفْلِيِّ إِلَّا أَنَّهُ هُوَ الشَّرِيطُ الْأَقْصَرُ."
+      : "انْتَبِهْ! الشَّرِيطُ السُّفْلِيُّ هُوَ الْأَقْصَرُ رَغْمَ أَنَّهُ مَائِلٌ.";
+    showFeedback(7, ok, err, msg);
+  }
+
+  function resetLesson() {
+    location.reload();
+  }
+</script>
+
+</body>
+</html>
