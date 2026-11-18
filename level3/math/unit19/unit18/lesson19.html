@@ -1,0 +1,1999 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>الدرس 19: الطَّرْحُ دُونَ احْتِفَاظٍ - السنة الثالثة ابتدائي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root {
+    --primary: #0284c7;
+    --primary-dark: #0369a1;
+    --primary-light: #e0f2fe;
+    --discover-color: #15803d;
+    --discover-bg: #f0fdf4;
+    --achieve-color: #b45309;
+    --achieve-bg: #fffbeb;
+    --learn-color: #7e22ce;
+    --learn-bg: #faf5ff;
+    --train-color: #be185d;
+    --train-bg: #fdf2f8;
+    --search-color: #c2410c;
+    --search-bg: #fff7ed;
+    --correct: #16a34a;
+    --correct-bg: #dcfce7;
+    --wrong: #dc2626;
+    --wrong-bg: #fee2e2;
+    --locked: #94a3b8;
+    --bg: #f1f5f9;
+    --card: #ffffff;
+    --text: #1e293b;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Cairo', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  .ltr {
+    dir: ltr;
+    direction: ltr;
+    display: inline-block;
+    unicode-bidi: isolate;
+    font-family: 'Cairo', sans-serif;
+    font-weight: 700;
+  }
+
+  /* Header */
+  header {
+    background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+    color: white;
+    padding: 20px 15px;
+    text-align: center;
+    border-bottom: 5px solid #38bdf8;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    position: relative;
+  }
+
+  .lesson-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    color: #0284c7;
+    font-size: 1.8rem;
+    font-weight: 900;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 4px solid #7dd3fc;
+    margin-bottom: 8px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  }
+
+  header h1 {
+    margin: 5px 0;
+    font-size: 1.8rem;
+    font-weight: 900;
+    text-shadow: 1px 2px 4px rgba(0,0,0,0.2);
+  }
+
+  header p {
+    margin: 0;
+    font-size: 1rem;
+    color: #e0f2fe;
+    font-weight: 600;
+  }
+
+  .container {
+    max-width: 920px;
+    margin: 20px auto;
+    padding: 0 15px 40px;
+  }
+
+  /* Section Cards */
+  .section-card {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 26px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .section-card.locked {
+    opacity: 0.65;
+    pointer-events: none;
+    filter: grayscale(35%);
+  }
+
+  .section-card.locked::after {
+    content: "🔒 أَتْمِمِ الْمَرْحَلَةَ السَّابِقَةَ لِفَتْحِ هَذَا الْجُزْءِ";
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #475569;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 2px dashed #cbd5e1;
+  }
+
+  .section-badge {
+    padding: 6px 18px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 800;
+    font-size: 1.25rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  }
+
+  .sec-discover { border-top: 6px solid var(--discover-color); }
+  .sec-discover .section-badge { background: var(--discover-color); }
+
+  .sec-achieve { border-top: 6px solid var(--achieve-color); }
+  .sec-achieve .section-badge { background: var(--achieve-color); }
+
+  .sec-learn { border-top: 6px solid var(--learn-color); background: var(--learn-bg); }
+  .sec-learn .section-badge { background: var(--learn-color); }
+
+  .sec-train { border-top: 6px solid var(--train-color); }
+  .sec-train .section-badge { background: var(--train-color); }
+
+  .sec-search { border-top: 6px solid var(--search-color); }
+  .sec-search .section-badge { background: var(--search-color); }
+
+  /* Exercise Box */
+  .exercise-box {
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 20px;
+    transition: opacity 0.3s ease;
+  }
+
+  .exercise-box.ex-locked {
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .ex-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ex-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background: var(--primary);
+    color: white;
+    border-radius: 8px;
+    font-weight: 900;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .story-box {
+    background: #ffffff;
+    border-right: 4px solid #16a34a;
+    padding: 14px 16px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  }
+
+  .two-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  @media (max-width: 720px) {
+    .two-cols {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .character-card {
+    background: white;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .char-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .char-avatar {
+    font-size: 2rem;
+    background: #f1f5f9;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .speech-bubble {
+    background: #f0fdf4;
+    border: 1.5px solid #86efac;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: #166534;
+    margin-bottom: 14px;
+  }
+
+  .speech-bubble.aymen {
+    background: #eff6ff;
+    border-color: #93c5fd;
+    color: #1e40af;
+  }
+
+  /* Vertical Math Table */
+  .v-math-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0;
+  }
+
+  .v-table {
+    border-collapse: collapse;
+    direction: ltr;
+    background: #ffffff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+
+  .v-table th, .v-table td {
+    width: 46px;
+    height: 46px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 1.35rem;
+    font-weight: 800;
+    border: 1px solid #cbd5e1;
+    padding: 2px;
+  }
+
+  .v-table th {
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 1rem;
+    height: 34px;
+  }
+
+  .v-table tr.op-row td {
+    border-bottom: 3px solid #0f172a;
+  }
+
+  .v-table td.op-sign {
+    border-left: none;
+    background: #f8fafc;
+    color: #0284c7;
+    font-size: 1.5rem;
+    width: 36px;
+  }
+
+  .v-table tr.res-row td {
+    background: #fefce8;
+  }
+
+  /* Inputs */
+  input.digit-input {
+    width: 38px;
+    height: 38px;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 800;
+    border: 2px solid #94a3b8;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #0f172a;
+    outline: none;
+    transition: all 0.2s;
+    direction: ltr;
+  }
+
+  input.digit-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+  }
+
+  input.num-input {
+    width: 90px;
+    height: 40px;
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 800;
+    border: 2px solid #94a3b8;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #0f172a;
+    outline: none;
+    direction: ltr;
+  }
+
+  input.num-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+  }
+
+  /* Validation States */
+  input.is-correct {
+    background-color: var(--correct-bg) !important;
+    border-color: var(--correct) !important;
+    color: #14532d !important;
+  }
+
+  input.is-wrong {
+    background-color: var(--wrong-bg) !important;
+    border-color: var(--wrong) !important;
+    color: #7f1d1d !important;
+  }
+
+  .correction-hint {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--correct);
+    margin-top: 3px;
+    direction: ltr;
+  }
+
+  /* Grid for Operations */
+  .ops-grid-5 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+    gap: 14px;
+    margin-top: 12px;
+  }
+
+  .ops-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+    gap: 14px;
+    margin-top: 12px;
+  }
+
+  .ops-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .op-card {
+    background: white;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .op-prompt-badge {
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 4px 14px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    border: 1px solid #bae6fd;
+  }
+
+  /* Buttons */
+  .btn-check {
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 3px 8px rgba(2, 132, 199, 0.25);
+    transition: transform 0.15s, background 0.2s;
+  }
+
+  .btn-check:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #0369a1, #075985);
+  }
+
+  .btn-check:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  /* Stage Counter */
+  .stage-counter {
+    margin-top: 16px;
+    padding: 10px 16px;
+    background: #f1f5f9;
+    border-radius: 10px;
+    border: 1.5px solid #cbd5e1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 1.05rem;
+  }
+
+  .count-ok { color: var(--correct); }
+  .count-err { color: var(--wrong); }
+
+  /* Learn Box */
+  .learn-content {
+    background: white;
+    border: 2px solid #d8b4fe;
+    border-radius: 14px;
+    padding: 18px;
+    font-size: 1.1rem;
+  }
+
+  .learn-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: center;
+    margin-top: 12px;
+  }
+
+  @media (max-width: 650px) {
+    .learn-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Part-Whole Bar Model for Abhath */
+  .bar-model {
+    width: 240px;
+    margin: 14px auto;
+    border: 2px solid #1e293b;
+    border-radius: 8px;
+    overflow: hidden;
+    direction: ltr;
+    background: white;
+  }
+
+  .bar-top {
+    background: #fef3c7;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 900;
+    padding: 8px;
+    border-bottom: 2px solid #1e293b;
+  }
+
+  .bar-bottom {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.2fr;
+  }
+
+  .bar-cell {
+    padding: 8px 4px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 800;
+    border-right: 2px solid #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bar-cell:last-child {
+    border-right: none;
+    background: #fff7ed;
+  }
+
+  /* Road Sign */
+  .road-sign {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #0284c7;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 12px 30px 30px 12px;
+    border: 3px solid white;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    font-weight: 800;
+    margin: 8px 0;
+  }
+
+  /* Final Evaluation Card */
+  .final-report {
+    background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
+    border: 3px solid #0284c7;
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(2, 132, 199, 0.15);
+    margin-top: 30px;
+  }
+
+  .final-report h2 {
+    color: #0369a1;
+    font-size: 1.6rem;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+
+  .report-grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 35px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  /* Circular Pie / Donut Chart */
+  .circle-chart-container {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+    background: conic-gradient(#cbd5e1 0% 100%);
+    transition: background 0.6s ease;
+  }
+
+  .circle-chart-inner {
+    width: 122px;
+    height: 122px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.08);
+  }
+
+  .circle-percent {
+    font-size: 1.85rem;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1.1;
+  }
+
+  .circle-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #64748b;
+  }
+
+  .stats-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 230px;
+  }
+
+  .stat-pill {
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .stat-pill.ok {
+    background: var(--correct-bg);
+    color: #14532d;
+    border: 1.5px solid #86efac;
+  }
+
+  .stat-pill.err {
+    background: var(--wrong-bg);
+    color: #7f1d1d;
+    border: 1.5px solid #fca5a5;
+  }
+
+  .stat-pill.total {
+    background: #e0f2fe;
+    color: #0c4a6e;
+    border: 1.5px solid #7dd3fc;
+  }
+
+  .progress-bar-wrap {
+    width: 100%;
+    max-width: 550px;
+    height: 18px;
+    background: #e2e8f0;
+    border-radius: 20px;
+    margin: 15px auto;
+    overflow: hidden;
+    border: 1px solid #cbd5e1;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #16a34a, #22c55e);
+    transition: width 0.5s ease;
+  }
+
+  .btn-reset {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+    border: none;
+    padding: 12px 28px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    border-radius: 12px;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3);
+    transition: transform 0.2s;
+  }
+
+  .btn-reset:hover {
+    transform: scale(1.03);
+  }
+
+  .feedback-msg {
+    margin-top: 10px;
+    font-weight: 800;
+    font-size: 1rem;
+  }
+
+  /* ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== */
+  #sub-lock-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .lock-box {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+    border: 2px solid #e1f5fe;
+    max-width: 380px;
+    width: 100%;
+  }
+  .lock-icon { font-size: 50px; margin-bottom: 12px; }
+  .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+  .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+  .btn-channel {
+    display: block;
+    width: 100%;
+    background: #0288d1;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+  }
+  .btn-check-sub {
+    width: 100%;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 13px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .sub-status-msg {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-height: 24px;
+  }
+
+  /* زر العودة إلى الفهرس (أُضيف) */
+  .btn-back-home {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin: 20px auto 10px auto;
+    background: #0d47a1;
+    color: #ffffff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<header>
+  <div class="lesson-badge">19</div>
+  <h1>الطَّرْحُ دُونَ احْتِفَاظٍ</h1>
+  <p>الرِّيَاضِيَّاتُ — السَّنَةُ الثَّالِثَةُ ابْتِدَائِي (كِتَابُ التِّلْمِيذِ ص 32 وَكَرَّاسُ الْأَنْشِطَةِ ص 23)</p>
+</header>
+
+<div class="container">
+
+  <!-- ==================== 1. أَكْتَشِفُ ==================== -->
+  <section class="section-card sec-discover" id="sec-discover">
+    <div class="section-header">
+      <span class="section-badge">أَكْتَشِفُ</span>
+      <span style="font-weight:700; color:#166534;">كِتَابُ التِّلْمِيذِ — ص 32</span>
+    </div>
+
+    <div class="story-box">
+      يُرِيدُ أَمِينٌ شِرَاءَ كِتَابٍ ثَمَنُهُ <span class="ltr">950 DA</span>. عَدَّ مَا فِي حَافِظَتِهِ، فَوَجَدَ <span class="ltr">510 DA</span>.
+      <br>كَمْ يَنْقُصُهُ لِاقْتِنَاءِ الْكِتَابِ؟
+    </div>
+
+    <div class="two-cols">
+      <!-- طَرِيقَةُ مَرْيَمَ -->
+      <div class="exercise-box" id="ex-disc-1" style="margin-bottom:0;">
+        <div class="char-header">
+          <div class="char-avatar">👧</div>
+          <strong style="font-size:1.2rem; color:#15803d;">طَرِيقَةُ مَرْيَمَ</strong>
+        </div>
+        <div class="speech-bubble">
+          «أَسْتَعْمِلُ الطَّرْحَ لِحِسَابِ الْمَبْلَغِ الَّذِي يَنْقُصُ. أَضَعُ الْعَمَلِيَّةَ عَمُودِيًّا.»
+        </div>
+
+        <div class="v-math-wrapper">
+          <table class="v-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>م</th>
+                <th>ع</th>
+                <th>و</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="op-sign"></td>
+                <td>9</td>
+                <td>5</td>
+                <td>0</td>
+              </tr>
+              <tr class="op-row">
+                <td class="op-sign">-</td>
+                <td>5</td>
+                <td>1</td>
+                <td>0</td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="4" id="d1_m"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="4" id="d1_c"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0" id="d1_u"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="margin-top:14px; font-weight:800; font-size:1.1rem; text-align:center;">
+          ▪ أَكْمِلْ إِجْرَاءَ الْعَمَلِيَّةِ:
+          <div style="margin-top:8px;">
+            <span class="ltr" style="font-size:1.25rem;">
+              950 - 510 = <input type="text" inputmode="numeric" maxlength="3" class="num-input" data-ans="440" id="d1_h">
+            </span>
+          </div>
+        </div>
+
+        <div style="text-align:center;">
+          <button class="btn-check" id="btn-disc-1" onclick="checkDisc1()">تَحَقَّقْ مِنْ حَلِّ مَرْيَمَ ✓</button>
+          <div class="feedback-msg" id="fb-disc-1"></div>
+        </div>
+      </div>
+
+      <!-- طَرِيقَةُ أَيْمَنَ -->
+      <div class="exercise-box ex-locked" id="ex-disc-2" style="margin-bottom:0;">
+        <div class="char-header">
+          <div class="char-avatar">👦</div>
+          <strong style="font-size:1.2rem; color:#1d4ed8;">طَرِيقَةُ أَيْمَنَ</strong>
+        </div>
+        <div class="speech-bubble aymen">
+          «أَسْتَعْمِلُ الْجَمْعَ لِحِسَابِ الْمَبْلَغِ الَّذِي يَنْقُصُ.»
+        </div>
+
+        <div style="margin:auto 0; padding:20px 10px; background:#f8fafc; border-radius:12px; border:1.5px dashed #93c5fd; text-align:center;">
+          <div style="font-weight:800; font-size:1.15rem; margin-bottom:12px;">
+            ▪ أَكْمِلِ الْحِسَابَ:
+          </div>
+          <span class="ltr" style="font-size:1.3rem;">
+            510 + <input type="text" inputmode="numeric" maxlength="3" class="num-input" data-ans="440" id="d2_h"> = 950
+          </span>
+        </div>
+
+        <div style="text-align:center;">
+          <button class="btn-check" id="btn-disc-2" onclick="checkDisc2()">تَحَقَّقْ مِنْ حَلِّ أَيْمَنَ ✓</button>
+          <div class="feedback-msg" id="fb-disc-2"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stage-counter" id="counter-discover">
+      <span>مَرْحَلَةُ أَكْتَشِفُ:</span>
+      <span><span class="count-ok">✓ الصَّوَابُ: <b id="ok-discover">0</b></span> | <span class="count-err">✗ الْخَطَأُ: <b id="err-discover">0</b></span></span>
+    </div>
+  </section>
+
+  <!-- ==================== 2. أُنْجِزُ ==================== -->
+  <section class="section-card sec-achieve locked" id="sec-achieve">
+    <div class="section-header">
+      <span class="section-badge">أُنْجِزُ</span>
+      <span style="font-weight:700; color:#b45309;">كِتَابُ التِّلْمِيذِ — ص 32</span>
+    </div>
+
+    <!-- التمرين 1 في أنجز -->
+    <div class="exercise-box" id="ex-ach-1">
+      <div class="ex-title">
+        <span class="ex-num">1</span>
+        <span>ضَعْ عَمَلِيَّاتِ الطَّرْحِ عَمُودِيًّا ثُمَّ أَنْجِزْهَا:</span>
+      </div>
+
+      <div class="ops-grid-3">
+        <!-- 804 - 201 -->
+        <div class="op-card">
+          <div class="op-prompt-badge"><span class="ltr">804 - 201</span></div>
+          <table class="v-table">
+            <thead>
+              <tr><th></th><th>م</th><th>ع</th><th>و</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="op-sign"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="8"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="4"></td>
+              </tr>
+              <tr class="op-row">
+                <td class="op-sign">-</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="6"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="3"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 895 - 83 -->
+        <div class="op-card">
+          <div class="op-prompt-badge"><span class="ltr">895 - 83</span></div>
+          <table class="v-table">
+            <thead>
+              <tr><th></th><th>م</th><th>ع</th><th>و</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="op-sign"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="8"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="9"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="5"></td>
+              </tr>
+              <tr class="op-row">
+                <td class="op-sign">-</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="" placeholder="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="8"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="3"></td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="8"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+              </tr>
+            </tbody>
+          </table>
+          <small style="color:#64748b; margin-top:4px;">(اتْرُكْ خَانَةَ الْمِئَاتِ فَارِغَةً أَوْ ضَعْ 0)</small>
+        </div>
+
+        <!-- 685 - 502 -->
+        <div class="op-card">
+          <div class="op-prompt-badge"><span class="ltr">685 - 502</span></div>
+          <table class="v-table">
+            <thead>
+              <tr><th></th><th>م</th><th>ع</th><th>و</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="op-sign"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="6"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="8"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="5"></td>
+              </tr>
+              <tr class="op-row">
+                <td class="op-sign">-</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="5"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="8"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="3"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="btn-check" id="btn-ach-1" onclick="checkAch1()">تَحَقَّقْ مِنَ التَّمْرِينِ 1 ✓</button>
+        <div class="feedback-msg" id="fb-ach-1"></div>
+      </div>
+    </div>
+
+    <!-- التمرين 2 في أنجز -->
+    <div class="exercise-box ex-locked" id="ex-ach-2">
+      <div class="ex-title">
+        <span class="ex-num">2</span>
+        <span>الْمَسَافَةُ مِنْ عَنَّابَةَ إِلَى وَهْرَانَ هِيَ <span class="ltr">956 km</span>. وَصَلَ مُسَافِرٌ إِلَى أَحَدِ الْأَمَاكِنِ وَقَرَأَ عَلَى لَوْحَةٍ:</span>
+      </div>
+
+      <div style="text-align:center;">
+        <div class="road-sign">
+          <span>وَهْرَانُ / ORAN</span>
+          <span class="ltr" style="background:white; color:#0284c7; padding:2px 10px; border-radius:8px;">240 km</span>
+        </div>
+      </div>
+
+      <div class="story-box" style="border-right-color:#b45309; margin-top:10px;">
+        ▪ مَا هِيَ الْمَسَافَةُ الَّتِي قَطَعَهَا الْمُسَافِرُ؟
+      </div>
+
+      <div class="two-cols" style="align-items:center;">
+        <!-- العملية العمودية -->
+        <div class="op-card">
+          <strong style="margin-bottom:8px; color:#b45309;">الْعَمَلِيَّةُ الْعَمُودِيَّةُ:</strong>
+          <table class="v-table">
+            <thead>
+              <tr><th></th><th>م</th><th>ع</th><th>و</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="op-sign"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="9"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="5"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="6"></td>
+              </tr>
+              <tr class="op-row">
+                <td class="op-sign">-</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="4"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="7"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="6"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- العملية الأفقية والإجابة -->
+        <div class="op-card" style="justify-content:center; gap:14px; padding:20px;">
+          <strong style="color:#b45309;">الْعَمَلِيَّةُ الْأُفُقِيَّةُ:</strong>
+          <div class="ltr" style="font-size:1.2rem;">
+            <input type="text" inputmode="numeric" maxlength="3" class="num-input" style="width:72px;" data-ans="956">
+            -
+            <input type="text" inputmode="numeric" maxlength="3" class="num-input" style="width:72px;" data-ans="240">
+            =
+            <input type="text" inputmode="numeric" maxlength="3" class="num-input" style="width:72px;" data-ans="716">
+          </div>
+          <div style="font-weight:800; font-size:1.1rem; text-align:center;">
+            الْمَسَافَةُ الَّتِي قَطَعَهَا الْمُسَافِرُ هِيَ:
+            <span class="ltr">
+              <input type="text" inputmode="numeric" maxlength="3" class="num-input" style="width:80px;" data-ans="716"> km
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="btn-check" id="btn-ach-2" onclick="checkAch2()">تَحَقَّقْ مِنَ التَّمْرِينِ 2 ✓</button>
+        <div class="feedback-msg" id="fb-ach-2"></div>
+      </div>
+    </div>
+
+    <div class="stage-counter" id="counter-achieve">
+      <span>مَرْحَلَةُ أُنْجِزُ:</span>
+      <span><span class="count-ok">✓ الصَّوَابُ: <b id="ok-achieve">0</b></span> | <span class="count-err">✗ الْخَطَأُ: <b id="err-achieve">0</b></span></span>
+    </div>
+  </section>
+
+  <!-- ==================== 3. تَعَلَّمْتُ ==================== -->
+  <section class="section-card sec-learn locked" id="sec-learn">
+    <div class="section-header">
+      <span class="section-badge">تَعَلَّمْتُ</span>
+      <span style="font-weight:700; color:#7e22ce;">قَاعِدَةُ الدَّرْسِ — ص 32</span>
+    </div>
+
+    <div class="learn-content">
+      <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-weight:800; color:#6b21a8; margin-bottom:10px;">
+        <span>كَيْفَ أَضَعُ وَأُجْرِي عَمَلِيَّةَ طَرْحٍ؟</span>
+        <span>مِثَالٌ: أَحْسُبُ <span class="ltr">738 - 123</span></span>
+      </div>
+
+      <p style="font-weight:700; margin:8px 0;">
+        أَضَعُ الْعَمَلِيَّةَ عَمُودِيًّا ( أَرْقَامُ الْوَحَدَاتِ تَحْتَ أَرْقَامِ الْوَحَدَاتِ وَأَرْقَامُ الْعَشَرَاتِ تَحْتَ أَرْقَامِ الْعَشَرَاتِ ... ).
+      </p>
+
+      <div class="learn-grid">
+        <table class="v-table">
+          <thead>
+            <tr><th></th><th>م</th><th>ع</th><th>و</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class="op-sign"></td><td>7</td><td>3</td><td>8</td></tr>
+            <tr class="op-row"><td class="op-sign">-</td><td>1</td><td>2</td><td>3</td></tr>
+            <tr class="res-row"><td class="op-sign">=</td><td style="color:#7e22ce;">6</td><td style="color:#0284c7;">1</td><td style="color:#d97706;">5</td></tr>
+          </tbody>
+        </table>
+
+        <div>
+          <ul style="margin:0; padding-right:20px; font-weight:700;">
+            <li>أَحْسُبُ عَدَدَ الْوَحَدَاتِ: <span class="ltr">8 - 3 = 5</span>، أَكْتُبُ <span style="color:#d97706; font-weight:900;">5</span> فِي عَمُودِ الْوَحَدَاتِ.</li>
+            <li>أَحْسُبُ عَدَدَ الْعَشَرَاتِ: <span class="ltr">3 - 2 = 1</span>، أَكْتُبُ <span style="color:#0284c7; font-weight:900;">1</span> فِي عَمُودِ الْعَشَرَاتِ.</li>
+            <li>أَحْسُبُ عَدَدَ الْمِئَاتِ: <span class="ltr">7 - 1 = 6</span>، أَكْتُبُ <span style="color:#7e22ce; font-weight:900;">6</span> فِي عَمُودِ الْمِئَاتِ.</li>
+          </ul>
+          <div style="margin-top:12px; background:#f3e8ff; display:inline-block; padding:6px 18px; border-radius:10px; border:1.5px solid #c084fc;">
+            <span class="ltr" style="font-size:1.25rem; color:#581c87;">738 - 123 = 615</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 4. أَتَمَرَّنُ ==================== -->
+  <section class="section-card sec-train locked" id="sec-train">
+    <div class="section-header">
+      <span class="section-badge">أَتَمَرَّنُ</span>
+      <span style="font-weight:700; color:#be185d;">كَرَّاسُ الْأَنْشِطَةِ — ص 23</span>
+    </div>
+
+    <!-- التمرين 1: أَجْرِ الْعَمَلِيَّاتِ الْآتِيَةَ -->
+    <div class="exercise-box" id="ex-tr-1">
+      <div class="ex-title">
+        <span class="ex-num" style="background:var(--train-color);">1</span>
+        <span>أَجْرِ الْعَمَلِيَّاتِ الْآتِيَةَ:</span>
+      </div>
+
+      <div class="ops-grid-5">
+        <!-- 35 - 24 -->
+        <div class="op-card">
+          <table class="v-table">
+            <tbody>
+              <tr><td class="op-sign"></td><td>3</td><td>5</td></tr>
+              <tr class="op-row"><td class="op-sign">-</td><td>2</td><td>4</td></tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 456 - 320 -->
+        <div class="op-card">
+          <table class="v-table">
+            <tbody>
+              <tr><td class="op-sign"></td><td>4</td><td>5</td><td>6</td></tr>
+              <tr class="op-row"><td class="op-sign">-</td><td>3</td><td>2</td><td>0</td></tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="3"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="6"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 359 - 208 -->
+        <div class="op-card">
+          <table class="v-table">
+            <tbody>
+              <tr><td class="op-sign"></td><td>3</td><td>5</td><td>9</td></tr>
+              <tr class="op-row"><td class="op-sign">-</td><td>2</td><td>0</td><td>8</td></tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="5"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 128 - 115 -->
+        <div class="op-card">
+          <table class="v-table">
+            <tbody>
+              <tr><td class="op-sign"></td><td>1</td><td>2</td><td>8</td></tr>
+              <tr class="op-row"><td class="op-sign">-</td><td>1</td><td>1</td><td>5</td></tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="3"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 910 - 700 -->
+        <div class="op-card">
+          <table class="v-table">
+            <tbody>
+              <tr><td class="op-sign"></td><td>9</td><td>1</td><td>0</td></tr>
+              <tr class="op-row"><td class="op-sign">-</td><td>7</td><td>0</td><td>0</td></tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="btn-check" id="btn-tr-1" onclick="checkTr1()">تَحَقَّقْ مِنَ التَّمْرِينِ 1 ✓</button>
+        <div class="feedback-msg" id="fb-tr-1"></div>
+      </div>
+    </div>
+
+    <!-- التمرين 2: أَنْجِزْ عَمُودِيًّا الْعَمَلِيَّاتِ الْآتِيَةَ -->
+    <div class="exercise-box ex-locked" id="ex-tr-2">
+      <div class="ex-title">
+        <span class="ex-num" style="background:var(--train-color);">2</span>
+        <span>أَنْجِزْ عَمُودِيًّا الْعَمَلِيَّاتِ الْآتِيَةَ:</span>
+      </div>
+
+      <div class="ops-grid-4">
+        <!-- 897 - 6 -->
+        <div class="op-card">
+          <div class="op-prompt-badge"><span class="ltr">897 - 6</span></div>
+          <table class="v-table">
+            <thead><tr><th></th><th>م</th><th>ع</th><th>و</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="op-sign"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="8"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="9"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="7"></td>
+              </tr>
+              <tr class="op-row">
+                <td class="op-sign">-</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="" placeholder="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="" placeholder="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="6"></td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="8"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="9"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 400 - 300 -->
+        <div class="op-card">
+          <div class="op-prompt-badge"><span class="ltr">400 - 300</span></div>
+          <table class="v-table">
+            <thead><tr><th></th><th>م</th><th>ع</th><th>و</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="op-sign"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="4"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+              </tr>
+              <tr class="op-row">
+                <td class="op-sign">-</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="3"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 678 - 77 -->
+        <div class="op-card">
+          <div class="op-prompt-badge"><span class="ltr">678 - 77</span></div>
+          <table class="v-table">
+            <thead><tr><th></th><th>م</th><th>ع</th><th>و</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="op-sign"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="6"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="7"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="8"></td>
+              </tr>
+              <tr class="op-row">
+                <td class="op-sign">-</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="" placeholder="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="7"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="7"></td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="6"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 308 - 206 -->
+        <div class="op-card">
+          <div class="op-prompt-badge"><span class="ltr">308 - 206</span></div>
+          <table class="v-table">
+            <thead><tr><th></th><th>م</th><th>ع</th><th>و</th></tr></thead>
+            <tbody>
+              <tr>
+                <td class="op-sign"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="3"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="8"></td>
+              </tr>
+              <tr class="op-row">
+                <td class="op-sign">-</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="6"></td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="btn-check" id="btn-tr-2" onclick="checkTr2()">تَحَقَّقْ مِنَ التَّمْرِينِ 2 ✓</button>
+        <div class="feedback-msg" id="fb-tr-2"></div>
+      </div>
+    </div>
+
+    <!-- التمرين 3: جِدِ الْأَرْقَامَ النَّاقِصَةَ -->
+    <div class="exercise-box ex-locked" id="ex-tr-3">
+      <div class="ex-title">
+        <span class="ex-num" style="background:var(--train-color);">3</span>
+        <span>جِدِ الْأَرْقَامَ النَّاقِصَةَ:</span>
+      </div>
+
+      <div class="ops-grid-3">
+        <!-- 528 - 212 = 316 -->
+        <div class="op-card">
+          <table class="v-table">
+            <tbody>
+              <tr><td class="op-sign"></td><td>5</td><td>2</td><td>8</td></tr>
+              <tr class="op-row">
+                <td class="op-sign">-</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td>3</td>
+                <td>1</td>
+                <td>6</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 698 - 45 = 653 -->
+        <div class="op-card">
+          <table class="v-table">
+            <tbody>
+              <tr>
+                <td class="op-sign"></td>
+                <td>6</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="9"></td>
+                <td>8</td>
+              </tr>
+              <tr class="op-row">
+                <td class="op-sign">-</td>
+                <td></td>
+                <td>4</td>
+                <td>5</td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="6"></td>
+                <td>5</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="3"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 298 - 57 = 241 -->
+        <div class="op-card">
+          <table class="v-table">
+            <tbody>
+              <tr>
+                <td class="op-sign"></td>
+                <td>2</td>
+                <td>9</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="8"></td>
+              </tr>
+              <tr class="op-row">
+                <td class="op-sign">-</td>
+                <td></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="5"></td>
+                <td>7</td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+                <td>4</td>
+                <td>1</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="btn-check" id="btn-tr-3" onclick="checkTr3()">تَحَقَّقْ مِنَ التَّمْرِينِ 3 ✓</button>
+        <div class="feedback-msg" id="fb-tr-3"></div>
+      </div>
+    </div>
+
+    <!-- التمرين 4: مشكلة الكريات -->
+    <div class="exercise-box ex-locked" id="ex-tr-4">
+      <div class="ex-title">
+        <span class="ex-num" style="background:var(--train-color);">4</span>
+        <span>كَانَ مَعَ أَمِينٍ <span class="ltr">169</span> كُرَيَّةً. لَعِبَ مَعَ أَصْدِقَائِهِ وَخَسِرَ <span class="ltr">20</span> فِي اسْتِرَاحَةِ الصَّبَاحِ، ثُمَّ خَسِرَ <span class="ltr">18</span> فِي اسْتِرَاحَةِ الْمَسَاءِ.</span>
+      </div>
+
+      <div class="story-box" style="border-right-color:var(--train-color);">
+        ▪ مَا هُوَ عَدَدُ الْكُرَيَّاتِ الْمُتَبَقِّيَةِ مَعَهُ؟
+      </div>
+
+      <div class="two-cols">
+        <!-- الخطوة 1 -->
+        <div class="op-card">
+          <strong style="color:var(--train-color); margin-bottom:6px;">الْخُطْوَةُ الْأُولَى (بَعْدَ اسْتِرَاحَةِ الصَّبَاحِ):</strong>
+          <table class="v-table">
+            <tbody>
+              <tr>
+                <td class="op-sign"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="6"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="9"></td>
+              </tr>
+              <tr class="op-row">
+                <td class="op-sign">-</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="" placeholder="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="0"></td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="4"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="9"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:8px;">
+            <span class="ltr">169 - 20 = <input type="text" inputmode="numeric" maxlength="3" class="num-input" style="width:72px;" data-ans="149"></span>
+          </div>
+        </div>
+
+        <!-- الخطوة 2 -->
+        <div class="op-card">
+          <strong style="color:var(--train-color); margin-bottom:6px;">الْخُطْوَةُ الثَّانِيَةُ (بَعْدَ اسْتِرَاحَةِ الْمَسَاءِ):</strong>
+          <table class="v-table">
+            <tbody>
+              <tr>
+                <td class="op-sign"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="4"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="9"></td>
+              </tr>
+              <tr class="op-row">
+                <td class="op-sign">-</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="" placeholder="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="8"></td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="3"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:8px;">
+            <span class="ltr">149 - 18 = <input type="text" inputmode="numeric" maxlength="3" class="num-input" style="width:72px;" data-ans="131"></span>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top:14px; font-weight:800; font-size:1.15rem;">
+        عَدَدُ الْكُرَيَّاتِ الْمُتَبَقِّيَةِ مَعَهُ هُوَ:
+        <span class="ltr"><input type="text" inputmode="numeric" maxlength="3" class="num-input" style="width:85px;" data-ans="131"></span> كُرَيَّةً.
+      </div>
+
+      <div style="text-align:center;">
+        <button class="btn-check" id="btn-tr-4" onclick="checkTr4()">تَحَقَّقْ مِنَ التَّمْرِينِ 4 ✓</button>
+        <div class="feedback-msg" id="fb-tr-4"></div>
+      </div>
+    </div>
+
+    <div class="stage-counter" id="counter-train">
+      <span>مَرْحَلَةُ أَتَمَرَّنُ:</span>
+      <span><span class="count-ok">✓ الصَّوَابُ: <b id="ok-train">0</b></span> | <span class="count-err">✗ الْخَطَأُ: <b id="err-train">0</b></span></span>
+    </div>
+  </section>
+
+  <!-- ==================== 5. أَبْحَثُ ==================== -->
+  <section class="section-card sec-search locked" id="sec-search">
+    <div class="section-header">
+      <span class="section-badge">أَبْحَثُ</span>
+      <span style="font-weight:700; color:#c2410c;">كَرَّاسُ الْأَنْشِطَةِ — ص 23</span>
+    </div>
+
+    <div class="exercise-box" id="ex-search-1" style="margin-bottom:0;">
+      <div class="story-box" style="border-right-color:var(--search-color);">
+        مَجْمُوعُ ثَلَاثَةِ أَعْدَادٍ هُوَ <span class="ltr">545</span>. أَحَدُ هَذِهِ الْأَعْدَادِ هُوَ <span class="ltr">7</span> وَالْآخَرُ <span class="ltr">214</span>.
+        <br>▪ مَا هُوَ الْعَدَدُ الثَّالِثُ؟
+      </div>
+
+      <!-- المخطط الشريطي المطابق للكتاب -->
+      <div class="bar-model">
+        <div class="bar-top">545</div>
+        <div class="bar-bottom">
+          <div class="bar-cell">7</div>
+          <div class="bar-cell">214</div>
+          <div class="bar-cell">
+            <input type="text" inputmode="numeric" maxlength="3" class="num-input" style="width:74px;" data-ans="324" id="s_bar">
+          </div>
+        </div>
+      </div>
+
+      <div class="two-cols" style="margin-top:16px;">
+        <!-- حساب مجموع العددين المعلومين -->
+        <div class="op-card">
+          <strong style="color:var(--search-color); margin-bottom:6px;">1. أَحْسُبُ مَجْمُوعَ الْعَدَدَيْنِ الْمَعْلُومَيْنِ:</strong>
+          <table class="v-table">
+            <tbody>
+              <tr>
+                <td class="op-sign"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="4"></td>
+              </tr>
+              <tr class="op-row">
+                <td class="op-sign">+</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="" placeholder="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="" placeholder="0"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="7"></td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:8px;">
+            <span class="ltr">214 + 7 = <input type="text" inputmode="numeric" maxlength="3" class="num-input" style="width:72px;" data-ans="221"></span>
+          </div>
+        </div>
+
+        <!-- حساب العدد الثالث بالطرح -->
+        <div class="op-card">
+          <strong style="color:var(--search-color); margin-bottom:6px;">2. أَحْسُبُ الْعَدَدَ الثَّالِثَ بِالطَّرْحِ:</strong>
+          <table class="v-table">
+            <tbody>
+              <tr>
+                <td class="op-sign"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="5"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="4"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="5"></td>
+              </tr>
+              <tr class="op-row">
+                <td class="op-sign">-</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="1"></td>
+              </tr>
+              <tr class="res-row">
+                <td class="op-sign">=</td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="3"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="2"></td>
+                <td><input type="text" inputmode="numeric" maxlength="1" class="digit-input" data-ans="4"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top:8px;">
+            <span class="ltr">545 - 221 = <input type="text" inputmode="numeric" maxlength="3" class="num-input" style="width:72px;" data-ans="324"></span>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center; margin-top:14px; font-weight:800; font-size:1.15rem;">
+        الْعَدَدُ الثَّالِثُ هُوَ:
+        <span class="ltr"><input type="text" inputmode="numeric" maxlength="3" class="num-input" style="width:85px;" data-ans="324"></span>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="btn-check" id="btn-search-1" onclick="checkSearch1()">تَحَقَّقْ مِنْ أَبْحَثُ ✓</button>
+        <div class="feedback-msg" id="fb-search-1"></div>
+      </div>
+    </div>
+
+    <div class="stage-counter" id="counter-search">
+      <span>مَرْحَلَةُ أَبْحَثُ:</span>
+      <span><span class="count-ok">✓ الصَّوَابُ: <b id="ok-search">0</b></span> | <span class="count-err">✗ الْخَطَأُ: <b id="err-search">0</b></span></span>
+    </div>
+  </section>
+
+  <!-- ==================== 6. التقييم النهائي الشامل ==================== -->
+  <section class="final-report" id="final-report">
+    <h2>📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</h2>
+
+    <div class="report-grid">
+      <!-- الدائرة النسبية -->
+      <div class="circle-chart-container" id="pie-circle">
+        <div class="circle-chart-inner">
+          <span class="circle-percent" id="pie-percent">0%</span>
+          <span class="circle-label">نِسْبَةُ النَّجَاحِ</span>
+        </div>
+      </div>
+
+      <!-- الإحصائيات التفصيلية -->
+      <div class="stats-boxes">
+        <div class="stat-pill ok">
+          <span>✓ مَجْمُوعُ الصَّوَابِ:</span>
+          <span id="total-correct">0</span>
+        </div>
+        <div class="stat-pill err">
+          <span>✗ مَجْمُوعُ الْأَخْطَاءِ:</span>
+          <span id="total-wrong">0</span>
+        </div>
+        <div class="stat-pill total">
+          <span>📝 إِجْمَالِيُّ الْأَسْئِلَةِ الْمُجَابَةِ:</span>
+          <span id="total-answered">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+
+    <p id="final-message" style="font-weight:800; font-size:1.15rem; color:#0369a1; margin:12px 0;">
+      أَجِبْ عَنِ التَّمَارِينِ بِالتَّرْتِيبِ لِتَظْهَرَ نَتِيجَتُكَ النِّهَائِيَّةُ هُنَا!
+    </p>
+
+    <button class="btn-reset" onclick="resetAll()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+  </section>
+
+  <!-- ========================================
+       زر العودة إلى الفهرس (أُضيف)
+       ======================================== -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</div>
+
+<!-- ========================================
+     سكريبت الحماية (أُضيف)
+     ======================================== -->
+<script>
+  const CHANNEL_ID = "-1003910412986";
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي
+     ======================================== -->
+<script>
+  // إجمالي البنود التقييمية في الدرس:
+  // أكتشف: 4 (مريم) + 1 (أيمن) = 5
+  // أنجز: 27 (تمرين 1) + 13 (تمرين 2) = 40
+  // أتمرن: 14 (ت1) + 36 (ت2) + 8 (ت3) + 21 (ت4) = 79
+  // أبحث: 22
+  // المجموع الكلي: 5 + 40 + 79 + 22 = 146 بنداً
+  const TOTAL_QUESTIONS = 146;
+
+  // إحصائيات المراحل
+  const stats = {
+    discover: { ok: 0, err: 0 },
+    achieve:  { ok: 0, err: 0 },
+    train:    { ok: 0, err: 0 },
+    search:   { ok: 0, err: 0 }
+  };
+
+  // تحويل الأرقام العربية المشرقية (٠-٩) إلى أرقام غربية (0-9) تلقائياً عند الكتابة
+  function normalizeDigits(str) {
+    const arabicNums = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+    return str.trim().replace(/[٠-٩]/g, d => arabicNums.indexOf(d));
+  }
+
+  document.querySelectorAll('input').forEach(inp => {
+    inp.addEventListener('input', function() {
+      this.value = normalizeDigits(this.value).replace(/[^0-9]/g, '');
+    });
+  });
+
+  // دالة تقييم حاوية تمرين واحدة (محاولة واحدة فقط + تجميد + تلوين أخضر/أحمر)
+  function evaluateExercise(containerId, stageKey, btnId, fbId, nextUnlockCallback) {
+    const container = document.getElementById(containerId);
+    const inputs = container.querySelectorAll('input');
+    const btn = document.getElementById(btnId);
+    const fb = document.getElementById(fbId);
+
+    // التأكد من عدم ترك كل الحقول فارغة (باستثناء الحقول الاختيارية للصفر البادئ)
+    let hasRequiredEmpty = false;
+    inputs.forEach(inp => {
+      const expected = inp.getAttribute('data-ans');
+      if (expected !== "" && inp.value.trim() === "") {
+        hasRequiredEmpty = true;
+      }
+    });
+
+    if (hasRequiredEmpty) {
+      fb.style.color = "#d97706";
+      fb.textContent = "⚠️ يَرْجَى مَلْءُ جَمِيعِ الْخَانَاتِ الْمَطْلُوبَةِ قَبْلَ التَّحَقُّقِ!";
+      return;
+    }
+
+    let exOk = 0;
+    let exErr = 0;
+
+    inputs.forEach(inp => {
+      const expected = inp.getAttribute('data-ans');
+      const val = normalizeDigits(inp.value);
+      inp.disabled = true; // تجميد الحقل بعد المحاولة الوحيدة
+
+      // حالة الخانة الاختيارية (مثل خانة المئات في عدد من رقمين: يقبل الفراغ أو 0)
+      if (expected === "") {
+        if (val === "" || val === "0") {
+          inp.classList.add('is-correct');
+          exOk++;
+        } else {
+          inp.classList.add('is-wrong');
+          exErr++;
+          const hint = document.createElement('span');
+          hint.className = 'correction-hint';
+          hint.textContent = '0';
+          inp.parentNode.appendChild(hint);
+        }
+      } else {
+        if (val === expected) {
+          inp.classList.add('is-correct');
+          exOk++;
+        } else {
+          inp.classList.add('is-wrong');
+          exErr++;
+          const hint = document.createElement('span');
+          hint.className = 'correction-hint';
+          hint.textContent = expected;
+          inp.parentNode.appendChild(hint);
+        }
+      }
+    });
+
+    // تجميد زر التحقق
+    btn.disabled = true;
+    btn.textContent = "تَمَّ التَّصْحِيحُ ✓";
+
+    // تحديث عداد المرحلة
+    stats[stageKey].ok += exOk;
+    stats[stageKey].err += exErr;
+    document.getElementById(`ok-${stageKey}`).textContent = stats[stageKey].ok;
+    document.getElementById(`err-${stageKey}`).textContent = stats[stageKey].err;
+
+    // رسالة التغذية الراجعة للتمرين
+    if (exErr === 0) {
+      fb.style.color = "var(--correct)";
+      fb.textContent = `🎉 أَحْسَنْتَ! جَمِيعُ إِجَابَاتِكَ صَحِيحَةٌ (${exOk} / ${exOk}).`;
+    } else {
+      fb.style.color = "var(--wrong)";
+      fb.textContent = `📌 الصَّوَابُ: ${exOk} | الْخَطَأُ: ${exErr} (لَاحِظِ التَّصْحِيحَ بِالْأَخْضَرِ).`;
+    }
+
+    // تحديث التقرير النهائي والدائرة النسبية
+    updateFinalReport();
+
+    // تفعيل التمرين أو المرحلة الموالية
+    if (typeof nextUnlockCallback === 'function') {
+      nextUnlockCallback();
+    }
+  }
+
+  // دوال التحقق المتسلسلة لكل تمرين
+  function checkDisc1() {
+    evaluateExercise('ex-disc-1', 'discover', 'btn-disc-1', 'fb-disc-1', () => {
+      document.getElementById('ex-disc-2').classList.remove('ex-locked');
+    });
+  }
+
+  function checkDisc2() {
+    evaluateExercise('ex-disc-2', 'discover', 'btn-disc-2', 'fb-disc-2', () => {
+      document.getElementById('sec-achieve').classList.remove('locked');
+    });
+  }
+
+  function checkAch1() {
+    evaluateExercise('ex-ach-1', 'achieve', 'btn-ach-1', 'fb-ach-1', () => {
+      document.getElementById('ex-ach-2').classList.remove('ex-locked');
+    });
+  }
+
+  function checkAch2() {
+    evaluateExercise('ex-ach-2', 'achieve', 'btn-ach-2', 'fb-ach-2', () => {
+      document.getElementById('sec-learn').classList.remove('locked');
+      document.getElementById('sec-train').classList.remove('locked');
+    });
+  }
+
+  function checkTr1() {
+    evaluateExercise('ex-tr-1', 'train', 'btn-tr-1', 'fb-tr-1', () => {
+      document.getElementById('ex-tr-2').classList.remove('ex-locked');
+    });
+  }
+
+  function checkTr2() {
+    evaluateExercise('ex-tr-2', 'train', 'btn-tr-2', 'fb-tr-2', () => {
+      document.getElementById('ex-tr-3').classList.remove('ex-locked');
+    });
+  }
+
+  function checkTr3() {
+    evaluateExercise('ex-tr-3', 'train', 'btn-tr-3', 'fb-tr-3', () => {
+      document.getElementById('ex-tr-4').classList.remove('ex-locked');
+    });
+  }
+
+  function checkTr4() {
+    evaluateExercise('ex-tr-4', 'train', 'btn-tr-4', 'fb-tr-4', () => {
+      document.getElementById('sec-search').classList.remove('locked');
+    });
+  }
+
+  function checkSearch1() {
+    evaluateExercise('ex-search-1', 'search', 'btn-search-1', 'fb-search-1', () => {
+      const msg = document.getElementById('final-message');
+      const totalOk = Number(document.getElementById('total-correct').textContent);
+      const totalErr = Number(document.getElementById('total-wrong').textContent);
+      const pct = Math.min(100, Math.round((totalOk / TOTAL_QUESTIONS) * 100));
+
+      if (pct === 100) {
+        msg.style.color = "var(--correct)";
+        msg.textContent = "🏆 مُمْتَازٌ يَا بَطَلُ! نَتِيجَةٌ كَامِلَةٌ 100% دُونَ أَيِّ خَطَأٍ!";
+      } else if (pct >= 75) {
+        msg.style.color = "#0284c7";
+        msg.textContent = "👏 عَمَلٌ رَائِعٌ! أَنْتَ مُتَمَكِّنٌ مِنَ الطَّرْحِ دُونَ احْتِفَاظٍ.";
+      } else {
+        msg.style.color = "#d97706";
+        msg.textContent = "💪 مُحَاوَلَةٌ جَيِّدَةٌ! رَاجِعْ أَخْطَاءَكَ أَعْلَاهُ ثُمَّ أَعِدِ الْمُحَاوَلَةَ.";
+      }
+    });
+  }
+
+  // تحديث التقييم النهائي والدائرة النسبية (conic-gradient)
+  function updateFinalReport() {
+    const totalOk = stats.discover.ok + stats.achieve.ok + stats.train.ok + stats.search.ok;
+    const totalErr = stats.discover.err + stats.achieve.err + stats.train.err + stats.search.err;
+    const totalAll = totalOk + totalErr;
+
+    document.getElementById('total-correct').textContent = totalOk;
+    document.getElementById('total-wrong').textContent = totalErr;
+    document.getElementById('total-answered').textContent = totalAll;
+
+    let percent = 0;
+    if (totalAll > 0) {
+      percent = Math.round((totalOk / TOTAL_QUESTIONS) * 100);
+      if (totalErr === 0 && totalAll === TOTAL_QUESTIONS) {
+        percent = 100;
+      }
+      if (percent > 100) percent = 100;
+    }
+
+    document.getElementById('pie-percent').textContent = `${percent}%`;
+    document.getElementById('progress-fill').style.width = `${percent}%`;
+
+    // تحديث الدائرة النسبية (أخضر للصواب وأحمر للخطأ ورمادي للمتبقي)
+    const pie = document.getElementById('pie-circle');
+    const correctDeg = (totalOk / TOTAL_QUESTIONS) * 360;
+    const wrongDeg = (totalErr / TOTAL_QUESTIONS) * 360;
+    const correctEnd = correctDeg;
+    const wrongEnd = correctDeg + wrongDeg;
+
+    pie.style.background = `conic-gradient(
+      #16a34a 0deg ${correctEnd}deg,
+      #dc2626 ${correctEnd}deg ${wrongEnd}deg,
+      #cbd5e1 ${wrongEnd}deg 360deg
+    )`;
+  }
+
+  // إعادة المحاولة من جديد
+  function resetAll() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+      location.reload();
+    }, 300);
+  }
+
+  updateFinalReport();
+</script>
+
+</body>
+</html>
