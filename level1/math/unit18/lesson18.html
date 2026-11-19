@@ -1,0 +1,1924 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>مُقَارَنَةُ أَطْوَالٍ (2) - السنة الأولى ابتدائي</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #6a2c70;
+    --primary-light: #f3e6f5;
+    --secondary: #1e88e5;
+    --accent: #f59e0b;
+    --success: #16a34a;
+    --success-bg: #dcfce7;
+    --danger: #dc2626;
+    --danger-bg: #fee2e2;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --border: #cbd5e1;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Tajawal', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding-bottom: 40px;
+  }
+
+  /* شريط العنوان الرسمي */
+  .lesson-header {
+    background: linear-gradient(135deg, #5e2768 0%, #83388f 100%);
+    color: #fff;
+    padding: 18px 16px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    box-shadow: 0 4px 15px rgba(94, 39, 104, 0.25);
+    text-align: center;
+    position: relative;
+  }
+
+  .lesson-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .lesson-header h1 {
+    margin: 4px 0;
+    font-size: 1.75rem;
+    font-weight: 900;
+    letter-spacing: 0.3px;
+  }
+
+  .lesson-sub {
+    font-size: 0.95rem;
+    opacity: 0.92;
+  }
+
+  /* شريط الأدوات العائم (شريط الورق المقوى التفاعلي للمساعدة في القياس كما في الدرس) */
+  .paper-strip-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    background: #fffbeb;
+    border-bottom: 2px solid #f59e0b;
+    padding: 8px 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+
+  .strip-info {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #92400e;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .strip-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .tool-btn {
+    background: #ffffff;
+    border: 1.5px solid #d97706;
+    color: #92400e;
+    border-radius: 8px;
+    padding: 4px 9px;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .tool-btn:active {
+    transform: scale(0.95);
+    background: #fef3c7;
+  }
+
+  .tool-btn.active {
+    background: #d97706;
+    color: #fff;
+  }
+
+  /* شريط الورق المقوى العائم */
+  #floating-paper-strip {
+    position: fixed;
+    top: 130px;
+    left: 50%;
+    transform: translateX(-50%) rotate(0deg);
+    width: 340px;
+    height: 34px;
+    background: linear-gradient(180deg, #fef9c3 0%, #fde047 100%);
+    border: 2px solid #ca8a04;
+    border-radius: 4px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.22);
+    z-index: 1000;
+    cursor: grab;
+    display: none;
+    touch-action: none;
+    user-select: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px;
+  }
+
+  #floating-paper-strip:active {
+    cursor: grabbing;
+  }
+
+  #floating-paper-strip .strip-ticks {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background-image: repeating-linear-gradient(
+      to right,
+      #854d0e 0px,
+      #854d0e 1.5px,
+      transparent 1.5px,
+      transparent 19px
+    );
+    opacity: 0.65;
+  }
+
+  #floating-paper-strip .strip-label {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: #713f12;
+    margin-top: 8px;
+    width: 100%;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .container {
+    max-width: 820px;
+    margin: 16px auto;
+    padding: 0 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* بطاقات المحطات التعليمية */
+  .section-card {
+    background: var(--card);
+    border-radius: 18px;
+    border: 2px solid #e2e8f0;
+    padding: 18px 16px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+    position: relative;
+  }
+
+  .section-card.locked {
+    opacity: 0.62;
+    pointer-events: none;
+    filter: grayscale(0.25);
+  }
+
+  .section-card.locked::after {
+    content: "🔒 أَكْمِلِ التَّمْرِينَ السَّابِقَ لِفَتْحِ هَذِهِ الْمَحَطَّةِ";
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    background: #334155;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 12px;
+  }
+
+  .section-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.35rem;
+    font-weight: 900;
+    padding: 4px 16px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+
+  .title-discover {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-right: 5px solid #dc2626;
+  }
+
+  .title-apply {
+    background: #ffedd5;
+    color: #c2410c;
+    border-right: 5px solid #ea580c;
+  }
+
+  .title-learned {
+    background: #dcfce7;
+    color: #15803d;
+    border-right: 5px solid #16a34a;
+  }
+
+  .title-practice {
+    background: #fef9c3;
+    color: #854d0e;
+    border-right: 5px solid #eab308;
+  }
+
+  .title-search {
+    background: #e0f2fe;
+    color: #0369a1;
+    border-right: 5px solid #0284c7;
+  }
+
+  .instruction-text {
+    font-size: 1.12rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 6px 0 14px;
+  }
+
+  .sub-instruction {
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: #334155;
+    margin: 4px 0 12px;
+  }
+
+  /* أزرار التحقق والعدادات */
+  .action-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1.5px dashed #cbd5e1;
+  }
+
+  .check-btn {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 24px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.08rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+    transition: transform 0.15s, opacity 0.2s;
+  }
+
+  .check-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  .check-btn:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .station-counter {
+    background: #f1f5f9;
+    padding: 6px 14px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.98rem;
+    display: flex;
+    gap: 12px;
+  }
+
+  .cnt-ok { color: var(--success); }
+  .cnt-err { color: var(--danger); }
+
+  /* =========================
+     1. أَكْتَشِفُ (أقلام الرصاص)
+  ========================= */
+  .pencils-board {
+    background: #fafafa;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-x: auto;
+  }
+
+  .pencil-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    min-height: 28px;
+  }
+
+  .pencil-svg {
+    display: block;
+    height: 24px;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.12));
+  }
+
+  .order-boxes-container {
+    margin-top: 14px;
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 12px;
+  }
+
+  .order-hint {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .slots-grid {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .pencil-slot {
+    width: 62px;
+    height: 54px;
+    border: 2.5px solid #64748b;
+    border-radius: 12px;
+    background: #fff;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-align: center;
+    color: #0f172a;
+    transition: all 0.2s;
+  }
+
+  .pencil-slot:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  }
+
+  .pencil-slot.correct {
+    background-color: var(--success-bg);
+    border-color: var(--success);
+    color: #14532d;
+  }
+
+  .pencil-slot.incorrect {
+    background-color: var(--danger-bg);
+    border-color: var(--danger);
+    color: #7f1d1d;
+  }
+
+  /* =========================
+     2. أُنْجِزُ (ربط الأشرطة)
+  ========================= */
+  .matching-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .match-item {
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 12px;
+    background: #fff;
+    display: grid;
+    grid-template-columns: 1.1fr 1.4fr 1.1fr;
+    align-items: center;
+    gap: 10px;
+  }
+
+  @media (max-width: 640px) {
+    .match-item {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+  }
+
+  .strip-name-box {
+    font-size: 1.12rem;
+    font-weight: 900;
+    color: #1e293b;
+    background: #f1f5f9;
+    padding: 10px 12px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1.5px solid #cbd5e1;
+  }
+
+  .options-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border: 2px solid #cbd5e1;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 1.02rem;
+    transition: all 0.15s;
+    background: #f8fafc;
+  }
+
+  .radio-option:hover {
+    border-color: #3b82f6;
+    background: #eff6ff;
+  }
+
+  .radio-option input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #2563eb;
+    cursor: pointer;
+  }
+
+  .radio-option.selected {
+    border-color: #2563eb;
+    background: #dbeafe;
+  }
+
+  .radio-option.correct {
+    border-color: var(--success) !important;
+    background: var(--success-bg) !important;
+    color: #14532d !important;
+  }
+
+  .radio-option.incorrect {
+    border-color: var(--danger) !important;
+    background: var(--danger-bg) !important;
+    color: #7f1d1d !important;
+  }
+
+  .strips-visual-pair {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    background: #fafafa;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    direction: ltr;
+  }
+
+  .v-strip {
+    height: 18px;
+    border-radius: 2px;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.15);
+  }
+
+  /* =========================
+     3. تَعَلَّمْتُ
+  ========================= */
+  .learned-box {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 3px solid #16a34a;
+    border-radius: 16px;
+    padding: 16px 18px;
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #14532d;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.12);
+  }
+
+  .learned-box span.highlight {
+    color: #b91c1c;
+    background: #fff;
+    padding: 2px 10px;
+    border-radius: 8px;
+    border: 1.5px solid #86efac;
+  }
+
+  /* =========================
+     4. أَتَمَرَّنُ 1 (تمديد الخطين)
+  ========================= */
+  .extend-board {
+    background: #fff;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    direction: ltr;
+  }
+
+  .line-track {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .line-label-ar {
+    direction: rtl;
+    text-align: right;
+    font-weight: 800;
+    font-size: 0.98rem;
+  }
+
+  .red-ref-box {
+    border: 2px solid #334155;
+    border-radius: 8px;
+    padding: 8px 10px;
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    background: #fff;
+  }
+
+  .seg-line {
+    height: 6px;
+    border-radius: 3px;
+  }
+
+  .interactive-extend-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .extend-canvas-wrap {
+    display: flex;
+    align-items: center;
+    background: #f8fafc;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1.5px dashed #94a3b8;
+    min-width: 310px;
+  }
+
+  .extend-controls {
+    display: flex;
+    gap: 6px;
+    direction: rtl;
+  }
+
+  .ext-btn {
+    border: none;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-family: 'Tajawal', sans-serif;
+    font-weight: 800;
+    font-size: 0.92rem;
+    cursor: pointer;
+    color: #fff;
+    transition: transform 0.1s;
+  }
+
+  .ext-btn:active { transform: scale(0.95); }
+  .ext-btn-plus { background: #0284c7; }
+  .ext-btn-minus { background: #64748b; }
+
+  /* =========================
+     5. أَتَمَرَّنُ 2 (تلوين الشريطين المتساويين)
+  ========================= */
+  .strips-color-arena {
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .strip-choice {
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .strip-choice:hover rect {
+    stroke: #2563eb;
+    stroke-width: 3;
+  }
+
+  .strip-choice.colored rect {
+    fill: #fde047;
+    stroke: #ca8a04;
+    stroke-width: 3;
+  }
+
+  .strip-choice.correct rect {
+    fill: #86efac !important;
+    stroke: #16a34a !important;
+    stroke-width: 3.5 !important;
+  }
+
+  .strip-choice.incorrect rect {
+    fill: #fca5a5 !important;
+    stroke: #dc2626 !important;
+    stroke-width: 3.5 !important;
+  }
+
+  /* =========================
+     6. أَبْحَثُ (أحط الحلزون)
+  ========================= */
+  .snails-arena {
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .snail-node {
+    cursor: pointer;
+  }
+
+  .snail-ring {
+    fill: transparent;
+    stroke: transparent;
+    stroke-width: 4;
+    transition: all 0.2s;
+  }
+
+  .snail-node:hover .snail-ring {
+    stroke: #93c5fd;
+    stroke-dasharray: 6 4;
+  }
+
+  .snail-node.selected .snail-ring {
+    stroke: #2563eb;
+    stroke-dasharray: none;
+    fill: rgba(37, 99, 235, 0.08);
+  }
+
+  .snail-node.correct .snail-ring {
+    stroke: #16a34a !important;
+    fill: rgba(22, 163, 74, 0.15) !important;
+  }
+
+  .snail-node.incorrect .snail-ring {
+    stroke: #dc2626 !important;
+    fill: rgba(220, 38, 38, 0.15) !important;
+  }
+
+  /* =========================
+     7. بطاقة الحصيلة والتقييم العام
+  ========================= */
+  .summary-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    border: 3px solid var(--primary);
+    border-radius: 22px;
+    padding: 22px 18px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(106, 44, 112, 0.14);
+  }
+
+  .summary-title {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--primary);
+    margin: 0 0 16px;
+  }
+
+  .summary-grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 18px;
+  }
+
+  .gauge-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+  }
+
+  .gauge-svg {
+    width: 150px;
+    height: 150px;
+    transform: rotate(-90deg);
+  }
+
+  .gauge-bg {
+    fill: none;
+    stroke: #e2e8f0;
+    stroke-width: 13;
+  }
+
+  .gauge-fill {
+    fill: none;
+    stroke: #16a34a;
+    stroke-width: 13;
+    stroke-linecap: round;
+    stroke-dasharray: 408.4;
+    stroke-dashoffset: 408.4;
+    transition: stroke-dashoffset 0.7s ease, stroke 0.4s ease;
+  }
+
+  .gauge-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gauge-percent {
+    font-size: 1.9rem;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1.1;
+  }
+
+  .gauge-sub {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #64748b;
+  }
+
+  .stats-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 220px;
+  }
+
+  .stat-pill {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1.08rem;
+  }
+
+  .stat-pill.ok {
+    background: var(--success-bg);
+    color: #14532d;
+    border: 1.5px solid #86efac;
+  }
+
+  .stat-pill.err {
+    background: var(--danger-bg);
+    color: #7f1d1d;
+    border: 1.5px solid #fca5a5;
+  }
+
+  .stat-pill.tot {
+    background: #f1f5f9;
+    color: #1e293b;
+    border: 1.5px solid #cbd5e1;
+  }
+
+  .remark-banner {
+    background: #fef3c7;
+    border: 2px solid #f59e0b;
+    color: #92400e;
+    font-size: 1.2rem;
+    font-weight: 900;
+    padding: 12px 16px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+  }
+
+  .reset-btn {
+    background: linear-gradient(135deg, #6a2c70 0%, #83388f 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 28px;
+    font-family: 'Tajawal', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(106, 44, 112, 0.3);
+  }
+
+  .reset-btn:hover {
+    opacity: 0.94;
+  }
+
+  .feedback-msg {
+    margin-top: 10px;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 8px 12px;
+    border-radius: 10px;
+    display: none;
+  }
+
+  .feedback-msg.show { display: block; }
+  .feedback-msg.ok { background: var(--success-bg); color: #14532d; }
+  .feedback-msg.err { background: var(--danger-bg); color: #7f1d1d; }
+
+  /* ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== */
+  #sub-lock-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .lock-box {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+    border: 2px solid #e1f5fe;
+    max-width: 380px;
+    width: 100%;
+  }
+  .lock-icon { font-size: 50px; margin-bottom: 12px; }
+  .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; font-family: 'Cairo', sans-serif; }
+  .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; font-family: 'Cairo', sans-serif; }
+  .btn-channel {
+    display: block;
+    width: 100%;
+    background: #0288d1;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    font-family: 'Cairo', sans-serif;
+  }
+  .btn-check-sub {
+    width: 100%;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 13px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+  }
+  .sub-status-msg {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-height: 24px;
+    font-family: 'Cairo', sans-serif;
+  }
+  .btn-back-home {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin: 20px auto 30px auto;
+    background: #0d47a1;
+    color: #ffffff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    font-family: 'Cairo', sans-serif;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<!-- ترويسة الدرس -->
+<header class="lesson-header">
+  <div class="lesson-badge">الرِّيَاضِيَّاتُ • السَّنَةُ الْأُولَى ابْتِدَائِي • الدَّرْسُ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">18</span></div>
+  <h1>مُقَارَنَةُ أَطْوَالٍ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">2</span>)</h1>
+  <div class="lesson-sub">كِتَابُ التِّلْمِيذِ ص <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">29</span> — كُرَّاسُ الْأَنْشِطَةِ ص <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">22</span></div>
+</header>
+
+<!-- شريط أداة القياس: شريط الورق المقوى التفاعلي -->
+<div class="paper-strip-toolbar">
+  <div class="strip-info">
+    <span>📏 أَدَاةُ الْمُقَارَنَةِ:</span>
+    <span>شَرِيطٌ مِنَ الْوَرَقِ الْمُقَوَّى (اسْحَبْهُ وَدَوِّرْهُ لِقِيَاسِ الْأَطْوَالِ)</span>
+  </div>
+  <div class="strip-controls">
+    <button class="tool-btn" id="toggleStripBtn" onclick="togglePaperStrip()">إِظْهَارُ الشَّرِيطِ</button>
+    <button class="tool-btn" onclick="rotateStrip(-15)" title="تدوير يسار">↺ <span dir="ltr">15°</span></button>
+    <button class="tool-btn" onclick="rotateStrip(-2)" title="تدوير دقيق يسار">↺ <span dir="ltr">2°</span></button>
+    <button class="tool-btn" onclick="rotateStrip(2)" title="تدوير دقيق يمين">↻ <span dir="ltr">2°</span></button>
+    <button class="tool-btn" onclick="rotateStrip(15)" title="تدوير يمين">↻ <span dir="ltr">15°</span></button>
+    <button class="tool-btn" onclick="resetStrip()">إِعَادَةُ الضَّبْطِ</button>
+  </div>
+</div>
+
+<!-- شريط الورق المقوى العائم القابل للسحب -->
+<div id="floating-paper-strip">
+  <div class="strip-ticks"></div>
+  <div class="strip-label">شَرِيطُ الْوَرَقِ الْمُقَوَّى لِلْمُقَارَنَةِ</div>
+</div>
+
+<main class="container">
+
+  <!-- ==========================================
+       المحطة 1: أَكْتَشِفُ (كتاب التلميذ ص 29)
+  =========================================== -->
+  <section class="section-card" id="sec-discover">
+    <div class="section-title title-discover">أَكْتَشِفُ</div>
+    <p class="instruction-text">أَرَادَ أَمِين تَرْتِيبَ أَقْلَامِ الرَّصَاصِ مِنَ الْأَقْصَرِ إِلَى الْأَطْوَلِ.</p>
+    <p class="sub-instruction">بِاسْتِعْمَالِ شَرِيطٍ مِنَ الْوَرَقِ الْمُقَوَّى، سَاعِدْ أَمِين عَلَى إِنْجَازِ مَهَمَّتِهِ.</p>
+
+    <div class="pencils-board">
+      <div class="pencil-row">
+        <svg class="pencil-svg" width="235" viewBox="0 0 235 24">
+          <polygon points="0,12 24,2 24,22" fill="#f3d2b3"/>
+          <polygon points="0,12 8,8.5 8,15.5" fill="#1e293b"/>
+          <rect x="24" y="2" width="195" height="20" fill="#a1622f"/>
+          <rect x="24" y="8" width="195" height="8" fill="#b87338"/>
+          <rect x="219" y="2" width="16" height="20" rx="2" fill="#e2e8f0"/>
+          <rect x="135" y="4" width="24" height="16" rx="3" fill="#1d4ed8"/>
+          <text x="147" y="16" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">2</text>
+        </svg>
+      </div>
+
+      <div class="pencil-row">
+        <svg class="pencil-svg" width="160" viewBox="0 0 160 24">
+          <polygon points="0,12 24,2 24,22" fill="#f3d2b3"/>
+          <polygon points="0,12 8,8.5 8,15.5" fill="#1e293b"/>
+          <rect x="24" y="2" width="120" height="20" fill="#a1622f"/>
+          <rect x="24" y="8" width="120" height="8" fill="#b87338"/>
+          <rect x="144" y="2" width="16" height="20" rx="2" fill="#e2e8f0"/>
+          <rect x="108" y="4" width="24" height="16" rx="3" fill="#1d4ed8"/>
+          <text x="120" y="16" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">1</text>
+        </svg>
+      </div>
+
+      <div class="pencil-row">
+        <svg class="pencil-svg" width="335" viewBox="0 0 335 24">
+          <polygon points="0,12 24,2 24,22" fill="#f3d2b3"/>
+          <polygon points="0,12 8,8.5 8,15.5" fill="#1e293b"/>
+          <rect x="24" y="2" width="295" height="20" fill="#a1622f"/>
+          <rect x="24" y="8" width="295" height="8" fill="#b87338"/>
+          <rect x="319" y="2" width="16" height="20" rx="2" fill="#e2e8f0"/>
+          <rect x="255" y="4" width="24" height="16" rx="3" fill="#1d4ed8"/>
+          <text x="267" y="16" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">3</text>
+        </svg>
+      </div>
+
+      <div class="pencil-row">
+        <svg class="pencil-svg" width="295" viewBox="0 0 295 24">
+          <polygon points="0,12 24,2 24,22" fill="#f3d2b3"/>
+          <polygon points="0,12 8,8.5 8,15.5" fill="#1e293b"/>
+          <rect x="24" y="2" width="255" height="20" fill="#a1622f"/>
+          <rect x="24" y="8" width="255" height="8" fill="#b87338"/>
+          <rect x="279" y="2" width="16" height="20" rx="2" fill="#e2e8f0"/>
+          <rect x="135" y="4" width="24" height="16" rx="3" fill="#1d4ed8"/>
+          <text x="147" y="16" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">4</text>
+        </svg>
+      </div>
+
+      <div class="pencil-row">
+        <svg class="pencil-svg" width="195" viewBox="0 0 195 24">
+          <polygon points="0,12 24,2 24,22" fill="#f3d2b3"/>
+          <polygon points="0,12 8,8.5 8,15.5" fill="#1e293b"/>
+          <rect x="24" y="2" width="155" height="20" fill="#a1622f"/>
+          <rect x="24" y="8" width="155" height="8" fill="#b87338"/>
+          <rect x="179" y="2" width="16" height="20" rx="2" fill="#e2e8f0"/>
+          <rect x="143" y="4" width="24" height="16" rx="3" fill="#1d4ed8"/>
+          <text x="155" y="16" fill="#fff" font-size="13" font-weight="bold" text-anchor="middle">5</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="order-boxes-container">
+      <div class="order-hint">
+        <span>⬅️ اُكْتُبْ أَرْقَامَ الْأَقْلَامِ مِنَ الْأَقْصَرِ (يَمِيناً) إِلَى الْأَطْوَلِ (يَسَاراً):</span>
+      </div>
+      <div class="slots-grid">
+        <input type="text" inputmode="numeric" maxlength="1" class="pencil-slot" id="p-slot-0" aria-label="الأقصر" />
+        <input type="text" inputmode="numeric" maxlength="1" class="pencil-slot" id="p-slot-1" aria-label="الثاني" />
+        <input type="text" inputmode="numeric" maxlength="1" class="pencil-slot" id="p-slot-2" aria-label="الثالث" />
+        <input type="text" inputmode="numeric" maxlength="1" class="pencil-slot" id="p-slot-3" aria-label="الرابع" />
+        <input type="text" inputmode="numeric" maxlength="1" class="pencil-slot" id="p-slot-4" aria-label="الأطول" />
+      </div>
+    </div>
+
+    <div id="fb-discover" class="feedback-msg"></div>
+
+    <div class="action-row">
+      <button class="check-btn" id="btn-discover" onclick="checkDiscover()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      <div class="station-counter">
+        <span class="cnt-ok">✓ الصَّوَابُ: <b id="ok-discover">0</b></span>
+        <span class="cnt-err">✗ الْخَطَأُ: <b id="err-discover">0</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       المحطة 2: أُنْجِزُ (كتاب التلميذ ص 29)
+  =========================================== -->
+  <section class="section-card locked" id="sec-apply">
+    <div class="section-title title-apply">أُنْجِزُ</div>
+    <p class="instruction-text">▪️ لَاحِظِ الْأَشْرِطَةَ ثُمَّ ارْبِطْ كُلَّ اقْتِرَاحٍ بِالْإِجَابَةِ الصَّحِيحَةِ.</p>
+
+    <div class="matching-rows">
+      <div class="match-item" id="match-row-1">
+        <div class="strip-name-box">الشَّرِيطُ الْأَزْرَقُ</div>
+        <div class="options-group">
+          <label class="radio-option" id="opt-1-a">
+            <input type="radio" name="q_strip_1" value="longer" onchange="selectRadio(this)">
+            <span>أَطْوَلُ مِنَ الشَّرِيطِ الْوَرْدِي</span>
+          </label>
+          <label class="radio-option" id="opt-1-b">
+            <input type="radio" name="q_strip_1" value="shorter" onchange="selectRadio(this)">
+            <span>أَقْصَرُ مِنَ الشَّرِيطِ الْوَرْدِي</span>
+          </label>
+        </div>
+        <div class="strips-visual-pair" title="الأشرطة كما في الكتاب">
+          <div class="v-strip" style="width: 118px; background: #d982b5;"></div>
+          <div class="v-strip" style="width: 158px; background: #67b7dc;"></div>
+        </div>
+      </div>
+
+      <div class="match-item" id="match-row-2">
+        <div class="strip-name-box">الشَّرِيطُ الْبَنَفْسَجِيُّ</div>
+        <div class="options-group">
+          <label class="radio-option" id="opt-2-a">
+            <input type="radio" name="q_strip_2" value="longer" onchange="selectRadio(this)">
+            <span>أَطْوَلُ مِنَ الشَّرِيطِ الْأَخْضَرِ</span>
+          </label>
+          <label class="radio-option" id="opt-2-b">
+            <input type="radio" name="q_strip_2" value="shorter" onchange="selectRadio(this)">
+            <span>أَقْصَرُ مِنَ الشَّرِيطِ الْأَخْضَرِ</span>
+          </label>
+        </div>
+        <div class="strips-visual-pair" title="الأشرطة كما في الكتاب">
+          <div class="v-strip" style="width: 120px; background: #1e7b1e;"></div>
+          <div class="v-strip" style="width: 156px; background: #8e5ea2;"></div>
+        </div>
+      </div>
+
+      <div class="match-item" id="match-row-3">
+        <div class="strip-name-box">الشَّرِيطُ الْبُنِّيُّ</div>
+        <div class="options-group">
+          <label class="radio-option" id="opt-3-a">
+            <input type="radio" name="q_strip_3" value="longer" onchange="selectRadio(this)">
+            <span>أَطْوَلُ مِنَ الشَّرِيطِ الْأَحْمَرِ</span>
+          </label>
+          <label class="radio-option" id="opt-3-b">
+            <input type="radio" name="q_strip_3" value="shorter" onchange="selectRadio(this)">
+            <span>أَقْصَرُ مِنَ الشَّرِيطِ الْأَحْمَرِ</span>
+          </label>
+        </div>
+        <div class="strips-visual-pair" title="الأشرطة كما في الكتاب">
+          <div class="v-strip" style="width: 154px; background: #8b5a2b;"></div>
+          <div class="v-strip" style="width: 128px; background: #c02018;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="fb-apply" class="feedback-msg"></div>
+
+    <div class="action-row">
+      <button class="check-btn" id="btn-apply" onclick="checkApply()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      <div class="station-counter">
+        <span class="cnt-ok">✓ الصَّوَابُ: <b id="ok-apply">0</b></span>
+        <span class="cnt-err">✗ الْخَطَأُ: <b id="err-apply">0</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       بطاقة تَعَلَّمْتُ (مطابقة تماماً للكتاب ص 29)
+  =========================================== -->
+  <section class="section-card" id="sec-learned">
+    <div class="section-title title-learned">تَعَلَّمْتُ</div>
+    <div class="learned-box">
+      لِتَرْتِيبِ أَشْيَاءَ حَسَبَ الطُّولِ أَسْتَعْمِلُ التَّعْبِيرَ : « <span class="highlight">أَقْصَرُ مِنْ</span> » وَ « <span class="highlight">أَطْوَلُ مِنْ</span> » .
+    </div>
+  </section>
+
+  <!-- ==========================================
+       المحطة 3: أَتَمَرَّنُ - التمرين 1 (كراس الأنشطة ص 22)
+  =========================================== -->
+  <section class="section-card locked" id="sec-practice1">
+    <div class="section-title title-practice">أَتَمَرَّنُ — التَّمْرِينُ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1</span></div>
+    <p class="instruction-text">مَدِّدِ الْخَطَّيْنِ الْأَزْرَقَ وَالْأَخْضَرَ بِحَيْثُ يَكُونُ :</p>
+    <p class="sub-instruction">
+      – الْخَطُّ الْأَزْرَقُ <b>أَقْصَرَ</b> مِنَ الْخَطِّ الْأَحْمَرِ.<br>
+      – الْخَطُّ الْأَخْضَرُ <b>أَطْوَلَ</b> مِنَ الْخَطِّ الْأَحْمَرِ.
+    </p>
+
+    <div class="extend-board">
+      <div class="line-track">
+        <div class="line-label-ar" style="color:#dc2626;">الْخَطُّ الْأَحْمَرُ (الْمَرْجِعُ):</div>
+        <div class="red-ref-box">
+          <div class="seg-line" style="width: 220px; background: #dc2626;"></div>
+        </div>
+      </div>
+
+      <div class="line-track">
+        <div class="line-label-ar" style="color:#1d4ed8;">الْخَطُّ الْأَزْرَقُ (مَدِّدْهُ بِحَيْثُ يَبْقَى أَقْصَرَ مِنَ الْأَحْمَرِ):</div>
+        <div class="interactive-extend-row">
+          <div class="extend-canvas-wrap" id="wrap-blue">
+            <div class="seg-line" style="width: 110px; background: #1d4ed8; border-radius: 3px 0 0 3px;"></div>
+            <div id="blue-ext-bar" class="seg-line" style="width: 20px; background: #3b82f6; border-radius: 0 3px 3px 0; transition: width 0.15s;"></div>
+          </div>
+          <div class="extend-controls">
+            <button class="ext-btn ext-btn-plus" id="blue-plus" onclick="changeLine('blue', 25)">مَدِّدْ ➕</button>
+            <button class="ext-btn ext-btn-minus" id="blue-minus" onclick="changeLine('blue', -25)">قَصِّرْ ➖</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="line-track">
+        <div class="line-label-ar" style="color:#15803d;">الْخَطُّ الْأَخْضَرُ (مَدِّدْهُ بِحَيْثُ يَصِيرَ أَطْوَلَ مِنَ الْأَحْمَرِ):</div>
+        <div class="interactive-extend-row">
+          <div class="extend-canvas-wrap" id="wrap-green">
+            <div class="seg-line" style="width: 120px; background: #15803d; border-radius: 3px 0 0 3px;"></div>
+            <div id="green-ext-bar" class="seg-line" style="width: 20px; background: #22c55e; border-radius: 0 3px 3px 0; transition: width 0.15s;"></div>
+          </div>
+          <div class="extend-controls">
+            <button class="ext-btn ext-btn-plus" id="green-plus" onclick="changeLine('green', 25)">مَدِّدْ ➕</button>
+            <button class="ext-btn ext-btn-minus" id="green-minus" onclick="changeLine('green', -25)">قَصِّرْ ➖</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="fb-practice1" class="feedback-msg"></div>
+
+    <div class="action-row">
+      <button class="check-btn" id="btn-practice1" onclick="checkPractice1()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      <div class="station-counter">
+        <span class="cnt-ok">✓ الصَّوَابُ: <b id="ok-practice1">0</b></span>
+        <span class="cnt-err">✗ الْخَطَأُ: <b id="err-practice1">0</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       المحطة 4: أَتَمَرَّنُ - التمرين 2 (كراس الأنشطة ص 22)
+  =========================================== -->
+  <section class="section-card locked" id="sec-practice2">
+    <div class="section-title title-practice">أَتَمَرَّنُ — التَّمْرِينُ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">2</span></div>
+    <p class="instruction-text">لَوِّنِ الشَّرِيطَيْنِ اللَّذَيْنِ لَهُمَا نَفْسُ الطُّولِ. (انْقُرْ عَلَى شَرِيطَيْنِ لِتَلْوِينِهِمَا)</p>
+
+    <div class="strips-color-arena">
+      <svg id="strips-svg" width="100%" max-width="520" viewBox="0 0 520 215" style="max-width:520px; height:auto;">
+        <g class="strip-choice" id="s-choice-1" onclick="toggleStripChoice(1)">
+          <rect x="90" y="14" width="280" height="18" fill="#ffffff" stroke="#1e293b" stroke-width="2" />
+        </g>
+
+        <g class="strip-choice" id="s-choice-2" onclick="toggleStripChoice(2)" transform="translate(55, 42) rotate(5.5)">
+          <rect x="0" y="0" width="310" height="18" fill="#ffffff" stroke="#1e293b" stroke-width="2" />
+        </g>
+
+        <g class="strip-choice" id="s-choice-3" onclick="toggleStripChoice(3)" transform="translate(185, 130) rotate(-7)">
+          <rect x="0" y="0" width="250" height="18" fill="#ffffff" stroke="#1e293b" stroke-width="2" />
+        </g>
+
+        <g class="strip-choice" id="s-choice-4" onclick="toggleStripChoice(4)">
+          <rect x="68" y="175" width="280" height="18" fill="#ffffff" stroke="#1e293b" stroke-width="2" />
+        </g>
+      </svg>
+    </div>
+
+    <div id="fb-practice2" class="feedback-msg"></div>
+
+    <div class="action-row">
+      <button class="check-btn" id="btn-practice2" onclick="checkPractice2()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      <div class="station-counter">
+        <span class="cnt-ok">✓ الصَّوَابُ: <b id="ok-practice2">0</b></span>
+        <span class="cnt-err">✗ الْخَطَأُ: <b id="err-practice2">0</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       المحطة 5: أَبْحَثُ (كراس الأنشطة ص 22)
+  =========================================== -->
+  <section class="section-card locked" id="sec-search">
+    <div class="section-title title-search">أَبْحَثُ</div>
+    <p class="instruction-text">أَحِطِ الْحَلَزُونَ الَّذِي يَصِلُ أَوَّلاً إِلَى الْخَسِّ. (انْقُرْ عَلَى الْحَلَزُونِ لِإِحَاطَتِهِ)</p>
+
+    <div class="snails-arena">
+      <svg width="100%" viewBox="0 0 480 260" style="max-width:480px; height:auto;">
+        <line x1="95" y1="88" x2="265" y2="131" stroke="#334155" stroke-width="2" />
+        <line x1="93" y1="96" x2="265" y2="139" stroke="#334155" stroke-width="2" />
+
+        <line x1="316" y1="76" x2="261" y2="131" stroke="#334155" stroke-width="2" />
+        <line x1="322" y1="82" x2="268" y2="137" stroke="#334155" stroke-width="2" />
+
+        <line x1="365" y1="215" x2="262" y2="138" stroke="#334155" stroke-width="2" />
+        <line x1="370" y1="208" x2="268" y2="131" stroke="#334155" stroke-width="2" />
+
+        <g transform="translate(265, 135)">
+          <ellipse cx="0" cy="0" rx="23" ry="18" fill="#86efac" stroke="#15803d" stroke-width="2.5" />
+          <path d="M-12,-4 Q0,-16 12,-4 Q16,8 0,12 Q-16,8 -12,-4 Z" fill="#22c55e" stroke="#166534" stroke-width="1.5"/>
+          <path d="M-6,-2 Q0,-9 6,-2 Q8,5 0,7 Q-8,5 -6,-2 Z" fill="#bbf7d0"/>
+        </g>
+
+        <g class="snail-node" id="snail-left" onclick="selectSnail('left')" transform="translate(72, 82)">
+          <circle class="snail-ring" cx="0" cy="0" r="34" />
+          <path d="M-18,12 Q0,14 20,10 Q24,4 18,2 L-14,6 Z" fill="#d9f99d" stroke="#3f6212" stroke-width="1.5"/>
+          <circle cx="19" cy="4" r="4" fill="#d9f99d" stroke="#3f6212" stroke-width="1.5"/>
+          <line x1="20" y1="1" x2="23" y2="-6" stroke="#3f6212" stroke-width="1.5"/>
+          <line x1="17" y1="1" x2="18" y2="-6" stroke="#3f6212" stroke-width="1.5"/>
+          <circle cx="-4" cy="-2" r="13" fill="#92400e" stroke="#451a03" stroke-width="2"/>
+          <path d="M-4,-2 m-6,0 a6,6 0 1,0 12,0 a4,4 0 1,0 -8,0" fill="none" stroke="#fde68a" stroke-width="1.8"/>
+        </g>
+
+        <g class="snail-node" id="snail-top" onclick="selectSnail('top')" transform="translate(332, 62)">
+          <circle class="snail-ring" cx="0" cy="0" r="34" />
+          <path d="M18,12 Q0,14 -20,10 Q-24,4 -18,2 L14,6 Z" fill="#d9f99d" stroke="#3f6212" stroke-width="1.5"/>
+          <circle cx="-19" cy="4" r="4" fill="#d9f99d" stroke="#3f6212" stroke-width="1.5"/>
+          <line x1="-20" y1="1" x2="-23" y2="-6" stroke="#3f6212" stroke-width="1.5"/>
+          <line x1="-17" y1="1" x2="-18" y2="-6" stroke="#3f6212" stroke-width="1.5"/>
+          <circle cx="4" cy="-2" r="13" fill="#92400e" stroke="#451a03" stroke-width="2"/>
+          <path d="M4,-2 m-6,0 a6,6 0 1,0 12,0 a4,4 0 1,0 -8,0" fill="none" stroke="#fde68a" stroke-width="1.8"/>
+        </g>
+
+        <g class="snail-node" id="snail-bottom" onclick="selectSnail('bottom')" transform="translate(384, 218)">
+          <circle class="snail-ring" cx="0" cy="0" r="34" />
+          <path d="M18,12 Q0,14 -20,10 Q-24,4 -18,2 L14,6 Z" fill="#d9f99d" stroke="#3f6212" stroke-width="1.5"/>
+          <circle cx="-19" cy="4" r="4" fill="#d9f99d" stroke="#3f6212" stroke-width="1.5"/>
+          <line x1="-20" y1="1" x2="-23" y2="-6" stroke="#3f6212" stroke-width="1.5"/>
+          <line x1="-17" y1="1" x2="-18" y2="-6" stroke="#3f6212" stroke-width="1.5"/>
+          <circle cx="4" cy="-2" r="13" fill="#92400e" stroke="#451a03" stroke-width="2"/>
+          <path d="M4,-2 m-6,0 a6,6 0 1,0 12,0 a4,4 0 1,0 -8,0" fill="none" stroke="#fde68a" stroke-width="1.8"/>
+        </g>
+      </svg>
+    </div>
+
+    <div id="fb-search" class="feedback-msg"></div>
+
+    <div class="action-row">
+      <button class="check-btn" id="btn-search" onclick="checkSearch()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      <div class="station-counter">
+        <span class="cnt-ok">✓ الصَّوَابُ: <b id="ok-search">0</b></span>
+        <span class="cnt-err">✗ الْخَطَأُ: <b id="err-search">0</b></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+       بطاقة الحصيلة والتقييم الكلي (أسفل التمارين)
+  =========================================== -->
+  <section class="summary-card" id="summary-section">
+    <h2 class="summary-title">📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْكُلِّيُّ</h2>
+
+    <div class="summary-grid">
+      <div class="gauge-wrapper">
+        <svg class="gauge-svg" viewBox="0 0 150 150">
+          <circle class="gauge-bg" cx="75" cy="75" r="65"></circle>
+          <circle class="gauge-fill" id="gauge-circle" cx="75" cy="75" r="65"></circle>
+        </svg>
+        <div class="gauge-text">
+          <span class="gauge-percent" id="total-percent" dir="ltr">0%</span>
+          <span class="gauge-sub">نِسْبَةُ النَّجَاحِ</span>
+        </div>
+      </div>
+
+      <div class="stats-boxes">
+        <div class="stat-pill ok">
+          <span>✓ الْإِجَابَاتُ الصَّحِيحَةُ:</span>
+          <span id="total-ok" dir="ltr">0</span>
+        </div>
+        <div class="stat-pill err">
+          <span>✗ الْإِجَابَاتُ الْخَاطِئَةُ:</span>
+          <span id="total-err" dir="ltr">0</span>
+        </div>
+        <div class="stat-pill tot">
+          <span>📝 مَجْمُوعُ الْأَسْئِلَةِ الْمُجَابِ عَنْهَا:</span>
+          <span id="total-answered" dir="ltr">0 / 13</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="remark-banner" id="final-remark">
+      أَجِبْ عَنِ التَّمَارِينِ بِالتَّسَلْسُلِ لِتَظْهَرَ مُلَاحَظَتُكَ هُنَا 🌟
+    </div>
+
+    <button class="reset-btn" onclick="resetLesson()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+  </section>
+
+  <!-- زر العودة إلى الفهرس -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</main>
+
+<!-- ========================================
+     سكريبت الحماية — قفل الاشتراك الإجباري
+     ======================================== -->
+<script>
+  const CHANNEL_ID = "-1004456852024";
+  const tg = window.Telegram?.WebApp;
+  if (tg) { tg.ready(); tg.expand(); }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس التفاعلي
+     ======================================== -->
+<script>
+  const state = {
+    discoverDone: false,
+    applyDone: false,
+    practice1Done: false,
+    practice2Done: false,
+    searchDone: false,
+    totalCorrect: 0,
+    totalWrong: 0,
+    blueExtra: 20,
+    greenExtra: 20,
+    selectedStrips: [],
+    selectedSnail: null
+  };
+
+  function updateGlobalScore() {
+    const ok = state.totalCorrect;
+    const err = state.totalWrong;
+    const answered = ok + err;
+
+    document.getElementById('total-ok').textContent = ok;
+    document.getElementById('total-err').textContent = err;
+    document.getElementById('total-answered').textContent = `${answered} / 13`;
+
+    let percent = 0;
+    if (answered > 0) {
+      percent = Math.round((ok / (ok + err)) * 100);
+    }
+    percent = Math.min(100, Math.max(0, percent));
+
+    document.getElementById('total-percent').textContent = `${percent}%`;
+
+    const circumference = 408.4;
+    const offset = circumference - (percent / 100) * circumference;
+    const circle = document.getElementById('gauge-circle');
+    circle.style.strokeDashoffset = offset;
+
+    if (percent >= 80) {
+      circle.style.stroke = '#16a34a';
+    } else if (percent >= 50) {
+      circle.style.stroke = '#f59e0b';
+    } else {
+      circle.style.stroke = '#dc2626';
+    }
+
+    const remarkEl = document.getElementById('final-remark');
+    if (answered === 0) {
+      remarkEl.textContent = 'أَجِبْ عَنِ التَّمَارِينِ بِالتَّسَلْسُلِ لِتَظْهَرَ مُلَاحَظَتُكَ هُنَا 🌟';
+    } else if (percent === 100 && answered === 13) {
+      remarkEl.textContent = '🏆 مُمْتَازٌ جِدّاً! أَنْتَ عَبْقَرِيُّ الرِّيَاضِيَّاتِ، كُلُّ إِجَابَاتِكَ صَحِيحَةٌ!';
+    } else if (percent >= 80) {
+      remarkEl.textContent = '🌟 رَائِعٌ جِدّاً! نَتِيجَةٌ مُمْتَازَةٌ، أَحْسَنْتَ يَا بَطَلُ!';
+    } else if (percent >= 60) {
+      remarkEl.textContent = '👍 جَيِّدٌ! واصِلِ التَّدَرُّبَ لِتُحَقِّقَ الْعَلَامَةَ الْكَامِلَةَ!';
+    } else if (percent >= 40) {
+      remarkEl.textContent = '💪 مُحَاوَلَةٌ لَا بَأْسَ بِهَا، رَاجِعْ أَخْطَاءَكَ وَحَاوِلْ مَرَّةً أُخْرَى!';
+    } else {
+      remarkEl.textContent = '📚 تَحْتَاجُ إِلَى مَزِيدٍ مِنَ التَّرْكِيزِ، اسْتَعْمِلْ شَرِيطَ الْوَرَقِ الْمُقَوَّى وَأَعِدِ الْمُحَاوَلَةَ!';
+    }
+  }
+
+  function unlockSection(secId) {
+    const el = document.getElementById(secId);
+    if (el) el.classList.remove('locked');
+  }
+
+  function showFeedback(id, isOk, text) {
+    const fb = document.getElementById(id);
+    fb.textContent = text;
+    fb.className = `feedback-msg show ${isOk ? 'ok' : 'err'}`;
+  }
+
+  function checkDiscover() {
+    if (state.discoverDone) return;
+
+    const expected = ['1', '5', '2', '4', '3'];
+    const inputs = [];
+    for (let i = 0; i < 5; i++) {
+      const inp = document.getElementById(`p-slot-${i}`);
+      const val = inp.value.trim();
+      if (!val) {
+        showFeedback('fb-discover', false, '⚠️ اِمْلَأْ جَمِيعَ الْخَانَاتِ الْخَمْسِ أَوَّلاً!');
+        return;
+      }
+      inputs.push(inp);
+    }
+
+    let okCount = 0;
+    let errCount = 0;
+
+    inputs.forEach((inp, idx) => {
+      inp.disabled = true;
+      if (inp.value.trim() === expected[idx]) {
+        inp.classList.add('correct');
+        okCount++;
+      } else {
+        inp.classList.add('incorrect');
+        errCount++;
+      }
+    });
+
+    state.discoverDone = true;
+    state.totalCorrect += okCount;
+    state.totalWrong += errCount;
+
+    document.getElementById('ok-discover').textContent = okCount;
+    document.getElementById('err-discover').textContent = errCount;
+    document.getElementById('btn-discover').disabled = true;
+
+    if (errCount === 0) {
+      showFeedback('fb-discover', true, '👏 أَحْسَنْتَ! التَّرْتِيبُ الصَّحِيحُ مِنَ الْأَقْصَرِ إِلَى الْأَطْوَلِ هُوَ: 1 ← 5 ← 2 ← 4 ← 3');
+    } else {
+      showFeedback('fb-discover', false, '❌ التَّرْتِيبُ الصَّحِيحُ مِنَ الْأَقْصَرِ إِلَى الْأَطْوَلِ هُوَ: 1 ← 5 ← 2 ← 4 ← 3');
+    }
+
+    updateGlobalScore();
+    unlockSection('sec-apply');
+  }
+
+  function selectRadio(radioEl) {
+    if (state.applyDone) return;
+    const name = radioEl.name;
+    document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+      r.parentElement.classList.remove('selected');
+    });
+    radioEl.parentElement.classList.add('selected');
+  }
+
+  function checkApply() {
+    if (state.applyDone) return;
+
+    const q1 = document.querySelector('input[name="q_strip_1"]:checked');
+    const q2 = document.querySelector('input[name="q_strip_2"]:checked');
+    const q3 = document.querySelector('input[name="q_strip_3"]:checked');
+
+    if (!q1 || !q2 || !q3) {
+      showFeedback('fb-apply', false, '⚠️ اِخْتَرْ إِجَابَةً وَاحِدَةً لِكُلِّ شَرِيطٍ قَبْلَ التَّحَقُّقِ!');
+      return;
+    }
+
+    const answers = [
+      { chosen: q1, correctVal: 'longer', optA: 'opt-1-a', optB: 'opt-1-b' },
+      { chosen: q2, correctVal: 'longer', optA: 'opt-2-a', optB: 'opt-2-b' },
+      { chosen: q3, correctVal: 'longer', optA: 'opt-3-a', optB: 'opt-3-b' }
+    ];
+
+    let okCount = 0;
+    let errCount = 0;
+
+    answers.forEach(item => {
+      const chosenLabel = item.chosen.parentElement;
+      if (item.chosen.value === item.correctVal) {
+        chosenLabel.classList.add('correct');
+        okCount++;
+      } else {
+        chosenLabel.classList.add('incorrect');
+        const rightOpt = item.correctVal === 'longer' ? document.getElementById(item.optA) : document.getElementById(item.optB);
+        rightOpt.classList.add('correct');
+        errCount++;
+      }
+    });
+
+    document.querySelectorAll('#sec-apply input[type="radio"]').forEach(r => r.disabled = true);
+
+    state.applyDone = true;
+    state.totalCorrect += okCount;
+    state.totalWrong += errCount;
+
+    document.getElementById('ok-apply').textContent = okCount;
+    document.getElementById('err-apply').textContent = errCount;
+    document.getElementById('btn-apply').disabled = true;
+
+    if (errCount === 0) {
+      showFeedback('fb-apply', true, '🌟 مُمْتَازٌ! جَمِيعُ الْمُقَارَنَاتِ صَحِيحَةٌ.');
+    } else {
+      showFeedback('fb-apply', false, '💡 لَاحِظِ الْإِجَابَاتِ الصَّحِيحَةَ الْمُلَوَّنَةَ بِالْأَخْضَرِ.');
+    }
+
+    updateGlobalScore();
+    unlockSection('sec-practice1');
+  }
+
+  function changeLine(color, delta) {
+    if (state.practice1Done) return;
+    if (color === 'blue') {
+      state.blueExtra = Math.max(0, Math.min(180, state.blueExtra + delta));
+      document.getElementById('blue-ext-bar').style.width = `${state.blueExtra}px`;
+    } else if (color === 'green') {
+      state.greenExtra = Math.max(0, Math.min(200, state.greenExtra + delta));
+      document.getElementById('green-ext-bar').style.width = `${state.greenExtra}px`;
+    }
+  }
+
+  function checkPractice1() {
+    if (state.practice1Done) return;
+
+    const blueTotal = 110 + state.blueExtra;
+    const greenTotal = 120 + state.greenExtra;
+    const redTotal = 220;
+
+    const isBlueValid = (blueTotal > 110) && (blueTotal < redTotal);
+    const isGreenValid = (greenTotal > redTotal);
+
+    let okCount = 0;
+    let errCount = 0;
+
+    const wrapBlue = document.getElementById('wrap-blue');
+    const wrapGreen = document.getElementById('wrap-green');
+
+    if (isBlueValid) {
+      wrapBlue.style.borderColor = '#16a34a';
+      wrapBlue.style.background = '#dcfce7';
+      okCount++;
+    } else {
+      wrapBlue.style.borderColor = '#dc2626';
+      wrapBlue.style.background = '#fee2e2';
+      errCount++;
+    }
+
+    if (isGreenValid) {
+      wrapGreen.style.borderColor = '#16a34a';
+      wrapGreen.style.background = '#dcfce7';
+      okCount++;
+    } else {
+      wrapGreen.style.borderColor = '#dc2626';
+      wrapGreen.style.background = '#fee2e2';
+      errCount++;
+    }
+
+    ['blue-plus', 'blue-minus', 'green-plus', 'green-minus'].forEach(id => {
+      document.getElementById(id).disabled = true;
+    });
+
+    state.practice1Done = true;
+    state.totalCorrect += okCount;
+    state.totalWrong += errCount;
+
+    document.getElementById('ok-practice1').textContent = okCount;
+    document.getElementById('err-practice1').textContent = errCount;
+    document.getElementById('btn-practice1').disabled = true;
+
+    if (errCount === 0) {
+      showFeedback('fb-practice1', true, '👏 رَائِعٌ! الْخَطُّ الْأَزْرَقُ مُمَدَّدٌ وَأَقْصَرُ مِنَ الْأَحْمَرِ، وَالْخَطُّ الْأَخْضَرُ أَطْوَلُ مِنَ الْأَحْمَرِ.');
+    } else {
+      showFeedback('fb-practice1', false, '❌ تَذَكَّرْ: يَجِبُ تَمْدِيدُ الْأَزْرَقِ دُونَ أَنْ يَبْلُغَ طُولَ الْأَحْمَرِ، وَتَمْدِيدُ الْأَخْضَرِ لِيَتَجَاوَزَ طُولَ الْأَحْمَرِ.');
+    }
+
+    updateGlobalScore();
+    unlockSection('sec-practice2');
+  }
+
+  function toggleStripChoice(num) {
+    if (state.practice2Done) return;
+    const idx = state.selectedStrips.indexOf(num);
+    const el = document.getElementById(`s-choice-${num}`);
+
+    if (idx > -1) {
+      state.selectedStrips.splice(idx, 1);
+      el.classList.remove('colored');
+    } else {
+      if (state.selectedStrips.length >= 2) {
+        const first = state.selectedStrips.shift();
+        document.getElementById(`s-choice-${first}`).classList.remove('colored');
+      }
+      state.selectedStrips.push(num);
+      el.classList.add('colored');
+    }
+  }
+
+  function checkPractice2() {
+    if (state.practice2Done) return;
+
+    if (state.selectedStrips.length !== 2) {
+      showFeedback('fb-practice2', false, '⚠️ اِنْقُرْ عَلَى شَرِيطَيْنِ اثْنَيْنِ لِتَلْوِينِهِمَا قَبْلَ التَّحَقُّقِ!');
+      return;
+    }
+
+    const correctSet = [1, 4];
+    let okCount = 0;
+    let errCount = 0;
+
+    state.selectedStrips.forEach(num => {
+      const el = document.getElementById(`s-choice-${num}`);
+      if (correctSet.includes(num)) {
+        el.classList.add('correct');
+        okCount++;
+      } else {
+        el.classList.add('incorrect');
+        errCount++;
+      }
+    });
+
+    correctSet.forEach(num => {
+      if (!state.selectedStrips.includes(num)) {
+        document.getElementById(`s-choice-${num}`).classList.add('correct');
+      }
+    });
+
+    state.practice2Done = true;
+    state.totalCorrect += okCount;
+    state.totalWrong += errCount;
+
+    document.getElementById('ok-practice2').textContent = okCount;
+    document.getElementById('err-practice2').textContent = errCount;
+    document.getElementById('btn-practice2').disabled = true;
+
+    if (errCount === 0) {
+      showFeedback('fb-practice2', true, '🌟 أَحْسَنْتَ! الشَّرِيطُ الْأَوَّلُ وَالشَّرِيطُ الْأَخِيرُ لَهُمَا نَفْسُ الطُّولِ.');
+    } else {
+      showFeedback('fb-practice2', false, '💡 الشَّرِيطَانِ اللَّذَانِ لَهُمَا نَفْسُ الطُّولِ هُمَا الشَّرِيطُ الْأَعْلَى وَالشَّرِيطُ الْأَسْفَلُ (بِالْأَخْضَرِ).');
+    }
+
+    updateGlobalScore();
+    unlockSection('sec-search');
+  }
+
+  function selectSnail(id) {
+    if (state.searchDone) return;
+    state.selectedSnail = id;
+    ['left', 'top', 'bottom'].forEach(s => {
+      document.getElementById(`snail-${s}`).classList.remove('selected');
+    });
+    document.getElementById(`snail-${id}`).classList.add('selected');
+  }
+
+  function checkSearch() {
+    if (state.searchDone) return;
+
+    if (!state.selectedSnail) {
+      showFeedback('fb-search', false, '⚠️ اِنْقُرْ عَلَى أَحَدِ الْحَلَازِينِ الثَّلَاثَةِ لِإِحَاطَتِهِ!');
+      return;
+    }
+
+    let okCount = 0;
+    let errCount = 0;
+
+    const chosenEl = document.getElementById(`snail-${state.selectedSnail}`);
+    if (state.selectedSnail === 'top') {
+      chosenEl.classList.add('correct');
+      okCount = 1;
+    } else {
+      chosenEl.classList.add('incorrect');
+      document.getElementById('snail-top').classList.add('correct');
+      errCount = 1;
+    }
+
+    state.searchDone = true;
+    state.totalCorrect += okCount;
+    state.totalWrong += errCount;
+
+    document.getElementById('ok-search').textContent = okCount;
+    document.getElementById('err-search').textContent = errCount;
+    document.getElementById('btn-search').disabled = true;
+
+    if (errCount === 0) {
+      showFeedback('fb-search', true, '🎉 عَبْقَرِيٌّ! الْحَلَزُونُ الْعُلْوِيُّ الْأَيْمَنُ يَصِلُ أَوَّلاً لِأَنَّ مَسَارَهُ هُوَ الْأَقْصَرُ.');
+    } else {
+      showFeedback('fb-search', false, '💡 الْحَلَزُونُ الَّذِي يَصِلُ أَوَّلاً هُوَ الْحَلَزُونُ الْعُلْوِيُّ الْأَيْمَنُ (الْمُحَاطُ بِالْأَخْضَرِ) لِأَنَّ طَرِيقَهُ أَقْصَرُ.');
+    }
+
+    updateGlobalScore();
+  }
+
+  function resetLesson() {
+    state.discoverDone = false;
+    state.applyDone = false;
+    state.practice1Done = false;
+    state.practice2Done = false;
+    state.searchDone = false;
+    state.totalCorrect = 0;
+    state.totalWrong = 0;
+    state.blueExtra = 20;
+    state.greenExtra = 20;
+    state.selectedStrips = [];
+    state.selectedSnail = null;
+
+    for (let i = 0; i < 5; i++) {
+      const inp = document.getElementById(`p-slot-${i}`);
+      inp.value = '';
+      inp.disabled = false;
+      inp.classList.remove('correct', 'incorrect');
+    }
+    document.getElementById('btn-discover').disabled = false;
+    document.getElementById('ok-discover').textContent = '0';
+    document.getElementById('err-discover').textContent = '0';
+    document.getElementById('fb-discover').className = 'feedback-msg';
+
+    document.querySelectorAll('#sec-apply input[type="radio"]').forEach(r => {
+      r.checked = false;
+      r.disabled = false;
+      r.parentElement.classList.remove('selected', 'correct', 'incorrect');
+    });
+    document.getElementById('btn-apply').disabled = false;
+    document.getElementById('ok-apply').textContent = '0';
+    document.getElementById('err-apply').textContent = '0';
+    document.getElementById('fb-apply').className = 'feedback-msg';
+    document.getElementById('sec-apply').classList.add('locked');
+
+    document.getElementById('blue-ext-bar').style.width = '20px';
+    document.getElementById('green-ext-bar').style.width = '20px';
+    document.getElementById('wrap-blue').style.borderColor = '#94a3b8';
+    document.getElementById('wrap-blue').style.background = '#f8fafc';
+    document.getElementById('wrap-green').style.borderColor = '#94a3b8';
+    document.getElementById('wrap-green').style.background = '#f8fafc';
+    ['blue-plus', 'blue-minus', 'green-plus', 'green-minus'].forEach(id => {
+      document.getElementById(id).disabled = false;
+    });
+    document.getElementById('btn-practice1').disabled = false;
+    document.getElementById('ok-practice1').textContent = '0';
+    document.getElementById('err-practice1').textContent = '0';
+    document.getElementById('fb-practice1').className = 'feedback-msg';
+    document.getElementById('sec-practice1').classList.add('locked');
+
+    [1, 2, 3, 4].forEach(n => {
+      document.getElementById(`s-choice-${n}`).classList.remove('colored', 'correct', 'incorrect');
+    });
+    document.getElementById('btn-practice2').disabled = false;
+    document.getElementById('ok-practice2').textContent = '0';
+    document.getElementById('err-practice2').textContent = '0';
+    document.getElementById('fb-practice2').className = 'feedback-msg';
+    document.getElementById('sec-practice2').classList.add('locked');
+
+    ['left', 'top', 'bottom'].forEach(s => {
+      document.getElementById(`snail-${s}`).classList.remove('selected', 'correct', 'incorrect');
+    });
+    document.getElementById('btn-search').disabled = false;
+    document.getElementById('ok-search').textContent = '0';
+    document.getElementById('err-search').textContent = '0';
+    document.getElementById('fb-search').className = 'feedback-msg';
+    document.getElementById('sec-search').classList.add('locked');
+
+    updateGlobalScore();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  const stripEl = document.getElementById('floating-paper-strip');
+  const toggleBtn = document.getElementById('toggleStripBtn');
+  let stripVisible = false;
+  let stripAngle = 0;
+  let stripX = window.innerWidth / 2 - 170;
+  let stripY = 140;
+
+  function togglePaperStrip() {
+    stripVisible = !stripVisible;
+    stripEl.style.display = stripVisible ? 'flex' : 'none';
+    toggleBtn.textContent = stripVisible ? 'إِخْفَاءُ الشَّرِيطِ' : 'إِظْهَارُ الشَّرِيطِ';
+    toggleBtn.classList.toggle('active', stripVisible);
+    if (stripVisible) applyStripTransform();
+  }
+
+  function rotateStrip(deg) {
+    if (!stripVisible) togglePaperStrip();
+    stripAngle = (stripAngle + deg) % 360;
+    applyStripTransform();
+  }
+
+  function resetStrip() {
+    stripAngle = 0;
+    stripX = Math.max(10, window.innerWidth / 2 - 170);
+    stripY = 140;
+    applyStripTransform();
+  }
+
+  function applyStripTransform() {
+    stripEl.style.left = `${stripX}px`;
+    stripEl.style.top = `${stripY}px`;
+    stripEl.style.transform = `rotate(${stripAngle}deg)`;
+  }
+
+  let isDragging = false;
+  let dragOffsetX = 0;
+  let dragOffsetY = 0;
+
+  stripEl.addEventListener('pointerdown', (e) => {
+    isDragging = true;
+    dragOffsetX = e.clientX - stripX;
+    dragOffsetY = e.clientY - stripY;
+    stripEl.setPointerCapture(e.pointerId);
+  });
+
+  stripEl.addEventListener('pointermove', (e) => {
+    if (!isDragging) return;
+    stripX = e.clientX - dragOffsetX;
+    stripY = e.clientY - dragOffsetY;
+    applyStripTransform();
+  });
+
+  stripEl.addEventListener('pointerup', (e) => {
+    isDragging = false;
+    stripEl.releasePointerCapture(e.pointerId);
+  });
+
+  updateGlobalScore();
+</script>
+</body>
+</html>
