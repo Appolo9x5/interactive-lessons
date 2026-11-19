@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدَّرْسُ 19 : الْـمَسَالِكُ (1) - السَّنَةُ الْأُولَى ابْتِدَائِي</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #2e7d32;
+    --primary-light: #e8f5e9;
+    --secondary: #1565c0;
+    --accent: #ef6c00;
+    --success: #2e7d32;
+    --success-bg: #dcedc8;
+    --error: #c62828;
+    --error-bg: #ffcdd2;
+    --bg: #f4f7f5;
+    --card: #ffffff;
+    --text: #1b2a1e;
+    --border: #cfd8dc;
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: 'Cairo', Tahoma, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+    line-height: 1.7;
+  }
+
+  .header-banner {
+    background: linear-gradient(135deg, #2e7d32 0%, #43a047 100%);
+    color: #fff;
+    padding: 18px 16px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    border-bottom: 5px solid #ffb300;
+  }
+
+  .header-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.22);
+    padding: 3px 14px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .header-banner h1 {
+    margin: 4px 0 0;
+    font-size: 1.85rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 18px auto 40px;
+    padding: 0 12px;
+  }
+
+  .section-card {
+    background: var(--card);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    border: 2px solid #e0e7e2;
+    transition: opacity 0.3s ease;
+  }
+
+  .section-card.locked {
+    opacity: 0.55;
+    pointer-events: none;
+    position: relative;
+  }
+
+  .lock-notice {
+    background: #fff3e0;
+    color: #e65100;
+    border: 1.5px dashed #ffb74d;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    margin-bottom: 14px;
+    text-align: center;
+    display: none;
+  }
+
+  .section-card.locked .lock-notice {
+    display: block;
+  }
+
+  .section-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #d32f2f;
+    color: #fff;
+    padding: 6px 20px;
+    border-radius: 12px;
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-top: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 6px rgba(211,47,47,0.25);
+  }
+
+  .section-title.green {
+    background: #2e7d32;
+    box-shadow: 0 3px 6px rgba(46,125,50,0.25);
+  }
+
+  .exercise-box {
+    border: 2px solid #e8ece9;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 18px;
+    background: #fafcfb;
+  }
+
+  .exercise-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: #1b2a1e;
+  }
+
+  .num-badge {
+    background: #2e7d32;
+    color: #fff;
+    min-width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+
+  .canvas-wrapper {
+    position: relative;
+    background: #fff;
+    border: 2px solid #cfd8dc;
+    border-radius: 14px;
+    overflow: hidden;
+    margin: 10px auto;
+    max-width: 100%;
+    touch-action: none;
+    user-select: none;
+  }
+
+  svg.interactive-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+  }
+
+  .color-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 25px;
+    border: 3px solid transparent;
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .color-btn.active {
+    border-color: #111;
+    transform: scale(1.06);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  }
+
+  .color-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(0,0,0,0.3);
+  }
+
+  .btn-action {
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 0.98rem;
+    padding: 9px 20px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+
+  .btn-check {
+    background: #1565c0;
+    color: #fff;
+    box-shadow: 0 3px 8px rgba(21,101,192,0.3);
+  }
+
+  .btn-check:hover:not(:disabled) {
+    background: #0d47a1;
+  }
+
+  .btn-check:disabled {
+    background: #90a4ae;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .btn-clear {
+    background: #eceff1;
+    color: #37474f;
+    border: 1.5px solid #cfd8dc;
+  }
+
+  .btn-clear:hover:not(:disabled) {
+    background: #cfd8dc;
+  }
+
+  .btn-clear:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .option-card {
+    background: #fff;
+    border: 2.5px solid #cfd8dc;
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-family: inherit;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #1b2a1e;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .option-card:hover:not(:disabled) {
+    border-color: #1565c0;
+    background: #e3f2fd;
+  }
+
+  .option-card.selected {
+    border-color: #1565c0;
+    background: #bbdefb;
+  }
+
+  .option-card.correct {
+    background: var(--success-bg) !important;
+    border-color: var(--success) !important;
+    color: #1b5e20 !important;
+  }
+
+  .option-card.wrong {
+    background: var(--error-bg) !important;
+    border-color: var(--error) !important;
+    color: #b71c1c !important;
+  }
+
+  .option-card:disabled {
+    cursor: default;
+  }
+
+  .feedback-banner {
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 1rem;
+    display: none;
+  }
+
+  .feedback-banner.success {
+    display: block;
+    background: var(--success-bg);
+    color: #1b5e20;
+    border: 2px solid var(--success);
+  }
+
+  .feedback-banner.error {
+    display: block;
+    background: var(--error-bg);
+    color: #b71c1c;
+    border: 2px solid var(--error);
+  }
+
+  .stage-counter {
+    background: #eef4f0;
+    border: 1.5px solid #c8e6c9;
+    border-radius: 10px;
+    padding: 8px 16px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: #1b5e20;
+    margin-top: 10px;
+  }
+
+  /* بطاقة تعلمت */
+  .learned-card {
+    background: #fffde7;
+    border: 3px solid #fbc02d;
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(251,192,45,0.2);
+    text-align: center;
+  }
+
+  .learned-badge {
+    display: inline-block;
+    background: #f57f17;
+    color: #fff;
+    padding: 5px 22px;
+    border-radius: 20px;
+    font-size: 1.25rem;
+    font-weight: 900;
+    margin-bottom: 12px;
+  }
+
+  .learned-text {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #212121;
+    margin: 0;
+  }
+
+  /* بطاقة التقييم النهائي */
+  .final-report {
+    background: linear-gradient(180deg, #ffffff 0%, #f1f8e9 100%);
+    border: 3px solid #2e7d32;
+    border-radius: 20px;
+    padding: 24px 18px;
+    text-align: center;
+    box-shadow: 0 6px 20px rgba(46,125,50,0.15);
+  }
+
+  .final-report h2 {
+    margin-top: 0;
+    color: #1b5e20;
+    font-size: 1.5rem;
+    font-weight: 900;
+  }
+
+  .stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    margin: 18px 0;
+  }
+
+  .stat-box {
+    background: #fff;
+    border: 2px solid #cfd8dc;
+    border-radius: 14px;
+    padding: 14px 22px;
+    min-width: 140px;
+  }
+
+  .stat-box.good {
+    border-color: #2e7d32;
+    background: #e8f5e9;
+  }
+
+  .stat-box.bad {
+    border-color: #c62828;
+    background: #ffebee;
+  }
+
+  .stat-label {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #455a64;
+  }
+
+  .stat-value {
+    font-size: 1.9rem;
+    font-weight: 900;
+  }
+
+  .stat-box.good .stat-value { color: #2e7d32; }
+  .stat-box.bad .stat-value { color: #c62828; }
+
+  .gauge-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+  }
+
+  .gauge-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.75rem;
+    color: #1b5e20;
+  }
+
+  .progress-bar-wrap {
+    width: 100%;
+    max-width: 500px;
+    height: 18px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 12px auto;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #43a047, #2e7d32);
+    transition: width 0.5s ease;
+  }
+
+  .final-remark {
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 12px 18px;
+    border-radius: 12px;
+    background: #fff;
+    border: 2px dashed #4caf50;
+    display: inline-block;
+    margin: 10px 0 18px;
+    color: #1b5e20;
+  }
+
+  .btn-restart {
+    background: #ef6c00;
+    color: #fff;
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 800;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(239,108,0,0.3);
+  }
+
+  .btn-restart:hover {
+    background: #e65100;
+  }
+
+  .bird-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .bird-select-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: #fff;
+    border: 2px solid #cfd8dc;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-weight: 800;
+  }
+
+  .bird-select-item select {
+    font-family: inherit;
+    font-weight: 800;
+    font-size: 1rem;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 2px solid #90a4ae;
+    background: #f9fbfc;
+  }
+
+  .bird-select-item.correct {
+    background: var(--success-bg);
+    border-color: var(--success);
+  }
+
+  .bird-select-item.wrong {
+    background: var(--error-bg);
+    border-color: var(--error);
+  }
+
+  .hint-note {
+    font-size: 0.94rem;
+    color: #37474f;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .maze-cell {
+    cursor: pointer;
+    transition: fill 0.15s ease;
+  }
+
+  /* ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== */
+  #sub-lock-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .lock-box {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+    border: 2px solid #e1f5fe;
+    max-width: 380px;
+    width: 100%;
+  }
+  .lock-icon { font-size: 50px; margin-bottom: 12px; }
+  .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+  .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+  .btn-channel {
+    display: block;
+    width: 100%;
+    background: #0288d1;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    font-family: 'Cairo', sans-serif;
+  }
+  .btn-check-sub {
+    width: 100%;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 13px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    font-family: 'Cairo', sans-serif;
+  }
+  .sub-status-msg {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-height: 24px;
+  }
+  .btn-back-home {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin: 20px auto 30px auto;
+    background: #0d47a1;
+    color: #ffffff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    font-family: 'Cairo', sans-serif;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<header class="header-banner">
+  <div class="header-badge">الرِّيَاضِيَّاتُ – السَّنَةُ الْأُولَى ابْتِدَائِي – الدَّرْسُ 19</div>
+  <h1>الْـمَسَالِكُ (1)</h1>
+</header>
+
+<main class="container">
+
+  <!-- ==================== المحطة 1: أكتشف ==================== -->
+  <section class="section-card" id="sec-aktashif">
+    <h2 class="section-title">أَكْتَشِفُ</h2>
+
+    <!-- أكتشف - التمرين 1 -->
+    <div class="exercise-box" id="ex-a1">
+      <div class="exercise-header">
+        <span class="num-badge">1</span>
+        <div>لَوِّنْ بِالْأَزْرَقِ الْـمَسْلَكَ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">①</span> وَبِالْبُنِّيِّ الْـمَسْلَكَ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">②</span>.</div>
+      </div>
+
+      <p class="hint-note">اخْتَرِ اللَّوْنَ الْمُنَاسِبَ ثُمَّ اضْغَطْ عَلَى كُلِّ مَسْلَكٍ دَاخِلَ الْمَلْعَبِ لِتَلْوِينِهِ:</p>
+      <div class="toolbar" id="a1-tools">
+        <button type="button" class="color-btn active" data-color="#1976d2" style="background:#e3f2fd; color:#0d47a1;" onclick="selectColor('a1', '#1976d2', this)">
+          <span class="color-dot" style="background:#1976d2;"></span> أَزْرَقُ
+        </button>
+        <button type="button" class="color-btn" data-color="#795548" style="background:#efebe9; color:#4e342e;" onclick="selectColor('a1', '#795548', this)">
+          <span class="color-dot" style="background:#795548;"></span> بُنِّيٌّ
+        </button>
+        <button type="button" class="btn-action btn-clear" id="a1-clear" onclick="resetA1()">مَسْحٌ 🗑</button>
+      </div>
+
+      <div class="canvas-wrapper" style="max-width: 520px;">
+        <svg id="svg-a1" class="interactive-svg" viewBox="0 0 460 320">
+          <!-- أرضية الملعب -->
+          <rect x="10" y="10" width="440" height="300" rx="12" fill="#388e3c" stroke="#1b5e20" stroke-width="3"/>
+          <!-- خطوط الملعب البيضاء -->
+          <rect x="30" y="28" width="400" height="264" fill="none" stroke="#ffffff" stroke-width="3"/>
+          <line x1="230" y1="28" x2="230" y2="292" stroke="#ffffff" stroke-width="2.5"/>
+          <circle cx="230" cy="160" r="38" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+          <circle cx="230" cy="160" r="4" fill="#ffffff"/>
+          <!-- منطقتا الجزاء -->
+          <rect x="30" y="95" width="55" height="130" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+          <rect x="375" y="95" width="55" height="130" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+
+          <!-- المسلك 1 (مستقيم) -->
+          <g style="cursor:pointer;" onclick="paintPath('a1-p1', 'a1')">
+            <line x1="55" y1="255" x2="105" y2="48" stroke="#ffffff" stroke-width="18" stroke-linecap="round"/>
+            <line id="a1-p1" x1="55" y1="255" x2="105" y2="48" stroke="#ffffff" stroke-width="12" stroke-linecap="round"/>
+          </g>
+          <!-- شارة 1 -->
+          <circle cx="52" cy="272" r="14" fill="#ffffff" stroke="#1b5e20" stroke-width="2.5"/>
+          <text x="52" y="278" text-anchor="middle" font-size="16" font-weight="900" fill="#1b5e20">1</text>
+
+          <!-- أقماع بجانب المسلك 2 -->
+          <polygon points="392,155 385,172 399,172" fill="#ef6c00"/>
+          <polygon points="355,195 348,212 362,212" fill="#ef6c00"/>
+          <polygon points="395,235 388,252 402,252" fill="#ef6c00"/>
+
+          <!-- المسلك 2 (منحني متعرج) -->
+          <g style="cursor:pointer;" onclick="paintPath('a1-p2', 'a1')">
+            <path d="M 380 120 C 370 155, 415 165, 380 185 C 345 205, 415 220, 380 242 C 355 256, 360 272, 345 278" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round"/>
+            <path id="a1-p2" d="M 380 120 C 370 155, 415 165, 380 185 C 345 205, 415 220, 380 242 C 355 256, 360 272, 345 278" fill="none" stroke="#ffffff" stroke-width="12" stroke-linecap="round"/>
+          </g>
+          <!-- شارة 2 -->
+          <circle cx="382" cy="100" r="14" fill="#ffffff" stroke="#1b5e20" stroke-width="2.5"/>
+          <text x="382" y="106" text-anchor="middle" font-size="16" font-weight="900" fill="#1b5e20">2</text>
+        </svg>
+      </div>
+
+      <div class="toolbar">
+        <button type="button" class="btn-action btn-check" id="a1-check" onclick="checkA1()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      </div>
+      <div class="feedback-banner" id="a1-fb"></div>
+    </div>
+
+    <!-- أكتشف - التمرين 2 -->
+    <div class="exercise-box" id="ex-a2">
+      <div class="exercise-header">
+        <span class="num-badge">2</span>
+        <div>لَوِّنْ بِالْأَحْمَرِ مَسْلَكَ الْفَارِسِ.</div>
+      </div>
+
+      <p class="hint-note">مَرِّرْ إِصْبَعَكَ أَوِ الْفَأْرَةَ لِتَلْوِينِ مَسْلَكِ الْفَارِسِ مِنَ «الِانْطِلَاقِ» إِلَى «الْوُصُولِ» بِاللَّوْنِ الْأَحْمَرِ، ثُمَّ أَجِبْ عَنِ السُّؤَالِ:</p>
+      <div class="toolbar">
+        <button type="button" class="btn-action btn-clear" id="a2-clear" onclick="clearFreeDraw('canvas-a2')">مَسْحُ الرَّسْمِ 🗑</button>
+      </div>
+
+      <div class="canvas-wrapper" style="max-width: 520px;">
+        <svg class="interactive-svg" viewBox="0 0 460 320">
+          <!-- خلفية رملية -->
+          <rect x="0" y="0" width="460" height="320" fill="#e6dcc8"/>
+          <!-- المسلك المنقط للفارس -->
+          <path d="M 325 268 C 280 235, 360 190, 320 140 C 285 95, 220 155, 175 185 C 125 220, 75 185, 95 145 C 115 110, 185 150, 225 180 C 265 210, 240 265, 195 245 C 155 225, 175 155, 125 105 C 95 75, 70 65, 55 55"
+                fill="none" stroke="#ffffff" stroke-width="11" stroke-dasharray="4 9" stroke-linecap="round"/>
+          <!-- حواجز قفز الخيل -->
+          <g stroke="#6d4c41" stroke-width="3">
+            <line x1="295" y1="210" x2="325" y2="230"/><line x1="295" y1="192" x2="295" y2="225"/><line x1="325" y1="212" x2="325" y2="245"/>
+            <line x1="295" y1="120" x2="325" y2="140"/><line x1="295" y1="102" x2="295" y2="135"/><line x1="325" y1="122" x2="325" y2="155"/>
+            <line x1="130" y1="185" x2="155" y2="210"/><line x1="130" y1="168" x2="130" y2="200"/><line x1="155" y1="192" x2="155" y2="222"/>
+            <line x1="195" y1="230" x2="220" y2="255"/><line x1="195" y1="212" x2="195" y2="245"/><line x1="220" y1="238" x2="220" y2="268"/>
+            <line x1="95" y1="75" x2="125" y2="95"/><line x1="95" y1="58" x2="95" y2="90"/><line x1="125" y1="78" x2="125" y2="110"/>
+          </g>
+          <!-- خط الوصول -->
+          <line x1="30" y1="68" x2="72" y2="38" stroke="#5d4037" stroke-width="3" stroke-dasharray="5 5"/>
+          <text x="50" y="32" text-anchor="middle" font-size="15" font-weight="900" fill="#3e2723">الْوُصُولُ</text>
+          <!-- الفارس والانطلاق -->
+          <text x="395" y="285" text-anchor="middle" font-size="28">🏇</text>
+          <text x="342" y="295" text-anchor="middle" font-size="15" font-weight="900" fill="#3e2723">الِانْطِلَاقُ</text>
+        </svg>
+        <canvas id="canvas-a2" width="460" height="320" style="position:absolute; inset:0; width:100%; height:100%;"></canvas>
+      </div>
+
+      <div style="font-weight:800; margin-top:10px;">كَيْفَ هُوَ شَكْلُ مَسْلَكِ الْفَارِسِ؟</div>
+      <div class="options-grid" id="a2-options">
+        <button type="button" class="option-card" data-val="curved" onclick="selectOption('a2', this)">خَطٌّ مُنْحَنٍ</button>
+        <button type="button" class="option-card" data-val="straight" onclick="selectOption('a2', this)">خَطٌّ مُسْتَقِيمٌ</button>
+      </div>
+
+      <div class="toolbar" style="margin-top:14px;">
+        <button type="button" class="btn-action btn-check" id="a2-check" onclick="checkA2()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      </div>
+      <div class="feedback-banner" id="a2-fb"></div>
+    </div>
+
+    <div class="stage-counter" id="counter-aktashif">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+  </section>
+
+  <!-- ==================== المحطة 2: أنجز ==================== -->
+  <section class="section-card locked" id="sec-anjiz">
+    <div class="lock-notice">🔒 أَكْمِلْ جَمِيعَ تَمَارِينِ «أَكْتَشِفُ» أَوَّلًا لِتَفْعِيلِ هَذِهِ الْمَحَطَّةِ</div>
+    <h2 class="section-title">أُنْجِزُ</h2>
+
+    <!-- أنجز - التمرين 1 (المتاهة التفاعلية بتلوين الخانات) -->
+    <div class="exercise-box" id="ex-n1">
+      <div class="exercise-header">
+        <span class="num-badge">1</span>
+        <div>أُرْسُمُ الْـمَسْلَكَ الَّذِي يَسْلُكُهُ الثَّعْلَبُ لِيَصِلَ إِلَى الْأَرْنَبِ.</div>
+      </div>
+
+      <p class="hint-note">اضْغَطْ أَوْ مَرِّرْ إِصْبَعَكَ عَلَى خَانَاتِ الْمَمَرِّ الْمَفْتُوحِ لِتَلْوِينِ الْمَسْلَكِ مِنَ الثَّعْلَبِ 🦊 إِلَى الْأَرْنَبِ 🐇:</p>
+      <div class="toolbar">
+        <button type="button" class="btn-action btn-clear" id="n1-clear" onclick="resetGridMaze('n1')">مَسْحُ التَّلْوِينِ 🗑</button>
+      </div>
+
+      <div class="canvas-wrapper" style="max-width: 480px;">
+        <svg id="svg-n1" class="interactive-svg" viewBox="0 0 460 360"></svg>
+      </div>
+
+      <div class="toolbar" style="margin-top:14px;">
+        <button type="button" class="btn-action btn-check" id="n1-check" onclick="checkGridMaze('n1')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      </div>
+      <div class="feedback-banner" id="n1-fb"></div>
+    </div>
+
+    <!-- أنجز - التمرين 2 -->
+    <div class="exercise-box" id="ex-n2">
+      <div class="exercise-header">
+        <span class="num-badge">2</span>
+        <div>لَوِّنِ الطَّرِيقَ مِنَ الْـمَنْزِلِ إِلَى الْـمَلْعَبِ.</div>
+      </div>
+
+      <p class="hint-note">اضْغَطْ عَلَى أَجْزَاءِ الطَّرِيقِ الْمَفْتُوحَةِ لِتَلْوِينِ الْمَسْلَكِ مِنَ الْـمَنْزِلِ 🏠 إِلَى الْـمَلْعَبِ 🏟️:</p>
+      <div class="toolbar">
+        <button type="button" class="btn-action btn-clear" id="n2-clear" onclick="resetN2()">مَسْحُ التَّلْوِينِ 🗑</button>
+      </div>
+
+      <div class="canvas-wrapper" style="max-width: 500px;">
+        <svg id="svg-n2" class="interactive-svg" viewBox="0 0 460 320">
+          <rect x="0" y="0" width="460" height="320" fill="#f1f8e9"/>
+          <!-- الملعب في الأعلى -->
+          <text x="165" y="45" text-anchor="middle" font-size="38">🏟️</text>
+          <text x="165" y="68" text-anchor="middle" font-size="14" font-weight="900" fill="#1b5e20">الْـمَلْعَبُ</text>
+
+          <!-- المنزل في الأسفل يمين -->
+          <text x="385" y="265" text-anchor="middle" font-size="40">🏠</text>
+          <text x="385" y="292" text-anchor="middle" font-size="14" font-weight="900" fill="#bf360c">الْـمَنْزِلُ</text>
+
+          <!-- أشجار -->
+          <text x="70" y="250" font-size="26">🌳</text>
+          <text x="275" y="165" font-size="26">🌲</text>
+          <text x="115" y="135" font-size="24">🌳</text>
+
+          <!-- شبكة الطرق -->
+          <!-- الجزء 1 الصحيح: من المنزل إلى المفترق الأول -->
+          <path id="n2-s1" class="n2-seg" d="M 355 255 Q 310 265 260 245" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" style="cursor:pointer;" onclick="toggleSeg(this)"/>
+          <path d="M 355 255 Q 310 265 260 245" fill="none" stroke="#546e7a" stroke-width="20" stroke-linecap="round" style="pointer-events:none; opacity:0.25;"/>
+
+          <!-- طريق مسدود 1 (نحو الأسفل الأيسر) -->
+          <path id="n2-d1" class="n2-seg" d="M 260 245 Q 170 280 95 270" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" style="cursor:pointer;" onclick="toggleSeg(this)"/>
+          <path d="M 260 245 Q 170 280 95 270" fill="none" stroke="#546e7a" stroke-width="20" stroke-linecap="round" style="pointer-events:none; opacity:0.25;"/>
+          <line x1="92" y1="260" x2="98" y2="280" stroke="#c62828" stroke-width="4"/>
+
+          <!-- الجزء 2 الصحيح: صعوداً نحو الوسط -->
+          <path id="n2-s2" class="n2-seg" d="M 260 245 Q 230 205 235 165" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" style="cursor:pointer;" onclick="toggleSeg(this)"/>
+          <path d="M 260 245 Q 230 205 235 165" fill="none" stroke="#546e7a" stroke-width="20" stroke-linecap="round" style="pointer-events:none; opacity:0.25;"/>
+
+          <!-- طريق مسدود 2 (يميناً) -->
+          <path id="n2-d2" class="n2-seg" d="M 235 165 Q 310 140 365 155" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" style="cursor:pointer;" onclick="toggleSeg(this)"/>
+          <path d="M 235 165 Q 310 140 365 155" fill="none" stroke="#546e7a" stroke-width="20" stroke-linecap="round" style="pointer-events:none; opacity:0.25;"/>
+          <line x1="365" y1="145" x2="365" y2="165" stroke="#c62828" stroke-width="4"/>
+
+          <!-- الجزء 3 الصحيح: من الوسط إلى الملعب -->
+          <path id="n2-s3" class="n2-seg" d="M 235 165 Q 210 115 170 78" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" style="cursor:pointer;" onclick="toggleSeg(this)"/>
+          <path d="M 235 165 Q 210 115 170 78" fill="none" stroke="#546e7a" stroke-width="20" stroke-linecap="round" style="pointer-events:none; opacity:0.25;"/>
+        </svg>
+      </div>
+
+      <div class="toolbar" style="margin-top:12px;">
+        <button type="button" class="btn-action btn-check" id="n2-check" onclick="checkN2()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      </div>
+      <div class="feedback-banner" id="n2-fb"></div>
+    </div>
+
+    <div class="stage-counter" id="counter-anjiz">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+  </section>
+
+  <!-- ==================== بطاقة تعلمت ==================== -->
+  <section class="learned-card">
+    <div class="learned-badge">تَعَلَّمْتُ</div>
+    <p class="learned-text">يُمْكِنُ أَنْ أَرْسُمَ مَسْلَكًا بِخُطُوطٍ مُنْحَنِيَةٍ، أَوْ مُسْتَقِيمَةٍ.</p>
+  </section>
+
+  <!-- ==================== المحطة 3: أتمرن ==================== -->
+  <section class="section-card locked" id="sec-atamarran">
+    <div class="lock-notice">🔒 أَكْمِلْ جَمِيعَ تَمَارِينِ «أُنْجِزُ» أَوَّلًا لِتَفْعِيلِ هَذِهِ الْمَحَطَّةِ</div>
+    <h2 class="section-title green">أَتَمَرَّنُ :</h2>
+
+    <!-- أتمرن - التمرين 1 -->
+    <div class="exercise-box" id="ex-t1">
+      <div class="exercise-header">
+        <span class="num-badge">1</span>
+        <div>لَوِّنْ بِالْأَخْضَرِ مَسْلَكَ لَاعِبِ كُرَةِ السَّلَّةِ وَهُوَ يَتَدَرَّبُ.</div>
+      </div>
+
+      <p class="hint-note">اضْغَطْ عَلَى مَسْلَكِ اللَّاعِبِ لِتَلْوِينِهِ بِالْأَخْضَرِ، ثُمَّ اخْتَرْ نَوْعَ الْخَطِّ:</p>
+      <div class="canvas-wrapper" style="max-width: 500px;">
+        <svg class="interactive-svg" viewBox="0 0 460 250">
+          <!-- ملعب كرة السلة -->
+          <polygon points="60,60 400,60 440,210 20,210" fill="#fafafa" stroke="#90a4ae" stroke-width="2.5"/>
+          <!-- السلة -->
+          <line x1="355" y1="35" x2="355" y2="115" stroke="#37474f" stroke-width="4"/>
+          <rect x="332" y="18" width="46" height="32" fill="#fff" stroke="#d32f2f" stroke-width="2.5"/>
+          <ellipse cx="342" cy="44" rx="10" ry="4" fill="none" stroke="#ef6c00" stroke-width="2.5"/>
+
+          <!-- مسلك اللاعب المتعرج -->
+          <g style="cursor:pointer;" onclick="paintBasketballPath()">
+            <path d="M 110 115 C 95 165, 165 175, 180 125 C 195 85, 235 160, 265 135 C 290 115, 295 85, 325 75"
+                  fill="none" stroke="#37474f" stroke-width="14" stroke-linecap="round"/>
+            <path id="t1-path" d="M 110 115 C 95 165, 165 175, 180 125 C 195 85, 235 160, 265 135 C 290 115, 295 85, 325 75"
+                  fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+          </g>
+          <!-- اللاعب -->
+          <text x="105" y="105" text-anchor="middle" font-size="30">⛹️</text>
+          <text x="195" y="110" text-anchor="middle" font-size="26">⛹️</text>
+          <text x="295" y="80" text-anchor="middle" font-size="26">⛹️</text>
+        </svg>
+      </div>
+
+      <div style="font-weight:800; margin-top:10px;">رَسَمَ لَاعِبُ كُرَةِ السَّلَّةِ مَسْلَكًا بـِ :</div>
+      <div class="options-grid" id="t1-options">
+        <button type="button" class="option-card" data-val="curved" onclick="selectOption('t1', this)">خُطُوطٍ مُنْحَنِيَةٍ</button>
+        <button type="button" class="option-card" data-val="straight" onclick="selectOption('t1', this)">خُطُوطٍ مُسْتَقِيمَةٍ</button>
+      </div>
+
+      <div class="toolbar" style="margin-top:14px;">
+        <button type="button" class="btn-action btn-check" id="t1-check" onclick="checkT1()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      </div>
+      <div class="feedback-banner" id="t1-fb"></div>
+    </div>
+
+    <!-- أتمرن - التمرين 2 (1) -->
+    <div class="exercise-box" id="ex-t2a">
+      <div class="exercise-header">
+        <span class="num-badge">2</span>
+        <div><span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">①</span> لَوِّنْ طَرِيقَ اللَّبُؤَةِ لِلْعَوْدَةِ إِلَى صَغِيرِهَا.</div>
+      </div>
+
+      <p class="hint-note">اضْغَطْ عَلَى أَجْزَاءِ الطَّرِيقِ الصَّحِيحَةِ الَّتِي تُوصِلُ اللَّبُؤَةَ 🦁 إِلَى شِبْلِهَا 🐱:</p>
+      <div class="toolbar">
+        <button type="button" class="btn-action btn-clear" id="t2a-clear" onclick="resetT2a()">مَسْحُ التَّلْوِينِ 🗑</button>
+      </div>
+
+      <div class="canvas-wrapper" style="max-width: 460px;">
+        <svg id="svg-t2a" class="interactive-svg" viewBox="0 0 420 330">
+          <rect x="0" y="0" width="420" height="330" fill="#fffdf7"/>
+          <!-- اللبؤة في الأعلى يمين -->
+          <text x="345" y="65" text-anchor="middle" font-size="38">🦁</text>
+          <!-- الشبل في الأسفل يسار -->
+          <text x="135" y="300" text-anchor="middle" font-size="34">🐱</text>
+
+          <!-- مسار 1 صحيح: من اللبؤة إلى التفرع -->
+          <path id="t2a-s1" class="t2a-seg" d="M 310 65 Q 250 55 215 95" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" style="cursor:pointer;" onclick="toggleSeg(this)"/>
+          <path d="M 310 65 Q 250 55 215 95" fill="none" stroke="#37474f" stroke-width="20" stroke-linecap="round" style="pointer-events:none; opacity:0.25;"/>
+
+          <!-- طريق مسدود علوي يسار -->
+          <path id="t2a-d1" class="t2a-seg" d="M 215 95 Q 145 70 110 120" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" style="cursor:pointer;" onclick="toggleSeg(this)"/>
+          <path d="M 215 95 Q 145 70 110 120" fill="none" stroke="#37474f" stroke-width="20" stroke-linecap="round" style="pointer-events:none; opacity:0.25;"/>
+          <line x1="102" y1="115" x2="118" y2="125" stroke="#c62828" stroke-width="4"/>
+
+          <!-- مسار 2 صحيح: نزول متعرج في الوسط -->
+          <path id="t2a-s2" class="t2a-seg" d="M 215 95 Q 245 145 190 185" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" style="cursor:pointer;" onclick="toggleSeg(this)"/>
+          <path d="M 215 95 Q 245 145 190 185" fill="none" stroke="#37474f" stroke-width="20" stroke-linecap="round" style="pointer-events:none; opacity:0.25;"/>
+
+          <!-- طريق مسدود أيمن -->
+          <path id="t2a-d2" class="t2a-seg" d="M 190 185 Q 275 180 315 225" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" style="cursor:pointer;" onclick="toggleSeg(this)"/>
+          <path d="M 190 185 Q 275 180 315 225" fill="none" stroke="#37474f" stroke-width="20" stroke-linecap="round" style="pointer-events:none; opacity:0.25;"/>
+          <line x1="308" y1="230" x2="322" y2="220" stroke="#c62828" stroke-width="4"/>
+
+          <!-- مسار 3 صحيح: الوصول إلى الشبل -->
+          <path id="t2a-s3" class="t2a-seg" d="M 190 185 Q 145 220 145 268" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" style="cursor:pointer;" onclick="toggleSeg(this)"/>
+          <path d="M 190 185 Q 145 220 145 268" fill="none" stroke="#37474f" stroke-width="20" stroke-linecap="round" style="pointer-events:none; opacity:0.25;"/>
+        </svg>
+      </div>
+
+      <div class="toolbar" style="margin-top:12px;">
+        <button type="button" class="btn-action btn-check" id="t2a-check" onclick="checkT2a()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      </div>
+      <div class="feedback-banner" id="t2a-fb"></div>
+    </div>
+
+    <!-- أتمرن - التمرين 2 (2) -->
+    <div class="exercise-box" id="ex-t2b">
+      <div class="exercise-header">
+        <span class="num-badge">2</span>
+        <div><span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">②</span> لَوِّنْ بِأَلْوَانٍ مُخْتَلِفَةٍ مَسْلَكَ كُلِّ طَائِرٍ لِلْوُصُولِ إِلَى طَرِيدَتِهِ. أَحِطْ بِنَفْسِ اللَّوْنِ الطَّائِرَ وَطَرِيدَتَهُ.</div>
+      </div>
+
+      <div class="canvas-wrapper" style="max-width: 460px;">
+        <svg class="interactive-svg" viewBox="0 0 440 270">
+          <rect x="0" y="0" width="440" height="270" fill="#ffffff"/>
+          <!-- الطيور في اليسار -->
+          <text x="55" y="55" font-size="32">🐦</text>
+          <text x="35" y="30" font-size="13" font-weight="900" fill="#1565c0">الطَّائِرُ 1 (أَعْلَى)</text>
+
+          <text x="55" y="135" font-size="32">🦅</text>
+          <text x="35" y="110" font-size="13" font-weight="900" fill="#e65100">الطَّائِرُ 2 (وَسَط)</text>
+
+          <text x="55" y="215" font-size="32">🐤</text>
+          <text x="35" y="190" font-size="13" font-weight="900" fill="#2e7d32">الطَّائِرُ 3 (أَسْفَل)</text>
+
+          <!-- الطرائد في اليمين -->
+          <text x="355" y="55" font-size="30">🦟</text>
+          <text x="340" y="30" font-size="13" font-weight="900" fill="#37474f">الْيَعْسُوبُ</text>
+
+          <text x="355" y="135" font-size="30">🐞</text>
+          <text x="340" y="110" font-size="13" font-weight="900" fill="#37474f">الدُّعْسُوقَةُ</text>
+
+          <text x="355" y="215" font-size="30">🐜</text>
+          <text x="340" y="190" font-size="13" font-weight="900" fill="#37474f">النَّمْلَةُ</text>
+
+          <!-- المسلك المتقاطع للطائر 1 -> النملة -->
+          <path d="M 95 50 C 190 45, 160 225, 340 210" fill="none" stroke="#1e88e5" stroke-width="3" stroke-dasharray="6 5"/>
+          <!-- المسلك المتقاطع للطائر 2 -> اليعسوب -->
+          <path d="M 95 130 C 210 155, 220 35, 340 50" fill="none" stroke="#fb8c00" stroke-width="3" stroke-dasharray="6 5"/>
+          <!-- المسلك المتقاطع للطائر 3 -> الدعسوقة -->
+          <path d="M 95 210 C 225 200, 235 120, 340 130" fill="none" stroke="#43a047" stroke-width="3" stroke-dasharray="6 5"/>
+        </svg>
+      </div>
+
+      <p class="hint-note">تَتَبَّعْ كُلَّ مَسْلَكٍ وَاخْتَرِ الطَّرِيدَةَ الَّتِي يَصِلُ إِلَيْهَا كُلُّ طَائِرٍ:</p>
+      <div class="bird-row" id="t2b-rows">
+        <div class="bird-select-item" id="t2b-r1">
+          <span>1. الطَّائِرُ فِي الْأَعْلَى 🐦 يَصِلُ إِلَى:</span>
+          <select id="t2b-s1">
+            <option value="">-- اخْتَرِ الطَّرِيدَةَ --</option>
+            <option value="dragonfly">الْيَعْسُوبِ 🦟</option>
+            <option value="ladybug">الدُّعْسُوقَةِ 🐞</option>
+            <option value="ant">النَّمْلَةِ 🐜</option>
+          </select>
+        </div>
+        <div class="bird-select-item" id="t2b-r2">
+          <span>2. الطَّائِرُ فِي الْوَسَطِ 🦅 يَصِلُ إِلَى:</span>
+          <select id="t2b-s2">
+            <option value="">-- اخْتَرِ الطَّرِيدَةَ --</option>
+            <option value="dragonfly">الْيَعْسُوبِ 🦟</option>
+            <option value="ladybug">الدُّعْسُوقَةِ 🐞</option>
+            <option value="ant">النَّمْلَةِ 🐜</option>
+          </select>
+        </div>
+        <div class="bird-select-item" id="t2b-r3">
+          <span>3. الطَّائِرُ فِي الْأَسْفَلِ 🐤 يَصِلُ إِلَى:</span>
+          <select id="t2b-s3">
+            <option value="">-- اخْتَرِ الطَّرِيدَةَ --</option>
+            <option value="dragonfly">الْيَعْسُوبِ 🦟</option>
+            <option value="ladybug">الدُّعْسُوقَةِ 🐞</option>
+            <option value="ant">النَّمْلَةِ 🐜</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="toolbar" style="margin-top:14px;">
+        <button type="button" class="btn-action btn-check" id="t2b-check" onclick="checkT2b()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      </div>
+      <div class="feedback-banner" id="t2b-fb"></div>
+    </div>
+
+    <div class="stage-counter" id="counter-atamarran">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+  </section>
+
+  <!-- ==================== المحطة 4: أبحث ==================== -->
+  <section class="section-card locked" id="sec-abhath">
+    <div class="lock-notice">🔒 أَكْمِلْ جَمِيعَ تَمَارِينِ «أَتَمَرَّنُ» أَوَّلًا لِتَفْعِيلِ هَذِهِ الْمَحَطَّةِ</div>
+    <h2 class="section-title green">أَبْحَثُ :</h2>
+
+    <div class="exercise-box" id="ex-b1">
+      <div class="exercise-header">
+        <span class="num-badge">★</span>
+        <div>أُرْسُمُ الْـمَسْلَكَ الَّذِي تَتَّبِعُهُ السَّيَّارَةُ لِلْوُصُولِ إِلَى مَحَطَّةِ الْبِنْزِينِ.</div>
+      </div>
+
+      <p class="hint-note">اضْغَطْ أَوْ مَرِّرْ إِصْبَعَكَ عَلَى خَانَاتِ الْمَمَرِّ الْمَفْتُوحِ لِتَلْوِينِ الْمَسْلَكِ مِنَ السَّيَّارَةِ 🚗 إِلَى مَحَطَّةِ الْبِنْزِينِ ⛽:</p>
+      <div class="toolbar">
+        <button type="button" class="btn-action btn-clear" id="b1-clear" onclick="resetGridMaze('b1')">مَسْحُ التَّلْوِينِ 🗑</button>
+      </div>
+
+      <div class="canvas-wrapper" style="max-width: 480px;">
+        <svg id="svg-b1" class="interactive-svg" viewBox="0 0 460 360"></svg>
+      </div>
+
+      <div class="toolbar" style="margin-top:14px;">
+        <button type="button" class="btn-action btn-check" id="b1-check" onclick="checkGridMaze('b1')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      </div>
+      <div class="feedback-banner" id="b1-fb"></div>
+    </div>
+
+    <div class="stage-counter" id="counter-abhath">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+  </section>
+
+  <!-- ==================== التقييم الكلي ==================== -->
+  <section class="final-report" id="final-report">
+    <h2>📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</h2>
+
+    <div class="stats-row">
+      <div class="stat-box good">
+        <div class="stat-label">الْإِجَابَاتُ الصَّحِيحَةُ</div>
+        <div class="stat-value" id="total-correct">0</div>
+      </div>
+
+      <div class="gauge-container">
+        <svg width="150" height="150" viewBox="0 0 150 150">
+          <circle cx="75" cy="75" r="62" fill="none" stroke="#e0e0e0" stroke-width="14"/>
+          <circle id="gauge-circle" cx="75" cy="75" r="62" fill="none" stroke="#2e7d32" stroke-width="14"
+                  stroke-dasharray="389.56" stroke-dashoffset="389.56" stroke-linecap="round"
+                  transform="rotate(-90 75 75)" style="transition: stroke-dashoffset 0.6s ease;"/>
+        </svg>
+        <div class="gauge-text">
+          <span id="total-percent">0%</span>
+        </div>
+      </div>
+
+      <div class="stat-box bad">
+        <div class="stat-label">الْإِجَابَاتُ الْخَاطِئَةُ</div>
+        <div class="stat-value" id="total-wrong">0</div>
+      </div>
+    </div>
+
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="final-progress"></div>
+    </div>
+
+    <div class="final-remark" id="final-remark">أَكْمِلْ جَمِيعَ التَّمَارِينِ لِظُهُورِ الْمُلَاحَظَةِ النِّهَائِيَّةِ!</div>
+    <br>
+    <button type="button" class="btn-restart" onclick="restartAll()">🔄 إِعَادَةُ الْـمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+  </section>
+
+  <!-- زر العودة إلى الفهرس -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</main>
+
+<!-- ========================================
+     سكريبت الحماية — قفل الاشتراك الإجباري
+     ======================================== -->
+<script>
+  const CHANNEL_ID = "-1004456852024";
+  const tg = window.Telegram?.WebApp;
+  if (tg) { tg.ready(); tg.expand(); }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس التفاعلي
+     ======================================== -->
+<script>
+  const TOTAL_QUESTIONS = 8;
+
+  const state = {
+    a1: { done: false, color: '#1976d2', p1: '#ffffff', p2: '#ffffff' },
+    a2: { done: false, selected: null },
+    n1: { done: false, painted: new Set() },
+    n2: { done: false },
+    t1: { done: false, painted: false, selected: null },
+    t2a: { done: false },
+    t2b: { done: false },
+    b1: { done: false, painted: new Set() }
+  };
+
+  const scores = {
+    aktashif: { correct: 0, wrong: 0 },
+    anjiz: { correct: 0, wrong: 0 },
+    atamarran: { correct: 0, wrong: 0 },
+    abhath: { correct: 0, wrong: 0 }
+  };
+
+  const mazesConfig = {
+    n1: {
+      stage: 'anjiz',
+      activeColor: '#ff9800',
+      startEmoji: '🦊',
+      goalEmoji: '🐇',
+      grid: [
+        [1, 0, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 0, 0, 1],
+        [1, 1, 1, 0, 1, 1, 1],
+        [1, 0, 0, 0, 1, 0, 1],
+        [1, 1, 0, 1, 1, 0, 1],
+        [1, 1, 0, 0, 0, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1]
+      ],
+      startCell: '0,1',
+      goalCell: '5,6',
+      solution: new Set([
+        '0,1',
+        '1,1', '1,2', '1,3',
+        '2,3',
+        '3,3', '3,2',
+        '4,2',
+        '5,2', '5,3', '5,4', '5,5', '5,6'
+      ])
+    },
+    b1: {
+      stage: 'abhath',
+      activeColor: '#29b6f6',
+      startEmoji: '🚗',
+      goalEmoji: '⛽',
+      grid: [
+        [1, 1, 1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1, 0, 1],
+        [0, 0, 1, 0, 0, 0, 1],
+        [1, 1, 1, 0, 1, 1, 1],
+        [1, 0, 0, 0, 1, 0, 1],
+        [1, 1, 0, 0, 0, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1]
+      ],
+      startCell: '2,0',
+      goalCell: '5,6',
+      solution: new Set([
+        '2,0', '2,1',
+        '1,1', '1,2', '1,3',
+        '2,3',
+        '3,3',
+        '4,3', '4,2',
+        '5,2', '5,3', '5,4', '5,5', '5,6'
+      ])
+    }
+  };
+
+  let isPointerDown = false;
+  let paintMode = 'add';
+
+  window.addEventListener('pointerup', () => { isPointerDown = false; });
+
+  function renderGridMaze(key) {
+    const cfg = mazesConfig[key];
+    const svg = document.getElementById('svg-' + key);
+    svg.innerHTML = '';
+
+    const rows = cfg.grid.length;
+    const cols = cfg.grid[0].length;
+    const cellSize = 42;
+    const offsetX = 83;
+    const offsetY = 33;
+
+    const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    bg.setAttribute('x', '0');
+    bg.setAttribute('y', '0');
+    bg.setAttribute('width', '460');
+    bg.setAttribute('height', '360');
+    bg.setAttribute('fill', '#f8faf9');
+    svg.appendChild(bg);
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const x = offsetX + c * cellSize;
+        const y = offsetY + r * cellSize;
+        const coord = `${r},${c}`;
+        const isWall = cfg.grid[r][c] === 1;
+
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', x);
+        rect.setAttribute('y', y);
+        rect.setAttribute('width', cellSize);
+        rect.setAttribute('height', cellSize);
+
+        if (isWall) {
+          rect.setAttribute('fill', '#37474f');
+          rect.setAttribute('stroke', '#263238');
+          rect.setAttribute('stroke-width', '1');
+        } else {
+          rect.setAttribute('id', `${key}-cell-${r}-${c}`);
+          rect.setAttribute('class', 'maze-cell');
+          rect.setAttribute('fill', '#ffffff');
+          rect.setAttribute('stroke', '#cfd8dc');
+          rect.setAttribute('stroke-width', '1.5');
+
+          rect.addEventListener('pointerdown', (e) => {
+            if (state[key].done) return;
+            e.preventDefault();
+            isPointerDown = true;
+            if (state[key].painted.has(coord)) {
+              paintMode = 'remove';
+              state[key].painted.delete(coord);
+              rect.setAttribute('fill', '#ffffff');
+            } else {
+              paintMode = 'add';
+              state[key].painted.add(coord);
+              rect.setAttribute('fill', cfg.activeColor);
+            }
+          });
+
+          rect.addEventListener('pointerenter', () => {
+            if (!isPointerDown || state[key].done) return;
+            if (paintMode === 'add') {
+              state[key].painted.add(coord);
+              rect.setAttribute('fill', cfg.activeColor);
+            } else {
+              state[key].painted.delete(coord);
+              rect.setAttribute('fill', '#ffffff');
+            }
+          });
+        }
+        svg.appendChild(rect);
+      }
+    }
+
+    if (key === 'n1') {
+      const sx = offsetX + 1 * cellSize + cellSize / 2;
+      const sy = offsetY - 8;
+      addSvgText(svg, sx, sy, cfg.startEmoji, 28);
+      addSvgText(svg, sx + 48, sy - 4, '⬇ الانطلاق', 13, '#d32f2f');
+
+      const gx = offsetX + cols * cellSize + 24;
+      const gy = offsetY + 5 * cellSize + cellSize / 2 + 8;
+      addSvgText(svg, gx, gy, cfg.goalEmoji, 30);
+    } else if (key === 'b1') {
+      const sx = offsetX - 26;
+      const sy = offsetY + 2 * cellSize + cellSize / 2 + 9;
+      addSvgText(svg, sx, sy, cfg.startEmoji, 30);
+
+      const gx = offsetX + cols * cellSize + 26;
+      const gy = offsetY + 5 * cellSize + cellSize / 2 + 9;
+      addSvgText(svg, gx, gy, cfg.goalEmoji, 30);
+    }
+  }
+
+  function addSvgText(svg, x, y, content, size, color = '#1b2a1e') {
+    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('x', x);
+    txt.setAttribute('y', y);
+    txt.setAttribute('text-anchor', 'middle');
+    txt.setAttribute('font-size', size);
+    txt.setAttribute('font-weight', '900');
+    txt.setAttribute('fill', color);
+    txt.setAttribute('style', 'pointer-events:none;');
+    txt.textContent = content;
+    svg.appendChild(txt);
+  }
+
+  function resetGridMaze(key) {
+    if (state[key].done) return;
+    state[key].painted.clear();
+    const cfg = mazesConfig[key];
+    for (let r = 0; r < cfg.grid.length; r++) {
+      for (let c = 0; c < cfg.grid[0].length; c++) {
+        if (cfg.grid[r][c] === 0) {
+          document.getElementById(`${key}-cell-${r}-${c}`).setAttribute('fill', '#ffffff');
+        }
+      }
+    }
+  }
+
+  function checkGridMaze(key) {
+    if (state[key].done) return;
+    const cfg = mazesConfig[key];
+    const painted = state[key].painted;
+
+    if (painted.size === 0) {
+      alert('لَوِّنِ الْمَسْلَكَ الصَّحِيحَ دَاخِلَ الْمَتَاهَةِ أَوَّلًا قَبْلَ التَّحَقُّقِ!');
+      return;
+    }
+
+    state[key].done = true;
+    document.getElementById(`${key}-check`).disabled = true;
+    document.getElementById(`${key}-clear`).disabled = true;
+
+    let exactMatch = (painted.size === cfg.solution.size);
+    if (exactMatch) {
+      for (const cell of cfg.solution) {
+        if (!painted.has(cell)) {
+          exactMatch = false;
+          break;
+        }
+      }
+    }
+
+    const fb = document.getElementById(`${key}-fb`);
+    if (exactMatch) {
+      for (const cell of cfg.solution) {
+        const [r, c] = cell.split(',');
+        document.getElementById(`${key}-cell-${r}-${c}`).setAttribute('fill', '#43a047');
+      }
+      fb.className = 'feedback-banner success';
+      fb.textContent = key === 'n1'
+        ? '✓ أَحْسَنْتَ! رَسَمْتَ الْمَسْلَكَ الصَّحِيحَ الَّذِي يُوصِلُ الثَّعْلَبَ إِلَى الْأَرْنَبِ.'
+        : '✓ عَبْقَرِيٌّ! رَسَمْتَ الْمَسْلَكَ الصَّحِيحَ الَّذِي يُوصِلُ السَّيَّارَةَ إِلَى مَحَطَّةِ الْبِنْزِينِ.';
+      scores[cfg.stage].correct++;
+    } else {
+      for (const cell of painted) {
+        if (!cfg.solution.has(cell)) {
+          const [r, c] = cell.split(',');
+          document.getElementById(`${key}-cell-${r}-${c}`).setAttribute('fill', '#e53935');
+        }
+      }
+      for (const cell of cfg.solution) {
+        const [r, c] = cell.split(',');
+        document.getElementById(`${key}-cell-${r}-${c}`).setAttribute('fill', '#43a047');
+      }
+      fb.className = 'feedback-banner error';
+      fb.textContent = key === 'n1'
+        ? '✗ إِجَابَةٌ خَاطِئَةٌ! الْمَسْلَكُ الصَّحِيحُ الْمُؤَدِّي إِلَى الْأَرْنَبِ مُلَوَّنٌ الْآنَ بِالْأَخْضَرِ.'
+        : '✗ إِجَابَةٌ خَاطِئَةٌ! الْمَسْلَكُ الصَّحِيحُ الْمُؤَدِّي إِلَى مَحَطَّةِ الْبِنْزِينِ مُلَوَّنٌ الْآنَ بِالْأَخْضَرِ.';
+      scores[cfg.stage].wrong++;
+    }
+
+    updateCounters();
+  }
+
+  /* ---- أكتشف 1 ---- */
+  function selectColor(ex, hex, btn) {
+    if (state[ex].done) return;
+    state[ex].color = hex;
+    document.querySelectorAll('#' + ex + '-tools .color-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  function paintPath(pathId, ex) {
+    if (state[ex].done) return;
+    const el = document.getElementById(pathId);
+    el.setAttribute('stroke', state[ex].color);
+    if (pathId === 'a1-p1') state.a1.p1 = state.a1.color;
+    if (pathId === 'a1-p2') state.a1.p2 = state.a1.color;
+  }
+
+  function resetA1() {
+    if (state.a1.done) return;
+    state.a1.p1 = '#ffffff';
+    state.a1.p2 = '#ffffff';
+    document.getElementById('a1-p1').setAttribute('stroke', '#ffffff');
+    document.getElementById('a1-p2').setAttribute('stroke', '#ffffff');
+  }
+
+  function checkA1() {
+    if (state.a1.done) return;
+    if (state.a1.p1 === '#ffffff' || state.a1.p2 === '#ffffff') {
+      alert('لَوِّنِ الْمَسْلَكَيْنِ ① وَ ② أَوَّلًا قَبْلَ التَّحَقُّقِ!');
+      return;
+    }
+    state.a1.done = true;
+    document.getElementById('a1-check').disabled = true;
+    document.getElementById('a1-clear').disabled = true;
+
+    const ok = (state.a1.p1 === '#1976d2' && state.a1.p2 === '#795548');
+    const fb = document.getElementById('a1-fb');
+    if (ok) {
+      fb.className = 'feedback-banner success';
+      fb.textContent = '✓ أَحْسَنْتَ! لَوَّنْتَ الْمَسْلَكَ ① بِالْأَزْرَقِ وَالْمَسْلَكَ ② بِالْبُنِّيِّ.';
+      scores.aktashif.correct++;
+    } else {
+      fb.className = 'feedback-banner error';
+      fb.textContent = '✗ إِجَابَةٌ خَاطِئَةٌ! الصَّوَابُ: الْمَسْلَكُ ① بِالْأَزْرَقِ وَالْمَسْلَكُ ② بِالْبُنِّيِّ.';
+      document.getElementById('a1-p1').setAttribute('stroke', '#1976d2');
+      document.getElementById('a1-p2').setAttribute('stroke', '#795548');
+      scores.aktashif.wrong++;
+    }
+    updateCounters();
+  }
+
+  /* ---- أكتشف 2 ---- */
+  function checkA2() {
+    if (state.a2.done) return;
+    if (!state.a2.selected) {
+      alert('اخْتَرْ إِجَابَةً أَوَّلًا قَبْلَ التَّحَقُّقِ!');
+      return;
+    }
+    state.a2.done = true;
+    document.getElementById('a2-check').disabled = true;
+    document.getElementById('a2-clear').disabled = true;
+
+    const ok = finalizeOptions('a2', 'curved');
+    const fb = document.getElementById('a2-fb');
+    if (ok) {
+      fb.className = 'feedback-banner success';
+      fb.textContent = '✓ مُمْتَازٌ! مَسْلَكُ الْفَارِسِ هُوَ خَطٌّ مُنْحَنٍ.';
+      scores.aktashif.correct++;
+    } else {
+      fb.className = 'feedback-banner error';
+      fb.textContent = '✗ خَطَأٌ! الصَّوَابُ: مَسْلَكُ الْفَارِسِ هُوَ خَطٌّ مُنْحَنٍ.';
+      scores.aktashif.wrong++;
+    }
+    updateCounters();
+  }
+
+  /* ---- أنجز 2 ---- */
+  function toggleSeg(el) {
+    const parentBox = el.closest('.exercise-box').id;
+    const key = parentBox.replace('ex-', '');
+    if (state[key].done) return;
+
+    const current = el.getAttribute('stroke');
+    if (current === '#ffffff') {
+      el.setAttribute('stroke', '#ffb300');
+    } else {
+      el.setAttribute('stroke', '#ffffff');
+    }
+  }
+
+  function resetN2() {
+    if (state.n2.done) return;
+    document.querySelectorAll('.n2-seg').forEach(s => s.setAttribute('stroke', '#ffffff'));
+  }
+
+  function checkN2() {
+    if (state.n2.done) return;
+    const s1 = document.getElementById('n2-s1').getAttribute('stroke') === '#ffb300';
+    const s2 = document.getElementById('n2-s2').getAttribute('stroke') === '#ffb300';
+    const s3 = document.getElementById('n2-s3').getAttribute('stroke') === '#ffb300';
+    const d1 = document.getElementById('n2-d1').getAttribute('stroke') === '#ffb300';
+    const d2 = document.getElementById('n2-d2').getAttribute('stroke') === '#ffb300';
+
+    if (!s1 && !s2 && !s3 && !d1 && !d2) {
+      alert('لَوِّنِ الطَّرِيقَ مِنَ الْـمَنْزِلِ إِلَى الْـمَلْعَبِ أَوَّلًا!');
+      return;
+    }
+
+    state.n2.done = true;
+    document.getElementById('n2-check').disabled = true;
+    document.getElementById('n2-clear').disabled = true;
+
+    const ok = (s1 && s2 && s3 && !d1 && !d2);
+    const fb = document.getElementById('n2-fb');
+    if (ok) {
+      ['n2-s1','n2-s2','n2-s3'].forEach(id => document.getElementById(id).setAttribute('stroke', '#43a047'));
+      fb.className = 'feedback-banner success';
+      fb.textContent = '✓ أَحْسَنْتَ! لَقَدْ لَوَّنْتَ الطَّرِيقَ الصَّحِيحَ مِنَ الْـمَنْزِلِ إِلَى الْـمَلْعَبِ.';
+      scores.anjiz.correct++;
+    } else {
+      ['n2-s1','n2-s2','n2-s3'].forEach(id => document.getElementById(id).setAttribute('stroke', '#43a047'));
+      if (d1) document.getElementById('n2-d1').setAttribute('stroke', '#e53935');
+      if (d2) document.getElementById('n2-d2').setAttribute('stroke', '#e53935');
+      fb.className = 'feedback-banner error';
+      fb.textContent = '✗ خَطَأٌ! الطَّرِيقُ الصَّحِيحُ مُلَوَّنٌ الْآنَ بِالْأَخْضَرِ دُونَ الدُّخُولِ فِي الطُّرُقِ الْمَسْدُودَةِ.';
+      scores.anjiz.wrong++;
+    }
+    updateCounters();
+  }
+
+  /* ---- أتمرن 1 ---- */
+  function paintBasketballPath() {
+    if (state.t1.done) return;
+    state.t1.painted = true;
+    document.getElementById('t1-path').setAttribute('stroke', '#43a047');
+  }
+
+  function checkT1() {
+    if (state.t1.done) return;
+    if (!state.t1.painted) {
+      alert('اضْغَطْ عَلَى مَسْلَكِ لَاعِبِ كُرَةِ السَّلَّةِ لِتَلْوِينِهِ بِالْأَخْضَرِ أَوَّلًا!');
+      return;
+    }
+    if (!state.t1.selected) {
+      alert('اخْتَرْ نَوْعَ الْخُطُوطِ أَوَّلًا!');
+      return;
+    }
+    state.t1.done = true;
+    document.getElementById('t1-check').disabled = true;
+
+    const ok = finalizeOptions('t1', 'curved');
+    const fb = document.getElementById('t1-fb');
+    if (ok) {
+      fb.className = 'feedback-banner success';
+      fb.textContent = '✓ أَحْسَنْتَ! مَسْلَكُ لَاعِبِ كُرَةِ السَّلَّةِ مُلَوَّنٌ بِالْأَخْضَرِ وَهُوَ بِخُطُوطٍ مُنْحَنِيَةٍ.';
+      scores.atamarran.correct++;
+    } else {
+      fb.className = 'feedback-banner error';
+      fb.textContent = '✗ خَطَأٌ! الصَّوَابُ: مَسْلَكُ لَاعِبِ كُرَةِ السَّلَّةِ مَرْسُومٌ بِخُطُوطٍ مُنْحَنِيَةٍ.';
+      scores.atamarran.wrong++;
+    }
+    updateCounters();
+  }
+
+  /* ---- أتمرن 2 (1) ---- */
+  function resetT2a() {
+    if (state.t2a.done) return;
+    document.querySelectorAll('.t2a-seg').forEach(s => s.setAttribute('stroke', '#ffffff'));
+  }
+
+  function checkT2a() {
+    if (state.t2a.done) return;
+    const s1 = document.getElementById('t2a-s1').getAttribute('stroke') === '#ffb300';
+    const s2 = document.getElementById('t2a-s2').getAttribute('stroke') === '#ffb300';
+    const s3 = document.getElementById('t2a-s3').getAttribute('stroke') === '#ffb300';
+    const d1 = document.getElementById('t2a-d1').getAttribute('stroke') === '#ffb300';
+    const d2 = document.getElementById('t2a-d2').getAttribute('stroke') === '#ffb300';
+
+    if (!s1 && !s2 && !s3 && !d1 && !d2) {
+      alert('لَوِّنْ طَرِيقَ اللَّبُؤَةِ إِلَى صَغِيرِهَا أَوَّلًا!');
+      return;
+    }
+
+    state.t2a.done = true;
+    document.getElementById('t2a-check').disabled = true;
+    document.getElementById('t2a-clear').disabled = true;
+
+    const ok = (s1 && s2 && s3 && !d1 && !d2);
+    const fb = document.getElementById('t2a-fb');
+    if (ok) {
+      ['t2a-s1','t2a-s2','t2a-s3'].forEach(id => document.getElementById(id).setAttribute('stroke', '#43a047'));
+      fb.className = 'feedback-banner success';
+      fb.textContent = '✓ مُمْتَازٌ! وَصَلَتِ اللَّبُؤَةُ إِلَى صَغِيرِهَا بِأَمَانٍ.';
+      scores.atamarran.correct++;
+    } else {
+      ['t2a-s1','t2a-s2','t2a-s3'].forEach(id => document.getElementById(id).setAttribute('stroke', '#43a047'));
+      if (d1) document.getElementById('t2a-d1').setAttribute('stroke', '#e53935');
+      if (d2) document.getElementById('t2a-d2').setAttribute('stroke', '#e53935');
+      fb.className = 'feedback-banner error';
+      fb.textContent = '✗ خَطَأٌ! الطَّرِيقُ الصَّحِيحُ لِلَّبُؤَةِ مُوَضَّحٌ الْآنَ بِالْأَخْضَرِ.';
+      scores.atamarran.wrong++;
+    }
+    updateCounters();
+  }
+
+  /* ---- أتمرن 2 (2) ---- */
+  function checkT2b() {
+    if (state.t2b.done) return;
+    const v1 = document.getElementById('t2b-s1').value;
+    const v2 = document.getElementById('t2b-s2').value;
+    const v3 = document.getElementById('t2b-s3').value;
+
+    if (!v1 || !v2 || !v3) {
+      alert('اخْتَرْ طَرِيدَةَ كُلِّ طَائِرٍ مِنَ الطُّيُورِ الثَّلَاثَةِ أَوَّلًا!');
+      return;
+    }
+
+    state.t2b.done = true;
+    document.getElementById('t2b-check').disabled = true;
+    ['t2b-s1','t2b-s2','t2b-s3'].forEach(id => document.getElementById(id).disabled = true);
+
+    const c1 = v1 === 'ant';
+    const c2 = v2 === 'dragonfly';
+    const c3 = v3 === 'ladybug';
+
+    document.getElementById('t2b-r1').classList.add(c1 ? 'correct' : 'wrong');
+    document.getElementById('t2b-r2').classList.add(c2 ? 'correct' : 'wrong');
+    document.getElementById('t2b-r3').classList.add(c3 ? 'correct' : 'wrong');
+
+    const fb = document.getElementById('t2b-fb');
+    if (c1 && c2 && c3) {
+      fb.className = 'feedback-banner success';
+      fb.textContent = '✓ رَائِعٌ! تَتَبَّعْتَ مَسْلَكَ كُلِّ طَائِرٍ إِلَى طَرِيدَتِهِ بِدِقَّةٍ.';
+      scores.atamarran.correct++;
+    } else {
+      fb.className = 'feedback-banner error';
+      fb.textContent = '✗ خَطَأٌ! الصَّوَابُ: الطَّائِرُ 1 ⟵ النَّمْلَةُ 🐜 | الطَّائِرُ 2 ⟵ الْيَعْسُوبُ 🦟 | الطَّائِرُ 3 ⟵ الدُّعْسُوقَةُ 🐞.';
+      scores.atamarran.wrong++;
+    }
+    updateCounters();
+  }
+
+  /* ---- مساعدات الاختيارات المتعددة ---- */
+  function selectOption(ex, btn) {
+    if (state[ex].done) return;
+    state[ex].selected = btn.getAttribute('data-val');
+    document.querySelectorAll('#' + ex + '-options .option-card').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+
+  function finalizeOptions(ex, correctVal) {
+    let isCorrect = false;
+    document.querySelectorAll('#' + ex + '-options .option-card').forEach(btn => {
+      btn.disabled = true;
+      const val = btn.getAttribute('data-val');
+      if (val === correctVal) {
+        btn.classList.add('correct');
+        if (state[ex].selected === correctVal) isCorrect = true;
+      } else if (val === state[ex].selected) {
+        btn.classList.add('wrong');
+      }
+    });
+    return isCorrect;
+  }
+
+  /* ---- تحديث العدادات وفك القفل والتقييم النهائي ---- */
+  function updateCounters() {
+    document.getElementById('counter-aktashif').textContent = `✓ الصَّوَابُ: ${scores.aktashif.correct} | ✗ الْخَطَأُ: ${scores.aktashif.wrong}`;
+    document.getElementById('counter-anjiz').textContent = `✓ الصَّوَابُ: ${scores.anjiz.correct} | ✗ الْخَطَأُ: ${scores.anjiz.wrong}`;
+    document.getElementById('counter-atamarran').textContent = `✓ الصَّوَابُ: ${scores.atamarran.correct} | ✗ الْخَطَأُ: ${scores.atamarran.wrong}`;
+    document.getElementById('counter-abhath').textContent = `✓ الصَّوَابُ: ${scores.abhath.correct} | ✗ الْخَطَأُ: ${scores.abhath.wrong}`;
+
+    if (state.a1.done && state.a2.done) {
+      document.getElementById('sec-anjiz').classList.remove('locked');
+    }
+    if (state.n1.done && state.n2.done) {
+      document.getElementById('sec-atamarran').classList.remove('locked');
+    }
+    if (state.t1.done && state.t2a.done && state.t2b.done) {
+      document.getElementById('sec-abhath').classList.remove('locked');
+    }
+
+    const totalCorrect = scores.aktashif.correct + scores.anjiz.correct + scores.atamarran.correct + scores.abhath.correct;
+    const totalWrong = scores.aktashif.wrong + scores.anjiz.wrong + scores.atamarran.wrong + scores.abhath.wrong;
+    const answered = totalCorrect + totalWrong;
+
+    document.getElementById('total-correct').textContent = totalCorrect;
+    document.getElementById('total-wrong').textContent = totalWrong;
+
+    const percent = Math.min(100, Math.round((totalCorrect / TOTAL_QUESTIONS) * 100));
+    document.getElementById('total-percent').textContent = percent + '%';
+    document.getElementById('final-progress').style.width = percent + '%';
+
+    const circumference = 389.56;
+    const offset = circumference - (percent / 100) * circumference;
+    const circle = document.getElementById('gauge-circle');
+    circle.style.strokeDashoffset = offset;
+    circle.setAttribute('stroke', percent >= 80 ? '#2e7d32' : (percent >= 50 ? '#ef6c00' : '#c62828'));
+
+    const remarkEl = document.getElementById('final-remark');
+    if (answered < TOTAL_QUESTIONS) {
+      remarkEl.textContent = `أَجَبْتَ عَنْ ${answered} مِنْ أَصْلِ ${TOTAL_QUESTIONS} تَمَارِينَ — وَاصِلِ التَّقَدُّمَ!`;
+    } else {
+      if (percent === 100) {
+        remarkEl.textContent = '🌟 مُمْتَازٌ جِدًّا! نَتِيجَةٌ كَامِلَةٌ، أَنْتَ بَطَلُ الْـمَسَالِكِ!';
+      } else if (percent >= 75) {
+        remarkEl.textContent = '👏 جَيِّدٌ جِدًّا! أَدَاءٌ رَائِعٌ وَفَهْمٌ مُمْتَازٌ لِلْمَسَالِكِ.';
+      } else if (percent >= 50) {
+        remarkEl.textContent = '👍 لَا بَأْسَ! حَاوِلْ مُرَاجَعَةَ الْأَخْطَاءِ لِتُحَقِّقَ نَتِيجَةً أَفْضَلَ.';
+      } else {
+        remarkEl.textContent = '💪 تَحْتَاجُ إِلَى مَزِيدٍ مِنَ التَّدَرُّبِ، أَعِدِ الْـمُحَاوَلَةَ وَسَتَنْجَحُ!';
+      }
+    }
+  }
+
+  /* ---- الرسم الحر لأكتشف 2 ---- */
+  function setupFreeCanvas(canvasId, strokeColor) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    ctx.lineWidth = 6;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = strokeColor;
+
+    let drawing = false;
+    const key = canvasId.replace('canvas-', '');
+
+    function getCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: (clientX - rect.left) * (canvas.width / rect.width),
+        y: (clientY - rect.top) * (canvas.height / rect.height)
+      };
+    }
+
+    function start(e) {
+      if (state[key].done) return;
+      drawing = true;
+      const pos = getCoords(e);
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+      e.preventDefault();
+    }
+
+    function move(e) {
+      if (!drawing || state[key].done) return;
+      const pos = getCoords(e);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      e.preventDefault();
+    }
+
+    function end() {
+      drawing = false;
+    }
+
+    canvas.addEventListener('mousedown', start);
+    canvas.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', end);
+
+    canvas.addEventListener('touchstart', start, { passive: false });
+    canvas.addEventListener('touchmove', move, { passive: false });
+    canvas.addEventListener('touchend', end);
+  }
+
+  function clearFreeDraw(canvasId) {
+    const key = canvasId.replace('canvas-', '');
+    if (state[key].done) return;
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function restartAll() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => location.reload(), 300);
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    setupFreeCanvas('canvas-a2', '#d32f2f');
+    renderGridMaze('n1');
+    renderGridMaze('b1');
+    updateCounters();
+  });
+</script>
+</body>
+</html>
