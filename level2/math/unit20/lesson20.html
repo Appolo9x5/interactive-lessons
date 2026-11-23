@@ -1,0 +1,1780 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدَّرْسُ 19 : اسْتِخْرَاجُ مُعْطَيَاتٍ (1) - السَّنَةُ الثَّانِيَةُ</title>
+<!-- مكتبة Telegram WebApp -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #8b2635;
+    --primary-light: #fdf2f4;
+    --secondary: #1e6b52;
+    --secondary-light: #eef8f4;
+    --accent: #d97706;
+    --accent-light: #fef7ec;
+    --blue: #1d4ed8;
+    --blue-light: #eff6ff;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --border: #cbd5e1;
+    --correct: #16a34a;
+    --correct-bg: #dcfce7;
+    --wrong: #dc2626;
+    --wrong-bg: #fee2e2;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  /* Header */
+  .lesson-header {
+    background: linear-gradient(135deg, #8b2635 0%, #b9384a 100%);
+    color: white;
+    border-radius: 20px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 8px 20px rgba(139, 38, 53, 0.25);
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .lesson-badge {
+    background: #ffffff;
+    color: #8b2635;
+    font-size: 2rem;
+    font-weight: 900;
+    width: 68px;
+    height: 68px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid #fde68a;
+    flex-shrink: 0;
+  }
+
+  .lesson-title-box h1 {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 900;
+  }
+
+  .lesson-title-box p {
+    margin: 4px 0 0;
+    font-size: 1rem;
+    opacity: 0.92;
+  }
+
+  /* Sections */
+  .section-card {
+    background: var(--card);
+    border-radius: 20px;
+    padding: 22px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+    border: 2px solid #e2e8f0;
+    transition: opacity 0.3s ease;
+  }
+
+  .section-card.locked {
+    opacity: 0.55;
+    pointer-events: none;
+    position: relative;
+  }
+
+  .section-badge {
+    display: inline-block;
+    padding: 6px 20px;
+    border-radius: 12px;
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+    color: white;
+  }
+
+  .badge-aktashif { background: #1e6b52; }
+  .badge-unjiz { background: #b9384a; }
+  .badge-taalamt { background: #6d28d9; }
+  .badge-atamarran { background: #b45309; }
+  .badge-abhath { background: #15803d; }
+
+  .instruction-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #0f172a;
+  }
+
+  /* LTR Isolation */
+  .ltr-math {
+    direction: ltr;
+    display: inline-block;
+    unicode-bidi: isolate;
+    font-weight: 800;
+  }
+
+  /* Aktashif Grid */
+  .aktashif-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .aktashif-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .grid-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fffbeb;
+    border: 2px solid #92400e;
+    text-align: center;
+    direction: ltr;
+  }
+
+  .grid-table th, .grid-table td {
+    border: 1.5px solid #b45309;
+    width: 48px;
+    height: 48px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    padding: 4px;
+  }
+
+  .grid-table th {
+    background: #fef3c7;
+    color: #78350f;
+  }
+
+  .item-icon {
+    font-size: 1.65rem;
+    display: block;
+    line-height: 1.1;
+  }
+
+  .item-label {
+    font-size: 0.68rem;
+    color: #475569;
+    display: block;
+    font-weight: 700;
+  }
+
+  .q-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .q-row {
+    background: #f8fafc;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 1.08rem;
+    font-weight: 700;
+  }
+
+  .q-row.example {
+    background: #ecfdf5;
+    border-color: #6ee7b7;
+  }
+
+  select, input[type="text"], input[type="number"] {
+    padding: 6px 10px;
+    border-radius: 10px;
+    border: 2px solid #94a3b8;
+    font-size: 1.05rem;
+    font-weight: 800;
+    background: white;
+    color: #0f172a;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  select:focus, input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
+
+  .correct-field {
+    border-color: var(--correct) !important;
+    background-color: var(--correct-bg) !important;
+    color: #14532d !important;
+  }
+
+  .wrong-field {
+    border-color: var(--wrong) !important;
+    background-color: var(--wrong-bg) !important;
+    color: #7f1d1d !important;
+  }
+
+  .feedback-badge {
+    font-size: 0.92rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 8px;
+  }
+
+  .fb-ok { color: #15803d; background: #dcfce7; }
+  .fb-err { color: #b91c1c; background: #fee2e2; }
+
+  /* Unjiz Lattice */
+  .unjiz-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 800px) {
+    .unjiz-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .sub-box {
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 16px;
+    background: #fcfcfd;
+  }
+
+  /* خانات منفصلة لمعطيات مسلك أنجز 1 بالترتيب الصحيح من اليسار إلى اليمين */
+  .path-box {
+    background: #fff1f2;
+    border: 1.5px dashed #be123c;
+    border-radius: 12px;
+    padding: 12px 10px;
+    margin: 10px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+    direction: ltr;
+  }
+
+  .path-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .step-chip {
+    background: #ffffff;
+    border: 2px solid #f43f5e;
+    color: #881337;
+    border-radius: 10px;
+    padding: 3px 10px;
+    font-size: 1.05rem;
+    font-weight: 900;
+    box-shadow: 0 2px 4px rgba(190, 18, 60, 0.08);
+    display: inline-block;
+    unicode-bidi: isolate;
+  }
+
+  .step-chip.start-chip {
+    background: #ffe4e6;
+    border-color: #be123c;
+  }
+
+  .step-arrow {
+    color: #be123c;
+    font-size: 1.2rem;
+    font-weight: 900;
+  }
+
+  .canvas-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+
+  svg.lattice-svg {
+    background: #ffffff;
+    border: 2px solid #94a3b8;
+    border-radius: 12px;
+    touch-action: manipulation;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .node-circle {
+    cursor: pointer;
+    transition: r 0.15s;
+  }
+
+  .node-circle:hover {
+    r: 8;
+  }
+
+  .btn-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .btn {
+    border: none;
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.1s, opacity 0.2s;
+  }
+
+  .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .btn-check { background: #16a34a; color: white; }
+  .btn-undo { background: #f59e0b; color: white; }
+  .btn-clear { background: #64748b; color: white; }
+  .btn-reset { background: #8b2635; color: white; font-size: 1.15rem; padding: 12px 26px; }
+
+  .coord-slots {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    justify-content: center;
+    background: #f1f5f9;
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .coord-slot-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: white;
+    padding: 4px 8px;
+    border-radius: 8px;
+    border: 1.5px solid #cbd5e1;
+    font-weight: 800;
+  }
+
+  /* Taalamt Box */
+  .taalamt-box {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+    border: 3px solid #7c3aed;
+    border-radius: 18px;
+    padding: 20px;
+    position: relative;
+  }
+
+  .taalamt-text {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #3b0764;
+    margin: 0;
+    line-height: 1.9;
+  }
+
+  /* Data Tables (Atamarran & Abhath) */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 18px;
+    text-align: center;
+    font-size: 1.05rem;
+  }
+
+  .data-table th, .data-table td {
+    border: 2px solid #cbd5e1;
+    padding: 10px 8px;
+    font-weight: 800;
+  }
+
+  .data-table th {
+    background: #fef3c7;
+    color: #78350f;
+  }
+
+  .row-girls { background: #fdf2f8; }
+  .row-boys { background: #eff6ff; }
+
+  .num-input {
+    width: 85px;
+    text-align: center;
+    direction: ltr;
+  }
+
+  .choice-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .choice-btn {
+    border: 2px solid #cbd5e1;
+    background: white;
+    border-radius: 12px;
+    padding: 8px 18px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .choice-btn.selected {
+    border-color: #2563eb;
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  .choice-btn.correct-choice {
+    border-color: var(--correct) !important;
+    background: var(--correct-bg) !important;
+    color: #14532d !important;
+  }
+
+  .choice-btn.wrong-choice {
+    border-color: var(--wrong) !important;
+    background: var(--wrong-bg) !important;
+    color: #7f1d1d !important;
+  }
+
+  /* Station Counter */
+  .station-counter {
+    margin-top: 16px;
+    padding: 10px 16px;
+    background: #f1f5f9;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 1.05rem;
+  }
+
+  .cnt-ok { color: #16a34a; }
+  .cnt-err { color: #dc2626; }
+
+  /* Final Evaluation Card */
+  .eval-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+    border: 3px solid #16a34a;
+    border-radius: 22px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(22, 163, 74, 0.12);
+    margin-top: 28px;
+  }
+
+  .eval-title {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #14532d;
+    margin: 0 0 18px;
+  }
+
+  .eval-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .circle-wrap {
+    position: relative;
+    width: 150px;
+    height: 150px;
+  }
+
+  .circle-wrap svg {
+    transform: rotate(-90deg);
+    width: 150px;
+    height: 150px;
+  }
+
+  .circle-bg {
+    fill: none;
+    stroke: #e2e8f0;
+    stroke-width: 14;
+  }
+
+  .circle-progress {
+    fill: none;
+    stroke: #16a34a;
+    stroke-width: 14;
+    stroke-linecap: round;
+    stroke-dasharray: 408.4;
+    stroke-dashoffset: 408.4;
+    transition: stroke-dashoffset 0.6s ease, stroke 0.3s ease;
+  }
+
+  .circle-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #0f172a;
+    direction: ltr;
+  }
+
+  .stats-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: right;
+    min-width: 240px;
+  }
+
+  .stat-pill {
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 1.15rem;
+    font-weight: 800;
+  }
+
+  .stat-ok { background: #dcfce7; color: #15803d; }
+  .stat-err { background: #fee2e2; color: #b91c1c; }
+  .stat-tot { background: #e0f2fe; color: #0369a1; }
+
+  .progress-bar-outer {
+    width: 100%;
+    height: 16px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 14px 0 20px;
+  }
+
+  .progress-bar-inner {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #16a34a, #22c55e);
+    transition: width 0.5s ease;
+  }
+
+  .produce-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== */
+  #sub-lock-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .lock-box {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+    border: 2px solid #e1f5fe;
+    max-width: 380px;
+    width: 100%;
+  }
+  .lock-icon { font-size: 50px; margin-bottom: 12px; }
+  .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+  .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+  .btn-channel {
+    display: block;
+    width: 100%;
+    background: #0288d1;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+  }
+  .btn-check-sub {
+    width: 100%;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 13px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .sub-status-msg {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-height: 24px;
+  }
+
+  /* زر العودة إلى الفهرس */
+  .btn-back-home {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin: 20px auto 10px auto;
+    background: #0d47a1;
+    color: #ffffff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- رأس الدرس -->
+  <header class="lesson-header">
+    <div class="lesson-title-box">
+      <h1>اسْتِخْرَاجُ مُعْطَيَاتٍ (1)</h1>
+      <p>الرِّيَاضِيَّاتُ – السَّنَةُ الثَّانِيَةُ ابْتِدَائِيٌّ (كِتَابُ التِّلْمِيذِ ص 39 + كُرَّاسُ الأَنْشِطَةِ ص 26)</p>
+    </div>
+    <div class="lesson-badge">19</div>
+  </header>
+
+  <!-- المحطة 1: أكتشف -->
+  <section class="section-card" id="sec-aktashif">
+    <div class="section-badge badge-aktashif">أَكْتَشِفُ</div>
+    <p class="instruction-text">لَاحِظِ الْجَدْوَلَ، وَامْلَأِ الْفَرَاغَاتِ كَمَا فِي الْمِثَالِ.</p>
+
+    <div class="aktashif-layout">
+      <!-- الجدول المرجعي -->
+      <div>
+        <table class="grid-table" dir="ltr" aria-label="جدول الأدوات">
+          <thead>
+            <tr>
+              <th></th>
+              <th>1</th>
+              <th>2</th>
+              <th>3</th>
+              <th>4</th>
+              <th>5</th>
+              <th>6</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th>أ</th>
+              <td></td>
+              <td><span class="item-icon">🖍️</span><span class="item-label">أَقْلَامٌ</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <th>ب</th>
+              <td><span class="item-icon">✏️</span><span class="item-label">مِبْرَاةٌ</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><span class="item-icon">🧽</span><span class="item-label">مِمْحَاةٌ</span></td>
+              <td></td>
+            </tr>
+            <tr>
+              <th>ج</th>
+              <td></td>
+              <td></td>
+              <td><span class="item-icon">🖩</span><span class="item-label">حَاسِبَةٌ</span></td>
+              <td></td>
+              <td></td>
+              <td><span class="item-icon">🎒</span><span class="item-label">مِحْفَظَةٌ</span></td>
+            </tr>
+            <tr>
+              <th>د</th>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><span class="item-icon">📖</span><span class="item-label">كِتَابٌ</span></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <th>هـ</th>
+              <td></td>
+              <td><span class="item-icon">🖊️</span><span class="item-label">قَلَمٌ</span></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><span class="item-icon">📯</span><span class="item-label">صَافِرَةٌ</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- الأسئلة -->
+      <div class="q-list">
+        <div class="q-row example">
+          <span>🔸 الْمِمْحَاةُ فِي الْخَانَةِ <span class="ltr-math">5 ب</span> . (مِثَالٌ)</span>
+        </div>
+
+        <div class="q-row" id="akt-q1-row">
+          <span>🔸</span>
+          <select id="akt-q1">
+            <option value="">-- اخْتَرِ الْأَدَاةَ --</option>
+            <option value="الْقَلَمُ">الْقَلَمُ</option>
+            <option value="الْحَاسِبَةُ">الْحَاسِبَةُ</option>
+            <option value="الْمِبْرَاةُ">الْمِبْرَاةُ</option>
+            <option value="الْأَقْلَامُ">الْأَقْلَامُ</option>
+          </select>
+          <span>فِي الْخَانَةِ <span class="ltr-math">2 هـ</span> .</span>
+          <span class="feedback-badge" id="akt-fb1"></span>
+        </div>
+
+        <div class="q-row" id="akt-q2-row">
+          <span>🔸</span>
+          <select id="akt-q2">
+            <option value="">-- اخْتَرِ الْأَدَاةَ --</option>
+            <option value="الْقَلَمُ">الْقَلَمُ</option>
+            <option value="الْحَاسِبَةُ">الْحَاسِبَةُ</option>
+            <option value="الْمِبْرَاةُ">الْمِبْرَاةُ</option>
+            <option value="الْأَقْلَامُ">الْأَقْلَامُ</option>
+          </select>
+          <span>فِي الْخَانَةِ <span class="ltr-math">3 ج</span> .</span>
+          <span class="feedback-badge" id="akt-fb2"></span>
+        </div>
+
+        <div class="q-row" id="akt-q3-row">
+          <span>🔸 الْكِتَابُ فِي الْخَانَةِ</span>
+          <select id="akt-q3-num">
+            <option value="">الْعَدَدُ</option>
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+          </select>
+          <select id="akt-q3-let">
+            <option value="">الْحَرْفُ</option>
+            <option value="أ">أ</option><option value="ب">ب</option><option value="ج">ج</option>
+            <option value="د">د</option><option value="هـ">هـ</option>
+          </select>
+          <span>.</span>
+          <span class="feedback-badge" id="akt-fb3"></span>
+        </div>
+
+        <div class="q-row" id="akt-q4-row">
+          <span>🔸 الْمِحْفَظَةُ فِي الْخَانَةِ</span>
+          <select id="akt-q4-num">
+            <option value="">الْعَدَدُ</option>
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+          </select>
+          <select id="akt-q4-let">
+            <option value="">الْحَرْفُ</option>
+            <option value="أ">أ</option><option value="ب">ب</option><option value="ج">ج</option>
+            <option value="د">د</option><option value="هـ">هـ</option>
+          </select>
+          <span>.</span>
+          <span class="feedback-badge" id="akt-fb4"></span>
+        </div>
+
+        <div class="q-row" id="akt-q5-row">
+          <span>🔸 الصَّافِرَةُ فِي الْخَانَةِ</span>
+          <select id="akt-q5-num">
+            <option value="">الْعَدَدُ</option>
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+          </select>
+          <select id="akt-q5-let">
+            <option value="">الْحَرْفُ</option>
+            <option value="أ">أ</option><option value="ب">ب</option><option value="ج">ج</option>
+            <option value="د">د</option><option value="هـ">هـ</option>
+          </select>
+          <span>.</span>
+          <span class="feedback-badge" id="akt-fb5"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="station-counter">
+      <button class="btn btn-check" id="btn-check-aktashif" onclick="checkAktashif()">تَحَقَّقْ مِنْ إِجَابَاتِ أَكْتَشِفُ ✓</button>
+      <div>
+        <span class="cnt-ok">✓ الصَّوَابُ: <span id="akt-ok">0</span></span> |
+        <span class="cnt-err">✗ الْخَطَأُ: <span id="akt-err">0</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- المحطة 2: أنجز -->
+  <section class="section-card locked" id="sec-unjiz">
+    <div class="section-badge badge-unjiz">أُنْجِزُ</div>
+
+    <div class="unjiz-grid">
+      <!-- التمرين 1 -->
+      <div class="sub-box">
+        <p class="instruction-text">1- أُرْسُمِ الْمَسْلَكَ الَّذِي يَنْطَلِقُ مِنَ النُّقْطَةِ <span class="ltr-math">4 أ</span> وَيَمُرُّ عَلَى النُّقَطِ أَدْنَاهُ، ثُمَّ يَعُودُ إِلَى النُّقْطَةِ <span class="ltr-math">4 أ</span>.</p>
+        
+        <!-- كل معطى في خانة منفصلة مع أسهم تشير للترتيب الصحيح من اليسار إلى اليمين -->
+        <div class="path-box" dir="ltr">
+          <div class="path-line">
+            <span class="step-chip start-chip">4 أ</span>
+            <span class="step-arrow">&rarr;</span>
+            <span class="step-chip">4 ب</span>
+            <span class="step-arrow">&rarr;</span>
+            <span class="step-chip">2 ب</span>
+            <span class="step-arrow">&rarr;</span>
+            <span class="step-chip">5 ي</span>
+            <span class="step-arrow">&rarr;</span>
+            <span class="step-chip">8 ب</span>
+          </div>
+          <div class="path-line">
+            <span class="step-arrow">&rarr;</span>
+            <span class="step-chip">6 ب</span>
+            <span class="step-arrow">&rarr;</span>
+            <span class="step-chip">6 أ</span>
+            <span class="step-arrow">&rarr;</span>
+            <span class="step-chip start-chip">4 أ</span>
+          </div>
+        </div>
+
+        <p style="font-size:0.95rem; color:#475569; margin:4px 0;">انْقُرْ عَلَى عُقَدِ الْمَرْصُوفَةِ بِالتَّرْتِيبِ لِرَسْمِ الْمَسْلَكِ:</p>
+        <div class="canvas-wrapper">
+          <svg id="svg-unjiz1" class="lattice-svg" width="380" height="340" viewBox="0 0 380 340"></svg>
+        </div>
+        <div class="btn-group">
+          <button class="btn btn-undo" id="btn-u1-undo" onclick="undoUnjiz1()">تَرَاجُعٌ ↩</button>
+          <button class="btn btn-clear" id="btn-u1-clear" onclick="clearUnjiz1()">مَسْحٌ 🗑</button>
+          <button class="btn btn-check" id="btn-u1-check" onclick="checkUnjiz1()">تَحَقَّقْ 1 ✓</button>
+        </div>
+        <div id="u1-feedback" style="margin-top:8px; font-weight:800;"></div>
+      </div>
+
+      <!-- التمرين 2 -->
+      <div class="sub-box">
+        <p class="instruction-text">2- أَكْمِلْ كِتَابَةَ الْمَسَارِ الَّذِي يَنْطَلِقُ مِنَ النُّقْطَةِ <span class="ltr-math">ل</span> وَيَصِلُ إِلَى النُّقْطَةِ <span class="ltr-math">ك</span> .</p>
+        <div class="canvas-wrapper">
+          <svg id="svg-unjiz2" class="lattice-svg" width="380" height="340" viewBox="0 0 380 340"></svg>
+        </div>
+
+        <div class="coord-slots" dir="ltr">
+          <span class="coord-slot-item" style="background:#dcfce7;">ل (2 ج)</span>
+          <span>&rarr;</span>
+          <span class="coord-slot-item">
+            <select id="u2-s1-n"><option value="">-</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+            <select id="u2-s1-l"><option value="">-</option><option>أ</option><option>ب</option><option>ج</option><option>د</option><option>هـ</option><option>و</option><option>ي</option></select>
+          </span>
+          <span>&rarr;</span>
+          <span class="coord-slot-item">
+            <select id="u2-s2-n"><option value="">-</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+            <select id="u2-s2-l"><option value="">-</option><option>أ</option><option>ب</option><option>ج</option><option>د</option><option>هـ</option><option>و</option><option>ي</option></select>
+          </span>
+          <span>&rarr;</span>
+          <span class="coord-slot-item">
+            <select id="u2-s3-n"><option value="">-</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+            <select id="u2-s3-l"><option value="">-</option><option>أ</option><option>ب</option><option>ج</option><option>د</option><option>هـ</option><option>و</option><option>ي</option></select>
+          </span>
+          <span>&rarr;</span>
+          <span class="coord-slot-item">
+            <select id="u2-s4-n"><option value="">-</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+            <select id="u2-s4-l"><option value="">-</option><option>أ</option><option>ب</option><option>ج</option><option>د</option><option>هـ</option><option>و</option><option>ي</option></select>
+          </span>
+          <span>&rarr;</span>
+          <span class="coord-slot-item">
+            <select id="u2-s5-n"><option value="">-</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+            <select id="u2-s5-l"><option value="">-</option><option>أ</option><option>ب</option><option>ج</option><option>د</option><option>هـ</option><option>و</option><option>ي</option></select>
+          </span>
+          <span>&rarr;</span>
+          <span class="coord-slot-item" style="background:#fef3c7;">ك (<select id="u2-s6-n"><option value="">-</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+            <select id="u2-s6-l"><option value="">-</option><option>أ</option><option>ب</option><option>ج</option><option>د</option><option>هـ</option><option>و</option><option>ي</option></select>)</span>
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-check" id="btn-u2-check" onclick="checkUnjiz2()">تَحَقَّقْ 2 ✓</button>
+        </div>
+        <div id="u2-feedback" style="margin-top:8px; font-weight:800;"></div>
+      </div>
+    </div>
+
+    <div class="station-counter">
+      <span>حَصِيلَةُ أُنْجِزُ:</span>
+      <div>
+        <span class="cnt-ok">✓ الصَّوَابُ: <span id="unj-ok">0</span></span> |
+        <span class="cnt-err">✗ الْخَطَأُ: <span id="unj-err">0</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- بطاقة تعلمت -->
+  <section class="section-card" id="sec-taalamt">
+    <div class="section-badge badge-taalamt">تَعَلَّمْتُ</div>
+    <div class="taalamt-box">
+      <p class="taalamt-text">
+        لِكَيْ أُحَدِّدَ نُقْطَةً عَلَى مَرْصُوفَةٍ أَوْ خَانَةً فِي جَدْوَلٍ، أُحَدِّدُ الْعَدَدَ عَلَى السَّطْرِ ثُمَّ أُحَدِّدُ الْحَرْفَ عَلَى الْعَمُودِ، ثُمَّ أَكْتُبُهُمَا .
+      </p>
+    </div>
+  </section>
+
+  <!-- المحطة 3: أتمرن (كراس الأنشطة) -->
+  <section class="section-card locked" id="sec-atamarran">
+    <div class="section-badge badge-atamarran">أَتَمَرَّنُ (كُرَّاسُ الأَنْشِطَةِ ص 26)</div>
+    <p class="instruction-text">1- هَذَا جَدْوَلُ إِحْصَاءِ تَلَامِيذِ مَدْرَسَةِ النَّجَاحِ.</p>
+
+    <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>التَّحْضِيرِي</th>
+            <th>السَّنَةُ <span class="ltr-math">1</span></th>
+            <th>السَّنَةُ <span class="ltr-math">2</span></th>
+            <th>السَّنَةُ <span class="ltr-math">3</span></th>
+            <th>السَّنَةُ <span class="ltr-math">4</span></th>
+            <th>السَّنَةُ <span class="ltr-math">5</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="row-girls">
+            <th>بَنَاتٌ</th>
+            <td><span class="ltr-math">10</span></td>
+            <td><span class="ltr-math">17</span></td>
+            <td><span class="ltr-math">14</span></td>
+            <td><span class="ltr-math">16</span></td>
+            <td><span class="ltr-math">13</span></td>
+            <td><span class="ltr-math">15</span></td>
+          </tr>
+          <tr class="row-boys">
+            <th>أَوْلَادٌ</th>
+            <td><span class="ltr-math">7</span></td>
+            <td><span class="ltr-math">14</span></td>
+            <td><span class="ltr-math">15</span></td>
+            <td><span class="ltr-math">11</span></td>
+            <td><span class="ltr-math">15</span></td>
+            <td><span class="ltr-math">6</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="instruction-text">أَكْمِلْ مَا يَأْتِي مُسْتَعْمِلًا الْجَدْوَلَ :</p>
+    <div class="q-list">
+      <div class="q-row">
+        <span>❶ عَدَدُ الْإِنَاثِ فِي التَّحْضِيرِي :</span>
+        <input type="number" class="num-input" id="atm-q1">
+        <span class="feedback-badge" id="atm-fb1"></span>
+      </div>
+      <div class="q-row">
+        <span>❷ عَدَدُ التَّلَامِيذِ فِي السَّنَةِ <span class="ltr-math">1</span> :</span>
+        <input type="number" class="num-input" id="atm-q2">
+        <span class="feedback-badge" id="atm-fb2"></span>
+      </div>
+      <div class="q-row">
+        <span>❸ عَدَدُ التَّلَامِيذِ فِي السَّنَةِ <span class="ltr-math">2</span> :</span>
+        <input type="number" class="num-input" id="atm-q3">
+        <span class="feedback-badge" id="atm-fb3"></span>
+      </div>
+      <div class="q-row">
+        <span>❹ عَدَدُ التَّلَامِيذِ فِي السَّنَةِ <span class="ltr-math">5</span> :</span>
+        <input type="number" class="num-input" id="atm-q4">
+        <span class="feedback-badge" id="atm-fb4"></span>
+      </div>
+      <div class="q-row">
+        <span>❺ عَدَدُ تَلَامِيذِ الْمَدْرَسَةِ :</span>
+        <input type="number" class="num-input" id="atm-q5">
+        <span class="feedback-badge" id="atm-fb5"></span>
+      </div>
+
+      <!-- سؤال رائد وإيمان -->
+      <div class="q-row" style="flex-direction:column; align-items:flex-start; background:#fffbeb; border-color:#f59e0b;">
+        <div>
+          <span>👦 <strong>رَائِدٌ</strong> يَقُولُ: «عَدَدُنَا أَكْبَرُ» | 👧 <strong>إِيمَانُ</strong> تَقُولُ: «عَدَدُنَا أَكْبَرُ»</span>
+        </div>
+        <div style="display:flex; flex-wrap:wrap; gap:16px; margin-top:6px;">
+          <div>
+            <span>عَدَدُ الذُّكُورِ :</span>
+            <input type="number" class="num-input" id="atm-q6">
+            <span class="feedback-badge" id="atm-fb6"></span>
+          </div>
+          <div>
+            <span>عَدَدُ الْإِنَاثِ :</span>
+            <input type="number" class="num-input" id="atm-q7">
+            <span class="feedback-badge" id="atm-fb7"></span>
+          </div>
+        </div>
+        <div style="margin-top:8px;">
+          <span>أَيُّهُمَا عَلَى صَوَابٍ ؟ الَّذِي عَلَى صَوَابٍ هُوَ :</span>
+          <div class="choice-group" id="atm-q8-choices">
+            <button type="button" class="choice-btn" data-val="رائد" onclick="selectChoice(this)">👦 رَائِدٌ</button>
+            <button type="button" class="choice-btn" data-val="إيمان" onclick="selectChoice(this)">👧 إِيمَانُ</button>
+          </div>
+          <span class="feedback-badge" id="atm-fb8"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="station-counter">
+      <button class="btn btn-check" id="btn-check-atamarran" onclick="checkAtamarran()">تَحَقَّقْ مِنْ إِجَابَاتِ أَتَمَرَّنُ ✓</button>
+      <div>
+        <span class="cnt-ok">✓ الصَّوَابُ: <span id="atm-ok">0</span></span> |
+        <span class="cnt-err">✗ الْخَطَأُ: <span id="atm-err">0</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- المحطة 4: أبحث -->
+  <section class="section-card locked" id="sec-abhath">
+    <div class="section-badge badge-abhath">أَبْحَثُ</div>
+    <p class="instruction-text">هَذَا الْجَدْوَلُ يُمَثِّلُ مُشْتَرَيَاتِ أُمِّ حَنِينٍ عِنْدَ الْخَضَّارِ.</p>
+
+    <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>الْمُنْتُوجُ</th>
+            <th>سِعْرُ الْكِيلُوغْرَامِ</th>
+            <th>الْمُشْتَرَيَاتُ بِالْكِيلُوغْرَامِ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="produce-cell"><span style="font-size:1.7rem;">🥔</span><span>بَطَاطَا</span></div></td>
+            <td><span class="ltr-math">45</span> دج</td>
+            <td><span class="ltr-math">3</span></td>
+          </tr>
+          <tr>
+            <td><div class="produce-cell"><span style="font-size:1.7rem;">🍅</span><span>طَمَاطِمُ</span></div></td>
+            <td><span class="ltr-math">25</span> دج</td>
+            <td><span class="ltr-math">2</span></td>
+          </tr>
+          <tr>
+            <td><div class="produce-cell"><span style="font-size:1.7rem;">🍎</span><span>رُمَّانٌ</span></div></td>
+            <td><span class="ltr-math">50</span> دج</td>
+            <td><span class="ltr-math">1</span></td>
+          </tr>
+          <tr>
+            <td><div class="produce-cell"><span style="font-size:1.7rem;">🍊</span><span>بُرْتُقَالٌ</span></div></td>
+            <td><span class="ltr-math">95</span> دج</td>
+            <td><span class="ltr-math">2</span></td>
+          </tr>
+          <tr>
+            <td><div class="produce-cell"><span style="font-size:1.7rem;">🍏</span><span>تُفَّاحٌ</span></div></td>
+            <td><span class="ltr-math">165</span> دج</td>
+            <td><span class="ltr-math">1</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="q-list">
+      <div class="q-row">
+        <span>❶ كَمْ كِيلُوغْرَامًا اشْتَرَتْ مِنَ الْبَطَاطَا ؟</span>
+        <input type="number" class="num-input" id="abh-q1">
+        <span>كِيلُوغْرَامًا</span>
+        <span class="feedback-badge" id="abh-fb1"></span>
+      </div>
+      <div class="q-row">
+        <span>❷ كَمْ كِيلُوغْرَامًا اشْتَرَتْ مِنَ التُّفَّاحِ ؟</span>
+        <input type="number" class="num-input" id="abh-q2">
+        <span>كِيلُوغْرَامًا</span>
+        <span class="feedback-badge" id="abh-fb2"></span>
+      </div>
+      <div class="q-row">
+        <span>❸ مَا وَزْنُ الْخَضْرَاوَاتِ ؟</span>
+        <input type="number" class="num-input" id="abh-q3">
+        <span>كِيلُوغْرَامًا</span>
+        <span class="feedback-badge" id="abh-fb3"></span>
+      </div>
+      <div class="q-row">
+        <span>❹ مَا وَزْنُ الْفَوَاكِهِ ؟</span>
+        <input type="number" class="num-input" id="abh-q4">
+        <span>كِيلُوغْرَامًا</span>
+        <span class="feedback-badge" id="abh-fb4"></span>
+      </div>
+      <div class="q-row">
+        <span>❺ مَا هُوَ الْمَبْلَغُ الَّذِي تَدْفَعُهُ أُمُّ حَنِينٍ مُقَابِلَ مُشْتَرَيَاتِهَا ؟</span>
+        <input type="number" class="num-input" id="abh-q5">
+        <span>دج</span>
+        <span class="feedback-badge" id="abh-fb5"></span>
+      </div>
+    </div>
+
+    <div class="station-counter">
+      <button class="btn btn-check" id="btn-check-abhath" onclick="checkAbhath()">تَحَقَّقْ مِنْ إِجَابَاتِ أَبْحَثُ ✓</button>
+      <div>
+        <span class="cnt-ok">✓ الصَّوَابُ: <span id="abh-ok">0</span></span> |
+        <span class="cnt-err">✗ الْخَطَأُ: <span id="abh-err">0</span></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- بطاقة التقييم النهائي الشامل -->
+  <section class="eval-card" id="sec-eval">
+    <h2 class="eval-title">📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</h2>
+    <div class="eval-body">
+      <div class="circle-wrap">
+        <svg viewBox="0 0 150 150">
+          <circle class="circle-bg" cx="75" cy="75" r="65"></circle>
+          <circle class="circle-progress" id="eval-circle" cx="75" cy="75" r="65"></circle>
+        </svg>
+        <div class="circle-text" id="eval-percent">0%</div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-pill stat-ok">✓ مَجْمُوعُ الْإِجَابَاتِ الصَّحِيحَةِ : <span id="tot-ok">0</span></div>
+        <div class="stat-pill stat-err">✗ مَجْمُوعُ الْأَخْطَاءِ : <span id="tot-err">0</span></div>
+        <div class="stat-pill stat-tot">📝 إِجْمَالِيُّ الْأَسْئِلَةِ الْمُقَيَّمَةِ : <span id="tot-answered">0</span> / <span id="tot-all">25</span></div>
+      </div>
+    </div>
+
+    <div class="progress-bar-outer">
+      <div class="progress-bar-inner" id="eval-bar"></div>
+    </div>
+
+    <button class="btn btn-reset" onclick="resetAll()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+  </section>
+
+  <!-- زر العودة إلى الفهرس -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</div>
+
+<!-- ========================================
+     سكريبت الحماية (التحقق من الاشتراك)
+     ======================================== -->
+<script>
+  const CHANNEL_ID = "-1004461185731";
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس التفاعلي
+     ======================================== -->
+<script>
+  const TOTAL_ITEMS = 25;
+
+  let scores = {
+    aktashif: { ok: 0, err: 0, done: false },
+    unjiz1:   { ok: 0, err: 0, done: false },
+    unjiz2:   { ok: 0, err: 0, done: false },
+    atamarran:{ ok: 0, err: 0, done: false },
+    abhath:   { ok: 0, err: 0, done: false }
+  };
+
+  function updateGlobalEval() {
+    const ok = scores.aktashif.ok + scores.unjiz1.ok + scores.unjiz2.ok + scores.atamarran.ok + scores.abhath.ok;
+    const err = scores.aktashif.err + scores.unjiz1.err + scores.unjiz2.err + scores.atamarran.err + scores.abhath.err;
+    const answered = ok + err;
+
+    let pct = Math.round((ok / TOTAL_ITEMS) * 100);
+    if (pct > 100) pct = 100;
+    if (pct < 0) pct = 0;
+
+    document.getElementById('tot-ok').textContent = ok;
+    document.getElementById('tot-err').textContent = err;
+    document.getElementById('tot-answered').textContent = answered;
+    document.getElementById('eval-percent').textContent = pct + '%';
+
+    const circumference = 2 * Math.PI * 65;
+    const offset = circumference - (pct / 100) * circumference;
+    const circle = document.getElementById('eval-circle');
+    circle.style.strokeDashoffset = offset;
+
+    if (pct >= 80) circle.style.stroke = '#16a34a';
+    else if (pct >= 50) circle.style.stroke = '#d97706';
+    else circle.style.stroke = '#dc2626';
+
+    document.getElementById('eval-bar').style.width = ((answered / TOTAL_ITEMS) * 100) + '%';
+  }
+
+  function setFeedback(el, isCorrect, correctText) {
+    el.textContent = isCorrect ? '✓ صَحِيحٌ' : `✗ الصَّوَابُ: ${correctText}`;
+    el.className = 'feedback-badge ' + (isCorrect ? 'fb-ok' : 'fb-err');
+  }
+
+  /* ================== 1. أكتشف ================== */
+  function checkAktashif() {
+    if (scores.aktashif.done) return;
+
+    const q1 = document.getElementById('akt-q1');
+    const q2 = document.getElementById('akt-q2');
+    const q3n = document.getElementById('akt-q3-num'), q3l = document.getElementById('akt-q3-let');
+    const q4n = document.getElementById('akt-q4-num'), q4l = document.getElementById('akt-q4-let');
+    const q5n = document.getElementById('akt-q5-num'), q5l = document.getElementById('akt-q5-let');
+
+    if (!q1.value || !q2.value || !q3n.value || !q3l.value || !q4n.value || !q4l.value || !q5n.value || !q5l.value) {
+      alert('يَرْجَى مَلْءُ جَمِيعِ الْفَرَاغَاتِ فِي مَحَطَّةِ أَكْتَشِفُ قَبْلَ التَّحَقُّقِ.');
+      return;
+    }
+
+    let ok = 0, err = 0;
+
+    const c1 = q1.value === 'الْقَلَمُ';
+    q1.classList.add(c1 ? 'correct-field' : 'wrong-field');
+    setFeedback(document.getElementById('akt-fb1'), c1, 'الْقَلَمُ');
+    c1 ? ok++ : err++;
+
+    const c2 = q2.value === 'الْحَاسِبَةُ';
+    q2.classList.add(c2 ? 'correct-field' : 'wrong-field');
+    setFeedback(document.getElementById('akt-fb2'), c2, 'الْحَاسِبَةُ');
+    c2 ? ok++ : err++;
+
+    const c3 = (q3n.value === '4' && q3l.value === 'د');
+    q3n.classList.add(c3 ? 'correct-field' : 'wrong-field');
+    q3l.classList.add(c3 ? 'correct-field' : 'wrong-field');
+    setFeedback(document.getElementById('akt-fb3'), c3, '4 د');
+    c3 ? ok++ : err++;
+
+    const c4 = (q4n.value === '6' && q4l.value === 'ج');
+    q4n.classList.add(c4 ? 'correct-field' : 'wrong-field');
+    q4l.classList.add(c4 ? 'correct-field' : 'wrong-field');
+    setFeedback(document.getElementById('akt-fb4'), c4, '6 ج');
+    c4 ? ok++ : err++;
+
+    const c5 = (q5n.value === '6' && q5l.value === 'هـ');
+    q5n.classList.add(c5 ? 'correct-field' : 'wrong-field');
+    q5l.classList.add(c5 ? 'correct-field' : 'wrong-field');
+    setFeedback(document.getElementById('akt-fb5'), c5, '6 هـ');
+    c5 ? ok++ : err++;
+
+    [q1, q2, q3n, q3l, q4n, q4l, q5n, q5l].forEach(el => el.disabled = true);
+    document.getElementById('btn-check-aktashif').disabled = true;
+
+    scores.aktashif = { ok, err, done: true };
+    document.getElementById('akt-ok').textContent = ok;
+    document.getElementById('akt-err').textContent = err;
+
+    document.getElementById('sec-unjiz').classList.remove('locked');
+    updateGlobalEval();
+  }
+
+  /* ================== 2. أنجز (المرصوفة) ================== */
+  const ROW_LETTERS = ['ي', 'و', 'هـ', 'د', 'ج', 'ب', 'أ'];
+  const COL_NUMS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
+  function getCoords(colIdx, rowIdx) {
+    return {
+      x: 42 + colIdx * 34,
+      y: 26 + rowIdx * 43
+    };
+  }
+
+  function buildBaseLattice(svgId, interactive) {
+    const svg = document.getElementById(svgId);
+    svg.innerHTML = '';
+
+    for (let r = 0; r < 7; r++) {
+      const p1 = getCoords(0, r);
+      const p2 = getCoords(9, r);
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', p1.x); line.setAttribute('y1', p1.y);
+      line.setAttribute('x2', p2.x); line.setAttribute('y2', p2.y);
+      line.setAttribute('stroke', '#cbd5e1'); line.setAttribute('stroke-width', '1.5');
+      svg.appendChild(line);
+
+      const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      txt.setAttribute('x', 18); txt.setAttribute('y', p1.y + 5);
+      txt.setAttribute('font-size', '14'); txt.setAttribute('font-weight', '800');
+      txt.setAttribute('fill', '#334155'); txt.setAttribute('text-anchor', 'middle');
+      txt.textContent = ROW_LETTERS[r];
+      svg.appendChild(txt);
+    }
+
+    for (let c = 0; c < 10; c++) {
+      const p1 = getCoords(c, 0);
+      const p2 = getCoords(c, 6);
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', p1.x); line.setAttribute('y1', p1.y);
+      line.setAttribute('x2', p2.x); line.setAttribute('y2', p2.y);
+      line.setAttribute('stroke', '#cbd5e1'); line.setAttribute('stroke-width', '1.5');
+      svg.appendChild(line);
+
+      const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      txt.setAttribute('x', p1.x); txt.setAttribute('y', 322);
+      txt.setAttribute('font-size', '14'); txt.setAttribute('font-weight', '800');
+      txt.setAttribute('fill', '#334155'); txt.setAttribute('text-anchor', 'middle');
+      txt.textContent = COL_NUMS[c];
+      svg.appendChild(txt);
+    }
+
+    const pathLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    pathLayer.setAttribute('id', svgId + '-paths');
+    svg.appendChild(pathLayer);
+
+    if (interactive) {
+      for (let r = 0; r < 7; r++) {
+        for (let c = 0; c < 10; c++) {
+          const pt = getCoords(c, r);
+          const code = COL_NUMS[c] + ROW_LETTERS[r];
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', pt.x); circle.setAttribute('cy', pt.y);
+          circle.setAttribute('r', code === '4أ' ? '7' : '4.5');
+          circle.setAttribute('fill', code === '4أ' ? '#dc2626' : '#64748b');
+          circle.setAttribute('class', 'node-circle');
+          circle.addEventListener('click', () => onNodeClickUnjiz1(code, pt));
+          svg.appendChild(circle);
+        }
+      }
+      const startPt = getCoords(3, 6);
+      const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      lbl.setAttribute('x', startPt.x); lbl.setAttribute('y', startPt.y - 10);
+      lbl.setAttribute('font-size', '12'); lbl.setAttribute('font-weight', '900');
+      lbl.setAttribute('fill', '#dc2626'); lbl.setAttribute('text-anchor', 'middle');
+      lbl.textContent = '4أ';
+      svg.appendChild(lbl);
+    }
+  }
+
+  let userPath1 = ['4أ'];
+  function renderUserPath1() {
+    const layer = document.getElementById('svg-unjiz1-paths');
+    layer.innerHTML = '';
+    if (userPath1.length < 2) return;
+
+    let pointsStr = userPath1.map(code => {
+      const colStr = code.replace(/[^0-9]/g, '');
+      const rowStr = code.replace(/[0-9]/g, '');
+      const c = COL_NUMS.indexOf(colStr);
+      const r = ROW_LETTERS.indexOf(rowStr);
+      const pt = getCoords(c, r);
+      return `${pt.x},${pt.y}`;
+    }).join(' ');
+
+    const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    poly.setAttribute('points', pointsStr);
+    poly.setAttribute('fill', 'none');
+    poly.setAttribute('stroke', '#1d4ed8');
+    poly.setAttribute('stroke-width', '3.5');
+    poly.setAttribute('stroke-linejoin', 'round');
+    layer.appendChild(poly);
+  }
+
+  function onNodeClickUnjiz1(code) {
+    if (scores.unjiz1.done) return;
+    if (userPath1[userPath1.length - 1] === code) return;
+    userPath1.push(code);
+    renderUserPath1();
+  }
+
+  function undoUnjiz1() {
+    if (scores.unjiz1.done) return;
+    if (userPath1.length > 1) {
+      userPath1.pop();
+      renderUserPath1();
+    }
+  }
+
+  function clearUnjiz1() {
+    if (scores.unjiz1.done) return;
+    userPath1 = ['4أ'];
+    renderUserPath1();
+  }
+
+  function checkUnjiz1() {
+    if (scores.unjiz1.done) return;
+    if (userPath1.length < 2) {
+      alert('يَرْجَى رَسْمُ الْمَسْلَكِ عَلَى الْمَرْصُوفَةِ أَوَّلًا.');
+      return;
+    }
+
+    const expected = ['4أ', '4ب', '2ب', '5ي', '8ب', '6ب', '6أ', '4أ'];
+    const isCorrect = JSON.stringify(userPath1) === JSON.stringify(expected);
+
+    const fb = document.getElementById('u1-feedback');
+    if (isCorrect) {
+      scores.unjiz1 = { ok: 1, err: 0, done: true };
+      fb.innerHTML = '<span class="fb-ok">✓ أَحْسَنْتَ! الْمَسْلَكُ الْمَرْسُومُ صَحِيحٌ وَمُطَابِقٌ تَمَامًا.</span>';
+    } else {
+      scores.unjiz1 = { ok: 0, err: 1, done: true };
+      fb.innerHTML = '<span class="fb-err">✗ الْمَسْلَكُ غَيْرُ مُطَابِقٍ. تَمَّ إِظْهَارُ الْمَسْلَكِ الصَّحِيحِ بِالْأَخْضَرِ.</span>';
+      const layer = document.getElementById('svg-unjiz1-paths');
+      const pts = expected.map(code => {
+        const c = COL_NUMS.indexOf(code.replace(/[^0-9]/g, ''));
+        const r = ROW_LETTERS.indexOf(code.replace(/[0-9]/g, ''));
+        const p = getCoords(c, r);
+        return `${p.x},${p.y}`;
+      }).join(' ');
+      const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+      poly.setAttribute('points', pts);
+      poly.setAttribute('fill', 'none');
+      poly.setAttribute('stroke', '#16a34a');
+      poly.setAttribute('stroke-width', '3.5');
+      poly.setAttribute('stroke-dasharray', '6,4');
+      layer.appendChild(poly);
+    }
+
+    document.getElementById('btn-u1-undo').disabled = true;
+    document.getElementById('btn-u1-clear').disabled = true;
+    document.getElementById('btn-u1-check').disabled = true;
+    updateUnjizStation();
+  }
+
+  function renderUnjiz2Path() {
+    buildBaseLattice('svg-unjiz2', false);
+    const layer = document.getElementById('svg-unjiz2-paths');
+    const pathNodes = ['2ج', '3أ', '5أ', '4ج', '7هـ', '9هـ', '10ج'];
+    const pts = pathNodes.map(code => {
+      const c = COL_NUMS.indexOf(code.replace(/[^0-9]/g, ''));
+      const r = ROW_LETTERS.indexOf(code.replace(/[0-9]/g, ''));
+      const p = getCoords(c, r);
+      return `${p.x},${p.y}`;
+    }).join(' ');
+
+    const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    poly.setAttribute('points', pts);
+    poly.setAttribute('fill', 'none');
+    poly.setAttribute('stroke', '#6d28d9');
+    poly.setAttribute('stroke-width', '3.5');
+    poly.setAttribute('stroke-linejoin', 'round');
+    layer.appendChild(poly);
+
+    pathNodes.forEach((code, idx) => {
+      const c = COL_NUMS.indexOf(code.replace(/[^0-9]/g, ''));
+      const r = ROW_LETTERS.indexOf(code.replace(/[0-9]/g, ''));
+      const p = getCoords(c, r);
+      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.setAttribute('cx', p.x); dot.setAttribute('cy', p.y);
+      dot.setAttribute('r', '5');
+      dot.setAttribute('fill', idx === 0 ? '#16a34a' : (idx === pathNodes.length - 1 ? '#dc2626' : '#6d28d9'));
+      layer.appendChild(dot);
+    });
+
+    const pL = getCoords(1, 4);
+    const tL = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    tL.setAttribute('x', pL.x); tL.setAttribute('y', pL.y - 10);
+    tL.setAttribute('font-size', '15'); tL.setAttribute('font-weight', '900');
+    tL.setAttribute('fill', '#16a34a'); tL.setAttribute('text-anchor', 'middle');
+    tL.textContent = 'ل';
+    layer.appendChild(tL);
+
+    const pK = getCoords(9, 4);
+    const tK = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    tK.setAttribute('x', pK.x + 12); tK.setAttribute('y', pK.y + 4);
+    tK.setAttribute('font-size', '15'); tK.setAttribute('font-weight', '900');
+    tK.setAttribute('fill', '#dc2626');
+    tK.textContent = 'ك';
+    layer.appendChild(tK);
+  }
+
+  function checkUnjiz2() {
+    if (scores.unjiz2.done) return;
+
+    const expected = [
+      { n: '3', l: 'أ' },
+      { n: '5', l: 'أ' },
+      { n: '4', l: 'ج' },
+      { n: '7', l: 'هـ' },
+      { n: '9', l: 'هـ' },
+      { n: '10', l: 'ج' }
+    ];
+
+    for (let i = 1; i <= 6; i++) {
+      if (!document.getElementById(`u2-s${i}-n`).value || !document.getElementById(`u2-s${i}-l`).value) {
+        alert('يَرْجَى إِكْمَالُ جَمِيعِ نُقَطِ الْمَسَارِ قَبْلَ التَّحَقُّقِ.');
+        return;
+      }
+    }
+
+    let ok = 0, err = 0;
+    expected.forEach((exp, idx) => {
+      const i = idx + 1;
+      const selN = document.getElementById(`u2-s${i}-n`);
+      const selL = document.getElementById(`u2-s${i}-l`);
+      const isOk = (selN.value === exp.n && selL.value === exp.l);
+      selN.classList.add(isOk ? 'correct-field' : 'wrong-field');
+      selL.classList.add(isOk ? 'correct-field' : 'wrong-field');
+      selN.disabled = true;
+      selL.disabled = true;
+      isOk ? ok++ : err++;
+    });
+
+    scores.unjiz2 = { ok, err, done: true };
+    document.getElementById('btn-u2-check').disabled = true;
+    const fb = document.getElementById('u2-feedback');
+    fb.innerHTML = err === 0
+      ? '<span class="fb-ok">✓ مُمْتَازٌ! جَمِيعُ نُقَطِ الْمَسَارِ صَحِيحَةٌ.</span>'
+      : '<span class="fb-err">✗ الصَّوَابُ هُوَ: <span dir="ltr">2 ج &rarr; 3 أ &rarr; 5 أ &rarr; 4 ج &rarr; 7 هـ &rarr; 9 هـ &rarr; 10 ج</span></span>';
+
+    updateUnjizStation();
+  }
+
+  function updateUnjizStation() {
+    const ok = scores.unjiz1.ok + scores.unjiz2.ok;
+    const err = scores.unjiz1.err + scores.unjiz2.err;
+    document.getElementById('unj-ok').textContent = ok;
+    document.getElementById('unj-err').textContent = err;
+
+    if (scores.unjiz1.done && scores.unjiz2.done) {
+      document.getElementById('sec-atamarran').classList.remove('locked');
+    }
+    updateGlobalEval();
+  }
+
+  /* ================== 3. أتمرن ================== */
+  let selectedPerson = '';
+  function selectChoice(btn) {
+    if (scores.atamarran.done) return;
+    document.querySelectorAll('#atm-q8-choices .choice-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedPerson = btn.getAttribute('data-val');
+  }
+
+  function checkAtamarran() {
+    if (scores.atamarran.done) return;
+
+    const answers = [
+      { id: 'atm-q1', fb: 'atm-fb1', val: 10 },
+      { id: 'atm-q2', fb: 'atm-fb2', val: 31 },
+      { id: 'atm-q3', fb: 'atm-fb3', val: 29 },
+      { id: 'atm-q4', fb: 'atm-fb4', val: 21 },
+      { id: 'atm-q5', fb: 'atm-fb5', val: 153 },
+      { id: 'atm-q6', fb: 'atm-fb6', val: 68 },
+      { id: 'atm-q7', fb: 'atm-fb7', val: 85 }
+    ];
+
+    for (let item of answers) {
+      if (document.getElementById(item.id).value === '') {
+        alert('يَرْجَى مَلْءُ جَمِيعِ الْخَانَاتِ الرَّقْمِيَّةِ قَبْلَ التَّحَقُّقِ.');
+        return;
+      }
+    }
+    if (!selectedPerson) {
+      alert('يَرْجَى اخْتِيَارُ مَنْ هُوَ عَلَى صَوَابٍ (رَائِدٌ أَمْ إِيمَانُ).');
+      return;
+    }
+
+    let ok = 0, err = 0;
+    answers.forEach(item => {
+      const inp = document.getElementById(item.id);
+      const isOk = Number(inp.value) === item.val;
+      inp.classList.add(isOk ? 'correct-field' : 'wrong-field');
+      inp.disabled = true;
+      setFeedback(document.getElementById(item.fb), isOk, item.val);
+      isOk ? ok++ : err++;
+    });
+
+    const isPersonOk = selectedPerson === 'إيمان';
+    document.querySelectorAll('#atm-q8-choices .choice-btn').forEach(b => {
+      b.disabled = true;
+      if (b.getAttribute('data-val') === 'إيمان') b.classList.add('correct-choice');
+      else if (b.getAttribute('data-val') === selectedPerson && !isPersonOk) b.classList.add('wrong-choice');
+    });
+    setFeedback(document.getElementById('atm-fb8'), isPersonOk, 'إِيمَانُ');
+    isPersonOk ? ok++ : err++;
+
+    scores.atamarran = { ok, err, done: true };
+    document.getElementById('btn-check-atamarran').disabled = true;
+    document.getElementById('atm-ok').textContent = ok;
+    document.getElementById('atm-err').textContent = err;
+
+    document.getElementById('sec-abhath').classList.remove('locked');
+    updateGlobalEval();
+  }
+
+  /* ================== 4. أبحث ================== */
+  function checkAbhath() {
+    if (scores.abhath.done) return;
+
+    const answers = [
+      { id: 'abh-q1', fb: 'abh-fb1', val: 3 },
+      { id: 'abh-q2', fb: 'abh-fb2', val: 1 },
+      { id: 'abh-q3', fb: 'abh-fb3', val: 5 },
+      { id: 'abh-q4', fb: 'abh-fb4', val: 4 },
+      { id: 'abh-q5', fb: 'abh-fb5', val: 590 }
+    ];
+
+    for (let item of answers) {
+      if (document.getElementById(item.id).value === '') {
+        alert('يَرْجَى الْإِجَابَةُ عَنْ جَمِيعِ أَسْئِلَةِ أَبْحَثُ قَبْلَ التَّحَقُّقِ.');
+        return;
+      }
+    }
+
+    let ok = 0, err = 0;
+    answers.forEach(item => {
+      const inp = document.getElementById(item.id);
+      const isOk = Number(inp.value) === item.val;
+      inp.classList.add(isOk ? 'correct-field' : 'wrong-field');
+      inp.disabled = true;
+      setFeedback(document.getElementById(item.fb), isOk, item.val);
+      isOk ? ok++ : err++;
+    });
+
+    scores.abhath = { ok, err, done: true };
+    document.getElementById('btn-check-abhath').disabled = true;
+    document.getElementById('abh-ok').textContent = ok;
+    document.getElementById('abh-err').textContent = err;
+
+    updateGlobalEval();
+  }
+
+  /* ================== إعادة المحاولة ================== */
+  function resetAll() {
+    scores = {
+      aktashif: { ok: 0, err: 0, done: false },
+      unjiz1:   { ok: 0, err: 0, done: false },
+      unjiz2:   { ok: 0, err: 0, done: false },
+      atamarran:{ ok: 0, err: 0, done: false },
+      abhath:   { ok: 0, err: 0, done: false }
+    };
+
+    document.querySelectorAll('select, input[type="number"]').forEach(el => {
+      el.value = '';
+      el.disabled = false;
+      el.classList.remove('correct-field', 'wrong-field');
+    });
+
+    document.querySelectorAll('.feedback-badge').forEach(el => {
+      el.textContent = '';
+      el.className = 'feedback-badge';
+    });
+
+    document.querySelectorAll('.btn-check, .btn-undo, .btn-clear').forEach(b => b.disabled = false);
+
+    selectedPerson = '';
+    document.querySelectorAll('#atm-q8-choices .choice-btn').forEach(b => {
+      b.disabled = false;
+      b.classList.remove('selected', 'correct-choice', 'wrong-choice');
+    });
+
+    userPath1 = ['4أ'];
+    buildBaseLattice('svg-unjiz1', true);
+    renderUnjiz2Path();
+    document.getElementById('u1-feedback').innerHTML = '';
+    document.getElementById('u2-feedback').innerHTML = '';
+
+    ['akt-ok', 'akt-err', 'unj-ok', 'unj-err', 'atm-ok', 'atm-err', 'abh-ok', 'abh-err'].forEach(id => {
+      document.getElementById(id).textContent = '0';
+    });
+
+    document.getElementById('sec-unjiz').classList.add('locked');
+    document.getElementById('sec-atamarran').classList.add('locked');
+    document.getElementById('sec-abhath').classList.add('locked');
+
+    updateGlobalEval();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('tot-all').textContent = TOTAL_ITEMS;
+    buildBaseLattice('svg-unjiz1', true);
+    renderUnjiz2Path();
+    updateGlobalEval();
+  });
+</script>
+</body>
+</html>
