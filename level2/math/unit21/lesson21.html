@@ -1,0 +1,1721 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>الدَّرْسُ 20 : قِيَاسُ الْأَطْوَالِ (1)</title>
+  <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- خطوط عربية واضحة ومبهجة للمرحلة الابتدائية -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --primary: #6d28d9;
+      --primary-light: #ede9fe;
+      --accent-green: #16a34a;
+      --accent-red: #dc2626;
+      --accent-amber: #d97706;
+      --bg-page: #fdfbf7;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      background-color: var(--bg-page);
+      background-image: radial-gradient(#e5e0d8 1px, transparent 1px);
+      background-size: 20px 20px;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      line-height: 1.8;
+    }
+
+    /* عزل الاتجاه للأرقام والعمليات */
+    .ltr-num {
+      direction: ltr;
+      display: inline-block;
+      unicode-bidi: isolate;
+      font-weight: 800;
+    }
+
+    /* تنسيق حقول الإدخال الرقمية */
+    .math-input {
+      width: 68px;
+      height: 44px;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 800;
+      border: 2.5px solid #94a3b8;
+      border-radius: 12px;
+      background-color: #ffffff;
+      color: #0f172a;
+      direction: ltr;
+      unicode-bidi: isolate;
+      transition: all 0.2s ease;
+      outline: none;
+      margin: 0 6px;
+    }
+
+    .math-input:focus {
+      border-color: #6d28d9;
+      box-shadow: 0 0 0 4px rgba(109, 40, 217, 0.15);
+    }
+
+    .math-input.correct {
+      border-color: #16a34a !important;
+      background-color: #dcfce7 !important;
+      color: #14532d !important;
+    }
+
+    .math-input.wrong {
+      border-color: #dc2626 !important;
+      background-color: #fee2e2 !important;
+      color: #7f1d1d !important;
+    }
+
+    /* حالة القفل للتسلسل الإجباري */
+    .section-locked {
+      opacity: 0.55;
+      pointer-events: none;
+      filter: grayscale(0.35);
+      position: relative;
+    }
+
+    .section-locked::after {
+      content: "🔒 أَكْمِلِ التَّمْرِينَ السَّابِقَ لِفَتْحِ هَذَا الْجُزْءِ";
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: #334155;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    /* الأدوات القابلة للسحب والتدوير */
+    .draggable-unit {
+      touch-action: none;
+      cursor: grab;
+      user-select: none;
+      position: absolute;
+      z-index: 30;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.22);
+      transition: box-shadow 0.15s ease;
+    }
+
+    .draggable-unit:active {
+      cursor: grabbing;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.32);
+    }
+
+    /* حاويات القياس ذات التمرير الأفقي الآمن للشاشات الصغيرة دون تغيير المقياس بالبكسل */
+    .measure-scroll-area {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .measure-stage {
+      position: relative;
+      min-width: 460px;
+      background: #ffffff;
+      border: 2px dashed #cbd5e1;
+      border-radius: 16px;
+      padding: 18px 20px;
+      user-select: none;
+    }
+
+    /* أزرار التحكم بالأدوات */
+    .tool-btn {
+      background: #f1f5f9;
+      border: 1.5px solid #cbd5e1;
+      color: #1e293b;
+      font-weight: 700;
+      font-size: 0.85rem;
+      padding: 6px 11px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tool-btn:hover {
+      background: #e2e8f0;
+      border-color: #94a3b8;
+    }
+
+    .tool-btn:active {
+      transform: scale(0.96);
+    }
+
+    .tool-btn-primary {
+      background: #ede9fe;
+      border-color: #a78bfa;
+      color: #5b21b6;
+    }
+
+    .tool-btn-primary:hover {
+      background: #ddd6fe;
+    }
+
+    /* خيارات الاختيار من متعدد */
+    .mcq-option {
+      border: 2px solid #cbd5e1;
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+
+    .mcq-option:hover:not(.disabled) {
+      border-color: #7c3aed;
+      background: #f5f3ff;
+    }
+
+    .mcq-option.selected {
+      border-color: #6d28d9;
+      background: #ede9fe;
+      box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
+    }
+
+    .mcq-option.correct {
+      border-color: #16a34a !important;
+      background: #dcfce7 !important;
+      color: #14532d !important;
+    }
+
+    .mcq-option.wrong {
+      border-color: #dc2626 !important;
+      background: #fee2e2 !important;
+      color: #7f1d1d !important;
+    }
+
+    .mcq-option.disabled {
+      cursor: default;
+    }
+
+    /* زر التحقق الرئيسي */
+    .check-btn {
+      background: linear-gradient(135deg, #6d28d9 0%, #4f46e5 100%);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 1.05rem;
+      padding: 11px 26px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(109, 40, 217, 0.28);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .check-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(109, 40, 217, 0.36);
+    }
+
+    .check-btn:disabled {
+      background: #94a3b8;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    /* شارة العنوان */
+    .section-badge {
+      display: inline-block;
+      padding: 6px 22px;
+      border-radius: 14px;
+      font-weight: 900;
+      font-size: 1.3rem;
+      letter-spacing: 0.3px;
+    }
+
+    /* شريط الإشعار الداخلي (بديل alert) */
+    #toast-banner {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: #1e293b;
+      color: #fff;
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+      z-index: 9999;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      text-align: center;
+      max-width: 92vw;
+    }
+
+    #toast-banner.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* تحريك الدائرة النسبية */
+    .progress-ring__circle {
+      transition: stroke-dashoffset 0.7s ease-in-out, stroke 0.4s ease;
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري (أُضيفت)
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    /* زر العودة إلى الفهرس (أُضيف) */
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 24px auto 10px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    }
+  </style>
+</head>
+<body class="pb-16">
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري (أُضيفت)
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <!-- شريط الإشعارات الداخلي -->
+  <div id="toast-banner" role="alert"></div>
+
+  <!-- الترويسة الرئيسية للدرس -->
+  <header class="bg-gradient-to-l from-purple-800 via-purple-700 to-indigo-800 text-white shadow-lg border-b-4 border-amber-400">
+    <div class="max-w-4xl mx-auto px-4 py-5 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 sm:gap-4">
+        <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-white text-purple-800 font-black text-2xl sm:text-3xl flex items-center justify-center shadow-md border-2 border-purple-200 shrink-0">
+          <span class="ltr-num">20</span>
+        </div>
+        <div>
+          <p class="text-purple-200 text-xs sm:text-sm font-bold">الرِّيَاضِيَّاتُ – السَّنَةُ الثَّانِيَةُ ابْتِدَائِيٌّ</p>
+          <h1 class="text-2xl sm:text-3xl font-black tracking-wide">قِيَاسُ الْأَطْوَالِ (<span class="ltr-num">1</span>)</h1>
+        </div>
+      </div>
+      <div class="hidden sm:flex flex-col items-end text-xs text-purple-100 bg-white/10 px-3.5 py-2 rounded-xl border border-white/20">
+        <span>📖 كِتَابُ التِّلْمِيذِ: ص <span class="ltr-num">40</span></span>
+        <span>📝 كُرَّاسُ الْأَنْشِطَةِ: ص <span class="ltr-num">27</span></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-3 sm:px-5 mt-6 space-y-8">
+
+    <!-- =========================================================
+         القسم الأول: أَكْتَشِفُ (كتاب التلميذ - ص 40)
+    ========================================================== -->
+    <section id="sec-aktashif" class="bg-white rounded-3xl shadow-md border-2 border-emerald-600/30 p-4 sm:p-7">
+      <div class="flex items-center justify-between flex-wrap gap-2 mb-5 border-b-2 border-emerald-100 pb-3">
+        <span class="section-badge bg-emerald-100 text-emerald-800 border border-emerald-300">أَكْتَشِفُ</span>
+        <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">كِتَابُ التِّلْمِيذِ – ص <span class="ltr-num">40</span></span>
+      </div>
+
+      <!-- التمرين 1 من أكتشف -->
+      <div id="ex-aktashif-1" class="mb-8 pb-7 border-b-2 border-dashed border-slate-200">
+        <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 mb-4 leading-relaxed">
+          <span class="ltr-num text-emerald-700">1-</span> مَنْ وَجَدَ الْقَيْسَ الصَّحِيحَ لِلَّوْحَةِ الْخَشَبِيَّةِ أَيْمَنُ أَمْ رَائِدٌ؟ لِمَاذَا ؟
+        </h2>
+
+        <!-- رسم توضيحي SVG للوحة الخشبية وقياس رائد وأيمن -->
+        <div class="bg-amber-50/70 border-2 border-amber-200 rounded-2xl p-4 mb-5 overflow-x-auto">
+          <svg viewBox="0 0 680 235" class="w-full min-w-[540px] h-auto mx-auto block" aria-label="رسم توضيحي لقياس رائد وأيمن للوحة الخشبية">
+            <!-- خلفية ناعمة -->
+            <rect x="5" y="5" width="670" height="225" rx="16" fill="#fffbeb" />
+
+            <!-- فقاعة كلام رائد (يمين) -->
+            <rect x="495" y="16" width="165" height="62" rx="14" fill="#ffffff" stroke="#d97706" stroke-width="2" />
+            <polygon points="515,78 525,92 535,78" fill="#ffffff" stroke="#d97706" stroke-width="2" />
+            <line x1="516" y1="78" x2="534" y2="78" stroke="#ffffff" stroke-width="3" />
+            <text x="577" y="42" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="14" fill="#1e293b">قَيْسُ اللَّوْحَةِ</text>
+            <text x="577" y="64" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="14" fill="#b45309">سِتُّ خُشَيْبَاتٍ</text>
+
+            <!-- بطاقة اسم رائد -->
+            <circle cx="565" cy="135" r="24" fill="#fda4af" stroke="#be123c" stroke-width="2" />
+            <text x="565" y="141" text-anchor="middle" font-size="22">👦</text>
+            <rect x="530" y="166" width="70" height="26" rx="8" fill="#ffe4e6" stroke="#be123c" stroke-width="1.5" />
+            <text x="565" y="184" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="14" fill="#9f1239">رَائِدٌ</text>
+
+            <!-- اللوحة الخشبية في المنتصف (عرضها 280px: من x=200 إلى x=480) -->
+            <rect x="200" y="65" width="280" height="105" rx="4" fill="#d4d442" stroke="#854d0e" stroke-width="2.5" />
+            <!-- خطوط نسيج الخشب -->
+            <line x1="205" y1="88" x2="475" y2="88" stroke="#a16207" stroke-width="1" opacity="0.35" />
+            <line x1="205" y1="115" x2="475" y2="115" stroke="#a16207" stroke-width="1" opacity="0.35" />
+            <line x1="205" y1="145" x2="475" y2="145" stroke="#a16207" stroke-width="1" opacity="0.35" />
+
+            <!-- قياس رائد في الأعلى: 6 خشيبات متباعدة (بينها فراغات!) -->
+            <text x="340" y="45" text-anchor="middle" font-family="Cairo" font-weight="700" font-size="12" fill="#9f1239">قِيَاسُ رَائِدٍ (6 خُشَيْبَاتٍ بَيْنَهَا فَرَاغَاتٌ)</text>
+            <rect x="202" y="54" width="38" height="9" rx="2" fill="#dc2626" stroke="#7f1d1d" stroke-width="1" />
+            <rect x="249" y="54" width="38" height="9" rx="2" fill="#2563eb" stroke="#1e3a8a" stroke-width="1" />
+            <rect x="296" y="54" width="38" height="9" rx="2" fill="#16a34a" stroke="#14532d" stroke-width="1" />
+            <rect x="344" y="54" width="38" height="9" rx="2" fill="#9333ea" stroke="#581c87" stroke-width="1" />
+            <rect x="392" y="54" width="38" height="9" rx="2" fill="#ea580c" stroke="#7c2d12" stroke-width="1" />
+            <rect x="440" y="54" width="38" height="9" rx="2" fill="#dc2626" stroke="#7f1d1d" stroke-width="1" />
+
+            <!-- قياس أيمن في الأسفل: 7 خشيبات متراصة تماماً بدون فراغات (7 × 40px = 280px) -->
+            <rect x="200" y="172" width="40" height="9" rx="1" fill="#dc2626" stroke="#7f1d1d" stroke-width="1" />
+            <rect x="240" y="172" width="40" height="9" rx="1" fill="#2563eb" stroke="#1e3a8a" stroke-width="1" />
+            <rect x="280" y="172" width="40" height="9" rx="1" fill="#16a34a" stroke="#14532d" stroke-width="1" />
+            <rect x="320" y="172" width="40" height="9" rx="1" fill="#9333ea" stroke="#581c87" stroke-width="1" />
+            <rect x="360" y="172" width="40" height="9" rx="1" fill="#ea580c" stroke="#7c2d12" stroke-width="1" />
+            <rect x="400" y="172" width="40" height="9" rx="1" fill="#0284c7" stroke="#0c4a6e" stroke-width="1" />
+            <rect x="440" y="172" width="40" height="9" rx="1" fill="#dc2626" stroke="#7f1d1d" stroke-width="1" />
+            <text x="340" y="202" text-anchor="middle" font-family="Cairo" font-weight="700" font-size="12" fill="#15803d">قِيَاسُ أَيْمَنَ (7 خُشَيْبَاتٍ مُتَرَاصَّةٍ مِنَ الطَّرَفِ إِلَى الطَّرَفِ)</text>
+
+            <!-- فقاعة كلام أيمن (يسار) -->
+            <rect x="20" y="16" width="165" height="62" rx="14" fill="#ffffff" stroke="#16a34a" stroke-width="2" />
+            <polygon points="145,78 155,92 165,78" fill="#ffffff" stroke="#16a34a" stroke-width="2" />
+            <line x1="146" y1="78" x2="164" y2="78" stroke="#ffffff" stroke-width="3" />
+            <text x="102" y="42" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="14" fill="#1e293b">قَيْسُ اللَّوْحَةِ</text>
+            <text x="102" y="64" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="14" fill="#15803d">سَبْعُ خُشَيْبَاتٍ</text>
+
+            <!-- بطاقة اسم أيمن -->
+            <circle cx="115" cy="135" r="24" fill="#bbf7d0" stroke="#15803d" stroke-width="2" />
+            <text x="115" y="141" text-anchor="middle" font-size="22">🧒</text>
+            <rect x="80" y="166" width="70" height="26" rx="8" fill="#dcfce7" stroke="#15803d" stroke-width="1.5" />
+            <text x="115" y="184" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="14" fill="#14532d">أَيْمَنُ</text>
+          </svg>
+        </div>
+
+        <!-- السؤال الفرعي 1.1 -->
+        <div class="space-y-4">
+          <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <p class="font-extrabold text-slate-800 mb-3">أ) مَنْ وَجَدَ الْقَيْسَ الصَّحِيحَ لِلَّوْحَةِ الْخَشَبِيَّةِ؟</p>
+            <div id="mcq-aktashif-1a" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+            <div id="fb-aktashif-1a" class="mt-2 text-sm font-bold hidden"></div>
+          </div>
+
+          <!-- السؤال الفرعي 1.2 -->
+          <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+            <p class="font-extrabold text-slate-800 mb-3">ب) لِمَاذَا ؟</p>
+            <div id="mcq-aktashif-1b" class="grid grid-cols-1 gap-2.5"></div>
+            <div id="fb-aktashif-1b" class="mt-2 text-sm font-bold hidden"></div>
+          </div>
+        </div>
+
+        <div class="mt-4 flex items-center justify-between flex-wrap gap-3">
+          <button id="btn-check-aktashif-1" onclick="checkAktashif1()" class="check-btn">
+            <span>✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- التمرين 2 من أكتشف (مقفل حتى إتمام التمرين 1) -->
+      <div id="ex-aktashif-2" class="section-locked transition-all duration-300">
+        <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 mb-3 flex items-center flex-wrap gap-2">
+          <span><span class="ltr-num text-emerald-700">2-</span> اِسْتَعْمِلِ الْوَحْدَةَ</span>
+          <span class="inline-block w-14 h-4 bg-red-600 border border-red-800 rounded-sm align-middle shadow-sm" aria-label="الوحدة الحمراء"></span>
+          <span>لِقِيَاسِ الْخَطِّ الْأَخْضَرِ وَالْخَطِّ الْأَحْمَرِ .</span>
+        </h2>
+
+        <!-- شريط أدوات الوحدة الحمراء -->
+        <div class="flex flex-wrap items-center justify-between gap-2 bg-red-50 border border-red-200 rounded-2xl p-3 mb-3">
+          <span class="text-xs sm:text-sm font-bold text-red-900">🖐️ اسْحَبِ الْوَحْدَةَ الْحَمْرَاءَ أَوْ رُصَّ نُسَخاً مُتَجَاوِرَةً فَوْقَ كُلِّ خَطٍّ لِقِيَاسِهِ:</span>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button type="button" class="tool-btn tool-btn-primary" onclick="stampUnit('stage-aktashif-2', 56, 14, '#dc2626', '#7f1d1d')">➕ رَصُّ وَحْدَةٍ مُجَاوِرَةٍ</button>
+            <button type="button" class="tool-btn" onclick="resetStageUnits('stage-aktashif-2', 'unit-red-main', 20, 16)">🔄 إِعَادَةُ الْوَحْدَةِ</button>
+          </div>
+        </div>
+
+        <!-- مساحة القياس المعايرة بدقة: الوحدة الحمراء = 56px -->
+        <div class="measure-scroll-area mb-4">
+          <div id="stage-aktashif-2" class="measure-stage" style="height: 175px;">
+            <!-- الوحدة الحمراء القابلة للسحب (56px) -->
+            <div id="unit-red-main" class="draggable-unit rounded-sm"
+                 style="width: 56px; height: 14px; background: #dc2626; border: 1.5px solid #7f1d1d; left: 20px; top: 16px;"
+                 title="اسحبني للقياس"></div>
+
+            <!-- الخط الأخضر: 6 وحدات × 56px = 336px -->
+            <div style="position: absolute; left: 20px; top: 68px;">
+              <div class="text-xs font-bold text-emerald-800 mb-1">الْخَطُّ الْأَخْضَرُ:</div>
+              <div style="width: 336px; height: 8px; background: #16a34a; border-radius: 3px;"></div>
+            </div>
+
+            <!-- الخط الأحمر: 5 وحدات × 56px = 280px -->
+            <div style="position: absolute; left: 20px; top: 122px;">
+              <div class="text-xs font-bold text-red-800 mb-1">الْخَطُّ الْأَحْمَرُ:</div>
+              <div style="width: 280px; height: 8px; background: #dc2626; border-radius: 3px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- حقول الإجابة -->
+        <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-base sm:text-lg font-bold">
+          <div class="flex items-center flex-wrap gap-1">
+            <span>طُولُ الْخَطِّ الْأَخْضَرِ</span>
+            <input type="number" inputmode="numeric" id="inp-aktashif-green" class="math-input" aria-label="طول الخط الأخضر" />
+            <span>وَحْدَاتٍ .</span>
+            <span id="fb-aktashif-green" class="text-sm font-extrabold mr-2"></span>
+          </div>
+          <div class="flex items-center flex-wrap gap-1">
+            <span>طُولُ الْخَطِّ الْأَحْمَرِ</span>
+            <input type="number" inputmode="numeric" id="inp-aktashif-red" class="math-input" aria-label="طول الخط الأحمر" />
+            <span>وَحْدَاتٍ .</span>
+            <span id="fb-aktashif-red" class="text-sm font-extrabold mr-2"></span>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <button id="btn-check-aktashif-2" onclick="checkAktashif2()" class="check-btn">
+            <span>✓ تَحَقَّقْ مِنَ الْقِيَاسِ</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- عدّاد محطة أكتشف -->
+      <div class="mt-6 pt-3 border-t border-emerald-200 flex items-center justify-between text-sm font-extrabold bg-emerald-50/80 px-4 py-2.5 rounded-xl">
+        <span class="text-emerald-900">حَصِيلَةُ مَحَطَّةِ أَكْتَشِفُ:</span>
+        <div class="flex items-center gap-4">
+          <span class="text-emerald-700">✓ الصَّوَابُ: <span id="score-aktashif-ok" class="ltr-num">0</span></span>
+          <span class="text-red-600">✗ الْخَطَأُ: <span id="score-aktashif-err" class="ltr-num">0</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         القسم الثاني: أُنْجِزُ (كتاب التلميذ - ص 40)
+    ========================================================== -->
+    <section id="sec-unjiz" class="section-locked bg-white rounded-3xl shadow-md border-2 border-amber-500/40 p-4 sm:p-7 transition-all duration-300">
+      <div class="flex items-center justify-between flex-wrap gap-2 mb-5 border-b-2 border-amber-100 pb-3">
+        <span class="section-badge bg-amber-100 text-amber-900 border border-amber-300">أُنْجِزُ</span>
+        <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">كِتَابُ التِّلْمِيذِ – ص <span class="ltr-num">40</span></span>
+      </div>
+
+      <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 mb-3 flex items-center flex-wrap gap-2">
+        <span>بِاسْتِعْمَالِ الْوَحْدَةِ</span>
+        <span class="inline-block w-13 h-4 bg-lime-400 border border-lime-700 rounded-sm align-middle shadow-sm" style="width: 52px;" aria-label="الوحدة الصفراء"></span>
+        <span>أَوْجِدْ طُولَ الْأَشْرِطَةِ .</span>
+      </h2>
+
+      <!-- شريط أدوات الوحدة الصفراء -->
+      <div class="flex flex-wrap items-center justify-between gap-2 bg-amber-50 border border-amber-200 rounded-2xl p-3 mb-3">
+        <span class="text-xs sm:text-sm font-bold text-amber-950">🖐️ اسْحَبِ الْوَحْدَةَ الصَّفْرَاءَ أَوْ رُصَّ نُسَخاً مُتَجَاوِرَةً فَوْقَ كُلِّ شَرِيطٍ:</span>
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button type="button" class="tool-btn tool-btn-primary" onclick="stampUnit('stage-unjiz', 52, 16, '#bef264', '#4d7c0f')">➕ رَصُّ وَحْدَةٍ مُجَاوِرَةٍ</button>
+          <button type="button" class="tool-btn" onclick="resetStageUnits('stage-unjiz', 'unit-yellow-main', 20, 14)">🔄 إِعَادَةُ الْوَحْدَةِ</button>
+        </div>
+      </div>
+
+      <!-- مساحة القياس المعايرة بدقة: الوحدة الصفراء = 52px -->
+      <div class="measure-scroll-area mb-4">
+        <div id="stage-unjiz" class="measure-stage" style="height: 235px; min-width: 470px;">
+          <!-- الوحدة الصفراء القابلة للسحب (52px) -->
+          <div id="unit-yellow-main" class="draggable-unit rounded-sm"
+               style="width: 52px; height: 16px; background: #bef264; border: 1.5px solid #4d7c0f; left: 20px; top: 14px;"
+               title="اسحبني للقياس"></div>
+
+          <!-- الشريط الأخضر: 7 وحدات × 52px = 364px -->
+          <div style="position: absolute; left: 20px; top: 56px;">
+            <div class="text-xs font-bold text-emerald-800 mb-1">الشَّرِيطُ الْأَخْضَرُ:</div>
+            <div style="width: 364px; height: 16px; background: #16a34a; border-radius: 3px;"></div>
+          </div>
+
+          <!-- الشريط الأزرق: 5 وحدات × 52px = 260px -->
+          <div style="position: absolute; left: 72px; top: 114px;">
+            <div class="text-xs font-bold text-sky-800 mb-1">الشَّرِيطُ الْأَزْرَقُ:</div>
+            <div style="width: 260px; height: 16px; background: #38bdf8; border-radius: 3px;"></div>
+          </div>
+
+          <!-- الشريط البنفسجي: 8 وحدات × 52px = 416px -->
+          <div style="position: absolute; left: 20px; top: 172px;">
+            <div class="text-xs font-bold text-purple-800 mb-1">الشَّرِيطُ الْبَنَفْسَجِيُّ:</div>
+            <div style="width: 416px; height: 16px; background: #9333ea; border-radius: 3px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- حقول الإجابة لأنجز -->
+      <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-base sm:text-lg font-bold">
+        <div class="flex items-center flex-wrap gap-1">
+          <span>طُولُ الشَّرِيطِ الْأَخْضَرِ</span>
+          <input type="number" inputmode="numeric" id="inp-unjiz-green" class="math-input" aria-label="طول الشريط الأخضر" />
+          <span>وَحْدَاتٍ .</span>
+          <span id="fb-unjiz-green" class="text-sm font-extrabold mr-2"></span>
+        </div>
+        <div class="flex items-center flex-wrap gap-1">
+          <span>طُولُ الشَّرِيطِ الْأَزْرَقِ</span>
+          <input type="number" inputmode="numeric" id="inp-unjiz-blue" class="math-input" aria-label="طول الشريط الأزرق" />
+          <span>وَحْدَاتٍ .</span>
+          <span id="fb-unjiz-blue" class="text-sm font-extrabold mr-2"></span>
+        </div>
+        <div class="flex items-center flex-wrap gap-1">
+          <span>طُولُ الشَّرِيطِ الْبَنَفْسَجِيِّ</span>
+          <input type="number" inputmode="numeric" id="inp-unjiz-purple" class="math-input" aria-label="طول الشريط البنفسجي" />
+          <span>وَحْدَاتٍ .</span>
+          <span id="fb-unjiz-purple" class="text-sm font-extrabold mr-2"></span>
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <button id="btn-check-unjiz" onclick="checkUnjiz()" class="check-btn">
+          <span>✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</span>
+        </button>
+      </div>
+
+      <!-- عدّاد محطة أنجز -->
+      <div class="mt-6 pt-3 border-t border-amber-200 flex items-center justify-between text-sm font-extrabold bg-amber-50/80 px-4 py-2.5 rounded-xl">
+        <span class="text-amber-950">حَصِيلَةُ مَحَطَّةِ أُنْجِزُ:</span>
+        <div class="flex items-center gap-4">
+          <span class="text-emerald-700">✓ الصَّوَابُ: <span id="score-unjiz-ok" class="ltr-num">0</span></span>
+          <span class="text-red-600">✗ الْخَطَأُ: <span id="score-unjiz-err" class="ltr-num">0</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         بطاقة تَعَلَّمْتُ (مطابقة تماماً للدرس - ص 40)
+    ========================================================== -->
+    <section id="sec-taalamtu" class="bg-gradient-to-l from-purple-50 via-fuchsia-50 to-purple-50 rounded-3xl shadow-md border-4 border-purple-700 p-5 sm:p-6 relative">
+      <div class="flex items-center gap-3 mb-2">
+        <span class="bg-purple-700 text-white font-black text-xl px-5 py-1.5 rounded-xl shadow-sm">تَعَلَّمْتُ</span>
+        <span class="text-purple-700 text-2xl">💡</span>
+      </div>
+      <p class="text-xl sm:text-2xl font-black text-purple-950 mt-3 pr-2">
+        أَقِيسُ الْأَطْوَالَ بِاسْتِعْمَالِ وَحْدَةِ قِيَاسٍ .
+      </p>
+    </section>
+
+    <!-- =========================================================
+         القسم الثالث: أَتَمَرَّنُ (كراس الأنشطة - ص 27)
+    ========================================================== -->
+    <section id="sec-atamarran" class="section-locked bg-white rounded-3xl shadow-md border-2 border-orange-500/40 p-4 sm:p-7 transition-all duration-300">
+      <div class="flex items-center justify-between flex-wrap gap-2 mb-5 border-b-2 border-orange-100 pb-3">
+        <span class="section-badge bg-orange-100 text-orange-900 border border-orange-300">أَتَمَرَّنُ</span>
+        <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">كُرَّاسُ الْأَنْشِطَةِ – ص <span class="ltr-num">27</span></span>
+      </div>
+
+      <!-- التمرين 1 من أتمرن -->
+      <div id="ex-atamarran-1" class="mb-8 pb-7 border-b-2 border-dashed border-slate-200">
+        <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 mb-3 flex items-center flex-wrap gap-2">
+          <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-orange-600 text-white font-black text-base ltr-num">1</span>
+          <span>اِسْتَعْمِلِ الْوَحْدَةَ</span>
+          <span class="inline-block w-12 h-1 bg-slate-900 align-middle" aria-label="الوحدة السوداء"></span>
+          <span>لِمُسَاعَدَةِ السُّلَحْفَاةِ عَلَى التَّعَرُّفِ عَلَى أَقْصَرِ مَسْلَكٍ .</span>
+        </h2>
+
+        <!-- شريط التحكم بالوحدة السوداء القابلة للسحب والتدوير -->
+        <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-100 border border-slate-300 rounded-2xl p-3 mb-3">
+          <span class="text-xs sm:text-sm font-bold text-slate-800">🧭 اسْحَبِ الْوَحْدَةَ السَّوْدَاءَ وَدَوِّرْهَا لِقِيَاسِ أَضْلَاعِ الْمَسْلَكَيْنِ:</span>
+          <div class="flex flex-wrap items-center gap-1.5">
+            <button type="button" class="tool-btn" onclick="rotateBlackUnit(-15)">↺ <span class="ltr-num">15°</span></button>
+            <button type="button" class="tool-btn" onclick="rotateBlackUnit(-5)">↺ <span class="ltr-num">5°</span></button>
+            <span id="black-angle-display" class="text-xs font-extrabold bg-white px-2.5 py-1.5 rounded-lg border border-slate-300 ltr-num">0°</span>
+            <button type="button" class="tool-btn" onclick="rotateBlackUnit(5)">↻ <span class="ltr-num">5°</span></button>
+            <button type="button" class="tool-btn" onclick="rotateBlackUnit(15)">↻ <span class="ltr-num">15°</span></button>
+            <button type="button" class="tool-btn tool-btn-primary" onclick="resetBlackUnit()">🔄 إِعَادَةٌ</button>
+          </div>
+        </div>
+
+        <!-- مساحة مسلكي السلحفاة (كل قطعة طولها الدقيق 48px مطابقة للوحدة السوداء 48px) -->
+        <div class="measure-scroll-area mb-4">
+          <div id="stage-turtle" class="measure-stage" style="height: 235px; min-width: 470px;">
+            <!-- الوحدة السوداء القابلة للسحب والتدوير (طولها 48px) -->
+            <div id="unit-black-main" class="draggable-unit flex items-center justify-center"
+                 style="width: 64px; height: 26px; left: 25px; top: 14px; background: rgba(255,255,255,0.85); border: 1.5px dashed #64748b; border-radius: 8px; transform-origin: center center;"
+                 title="اسحبني ودورني لقياس القطع">
+              <!-- القطعة السوداء الفعلية بطول 48px بالضبط -->
+              <div style="width: 48px; height: 4px; background: #0f172a; border-radius: 2px; position: relative;">
+                <span style="position:absolute; left:0; top:-3px; width:2px; height:10px; background:#dc2626;"></span>
+                <span style="position:absolute; right:0; top:-3px; width:2px; height:10px; background:#dc2626;"></span>
+              </div>
+            </div>
+
+            <!-- رسم SVG للمسلكين الأخضر (5 قطع × 48px) والأحمر (4 قطع × 48px) -->
+            <svg viewBox="0 0 440 200" width="440" height="200" style="position: absolute; left: 10px; top: 25px; pointer-events: none;">
+              <!-- السلحفاة على اليسار -->
+              <text x="26" y="102" font-size="32" text-anchor="middle">🐢</text>
+              <!-- الخس على اليمين -->
+              <text x="385" y="102" font-size="32" text-anchor="middle">🥬</text>
+
+              <!-- المسلك الأخضر: 5 قطع طول كل منها 48px بالضبط -->
+              <polyline points="68,95 102,129 123,86 170,96 204,62 252,62"
+                        fill="none" stroke="#16a34a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+              <circle cx="68" cy="95" r="3.5" fill="#14532d" />
+              <circle cx="102" cy="129" r="3.5" fill="#14532d" />
+              <circle cx="123" cy="86" r="3.5" fill="#14532d" />
+              <circle cx="170" cy="96" r="3.5" fill="#14532d" />
+              <circle cx="204" cy="62" r="3.5" fill="#14532d" />
+              <circle cx="252" cy="62" r="3.5" fill="#14532d" />
+
+              <!-- المسلك الأحمر: 4 قطع طول كل منها 48px بالضبط -->
+              <polyline points="68,85 106,56 130,98 168,69 206,98"
+                        fill="none" stroke="#dc2626" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+              <circle cx="68" cy="85" r="3.5" fill="#7f1d1d" />
+              <circle cx="106" cy="56" r="3.5" fill="#7f1d1d" />
+              <circle cx="130" cy="98" r="3.5" fill="#7f1d1d" />
+              <circle cx="168" cy="69" r="3.5" fill="#7f1d1d" />
+              <circle cx="206" cy="98" r="3.5" fill="#7f1d1d" />
+
+              <!-- مفتاح توضيحي صغير -->
+              <text x="340" y="32" font-family="Cairo" font-weight="800" font-size="12" fill="#15803d">● الْمَسْلَكُ الْأَخْضَرُ</text>
+              <text x="340" y="52" font-family="Cairo" font-weight="800" font-size="12" fill="#b91c1c">● الْمَسْلَكُ الْأَحْمَرُ</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- أسئلة التمرين 1 من أتمرن -->
+        <div class="space-y-4 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-base sm:text-lg font-bold">
+          <div class="flex items-center flex-wrap gap-1">
+            <span>طُولُ الْمَسْلَكِ الْأَخْضَرِ</span>
+            <input type="number" inputmode="numeric" id="inp-turtle-green" class="math-input" aria-label="طول المسلك الأخضر" />
+            <span>وَحْدَاتٍ .</span>
+            <span id="fb-turtle-green" class="text-sm font-extrabold mr-2"></span>
+          </div>
+
+          <div class="flex items-center flex-wrap gap-1">
+            <span>طُولُ الْمَسْلَكِ الْأَحْمَرِ</span>
+            <input type="number" inputmode="numeric" id="inp-turtle-red" class="math-input" aria-label="طول المسلك الأحمر" />
+            <span>وَحْدَاتٍ .</span>
+            <span id="fb-turtle-red" class="text-sm font-extrabold mr-2"></span>
+          </div>
+
+          <div class="pt-2 border-t border-slate-200">
+            <p class="text-orange-800 font-extrabold mb-2">أَكْمِلْ بِـ : أَطْوَلُ – أَقْصَرُ .</p>
+            <div class="flex items-center flex-wrap gap-2">
+              <span>الْمَسْلَكُ الْأَحْمَرُ</span>
+              <div id="mcq-turtle-compare" class="inline-flex gap-2"></div>
+              <span>مِنَ الْمَسْلَكِ الْأَخْضَرِ .</span>
+              <span id="fb-turtle-compare" class="text-sm font-extrabold mr-2"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <button id="btn-check-atamarran-1" onclick="checkAtamarran1()" class="check-btn">
+            <span>✓ تَحَقَّقْ مِنَ التَّمْرِينِ <span class="ltr-num">1</span></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- التمرين 2 من أتمرن (مقفل حتى إتمام التمرين 1) -->
+      <div id="ex-atamarran-2" class="section-locked transition-all duration-300">
+        <h2 class="text-lg sm:text-xl font-extrabold text-slate-800 mb-1 flex items-center gap-2">
+          <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-orange-600 text-white font-black text-base ltr-num">2</span>
+          <span>فِي هَذَا الشَّكْلِ وَحْدَةُ الطُّولِ هِيَ ضِلْعُ مُرَبَّعِ الْمَرْصُوفَةِ</span>
+        </h2>
+        <p class="text-base sm:text-lg font-extrabold text-orange-800 mb-4 pr-9">أَكْمِلْ بِالْعَدَدِ الْمُنَاسِبِ .</p>
+
+        <!-- رسم المرصوفة المطابق تماماً للصورة -->
+        <div class="bg-sky-50/50 border-2 border-sky-200 rounded-2xl p-4 mb-4 overflow-x-auto">
+          <svg viewBox="0 0 430 270" class="w-full max-w-[430px] h-auto mx-auto block" aria-label="مرصوفة قياس طول الشكل الأخضر والأحمر">
+            <!-- خلفية بيضاء للمرصوفة -->
+            <rect x="20" y="55" width="385" height="196" fill="#ffffff" />
+
+            <!-- شبكة المرصوفة: 11 عموداً × 7 أسطر (حجم المربع 35 × 28) -->
+            <g stroke="#7dd3fc" stroke-width="1.2">
+              <line x1="20" y1="55" x2="405" y2="55" />
+              <line x1="20" y1="83" x2="405" y2="83" />
+              <line x1="20" y1="111" x2="405" y2="111" />
+              <line x1="20" y1="139" x2="405" y2="139" />
+              <line x1="20" y1="167" x2="405" y2="167" />
+              <line x1="20" y1="195" x2="405" y2="195" />
+              <line x1="20" y1="223" x2="405" y2="223" />
+              <line x1="20" y1="251" x2="405" y2="251" />
+              <line x1="20" y1="55" x2="20" y2="251" />
+              <line x1="55" y1="55" x2="55" y2="251" />
+              <line x1="90" y1="55" x2="90" y2="251" />
+              <line x1="125" y1="55" x2="125" y2="251" />
+              <line x1="160" y1="55" x2="160" y2="251" />
+              <line x1="195" y1="55" x2="195" y2="251" />
+              <line x1="230" y1="55" x2="230" y2="251" />
+              <line x1="265" y1="55" x2="265" y2="251" />
+              <line x1="300" y1="55" x2="300" y2="251" />
+              <line x1="335" y1="55" x2="335" y2="251" />
+              <line x1="370" y1="55" x2="370" y2="251" />
+              <line x1="405" y1="55" x2="405" y2="251" />
+            </g>
+
+            <!-- إشارة وحدة الطول (ضلع مربع واحد) -->
+            <rect x="28" y="8" width="90" height="28" rx="14" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+            <text x="73" y="27" text-anchor="middle" font-family="Cairo" font-weight="800" font-size="13" fill="#0f172a">وَحْدَةُ الطُّولِ</text>
+            <line x1="73" y1="36" x2="73" y2="105" stroke="#0f172a" stroke-width="1.5" />
+            <polygon points="69,102 73,110 77,102" fill="#0f172a" />
+            <line x1="55" y1="111" x2="90" y2="111" stroke="#0f172a" stroke-width="3.5" />
+
+            <!-- الشكل الملون بالأخضر: مستطيل عرضه 5 وحدات وارتفاعه 3 وحدات -> المجموع = 16 وحدة -->
+            <rect x="55" y="139" width="175" height="84" fill="rgba(22, 163, 74, 0.08)" stroke="#15803d" stroke-width="3.2" />
+
+            <!-- الشكل الملون بالأحمر: مربع عرضه 3 وحدات وارتفاعه 3 وحدات -> المجموع = 12 وحدة -->
+            <rect x="265" y="139" width="105" height="84" fill="rgba(220, 38, 38, 0.08)" stroke="#991b1b" stroke-width="3.2" />
+          </svg>
+        </div>
+
+        <!-- حقول الإدخال للتمرين 2 -->
+        <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-base sm:text-lg font-bold">
+          <div class="flex items-center flex-wrap gap-1">
+            <span>طُولُ الشَّكْلِ الْمُلَوَّنِ بِالْأَخْضَرِ هُوَ</span>
+            <input type="number" inputmode="numeric" id="inp-grid-green" class="math-input" aria-label="طول الشكل الملون بالأخضر" />
+            <span>وَحْدَاتٍ .</span>
+            <span id="fb-grid-green" class="text-sm font-extrabold mr-2"></span>
+          </div>
+          <div class="flex items-center flex-wrap gap-1">
+            <span>طُولُ الشَّكْلِ الْمُلَوَّنِ بِالْأَحْمَرِ هُوَ</span>
+            <input type="number" inputmode="numeric" id="inp-grid-red" class="math-input" aria-label="طول الشكل الملون بالأحمر" />
+            <span>وَحْدَاتٍ .</span>
+            <span id="fb-grid-red" class="text-sm font-extrabold mr-2"></span>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <button id="btn-check-atamarran-2" onclick="checkAtamarran2()" class="check-btn">
+            <span>✓ تَحَقَّقْ مِنَ التَّمْرِينِ <span class="ltr-num">2</span></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- عدّاد محطة أتمرن -->
+      <div class="mt-6 pt-3 border-t border-orange-200 flex items-center justify-between text-sm font-extrabold bg-orange-50/80 px-4 py-2.5 rounded-xl">
+        <span class="text-orange-950">حَصِيلَةُ مَحَطَّةِ أَتَمَرَّنُ:</span>
+        <div class="flex items-center gap-4">
+          <span class="text-emerald-700">✓ الصَّوَابُ: <span id="score-atamarran-ok" class="ltr-num">0</span></span>
+          <span class="text-red-600">✗ الْخَطَأُ: <span id="score-atamarran-err" class="ltr-num">0</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         القسم الرابع: أَبْحَثُ (كراس الأنشطة - ص 27)
+    ========================================================== -->
+    <section id="sec-abhath" class="section-locked bg-white rounded-3xl shadow-md border-2 border-teal-600/40 p-4 sm:p-7 transition-all duration-300">
+      <div class="flex items-center justify-between flex-wrap gap-2 mb-5 border-b-2 border-teal-100 pb-3">
+        <span class="section-badge bg-teal-700 text-white">أَبْحَثُ</span>
+        <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">كُرَّاسُ الْأَنْشِطَةِ – ص <span class="ltr-num">27</span></span>
+      </div>
+
+      <div class="space-y-2 mb-4">
+        <p class="text-lg sm:text-xl font-extrabold text-slate-800">
+          حَنِينُ تَقُولُ إِنَّ طُولَ الشَّرِيطِ الْبَنَفْسَجِيِّ هُوَ <span class="ltr-num text-purple-700">7</span> وَحْدَاتٍ .
+        </p>
+        <p class="text-base sm:text-lg font-extrabold text-teal-800">
+          ضَعْ إِشَارَةَ ( <span class="ltr-num">X</span> ) أَمَامَ الْوَحْدَةِ الَّتِي اسْتَعْمَلَتْهَا حَنِينُ لِقِيَاسِ طُولِ هَذَا الشَّرِيطِ ؟
+        </p>
+      </div>
+
+      <!-- مساحة تجريب الوحدات ح، خ، ز فوق الشريط البنفسجي (336px) -->
+      <div class="bg-teal-50/70 border border-teal-200 rounded-2xl p-3 mb-3 flex flex-wrap items-center justify-between gap-2">
+        <span class="text-xs sm:text-sm font-bold text-teal-950">🧪 جَرِّبْ سَحْبَ كُلِّ وَحْدَةٍ أَوْ رَصَّهَا فَوْقَ الشَّرِيطِ الْبَنَفْسَجِيِّ لِلتَّأَكُّدِ:</span>
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button type="button" class="tool-btn" onclick="stampAbhathUnit('h')">➕ رَصُّ (ح)</button>
+          <button type="button" class="tool-btn" onclick="stampAbhathUnit('kh')">➕ رَصُّ (خ)</button>
+          <button type="button" class="tool-btn" onclick="stampAbhathUnit('z')">➕ رَصُّ (ز)</button>
+          <button type="button" class="tool-btn tool-btn-primary" onclick="resetAbhathStage()">🔄 إِعَادَةٌ</button>
+        </div>
+      </div>
+
+      <div class="measure-scroll-area mb-5">
+        <div id="stage-abhath" class="measure-stage" style="height: 210px; min-width: 470px;">
+          <!-- الشريط البنفسجي: طوله الدقيق 336px -->
+          <div style="position: absolute; left: 20px; top: 32px;">
+            <div class="text-xs font-bold text-fuchsia-900 mb-1">الشَّرِيطُ الْبَنَفْسَجِيُّ (طُولُهُ 7 وَحْدَاتٍ عِنْدَ حَنِينَ):</div>
+            <div style="width: 336px; height: 18px; background: #c026d3; border: 1.5px solid #86198f; border-radius: 3px;"></div>
+          </div>
+
+          <!-- الوحدة ح (حمراء: 42px -> تقيس الشريط في 8 وحدات) -->
+          <div style="position: absolute; left: 320px; top: 82px; font-weight: 800; font-size: 0.95rem; color: #991b1b;">الْوَحْدَةُ ح</div>
+          <div id="unit-abhath-h" class="draggable-unit rounded-sm"
+               style="width: 42px; height: 15px; background: #dc2626; border: 1.5px solid #7f1d1d; left: 265px; top: 86px;"
+               title="الوحدة ح - اسحبني للقياس"></div>
+
+          <!-- الوحدة خ (خضراء: 48px -> تقيس الشريط في 7 وحدات بالضبط!) -->
+          <div style="position: absolute; left: 320px; top: 122px; font-weight: 800; font-size: 0.95rem; color: #166534;">الْوَحْدَةُ خ</div>
+          <div id="unit-abhath-kh" class="draggable-unit rounded-sm"
+               style="width: 48px; height: 15px; background: #16a34a; border: 1.5px solid #14532d; left: 259px; top: 126px;"
+               title="الوحدة خ - اسحبني للقياس"></div>
+
+          <!-- الوحدة ز (زرقاء: 67.2px -> تقيس الشريط في 5 وحدات) -->
+          <div style="position: absolute; left: 320px; top: 162px; font-weight: 800; font-size: 0.95rem; color: #1e3a8a;">الْوَحْدَةُ ز</div>
+          <div id="unit-abhath-z" class="draggable-unit rounded-sm"
+               style="width: 67.2px; height: 15px; background: #1e3a8a; border: 1.5px solid #172554; left: 240px; top: 166px;"
+               title="الوحدة ز - اسحبني للقياس"></div>
+        </div>
+      </div>
+
+      <!-- خيارات الاختيار مع علامة (X) -->
+      <div id="mcq-abhath" class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4"></div>
+      <div id="fb-abhath" class="mb-3 text-sm font-extrabold hidden"></div>
+
+      <div>
+        <button id="btn-check-abhath" onclick="checkAbhath()" class="check-btn">
+          <span>✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</span>
+        </button>
+      </div>
+
+      <!-- عدّاد محطة أبحث -->
+      <div class="mt-6 pt-3 border-t border-teal-200 flex items-center justify-between text-sm font-extrabold bg-teal-50/80 px-4 py-2.5 rounded-xl">
+        <span class="text-teal-950">حَصِيلَةُ مَحَطَّةِ أَبْحَثُ:</span>
+        <div class="flex items-center gap-4">
+          <span class="text-emerald-700">✓ الصَّوَابُ: <span id="score-abhath-ok" class="ltr-num">0</span></span>
+          <span class="text-red-600">✗ الْخَطَأُ: <span id="score-abhath-err" class="ltr-num">0</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================
+         التقييم النهائي الشامل (أسفل التمارين مباشرة في نفس الصفحة)
+    ========================================================== -->
+    <section id="sec-final-report" class="bg-white rounded-3xl shadow-xl border-4 border-indigo-600/30 p-5 sm:p-8">
+      <div class="text-center mb-6">
+        <h2 class="text-2xl sm:text-3xl font-black text-indigo-950">📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</h2>
+        <p class="text-sm sm:text-base font-bold text-slate-500 mt-1">تَتَحَدَّثُ النَّتَائِجُ تِلْقَائِيّاً كُلَّمَا أَنْجَزْتَ تَمْرِيناً</p>
+      </div>
+
+      <div class="flex flex-col md:flex-row items-center justify-around gap-8 bg-slate-50 rounded-2xl p-6 border border-slate-200">
+        <!-- الدائرة النسبية الحقيقية (SVG Circular Progress Ring) -->
+        <div class="relative w-44 h-44 flex items-center justify-center shrink-0">
+          <svg class="w-44 h-44" viewBox="0 0 160 160" aria-label="الدائرة النسبية للنتيجة">
+            <!-- المسار الخلفي للدائرة -->
+            <circle cx="80" cy="80" r="66" fill="#ffffff" stroke="#e2e8f0" stroke-width="14" />
+            <!-- مسار النسبة المئوية -->
+            <circle id="final-progress-circle"
+                    class="progress-ring__circle"
+                    cx="80" cy="80" r="66"
+                    fill="transparent"
+                    stroke="#6d28d9"
+                    stroke-width="14"
+                    stroke-linecap="round"
+                    stroke-dasharray="414.69"
+                    stroke-dashoffset="414.69" />
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+            <span id="final-percent-text" class="text-3xl sm:text-4xl font-black text-slate-800 ltr-num">0%</span>
+            <span class="text-xs font-bold text-slate-500 mt-0.5">نِسْبَةُ النَّجَاحِ</span>
+          </div>
+        </div>
+
+        <!-- تفاصيل الإجابات الصحيحة والخاطئة والرسالة التشجيعية -->
+        <div class="flex-1 w-full space-y-4">
+          <div class="grid grid-cols-2 gap-3">
+            <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-4 text-center">
+              <div class="text-xs sm:text-sm font-extrabold text-emerald-800">الْإِجَابَاتُ الصَّحِيحَةُ</div>
+              <div id="final-correct-count" class="text-3xl font-black text-emerald-700 mt-1 ltr-num">0</div>
+            </div>
+            <div class="bg-red-50 border-2 border-red-200 rounded-2xl p-4 text-center">
+              <div class="text-xs sm:text-sm font-extrabold text-red-800">الْإِجَابَاتُ الْخَاطِئَةُ</div>
+              <div id="final-wrong-count" class="text-3xl font-black text-red-600 mt-1 ltr-num">0</div>
+            </div>
+          </div>
+
+          <div class="bg-indigo-50 border border-indigo-200 rounded-2xl p-4 text-center">
+            <p id="final-message" class="text-base sm:text-lg font-extrabold text-indigo-950">
+              🌟 اِبْدَأْ بِحَلِّ التَّمَارِينِ أَعْلَاهُ لِتَرَى نَتِيجَتَكَ النِّهَائِيَّةَ!
+            </p>
+            <p class="text-xs font-bold text-slate-500 mt-1">
+              الْعَدَدُ الْإِجْمَالِيُّ لِلْأَسْئِلَةِ: <span class="ltr-num">13</span> سُؤَالاً
+            </p>
+          </div>
+
+          <div class="text-center pt-1">
+            <button type="button" onclick="restartWholeLesson()" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-white font-black text-base px-7 py-3 rounded-2xl shadow-md transition-all cursor-pointer">
+              🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================
+         زر العودة إلى الفهرس (أُضيف)
+         ======================================== -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+  </main>
+
+  <!-- ========================================
+       سكريبت الحماية (أُضيف)
+       ======================================== -->
+  <script>
+    const CHANNEL_ID = "-1004461185731";
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+  </script>
+
+  <!-- ========================================
+       سكريبت الدرس الأصلي
+       ======================================== -->
+  <script>
+    const EXACT_TOTAL_QUESTIONS = 13;
+
+    const scores = {
+      aktashif: { ok: 0, err: 0 },
+      unjiz: { ok: 0, err: 0 },
+      atamarran: { ok: 0, err: 0 },
+      abhath: { ok: 0, err: 0 }
+    };
+
+    const completed = {
+      aktashif1: false,
+      aktashif2: false,
+      unjiz: false,
+      atamarran1: false,
+      atamarran2: false,
+      abhath: false
+    };
+
+    const selectedMCQ = {
+      aktashif1a: null,
+      aktashif1b: null,
+      turtleCompare: null,
+      abhath: null
+    };
+
+    let blackUnitAngle = 0;
+
+    const stampCounters = {
+      'stage-aktashif-2': 0,
+      'stage-unjiz': 0,
+      'stage-abhath-h': 0,
+      'stage-abhath-kh': 0,
+      'stage-abhath-z': 0
+    };
+
+    function shuffleArray(arr) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      const banner = document.getElementById('toast-banner');
+      banner.textContent = msg;
+      banner.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        banner.classList.remove('show');
+      }, 3000);
+    }
+
+    function renderAllMCQs() {
+      const opts1a = shuffleArray([
+        { id: 'aymen', text: 'أَيْمَنُ', correct: true },
+        { id: 'raed', text: 'رَائِدٌ', correct: false }
+      ]);
+      renderMCQGroup('mcq-aktashif-1a', opts1a, 'aktashif1a');
+
+      const opts1b = shuffleArray([
+        {
+          id: 'reason_correct',
+          text: 'لِأَنَّهُ رَصَّ الْخُشَيْبَاتِ بِدُونِ فَرَاغَاتٍ وَبَدَأَ مِنْ طَرَفِ اللَّوْحَةِ إِلَى طَرَفِهَا الْآخَرِ',
+          correct: true
+        },
+        {
+          id: 'reason_less',
+          text: 'لِأَنَّ عَدَدَ خُشَيْبَاتِهِ أَقَلُّ',
+          correct: false
+        },
+        {
+          id: 'reason_gaps',
+          text: 'لِأَنَّهُ تَرَكَ فَرَاغَاتٍ بَيْنَ الْخُشَيْبَاتِ',
+          correct: false
+        }
+      ]);
+      renderMCQGroup('mcq-aktashif-1b', opts1b, 'aktashif1b');
+
+      const optsTurtle = shuffleArray([
+        { id: 'shorter', text: 'أَقْصَرُ', correct: true },
+        { id: 'longer', text: 'أَطْوَلُ', correct: false }
+      ]);
+      renderMCQGroup('mcq-turtle-compare', optsTurtle, 'turtleCompare', true);
+
+      const optsAbhath = shuffleArray([
+        { id: 'h', text: 'الْوَحْدَةُ ح', color: '#dc2626', width: 42, correct: false },
+        { id: 'kh', text: 'الْوَحْدَةُ خ', color: '#16a34a', width: 48, correct: true },
+        { id: 'z', text: 'الْوَحْدَةُ ز', color: '#1e3a8a', width: 67.2, correct: false }
+      ]);
+      renderAbhathMCQ(optsAbhath);
+    }
+
+    function renderMCQGroup(containerId, options, stateKey, isInline = false) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      options.forEach(opt => {
+        const div = document.createElement('div');
+        div.className = isInline
+          ? 'mcq-option py-2 px-4 text-base'
+          : 'mcq-option';
+        div.dataset.optId = opt.id;
+        div.dataset.correct = opt.correct ? '1' : '0';
+        div.innerHTML = `
+          <span class="w-6 h-6 rounded-full border-2 border-slate-400 flex items-center justify-center text-xs font-black shrink-0 indicator"></span>
+          <span>${opt.text}</span>
+        `;
+        div.addEventListener('click', () => {
+          if (div.classList.contains('disabled')) return;
+          selectedMCQ[stateKey] = opt;
+          Array.from(container.children).forEach(child => {
+            child.classList.remove('selected');
+            child.querySelector('.indicator').textContent = '';
+          });
+          div.classList.add('selected');
+          div.querySelector('.indicator').textContent = '✓';
+        });
+        container.appendChild(div);
+      });
+    }
+
+    function renderAbhathMCQ(options) {
+      const container = document.getElementById('mcq-abhath');
+      container.innerHTML = '';
+      options.forEach(opt => {
+        const div = document.createElement('div');
+        div.className = 'mcq-option justify-between';
+        div.dataset.optId = opt.id;
+        div.dataset.correct = opt.correct ? '1' : '0';
+        div.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 rounded-lg border-2 border-slate-700 bg-white flex items-center justify-center font-black text-xl text-purple-800 ltr-num x-box"></span>
+            <span class="font-extrabold">${opt.text}</span>
+          </div>
+          <span style="display:inline-block; width:${opt.width}px; height:14px; background:${opt.color}; border-radius:2px;"></span>
+        `;
+        div.addEventListener('click', () => {
+          if (div.classList.contains('disabled')) return;
+          selectedMCQ.abhath = opt;
+          Array.from(container.children).forEach(child => {
+            child.classList.remove('selected');
+            child.querySelector('.x-box').textContent = '';
+          });
+          div.classList.add('selected');
+          div.querySelector('.x-box').textContent = 'X';
+        });
+        container.appendChild(div);
+      });
+    }
+
+    function makeDraggable(el) {
+      let isDragging = false;
+      let startX = 0, startY = 0;
+      let initialLeft = 0, initialTop = 0;
+
+      const onPointerDown = (e) => {
+        isDragging = true;
+        el.setPointerCapture(e.pointerId);
+        startX = e.clientX;
+        startY = e.clientY;
+        initialLeft = parseFloat(el.style.left) || 0;
+        initialTop = parseFloat(el.style.top) || 0;
+        el.style.zIndex = 50;
+      };
+
+      const onPointerMove = (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        const parent = el.parentElement;
+        const maxLeft = parent.clientWidth - el.offsetWidth;
+        const maxTop = parent.clientHeight - el.offsetHeight;
+
+        let newLeft = Math.max(0, Math.min(maxLeft, initialLeft + dx));
+        let newTop = Math.max(0, Math.min(maxTop, initialTop + dy));
+
+        el.style.left = newLeft + 'px';
+        el.style.top = newTop + 'px';
+      };
+
+      const onPointerUp = (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        el.releasePointerCapture(e.pointerId);
+        el.style.zIndex = 30;
+      };
+
+      el.addEventListener('pointerdown', onPointerDown);
+      el.addEventListener('pointermove', onPointerMove);
+      el.addEventListener('pointerup', onPointerUp);
+      el.addEventListener('pointercancel', onPointerUp);
+    }
+
+    function stampUnit(stageId, widthPx, heightPx, bgColor, borderColor) {
+      const stage = document.getElementById(stageId);
+      const count = stampCounters[stageId] || 0;
+      if (count >= 10) {
+        showToast('لَقَدْ أَضَفْتَ الْعَدَدَ الْكَافِي مِنَ الْوَحَدَاتِ!');
+        return;
+      }
+      const clone = document.createElement('div');
+      clone.className = 'draggable-unit stamped-unit rounded-sm';
+      clone.style.width = widthPx + 'px';
+      clone.style.height = heightPx + 'px';
+      clone.style.background = bgColor;
+      clone.style.border = `1.5px solid ${borderColor}`;
+      clone.style.left = (20 + count * widthPx) + 'px';
+      clone.style.top = '16px';
+      clone.title = 'اسحبني لرص الوحدات جنباً إلى جنب';
+      stage.appendChild(clone);
+      makeDraggable(clone);
+      stampCounters[stageId] = count + 1;
+    }
+
+    function resetStageUnits(stageId, mainUnitId, defaultLeft, defaultTop) {
+      const stage = document.getElementById(stageId);
+      stage.querySelectorAll('.stamped-unit').forEach(el => el.remove());
+      stampCounters[stageId] = 0;
+      const mainUnit = document.getElementById(mainUnitId);
+      mainUnit.style.left = defaultLeft + 'px';
+      mainUnit.style.top = defaultTop + 'px';
+    }
+
+    function rotateBlackUnit(delta) {
+      blackUnitAngle = (blackUnitAngle + delta) % 360;
+      const el = document.getElementById('unit-black-main');
+      el.style.transform = `rotate(${blackUnitAngle}deg)`;
+      document.getElementById('black-angle-display').textContent = `${blackUnitAngle}°`;
+    }
+
+    function resetBlackUnit() {
+      blackUnitAngle = 0;
+      const el = document.getElementById('unit-black-main');
+      el.style.left = '25px';
+      el.style.top = '14px';
+      el.style.transform = 'rotate(0deg)';
+      document.getElementById('black-angle-display').textContent = '0°';
+    }
+
+    function stampAbhathUnit(type) {
+      const stage = document.getElementById('stage-abhath');
+      const configs = {
+        h: { key: 'stage-abhath-h', w: 42, bg: '#dc2626', bd: '#7f1d1d', top: 60 },
+        kh: { key: 'stage-abhath-kh', w: 48, bg: '#16a34a', bd: '#14532d', top: 60 },
+        z: { key: 'stage-abhath-z', w: 67.2, bg: '#1e3a8a', bd: '#172554', top: 60 }
+      };
+      const cfg = configs[type];
+      const count = stampCounters[cfg.key];
+      if (count >= 9) {
+        showToast('تَمَّ الْوُصُولُ إِلَى الْحَدِّ الْأَقْصَى لِلنُّسَخِ!');
+        return;
+      }
+      const clone = document.createElement('div');
+      clone.className = 'draggable-unit stamped-unit rounded-sm';
+      clone.style.width = cfg.w + 'px';
+      clone.style.height = '15px';
+      clone.style.background = cfg.bg;
+      clone.style.border = `1.5px solid ${cfg.bd}`;
+      clone.style.left = (20 + count * cfg.w) + 'px';
+      clone.style.top = cfg.top + 'px';
+      stage.appendChild(clone);
+      makeDraggable(clone);
+      stampCounters[cfg.key] = count + 1;
+    }
+
+    function resetAbhathStage() {
+      const stage = document.getElementById('stage-abhath');
+      stage.querySelectorAll('.stamped-unit').forEach(el => el.remove());
+      stampCounters['stage-abhath-h'] = 0;
+      stampCounters['stage-abhath-kh'] = 0;
+      stampCounters['stage-abhath-z'] = 0;
+
+      const uh = document.getElementById('unit-abhath-h');
+      uh.style.left = '265px'; uh.style.top = '86px';
+
+      const ukh = document.getElementById('unit-abhath-kh');
+      ukh.style.left = '259px'; ukh.style.top = '126px';
+
+      const uz = document.getElementById('unit-abhath-z');
+      uz.style.left = '240px'; uz.style.top = '166px';
+    }
+
+    function lockMCQGroup(containerId, feedbackId, selectedObj) {
+      const container = document.getElementById(containerId);
+      const fb = document.getElementById(feedbackId);
+      let isCorrect = false;
+
+      Array.from(container.children).forEach(child => {
+        child.classList.add('disabled');
+        const optCorrect = child.dataset.correct === '1';
+        const optSelected = child.dataset.optId === selectedObj.id;
+
+        if (optCorrect) {
+          child.classList.add('correct');
+          if (child.querySelector('.indicator')) child.querySelector('.indicator').textContent = '✓';
+        } else if (optSelected && !optCorrect) {
+          child.classList.add('wrong');
+          if (child.querySelector('.indicator')) child.querySelector('.indicator').textContent = '✗';
+        }
+      });
+
+      if (selectedObj.correct) {
+        isCorrect = true;
+        if (fb) {
+          fb.textContent = '✓ إِجَابَةٌ صَحِيحَةٌ! أَحْسَنْتَ.';
+          fb.className = 'mt-2 text-sm font-extrabold text-emerald-700 block';
+        }
+      } else {
+        if (fb) {
+          fb.textContent = '✗ إِجَابَةٌ خَاطِئَةٌ. لَاحِظِ الْإِجَابَةَ الصَّحِيحَةَ بِالْأَخْضَرِ.';
+          fb.className = 'mt-2 text-sm font-extrabold text-red-600 block';
+        }
+      }
+      return isCorrect;
+    }
+
+    function validateNumericInput(inputId, feedbackId, expectedVal) {
+      const inp = document.getElementById(inputId);
+      const fb = document.getElementById(feedbackId);
+      const userVal = parseInt(inp.value.trim(), 10);
+      inp.disabled = true;
+
+      if (userVal === expectedVal) {
+        inp.classList.add('correct');
+        fb.innerHTML = `<span class="text-emerald-700">✓ صَحِيحٌ</span>`;
+        return true;
+      } else {
+        inp.classList.add('wrong');
+        fb.innerHTML = `<span class="text-red-600">✗ خَطَأٌ (الصَّوَابُ: <span class="ltr-num">${expectedVal}</span>)</span>`;
+        return false;
+      }
+    }
+
+    function checkAktashif1() {
+      if (completed.aktashif1) return;
+      if (!selectedMCQ.aktashif1a || !selectedMCQ.aktashif1b) {
+        showToast('⚠️ اخْتَرْ إِجَابَةً لِلسُّؤَالَيْنِ (أ) وَ (ب) أَوَّلاً!');
+        return;
+      }
+
+      completed.aktashif1 = true;
+      document.getElementById('btn-check-aktashif-1').disabled = true;
+
+      const okA = lockMCQGroup('mcq-aktashif-1a', 'fb-aktashif-1a', selectedMCQ.aktashif1a);
+      const okB = lockMCQGroup('mcq-aktashif-1b', 'fb-aktashif-1b', selectedMCQ.aktashif1b);
+
+      scores.aktashif.ok += (okA ? 1 : 0) + (okB ? 1 : 0);
+      scores.aktashif.err += (okA ? 0 : 1) + (okB ? 0 : 1);
+
+      document.getElementById('ex-aktashif-2').classList.remove('section-locked');
+      updateAllScoresUI();
+    }
+
+    function checkAktashif2() {
+      if (completed.aktashif2) return;
+      const gVal = document.getElementById('inp-aktashif-green').value.trim();
+      const rVal = document.getElementById('inp-aktashif-red').value.trim();
+      if (gVal === '' || rVal === '') {
+        showToast('⚠️ أَكْمِلْ مَلْءَ الْخَانَتَيْنِ أَوَّلاً!');
+        return;
+      }
+
+      completed.aktashif2 = true;
+      document.getElementById('btn-check-aktashif-2').disabled = true;
+
+      const okG = validateNumericInput('inp-aktashif-green', 'fb-aktashif-green', 6);
+      const okR = validateNumericInput('inp-aktashif-red', 'fb-aktashif-red', 5);
+
+      scores.aktashif.ok += (okG ? 1 : 0) + (okR ? 1 : 0);
+      scores.aktashif.err += (okG ? 0 : 1) + (okR ? 0 : 1);
+
+      document.getElementById('sec-unjiz').classList.remove('section-locked');
+      updateAllScoresUI();
+    }
+
+    function checkUnjiz() {
+      if (completed.unjiz) return;
+      const gVal = document.getElementById('inp-unjiz-green').value.trim();
+      const bVal = document.getElementById('inp-unjiz-blue').value.trim();
+      const pVal = document.getElementById('inp-unjiz-purple').value.trim();
+      if (gVal === '' || bVal === '' || pVal === '') {
+        showToast('⚠️ أَكْمِلْ جَمِيعَ الْخَانَاتِ الثَّلَاثِ أَوَّلاً!');
+        return;
+      }
+
+      completed.unjiz = true;
+      document.getElementById('btn-check-unjiz').disabled = true;
+
+      const okG = validateNumericInput('inp-unjiz-green', 'fb-unjiz-green', 7);
+      const okB = validateNumericInput('inp-unjiz-blue', 'fb-unjiz-blue', 5);
+      const okP = validateNumericInput('inp-unjiz-purple', 'fb-unjiz-purple', 8);
+
+      scores.unjiz.ok += (okG ? 1 : 0) + (okB ? 1 : 0) + (okP ? 1 : 0);
+      scores.unjiz.err += (okG ? 0 : 1) + (okB ? 0 : 1) + (okP ? 0 : 1);
+
+      document.getElementById('sec-atamarran').classList.remove('section-locked');
+      updateAllScoresUI();
+    }
+
+    function checkAtamarran1() {
+      if (completed.atamarran1) return;
+      const gVal = document.getElementById('inp-turtle-green').value.trim();
+      const rVal = document.getElementById('inp-turtle-red').value.trim();
+      if (gVal === '' || rVal === '' || !selectedMCQ.turtleCompare) {
+        showToast('⚠️ أَكْمِلْ جَمِيعَ أَسْئِلَةِ التَّمْرِينِ (1) أَوَّلاً!');
+        return;
+      }
+
+      completed.atamarran1 = true;
+      document.getElementById('btn-check-atamarran-1').disabled = true;
+
+      const okG = validateNumericInput('inp-turtle-green', 'fb-turtle-green', 5);
+      const okR = validateNumericInput('inp-turtle-red', 'fb-turtle-red', 4);
+      const okC = lockMCQGroup('mcq-turtle-compare', null, selectedMCQ.turtleCompare);
+
+      const fbC = document.getElementById('fb-turtle-compare');
+      if (okC) {
+        fbC.innerHTML = `<span class="text-emerald-700">✓ صَحِيحٌ</span>`;
+      } else {
+        fbC.innerHTML = `<span class="text-red-600">✗ خَطَأٌ (الصَّوَابُ: أَقْصَرُ)</span>`;
+      }
+
+      scores.atamarran.ok += (okG ? 1 : 0) + (okR ? 1 : 0) + (okC ? 1 : 0);
+      scores.atamarran.err += (okG ? 0 : 1) + (okR ? 0 : 1) + (okC ? 0 : 1);
+
+      document.getElementById('ex-atamarran-2').classList.remove('section-locked');
+      updateAllScoresUI();
+    }
+
+    function checkAtamarran2() {
+      if (completed.atamarran2) return;
+      const gVal = document.getElementById('inp-grid-green').value.trim();
+      const rVal = document.getElementById('inp-grid-red').value.trim();
+      if (gVal === '' || rVal === '') {
+        showToast('⚠️ أَكْمِلْ مَلْءَ الْخَانَتَيْنِ أَوَّلاً!');
+        return;
+      }
+
+      completed.atamarran2 = true;
+      document.getElementById('btn-check-atamarran-2').disabled = true;
+
+      const okG = validateNumericInput('inp-grid-green', 'fb-grid-green', 16);
+      const okR = validateNumericInput('inp-grid-red', 'fb-grid-red', 12);
+
+      scores.atamarran.ok += (okG ? 1 : 0) + (okR ? 1 : 0);
+      scores.atamarran.err += (okG ? 0 : 1) + (okR ? 0 : 1);
+
+      document.getElementById('sec-abhath').classList.remove('section-locked');
+      updateAllScoresUI();
+    }
+
+    function checkAbhath() {
+      if (completed.abhath) return;
+      if (!selectedMCQ.abhath) {
+        showToast('⚠️ ضَعْ إِشَارَةَ (X) أَمَامَ الْوَحْدَةِ الْمُنَاسِبَةِ أَوَّلاً!');
+        return;
+      }
+
+      completed.abhath = true;
+      document.getElementById('btn-check-abhath').disabled = true;
+
+      const container = document.getElementById('mcq-abhath');
+      const fb = document.getElementById('fb-abhath');
+
+      Array.from(container.children).forEach(child => {
+        child.classList.add('disabled');
+        const isRight = child.dataset.correct === '1';
+        const isChosen = child.dataset.optId === selectedMCQ.abhath.id;
+        if (isRight) {
+          child.classList.add('correct');
+        } else if (isChosen && !isRight) {
+          child.classList.add('wrong');
+        }
+      });
+
+      if (selectedMCQ.abhath.correct) {
+        scores.abhath.ok += 1;
+        fb.textContent = '✓ أَحْسَنْتَ! الْوَحْدَةُ (خ) تَقِيسُ الشَّرِيطَ الْبَنَفْسَجِيَّ فِي 7 وَحْدَاتٍ بِالضَّبْطِ.';
+        fb.className = 'mb-3 text-sm font-extrabold text-emerald-700 block';
+      } else {
+        scores.abhath.err += 1;
+        fb.textContent = '✗ إِجَابَةٌ خَاطِئَةٌ. الْوَحْدَةُ الصَّحِيحَةُ هِيَ: الْوَحْدَةُ خ.';
+        fb.className = 'mb-3 text-sm font-extrabold text-red-600 block';
+      }
+
+      updateAllScoresUI();
+    }
+
+    function updateAllScoresUI() {
+      document.getElementById('score-aktashif-ok').textContent = scores.aktashif.ok;
+      document.getElementById('score-aktashif-err').textContent = scores.aktashif.err;
+
+      document.getElementById('score-unjiz-ok').textContent = scores.unjiz.ok;
+      document.getElementById('score-unjiz-err').textContent = scores.unjiz.err;
+
+      document.getElementById('score-atamarran-ok').textContent = scores.atamarran.ok;
+      document.getElementById('score-atamarran-err').textContent = scores.atamarran.err;
+
+      document.getElementById('score-abhath-ok').textContent = scores.abhath.ok;
+      document.getElementById('score-abhath-err').textContent = scores.abhath.err;
+
+      const totalOk = scores.aktashif.ok + scores.unjiz.ok + scores.atamarran.ok + scores.abhath.ok;
+      const totalErr = scores.aktashif.err + scores.unjiz.err + scores.atamarran.err + scores.abhath.err;
+
+      document.getElementById('final-correct-count').textContent = totalOk;
+      document.getElementById('final-wrong-count').textContent = totalErr;
+
+      let percentage = Math.round((totalOk / EXACT_TOTAL_QUESTIONS) * 100);
+      percentage = Math.max(0, Math.min(100, percentage));
+
+      document.getElementById('final-percent-text').textContent = `${percentage}%`;
+
+      const circle = document.getElementById('final-progress-circle');
+      const circumference = 2 * Math.PI * 66;
+      const offset = circumference - (percentage / 100) * circumference;
+      circle.style.strokeDashoffset = offset;
+
+      const msgEl = document.getElementById('final-message');
+      const allDone = Object.values(completed).every(Boolean);
+
+      if (allDone) {
+        if (percentage === 100) {
+          circle.style.stroke = '#16a34a';
+          msgEl.textContent = '🏆 مُمْتَازٌ يَا بَطَلُ! نَتِيجَةٌ كَامِلَةٌ (100%)، لَقَدْ أَتْقَنْتَ قِيَاسَ الْأَطْوَالِ بِبَرَاعَةٍ!';
+        } else if (percentage >= 75) {
+          circle.style.stroke = '#2563eb';
+          msgEl.textContent = '👏 أَحْسَنْتَ! نَتِيجَةٌ جَيِّدَةٌ جِدّاً، واصِلِ الاجْتِهَادَ!';
+        } else if (percentage >= 50) {
+          circle.style.stroke = '#d97706';
+          msgEl.textContent = '👍 عَمَلٌ جَيِّدٌ! رَاجِعْ أَخْطَاءَكَ وَحَاوِلْ مَرَّةً أُخْرَى لِتَحْقِيقِ الْعَلَامَةِ الْكَامِلَةِ.';
+        } else {
+          circle.style.stroke = '#dc2626';
+          msgEl.textContent = '💪 لَا بَأْسَ! اِسْتَعْمِلْ أَدَوَاتِ الْقِيَاسِ بِدِقَّةٍ وَأَعِدِ الْمُحَاوَلَةَ.';
+        }
+      } else {
+        circle.style.stroke = '#6d28d9';
+        if (totalOk + totalErr > 0) {
+          msgEl.textContent = '⏳ أَحْسَنْتَ! واصِلْ حَلَّ بَقِيَّةِ التَّمَارِينِ لِإِكْمَالِ التَّقْيِيمِ النِّهَائِيِّ.';
+        } else {
+          msgEl.textContent = '🌟 اِبْدَأْ بِحَلِّ التَّمَارِينِ أَعْلَاهُ لِتَرَى نَتِيجَتَكَ النِّهَائِيَّةَ!';
+        }
+      }
+    }
+
+    function restartWholeLesson() {
+      scores.aktashif = { ok: 0, err: 0 };
+      scores.unjiz = { ok: 0, err: 0 };
+      scores.atamarran = { ok: 0, err: 0 };
+      scores.abhath = { ok: 0, err: 0 };
+
+      completed.aktashif1 = false;
+      completed.aktashif2 = false;
+      completed.unjiz = false;
+      completed.atamarran1 = false;
+      completed.atamarran2 = false;
+      completed.abhath = false;
+
+      selectedMCQ.aktashif1a = null;
+      selectedMCQ.aktashif1b = null;
+      selectedMCQ.turtleCompare = null;
+      selectedMCQ.abhath = null;
+
+      [
+        'btn-check-aktashif-1',
+        'btn-check-aktashif-2',
+        'btn-check-unjiz',
+        'btn-check-atamarran-1',
+        'btn-check-atamarran-2',
+        'btn-check-abhath'
+      ].forEach(id => {
+        document.getElementById(id).disabled = false;
+      });
+
+      document.getElementById('ex-aktashif-2').classList.add('section-locked');
+      document.getElementById('sec-unjiz').classList.add('section-locked');
+      document.getElementById('sec-atamarran').classList.add('section-locked');
+      document.getElementById('ex-atamarran-2').classList.add('section-locked');
+      document.getElementById('sec-abhath').classList.add('section-locked');
+
+      document.querySelectorAll('.math-input').forEach(inp => {
+        inp.value = '';
+        inp.disabled = false;
+        inp.classList.remove('correct', 'wrong');
+      });
+
+      [
+        'fb-aktashif-1a',
+        'fb-aktashif-1b',
+        'fb-aktashif-green',
+        'fb-aktashif-red',
+        'fb-unjiz-green',
+        'fb-unjiz-blue',
+        'fb-unjiz-purple',
+        'fb-turtle-green',
+        'fb-turtle-red',
+        'fb-turtle-compare',
+        'fb-grid-green',
+        'fb-grid-red',
+        'fb-abhath'
+      ].forEach(id => {
+        const el = document.getElementById(id);
+        el.textContent = '';
+        if (id.startsWith('fb-aktashif-1') || id === 'fb-abhath') {
+          el.classList.add('hidden');
+        }
+      });
+
+      resetStageUnits('stage-aktashif-2', 'unit-red-main', 20, 16);
+      resetStageUnits('stage-unjiz', 'unit-yellow-main', 20, 14);
+      resetBlackUnit();
+      resetAbhathStage();
+
+      renderAllMCQs();
+      updateAllScoresUI();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast('🔄 تَمَّتْ إِعَادَةُ تَهْيِئَةِ الدَّرْسِ مِنْ جَدِيدٍ!');
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderAllMCQs();
+      makeDraggable(document.getElementById('unit-red-main'));
+      makeDraggable(document.getElementById('unit-yellow-main'));
+      makeDraggable(document.getElementById('unit-black-main'));
+      makeDraggable(document.getElementById('unit-abhath-h'));
+      makeDraggable(document.getElementById('unit-abhath-kh'));
+      makeDraggable(document.getElementById('unit-abhath-z'));
+      updateAllScoresUI();
+    });
+  </script>
+</body>
+</html>
