@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مَنْهَجِيَّةُ حَلِّ مُشْكِلَاتٍ (1) : أَطْرَحُ السُّؤَالَ - السنة الثالثة</title>
+    <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8e24aa;
+            --primary-dark: #5c007a;
+            --primary-light: #f3e5f5;
+            --secondary: #00897b;
+            --secondary-light: #e0f2f1;
+            --accent: #f57c00;
+            --accent-light: #fff3e0;
+            --success: #2e7d32;
+            --success-bg: #e8f5e9;
+            --error: #c62828;
+            --error-bg: #ffebee;
+            --bg-body: #f4f7fb;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            --border-color: #cbd5e1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.85;
+            padding-bottom: 50px;
+        }
+
+        /* عزل اتجاه العمليات الحسابية والأرقام والوحدات من اليسار إلى اليمين */
+        .ltr-math {
+            direction: ltr;
+            display: inline-block;
+            unicode-bidi: isolate;
+            font-weight: 800;
+            color: #0d47a1;
+            background: #eef4ff;
+            padding: 1px 7px;
+            border-radius: 6px;
+            border: 1px solid #d0e1ff;
+            margin: 0 2px;
+        }
+
+        .ltr-inline {
+            direction: ltr;
+            display: inline-block;
+            unicode-bidi: isolate;
+            font-weight: 700;
+        }
+
+        /* الترويسة */
+        header {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            color: white;
+            padding: 24px 16px;
+            text-align: center;
+            border-bottom-left-radius: 28px;
+            border-bottom-right-radius: 28px;
+            box-shadow: 0 6px 18px rgba(142, 36, 170, 0.25);
+            margin-bottom: 24px;
+        }
+
+        .badge-meta {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        header h1 {
+            font-size: 1.75rem;
+            font-weight: 900;
+            margin-bottom: 4px;
+        }
+
+        header h2 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #ffe082;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 14px;
+        }
+
+        /* بطاقات الأقسام */
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 2px solid #e2e8f0;
+            position: relative;
+        }
+
+        .section-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary);
+            color: white;
+            padding: 6px 20px;
+            border-radius: 30px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            box-shadow: 0 3px 8px rgba(142, 36, 170, 0.25);
+        }
+
+        .section-title.teal {
+            background: var(--secondary);
+            box-shadow: 0 3px 8px rgba(0, 137, 123, 0.25);
+        }
+
+        .section-title.orange {
+            background: var(--accent);
+            box-shadow: 0 3px 8px rgba(245, 124, 0, 0.25);
+        }
+
+        .section-title.blue {
+            background: #1565c0;
+            box-shadow: 0 3px 8px rgba(21, 101, 192, 0.25);
+        }
+
+        /* صندوق نص المشكلة */
+        .problem-box {
+            background: #f8fafc;
+            border-right: 5px solid var(--primary);
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* رسم لافتة الطريق في أكتشف */
+        .road-sign-illustration {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            background: #e3f2fd;
+            border: 2px dashed #64b5f6;
+            border-radius: 14px;
+            padding: 14px;
+            margin: 14px 0;
+            flex-wrap: wrap;
+        }
+
+        .sign-board {
+            background: #ffffff;
+            border: 3px solid #1e293b;
+            border-radius: 8px;
+            padding: 8px 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 1.15rem;
+            box-shadow: 0 4px 0 #1e293b;
+        }
+
+        .sign-arrow {
+            color: #1565c0;
+            font-size: 1.5rem;
+            font-weight: 900;
+        }
+
+        /* أسئلة فرعية */
+        .sub-question {
+            background: #ffffff;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 14px;
+            transition: all 0.2s;
+        }
+
+        .sub-q-header {
+            font-weight: 800;
+            font-size: 1.08rem;
+            color: #0f172a;
+            margin-bottom: 10px;
+        }
+
+        /* خيارات الاختيار من متعدد */
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 14px;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            background: #f8fafc;
+            transition: 0.2s;
+            user-select: none;
+        }
+
+        .option-label:hover:not(.locked) {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .option-label input[type="radio"],
+        .option-label input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .option-label.correct-opt {
+            background: var(--success-bg) !important;
+            border-color: var(--success) !important;
+            color: var(--success) !important;
+        }
+
+        .option-label.wrong-opt {
+            background: var(--error-bg) !important;
+            border-color: var(--error) !important;
+            color: var(--error) !important;
+        }
+
+        .locked {
+            pointer-events: none;
+            opacity: 0.92;
+        }
+
+        /* حقول الإدخال الحسابية LTR */
+        .math-input-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            direction: ltr;
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 8px;
+            flex-wrap: wrap;
+        }
+
+        .math-input {
+            width: 85px;
+            height: 44px;
+            text-align: center;
+            font-size: 1.15rem;
+            font-weight: 800;
+            border: 2px solid #94a3b8;
+            border-radius: 10px;
+            direction: ltr;
+            background: white;
+            color: #0f172a;
+            outline: none;
+        }
+
+        .math-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(142, 36, 170, 0.15);
+        }
+
+        .math-input.correct-field {
+            background: var(--success-bg) !important;
+            border-color: var(--success) !important;
+            color: var(--success) !important;
+        }
+
+        .math-input.wrong-field {
+            background: var(--error-bg) !important;
+            border-color: var(--error) !important;
+            color: var(--error) !important;
+        }
+
+        .op-symbol {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #334155;
+            padding: 0 4px;
+        }
+
+        .unit-badge {
+            font-weight: 800;
+            color: #1e293b;
+            background: #e2e8f0;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        /* الأزرار */
+        .btn-check {
+            background: linear-gradient(135deg, #1976d2, #0d47a1);
+            color: white;
+            border: none;
+            padding: 11px 24px;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+            transition: transform 0.15s;
+        }
+
+        .btn-check:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+
+        .btn-check:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .feedback-msg {
+            margin-top: 10px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.98rem;
+            display: none;
+        }
+
+        .feedback-msg.show-ok {
+            display: block;
+            background: var(--success-bg);
+            color: var(--success);
+            border: 1px solid #a5d6a7;
+        }
+
+        .feedback-msg.show-err {
+            display: block;
+            background: var(--error-bg);
+            color: var(--error);
+            border: 1px solid #ef9a9a;
+        }
+
+        /* جداول الكتاب المدرسي */
+        .school-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .school-table th,
+        .school-table td {
+            border: 2px solid #94a3b8;
+            padding: 10px 12px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.02rem;
+        }
+
+        .school-table th {
+            background: #e0f2f1;
+            color: #004d40;
+        }
+
+        /* قاعدة تعلمت */
+        .learned-box {
+            background: linear-gradient(to left, #fffde7, #fff9c4);
+            border: 2px solid #fbc02d;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .learned-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px;
+            background: white;
+        }
+
+        .learned-table td {
+            border: 1.5px solid #f57f17;
+            padding: 12px;
+            vertical-align: top;
+            font-weight: 700;
+        }
+
+        /* بطاقة المهمات (الصفحة الثالثة) */
+        .missions-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .mission-card {
+            background: #fdfcfb;
+            border: 2px solid #d7ccc8;
+            border-radius: 16px;
+            padding: 16px;
+            position: relative;
+        }
+
+        .mission-badge {
+            display: inline-block;
+            background: #5d4037;
+            color: white;
+            padding: 2px 12px;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        /* عداد المحطة */
+        .stage-counter {
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 2px dashed #cbd5e1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 800;
+            font-size: 1.02rem;
+            color: #334155;
+        }
+
+        .count-ok { color: var(--success); }
+        .count-err { color: var(--error); }
+
+        /* التقييم النهائي والدائرة النسبية */
+        .final-report-card {
+            background: linear-gradient(135deg, #ffffff, #f3e5f5);
+            border: 3px solid var(--primary);
+            border-radius: 24px;
+            padding: 26px 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(142, 36, 170, 0.15);
+            margin-top: 30px;
+        }
+
+        .circle-wrap {
+            width: 170px;
+            height: 170px;
+            margin: 18px auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .circle-svg {
+            width: 170px;
+            height: 170px;
+            transform: rotate(-90deg);
+        }
+
+        .circle-bg {
+            fill: none;
+            stroke: #e2e8f0;
+            stroke-width: 14;
+        }
+
+        .circle-progress {
+            fill: none;
+            stroke: var(--success);
+            stroke-width: 14;
+            stroke-linecap: round;
+            stroke-dasharray: 440;
+            stroke-dashoffset: 440;
+            transition: stroke-dashoffset 0.7s ease, stroke 0.4s ease;
+        }
+
+        .circle-text {
+            position: absolute;
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary-dark);
+            direction: ltr;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 16px 0;
+        }
+
+        .stat-pill {
+            background: white;
+            padding: 10px 20px;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+            border: 1.5px solid #cbd5e1;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            max-width: 500px;
+            height: 16px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            margin: 14px auto;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--secondary), var(--success));
+            transition: width 0.6s ease;
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #d84315, #bf360c);
+            color: white;
+            border: none;
+            padding: 13px 28px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 14px;
+            box-shadow: 0 4px 12px rgba(191, 54, 12, 0.25);
+        }
+
+        .btn-reset:hover {
+            opacity: 0.92;
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري (أُضيفت)
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس (أُضيف) */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            max-width: 420px;
+            margin: 20px auto 10px auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.4rem; }
+            .math-input { width: 72px; height: 40px; font-size: 1.05rem; }
+            .school-table th, .school-table td { padding: 6px; font-size: 0.92rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+    <div class="lock-box">
+        <div class="lock-icon">🔒</div>
+        <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+        <div class="lock-desc">
+            لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+        </div>
+        <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+            📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+        </a>
+        <button class="btn-check-sub" onclick="verifySubscription()">
+            ✅ تَأْكِيدُ الاِشْتِرَاكِ
+        </button>
+        <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+</div>
+
+<header>
+    <div class="badge-meta">الرِّيَاضِيَّاتُ • السَّنَةُ الثَّالِثَةُ ابْتِدَائِي • الدَّرْسُ 20</div>
+    <h1>مَنْهَجِيَّةُ حَلِّ مُشْكِلَاتٍ (1)</h1>
+    <h2>أَطْرَحُ السُّؤَالَ</h2>
+</header>
+
+<div class="container">
+
+    <!-- ==================== المحطة 1: أكتشف ==================== -->
+    <section class="section-card" id="stage-aktashif">
+        <div class="section-title">🔍 أَكْتَشِفُ</div>
+        
+        <div class="problem-box">
+            <p>🔸 ذَهَبَ أَمِينُ مَعَ أَصْدِقَائِهِ فِي عُطْلَةٍ إِلَى مُرْتَفَعَاتِ تِيقْجْدَةَ.</p>
+            <p>الْمَسَافَةُ مِنْ مَقَرِّ سُكْنَاهُ إِلَى تِيقْجْدَةَ هِيَ <span class="ltr-math">280 km</span>.</p>
+            <p>قَرَأَ أَمِينُ عَلَى لَوْحَةِ التَّوْجِيهِ الْمَسَافَةَ الَّتِي مَازَالَتْ تَفْصِلُهُ عَنْ مَقْصِدِهِ.</p>
+            
+            <div class="road-sign-illustration">
+                <span>🚌 حَافِلَةُ أَمِينَ</span>
+                <div class="sign-board">
+                    <span>تِيقْجْدَة</span>
+                    <span class="ltr-math">60 km</span>
+                    <span class="sign-arrow">⬅</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- أ) ما الذي ينقص نص المشكلة؟ -->
+        <div class="sub-question" id="q-akt-a">
+            <div class="sub-q-header">أ) مَا الَّذِي يَنْقُصُ نَصَّ الْمُشْكِلَةِ؟</div>
+            <div class="options-grid">
+                <label class="option-label">
+                    <input type="radio" name="akt_a" value="wrong1">
+                    <span>يَنْقُصُ نَصَّ الْمُشْكِلَةِ عَدَدُ أَصْدِقَاءِ أَمِينَ الَّذِينَ سَافَرُوا مَعَهُ.</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="akt_a" value="correct">
+                    <span>يَنْقُصُ نَصَّ الْمُشْكِلَةِ السُّؤَالُ (الْمَطْلُوبُ الَّذِي يَتَطَلَّبُ إِجْرَاءَ حِسَابٍ).</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="akt_a" value="wrong2">
+                    <span>يَنْقُصُ نَصَّ الْمُشْكِلَةِ سُرْعَةُ الْحَافِلَةِ الَّتِي يَرْكَبُهَا أَمِينُ.</span>
+                </label>
+            </div>
+            <button class="btn-check" onclick="checkRadio('q-akt-a', 'akt_a', 'aktashif', 'أحسنت! ينقص نص المشكلة طرح السؤال المناسب.')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+        <!-- ب) اكتب سؤالا مناسبا -->
+        <div class="sub-question" id="q-akt-b">
+            <div class="sub-q-header">ب) اُكْتُبْ (اِخْتَرْ) سُؤَالًا مُنَاسِبًا لِنَصِّ الْمُشْكِلَةِ:</div>
+            <div class="options-grid">
+                <label class="option-label">
+                    <input type="radio" name="akt_b" value="wrong1">
+                    <span>مَا هِيَ الْمَسَافَةُ الْإِجْمَالِيَّةُ بَيْنَ مَقَرِّ سُكْنَى أَمِينَ وَتِيقْجْدَةَ؟</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="akt_b" value="correct">
+                    <span>مَا هِيَ الْمَسَافَةُ الَّتِي قَطَعَهَا أَمِينُ حَتَّى الْآنَ؟</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="akt_b" value="wrong2">
+                    <span>كَمْ سَاعَةً اسْتَغْرَقَتِ الرِّحْلَةُ إِلَى تِيقْجْدَةَ؟</span>
+                </label>
+            </div>
+            <button class="btn-check" onclick="checkRadio('q-akt-b', 'akt_b', 'aktashif', 'ممتاز! السؤال المناسب هو: ما هي المسافة التي قطعها أمين؟')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+        <!-- ج) أجب عن السؤال -->
+        <div class="sub-question" id="q-akt-c">
+            <div class="sub-q-header">ج) أَجِبْ عَنِ السُّؤَالِ (اُكْتُبِ الْعَمَلِيَّةَ وَالنَّاتِجَ مِنَ الْيَسَارِ إِلَى الْيَمِينِ):</div>
+            <div class="math-input-row">
+                <input type="number" class="math-input" id="akt_c_1" aria-label="العدد الأول">
+                <span class="op-symbol">-</span>
+                <input type="number" class="math-input" id="akt_c_2" aria-label="العدد الثاني">
+                <span class="op-symbol">=</span>
+                <input type="number" class="math-input" id="akt_c_3" aria-label="الناتج">
+                <span class="unit-badge">km</span>
+            </div>
+            <button class="btn-check" onclick="checkMathEquation('q-akt-c', ['akt_c_1','akt_c_2','akt_c_3'], [280, 60, 220], 'aktashif', '280 - 60 = 220 km')">تَحَقَّقْ مِنَ الْحِسَابِ ✓</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+        <div class="stage-counter">
+            <span>حَصِيلَةُ مَحَطَّةِ أَكْتَشِفُ:</span>
+            <span><span class="count-ok" id="ok-aktashif">✓ الصَّوَابُ: 0</span> | <span class="count-err" id="err-aktashif">✗ الْخَطَأُ: 0</span></span>
+        </div>
+    </section>
+
+    <!-- ==================== قاعدة تعلمت ==================== -->
+    <section class="learned-box">
+        <div class="section-title orange">💡 تَعَلَّمْتُ</div>
+        <p style="font-weight: 700; font-size: 1.05rem;">
+            🔸 فِي مُشْكِلَةٍ، نَجِدُ نَصًّا يَتَضَمَّنُ مَعْلُومَاتٍ (الْمُعْطَيَاتُ) وَالسُّؤَالَ أَوِ الْأَسْئِلَةَ الَّتِي تَتَطَلَّبُ إِجْرَاءَ حِسَابَاتٍ لِلْإِجَابَةِ عَلَيْهَا.<br>
+            يُمْكِنُ أَنْ تَرِدَ الْمُعْطَيَاتُ فِي نَصٍّ أَوْ جَدْوَلٍ أَوْ رَسْمٍ.<br>
+            <strong>مِثَالٌ :</strong> كَانَ مَعَ الْأَبِ <span class="ltr-math">500 DA</span>. اِشْتَرَى خُبْزًا بِمَبْلَغِ <span class="ltr-math">40 DA</span> وَحَلِيبًا بِمَبْلَغِ <span class="ltr-math">75 DA</span>.<br>
+            يُمْكِنُ أَنْ نَطْرَحَ الْأَسْئِلَةَ الْآتِيَةَ :
+        </p>
+        <table class="learned-table">
+            <tr>
+                <td style="width: 38%;">1) مَا هُوَ الْمَبْلَغُ الَّذِي كَانَ مَعَ الْأَبِ؟</td>
+                <td>
+                    ◀ الْإِجَابَةُ مُبَاشِرَةٌ.<br>
+                    👈 نَقْرَأُ فِي النَّصِّ « مَعَ الْأَبِ <span class="ltr-math">500 DA</span> ».
+                </td>
+            </tr>
+            <tr>
+                <td>2) مَا هِيَ مَصَارِيفُ الْأَبِ؟</td>
+                <td>
+                    ◀ الْإِجَابَةُ تَتَطَلَّبُ إِجْرَاءَ حِسَابٍ : <span class="ltr-math">40 + 75 = 115</span><br>
+                    👈 صَرَفَ الْأَبُ <span class="ltr-math">115 DA</span>.
+                </td>
+            </tr>
+            <tr>
+                <td>3) كَمْ بَقِيَ مَعَ الْأَبِ؟</td>
+                <td>
+                    ◀ الْإِجَابَةُ تَتَطَلَّبُ إِجْرَاءَ عِدَّةِ حِسَابَاتٍ :<br>
+                    نَحْسُبُ مَصَارِيفَ الْأَبِ : <span class="ltr-math">115 DA</span>.<br>
+                    نَحْسُبُ الْمَبْلَغَ الْبَاقِيَ : <span class="ltr-math">500 - 115 = 385</span><br>
+                    👈 بَقِيَ مَعَ الْأَبِ <span class="ltr-math">385 DA</span>.
+                </td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- ==================== المحطة 2: أطبق (صفحة 37) ==================== -->
+    <section class="section-card" id="stage-utabbiq">
+        <div class="section-title teal">✍️ أُطَبِّقُ</div>
+        <p style="font-weight: 800; margin-bottom: 14px; font-size: 1.08rem;">🔸 اُنْقُلِ الْأَسْئِلَةَ الْمُنَاسِبَةَ لِكُلِّ مُشْكِلَةٍ ، ثُمَّ أَجِبْ عَنْهَا .</p>
+
+        <!-- تمرين 1 أطبق -->
+        <div class="problem-box">
+            <strong>1️⃣ عِنْدَ أَيْمَنَ <span class="ltr-math">250 DA</span> وَعِنْدَ أَخِيهِ أَمِينَ ضِعْفُ هَذَا الْمَبْلَغِ .</strong>
+            <ul style="list-style: none; margin-top: 8px; padding-right: 12px;">
+                <li>أ) مَا هُوَ سِنُّ كُلٍّ مِنَ الْأَخَوَيْنِ؟</li>
+                <li>ب) مَا هُوَ الْمَبْلَغُ الَّذِي يَمْلِكُهُ أَمِينُ؟</li>
+                <li>ج) مَا هُوَ الْمَبْلَغُ الْإِجْمَالِيُّ الَّذِي يَمْلِكُهُ الْأَخَوَانِ؟</li>
+            </ul>
+        </div>
+
+        <div class="sub-question" id="q-ut1-select">
+            <div class="sub-q-header">1.1) اِخْتَرِ الْأَسْئِلَةَ الْمُنَاسِبَةَ لِهَذِهِ الْمُشْكِلَةِ (يُمْكِنُ اخْتِيَارُ أَكْثَرَ مِنْ سُؤَالٍ):</div>
+            <div class="options-grid">
+                <label class="option-label">
+                    <input type="checkbox" name="ut1_chk" value="a">
+                    <span>أ) مَا هُوَ سِنُّ كُلٍّ مِنَ الْأَخَوَيْنِ؟</span>
+                </label>
+                <label class="option-label">
+                    <input type="checkbox" name="ut1_chk" value="b">
+                    <span>ب) مَا هُوَ الْمَبْلَغُ الَّذِي يَمْلِكُهُ أَمِينُ؟</span>
+                </label>
+                <label class="option-label">
+                    <input type="checkbox" name="ut1_chk" value="c">
+                    <span>ج) مَا هُوَ الْمَبْلَغُ الْإِجْمَالِيُّ الَّذِي يَمْلِكُهُ الْأَخَوَانِ؟</span>
+                </label>
+            </div>
+            <button class="btn-check" onclick="checkCheckboxes('q-ut1-select', 'ut1_chk', ['b','c'], 'utabbiq', 'السؤالان المناسبان هما (ب) و (ج)، أما السن (أ) فلا توجد معطيات عنه.')">تَحَقَّقْ مِنَ الْاِخْتِيَارِ ✓</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+        <div class="sub-question" id="q-ut1-ans">
+            <div class="sub-q-header">1.2) أَجِبْ عَنِ السُّؤَالَيْنِ الْمُنَاسِبَيْنِ (مِنَ الْيَسَارِ إِلَى الْيَمِينِ):</div>
+            <p style="font-weight: 700; margin-top: 6px;">• الْمَبْلَغُ الَّذِي يَمْلِكُهُ أَمِينُ (ضِعْفُ <span class="ltr-inline">250</span>):</p>
+            <div class="math-input-row">
+                <input type="number" class="math-input" id="ut1_b1">
+                <span class="op-symbol">×</span>
+                <input type="number" class="math-input" id="ut1_b2">
+                <span class="op-symbol">=</span>
+                <input type="number" class="math-input" id="ut1_b3">
+                <span class="unit-badge">DA</span>
+            </div>
+            <p style="font-weight: 700; margin-top: 12px;">• الْمَبْلَغُ الْإِجْمَالِيُّ الَّذِي يَمْلِكُهُ الْأَخَوَانِ:</p>
+            <div class="math-input-row">
+                <input type="number" class="math-input" id="ut1_c1">
+                <span class="op-symbol">+</span>
+                <input type="number" class="math-input" id="ut1_c2">
+                <span class="op-symbol">=</span>
+                <input type="number" class="math-input" id="ut1_c3">
+                <span class="unit-badge">DA</span>
+            </div>
+            <button class="btn-check" onclick="checkDualMath('q-ut1-ans', ['ut1_b1','ut1_b2','ut1_b3'], [250, 2, 500], 'mul', ['ut1_c1','ut1_c2','ut1_c3'], [250, 500, 750], 'add', 'utabbiq', 'مبلغ أمين: 250 × 2 = 500 DA | المبلغ الإجمالي: 250 + 500 = 750 DA')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+        <!-- تمرين 2 أطبق -->
+        <div class="problem-box" style="margin-top: 22px;">
+            <strong>2️⃣ يُبَيِّنُ الْجَدْوَلُ الْآتِي تَعْدَادَ تَلَامِيذِ مَدْرَسَةٍ .</strong>
+            <table class="school-table">
+                <thead>
+                    <tr>
+                        <th>المُسْتَوَى</th>
+                        <th>السَّنَةُ 1</th>
+                        <th>السَّنَةُ 2</th>
+                        <th>السَّنَةُ 3</th>
+                        <th>السَّنَةُ 4</th>
+                        <th>السَّنَةُ 5</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>تَعْدَادُ التَّلَامِيذِ</strong></td>
+                        <td><span class="ltr-inline">68</span></td>
+                        <td><span class="ltr-inline">63</span></td>
+                        <td><span class="ltr-inline">60</span></td>
+                        <td><span class="ltr-inline">57</span></td>
+                        <td><span class="ltr-inline">70</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <ul style="list-style: none; margin-top: 8px; padding-right: 12px;">
+                <li>أ) مَا هُوَ تَعْدَادُ تَلَامِيذِ هَذِهِ الْمَدْرَسَةِ؟</li>
+                <li>ب) مَا هُوَ سِنُّ مُدِيرِ الْمَدْرَسَةِ؟</li>
+                <li>ج) مَا هِيَ السَّنَةُ الَّتِي فِيهَا أَكْبَرُ تَعْدَادٍ؟</li>
+            </ul>
+        </div>
+
+        <div class="sub-question" id="q-ut2-select">
+            <div class="sub-q-header">2.1) اِخْتَرِ الْأَسْئِلَةَ الْمُنَاسِبَةَ لِهَذِهِ الْمُشْكِلَةِ:</div>
+            <div class="options-grid">
+                <label class="option-label">
+                    <input type="checkbox" name="ut2_chk" value="a">
+                    <span>أ) مَا هُوَ تَعْدَادُ تَلَامِيذِ هَذِهِ الْمَدْرَسَةِ؟</span>
+                </label>
+                <label class="option-label">
+                    <input type="checkbox" name="ut2_chk" value="b">
+                    <span>ب) مَا هُوَ سِنُّ مُدِيرِ الْمَدْرَسَةِ؟</span>
+                </label>
+                <label class="option-label">
+                    <input type="checkbox" name="ut2_chk" value="c">
+                    <span>ج) مَا هِيَ السَّنَةُ الَّتِي فِيهَا أَكْبَرُ تَعْدَادٍ؟</span>
+                </label>
+            </div>
+            <button class="btn-check" onclick="checkCheckboxes('q-ut2-select', 'ut2_chk', ['a','c'], 'utabbiq', 'السؤالان المناسبان هما (أ) و (ج)، أما سن المدير (ب) فلا يوجد في الجدول.')">تَحَقَّقْ مِنَ الْاِخْتِيَارِ ✓</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+        <div class="sub-question" id="q-ut2-ans">
+            <div class="sub-q-header">2.2) أَجِبْ عَنِ السُّؤَالَيْنِ الْمُنَاسِبَيْنِ:</div>
+            <p style="font-weight: 700;">• أ) تَعْدَادُ تَلَامِيذِ هَذِهِ الْمَدْرَسَةِ (<span class="ltr-inline">68 + 63 + 60 + 57 + 70</span>):</p>
+            <div class="math-input-row">
+                <span>المجموع =</span>
+                <input type="number" class="math-input" id="ut2_total" style="width: 110px;">
+                <span class="unit-badge">تِلْمِيذًا</span>
+            </div>
+            <p style="font-weight: 700; margin-top: 12px;">• ج) السَّنَةُ الَّتِي فِيهَا أَكْبَرُ تَعْدَادٍ هِيَ:</p>
+            <div class="options-grid" style="margin-top: 6px;">
+                <label class="option-label">
+                    <input type="radio" name="ut2_max" value="y1">
+                    <span>السَّنَةُ 1 (68 تِلْمِيذًا)</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="ut2_max" value="y5">
+                    <span>السَّنَةُ 5 (70 تِلْمِيذًا)</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="ut2_max" value="y4">
+                    <span>السَّنَةُ 4 (57 تِلْمِيذًا)</span>
+                </label>
+            </div>
+            <button class="btn-check" onclick="checkUt2Answer()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+        <div class="stage-counter">
+            <span>حَصِيلَةُ مَحَطَّةِ أُطَبِّقُ:</span>
+            <span><span class="count-ok" id="ok-utabbiq">✓ الصَّوَابُ: 0</span> | <span class="count-err" id="err-utabbiq">✗ الْخَطَأُ: 0</span></span>
+        </div>
+    </section>
+
+    <!-- ==================== المحطة 3: أتمرن (صفحة 37) ==================== -->
+    <section class="section-card" id="stage-atamarran">
+        <div class="section-title">🎯 أَتَمَرَّنُ</div>
+
+        <!-- تمرين 1 أتمرن -->
+        <div class="problem-box">
+            <strong>1️⃣ اِخْتَرِ السُّؤَالَ (أَوِ الْأَسْئِلَةَ) الْمُنَاسِبَ(ـةَ) ، ثُمَّ أَجِبْ إِنْ أَمْكَنَ .</strong><br>
+            لَعِبَ أَمِينُ مَعَ أَصْدِقَائِهِ وَرَبِحَ <span class="ltr-math">15</span> كُرَيَّةً . صَارَ عِنْدَهُ الْآنَ <span class="ltr-math">93</span> كُرَيَّةً .
+        </div>
+
+        <div class="sub-question" id="q-tam1-select">
+            <div class="sub-q-header">1.1) اِخْتَرِ السُّؤَالَ (أَوِ الْأَسْئِلَةَ) الْمُنَاسِبَ(ـةَ):</div>
+            <div class="options-grid">
+                <label class="option-label">
+                    <input type="checkbox" name="tam1_chk" value="friends">
+                    <span>▪ مَا هُوَ عَدَدُ أَصْدِقَاءِ أَمِينَ؟</span>
+                </label>
+                <label class="option-label">
+                    <input type="checkbox" name="tam1_chk" value="won">
+                    <span>▪ كَمْ رَبِحَ أَمِينُ؟</span>
+                </label>
+                <label class="option-label">
+                    <input type="checkbox" name="tam1_chk" value="before">
+                    <span>▪ كَمْ كَانَ مَعَهُ قَبْلَ اللَّعِبِ؟</span>
+                </label>
+            </div>
+            <button class="btn-check" onclick="checkCheckboxes('q-tam1-select', 'tam1_chk', ['won','before'], 'atamarran', 'الأسئلة المناسبة: كم ربح أمين؟ (إجابة مباشرة 15) و كم كان معه قبل اللعب؟ (تتطلب حسابا).')">تَحَقَّقْ مِنَ الْاِخْتِيَارِ ✓</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+        <div class="sub-question" id="q-tam1-ans">
+            <div class="sub-q-header">1.2) أَجِبْ عَنِ السُّؤَالِ « كَمْ كَانَ مَعَهُ قَبْلَ اللَّعِبِ؟ » (مِنَ الْيَسَارِ إِلَى الْيَمِينِ):</div>
+            <div class="math-input-row">
+                <input type="number" class="math-input" id="tam1_1">
+                <span class="op-symbol">-</span>
+                <input type="number" class="math-input" id="tam1_2">
+                <span class="op-symbol">=</span>
+                <input type="number" class="math-input" id="tam1_3">
+                <span class="unit-badge">كُرَيَّةً</span>
+            </div>
+            <button class="btn-check" onclick="checkMathEquation('q-tam1-ans', ['tam1_1','tam1_2','tam1_3'], [93, 15, 78], 'atamarran', '93 - 15 = 78 كرية')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+        <!-- تمرين 2 أتمرن -->
+        <div class="problem-box" style="margin-top: 22px;">
+            <strong>2️⃣ ضَعِ السُّؤَالَ الْمُنَاسِبَ لِلْعَمَلِيَّةِ ، ثُمَّ حُلَّ الْمُشْكِلَةَ .</strong><br>
+            ◀ يَتَمَثَّلُ السِّبَاقُ فِي قَطْعِ <span class="ltr-math">5</span> دَوَرَاتٍ حَوْلَ الْمَلْعَبِ .<br>
+            ◀ طُولُ كُلِّ دَوْرَةٍ <span class="ltr-math">150 m</span> .<br>
+            الْعَمَلِيَّةُ الْمُقْتَرَحَةُ : <span class="ltr-math">150 × 5</span>
+        </div>
+
+        <div class="sub-question" id="q-tam2">
+            <div class="sub-q-header">2.1) اِخْتَرِ السُّؤَالَ الْمُنَاسِبَ لِلْعَمَلِيَّةِ <span class="ltr-math">150 × 5</span>:</div>
+            <div class="options-grid">
+                <label class="option-label">
+                    <input type="radio" name="tam2_q" value="wrong1">
+                    <span>مَا هُوَ عَرْضُ الْمَلْعَبِ؟</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="tam2_q" value="correct">
+                    <span>مَا هِيَ الْمَسَافَةُ الْإِجْمَالِيَّةُ الَّتِي يَقْطَعُهَا الْمُتَسَابِقُ؟</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="tam2_q" value="wrong2">
+                    <span>كَمْ دَوْرَةً يَقْطَعُ الْمُتَسَابِقُ؟</span>
+                </label>
+            </div>
+            <div class="sub-q-header" style="margin-top: 14px;">2.2) أَكْمِلْ حَلَّ الْمُشْكِلَةِ:</div>
+            <div class="math-input-row">
+                <span class="ltr-inline" style="font-size: 1.2rem; font-weight: 800;">150 × 5 =</span>
+                <input type="number" class="math-input" id="tam2_res" style="width: 110px;">
+                <span class="unit-badge">m</span>
+            </div>
+            <button class="btn-check" onclick="checkTam2()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+        <!-- تمرين 3 أتمرن -->
+        <div class="problem-box" style="margin-top: 22px;">
+            <strong>3️⃣ ضَعِ السُّؤَالَ الْمُنَاسِبَ لِكُلِّ وَضْعِيَّةٍ ، ثُمَّ أَجِبْ .</strong>
+        </div>
+
+        <!-- 3 أ -->
+        <div class="sub-question" id="q-tam3-a">
+            <div class="sub-q-header">أ) يَتَطَلَّبُ تَغْطِيَةُ أَرْضِيَّةِ شُرْفَةٍ <span class="ltr-math">89</span> بَلَاطَةً . وَضَعَ الْبَنَّاءُ <span class="ltr-math">65</span> بَلَاطَةً مِنْهَا .</div>
+            <p style="font-weight: 700; margin-bottom: 6px;">• اِخْتَرِ السُّؤَالَ الْمُنَاسِبَ:</p>
+            <div class="options-grid">
+                <label class="option-label">
+                    <input type="radio" name="tam3a_q" value="correct">
+                    <span>كَمْ بَلَاطَةً بَقِيَتْ لِإِتْمَامِ تَغْطِيَةِ أَرْضِيَّةِ الشُّرْفَةِ؟</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="tam3a_q" value="wrong">
+                    <span>مَا هُوَ ثَمَنُ الْبَلَاطَةِ الْوَاحِدَةِ؟</span>
+                </label>
+            </div>
+            <p style="font-weight: 700; margin-top: 12px;">• أَجِبْ عَنِ السُّؤَالِ (مِنَ الْيَسَارِ إِلَى الْيَمِينِ):</p>
+            <div class="math-input-row">
+                <input type="number" class="math-input" id="tam3a_1">
+                <span class="op-symbol">-</span>
+                <input type="number" class="math-input" id="tam3a_2">
+                <span class="op-symbol">=</span>
+                <input type="number" class="math-input" id="tam3a_3">
+                <span class="unit-badge">بَلَاطَةً</span>
+            </div>
+            <button class="btn-check" onclick="checkTam3A()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+        <!-- 3 ب -->
+        <div class="sub-question" id="q-tam3-b">
+            <div class="sub-q-header">ب) حَضَرَ حَمْزَةُ عَرْضًا مَسْرَحِيًّا مُدَّتُهُ <span class="ltr-math">45 min</span> . بَدَأَ الْعَرْضُ عَلَى السَّاعَةِ <span class="ltr-math">12 h 30</span> .</div>
+            <p style="font-weight: 700; margin-bottom: 6px;">• اِخْتَرِ السُّؤَالَ الْمُنَاسِبَ:</p>
+            <div class="options-grid">
+                <label class="option-label">
+                    <input type="radio" name="tam3b_q" value="wrong">
+                    <span>كَمْ عَدَدُ الْمُمَثِّلِينَ فِي الْعَرْضِ الْمَسْرَحِيِّ؟</span>
+                </label>
+                <label class="option-label">
+                    <input type="radio" name="tam3b_q" value="correct">
+                    <span>عَلَى أَيِّ سَاعَةٍ انْتَهَى الْعَرْضُ الْمَسْرَحِيُّ؟</span>
+                </label>
+            </div>
+            <p style="font-weight: 700; margin-top: 12px;">• وَقْتُ نِهَايَةِ الْعَرْضِ (<span class="ltr-inline">12 h 30 + 45 min</span>):</p>
+            <div class="math-input-row">
+                <input type="number" class="math-input" id="tam3b_h" placeholder="h" style="width: 75px;">
+                <span class="op-symbol">h</span>
+                <input type="number" class="math-input" id="tam3b_m" placeholder="min" style="width: 75px;">
+                <span class="op-symbol">min</span>
+            </div>
+            <button class="btn-check" onclick="checkTam3B()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+            <div class="feedback-msg"></div>
+        </div>
+
+        <div class="stage-counter">
+            <span>حَصِيلَةُ مَحَطَّةِ أَتَمَرَّنُ:</span>
+            <span><span class="count-ok" id="ok-atamarran">✓ الصَّوَابُ: 0</span> | <span class="count-err" id="err-atamarran">✗ الْخَطَأُ: 0</span></span>
+        </div>
+    </section>
+
+    <!-- ==================== المحطة 4: المهمات (الصفحة الثالثة المرفقة) ==================== -->
+    <section class="section-card" id="stage-missions">
+        <div class="section-title blue">⚽ الْمُهِمَّاتُ (تَهْيِئَةُ الْمَلْعَبِ)</div>
+        
+        <div class="problem-box">
+            <p>🔸 شَارَكَ أَحْمَدُ وَرِفَاقُهُ عُمَّالَ الْبَلَدِيَّةِ فِي تَهْيِئَةِ الْمَلْعَبِ تَحْضِيرًا لِإِقَامَةِ دَوْرَةٍ فِي كُرَةِ الْقَدَمِ بَيْنَ الْأَحْيَاءِ.</p>
+            <p style="color: #475569; font-size: 0.98rem; margin-top: 4px;">اِقْرَأْ كُلَّ وَضْعِيَّةٍ وَصَنِّفْهَا حَسَبَ إِمْكَانِيَّةِ حَلِّهَا، ثُمَّ أَجِبْ عَنِ الْمُهِمَّاتِ الَّتِي تَتَوَفَّرُ مُعْطَيَاتُهَا:</p>
+        </div>
+
+        <div class="missions-grid">
+            <!-- المهمة 1: المدرجات -->
+            <div class="mission-card" id="q-mis-1">
+                <span class="mission-badge">الْمُهِمَّةُ 1 : الْمُدَرَّجَاتُ</span>
+                <p style="font-weight: 700; margin-bottom: 10px;">
+                    يَتَّسِعُ الْمَلْعَبُ لـ <span class="ltr-math">3 000</span> مُتَفَرِّجٍ، فَإِذَا كَانَ عَدَدُ الْأَمَاكِنِ فِي الْمُدَرَّجَاتِ الْخَضْرَاءِ هُوَ <span class="ltr-math">1 200</span> وَعَدَدُ الْأَمَاكِنِ فِي الْمُدَرَّجَاتِ الْبَيْضَاءِ هُوَ <span class="ltr-math">1 100</span>.<br>
+                    <strong>أُحْسُبْ عَدَدَ الْأَمَاكِنِ فِي الْمُدَرَّجَاتِ الْحَمْرَاءِ .</strong>
+                </p>
+                <div class="math-input-row">
+                    <span class="ltr-inline">3000 - (1200 + 1100) =</span>
+                    <input type="number" class="math-input" id="mis1_ans" style="width: 110px;">
+                    <span class="unit-badge">مَكَانًا</span>
+                </div>
+                <button class="btn-check" onclick="checkSingleNumber('q-mis-1', 'mis1_ans', 700, 'missions', 'مجموع الخضراء والبيضاء = 2300، والباقي للحمراء: 3000 - 2300 = 700 مكان.')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+                <div class="feedback-msg"></div>
+            </div>
+
+            <!-- المهمة 2: كيس الجبس -->
+            <div class="mission-card" id="q-mis-2">
+                <span class="mission-badge">الْمُهِمَّةُ 2 : تَسْطِيرُ الْمَيْدَانِ</span>
+                <p style="font-weight: 700; margin-bottom: 10px;">
+                    لِتَسْطِيرِ الْمَيْدَانِ، أَحْضَرَ رُفَقَاءُ أَحْمَدَ كِيسًا مِنَ الْجِبْسِ.<br>
+                    <strong>مَا هُوَ وَزْنُهُ؟</strong>
+                </p>
+                <div class="options-grid">
+                    <label class="option-label">
+                        <input type="radio" name="mis2_q" value="missing">
+                        <span>لَا يُمْكِنُ الْإِجَابَةُ لِأَنَّ الْمُعْطَيَاتِ نَاقِصَةٌ (لَمْ يُذْكَرْ وَزْنُ الْكِيسِ فِي النَّصِّ).</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="mis2_q" value="wrong1">
+                        <span>وَزْنُهُ <span class="ltr-inline">50 kg</span>.</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="mis2_q" value="wrong2">
+                        <span>وَزْنُهُ <span class="ltr-inline">25 kg</span>.</span>
+                    </label>
+                </div>
+                <button class="btn-check" onclick="checkRadio('q-mis-2', 'mis2_q', 'missions', 'صحيح! لا توجد معطيات كافية لمعرفة وزن كيس الجبس.')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+                <div class="feedback-msg"></div>
+            </div>
+
+            <!-- المهمة 3: مقارنة المناصرين -->
+            <div class="mission-card" id="q-mis-3">
+                <span class="mission-badge">الْمُهِمَّةُ 3 : الْمُبَارَاةُ الِافْتِتَاحِيَّةُ</span>
+                <p style="font-weight: 700; margin-bottom: 10px;">
+                    الْمُبَارَاةُ الِافْتِتَاحِيَّةُ حَضَرَهَا <span class="ltr-math">1205</span> مُنَاصِرًا مِنْ حَيِّ 20 أوت، وَحَضَرَهَا <span class="ltr-math">1198</span> مُنَاصِرًا مِنْ حَيِّ 5 جويلية.<br>
+                    <strong>قَارِنْ بَيْنَ عَدَدِ الْمُنَاصِرِينَ مِنْ كُلِّ حَيٍّ .</strong>
+                </p>
+                <div class="math-input-row">
+                    <span class="ltr-inline" style="font-size: 1.2rem;">1205</span>
+                    <select id="mis3_cmp" class="math-input" style="width: 80px; cursor: pointer;">
+                        <option value="">؟</option>
+                        <option value=">">&gt;</option>
+                        <option value="<">&lt;</option>
+                        <option value="=">=</option>
+                    </select>
+                    <span class="ltr-inline" style="font-size: 1.2rem;">1198</span>
+                </div>
+                <button class="btn-check" onclick="checkComparison('q-mis-3', 'mis3_cmp', '>', 'missions', '1205 > 1198 (عدد مناصري حي 20 أوت أكبر).')">تَحَقَّقْ مِنَ الْمُقَارَنَةِ ✓</button>
+                <div class="feedback-msg"></div>
+            </div>
+
+            <!-- المهمة 4: الزاوية القائمة ووسط الملعب -->
+            <div class="mission-card" id="q-mis-4">
+                <span class="mission-badge">الْمُهِمَّةُ 4 : تَخْطِيطُ الْمَلْعَبِ</span>
+                <p style="font-weight: 700; margin-bottom: 10px;">
+                    الْمَكَانُ الَّذِي تُنَفَّذُ مِنْهُ ضَرْبَةُ الرُّكْنِيَّةِ يَجِبُ أَنْ يَكُونَ عَلَى شَكْلِ زَاوِيَةٍ قَائِمَةٍ، كَيْفَ يُشَكِّلُهَا أَحْمَدُ وَرِفَاقُهُ؟<br>
+                    نُقْطَةُ الِانْطِلَاقَةِ تَكُونُ فِي وَسَطِ الْمَلْعَبِ، كَيْفَ تُحَدَّدُ؟
+                </p>
+                <div class="options-grid">
+                    <label class="option-label">
+                        <input type="radio" name="mis4_q" value="correct">
+                        <span>تُشَكَّلُ الزَّاوِيَةُ الْقَائِمَةُ بِاسْتِعْمَالِ الْكُوسِ، وَتُحَدَّدُ نُقْطَةُ الْوَسَطِ بِقِيَاسِ مُنْتَصَفِ قُطْرَيِ الْمُسْتَطِيلِ (الْمَلْعَبِ).</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="mis4_q" value="wrong1">
+                        <span>تُشَكَّلُ بِاسْتِعْمَالِ الْمِدْوَرِ فَقَطْ دُونَ قِيَاسٍ.</span>
+                    </label>
+                </div>
+                <button class="btn-check" onclick="checkRadio('q-mis-4', 'mis4_q', 'missions', 'أحسنت! نستعمل الكوس للزاوية القائمة ونحدد المنتصف لتعيين نقطة البداية.')">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+                <div class="feedback-msg"></div>
+            </div>
+
+            <!-- المهمة 5: إكمال الجدول بأبعاد الملعب -->
+            <div class="mission-card" id="q-mis-5">
+                <span class="mission-badge">الْمُهِمَّةُ 5 : أَكْمِلِ الْجَدْوَلَ الْآتِي (أَبْعَادُ مَلْعَبِ كُرَةِ الْقَدَمِ)</span>
+                <p style="font-weight: 700; margin-bottom: 8px;">اِخْتَرِ الْقِيَاسَ الْمُنَاسِبَ لِكُلِّ بُعْدٍ مِنْ أَبْعَادِ الْمَلْعَبِ الرَّسْمِيِّ:</p>
+                <table class="school-table">
+                    <tr>
+                        <td style="text-align: right;">طُولُ الْمَلْعَبِ</td>
+                        <td>
+                            <select id="mis5_1" class="math-input" style="width: 130px;">
+                                <option value="">اختر...</option>
+                                <option value="100">100 m</option>
+                                <option value="7">7 m</option>
+                                <option value="11">11 m</option>
+                                <option value="65">65 m</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;">عَرْضُ الْمَلْعَبِ</td>
+                        <td>
+                            <select id="mis5_2" class="math-input" style="width: 130px;">
+                                <option value="">اختر...</option>
+                                <option value="100">100 m</option>
+                                <option value="7">7 m</option>
+                                <option value="11">11 m</option>
+                                <option value="65">65 m</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;">طُولُ الْمَرْمَى</td>
+                        <td>
+                            <select id="mis5_3" class="math-input" style="width: 130px;">
+                                <option value="">اختر...</option>
+                                <option value="100">100 m</option>
+                                <option value="7">7 m</option>
+                                <option value="11">11 m</option>
+                                <option value="65">65 m</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: right;">الْمَسَافَةُ بَيْنَ نُقْطَةِ الْجَزَاءِ وَخَطِّ الْمَرْمَى</td>
+                        <td>
+                            <select id="mis5_4" class="math-input" style="width: 130px;">
+                                <option value="">اختر...</option>
+                                <option value="100">100 m</option>
+                                <option value="7">7 m</option>
+                                <option value="11">11 m</option>
+                                <option value="65">65 m</option>
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+                <button class="btn-check" onclick="checkMis5Table()">تَحَقَّقْ مِنَ الْجَدْوَلِ ✓</button>
+                <div class="feedback-msg"></div>
+            </div>
+
+            <!-- المهمة 6: لافتات الروح الرياضية -->
+            <div class="mission-card" id="q-mis-6">
+                <span class="mission-badge">الْمُهِمَّةُ 6 : الرُّوحُ الرِّيَاضِيَّةُ</span>
+                <p style="font-weight: 700; margin-bottom: 10px;">
+                    رَفَعَ مُنَاصِرُو الْفَرِيقَيْنِ شِعَارَاتٍ لِلرُّوحِ الرِّيَاضِيَّةِ، تَخَيَّلْ مَا يَكْتُبُهُ أَنْصَارُ كُلِّ فَرِيقٍ عَلَى لَافِتَاتِهِمْ .
+                </p>
+                <div class="options-grid">
+                    <label class="option-label">
+                        <input type="radio" name="mis6_q" value="correct">
+                        <span>« الرِّيَاضَةُ أَخْلَاقٌ وَتَسَامُحٌ، نَتَنَافَسُ بِشَرَفٍ وَنَبْقَى إِخْوَةً »</span>
+                    </label>
+                    <label class="option-label">
+                        <input type="radio" name="mis6_q" value="wrong">
+                        <span>« الْفَوْزُ لَنَا فَقَطْ وَلَا نَقْبَلُ الْخَسَارَةَ »</span>
+                    </label>
+                </div>
+                <button class="btn-check" onclick="checkRadio('q-mis-6', 'mis6_q', 'missions', 'أحسنت! هذا شعار يعبر عن الروح الرياضية الحقيقية.')">تَحَقَّقْ مِنَ الشِّعَارِ ✓</button>
+                <div class="feedback-msg"></div>
+            </div>
+        </div>
+
+        <div class="stage-counter">
+            <span>حَصِيلَةُ مَحَطَّةِ الْمُهِمَّاتِ:</span>
+            <span><span class="count-ok" id="ok-missions">✓ الصَّوَابُ: 0</span> | <span class="count-err" id="err-missions">✗ الْخَطَأُ: 0</span></span>
+        </div>
+    </section>
+
+    <!-- ==================== التقييم النهائي الشامل ==================== -->
+    <section class="final-report-card" id="final-report">
+        <h2 style="color: var(--primary-dark); font-size: 1.5rem; font-weight: 900;">📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُ</h2>
+        <p style="color: var(--text-muted); font-weight: 700; margin-top: 4px;">يَتِمُّ حِسَابُ النِّسْبَةِ الْمِئَوِيَّةِ تِلْقَائِيًّا بِنَاءً عَلَى مَجْمُوعِ الْإِجَابَاتِ الصَّحِيحَةِ وَالْخَاطِئَةِ</p>
+
+        <!-- الدائرة النسبية -->
+        <div class="circle-wrap">
+            <svg class="circle-svg" viewBox="0 0 160 160">
+                <circle class="circle-bg" cx="80" cy="80" r="70"></circle>
+                <circle class="circle-progress" id="progress-ring" cx="80" cy="80" r="70"></circle>
+            </svg>
+            <div class="circle-text" id="circle-percent">0%</div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-pill" style="color: var(--success); border-color: #a5d6a7;">
+                ✓ مَجْمُوعُ الصَّوَابِ: <span id="total-ok" class="ltr-inline">0</span>
+            </div>
+            <div class="stat-pill" style="color: var(--error); border-color: #ef9a9a;">
+                ✗ مَجْمُوعُ الْأَخْطَاءِ: <span id="total-err" class="ltr-inline">0</span>
+            </div>
+            <div class="stat-pill" style="color: #1565c0; border-color: #90caf9;">
+                📝 الْأَسْئِلَةُ الْمُجَابُ عَنْهَا: <span id="total-answered" class="ltr-inline">0 / 18</span>
+            </div>
+        </div>
+
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="linear-progress"></div>
+        </div>
+
+        <p id="final-encouragement" style="font-weight: 800; font-size: 1.15rem; color: var(--primary-dark); margin-top: 8px;">
+            اِبْدَأْ بِحَلِّ التَّمَارِينِ أَعْلَاهُ لِمُشَاهَدَةِ نَتِيجَتِكَ!
+        </p>
+
+        <button class="btn-reset" onclick="resetLesson()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+    </section>
+
+    <!-- ========================================
+         زر العودة إلى الفهرس (أُضيف)
+         ======================================== -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</div>
+
+<!-- ========================================
+     سكريبت الحماية (أُضيف)
+     ======================================== -->
+<script>
+    // إعدادات القناة - السنة الثالثة
+    const CHANNEL_ID = "-1003910412986";
+
+    // تهيئة Telegram WebApp
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+        tg.ready();
+        tg.expand();
+    }
+
+    async function verifySubscription() {
+        const statusMsg = document.getElementById('sub-status-msg');
+        statusMsg.style.color = "#0288d1";
+        statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+        let userId = null;
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            userId = tg.initDataUnsafe.user.id;
+        }
+
+        if (!userId) {
+            statusMsg.style.color = "#e65100";
+            statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+            return;
+        }
+
+        try {
+            const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.isSubscribed) {
+                statusMsg.style.color = "#2e7d32";
+                statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                setTimeout(() => {
+                    document.getElementById('sub-lock-screen').style.display = 'none';
+                }, 600);
+            } else {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+            }
+        } catch (error) {
+            statusMsg.style.color = "#c62828";
+            statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+        }
+    }
+
+    window.addEventListener('load', () => {
+        verifySubscription();
+    });
+</script>
+
+<!-- ========================================
+     سكريبت منطق الدرس التفاعلي
+     ======================================== -->
+<script>
+    // حالة النقاط لكل محطة
+    const stageScores = {
+        aktashif: { ok: 0, err: 0 },
+        utabbiq: { ok: 0, err: 0 },
+        atamarran: { ok: 0, err: 0 },
+        missions: { ok: 0, err: 0 }
+    };
+
+    const TOTAL_QUESTIONS = 18;
+
+    function recordAnswer(stage, isCorrect, cardId, message) {
+        const card = document.getElementById(cardId);
+        const btn = card.querySelector('.btn-check');
+        const fb = card.querySelector('.feedback-msg');
+
+        btn.disabled = true;
+        // قفل جميع الحقول والخيارات داخل البطاقة (محاولة واحدة فقط)
+        card.querySelectorAll('input, select, .option-label').forEach(el => {
+            el.classList.add('locked');
+            if (el.tagName === 'INPUT' || el.tagName === 'SELECT') {
+                el.disabled = true;
+            }
+        });
+
+        if (isCorrect) {
+            stageScores[stage].ok++;
+            fb.className = 'feedback-msg show-ok';
+            fb.innerHTML = '🌟 إِجَابَةٌ صَحِيحَةٌ! ' + message;
+        } else {
+            stageScores[stage].err++;
+            fb.className = 'feedback-msg show-err';
+            fb.innerHTML = '❌ إِجَابَةٌ خَاطِئَةٌ. الصَّوَابُ: ' + message;
+        }
+
+        updateAllCounters();
+    }
+
+    function updateAllCounters() {
+        let totalOk = 0;
+        let totalErr = 0;
+
+        for (const key in stageScores) {
+            const ok = stageScores[key].ok;
+            const err = stageScores[key].err;
+            totalOk += ok;
+            totalErr += err;
+
+            const okEl = document.getElementById('ok-' + key);
+            const errEl = document.getElementById('err-' + key);
+            if (okEl) okEl.textContent = `✓ الصَّوَابُ: ${ok}`;
+            if (errEl) errEl.textContent = `✗ الْخَطَأُ: ${err}`;
+        }
+
+        const totalAttempted = totalOk + totalErr;
+        // حساب النسبة المئوية بحيث لا تتجاوز 100%
+        let percentage = 0;
+        if (totalAttempted > 0) {
+            percentage = Math.round((totalOk / totalAttempted) * 100);
+            if (percentage > 100) percentage = 100;
+        }
+
+        document.getElementById('total-ok').textContent = totalOk;
+        document.getElementById('total-err').textContent = totalErr;
+        document.getElementById('total-answered').textContent = `${totalAttempted} / ${TOTAL_QUESTIONS}`;
+        document.getElementById('circle-percent').textContent = `${percentage}%`;
+
+        // تحديث الدائرة النسبية (محيط الدائرة = 2 * pi * 70 ≈ 439.8)
+        const circumference = 440;
+        const offset = circumference - (percentage / 100) * circumference;
+        const ring = document.getElementById('progress-ring');
+        ring.style.strokeDashoffset = offset;
+
+        if (percentage >= 80) {
+            ring.style.stroke = '#2e7d32';
+        } else if (percentage >= 50) {
+            ring.style.stroke = '#f57c00';
+        } else {
+            ring.style.stroke = '#c62828';
+        }
+
+        // شريط التقدم
+        const completionPct = Math.min(100, Math.round((totalAttempted / TOTAL_QUESTIONS) * 100));
+        document.getElementById('linear-progress').style.width = `${completionPct}%`;
+
+        const enc = document.getElementById('final-encouragement');
+        if (totalAttempted === TOTAL_QUESTIONS) {
+            if (percentage === 100) {
+                enc.textContent = '🏆 مُمْتَازٌ! عَلامَةٌ كَامِلَةٌ 100%! أَنْتَ بَطَلٌ فِي مَنْهَجِيَّةِ حَلِّ الْمُشْكِلَاتِ!';
+            } else if (percentage >= 75) {
+                enc.textContent = '👏 أَحْسَنْتَ! نَتِيجَةٌ رَائِعَةٌ جِدًّا، واصِلِ التَّأَلُّقَ!';
+            } else {
+                enc.textContent = '💪 جَيِّدٌ! رَاجِعِ الْأَخْطَاءَ الْمُلَوَّنَةَ بِالْأَحْمَرِ أَعْلَاهُ ثُمَّ أَعِدِ الْمُحَاوَلَةَ.';
+            }
+        } else if (totalAttempted > 0) {
+            enc.textContent = `وَاصِلِ الْحَلَّ! أَنْجَزْتَ ${totalAttempted} مِنْ أَصْلِ ${TOTAL_QUESTIONS} سُؤَالًا.`;
+        }
+    }
+
+    // 1. فحص الاختيار من متعدد (Radio)
+    function checkRadio(cardId, radioName, stage, explanation) {
+        const card = document.getElementById(cardId);
+        const selected = card.querySelector(`input[name="${radioName}"]:checked`);
+        if (!selected) {
+            alert('يرجى اختيار إجابة أولاً!');
+            return;
+        }
+
+        const labels = card.querySelectorAll('.option-label');
+        let isCorrect = false;
+
+        labels.forEach(lbl => {
+            const inp = lbl.querySelector('input');
+            if (inp.value === 'correct' || inp.value === 'missing') {
+                lbl.classList.add('correct-opt');
+            }
+            if (inp.checked) {
+                if (inp.value === 'correct' || inp.value === 'missing') {
+                    isCorrect = true;
+                } else {
+                    lbl.classList.add('wrong-opt');
+                }
+            }
+        });
+
+        recordAnswer(stage, isCorrect, cardId, explanation);
+    }
+
+    // 2. فحص الاختيار المتعدد (Checkboxes)
+    function checkCheckboxes(cardId, chkName, correctValues, stage, explanation) {
+        const card = document.getElementById(cardId);
+        const checked = Array.from(card.querySelectorAll(`input[name="${chkName}"]:checked`)).map(i => i.value);
+        if (checked.length === 0) {
+            alert('يرجى اختيار سؤال واحد على الأقل!');
+            return;
+        }
+
+        const labels = card.querySelectorAll('.option-label');
+        labels.forEach(lbl => {
+            const inp = lbl.querySelector('input');
+            const shouldBeChecked = correctValues.includes(inp.value);
+            if (shouldBeChecked) {
+                lbl.classList.add('correct-opt');
+            } else if (inp.checked && !shouldBeChecked) {
+                lbl.classList.add('wrong-opt');
+            }
+        });
+
+        const isCorrect = checked.length === correctValues.length && correctValues.every(v => checked.includes(v));
+        recordAnswer(stage, isCorrect, cardId, explanation);
+    }
+
+    // 3. فحص معادلة حسابية (LTR: a op b = c)
+    function checkMathEquation(cardId, fieldIds, expectedVals, stage, explanation) {
+        const vals = fieldIds.map(id => parseFloat(document.getElementById(id).value));
+        if (vals.some(v => isNaN(v))) {
+            alert('يرجى ملء جميع خانات العملية الحسابية!');
+            return;
+        }
+
+        let allOk = true;
+        fieldIds.forEach((id, idx) => {
+            const el = document.getElementById(id);
+            if (vals[idx] === expectedVals[idx]) {
+                el.classList.add('correct-field');
+            } else {
+                el.classList.add('wrong-field');
+                allOk = false;
+            }
+        });
+
+        recordAnswer(stage, allOk, cardId, explanation);
+    }
+
+    // 4. فحص عمليتين متتاليتين (تمرين 1 أطبق)
+    function checkDualMath(cardId, ids1, exp1, op1, ids2, exp2, op2, stage, explanation) {
+        const v1 = ids1.map(id => parseFloat(document.getElementById(id).value));
+        const v2 = ids2.map(id => parseFloat(document.getElementById(id).value));
+
+        if (v1.some(isNaN) || v2.some(isNaN)) {
+            alert('يرجى ملء جميع الخانات في العمليتين!');
+            return;
+        }
+
+        // العملية الأولى: 250 * 2 = 500 (يقبل التبديل في الضرب 2 * 250 = 500)
+        let ok1 = false;
+        if ((v1[0] === 250 && v1[1] === 2 && v1[2] === 500) || (v1[0] === 2 && v1[1] === 250 && v1[2] === 500)) {
+            ok1 = true;
+            ids1.forEach(id => document.getElementById(id).classList.add('correct-field'));
+        } else {
+            ids1.forEach(id => document.getElementById(id).classList.add('wrong-field'));
+        }
+
+        // العملية الثانية: 250 + 500 = 750 (يقبل التبديل في الجمع 500 + 250 = 750)
+        let ok2 = false;
+        if ((v2[0] === 250 && v2[1] === 500 && v2[2] === 750) || (v2[0] === 500 && v2[1] === 250 && v2[2] === 750)) {
+            ok2 = true;
+            ids2.forEach(id => document.getElementById(id).classList.add('correct-field'));
+        } else {
+            ids2.forEach(id => document.getElementById(id).classList.add('wrong-field'));
+        }
+
+        recordAnswer(stage, ok1 && ok2, cardId, explanation);
+    }
+
+    // 5. فحص تمرين 2 أطبق (المجموع + أكبر سنة)
+    function checkUt2Answer() {
+        const cardId = 'q-ut2-ans';
+        const totalEl = document.getElementById('ut2_total');
+        const totalVal = parseFloat(totalEl.value);
+        const radio = document.querySelector('input[name="ut2_max"]:checked');
+
+        if (isNaN(totalVal) || !radio) {
+            alert('يرجى كتابة تعداد التلاميذ واختيار السنة التي فيها أكبر تعداد!');
+            return;
+        }
+
+        let okTotal = false;
+        if (totalVal === 318) {
+            okTotal = true;
+            totalEl.classList.add('correct-field');
+        } else {
+            totalEl.classList.add('wrong-field');
+        }
+
+        let okRadio = false;
+        const card = document.getElementById(cardId);
+        card.querySelectorAll('.option-label').forEach(lbl => {
+            const inp = lbl.querySelector('input');
+            if (inp.value === 'y5') lbl.classList.add('correct-opt');
+            if (inp.checked) {
+                if (inp.value === 'y5') okRadio = true;
+                else lbl.classList.add('wrong-opt');
+            }
+        });
+
+        recordAnswer('utabbiq', okTotal && okRadio, cardId, 'مجموع التلاميذ: 318 تلميذاً | أكبر تعداد في السنة 5 (70 تلميذاً).');
+    }
+
+    // 6. فحص تمرين 2 أتمرن
+    function checkTam2() {
+        const cardId = 'q-tam2';
+        const radio = document.querySelector('input[name="tam2_q"]:checked');
+        const resEl = document.getElementById('tam2_res');
+        const resVal = parseFloat(resEl.value);
+
+        if (!radio || isNaN(resVal)) {
+            alert('يرجى اختيار السؤال وإكمال العملية الحسابية!');
+            return;
+        }
+
+        let okRadio = false;
+        document.getElementById(cardId).querySelectorAll('.option-label').forEach(lbl => {
+            const inp = lbl.querySelector('input');
+            if (inp.value === 'correct') lbl.classList.add('correct-opt');
+            if (inp.checked) {
+                if (inp.value === 'correct') okRadio = true;
+                else lbl.classList.add('wrong-opt');
+            }
+        });
+
+        let okNum = false;
+        if (resVal === 750) {
+            okNum = true;
+            resEl.classList.add('correct-field');
+        } else {
+            resEl.classList.add('wrong-field');
+        }
+
+        recordAnswer('atamarran', okRadio && okNum, cardId, 'المسافة الإجمالية التي يقطعها المتسابق: 150 × 5 = 750 m.');
+    }
+
+    // 7. فحص تمرين 3 أ أتمرن
+    function checkTam3A() {
+        const cardId = 'q-tam3-a';
+        const radio = document.querySelector('input[name="tam3a_q"]:checked');
+        const ids = ['tam3a_1', 'tam3a_2', 'tam3a_3'];
+        const vals = ids.map(id => parseFloat(document.getElementById(id).value));
+
+        if (!radio || vals.some(isNaN)) {
+            alert('يرجى اختيار السؤال المناسب وملء خانات العملية الحسابية!');
+            return;
+        }
+
+        let okRadio = false;
+        document.getElementById(cardId).querySelectorAll('.option-label').forEach(lbl => {
+            const inp = lbl.querySelector('input');
+            if (inp.value === 'correct') lbl.classList.add('correct-opt');
+            if (inp.checked) {
+                if (inp.value === 'correct') okRadio = true;
+                else lbl.classList.add('wrong-opt');
+            }
+        });
+
+        const exp = [89, 65, 24];
+        let okMath = true;
+        ids.forEach((id, i) => {
+            const el = document.getElementById(id);
+            if (vals[i] === exp[i]) el.classList.add('correct-field');
+            else {
+                el.classList.add('wrong-field');
+                okMath = false;
+            }
+        });
+
+        recordAnswer('atamarran', okRadio && okMath, cardId, 'كم بلاطة بقيت؟ 89 - 65 = 24 بلاطة.');
+    }
+
+    // 8. فحص تمرين 3 ب أتمرن
+    function checkTam3B() {
+        const cardId = 'q-tam3-b';
+        const radio = document.querySelector('input[name="tam3b_q"]:checked');
+        const hEl = document.getElementById('tam3b_h');
+        const mEl = document.getElementById('tam3b_m');
+        const hVal = parseFloat(hEl.value);
+        const mVal = parseFloat(mEl.value);
+
+        if (!radio || isNaN(hVal) || isNaN(mVal)) {
+            alert('يرجى اختيار السؤال المناسب وكتابة وقت نهاية العرض بالساعات والدقائق!');
+            return;
+        }
+
+        let okRadio = false;
+        document.getElementById(cardId).querySelectorAll('.option-label').forEach(lbl => {
+            const inp = lbl.querySelector('input');
+            if (inp.value === 'correct') lbl.classList.add('correct-opt');
+            if (inp.checked) {
+                if (inp.value === 'correct') okRadio = true;
+                else lbl.classList.add('wrong-opt');
+            }
+        });
+
+        let okTime = (hVal === 13 && mVal === 15);
+        hEl.classList.add(hVal === 13 ? 'correct-field' : 'wrong-field');
+        mEl.classList.add(mVal === 15 ? 'correct-field' : 'wrong-field');
+
+        recordAnswer('atamarran', okRadio && okTime, cardId, 'ينتهي العرض المسرحي على الساعة 13 h 15 min.');
+    }
+
+    // 9. فحص عدد مفرد (مهمة 1)
+    function checkSingleNumber(cardId, inputId, expected, stage, explanation) {
+        const el = document.getElementById(inputId);
+        const val = parseFloat(el.value);
+        if (isNaN(val)) {
+            alert('يرجى إدخال الناتج أولاً!');
+            return;
+        }
+
+        const isOk = (val === expected);
+        el.classList.add(isOk ? 'correct-field' : 'wrong-field');
+        recordAnswer(stage, isOk, cardId, explanation);
+    }
+
+    // 10. فحص مقارنة (مهمة 3)
+    function checkComparison(cardId, selectId, expected, stage, explanation) {
+        const el = document.getElementById(selectId);
+        if (!el.value) {
+            alert('يرجى اختيار رمز المقارنة المناسب!');
+            return;
+        }
+
+        const isOk = (el.value === expected);
+        el.classList.add(isOk ? 'correct-field' : 'wrong-field');
+        recordAnswer(stage, isOk, cardId, explanation);
+    }
+
+    // 11. فحص جدول أبعاد الملعب (مهمة 5)
+    function checkMis5Table() {
+        const cardId = 'q-mis-5';
+        const checks = [
+            { id: 'mis5_1', exp: '100' },
+            { id: 'mis5_2', exp: '65' },
+            { id: 'mis5_3', exp: '7' },
+            { id: 'mis5_4', exp: '11' }
+        ];
+
+        if (checks.some(c => !document.getElementById(c.id).value)) {
+            alert('يرجى اختيار جميع القيم في الجدول!');
+            return;
+        }
+
+        let allOk = true;
+        checks.forEach(c => {
+            const el = document.getElementById(c.id);
+            if (el.value === c.exp) {
+                el.classList.add('correct-field');
+            } else {
+                el.classList.add('wrong-field');
+                allOk = false;
+            }
+        });
+
+        recordAnswer('missions', allOk, cardId, 'طول الملعب 100 m | عرضه 65 m | طول المرمى 7 m | نقطة الجزاء 11 m.');
+    }
+
+    // إعادة المحاولة من جديد
+    function resetLesson() {
+        for (const key in stageScores) {
+            stageScores[key].ok = 0;
+            stageScores[key].err = 0;
+        }
+
+        document.querySelectorAll('input').forEach(inp => {
+            inp.disabled = false;
+            inp.classList.remove('locked', 'correct-field', 'wrong-field');
+            if (inp.type === 'radio' || inp.type === 'checkbox') {
+                inp.checked = false;
+            } else {
+                inp.value = '';
+            }
+        });
+
+        document.querySelectorAll('select').forEach(sel => {
+            sel.disabled = false;
+            sel.selectedIndex = 0;
+            sel.classList.remove('locked', 'correct-field', 'wrong-field');
+        });
+
+        document.querySelectorAll('.option-label').forEach(lbl => {
+            lbl.classList.remove('locked', 'correct-opt', 'wrong-opt');
+        });
+
+        document.querySelectorAll('.btn-check').forEach(btn => {
+            btn.disabled = false;
+        });
+
+        document.querySelectorAll('.feedback-msg').forEach(fb => {
+            fb.className = 'feedback-msg';
+            fb.innerHTML = '';
+        });
+
+        document.getElementById('final-encouragement').textContent = 'اِبْدَأْ بِحَلِّ التَّمَارِينِ أَعْلَاهُ لِمُشَاهَدَةِ نَتِيجَتِكَ!';
+        updateAllCounters();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
