@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>وَضْعِيَّاتُ جَمْعٍ أَوْ طَرْحٍ (1) - السنة الأولى ابتدائي</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1e88e5;
+            --primary-dark: #1565c0;
+            --primary-light: #e3f2fd;
+            --secondary: #ff8f00;
+            --secondary-light: #fff8e1;
+            --teal: #00897b;
+            --teal-light: #e0f2f1;
+            --purple: #7b1fa2;
+            --purple-light: #f3e5f5;
+            --success: #2e7d32;
+            --success-bg: #e8f5e9;
+            --success-border: #66bb6a;
+            --danger: #c62828;
+            --danger-bg: #ffebee;
+            --danger-border: #ef5350;
+            --bg-body: #f4f7fb;
+            --text-main: #1f2937;
+            --text-muted: #4b5563;
+            --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            font-size: 18px;
+        }
+
+        /* Header */
+        .lesson-header {
+            background: linear-gradient(135deg, #1976d2, #0d47a1);
+            color: white;
+            padding: 24px 16px;
+            text-align: center;
+            border-bottom-left-radius: 28px;
+            border-bottom-right-radius: 28px;
+            box-shadow: 0 4px 15px rgba(13, 71, 161, 0.25);
+            margin-bottom: 24px;
+        }
+
+        .lesson-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .lesson-header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 0.3px;
+        }
+
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 0 14px 40px;
+        }
+
+        /* Section Cards */
+        .section-card {
+            background: #ffffff;
+            border-radius: 22px;
+            padding: 20px;
+            margin-bottom: 26px;
+            box-shadow: var(--card-shadow);
+            border: 2px solid #e5e7eb;
+            transition: opacity 0.3s ease;
+        }
+
+        .section-title {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 23px;
+            font-weight: 900;
+            padding: 6px 20px;
+            border-radius: 14px;
+            margin: 0 0 18px 0;
+        }
+
+        .title-discover {
+            background: var(--secondary-light);
+            color: #e65100;
+            border: 2px solid #ffb74d;
+        }
+
+        .title-do {
+            background: #fce4ec;
+            color: #c2185b;
+            border: 2px solid #f48fb1;
+        }
+
+        .title-learn {
+            background: var(--teal-light);
+            color: #00695c;
+            border: 2px solid #4db6ac;
+        }
+
+        .title-practice {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border: 2px solid #64b5f6;
+        }
+
+        .title-search {
+            background: #f1f8e9;
+            color: #33691e;
+            border: 2px solid #aed581;
+        }
+
+        /* Exercise Box */
+        .exercise-item {
+            background: #fafafa;
+            border: 2px solid #e2e8f0;
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .exercise-item:last-of-type {
+            margin-bottom: 12px;
+        }
+
+        .exercise-item.locked {
+            opacity: 0.55;
+            pointer-events: none;
+            filter: grayscale(0.4);
+        }
+
+        .lock-banner {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .exercise-item:not(.locked) .lock-banner {
+            display: none;
+        }
+
+        .ex-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 10px;
+            font-weight: 900;
+            font-size: 18px;
+            margin-left: 8px;
+        }
+
+        .ex-text {
+            font-size: 19px;
+            font-weight: 700;
+            margin: 0 0 14px 0;
+            color: #111827;
+        }
+
+        /* Interactive Drawing / Visual Box */
+        .visual-stage {
+            background: #ffffff;
+            border: 2px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 14px;
+            margin: 12px 0;
+            text-align: center;
+        }
+
+        .stage-hint {
+            font-size: 15px;
+            color: #0284c7;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: #f0f9ff;
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 12px;
+        }
+
+        .tokens-pool {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .token-btn {
+            border: 2px solid #cbd5e1;
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            transition: transform 0.15s, background 0.2s, border-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            user-select: none;
+        }
+
+        .token-btn:active {
+            transform: scale(0.95);
+        }
+
+        .token-btn.active {
+            background: #dcfce7;
+            border-color: #22c55e;
+            color: #15803d;
+        }
+
+        .token-btn.crossed {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #b91c1c;
+            text-decoration: line-through;
+            opacity: 0.75;
+        }
+
+        /* Inputs */
+        .math-input {
+            width: 68px;
+            height: 46px;
+            border: 2.5px solid #94a3b8;
+            border-radius: 12px;
+            text-align: center;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 22px;
+            font-weight: 800;
+            color: #0f172a;
+            background: #ffffff;
+            margin: 0 4px;
+            transition: all 0.2s;
+            direction: ltr;
+        }
+
+        .math-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(30, 136, 229, 0.18);
+        }
+
+        .math-input.correct {
+            background-color: var(--success-bg) !important;
+            border-color: var(--success) !important;
+            color: var(--success) !important;
+        }
+
+        .math-input.wrong {
+            background-color: var(--danger-bg) !important;
+            border-color: var(--danger) !important;
+            color: var(--danger) !important;
+        }
+
+        .math-input:disabled {
+            cursor: not-allowed;
+            opacity: 1;
+        }
+
+        /* LTR Math Equation Box */
+        .equation-box {
+            background: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 12px 18px;
+            margin: 14px auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 24px;
+            font-weight: 900;
+            direction: ltr;
+            unicode-bidi: isolate;
+        }
+
+        .ltr-inline {
+            display: inline-block;
+            direction: ltr;
+            unicode-bidi: isolate;
+        }
+
+        /* Multiple Choice Options */
+        .mcq-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 12px 0;
+        }
+
+        .mcq-btn {
+            flex: 1 1 120px;
+            padding: 10px 14px;
+            background: #ffffff;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            color: #1e293b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .mcq-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+
+        .mcq-btn.selected {
+            border-color: var(--primary);
+            background: #dbeafe;
+            color: var(--primary-dark);
+        }
+
+        .mcq-btn.correct {
+            background: var(--success-bg) !important;
+            border-color: var(--success) !important;
+            color: var(--success) !important;
+        }
+
+        .mcq-btn.wrong {
+            background: var(--danger-bg) !important;
+            border-color: var(--danger) !important;
+            color: var(--danger) !important;
+        }
+
+        /* Table for Exercise 2 in Atamarran */
+        .lesson-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .lesson-table th, .lesson-table td {
+            border: 2px solid #94a3b8;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 17px;
+        }
+
+        .lesson-table th {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        /* Action Buttons & Feedback */
+        .check-btn {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            padding: 11px 24px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-top: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+            transition: transform 0.15s, opacity 0.2s;
+        }
+
+        .check-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+
+        .check-btn:disabled {
+            background: #94a3b8;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+
+        .feedback-msg {
+            margin-top: 12px;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 17px;
+            display: none;
+        }
+
+        .feedback-msg.show {
+            display: block;
+        }
+
+        .feedback-msg.success {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 1.5px solid var(--success-border);
+        }
+
+        .feedback-msg.error {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 1.5px solid var(--danger-border);
+        }
+
+        /* Stage Counter Bar */
+        .stage-counter {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 8px 16px;
+            text-align: center;
+            font-weight: 800;
+            font-size: 16px;
+            color: #334155;
+            margin-top: 10px;
+            border: 1px solid #cbd5e1;
+        }
+
+        /* Ta'allamtu Card */
+        .learn-box {
+            background: linear-gradient(135deg, #e0f7fa, #e8f5e9);
+            border: 3px solid #26a69a;
+            border-radius: 18px;
+            padding: 20px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: 900;
+            color: #004d40;
+            box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.7);
+        }
+
+        /* Compare Grid (Before / After) */
+        .compare-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 12px 0;
+        }
+
+        @media (max-width: 600px) {
+            .compare-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .compare-card {
+            background: #fff;
+            border: 2px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .compare-badge {
+            display: inline-block;
+            background: #334155;
+            color: #fff;
+            padding: 3px 16px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        /* Final Evaluation Section */
+        .evaluation-card {
+            background: #ffffff;
+            border: 3px solid #1e88e5;
+            border-radius: 24px;
+            padding: 26px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(30, 136, 229, 0.12);
+            margin-top: 30px;
+        }
+
+        .evaluation-card h2 {
+            margin: 0 0 20px 0;
+            color: #0d47a1;
+            font-size: 25px;
+            font-weight: 900;
+        }
+
+        .circle-wrap {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+        }
+
+        .circle-wrap svg {
+            width: 150px;
+            height: 150px;
+            transform: rotate(-90deg);
+        }
+
+        .circle-bg {
+            fill: none;
+            stroke: #e2e8f0;
+            stroke-width: 13;
+        }
+
+        .circle-progress {
+            fill: none;
+            stroke: #1e88e5;
+            stroke-width: 13;
+            stroke-linecap: round;
+            stroke-dasharray: 408.4;
+            stroke-dashoffset: 408.4;
+            transition: stroke-dashoffset 0.7s ease, stroke 0.4s ease;
+        }
+
+        .circle-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 30px;
+            font-weight: 900;
+            color: #0f172a;
+            direction: ltr;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .stat-box {
+            padding: 12px 8px;
+            border-radius: 14px;
+            font-weight: 800;
+        }
+
+        .stat-total {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1.5px solid #cbd5e1;
+        }
+
+        .stat-correct {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 1.5px solid var(--success-border);
+        }
+
+        .stat-wrong {
+            background: var(--danger-bg);
+            color: var(--danger);
+            border: 1.5px solid var(--danger-border);
+        }
+
+        .stat-val {
+            display: block;
+            font-size: 24px;
+            font-weight: 900;
+            margin-top: 2px;
+        }
+
+        .eval-remark {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 14px;
+            font-size: 20px;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 18px;
+        }
+
+        .reset-btn {
+            background: #f59e0b;
+            color: #fff;
+            border: none;
+            border-radius: 14px;
+            padding: 12px 26px;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        }
+
+        .reset-btn:hover {
+            background: #d97706;
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+            font-family: 'Tajawal', sans-serif;
+        }
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+        }
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            max-width: 420px;
+            margin: 20px auto 30px auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+            font-family: 'Tajawal', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<header class="lesson-header">
+    <div class="lesson-badge">الرِّيَاضِيَّاتُ • السَّنَةُ الْأُولَى ابْتِدَائِي • الدَّرْسُ <span class="ltr-inline">20</span></div>
+    <h1>وَضْعِيَّاتُ جَمْعٍ أَوْ طَرْحٍ <span class="ltr-inline">(1)</span></h1>
+</header>
+
+<main class="container">
+
+    <!-- ==================== 1. أَكْتَشِفُ ==================== -->
+    <section class="section-card" id="sec-discover">
+        <h2 class="section-title title-discover">🔍 أَكْتَشِفُ</h2>
+
+        <!-- تمرين 1 -->
+        <div class="exercise-item" id="ex-disc-1">
+            <p class="ex-text"><span class="ex-num">1</span> عِنْدَ لَيْلَى <span class="ltr-inline">3</span> حَبَّاتِ حَلْوَى، أَعْطَاهَا أَخُوهَا حَبَّةً. كَمْ أَصْبَحَ عَدَدُ حَبَّاتِ الْحَلْوَى عِنْدَ لَيْلَى؟</p>
+            
+            <div class="visual-stage">
+                <div class="stage-hint">🎨 اُنْقُرْ لِإِضَافَةِ حَبَّةِ الْحَلْوَى الَّتِي أَعْطَاهَا أَخُوهَا لِلَيْلَى:</div>
+                <div style="display:flex; justify-content:center; align-items:center; gap:12px; flex-wrap:wrap; margin:8px 0;">
+                    <div style="background:#fce7f3; border:2px solid #f472b6; border-radius:14px; padding:10px 16px;">
+                        <div style="font-size:14px; font-weight:800; color:#9d174d; margin-bottom:4px;">حَبَّاتُ لَيْلَى (<span class="ltr-inline">3</span>)</div>
+                        <span style="font-size:28px;">🍬 🍬 🍬</span>
+                    </div>
+                    <span style="font-size:26px; font-weight:900; color:#16a34a;">+</span>
+                    <button type="button" class="token-btn" id="btn-candy-add" onclick="toggleCandy(this)">
+                        <span style="font-size:26px;">🍬</span>
+                        <span>أَضِفْ حَبَّةَ أَخِيهَا (<span class="ltr-inline">1</span>)</span>
+                    </button>
+                </div>
+            </div>
+
+            <div style="margin: 12px 0;">
+                <span style="font-weight:800; font-size:17px; color:#334155;">اِخْتَرْ نَوْعَ الْعَمَلِيَّةِ الْمُنَاسِبَةِ:</span>
+                <div class="mcq-group" id="mcq-disc-1">
+                    <button type="button" class="mcq-btn" data-val="add" onclick="selectMcq('mcq-disc-1', this)">عَمَلِيَّةُ جَمْعٍ (<span class="ltr-inline">+</span>)</button>
+                    <button type="button" class="mcq-btn" data-val="sub" onclick="selectMcq('mcq-disc-1', this)">عَمَلِيَّةُ طَرْحٍ (<span class="ltr-inline">-</span>)</button>
+                </div>
+            </div>
+
+            <div style="font-size:20px; font-weight:800; margin-top:12px;">
+                أَصْبَحَ عِنْدَ لَيْلَى <input type="number" inputmode="numeric" class="math-input" id="in-disc-1" autocomplete="off"> حَبَّاتِ حَلْوَى.
+            </div>
+
+            <button type="button" class="check-btn" id="btn-disc-1" onclick="checkDisc1()">✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+            <div class="feedback-msg" id="fb-disc-1"></div>
+        </div>
+
+        <!-- تمرين 2 -->
+        <div class="exercise-item locked" id="ex-disc-2">
+            <div class="lock-banner">🔒 أَتْمِمْ التَّمْرِينَ السَّابِقَ أَوَّلًا لِفَتْحِ هَذَا التَّمْرِينِ.</div>
+            <p class="ex-text"><span class="ex-num">2</span> عِنْدَ أَمِين <span class="ltr-inline">7</span> كُرَيَّاتٍ، أَعْطَى مِنْهَا <span class="ltr-inline">3</span> كُرَيَّاتٍ لِرَائِدٍ. كَمْ كُرَيَّةً بَقِيَتْ عِنْدَ أَمِين؟</p>
+
+            <div class="visual-stage">
+                <div class="stage-hint">🎨 اُنْقُرْ عَلَى <span class="ltr-inline">3</span> كُرَيَّاتٍ لِشَطْبِهَا (الَّتِي أَعْطَاهَا لِرَائِدٍ):</div>
+                <div class="tokens-pool" id="pool-marbles">
+                    <button type="button" class="token-btn" onclick="toggleCross(this)">🔮</button>
+                    <button type="button" class="token-btn" onclick="toggleCross(this)">🔮</button>
+                    <button type="button" class="token-btn" onclick="toggleCross(this)">🔮</button>
+                    <button type="button" class="token-btn" onclick="toggleCross(this)">🔮</button>
+                    <button type="button" class="token-btn" onclick="toggleCross(this)">🔮</button>
+                    <button type="button" class="token-btn" onclick="toggleCross(this)">🔮</button>
+                    <button type="button" class="token-btn" onclick="toggleCross(this)">🔮</button>
+                </div>
+            </div>
+
+            <div style="margin: 12px 0;">
+                <span style="font-weight:800; font-size:17px; color:#334155;">اِخْتَرْ نَوْعَ الْعَمَلِيَّةِ الْمُنَاسِبَةِ:</span>
+                <div class="mcq-group" id="mcq-disc-2">
+                    <button type="button" class="mcq-btn" data-val="add" onclick="selectMcq('mcq-disc-2', this)">عَمَلِيَّةُ جَمْعٍ (<span class="ltr-inline">+</span>)</button>
+                    <button type="button" class="mcq-btn" data-val="sub" onclick="selectMcq('mcq-disc-2', this)">عَمَلِيَّةُ طَرْحٍ (<span class="ltr-inline">-</span>)</button>
+                </div>
+            </div>
+
+            <div style="font-size:20px; font-weight:800; margin-top:12px;">
+                بَقِيَ عِنْدَ أَمِين <input type="number" inputmode="numeric" class="math-input" id="in-disc-2" autocomplete="off"> كُرَيَّاتٍ.
+            </div>
+
+            <button type="button" class="check-btn" id="btn-disc-2" onclick="checkDisc2()">✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+            <div class="feedback-msg" id="fb-disc-2"></div>
+        </div>
+
+        <div class="stage-counter" id="cnt-discover">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+    </section>
+
+    <!-- ==================== 2. أُنْجِزُ ==================== -->
+    <section class="section-card" id="sec-do">
+        <h2 class="section-title title-do">✏️ أُنْجِزُ</h2>
+
+        <!-- تمرين 1 -->
+        <div class="exercise-item locked" id="ex-do-1">
+            <div class="lock-banner">🔒 أَتْمِمْ مَرْحَلَةَ (أَكْتَشِفُ) أَوَّلًا لِفَتْحِ هَذَا التَّمْرِينِ.</div>
+            <p class="ex-text"><span class="ex-num">1</span> فِي السَّلَّةِ <span class="ltr-inline">5</span> كُبَّاتٍ مِنَ الصُّوفِ أَضَافَتْ لَهَا سِيرِين <span class="ltr-inline">4</span> كُبَّاتٍ. كَمْ كُبَّةً صَارَتْ فِي السَّلَّةِ؟</p>
+
+            <div class="visual-stage">
+                <div class="stage-hint">🧶 أَكْمِلْ رَسْمَ الْكُبَّاتِ: اُنْقُرْ لِإِضَافَةِ <span class="ltr-inline">4</span> كُبَّاتٍ جَدِيدَةٍ فِي السَّلَّةِ:</div>
+                <div style="margin-bottom:8px; font-weight:800; color:#475569;">الْكُبَّاتُ الْمَوْجُودَةُ فِي السَّلَّةِ (<span class="ltr-inline">5</span>): 🧶 🧶 🧶 🧶 🧶</div>
+                <div class="tokens-pool" id="pool-yarn">
+                    <button type="button" class="token-btn" onclick="toggleAddYarn(this)">➕ 🧶 كُبَّةٌ</button>
+                    <button type="button" class="token-btn" onclick="toggleAddYarn(this)">➕ 🧶 كُبَّةٌ</button>
+                    <button type="button" class="token-btn" onclick="toggleAddYarn(this)">➕ 🧶 كُبَّةٌ</button>
+                    <button type="button" class="token-btn" onclick="toggleAddYarn(this)">➕ 🧶 كُبَّةٌ</button>
+                </div>
+            </div>
+
+            <div style="font-size:20px; font-weight:800; margin-top:12px;">
+                صَارَتْ فِي السَّلَّةِ <input type="number" inputmode="numeric" class="math-input" id="in-do-1" autocomplete="off"> كُبَّاتٍ.
+            </div>
+
+            <button type="button" class="check-btn" id="btn-do-1" onclick="checkDo1()">✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+            <div class="feedback-msg" id="fb-do-1"></div>
+        </div>
+
+        <!-- تمرين 2 -->
+        <div class="exercise-item locked" id="ex-do-2">
+            <div class="lock-banner">🔒 أَتْمِمْ التَّمْرِينَ السَّابِقَ أَوَّلًا لِفَتْحِ هَذَا التَّمْرِينِ.</div>
+            <p class="ex-text"><span class="ex-num">2</span> فِي الْعُلْبَةِ <span class="ltr-inline">6</span> بَيْضَاتٍ، أَخَذَ مِنْهَا أَمِين <span class="ltr-inline">4</span> بَيْضَاتٍ. كَمْ بَيْضَةً بَقِيَتْ فِي الْعُلْبَةِ؟</p>
+
+            <div class="visual-stage">
+                <div class="stage-hint">🥚 أَرْسُمُ الْبَيْضَاتِ الْبَاقِيَةَ: اُنْقُرْ لِرَسْمِ الْبَيْضَاتِ الَّتِي بَقِيَتْ فِي الْعُلْبَةِ:</div>
+                <div class="tokens-pool" id="pool-eggs">
+                    <button type="button" class="token-btn" onclick="toggleEggSlot(this)">⬜ مَكَانٌ فَارِغٌ</button>
+                    <button type="button" class="token-btn" onclick="toggleEggSlot(this)">⬜ مَكَانٌ فَارِغٌ</button>
+                    <button type="button" class="token-btn" onclick="toggleEggSlot(this)">⬜ مَكَانٌ فَارِغٌ</button>
+                    <button type="button" class="token-btn" onclick="toggleEggSlot(this)">⬜ مَكَانٌ فَارِغٌ</button>
+                    <button type="button" class="token-btn" onclick="toggleEggSlot(this)">⬜ مَكَانٌ فَارِغٌ</button>
+                    <button type="button" class="token-btn" onclick="toggleEggSlot(this)">⬜ مَكَانٌ فَارِغٌ</button>
+                </div>
+            </div>
+
+            <div style="font-size:20px; font-weight:800; margin-top:12px;">
+                بَقِيَتْ فِي الْعُلْبَةِ <input type="number" inputmode="numeric" class="math-input" id="in-do-2" autocomplete="off"> بَيْضَتَانِ.
+            </div>
+
+            <button type="button" class="check-btn" id="btn-do-2" onclick="checkDo2()">✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+            <div class="feedback-msg" id="fb-do-2"></div>
+        </div>
+
+        <div class="stage-counter" id="cnt-do">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+    </section>
+
+    <!-- ==================== 3. تَعَلَّمْتُ ==================== -->
+    <section class="section-card">
+        <h2 class="section-title title-learn">💡 تَعَلَّمْتُ</h2>
+        <div class="learn-box">
+            حِينَمَا أُضِيفُ أَشْيَاءَ إِلَى بَعْضِهَا أَجْمَعُ، وَعِنْدَمَا آخُذُ مِنْهَا أَطْرَحُ.
+        </div>
+    </section>
+
+    <!-- ==================== 4. أَتَمَرَّنُ ==================== -->
+    <section class="section-card" id="sec-practice">
+        <h2 class="section-title title-practice">📝 أَتَمَرَّنُ</h2>
+
+        <!-- تمرين 1 -->
+        <div class="exercise-item locked" id="ex-prac-1">
+            <div class="lock-banner">🔒 أَتْمِمْ مَرْحَلَةَ (أُنْجِزُ) أَوَّلًا لِفَتْحِ هَذَا التَّمْرِينِ.</div>
+            <p class="ex-text"><span class="ex-num">1</span> لَاحِظْ الشَّاحِنَةَ قَبْلَ وَبَعْدَ، ثُمَّ أَكْمِلْ:</p>
+
+            <div class="compare-grid">
+                <div class="compare-card">
+                    <div class="compare-badge">قَبْلَ</div>
+                    <svg viewBox="0 0 220 120" width="100%" style="max-width:210px; display:block; margin:0 auto;">
+                        <!-- شاحنة -->
+                        <rect x="10" y="78" width="130" height="10" fill="#94a3b8" rx="3"/>
+                        <path d="M142 42 H178 L195 65 V88 H142 Z" fill="#2563eb"/>
+                        <polygon points="148,47 173,47 185,63 148,63" fill="#bae6fd"/>
+                        <circle cx="40" cy="94" r="13" fill="#1e293b"/><circle cx="40" cy="94" r="6" fill="#38bdf8"/>
+                        <circle cx="115" cy="94" r="13" fill="#1e293b"/><circle cx="115" cy="94" r="6" fill="#38bdf8"/>
+                        <circle cx="172" cy="94" r="13" fill="#1e293b"/><circle cx="172" cy="94" r="6" fill="#38bdf8"/>
+                        <!-- 9 علب (3 أعمدة × 3 صفوف) -->
+                        <g fill="#d97706" stroke="#78350f" stroke-width="1.5">
+                            <rect x="16" y="61" width="38" height="16"/><rect x="16" y="44" width="38" height="16"/><rect x="16" y="27" width="38" height="16"/>
+                            <rect x="57" y="61" width="38" height="16"/><rect x="57" y="44" width="38" height="16"/><rect x="57" y="27" width="38" height="16"/>
+                            <rect x="98" y="61" width="38" height="16"/><rect x="98" y="44" width="38" height="16"/><rect x="98" y="27" width="38" height="16"/>
+                        </g>
+                    </svg>
+                    <div style="font-weight:800; margin-top:8px;">
+                        فِي الشَّاحِنَةِ <input type="number" inputmode="numeric" class="math-input" id="in-prac1-before" autocomplete="off"> عُلَبٍ
+                    </div>
+                </div>
+
+                <div class="compare-card">
+                    <div class="compare-badge">بَعْدَ</div>
+                    <svg viewBox="0 0 220 120" width="100%" style="max-width:210px; display:block; margin:0 auto;">
+                        <!-- شاحنة -->
+                        <rect x="10" y="78" width="130" height="10" fill="#94a3b8" rx="3"/>
+                        <path d="M142 42 H178 L195 65 V88 H142 Z" fill="#2563eb"/>
+                        <polygon points="148,47 173,47 185,63 148,63" fill="#bae6fd"/>
+                        <circle cx="40" cy="94" r="13" fill="#1e293b"/><circle cx="40" cy="94" r="6" fill="#38bdf8"/>
+                        <circle cx="115" cy="94" r="13" fill="#1e293b"/><circle cx="115" cy="94" r="6" fill="#38bdf8"/>
+                        <circle cx="172" cy="94" r="13" fill="#1e293b"/><circle cx="172" cy="94" r="6" fill="#38bdf8"/>
+                        <!-- 6 علب -->
+                        <g fill="#d97706" stroke="#78350f" stroke-width="1.5">
+                            <rect x="16" y="61" width="38" height="16"/>
+                            <rect x="57" y="61" width="38" height="16"/><rect x="57" y="44" width="38" height="16"/><rect x="57" y="27" width="38" height="16"/>
+                            <rect x="98" y="61" width="38" height="16"/><rect x="98" y="44" width="38" height="16"/>
+                        </g>
+                    </svg>
+                    <div style="font-weight:800; margin-top:8px;">
+                        فِي الشَّاحِنَةِ <input type="number" inputmode="numeric" class="math-input" id="in-prac1-after" autocomplete="off"> عُلَبٍ
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align:center; font-weight:800; font-size:19px; margin-top:12px;">
+                نَقُصَ مِنَ الشَّاحِنَةِ <input type="number" inputmode="numeric" class="math-input" id="in-prac1-diff" autocomplete="off"> عُلَبٍ
+            </div>
+
+            <div style="text-align:center;">
+                <div class="equation-box">
+                    <span>6</span>
+                    <span>+</span>
+                    <input type="number" inputmode="numeric" class="math-input" id="in-prac1-eq" autocomplete="off">
+                    <span>=</span>
+                    <span>9</span>
+                </div>
+            </div>
+
+            <button type="button" class="check-btn" id="btn-prac-1" onclick="checkPrac1()">✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+            <div class="feedback-msg" id="fb-prac-1"></div>
+        </div>
+
+        <!-- تمرين 2 -->
+        <div class="exercise-item locked" id="ex-prac-2">
+            <div class="lock-banner">🔒 أَتْمِمْ التَّمْرِينَ السَّابِقَ أَوَّلًا لِفَتْحِ هَذَا التَّمْرِينِ.</div>
+            <p class="ex-text"><span class="ex-num">2</span> كَمْ يَلْزَمُ مِنْ جَزَرٍ لِيَأْكُلَ كُلُّ أَرْنَبٍ جَزَرَةً ؟ أَكْمِلْ لِتَعْرِفَ الْجَوَابَ.</p>
+
+            <div class="visual-stage">
+                <div style="font-size:30px; letter-spacing:4px; margin-bottom:6px;">🐇 🐇 🐇 🐇</div>
+                <div style="font-size:30px; letter-spacing:4px; margin-bottom:10px;">🐇 🐇 🐇 🐇</div>
+                <div style="border-top:1.5px dashed #cbd5e1; padding-top:8px; font-size:30px; letter-spacing:6px;">🥕 🥕 🥕 🥕 🥕 🥕</div>
+            </div>
+
+            <table class="lesson-table">
+                <thead>
+                    <tr>
+                        <th>عَدَدُ الْأَرَانِبِ</th>
+                        <th>عَدَدُ حَبَّاتِ الْجَزَرِ</th>
+                        <th>عَدَدُ حَبَّاتِ الْجَزَرِ النَّاقِصَةِ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="number" inputmode="numeric" class="math-input" id="in-prac2-rabbits" autocomplete="off"></td>
+                        <td><input type="number" inputmode="numeric" class="math-input" id="in-prac2-carrots" autocomplete="off"></td>
+                        <td><input type="number" inputmode="numeric" class="math-input" id="in-prac2-missing" autocomplete="off"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button type="button" class="check-btn" id="btn-prac-2" onclick="checkPrac2()">✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+            <div class="feedback-msg" id="fb-prac-2"></div>
+        </div>
+
+        <div class="stage-counter" id="cnt-practice">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+    </section>
+
+    <!-- ==================== 5. أَبْحَثُ ==================== -->
+    <section class="section-card" id="sec-search">
+        <h2 class="section-title title-search">🔎 أَبْحَثُ</h2>
+
+        <div class="exercise-item locked" id="ex-search-1">
+            <div class="lock-banner">🔒 أَتْمِمْ مَرْحَلَةَ (أَتَمَرَّنُ) أَوَّلًا لِفَتْحِ هَذَا التَّمْرِينِ.</div>
+            <p class="ex-text">لَاحِظْ الصُّورَتَيْنِ قَبْلَ وَبَعْدَ، ثُمَّ أَكْمِلْ :</p>
+
+            <div class="compare-grid">
+                <div class="compare-card">
+                    <div class="compare-badge">قَبْلَ</div>
+                    <div style="font-size:28px; margin:8px 0;">🎈🎈🎈🎈🎈🎈🎈</div>
+                    <div style="font-size:15px; color:#475569; font-weight:700;">رَائِدٌ يُمْسِكُ بِـ <span class="ltr-inline">7</span> بَالُونَاتٍ</div>
+                </div>
+                <div class="compare-card">
+                    <div class="compare-badge">بَعْدَ</div>
+                    <div style="font-size:28px; margin:8px 0;">🎈🎈🎈🎈🎈 💥💥</div>
+                    <div style="font-size:15px; color:#475569; font-weight:700;">تَفَرْقَعَتْ بَعْضُ الْبَالُونَاتِ</div>
+                </div>
+            </div>
+
+            <div style="font-size:19px; font-weight:800; line-height:2.4; margin-top:10px;">
+                <div>عِنْدَ رَائِدٍ قَبْلُ <input type="number" inputmode="numeric" class="math-input" id="in-srch-before" autocomplete="off"> بَالُونَاتٍ .</div>
+                <div>وَبَعْدُ أَصْبَحَ عِنْدَهُ <input type="number" inputmode="numeric" class="math-input" id="in-srch-after" autocomplete="off"> بَالُونَاتٍ .</div>
+                <div>عَدَدُ الْبَالُونَاتِ الَّتِي تَفَرْقَعَتْ <input type="number" inputmode="numeric" class="math-input" id="in-srch-popped" autocomplete="off"> .</div>
+            </div>
+
+            <div style="margin-top:12px;">
+                <div style="font-weight:800; font-size:19px; margin-bottom:6px;">أَكْمِلِ الْعَمَلِيَّةَ :</div>
+                <div style="text-align:center;">
+                    <div class="equation-box">
+                        <input type="number" inputmode="numeric" class="math-input" id="in-srch-eq1" autocomplete="off">
+                        <span>+</span>
+                        <input type="number" inputmode="numeric" class="math-input" id="in-srch-eq2" autocomplete="off">
+                        <span>=</span>
+                        <input type="number" inputmode="numeric" class="math-input" id="in-srch-eq3" autocomplete="off">
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="check-btn" id="btn-search-1" onclick="checkSearch1()">✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+            <div class="feedback-msg" id="fb-search-1"></div>
+        </div>
+
+        <div class="stage-counter" id="cnt-search">✓ الصَّوَابُ: 0 | ✗ الْخَطَأُ: 0</div>
+    </section>
+
+    <!-- ==================== 6. التَّقْيِيمُ الْكُلِّيُّ ==================== -->
+    <section class="evaluation-card" id="sec-evaluation">
+        <h2>📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</h2>
+
+        <div class="circle-wrap">
+            <svg viewBox="0 0 150 150">
+                <circle class="circle-bg" cx="75" cy="75" r="65"></circle>
+                <circle class="circle-progress" id="progress-ring" cx="75" cy="75" r="65"></circle>
+            </svg>
+            <div class="circle-text" id="percent-display">0%</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box stat-total">
+                <span>مَجْمُوعُ الْأَسْئِلَةِ</span>
+                <span class="stat-val" id="total-q-val">16</span>
+            </div>
+            <div class="stat-box stat-correct">
+                <span>✓ الصَّحِيحَةُ</span>
+                <span class="stat-val" id="total-correct-val">0</span>
+            </div>
+            <div class="stat-box stat-wrong">
+                <span>✗ الْخَاطِئَةُ</span>
+                <span class="stat-val" id="total-wrong-val">0</span>
+            </div>
+        </div>
+
+        <div class="eval-remark" id="eval-remark">
+            أَجِبْ عَنْ جَمِيعِ التَّمَارِينِ أَعْلَاهُ لِتَظْهَرَ نَتِيجَتُكَ النِّهَائِيَّةُ! 🌟
+        </div>
+
+        <button type="button" class="reset-btn" onclick="resetLesson()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+    </section>
+
+    <!-- زر العودة إلى الفهرس -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</main>
+
+<!-- ========================================
+     سكريبت الحماية — قفل الاشتراك الإجباري
+     ======================================== -->
+<script>
+  const CHANNEL_ID = "-1004456852024";
+  const tg = window.Telegram?.WebApp;
+  if (tg) { tg.ready(); tg.expand(); }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي
+     ======================================== -->
+<script>
+    // Track stage scores
+    const scores = {
+        discover: { correct: 0, wrong: 0 },
+        do:       { correct: 0, wrong: 0 },
+        practice: { correct: 0, wrong: 0 },
+        search:   { correct: 0, wrong: 0 }
+    };
+
+    const TOTAL_ITEMS = 16; // Total scorable questions across the entire lesson
+
+    // Interactive visual helpers
+    function toggleCandy(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('active');
+    }
+
+    function toggleCross(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('crossed');
+    }
+
+    function toggleAddYarn(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('active');
+        btn.innerHTML = btn.classList.contains('active') ? '✅ 🧶 أُضِيفَتْ' : '➕ 🧶 كُبَّةٌ';
+    }
+
+    function toggleEggSlot(btn) {
+        if (btn.disabled) return;
+        btn.classList.toggle('active');
+        btn.innerHTML = btn.classList.contains('active') ? '🥚 بَيْضَةٌ بَاقِيَةٌ' : '⬜ مَكَانٌ فَارِغٌ';
+    }
+
+    // Multiple Choice selection
+    function selectMcq(groupId, btn) {
+        if (btn.disabled) return;
+        const group = document.getElementById(groupId);
+        group.querySelectorAll('.mcq-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+    }
+
+    // Grade a single numeric input (1 attempt only)
+    function gradeInput(inputEl, expectedVal, stage) {
+        const raw = inputEl.value.trim();
+        const val = raw === '' ? NaN : Number(raw);
+        inputEl.disabled = true;
+        if (val === expectedVal) {
+            inputEl.classList.add('correct');
+            scores[stage].correct++;
+            return true;
+        } else {
+            inputEl.classList.add('wrong');
+            scores[stage].wrong++;
+            return false;
+        }
+    }
+
+    // Grade an MCQ group (1 attempt only)
+    function gradeMcq(groupId, expectedVal, stage) {
+        const group = document.getElementById(groupId);
+        const buttons = group.querySelectorAll('.mcq-btn');
+        const selected = group.querySelector('.mcq-btn.selected');
+        let isCorrect = false;
+
+        buttons.forEach(b => {
+            b.disabled = true;
+            if (b.dataset.val === expectedVal) {
+                b.classList.add('correct');
+            }
+        });
+
+        if (selected && selected.dataset.val === expectedVal) {
+            scores[stage].correct++;
+            isCorrect = true;
+        } else {
+            if (selected) selected.classList.add('wrong');
+            scores[stage].wrong++;
+        }
+        return isCorrect;
+    }
+
+    function showFeedback(fbId, allOk, msgSuccess, msgError) {
+        const fb = document.getElementById(fbId);
+        fb.className = 'feedback-msg show ' + (allOk ? 'success' : 'error');
+        fb.innerHTML = allOk ? msgSuccess : msgError;
+    }
+
+    function unlockExercise(exId) {
+        const el = document.getElementById(exId);
+        if (el) el.classList.remove('locked');
+    }
+
+    function updateCountersAndEval() {
+        // Update stage counters
+        document.getElementById('cnt-discover').innerHTML = `✓ الصَّوَابُ: ${scores.discover.correct} | ✗ الْخَطَأُ: ${scores.discover.wrong}`;
+        document.getElementById('cnt-do').innerHTML = `✓ الصَّوَابُ: ${scores.do.correct} | ✗ الْخَطَأُ: ${scores.do.wrong}`;
+        document.getElementById('cnt-practice').innerHTML = `✓ الصَّوَابُ: ${scores.practice.correct} | ✗ الْخَطَأُ: ${scores.practice.wrong}`;
+        document.getElementById('cnt-search').innerHTML = `✓ الصَّوَابُ: ${scores.search.correct} | ✗ الْخَطَأُ: ${scores.search.wrong}`;
+
+        // Total calculations
+        const totalCorrect = scores.discover.correct + scores.do.correct + scores.practice.correct + scores.search.correct;
+        const totalWrong   = scores.discover.wrong + scores.do.wrong + scores.practice.wrong + scores.search.wrong;
+        const answeredCount = totalCorrect + totalWrong;
+
+        // Percentage based on total correct vs total questions
+        const percent = Math.round((totalCorrect / TOTAL_ITEMS) * 100);
+
+        document.getElementById('total-correct-val').textContent = totalCorrect;
+        document.getElementById('total-wrong-val').textContent = totalWrong;
+        document.getElementById('percent-display').textContent = percent + '%';
+
+        // Update SVG circle
+        const ring = document.getElementById('progress-ring');
+        const circumference = 2 * Math.PI * 65; // ~408.4
+        const offset = circumference - (percent / 100) * circumference;
+        ring.style.strokeDashoffset = offset;
+
+        if (percent >= 80) {
+            ring.style.stroke = '#2e7d32';
+        } else if (percent >= 50) {
+            ring.style.stroke = '#f59e0b';
+        } else {
+            ring.style.stroke = '#c62828';
+        }
+
+        // Dynamic Remark
+        const remarkEl = document.getElementById('eval-remark');
+        if (answeredCount < TOTAL_ITEMS) {
+            remarkEl.innerHTML = `وَاصلْ التَّقَدُّمَ! أَجَبْتَ عَنْ <span class="ltr-inline">${answeredCount}</span> مِنْ <span class="ltr-inline">${TOTAL_ITEMS}</span> سُؤَالًا.`;
+        } else {
+            if (percent === 100) {
+                remarkEl.innerHTML = '🏆 مُمْتَازٌ جِدًّا! إِجَابَاتُكَ كُلُّهَا صَحِيحَةٌ، أَنْتَ بَطَلُ الرِّيَاضِيَّاتِ!';
+                remarkEl.style.borderColor = '#66bb6a';
+                remarkEl.style.background = '#e8f5e9';
+                remarkEl.style.color = '#1b5e20';
+            } else if (percent >= 75) {
+                remarkEl.innerHTML = '🌟 جَيِّدٌ جِدًّا! نَتِيجَةٌ رَائِعَةٌ، رَاجِعْ أَخْطَاءَكَ الْبَسِيطَةَ لِتَصِلَ لِلْعَلَامَةِ الْكَامِلَةِ.';
+                remarkEl.style.borderColor = '#66bb6a';
+                remarkEl.style.background = '#e8f5e9';
+                remarkEl.style.color = '#1b5e20';
+            } else if (percent >= 50) {
+                remarkEl.innerHTML = '👍 مُتَوَسِّطٌ! أحْسَنْتَ الْمُحَاوَلَةَ، يُمْكِنُكَ إِعَادَةُ الدَّرْسِ لِتَحْسِينِ نَتِيجَتِكَ.';
+                remarkEl.style.borderColor = '#ffb74d';
+                remarkEl.style.background = '#fff8e1';
+                remarkEl.style.color = '#e65100';
+            } else {
+                remarkEl.innerHTML = '💪 تَحْتَاجُ إِلَى مَزِيدٍ مِنَ التَّدْرِيبِ! تَذَكَّرْ قَاعِدَةَ (تَعَلَّمْتُ) وَأَعِدِ الْمُحَاوَلَةَ.';
+                remarkEl.style.borderColor = '#ef5350';
+                remarkEl.style.background = '#ffebee';
+                remarkEl.style.color = '#b71c1c';
+            }
+        }
+    }
+
+    // --- Validation Functions ---
+    function checkDisc1() {
+        const btn = document.getElementById('btn-disc-1');
+        btn.disabled = true;
+        document.getElementById('btn-candy-add').disabled = true;
+
+        const ok1 = gradeMcq('mcq-disc-1', 'add', 'discover');
+        const ok2 = gradeInput(document.getElementById('in-disc-1'), 4, 'discover');
+
+        showFeedback(
+            'fb-disc-1',
+            ok1 && ok2,
+            '👏 أَحْسَنْتَ! أَضَفْنَا حَبَّةً وَاحِدَةً إِلَى 3 حَبَّاتٍ (<span class="ltr-inline">3 + 1 = 4</span>).',
+            '❌ تَحَقَّقْ جَيِّدًا: عِنْدَمَا نُضِيفُ نَسْتَعْمِلُ الْجَمْعَ، وَالْجَوَابُ الصَّحِيحُ هُوَ <span class="ltr-inline">4</span> حَبَّاتٍ (<span class="ltr-inline">3 + 1 = 4</span>).'
+        );
+
+        unlockExercise('ex-disc-2');
+        updateCountersAndEval();
+    }
+
+    function checkDisc2() {
+        const btn = document.getElementById('btn-disc-2');
+        btn.disabled = true;
+        document.querySelectorAll('#pool-marbles .token-btn').forEach(b => b.disabled = true);
+
+        const ok1 = gradeMcq('mcq-disc-2', 'sub', 'discover');
+        const ok2 = gradeInput(document.getElementById('in-disc-2'), 4, 'discover');
+
+        showFeedback(
+            'fb-disc-2',
+            ok1 && ok2,
+            '👏 رَائِعٌ! أَخَذْنَا 3 كُرَيَّاتٍ مِنْ 7 فَبَقِيَتْ 4 كُرَيَّاتٍ (<span class="ltr-inline">7 - 3 = 4</span>).',
+            '❌ تَحَقَّقْ جَيِّدًا: عِنْدَمَا نَأْخُذُ نَسْتَعْمِلُ الطَّرْحَ، وَالْجَوَابُ الصَّحِيحُ هُوَ <span class="ltr-inline">4</span> كُرَيَّاتٍ (<span class="ltr-inline">7 - 3 = 4</span>).'
+        );
+
+        unlockExercise('ex-do-1');
+        updateCountersAndEval();
+    }
+
+    function checkDo1() {
+        const btn = document.getElementById('btn-do-1');
+        btn.disabled = true;
+        document.querySelectorAll('#pool-yarn .token-btn').forEach(b => b.disabled = true);
+
+        const ok = gradeInput(document.getElementById('in-do-1'), 9, 'do');
+
+        showFeedback(
+            'fb-do-1',
+            ok,
+            '👏 مُمْتَازٌ! صَارَتْ فِي السَّلَّةِ <span class="ltr-inline">9</span> كُبَّاتٍ (<span class="ltr-inline">5 + 4 = 9</span>).',
+            '❌ الْإِجَابَةُ الصَّحِيحَةُ هِيَ <span class="ltr-inline">9</span> كُبَّاتٍ لِأَنَّ <span class="ltr-inline">5 + 4 = 9</span>.'
+        );
+
+        unlockExercise('ex-do-2');
+        updateCountersAndEval();
+    }
+
+    function checkDo2() {
+        const btn = document.getElementById('btn-do-2');
+        btn.disabled = true;
+        document.querySelectorAll('#pool-eggs .token-btn').forEach(b => b.disabled = true);
+
+        const ok = gradeInput(document.getElementById('in-do-2'), 2, 'do');
+
+        showFeedback(
+            'fb-do-2',
+            ok,
+            '👏 أَحْسَنْتَ! بَقِيَتْ فِي الْعُلْبَةِ <span class="ltr-inline">2</span> بَيْضَتَانِ (<span class="ltr-inline">6 - 4 = 2</span>).',
+            '❌ الْإِجَابَةُ الصَّحِيحَةُ هِيَ <span class="ltr-inline">2</span> لِأَنَّ <span class="ltr-inline">6 - 4 = 2</span>.'
+        );
+
+        unlockExercise('ex-prac-1');
+        updateCountersAndEval();
+    }
+
+    function checkPrac1() {
+        const btn = document.getElementById('btn-prac-1');
+        btn.disabled = true;
+
+        const ok1 = gradeInput(document.getElementById('in-prac1-before'), 9, 'practice');
+        const ok2 = gradeInput(document.getElementById('in-prac1-after'), 6, 'practice');
+        const ok3 = gradeInput(document.getElementById('in-prac1-diff'), 3, 'practice');
+        const ok4 = gradeInput(document.getElementById('in-prac1-eq'), 3, 'practice');
+
+        showFeedback(
+            'fb-prac-1',
+            ok1 && ok2 && ok3 && ok4,
+            '👏 بَطَلٌ! كَانَ فِي الشَّاحِنَةِ <span class="ltr-inline">9</span> عُلَبٍ، وَأَصْبَحَ فِيهَا <span class="ltr-inline">6</span> عُلَبٍ، فَنَقُصَ مِنْهَا <span class="ltr-inline">3</span> عُلَبٍ (<span class="ltr-inline">6 + 3 = 9</span>).',
+            '❌ الصَّوَابُ: قَبْلَ <span class="ltr-inline">9</span> عُلَبٍ، بَعْدَ <span class="ltr-inline">6</span> عُلَبٍ، نَقُصَ <span class="ltr-inline">3</span> عُلَبٍ، وَالْعَمَلِيَّةُ: <span class="ltr-inline">6 + 3 = 9</span>.'
+        );
+
+        unlockExercise('ex-prac-2');
+        updateCountersAndEval();
+    }
+
+    function checkPrac2() {
+        const btn = document.getElementById('btn-prac-2');
+        btn.disabled = true;
+
+        const ok1 = gradeInput(document.getElementById('in-prac2-rabbits'), 8, 'practice');
+        const ok2 = gradeInput(document.getElementById('in-prac2-carrots'), 6, 'practice');
+        const ok3 = gradeInput(document.getElementById('in-prac2-missing'), 2, 'practice');
+
+        showFeedback(
+            'fb-prac-2',
+            ok1 && ok2 && ok3,
+            '👏 رَائِعٌ! عَدَدُ الْأَرَانِبِ <span class="ltr-inline">8</span>، وَحَبَّاتُ الْجَزَرِ <span class="ltr-inline">6</span>، فَيَنْقُصُنَا <span class="ltr-inline">2</span> حَبَّتَا جَزَرٍ.',
+            '❌ الصَّوَابُ: عَدَدُ الْأَرَانِبِ <span class="ltr-inline">8</span>، عَدَدُ حَبَّاتِ الْجَزَرِ <span class="ltr-inline">6</span>، وَالْجَزَرُ النَّاقِصُ هُوَ <span class="ltr-inline">2</span>.'
+        );
+
+        unlockExercise('ex-search-1');
+        updateCountersAndEval();
+    }
+
+    function checkSearch1() {
+        const btn = document.getElementById('btn-search-1');
+        btn.disabled = true;
+
+        const ok1 = gradeInput(document.getElementById('in-srch-before'), 7, 'search');
+        const ok2 = gradeInput(document.getElementById('in-srch-after'), 5, 'search');
+        const ok3 = gradeInput(document.getElementById('in-srch-popped'), 2, 'search');
+
+        // Equation: ...... + ...... = ...... (accept 5 + 2 = 7 or 2 + 5 = 7)
+        const eq1El = document.getElementById('in-srch-eq1');
+        const eq2El = document.getElementById('in-srch-eq2');
+        const eq3El = document.getElementById('in-srch-eq3');
+
+        const v1 = eq1El.value.trim() === '' ? NaN : Number(eq1El.value.trim());
+        const v2 = eq2El.value.trim() === '' ? NaN : Number(eq2El.value.trim());
+        const v3 = eq3El.value.trim() === '' ? NaN : Number(eq3El.value.trim());
+
+        eq1El.disabled = true;
+        eq2El.disabled = true;
+        eq3El.disabled = true;
+
+        const eqOk = ((v1 === 5 && v2 === 2) || (v1 === 2 && v2 === 5)) && v3 === 7;
+        if (eqOk) {
+            eq1El.classList.add('correct');
+            eq2El.classList.add('correct');
+            eq3El.classList.add('correct');
+            scores.search.correct++;
+        } else {
+            eq1El.classList.add('wrong');
+            eq2El.classList.add('wrong');
+            eq3El.classList.add('wrong');
+            scores.search.wrong++;
+        }
+
+        showFeedback(
+            'fb-search-1',
+            ok1 && ok2 && ok3 && eqOk,
+            '🏆 عَبْقَرِيٌّ! كَانَ عِنْدَ رَائِدٍ <span class="ltr-inline">7</span> بَالُونَاتٍ، أَصْبَحَ عِنْدَهُ <span class="ltr-inline">5</span>، وَتَفَرْقَعَ <span class="ltr-inline">2</span> (<span class="ltr-inline">5 + 2 = 7</span>).',
+            '❌ الصَّوَابُ: قَبْلُ <span class="ltr-inline">7</span>، بَعْدُ <span class="ltr-inline">5</span>، تَفَرْقَعَتْ <span class="ltr-inline">2</span>، وَالْعَمَلِيَّةُ هِيَ: <span class="ltr-inline">5 + 2 = 7</span>.'
+        );
+
+        updateCountersAndEval();
+    }
+
+    function resetLesson() {
+        // Reset scores
+        for (let key in scores) {
+            scores[key].correct = 0;
+            scores[key].wrong = 0;
+        }
+
+        // Reset inputs
+        document.querySelectorAll('.math-input').forEach(inp => {
+            inp.value = '';
+            inp.disabled = false;
+            inp.classList.remove('correct', 'wrong');
+        });
+
+        // Reset MCQs
+        document.querySelectorAll('.mcq-btn').forEach(btn => {
+            btn.disabled = false;
+            btn.classList.remove('selected', 'correct', 'wrong');
+        });
+
+        // Reset visual tokens
+        document.getElementById('btn-candy-add').disabled = false;
+        document.getElementById('btn-candy-add').classList.remove('active');
+
+        document.querySelectorAll('#pool-marbles .token-btn').forEach(b => {
+            b.disabled = false;
+            b.classList.remove('crossed');
+        });
+
+        document.querySelectorAll('#pool-yarn .token-btn').forEach(b => {
+            b.disabled = false;
+            b.classList.remove('active');
+            b.innerHTML = '➕ 🧶 كُبَّةٌ';
+        });
+
+        document.querySelectorAll('#pool-eggs .token-btn').forEach(b => {
+            b.disabled = false;
+            b.classList.remove('active');
+            b.innerHTML = '⬜ مَكَانٌ فَارِغٌ';
+        });
+
+        // Re-enable check buttons
+        document.querySelectorAll('.check-btn').forEach(b => b.disabled = false);
+
+        // Hide feedbacks
+        document.querySelectorAll('.feedback-msg').forEach(fb => {
+            fb.className = 'feedback-msg';
+            fb.innerHTML = '';
+        });
+
+        // Re-lock exercises sequentially
+        ['ex-disc-2', 'ex-do-1', 'ex-do-2', 'ex-prac-1', 'ex-prac-2', 'ex-search-1'].forEach(id => {
+            document.getElementById(id).classList.add('locked');
+        });
+
+        // Reset evaluation card UI
+        updateCountersAndEval();
+        const remarkEl = document.getElementById('eval-remark');
+        remarkEl.style.borderColor = '#cbd5e1';
+        remarkEl.style.background = '#f8fafc';
+        remarkEl.style.color = '#1e293b';
+        remarkEl.innerHTML = 'أَجِبْ عَنْ جَمِيعِ التَّمَارِينِ أَعْلَاهُ لِتَظْهَرَ نَتِيجَتُكَ النِّهَائِيَّةُ! 🌟';
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
