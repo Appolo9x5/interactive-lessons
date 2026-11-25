@@ -1,0 +1,2230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>الدرس 21: قِيَاسُ أَطْوَالٍ - الرياضيات للسنة الثالثة ابتدائي</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1e6091;
+    --primary-light: #e0f2fe;
+    --secondary: #d97706;
+    --secondary-light: #fef3c7;
+    --accent: #059669;
+    --accent-light: #d1fae5;
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+    --danger: #dc2626;
+    --danger-light: #fee2e2;
+    --bg: #f4f7fb;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #cbd5e1;
+    --radius: 16px;
+    --shadow: 0 6px 20px rgba(15, 23, 42, 0.07);
+    --cm-px: 38px;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Cairo', sans-serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    padding-bottom: 60px;
+  }
+
+  /* ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== */
+  #sub-lock-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    text-align: center;
+  }
+
+  .lock-box {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+    border: 2px solid #e1f5fe;
+    max-width: 380px;
+    width: 100%;
+  }
+
+  .lock-icon {
+    font-size: 50px;
+    margin-bottom: 12px;
+  }
+
+  .lock-title {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #01579b;
+    margin-bottom: 10px;
+  }
+
+  .lock-desc {
+    font-size: 1rem;
+    color: #546e7a;
+    line-height: 1.6;
+    margin-bottom: 22px;
+  }
+
+  .btn-channel {
+    display: block;
+    width: 100%;
+    background: #0288d1;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+  }
+
+  .btn-check-sub {
+    width: 100%;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 13px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .sub-status-msg {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-height: 24px;
+  }
+
+  .btn-back-home {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin: 24px auto 10px auto;
+    background: #1e3a8a;
+    color: #ffffff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(30, 58, 138, 0.25);
+  }
+
+  /* Header */
+  .lesson-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #0284c7 100%);
+    color: #fff;
+    padding: 24px 20px;
+    text-align: center;
+    border-bottom-left-radius: 28px;
+    border-bottom-right-radius: 28px;
+    box-shadow: 0 8px 25px rgba(2, 132, 199, 0.25);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .lesson-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+    padding: 4px 16px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .lesson-header h1 {
+    margin: 4px 0;
+    font-size: 2.1rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.18);
+  }
+
+  .lesson-subtitle {
+    font-size: 1rem;
+    opacity: 0.92;
+    margin: 0;
+  }
+
+  /* Floating Ruler Dock */
+  .ruler-dock {
+    position: sticky;
+    top: 8px;
+    z-index: 900;
+    max-width: 920px;
+    margin: 14px auto 0;
+    padding: 0 12px;
+  }
+
+  .ruler-toolbar {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(8px);
+    border: 2px solid #93c5fd;
+    border-radius: 14px;
+    padding: 8px 12px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    box-shadow: 0 6px 18px rgba(30, 58, 138, 0.12);
+  }
+
+  .ruler-title {
+    font-weight: 800;
+    color: var(--primary);
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .ruler-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .r-btn {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    padding: 4px 9px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .r-btn:hover {
+    background: #dbeafe;
+  }
+
+  .r-btn:active {
+    transform: scale(0.95);
+  }
+
+  .r-btn.primary-toggle {
+    background: #0284c7;
+    color: #fff;
+    border-color: #0284c7;
+  }
+
+  .r-btn.reset-btn {
+    background: #fef2f2;
+    color: #b91c1c;
+    border-color: #fecaca;
+  }
+
+  /* Draggable Interactive Ruler */
+  #interactive-ruler {
+    position: fixed;
+    top: 150px;
+    left: 40px;
+    width: calc(15 * var(--cm-px) + 28px);
+    height: 76px;
+    background: linear-gradient(180deg, rgba(254, 249, 195, 0.93) 0%, rgba(253, 230, 138, 0.90) 100%);
+    border: 2px solid #d97706;
+    border-top: 2px solid #b45309;
+    border-radius: 4px 4px 10px 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.22);
+    z-index: 9999;
+    direction: ltr;
+    transform-origin: 14px 0px;
+    touch-action: none;
+    user-select: none;
+    display: none;
+  }
+
+  #interactive-ruler.visible {
+    display: block;
+  }
+
+  #ruler-handle {
+    position: absolute;
+    bottom: 4px;
+    left: 14px;
+    right: 14px;
+    height: 28px;
+    background: rgba(217, 119, 6, 0.16);
+    border: 1px dashed #b45309;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: #78350f;
+    cursor: grab;
+  }
+
+  #ruler-handle:active {
+    cursor: grabbing;
+    background: rgba(217, 119, 6, 0.28);
+  }
+
+  .ruler-ticks-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 44px;
+    pointer-events: none;
+  }
+
+  /* Container & Sections */
+  .container {
+    max-width: 920px;
+    margin: 20px auto;
+    padding: 0 14px;
+  }
+
+  .section-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 26px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+  }
+
+  .section-banner {
+    padding: 14px 22px;
+    font-size: 1.35rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+  }
+
+  .banner-aktashif { background: linear-gradient(90deg, #059669, #10b981); }
+  .banner-unjiz { background: linear-gradient(90deg, #d97706, #f59e0b); }
+  .banner-taalamtu { background: linear-gradient(90deg, #4f46e5, #6366f1); }
+  .banner-atamarran { background: linear-gradient(90deg, #be185d, #ec4899); }
+  .banner-abhath { background: linear-gradient(90deg, #b45309, #d97706); }
+
+  .section-body {
+    padding: 20px;
+  }
+
+  .exercise-box {
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 20px;
+    transition: border-color 0.2s;
+  }
+
+  .exercise-box.locked-ex {
+    opacity: 0.58;
+    pointer-events: none;
+    position: relative;
+  }
+
+  .exercise-box.locked-ex::after {
+    content: "🔒 أَكْمِلِ التَّمْرِينَ السَّابِقَ أَوَّلًا";
+    position: absolute;
+    top: 12px;
+    left: 14px;
+    background: #334155;
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .ex-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 1.12rem;
+    font-weight: 800;
+    color: #0f172a;
+  }
+
+  .ex-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    font-weight: 900;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .ex-num.square {
+    border-radius: 8px;
+    background: #be185d;
+  }
+
+  .ex-num.orange {
+    background: #d97706;
+  }
+
+  .sub-instruction {
+    margin: 6px 0 12px 0;
+    padding-right: 12px;
+    border-right: 3px solid #94a3b8;
+    font-weight: 700;
+    color: #334155;
+  }
+
+  /* LTR Isolation Helper */
+  .ltr-box {
+    direction: ltr;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    unicode-bidi: isolate;
+    font-weight: 800;
+    font-size: 1.08rem;
+  }
+
+  /* Inputs & Buttons */
+  input.math-input {
+    width: 78px;
+    height: 40px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 800;
+    border: 2px solid #94a3b8;
+    border-radius: 10px;
+    background: #fff;
+    color: #0f172a;
+    direction: ltr;
+    transition: all 0.2s;
+  }
+
+  input.math-input:focus {
+    outline: none;
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+  }
+
+  input.math-input.wide {
+    width: 110px;
+  }
+
+  input.math-input.correct, select.math-select.correct {
+    background-color: var(--accent-light) !important;
+    border-color: var(--accent) !important;
+    color: #065f46 !important;
+  }
+
+  input.math-input.wrong, select.math-select.wrong {
+    background-color: var(--danger-light) !important;
+    border-color: var(--danger) !important;
+    color: #991b1b !important;
+  }
+
+  select.math-select {
+    height: 40px;
+    padding: 0 10px;
+    font-size: 1rem;
+    font-weight: 800;
+    border: 2px solid #94a3b8;
+    border-radius: 10px;
+    background: #fff;
+    color: #0f172a;
+    direction: ltr;
+    cursor: pointer;
+  }
+
+  /* Choice Pills (for radio / single attempt) */
+  .choice-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px 0;
+  }
+
+  .choice-btn {
+    background: #fff;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 8px 18px;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: #1e293b;
+  }
+
+  .choice-btn:hover:not(:disabled) {
+    border-color: #0284c7;
+    background: #f0f9ff;
+  }
+
+  .choice-btn.selected {
+    border-color: #0284c7;
+    background: #e0f2fe;
+    color: #0369a1;
+  }
+
+  .choice-btn.correct {
+    background: var(--accent-light) !important;
+    border-color: var(--accent) !important;
+    color: #065f46 !important;
+  }
+
+  .choice-btn.wrong {
+    background: var(--danger-light) !important;
+    border-color: var(--danger) !important;
+    color: #991b1b !important;
+  }
+
+  .check-btn {
+    background: linear-gradient(135deg, #0284c7, #1d4ed8);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 24px;
+    font-size: 1.02rem;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 12px;
+    box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+    transition: transform 0.15s, opacity 0.2s;
+  }
+
+  .check-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  .check-btn:disabled {
+    background: #94a3b8;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  .feedback-msg {
+    margin-top: 10px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.96rem;
+    display: none;
+  }
+
+  .feedback-msg.show {
+    display: block;
+  }
+
+  .feedback-msg.ok {
+    background: var(--accent-light);
+    color: #065f46;
+    border: 1px solid #6ee7b7;
+  }
+
+  .feedback-msg.err {
+    background: var(--danger-light);
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+  }
+
+  .station-counter {
+    background: #f1f5f9;
+    padding: 10px 18px;
+    border-top: 1px solid #e2e8f0;
+    font-weight: 800;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    color: #334155;
+  }
+
+  .cnt-ok { color: var(--accent); }
+  .cnt-err { color: var(--danger); }
+
+  /* Illustrative Ruler Card in Aktashif */
+  .illustration-card {
+    background: #fff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 14px;
+    overflow-x: auto;
+    text-align: center;
+  }
+
+  .equation-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+    gap: 10px;
+  }
+
+  /* Interactive Segment Drawing Canvas */
+  .draw-board {
+    background: #fff;
+    border: 2px dashed #94a3b8;
+    border-radius: 14px;
+    padding: 16px;
+    margin: 12px 0;
+  }
+
+  .draw-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .draw-controls label {
+    font-weight: 800;
+    font-size: 0.95rem;
+  }
+
+  .range-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f8fafc;
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+  }
+
+  /* Cards Grid for Ordering Exercises */
+  .order-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+    gap: 12px;
+    margin: 14px 0;
+  }
+
+  .order-card {
+    background: #fff;
+    border: 2px solid #93c5fd;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+
+  .order-card-val {
+    background: #eff6ff;
+    color: #1e3a8a;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-weight: 900;
+    width: 100%;
+    direction: ltr;
+  }
+
+  .order-card-arrow {
+    color: #64748b;
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  /* Objects Grid for Atamarran 1 */
+  .objects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+    gap: 14px;
+    margin: 14px 0;
+  }
+
+  .obj-item {
+    background: #fff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .obj-caption {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #475569;
+  }
+
+  /* Taalamtu Box */
+  .taalamtu-content {
+    background: #eef2ff;
+    border: 2px solid #818cf8;
+    border-radius: 14px;
+    padding: 18px 22px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #1e1b4b;
+    line-height: 2;
+  }
+
+  /* Final Summary & Circular Gauge */
+  .summary-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%);
+    border: 2px solid #38bdf8;
+    border-radius: 20px;
+    padding: 26px 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(2, 132, 199, 0.12);
+    margin-top: 30px;
+  }
+
+  .summary-title {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #0c4a6e;
+    margin-bottom: 18px;
+  }
+
+  .gauge-container {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    margin: 0 auto 18px;
+  }
+
+  .gauge-svg {
+    width: 170px;
+    height: 170px;
+    transform: rotate(-90deg);
+  }
+
+  .gauge-bg {
+    fill: none;
+    stroke: #e2e8f0;
+    stroke-width: 14;
+  }
+
+  .gauge-fill {
+    fill: none;
+    stroke: #10b981;
+    stroke-width: 14;
+    stroke-linecap: round;
+    stroke-dasharray: 440;
+    stroke-dashoffset: 440;
+    transition: stroke-dashoffset 0.7s ease, stroke 0.4s ease;
+  }
+
+  .gauge-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .gauge-percent {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1.1;
+  }
+
+  .gauge-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #64748b;
+  }
+
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .stat-pill {
+    background: #fff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-weight: 800;
+    font-size: 1.05rem;
+  }
+
+  .restart-btn {
+    background: linear-gradient(135deg, #059669, #047857);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 12px 28px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(5, 150, 105, 0.3);
+  }
+
+  .restart-btn:hover {
+    opacity: 0.94;
+  }
+
+  @media (max-width: 600px) {
+    .lesson-header h1 { font-size: 1.65rem; }
+    .equation-row { flex-direction: column; align-items: stretch; }
+    .ltr-box { justify-content: flex-end; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button type="button" class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="lesson-header">
+    <div class="lesson-badge">الرِّيَاضِيَّاتُ • السَّنَةُ الثَّالِثَةُ ابْتِدَائِي • الدَّرْسُ 21</div>
+    <h1>قِيَاسُ أَطْوَالٍ</h1>
+    <p class="lesson-subtitle">كِتَابُ التِّلْمِيذِ (ص 40) وَكَرَّاسُ الْأَنْشِطَةِ (ص 24)</p>
+  </header>
+
+  <!-- Sticky Interactive Ruler Control Bar -->
+  <div class="ruler-dock">
+    <div class="ruler-toolbar">
+      <div class="ruler-title">
+        <span>📏 الْمِسْطَرَةُ الرَّقْمِيَّةُ الْمُدَرَّجَةُ (15 cm):</span>
+      </div>
+      <div class="ruler-controls">
+        <button type="button" class="r-btn primary-toggle" id="toggle-ruler-btn" onclick="toggleRuler()">إِظْهَارُ الْمِسْطَرَةِ</button>
+        <button type="button" class="r-btn" onclick="moveRuler(0, -5)" title="أعلى">⬆</button>
+        <button type="button" class="r-btn" onclick="moveRuler(0, 5)" title="أسفل">⬇</button>
+        <button type="button" class="r-btn" onclick="moveRuler(-5, 0)" title="يسار">⬅</button>
+        <button type="button" class="r-btn" onclick="moveRuler(5, 0)" title="يمين">➡</button>
+        <button type="button" class="r-btn" onclick="rotateRuler(-15)">↺ 15°</button>
+        <button type="button" class="r-btn" onclick="rotateRuler(-1)">↺ 1°</button>
+        <button type="button" class="r-btn" onclick="rotateRuler(1)">↻ 1°</button>
+        <button type="button" class="r-btn" onclick="rotateRuler(15)">↻ 15°</button>
+        <button type="button" class="r-btn reset-btn" onclick="resetRuler()">إِعَادَةُ ضَبْطٍ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Draggable & Two-Finger Rotatable Ruler -->
+  <div id="interactive-ruler">
+    <svg class="ruler-ticks-svg" id="ruler-svg" viewBox="0 0 598 44" preserveAspectRatio="none"></svg>
+    <div id="ruler-handle">اسْحَبْ لِلتَّحْرِيكِ • أَوِ اسْتَعْمِلْ إِصْبَعَيْنِ / الْأَزْرَارَ لِلتَّدْوِيرِ (<span id="ruler-angle-label" dir="ltr">0°</span>)</div>
+  </div>
+
+  <main class="container">
+
+    <!-- ==================== 1. أكتشف ==================== -->
+    <section class="section-card" id="sec-aktashif">
+      <div class="section-banner banner-aktashif">
+        <span>🔍 أَكْتَشِفُ</span>
+        <span style="font-size:0.9rem; opacity:0.9;">كِتَابُ التِّلْمِيذِ ص 40</span>
+      </div>
+      <div class="section-body">
+
+        <!-- أكتشف - تمرين 1 -->
+        <div class="exercise-box" id="ex-aktashif-1">
+          <div class="ex-header">
+            <span class="ex-num">1</span>
+            <div>
+              <div>لَاحِظِ الْمِسْطَرَةَ الْمُدَرَّجَةَ.</div>
+              <div style="font-weight:700; font-size:1rem; color:#334155; margin-top:4px;">
+                ▪ التَّدْرِيجَاتُ الْحَمْرَاءُ تَرْمُزُ لِلسَّنْتِيمِتْرِ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">cm</span>) وَالتَّدْرِيجَاتُ السَّوْدَاءُ تَرْمُزُ لِلْمِلِّيمِتْرِ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">mm</span>).
+              </div>
+              <div style="font-weight:700; font-size:1rem; color:#334155; margin-top:4px;">
+                ▪ اُنْقُلْ عَلَى كُرَّاسِكَ ثُمَّ أَكْمِلْ بِمَا يُنَاسِبُ.
+              </div>
+            </div>
+          </div>
+
+          <!-- SVG توضيحي للمسطرة كما في الكتاب -->
+          <div class="illustration-card">
+            <svg width="540" height="88" viewBox="0 0 540 88" style="max-width:100%; height:auto; direction:ltr;">
+              <rect x="10" y="10" width="520" height="46" rx="4" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+              <g id="book-ruler-marks"></g>
+              <!-- قوس 1cm بين 2 و 3 -->
+              <path d="M 102 58 Q 121 70 140 58" fill="none" stroke="#dc2626" stroke-width="2"/>
+              <text x="121" y="79" font-size="11" font-weight="bold" fill="#dc2626" text-anchor="middle">1cm</text>
+              <!-- سهم 2cm 6mm -->
+              <line x1="224" y1="60" x2="224" y2="70" stroke="#0f172a" stroke-width="1.5"/>
+              <text x="224" y="82" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="middle">2cm 6mm</text>
+              <!-- 0dm و 1dm -->
+              <text x="26" y="76" font-size="11" font-weight="bold" fill="#b45309" text-anchor="middle">0dm</text>
+              <line x1="406" y1="58" x2="406" y2="68" stroke="#b45309" stroke-width="1.5"/>
+              <text x="406" y="80" font-size="11" font-weight="bold" fill="#b45309" text-anchor="middle">1dm</text>
+            </svg>
+          </div>
+
+          <div class="equation-row">
+            <span>▪ فِي كُلِّ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1</span> سَنْتِيمِتْرٍ يُوجَدُ <span id="akt1-word-mirror" style="color:#0284c7; font-weight:900;">.....</span> مِلِّيمِتْرٍ.</span>
+            <span class="ltr-box">
+              <span>1 cm =</span>
+              <input type="number" class="math-input" id="in-akt1-1" oninput="document.getElementById('akt1-word-mirror').textContent = this.value || '.....'">
+              <span>mm</span>
+            </span>
+          </div>
+
+          <button type="button" class="check-btn" id="btn-aktashif-1" onclick="checkAktashif1()">تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+          <div class="feedback-msg" id="fb-aktashif-1"></div>
+        </div>
+
+        <!-- أكتشف - تمرين 2 -->
+        <div class="exercise-box locked-ex" id="ex-aktashif-2">
+          <div class="ex-header">
+            <span class="ex-num">2</span>
+            <div>لَاحِظْ مِسْطَرَةَ الْقِسْمِ ثُمَّ أَكْمِلْ مَلْءَ الْفَرَاغَاتِ. <span style="font-size:0.9rem; color:#d97706;">(أَسْتَعْمِلُ تَحْوِيلَ الْوَحَدَاتِ)</span></div>
+          </div>
+
+          <div class="equation-row">
+            <span>▪ فِي كُلِّ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1</span> دِيسِيمِتْرٍ يُوجَدُ <span id="akt2-m1" style="color:#0284c7; font-weight:900;">.....</span> سَنْتِيمِتْرٍ.</span>
+            <span class="ltr-box">
+              <span>1 dm =</span>
+              <input type="number" class="math-input" id="in-akt2-1" oninput="document.getElementById('akt2-m1').textContent = this.value || '.....'">
+              <span>cm</span>
+            </span>
+          </div>
+
+          <div class="equation-row">
+            <span>▪ فِي كُلِّ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1</span> مِتْرٍ يُوجَدُ <span id="akt2-m2" style="color:#0284c7; font-weight:900;">.....</span> دِيسِيمِتْرٍ.</span>
+            <span class="ltr-box">
+              <span>1 m =</span>
+              <input type="number" class="math-input" id="in-akt2-2" oninput="document.getElementById('akt2-m2').textContent = this.value || '.....'">
+              <span>dm</span>
+            </span>
+          </div>
+
+          <div class="equation-row">
+            <span>▪ فِي كُلِّ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1</span> مِتْرٍ يُوجَدُ <span id="akt2-m3" style="color:#0284c7; font-weight:900;">.....</span> سَنْتِيمِتْرٍ.</span>
+            <span class="ltr-box">
+              <span>1 m =</span>
+              <input type="number" class="math-input" id="in-akt2-3" oninput="document.getElementById('akt2-m3').textContent = this.value || '.....'">
+              <span>cm</span>
+            </span>
+          </div>
+
+          <div class="equation-row">
+            <span>▪ فِي كُلِّ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1</span> مِتْرٍ يُوجَدُ <span id="akt2-m4" style="color:#0284c7; font-weight:900;">.....</span> مِلِّيمِتْرٍ.</span>
+            <span class="ltr-box">
+              <span>1 m =</span>
+              <input type="number" class="math-input" id="in-akt2-4">
+              <span>cm =</span>
+              <input type="number" class="math-input wide" id="in-akt2-5" oninput="document.getElementById('akt2-m4').textContent = this.value || '.....'">
+              <span>mm</span>
+            </span>
+          </div>
+
+          <button type="button" class="check-btn" id="btn-aktashif-2" onclick="checkAktashif2()">تَحَقَّقْ مِنَ الْإِجَابَاتِ</button>
+          <div class="feedback-msg" id="fb-aktashif-2"></div>
+        </div>
+
+      </div>
+      <div class="station-counter">
+        <span class="cnt-ok">✓ الصَّوَابُ: <span id="cnt-ok-aktashif">0</span></span>
+        <span class="cnt-err">✗ الْخَطَأُ: <span id="cnt-err-aktashif">0</span></span>
+      </div>
+    </section>
+
+    <!-- ==================== 2. أنجز ==================== -->
+    <section class="section-card" id="sec-unjiz">
+      <div class="section-banner banner-unjiz">
+        <span>✏️ أُنْجِزُ</span>
+        <span style="font-size:0.9rem; opacity:0.9;">كِتَابُ التِّلْمِيذِ ص 40</span>
+      </div>
+      <div class="section-body">
+
+        <!-- أنجز - تمرين 1 -->
+        <div class="exercise-box locked-ex" id="ex-unjiz-1">
+          <div class="ex-header">
+            <span class="ex-num orange">1</span>
+            <div>تَحَقَّقْ مِنَ الْقِيَاسَاتِ ثُمَّ احْسُبْ طُولَ الْخَطِّ الْمُنْكَسِرِ.</div>
+          </div>
+
+          <p style="font-size:0.93rem; color:#475569; margin:4px 0 10px;">
+            💡 اضْغَطْ عَلَى زِرِّ <strong>«إِظْهَارُ الْمِسْطَرَةِ»</strong> فِي الْأَعْلَى وَقِسْ كُلَّ قِطْعَةٍ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">a, b, c</span>) لِلتَّحَقُّقِ مِنْ أَطْوَالِهَا بدِقَّةٍ:
+          </p>
+
+          <!-- رسم الخط المنكسر بأطوال حقيقية مطابقة لمقياس المسطرة 1cm = 38px -->
+          <div class="illustration-card" style="padding:18px;">
+            <svg width="360" height="225" viewBox="0 0 360 225" style="max-width:100%; height:auto; direction:ltr; overflow:visible;">
+              <!-- القطعة c -->
+              <line x1="90" y1="35" x2="329.4" y2="35" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
+              <line x1="329.4" y1="28" x2="329.4" y2="42" stroke="#0f172a" stroke-width="2.5"/>
+              <text x="210" y="24" font-size="16" font-weight="bold" fill="#0f172a" text-anchor="middle">c</text>
+
+              <!-- القطعة b -->
+              <line x1="90" y1="35" x2="176" y2="121" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
+              <text x="150" y="75" font-size="16" font-weight="bold" fill="#0f172a">b</text>
+
+              <!-- القطعة a -->
+              <line x1="16.4" y1="121" x2="176" y2="121" stroke="#0f172a" stroke-width="3" stroke-linecap="round"/>
+              <line x1="16.4" y1="114" x2="16.4" y2="128" stroke="#0f172a" stroke-width="2.5"/>
+              <text x="96" y="110" font-size="16" font-weight="bold" fill="#0f172a" text-anchor="middle">a</text>
+
+              <!-- مسطرة توضيحية أسفل القطعة a كما في الكتاب -->
+              <g transform="translate(16.4, 134)">
+                <rect x="0" y="0" width="205" height="38" fill="#fef3c7" stroke="#92400e" stroke-width="1.5"/>
+                <g id="unjiz1-mini-ruler"></g>
+              </g>
+
+              <!-- بطاقة القياسات المعطاة كما في الكتاب -->
+              <g transform="translate(215, 75)">
+                <text x="0" y="15" font-size="14" font-weight="bold" fill="#1e293b">a = 4cm 2mm</text>
+                <text x="0" y="38" font-size="14" font-weight="bold" fill="#1e293b">b = 3cm 2mm</text>
+                <text x="0" y="61" font-size="14" font-weight="bold" fill="#1e293b">c = 6cm 3mm</text>
+              </g>
+            </svg>
+          </div>
+
+          <div class="equation-row">
+            <span>▪ طُولُ الْخَطِّ الْمُنْكَسِرِ هُوَ:</span>
+            <span class="ltr-box">
+              <input type="number" class="math-input" id="in-unj1-cm">
+              <span>cm</span>
+              <input type="number" class="math-input" id="in-unj1-mm">
+              <span>mm</span>
+            </span>
+          </div>
+
+          <button type="button" class="check-btn" id="btn-unjiz-1" onclick="checkUnjiz1()">تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+          <div class="feedback-msg" id="fb-unjiz-1"></div>
+        </div>
+
+        <!-- أنجز - تمرين 2 -->
+        <div class="exercise-box locked-ex" id="ex-unjiz-2">
+          <div class="ex-header">
+            <span class="ex-num orange">2</span>
+            <div>أُرْسُمْ بِاللَّوْنِ الْأَخْضَرِ قِطْعَةَ مُسْتَقِيمٍ طُولُهَا <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">57 mm</span> ثُمَّ مَدِّدْهَا بِالْأَزْرَقِ حَتَّى يَبْلُغَ طُولُهَا <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">10 cm</span>. مَا هُوَ طُولُ الْقِطْعَةِ الزَّرْقَاءِ؟</div>
+          </div>
+
+          <div class="draw-board">
+            <div class="draw-controls">
+              <div class="range-wrap">
+                <label for="slider-green" style="color:#059669;">الْقِطْعَةُ الْخَضْرَاءُ:</label>
+                <input type="range" id="slider-green" min="0" max="100" value="0" oninput="updateUnjiz2Draw()">
+                <span class="ltr-box" style="color:#059669; min-width:58px;"><span id="lbl-green">0</span> mm</span>
+              </div>
+              <div class="range-wrap">
+                <label for="slider-blue" style="color:#0284c7;">التَّمْدِيدُ الْأَزْرَقُ:</label>
+                <input type="range" id="slider-blue" min="0" max="100" value="0" oninput="updateUnjiz2Draw()">
+                <span class="ltr-box" style="color:#0284c7; min-width:58px;"><span id="lbl-blue">0</span> mm</span>
+              </div>
+            </div>
+
+            <div style="overflow-x:auto; text-align:center;">
+              <svg id="svg-unjiz2" width="430" height="75" viewBox="0 0 430 75" style="max-width:100%; height:auto; direction:ltr;">
+                <line x1="20" y1="35" x2="400" y2="35" stroke="#e2e8f0" stroke-width="6" stroke-linecap="round"/>
+                <line id="line-green" x1="20" y1="35" x2="20" y2="35" stroke="#10b981" stroke-width="6"/>
+                <line id="line-blue" x1="20" y1="35" x2="20" y2="35" stroke="#0284c7" stroke-width="6"/>
+                <line x1="20" y1="25" x2="20" y2="45" stroke="#0f172a" stroke-width="2.5"/>
+                <line x1="400" y1="22" x2="400" y2="48" stroke="#dc2626" stroke-width="2" stroke-dasharray="3,2"/>
+                <text x="400" y="65" font-size="12" font-weight="bold" fill="#dc2626" text-anchor="middle">10 cm (100 mm)</text>
+              </svg>
+            </div>
+          </div>
+
+          <div class="equation-row">
+            <span>▪ طُولُ الْقِطْعَةِ الزَّرْقَاءِ هُوَ:</span>
+            <span class="ltr-box">
+              <input type="number" class="math-input" id="in-unj2-ans">
+              <span>mm</span>
+            </span>
+          </div>
+
+          <button type="button" class="check-btn" id="btn-unjiz-2" onclick="checkUnjiz2()">تَحَقَّقْ مِنَ الرَّسْمِ وَالْإِجَابَةِ</button>
+          <div class="feedback-msg" id="fb-unjiz-2"></div>
+        </div>
+
+        <!-- أنجز - تمرين 3 -->
+        <div class="exercise-box locked-ex" id="ex-unjiz-3">
+          <div class="ex-header">
+            <span class="ex-num orange">3</span>
+            <div>رَتِّبْ هَذِهِ الْقِيَاسَاتِ تَصَاعُدِيًّا (مِنَ الْأَصْغَرِ إِلَى الْأَكْبَرِ بِتَرْقِيمِهَا مِنْ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1</span> إِلَى <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">7</span>).</div>
+          </div>
+
+          <div class="order-cards-grid">
+            <div class="order-card">
+              <div class="order-card-val">350 mm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-unj3-0">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">550 mm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-unj3-1">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">40 mm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-unj3-2">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">30 cm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-unj3-3">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">50 cm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-unj3-4">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">3 m</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-unj3-5">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">5 m</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-unj3-6">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="button" class="check-btn" id="btn-unjiz-3" onclick="checkUnjiz3()">تَحَقَّقْ مِنَ التَّرْتِيبِ</button>
+          <div class="feedback-msg" id="fb-unjiz-3"></div>
+        </div>
+
+      </div>
+      <div class="station-counter">
+        <span class="cnt-ok">✓ الصَّوَابُ: <span id="cnt-ok-unjiz">0</span></span>
+        <span class="cnt-err">✗ الْخَطَأُ: <span id="cnt-err-unjiz">0</span></span>
+      </div>
+    </section>
+
+    <!-- ==================== 3. تعلمت ==================== -->
+    <section class="section-card" id="sec-taalamtu">
+      <div class="section-banner banner-taalamtu">
+        <span>💡 تَعَلَّمْتُ</span>
+        <span style="font-size:0.9rem; opacity:0.9;">الْخُلَاصَةُ</span>
+      </div>
+      <div class="section-body">
+        <div class="taalamtu-content">
+          <div>• لِقِيَاسِ أَطْوَالٍ صَغِيرَةٍ، أَسْتَعْمِلُ السَّنْتِيمِتْرَ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">cm</span>) وَالْمِلِّيمِتْرَ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">mm</span>).</div>
+          <div>• لِقِيَاسِ أَطْوَالٍ أَكْبَرَ، أَسْتَعْمِلُ الْمِتْرَ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">m</span>).</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== 4. أتمرن ==================== -->
+    <section class="section-card" id="sec-atamarran">
+      <div class="section-banner banner-atamarran">
+        <span>📝 أَتَمَرَّنُ</span>
+        <span style="font-size:0.9rem; opacity:0.9;">كَرَّاسُ الْأَنْشِطَةِ ص 24</span>
+      </div>
+      <div class="section-body">
+
+        <!-- أتمرن - تمرين 1 -->
+        <div class="exercise-box locked-ex" id="ex-atamarran-1">
+          <div class="ex-header">
+            <span class="ex-num square">1</span>
+            <div>اُكْتُبِ الْوَحْدَةَ الْمُنَاسِبَةَ: مِلِّيمِتْر (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">mm</span>) أَوْ سَنْتِيمِتْر (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">cm</span>) أَوْ مِتْر (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">m</span>).</div>
+          </div>
+
+          <div class="objects-grid">
+            <!-- باب: 2 m -->
+            <div class="obj-item">
+              <svg width="64" height="72" viewBox="0 0 64 72">
+                <rect x="16" y="6" width="32" height="60" rx="2" fill="#cbd5e1" stroke="#334155" stroke-width="2"/>
+                <rect x="21" y="12" width="22" height="20" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+                <rect x="21" y="38" width="22" height="22" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+                <circle cx="43" cy="36" r="2.2" fill="#0f172a"/>
+              </svg>
+              <div class="obj-caption">ارْتِفَاعُ الْبَابِ</div>
+              <span class="ltr-box">
+                <span>2</span>
+                <select class="math-select" id="in-ata1-0">
+                  <option value="">...</option><option value="mm">mm</option><option value="cm">cm</option><option value="m">m</option>
+                </select>
+              </span>
+            </div>
+
+            <!-- قلم حبر: 15 cm -->
+            <div class="obj-item">
+              <svg width="64" height="72" viewBox="0 0 64 72">
+                <g transform="rotate(-40 32 36)">
+                  <rect x="27" y="12" width="10" height="44" rx="2" fill="#3b82f6" stroke="#1e3a8a" stroke-width="1.5"/>
+                  <polygon points="27,56 37,56 32,66" fill="#fde68a" stroke="#1e3a8a" stroke-width="1.5"/>
+                  <rect x="27" y="8" width="10" height="6" rx="1" fill="#94a3b8"/>
+                </g>
+              </svg>
+              <div class="obj-caption">طُولُ الْقَلَمِ</div>
+              <span class="ltr-box">
+                <span>15</span>
+                <select class="math-select" id="in-ata1-1">
+                  <option value="">...</option><option value="mm">mm</option><option value="cm">cm</option><option value="m">m</option>
+                </select>
+              </span>
+            </div>
+
+            <!-- سيارة: 4 m -->
+            <div class="obj-item">
+              <svg width="78" height="72" viewBox="0 0 78 72">
+                <path d="M 10 46 L 16 28 L 54 28 L 66 42 L 70 46 L 70 54 L 8 54 Z" fill="#ef4444" stroke="#7f1d1d" stroke-width="2"/>
+                <rect x="20" y="31" width="15" height="11" fill="#bae6fd"/>
+                <rect x="38" y="31" width="15" height="11" fill="#bae6fd"/>
+                <circle cx="22" cy="54" r="7" fill="#1e293b"/>
+                <circle cx="56" cy="54" r="7" fill="#1e293b"/>
+              </svg>
+              <div class="obj-caption">طُولُ السَّيَّارَةِ</div>
+              <span class="ltr-box">
+                <span>4</span>
+                <select class="math-select" id="in-ata1-2">
+                  <option value="">...</option><option value="mm">mm</option><option value="cm">cm</option><option value="m">m</option>
+                </select>
+              </span>
+            </div>
+
+            <!-- نملة: 5 mm -->
+            <div class="obj-item">
+              <svg width="64" height="72" viewBox="0 0 64 72">
+                <ellipse cx="32" cy="20" rx="5" ry="6" fill="#1e293b"/>
+                <ellipse cx="32" cy="33" rx="4.5" ry="7" fill="#1e293b"/>
+                <ellipse cx="32" cy="49" rx="7" ry="9" fill="#1e293b"/>
+                <path d="M 27 28 L 16 22 M 37 28 L 48 22 M 27 34 L 14 34 M 37 34 L 50 34 M 27 40 L 16 48 M 37 40 L 48 48" stroke="#1e293b" stroke-width="2" stroke-linecap="round"/>
+                <path d="M 29 14 L 24 8 M 35 14 L 40 8" stroke="#1e293b" stroke-width="1.5"/>
+              </svg>
+              <div class="obj-caption">طُولُ النَّمْلَةِ</div>
+              <span class="ltr-box">
+                <span>5</span>
+                <select class="math-select" id="in-ata1-3">
+                  <option value="">...</option><option value="mm">mm</option><option value="cm">cm</option><option value="m">m</option>
+                </select>
+              </span>
+            </div>
+
+            <!-- مقلمة: 25 cm -->
+            <div class="obj-item">
+              <svg width="72" height="72" viewBox="0 0 72 72">
+                <rect x="10" y="24" width="52" height="28" rx="8" fill="#f43f5e" stroke="#881337" stroke-width="2"/>
+                <line x1="12" y1="33" x2="60" y2="33" stroke="#fde047" stroke-width="2.5" stroke-dasharray="4,2"/>
+                <circle cx="54" cy="33" r="3" fill="#fde047"/>
+              </svg>
+              <div class="obj-caption">طُولُ الْمِقْلَمَةِ</div>
+              <span class="ltr-box">
+                <span>25</span>
+                <select class="math-select" id="in-ata1-4">
+                  <option value="">...</option><option value="mm">mm</option><option value="cm">cm</option><option value="m">m</option>
+                </select>
+              </span>
+            </div>
+          </div>
+
+          <button type="button" class="check-btn" id="btn-atamarran-1" onclick="checkAtamarran1()">تَحَقَّقْ مِنَ الْوَحَدَاتِ</button>
+          <div class="feedback-msg" id="fb-atamarran-1"></div>
+        </div>
+
+        <!-- أتمرن - تمرين 2 -->
+        <div class="exercise-box locked-ex" id="ex-atamarran-2">
+          <div class="ex-header">
+            <span class="ex-num square">2</span>
+            <div>أُرْسُمْ خَطًّا أَزْرَقَ طُولُهُ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">9 cm</span>) ثُمَّ مَدِّدْهُ بِخَطٍّ بُنِّيٍّ طُولُهُ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">50 mm</span>). كَمْ صَارَ طُولُ الْخَطَّيْنِ مَعًا؟ اِشْرَحْ.</div>
+          </div>
+
+          <div class="draw-board">
+            <div class="draw-controls">
+              <div class="range-wrap">
+                <label for="slider-ata-blue" style="color:#0284c7;">الْخَطُّ الْأَزْرَقُ:</label>
+                <input type="range" id="slider-ata-blue" min="0" max="12" value="0" oninput="updateAtamarran2Draw()">
+                <span class="ltr-box" style="color:#0284c7; min-width:54px;"><span id="lbl-ata-blue">0</span> cm</span>
+              </div>
+              <div class="range-wrap">
+                <label for="slider-ata-brown" style="color:#78350f;">التَّمْدِيدُ الْبُنِّيُّ:</label>
+                <input type="range" id="slider-ata-brown" min="0" max="80" step="5" value="0" oninput="updateAtamarran2Draw()">
+                <span class="ltr-box" style="color:#78350f; min-width:58px;"><span id="lbl-ata-brown">0</span> mm</span>
+              </div>
+            </div>
+
+            <div style="overflow-x:auto; text-align:center;">
+              <svg width="460" height="65" viewBox="0 0 460 65" style="max-width:100%; height:auto; direction:ltr;">
+                <line x1="15" y1="32" x2="445" y2="32" stroke="#e2e8f0" stroke-width="6" stroke-linecap="round"/>
+                <line id="line-ata-blue" x1="15" y1="32" x2="15" y2="32" stroke="#0284c7" stroke-width="6"/>
+                <line id="line-ata-brown" x1="15" y1="32" x2="15" y2="32" stroke="#92400e" stroke-width="6"/>
+                <line x1="15" y1="22" x2="15" y2="42" stroke="#0f172a" stroke-width="2.5"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="equation-row">
+            <span>▪ التَّحْوِيلُ لِلشَّرْحِ:</span>
+            <span class="ltr-box">
+              <span>50 mm =</span>
+              <input type="number" class="math-input" id="in-ata2-conv">
+              <span>cm</span>
+            </span>
+          </div>
+
+          <div class="equation-row">
+            <span>▪ صَارَ طُولُ الْخَطَّيْنِ مَعًا:</span>
+            <span class="ltr-box">
+              <span>9 cm +</span>
+              <input type="number" class="math-input" id="in-ata2-add">
+              <span>cm =</span>
+              <input type="number" class="math-input" id="in-ata2-tot">
+              <span>cm</span>
+            </span>
+          </div>
+
+          <button type="button" class="check-btn" id="btn-atamarran-2" onclick="checkAtamarran2()">تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+          <div class="feedback-msg" id="fb-atamarran-2"></div>
+        </div>
+
+        <!-- أتمرن - تمرين 3 -->
+        <div class="exercise-box locked-ex" id="ex-atamarran-3">
+          <div class="ex-header">
+            <span class="ex-num square">3</span>
+            <div>رَتِّبِ الْأَطْوَالَ التَّالِيَةَ:</div>
+          </div>
+
+          <!-- الفرع 1 -->
+          <div class="sub-instruction">1) رَتِّبِ الْأَطْوَالَ التَّالِيَةَ مِنَ الْأَكْبَرِ إِلَى الْأَصْغَرِ، بِتَرْقِيمِهَا مِنْ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1</span> إِلَى <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">6</span>.</div>
+          <div class="order-cards-grid">
+            <div class="order-card">
+              <div class="order-card-val">40 cm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-ata3a-0">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">120m 32cm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-ata3a-1">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">1205 cm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-ata3a-2">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">3900 mm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-ata3a-3">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">930cm 50mm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-ata3a-4">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">300m 40cm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-ata3a-5">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- الفرع 2 -->
+          <div class="sub-instruction" style="margin-top:18px;">2) أَكْمِلْ تَرْتِيبَ الْأَطْوَالِ التَّالِيَةِ مِنَ الْأَصْغَرِ إِلَى الْأَكْبَرِ، بِتَرْقِيمِهَا مِنْ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1</span> إِلَى <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">6</span>.</div>
+          <div class="order-cards-grid">
+            <div class="order-card">
+              <div class="order-card-val">35m 9cm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-ata3b-0">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">4m 32cm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-ata3b-1">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">1205 cm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-ata3b-2">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">390 mm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-ata3b-3">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">45cm 50mm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-ata3b-4">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+              </select>
+            </div>
+            <div class="order-card">
+              <div class="order-card-val">3m 140cm</div>
+              <div class="order-card-arrow">⬇</div>
+              <select class="math-select" id="in-ata3b-5">
+                <option value="">--</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="button" class="check-btn" id="btn-atamarran-3" onclick="checkAtamarran3()">تَحَقَّقْ مِنَ التَّرْتِيبَيْنِ</button>
+          <div class="feedback-msg" id="fb-atamarran-3"></div>
+        </div>
+
+        <!-- أتمرن - تمرين 4 -->
+        <div class="exercise-box locked-ex" id="ex-atamarran-4">
+          <div class="ex-header">
+            <span class="ex-num square">4</span>
+            <div>اِمْلَأِ الْفَرَاغَاتِ بِمَا يُنَاسِبُ.</div>
+          </div>
+
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:10px;">
+            <div class="equation-row" style="justify-content:center;">
+              <span class="ltr-box">
+                <span>19 cm =</span>
+                <input type="number" class="math-input" id="in-ata4-0">
+                <span>mm</span>
+              </span>
+            </div>
+            <div class="equation-row" style="justify-content:center;">
+              <span class="ltr-box">
+                <span>49 m =</span>
+                <input type="number" class="math-input wide" id="in-ata4-1">
+                <span>cm</span>
+              </span>
+            </div>
+            <div class="equation-row" style="justify-content:center;">
+              <span class="ltr-box">
+                <span>9 cm 60 mm =</span>
+                <input type="number" class="math-input" id="in-ata4-2">
+                <span>mm</span>
+              </span>
+            </div>
+            <div class="equation-row" style="justify-content:center;">
+              <span class="ltr-box">
+                <span>12 m 80 cm =</span>
+                <input type="number" class="math-input wide" id="in-ata4-3">
+                <span>cm</span>
+              </span>
+            </div>
+            <div class="equation-row" style="justify-content:center;">
+              <span class="ltr-box">
+                <span>120 m =</span>
+                <input type="number" class="math-input wide" id="in-ata4-4">
+                <span>cm</span>
+              </span>
+            </div>
+            <div class="equation-row" style="justify-content:center;">
+              <span class="ltr-box">
+                <span>58 cm 120 mm =</span>
+                <input type="number" class="math-input wide" id="in-ata4-5">
+                <span>mm</span>
+              </span>
+            </div>
+          </div>
+
+          <button type="button" class="check-btn" id="btn-atamarran-4" onclick="checkAtamarran4()">تَحَقَّقْ مِنَ الْإِجَابَاتِ</button>
+          <div class="feedback-msg" id="fb-atamarran-4"></div>
+        </div>
+
+      </div>
+      <div class="station-counter">
+        <span class="cnt-ok">✓ الصَّوَابُ: <span id="cnt-ok-atamarran">0</span></span>
+        <span class="cnt-err">✗ الْخَطَأُ: <span id="cnt-err-atamarran">0</span></span>
+      </div>
+    </section>
+
+    <!-- ==================== 5. أبحث ==================== -->
+    <section class="section-card" id="sec-abhath">
+      <div class="section-banner banner-abhath">
+        <span>🏆 أَبْحَثُ</span>
+        <span style="font-size:0.9rem; opacity:0.9;">كَرَّاسُ الْأَنْشِطَةِ ص 24</span>
+      </div>
+      <div class="section-body">
+
+        <div class="exercise-box locked-ex" id="ex-abhath-1">
+          <div class="ex-header">
+            <span class="ex-num orange">★</span>
+            <div>فِي مُسَابَقَةٍ لِلْقَفْزِ الطَّوِيلِ، سَجَّلَ رِيَاضِيٌّ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">7m 21cm</span>) فِي الْمُحَاوَلَةِ الْأُولَى وَسَجَّلَ فِي الْمُحَاوَلَةِ الثَّانِيَةِ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">712cm</span>). أَيُّ النَّتِيجَتَيْنِ أَحْسَنُ؟</div>
+          </div>
+
+          <div class="equation-row">
+            <span>▪ نُحَوِّلُ الْمُحَاوَلَةَ الْأُولَى إِلَى السَّنْتِيمِتْرِ:</span>
+            <span class="ltr-box">
+              <span>7m 21cm =</span>
+              <input type="number" class="math-input" id="in-abh-conv">
+              <span>cm</span>
+            </span>
+          </div>
+
+          <div style="margin-top:12px;">
+            <div style="font-weight:800; margin-bottom:6px;">▪ أَيُّ النَّتِيجَتَيْنِ أَحْسَنُ؟</div>
+            <div class="choice-group" id="abh-choices">
+              <button type="button" class="choice-btn" data-val="first" onclick="selectAbhChoice(this)">الْمُحَاوَلَةُ الْأُولَى (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">7m 21cm</span>)</button>
+              <button type="button" class="choice-btn" data-val="second" onclick="selectAbhChoice(this)">الْمُحَاوَلَةُ الثَّانِيَةِ (<span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">712cm</span>)</button>
+            </div>
+          </div>
+
+          <button type="button" class="check-btn" id="btn-abhath-1" onclick="checkAbhath1()">تَحَقَّقْ مِنَ الْحَلِّ</button>
+          <div class="feedback-msg" id="fb-abhath-1"></div>
+        </div>
+
+      </div>
+      <div class="station-counter">
+        <span class="cnt-ok">✓ الصَّوَابُ: <span id="cnt-ok-abhath">0</span></span>
+        <span class="cnt-err">✗ الْخَطَأُ: <span id="cnt-err-abhath">0</span></span>
+      </div>
+    </section>
+
+    <!-- ==================== 6. التقييم النهائي الشامل ==================== -->
+    <section class="summary-card" id="final-summary">
+      <div class="summary-title">📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</div>
+
+      <div class="gauge-container">
+        <svg class="gauge-svg" viewBox="0 0 160 160">
+          <circle class="gauge-bg" cx="80" cy="80" r="70"></circle>
+          <circle class="gauge-fill" id="gauge-circle" cx="80" cy="80" r="70"></circle>
+        </svg>
+        <div class="gauge-text">
+          <span class="gauge-percent" id="final-percent">0%</span>
+          <span class="gauge-label">نِسْبَةُ النَّجَاحِ</span>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-pill" style="color:var(--accent); border-color:#6ee7b7;">✓ الْإِجَابَاتُ الصَّحِيحَةُ: <span id="total-ok">0</span></div>
+        <div class="stat-pill" style="color:var(--danger); border-color:#fca5a5;">✗ الْإِجَابَاتُ الْخَاطِئَةُ: <span id="total-err">0</span></div>
+        <div class="stat-pill" style="color:var(--primary); border-color:#93c5fd;">📋 الْمَجْمُوعُ الْكُلِّيُّ: <span id="total-items">34</span></div>
+      </div>
+
+      <p id="final-motivation" style="font-weight:800; font-size:1.1rem; color:#334155; margin-bottom:18px;">
+        أَجِبْ عَنِ التَّمَارِينِ بِالتَّرْتِيبِ لِمُشَاهَدَةِ نَتِيجَتِكَ النِّهَائِيَّةِ!
+      </p>
+
+      <button type="button" class="restart-btn" onclick="resetAllLesson()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+    </section>
+
+    <!-- زر العودة إلى الفهرس -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+  </main>
+
+<!-- ========================================
+     سكريبت الحماية (الاشتراك الإجباري)
+     ======================================== -->
+<script>
+  const CHANNEL_ID = "-1003910412986";
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي
+     ======================================== -->
+<script>
+  /* ================= 1. بناء تدريجات المسطرة التفاعلية والرسوم التوضيحية ================= */
+  const CM_PX = 38;
+
+  function buildInteractiveRulerSVG() {
+    const svg = document.getElementById('ruler-svg');
+    let html = '';
+    const startX = 14;
+    for (let mm = 0; mm <= 150; mm++) {
+      const x = startX + (mm * (CM_PX / 10));
+      const isCm = mm % 10 === 0;
+      const isHalf = mm % 5 === 0 && !isCm;
+      const h = isCm ? 22 : (isHalf ? 15 : 9);
+      const stroke = isCm ? '#dc2626' : '#1e293b';
+      const sw = isCm ? 2 : 1;
+      html += `<line x1="${x}" y1="0" x2="${x}" y2="${h}" stroke="${stroke}" stroke-width="${sw}"/>`;
+      if (isCm) {
+        const cmVal = mm / 10;
+        const label = cmVal === 0 ? '0 cm' : cmVal;
+        html += `<text x="${x}" y="35" font-size="11" font-weight="bold" fill="#dc2626" text-anchor="middle">${label}</text>`;
+      }
+    }
+    svg.innerHTML = html;
+  }
+
+  function buildBookIllustrationRulers() {
+    const g1 = document.getElementById('book-ruler-marks');
+    let h1 = '';
+    for (let mm = 0; mm <= 130; mm++) {
+      const x = 26 + (mm * 3.8);
+      const isCm = mm % 10 === 0;
+      const isHalf = mm % 5 === 0 && !isCm;
+      const len = isCm ? 20 : (isHalf ? 13 : 8);
+      const col = isCm ? '#dc2626' : '#1e293b';
+      h1 += `<line x1="${x}" y1="10" x2="${x}" y2="${10 + len}" stroke="${col}" stroke-width="${isCm ? 1.8 : 1}"/>`;
+      if (isCm) {
+        const c = mm / 10;
+        const txt = c === 0 ? '0cm' : (c === 10 ? '10cm' : c);
+        h1 += `<text x="${x}" y="44" font-size="11" font-weight="bold" fill="${col}" text-anchor="middle">${txt}</text>`;
+      }
+    }
+    g1.innerHTML = h1;
+
+    const g2 = document.getElementById('unjiz1-mini-ruler');
+    let h2 = '';
+    for (let mm = 0; mm <= 52; mm++) {
+      const x = mm * 3.8;
+      const isCm = mm % 10 === 0;
+      const isHalf = mm % 5 === 0 && !isCm;
+      const len = isCm ? 16 : (isHalf ? 11 : 7);
+      const col = isCm ? '#dc2626' : '#1e293b';
+      h2 += `<line x1="${x}" y1="0" x2="${x}" y2="${len}" stroke="${col}" stroke-width="${isCm ? 1.6 : 1}"/>`;
+      if (isCm) {
+        h2 += `<text x="${x}" y="31" font-size="11" font-weight="bold" fill="#0f172a" text-anchor="middle">${mm / 10}</text>`;
+      }
+    }
+    g2.innerHTML = h2;
+  }
+
+  /* ================= 2. تحريك وتدوير المسطرة بالماوس واللمس والأزرار ================= */
+  const rulerEl = document.getElementById('interactive-ruler');
+  const handleEl = document.getElementById('ruler-handle');
+  let rulerState = { x: 30, y: 150, angle: 0, visible: false };
+
+  function applyRulerTransform() {
+    rulerEl.style.left = rulerState.x + 'px';
+    rulerEl.style.top = rulerState.y + 'px';
+    rulerEl.style.transform = `rotate(${rulerState.angle}deg)`;
+    document.getElementById('ruler-angle-label').textContent = Math.round(rulerState.angle) + '°';
+  }
+
+  function toggleRuler() {
+    rulerState.visible = !rulerState.visible;
+    rulerEl.classList.toggle('visible', rulerState.visible);
+    document.getElementById('toggle-ruler-btn').textContent = rulerState.visible ? 'إِخْفَاءُ الْمِسْطَرَةِ' : 'إِظْهَارُ الْمِسْطَرَةِ';
+    applyRulerTransform();
+  }
+
+  function moveRuler(dx, dy) {
+    if (!rulerState.visible) toggleRuler();
+    rulerState.x += dx;
+    rulerState.y += dy;
+    applyRulerTransform();
+  }
+
+  function rotateRuler(deg) {
+    if (!rulerState.visible) toggleRuler();
+    rulerState.angle = (rulerState.angle + deg) % 360;
+    applyRulerTransform();
+  }
+
+  function resetRuler() {
+    rulerState.x = 30;
+    rulerState.y = 150;
+    rulerState.angle = 0;
+    if (!rulerState.visible) toggleRuler();
+    applyRulerTransform();
+  }
+
+  let isDragging = false, dragStartX = 0, dragStartY = 0, initX = 0, initY = 0;
+  handleEl.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'touch' && !e.isPrimary) return;
+    isDragging = true;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    initX = rulerState.x;
+    initY = rulerState.y;
+    handleEl.setPointerCapture(e.pointerId);
+  });
+
+  handleEl.addEventListener('pointermove', (e) => {
+    if (!isDragging) return;
+    rulerState.x = initX + (e.clientX - dragStartX);
+    rulerState.y = initY + (e.clientY - dragStartY);
+    applyRulerTransform();
+  });
+
+  handleEl.addEventListener('pointerup', () => { isDragging = false; });
+  handleEl.addEventListener('pointercancel', () => { isDragging = false; });
+
+  let initialTouchAngle = null;
+  let initialRulerAngle = 0;
+
+  rulerEl.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      isDragging = false;
+      const t1 = e.touches[0], t2 = e.touches[1];
+      initialTouchAngle = Math.atan2(t2.clientY - t1.clientY, t2.clientX - t1.clientX) * (180 / Math.PI);
+      initialRulerAngle = rulerState.angle;
+    }
+  }, { passive: false });
+
+  rulerEl.addEventListener('touchmove', (e) => {
+    if (e.touches.length === 2 && initialTouchAngle !== null) {
+      e.preventDefault();
+      const t1 = e.touches[0], t2 = e.touches[1];
+      const currentAngle = Math.atan2(t2.clientY - t1.clientY, t2.clientX - t1.clientX) * (180 / Math.PI);
+      rulerState.angle = initialRulerAngle + (currentAngle - initialTouchAngle);
+      applyRulerTransform();
+    }
+  }, { passive: false });
+
+  rulerEl.addEventListener('touchend', (e) => {
+    if (e.touches.length < 2) initialTouchAngle = null;
+  });
+
+  /* ================= 3. تحديث الرسومات التفاعلية للقطع المستقيمة ================= */
+  function updateUnjiz2Draw() {
+    const gVal = parseInt(document.getElementById('slider-green').value, 10);
+    const bVal = parseInt(document.getElementById('slider-blue').value, 10);
+    document.getElementById('lbl-green').textContent = gVal;
+    document.getElementById('lbl-blue').textContent = bVal;
+
+    const scale = 3.8;
+    const x0 = 20;
+    const x1 = x0 + gVal * scale;
+    const x2 = x1 + bVal * scale;
+
+    const lineG = document.getElementById('line-green');
+    const lineB = document.getElementById('line-blue');
+    lineG.setAttribute('x2', x1);
+    lineB.setAttribute('x1', x1);
+    lineB.setAttribute('x2', x2);
+  }
+
+  function updateAtamarran2Draw() {
+    const bCm = parseInt(document.getElementById('slider-ata-blue').value, 10);
+    const brMm = parseInt(document.getElementById('slider-ata-brown').value, 10);
+    document.getElementById('lbl-ata-blue').textContent = bCm;
+    document.getElementById('lbl-ata-brown').textContent = brMm;
+
+    const scale = 2.8;
+    const x0 = 15;
+    const x1 = x0 + (bCm * 10) * scale;
+    const x2 = x1 + brMm * scale;
+
+    document.getElementById('line-ata-blue').setAttribute('x2', x1);
+    document.getElementById('line-ata-brown').setAttribute('x1', x1);
+    document.getElementById('line-ata-brown').setAttribute('x2', x2);
+  }
+
+  /* ================= 4. منطق التصحيح الصارم ================= */
+  const TOTAL_ITEMS = 34;
+  const scores = {
+    aktashif: { ok: 0, err: 0 },
+    unjiz: { ok: 0, err: 0 },
+    atamarran: { ok: 0, err: 0 },
+    abhath: { ok: 0, err: 0 }
+  };
+
+  const exerciseOrder = [
+    'ex-aktashif-1',
+    'ex-aktashif-2',
+    'ex-unjiz-1',
+    'ex-unjiz-2',
+    'ex-unjiz-3',
+    'ex-atamarran-1',
+    'ex-atamarran-2',
+    'ex-atamarran-3',
+    'ex-atamarran-4',
+    'ex-abhath-1'
+  ];
+
+  function unlockNextExercise(currentId) {
+    const idx = exerciseOrder.indexOf(currentId);
+    if (idx >= 0 && idx + 1 < exerciseOrder.length) {
+      const nextEl = document.getElementById(exerciseOrder[idx + 1]);
+      if (nextEl) nextEl.classList.remove('locked-ex');
+    }
+  }
+
+  function updateCountersAndSummary() {
+    ['aktashif', 'unjiz', 'atamarran', 'abhath'].forEach(st => {
+      document.getElementById('cnt-ok-' + st).textContent = scores[st].ok;
+      document.getElementById('cnt-err-' + st).textContent = scores[st].err;
+    });
+
+    const totalOk = scores.aktashif.ok + scores.unjiz.ok + scores.atamarran.ok + scores.abhath.ok;
+    const totalErr = scores.aktashif.err + scores.unjiz.err + scores.atamarran.err + scores.abhath.err;
+
+    document.getElementById('total-ok').textContent = totalOk;
+    document.getElementById('total-err').textContent = totalErr;
+
+    let rawPercent = Math.round((totalOk / TOTAL_ITEMS) * 100);
+    if (rawPercent > 100) rawPercent = 100;
+    if (rawPercent < 0) rawPercent = 0;
+
+    document.getElementById('final-percent').textContent = rawPercent + '%';
+
+    const circumference = 440;
+    const offset = circumference - (rawPercent / 100) * circumference;
+    const circle = document.getElementById('gauge-circle');
+    circle.style.strokeDashoffset = offset;
+    circle.style.stroke = rawPercent >= 80 ? '#10b981' : (rawPercent >= 50 ? '#f59e0b' : '#ef4444');
+
+    const mot = document.getElementById('final-motivation');
+    if (totalOk + totalErr === 0) {
+      mot.textContent = 'أَجِبْ عَنِ التَّمَارِينِ بِالتَّرْتِيبِ لِمُشَاهَدَةِ نَتِيجَتِكَ النِّهَائِيَّةِ!';
+    } else if (totalOk + totalErr < TOTAL_ITEMS) {
+      mot.textContent = 'أَحْسَنْتَ! وَاصِلْ حَلَّ بَقِيَّةِ التَّمَارِينِ لِإِتْمَامِ الدَّرْسِ.';
+    } else if (rawPercent === 100) {
+      mot.textContent = '🌟 مُمْتَازٌ جِدًّا! إِجَابَاتُكَ كُلُّهَا صَحِيحَةٌ 100%، أَنْتَ بَطَلُ الرِّيَاضِيَّاتِ!';
+    } else if (rawPercent >= 75) {
+      mot.textContent = '👏 عَمَلٌ رَائِعٌ! نَتِيجَةٌ مُمْتَازَةٌ، يُمْكِنُكَ مُرَاجَعَةُ الْأَخْطَاءِ الْمُلَوَّنَةِ بِالْأَحْمَرِ فِي الْأَعْلَى.';
+    } else {
+      mot.textContent = '💪 مُحَاوَلَةٌ جَيِّدَةٌ! رَاجِعِ التَّحْوِيلَاتِ الْمُلَوَّنَةَ بِالْأَحْمَرِ ثُمَّ أَعِدِ الْمُحَاوَلَةَ.';
+    }
+  }
+
+  function evaluateInput(el, expectedVal) {
+    const userVal = el.value.trim();
+    const isCorrect = userVal !== '' && Number(userVal) === Number(expectedVal);
+    el.classList.add(isCorrect ? 'correct' : 'wrong');
+    el.disabled = true;
+    return isCorrect;
+  }
+
+  function evaluateSelect(el, expectedVal) {
+    const userVal = el.value.trim();
+    const isCorrect = userVal !== '' && userVal === String(expectedVal);
+    el.classList.add(isCorrect ? 'correct' : 'wrong');
+    el.disabled = true;
+    return isCorrect;
+  }
+
+  function showFeedback(id, allOk, detailsHtml) {
+    const fb = document.getElementById(id);
+    fb.className = 'feedback-msg show ' + (allOk ? 'ok' : 'err');
+    fb.innerHTML = detailsHtml;
+  }
+
+  function checkAktashif1() {
+    const btn = document.getElementById('btn-aktashif-1');
+    if (btn.disabled) return;
+    btn.disabled = true;
+
+    const ok = evaluateInput(document.getElementById('in-akt1-1'), 10);
+    if (ok) {
+      scores.aktashif.ok += 1;
+      showFeedback('fb-aktashif-1', true, '✓ أَحْسَنْتَ! فِي كُلِّ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1 cm = 10 mm</span>.');
+    } else {
+      scores.aktashif.err += 1;
+      showFeedback('fb-aktashif-1', false, '✗ إِجَابَةٌ خَاطِئَةٌ. الصَّوَابُ: فِي كُلِّ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1 cm = 10 mm</span>.');
+    }
+    unlockNextExercise('ex-aktashif-1');
+    updateCountersAndSummary();
+  }
+
+  function checkAktashif2() {
+    const btn = document.getElementById('btn-aktashif-2');
+    if (btn.disabled) return;
+    btn.disabled = true;
+
+    const checks = [
+      evaluateInput(document.getElementById('in-akt2-1'), 10),
+      evaluateInput(document.getElementById('in-akt2-2'), 10),
+      evaluateInput(document.getElementById('in-akt2-3'), 100),
+      evaluateInput(document.getElementById('in-akt2-4'), 100),
+      evaluateInput(document.getElementById('in-akt2-5'), 1000)
+    ];
+
+    const okCount = checks.filter(Boolean).length;
+    const errCount = checks.length - okCount;
+    scores.aktashif.ok += okCount;
+    scores.aktashif.err += errCount;
+
+    const allOk = errCount === 0;
+    showFeedback('fb-aktashif-2', allOk, allOk
+      ? '✓ مُمْتَازٌ! جَمِيعُ التَّحْوِيلَاتِ صَحِيحَةٌ.'
+      : '✗ الصَّوَابُ: <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1 dm = 10 cm</span> | <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1 m = 10 dm</span> | <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">1 m = 100 cm = 1000 mm</span>.');
+
+    unlockNextExercise('ex-aktashif-2');
+    updateCountersAndSummary();
+  }
+
+  function checkUnjiz1() {
+    const btn = document.getElementById('btn-unjiz-1');
+    if (btn.disabled) return;
+    btn.disabled = true;
+
+    const c1 = evaluateInput(document.getElementById('in-unj1-cm'), 13);
+    const c2 = evaluateInput(document.getElementById('in-unj1-mm'), 7);
+
+    const okCount = [c1, c2].filter(Boolean).length;
+    scores.unjiz.ok += okCount;
+    scores.unjiz.err += (2 - okCount);
+
+    const allOk = okCount === 2;
+    showFeedback('fb-unjiz-1', allOk, allOk
+      ? '✓ أَحْسَنْتَ! طُولُ الْخَطِّ الْمُنْكَسِرِ هُوَ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">13 cm 7 mm</span>.'
+      : '✗ الصَّوَابُ: <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">4cm 2mm + 3cm 2mm + 6cm 3mm = 13 cm 7 mm</span>.');
+
+    unlockNextExercise('ex-unjiz-1');
+    updateCountersAndSummary();
+  }
+
+  function checkUnjiz2() {
+    const btn = document.getElementById('btn-unjiz-2');
+    if (btn.disabled) return;
+    btn.disabled = true;
+
+    const slG = document.getElementById('slider-green');
+    const slB = document.getElementById('slider-blue');
+    slG.disabled = true;
+    slB.disabled = true;
+
+    const drawOk = (Number(slG.value) === 57 && Number(slB.value) === 43);
+    const ansOk = evaluateInput(document.getElementById('in-unj2-ans'), 43);
+
+    const okCount = (drawOk ? 1 : 0) + (ansOk ? 1 : 0);
+    scores.unjiz.ok += okCount;
+    scores.unjiz.err += (2 - okCount);
+
+    const allOk = okCount === 2;
+    showFeedback('fb-unjiz-2', allOk, allOk
+      ? '✓ رَائِعٌ! الْقِطْعَةُ الْخَضْرَاءُ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">57 mm</span> وَالتَّمْدِيدُ الْأَزْرَقُ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">43 mm</span> لِيَبْلُغَ الطُّولُ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">10 cm (100 mm)</span>.'
+      : '✗ الصَّوَابُ: <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">10 cm = 100 mm</span>، إِذَنْ طُولُ الْقِطْعَةِ الزَّرْقَاءِ: <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">100 mm - 57 mm = 43 mm</span>.');
+
+    unlockNextExercise('ex-unjiz-2');
+    updateCountersAndSummary();
+  }
+
+  function checkUnjiz3() {
+    const btn = document.getElementById('btn-unjiz-3');
+    if (btn.disabled) return;
+    btn.disabled = true;
+
+    const expected = [3, 5, 1, 2, 4, 6, 7];
+    let okCount = 0;
+    expected.forEach((exp, i) => {
+      if (evaluateSelect(document.getElementById('in-unj3-' + i), exp)) okCount++;
+    });
+
+    scores.unjiz.ok += okCount;
+    scores.unjiz.err += (7 - okCount);
+
+    const allOk = okCount === 7;
+    showFeedback('fb-unjiz-3', allOk, allOk
+      ? '✓ مُمْتَازٌ! التَّرْتِيبُ التَّصَاعُدِيُّ صَحِيحٌ تَمَامًا.'
+      : '✗ التَّرْتِيبُ الصَّحِيحُ مِنَ الْأَصْغَرِ إِلَى الْأَكْبَرِ: <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">40 mm (1) &lt; 30 cm (2) &lt; 350 mm (3) &lt; 50 cm (4) &lt; 550 mm (5) &lt; 3 m (6) &lt; 5 m (7)</span>.');
+
+    unlockNextExercise('ex-unjiz-3');
+    updateCountersAndSummary();
+  }
+
+  function checkAtamarran1() {
+    const btn = document.getElementById('btn-atamarran-1');
+    if (btn.disabled) return;
+    btn.disabled = true;
+
+    const expected = ['m', 'cm', 'm', 'mm', 'cm'];
+    let okCount = 0;
+    expected.forEach((exp, i) => {
+      if (evaluateSelect(document.getElementById('in-ata1-' + i), exp)) okCount++;
+    });
+
+    scores.atamarran.ok += okCount;
+    scores.atamarran.err += (5 - okCount);
+
+    const allOk = okCount === 5;
+    showFeedback('fb-atamarran-1', allOk, allOk
+      ? '✓ أَحْسَنْتَ! جَمِيعُ الْوَحَدَاتِ الْمُخْتَارَةِ صَحِيحَةٌ.'
+      : '✗ الصَّوَابُ: الْبَابُ (<span dir="ltr">2 m</span>)، الْقَلَمُ (<span dir="ltr">15 cm</span>)، السَّيَّارَةُ (<span dir="ltr">4 m</span>)، النَّمْلَةُ (<span dir="ltr">5 mm</span>)، الْمِقْلَمَةُ (<span dir="ltr">25 cm</span>).');
+
+    unlockNextExercise('ex-atamarran-1');
+    updateCountersAndSummary();
+  }
+
+  function checkAtamarran2() {
+    const btn = document.getElementById('btn-atamarran-2');
+    if (btn.disabled) return;
+    btn.disabled = true;
+
+    const slB = document.getElementById('slider-ata-blue');
+    const slBr = document.getElementById('slider-ata-brown');
+    slB.disabled = true;
+    slBr.disabled = true;
+
+    const drawOk = (Number(slB.value) === 9 && Number(slBr.value) === 50);
+    const c1 = evaluateInput(document.getElementById('in-ata2-conv'), 5);
+    const c2 = evaluateInput(document.getElementById('in-ata2-add'), 5);
+    const c3 = evaluateInput(document.getElementById('in-ata2-tot'), 14);
+
+    const okCount = (drawOk ? 1 : 0) + [c1, c2, c3].filter(Boolean).length;
+    scores.atamarran.ok += okCount;
+    scores.atamarran.err += (4 - okCount);
+
+    const allOk = okCount === 4;
+    showFeedback('fb-atamarran-2', allOk, allOk
+      ? '✓ رَائِعٌ! الشَّرْحُ وَالرَّسْمُ صَحِيحَانِ: <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">50 mm = 5 cm</span> وَمَجْمُوعُ الطُّولَيْنِ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">9 cm + 5 cm = 14 cm</span>.'
+      : '✗ الصَّوَابُ: نُرْسِمُ <span dir="ltr">9 cm</span> بِالْأَزْرَقِ وَ<span dir="ltr">50 mm</span> بِالْبُنِّيِّ، وَنَحْسُبُ: <span dir="ltr">50 mm = 5 cm</span> إِذَنْ <span dir="ltr">9 cm + 5 cm = 14 cm</span>.');
+
+    unlockNextExercise('ex-atamarran-2');
+    updateCountersAndSummary();
+  }
+
+  function checkAtamarran3() {
+    const btn = document.getElementById('btn-atamarran-3');
+    if (btn.disabled) return;
+    btn.disabled = true;
+
+    const expA = [6, 2, 3, 5, 4, 1];
+    const expB = [6, 3, 5, 1, 2, 4];
+
+    let okCount = 0;
+    expA.forEach((v, i) => { if (evaluateSelect(document.getElementById('in-ata3a-' + i), v)) okCount++; });
+    expB.forEach((v, i) => { if (evaluateSelect(document.getElementById('in-ata3b-' + i), v)) okCount++; });
+
+    scores.atamarran.ok += okCount;
+    scores.atamarran.err += (12 - okCount);
+
+    const allOk = okCount === 12;
+    showFeedback('fb-atamarran-3', allOk, allOk
+      ? '✓ مُمْتَازٌ جِدًّا! التَّرْتِيبُ التَّنَازُلِيُّ وَالتَّصَاعُدِيُّ صَحِيحَانِ بِالْكَامِلِ.'
+      : '✗ تَحَقَّقْ مِنَ الْخَانَاتِ الْحَمْرَاءِ: (1) التَّنَازُلِيُّ: <span dir="ltr">300m 40cm (1) &gt; 120m 32cm (2) &gt; 1205 cm (3) &gt; 930cm 50mm (4) &gt; 3900 mm (5) &gt; 40 cm (6)</span> | (2) التَّصَاعُدِيُّ: <span dir="ltr">390 mm (1) &lt; 45cm 50mm (2) &lt; 4m 32cm (3) &lt; 3m 140cm (4) &lt; 1205 cm (5) &lt; 35m 9cm (6)</span>.');
+
+    unlockNextExercise('ex-atamarran-3');
+    updateCountersAndSummary();
+  }
+
+  function checkAtamarran4() {
+    const btn = document.getElementById('btn-atamarran-4');
+    if (btn.disabled) return;
+    btn.disabled = true;
+
+    const expected = [190, 4900, 150, 1280, 12000, 700];
+    let okCount = 0;
+    expected.forEach((v, i) => {
+      if (evaluateInput(document.getElementById('in-ata4-' + i), v)) okCount++;
+    });
+
+    scores.atamarran.ok += okCount;
+    scores.atamarran.err += (6 - okCount);
+
+    const allOk = okCount === 6;
+    showFeedback('fb-atamarran-4', allOk, allOk
+      ? '✓ أَحْسَنْتَ! جَمِيعُ التَّحْوِيلَاتِ صَحِيحَةٌ.'
+      : '✗ الصَّوَابُ: <span dir="ltr">19 cm = 190 mm</span> | <span dir="ltr">49 m = 4900 cm</span> | <span dir="ltr">9 cm 60 mm = 150 mm</span> | <span dir="ltr">12 m 80 cm = 1280 cm</span> | <span dir="ltr">120 m = 12000 cm</span> | <span dir="ltr">58 cm 120 mm = 700 mm</span>.');
+
+    unlockNextExercise('ex-atamarran-4');
+    updateCountersAndSummary();
+  }
+
+  let selectedAbhChoice = null;
+  function selectAbhChoice(btnEl) {
+    if (document.getElementById('btn-abhath-1').disabled) return;
+    document.querySelectorAll('#abh-choices .choice-btn').forEach(b => b.classList.remove('selected'));
+    btnEl.classList.add('selected');
+    selectedAbhChoice = btnEl.getAttribute('data-val');
+  }
+
+  function checkAbhath1() {
+    const btn = document.getElementById('btn-abhath-1');
+    if (btn.disabled) return;
+    btn.disabled = true;
+
+    const c1 = evaluateInput(document.getElementById('in-abh-conv'), 721);
+
+    const btns = document.querySelectorAll('#abh-choices .choice-btn');
+    btns.forEach(b => {
+      b.disabled = true;
+      const val = b.getAttribute('data-val');
+      if (val === 'first' && selectedAbhChoice === 'first') b.classList.add('correct');
+      if (val === 'second' && selectedAbhChoice === 'second') b.classList.add('wrong');
+    });
+    const c2 = (selectedAbhChoice === 'first');
+
+    const okCount = (c1 ? 1 : 0) + (c2 ? 1 : 0);
+    scores.abhath.ok += okCount;
+    scores.abhath.err += (2 - okCount);
+
+    const allOk = okCount === 2;
+    showFeedback('fb-abhath-1', allOk, allOk
+      ? '✓ أَحْسَنْتَ يَا بَطَلُ! <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">7m 21cm = 721cm</span> وَهِيَ أَكْبَرُ مِنْ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">712cm</span>، إِذَنْ نَتِيجَةُ الْمُحَاوَلَةِ الْأُولَى أَحْسَنُ.'
+      : '✗ الصَّوَابُ: <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">7m 21cm = 721cm</span>، وَبِمَا أَنَّ <span dir="ltr" style="display:inline-block; unicode-bidi:isolate;">721 cm &gt; 712 cm</span> فَإِنَّ الْمُحَاوَلَةَ الْأُولَى أَحْسَنُ.');
+
+    updateCountersAndSummary();
+  }
+
+  /* ================= 5. إعادة المحاولة من جديد ================= */
+  function resetAllLesson() {
+    scores.aktashif = { ok: 0, err: 0 };
+    scores.unjiz = { ok: 0, err: 0 };
+    scores.atamarran = { ok: 0, err: 0 };
+    scores.abhath = { ok: 0, err: 0 };
+
+    document.querySelectorAll('input.math-input').forEach(inp => {
+      inp.value = '';
+      inp.disabled = false;
+      inp.classList.remove('correct', 'wrong');
+    });
+
+    ['akt1-word-mirror', 'akt2-m1', 'akt2-m2', 'akt2-m3', 'akt2-m4'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = '.....';
+    });
+
+    document.querySelectorAll('select.math-select').forEach(sel => {
+      sel.value = '';
+      sel.disabled = false;
+      sel.classList.remove('correct', 'wrong');
+    });
+
+    ['slider-green', 'slider-blue', 'slider-ata-blue', 'slider-ata-brown'].forEach(id => {
+      const sl = document.getElementById(id);
+      sl.value = 0;
+      sl.disabled = false;
+    });
+    updateUnjiz2Draw();
+    updateAtamarran2Draw();
+
+    selectedAbhChoice = null;
+    document.querySelectorAll('#abh-choices .choice-btn').forEach(b => {
+      b.disabled = false;
+      b.classList.remove('selected', 'correct', 'wrong');
+    });
+
+    document.querySelectorAll('.check-btn').forEach(b => b.disabled = false);
+    document.querySelectorAll('.feedback-msg').forEach(f => {
+      f.className = 'feedback-msg';
+      f.innerHTML = '';
+    });
+
+    exerciseOrder.forEach((id, idx) => {
+      const box = document.getElementById(id);
+      if (idx === 0) box.classList.remove('locked-ex');
+      else box.classList.add('locked-ex');
+    });
+
+    updateCountersAndSummary();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  buildInteractiveRulerSVG();
+  buildBookIllustrationRulers();
+  updateCountersAndSummary();
+</script>
+</body>
+</html>
