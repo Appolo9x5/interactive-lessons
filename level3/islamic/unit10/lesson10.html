@@ -1,0 +1,1178 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التربية الإسلامية - السنة الثالثة: الصُّحْبَةُ الصَّالِحَةُ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap" rel="stylesheet">
+    <!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --primary-light: #ccfbf1;
+            --secondary: #f59e0b;
+            --secondary-light: #fef3c7;
+            --bg-body: #f0fdf4;
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --error: #dc2626;
+            --error-bg: #fee2e2;
+            --border-radius: 18px;
+            --shadow: 0 8px 20px rgba(13, 148, 136, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 24px 24px;
+            color: var(--text-main);
+            line-height: 1.9;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        /* ترويسة الدرس */
+        .lesson-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 25px 20px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+            position: relative;
+            border-bottom: 6px solid var(--secondary);
+        }
+
+        .lesson-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 16px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .lesson-header h1 {
+            font-size: 2.1rem;
+            font-weight: 900;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        /* بطاقات الأقسام والصفحات */
+        .section-card {
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .section-card.locked {
+            opacity: 0.55;
+            pointer-events: none;
+            filter: grayscale(40%);
+            position: relative;
+        }
+
+        .section-card.locked::after {
+            content: "🔒 أَكْمِلِ النَّشَاطَ السَّابِقَ لِفَتْحِ هَذَا التَّمْرِينِ";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1e293b;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: 800;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 10;
+            white-space: nowrap;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px dashed var(--primary-light);
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .page-num {
+            background: var(--secondary-light);
+            color: #b45309;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            border: 1px solid #fcd34d;
+        }
+
+        /* نص القصة - صفحة 35 */
+        .story-box {
+            background: #f8fafc;
+            border-right: 6px solid var(--primary);
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #0f172a;
+        }
+
+        .story-box p {
+            margin-bottom: 14px;
+            text-align: justify;
+        }
+
+        .story-quote {
+            background: var(--primary-light);
+            border: 2px dashed var(--primary);
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-weight: 800;
+            color: var(--primary-dark);
+            text-align: center;
+            margin-top: 15px;
+            font-size: 1.3rem;
+        }
+
+        /* شريط النتيجة المصغر */
+        .mini-score {
+            margin-top: 20px;
+            padding: 10px 18px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 800;
+            font-size: 1.05rem;
+            border: 1px solid #cbd5e1;
+        }
+
+        .score-correct { color: var(--success); }
+        .score-wrong { color: var(--error); }
+
+        /* التمرين 1: ملء الفراغات */
+        .word-bank {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            background: var(--secondary-light);
+            padding: 15px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            border: 2px solid #fde68a;
+        }
+
+        .bank-word {
+            background: white;
+            color: #92400e;
+            padding: 6px 18px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+
+        .fill-paragraph {
+            font-size: 1.35rem;
+            font-weight: 700;
+            line-height: 2.4;
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .blank-select {
+            font-size: 1.2rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 10px;
+            border: 2px solid var(--primary);
+            background: white;
+            color: var(--text-main);
+            cursor: pointer;
+            margin: 0 5px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .blank-select.correct {
+            background-color: var(--success-bg);
+            border-color: var(--success);
+            color: var(--success);
+            pointer-events: none;
+        }
+
+        .blank-select.wrong {
+            background-color: var(--error-bg);
+            border-color: var(--error);
+            color: var(--error);
+            pointer-events: none;
+        }
+
+        .correction-hint {
+            display: inline-block;
+            font-size: 1rem;
+            background: var(--success);
+            color: white;
+            padding: 1px 10px;
+            border-radius: 8px;
+            margin-right: 4px;
+        }
+
+        /* التمارين 2 و 5: الربط بسهم (مطابقة تفاعلية) */
+        .match-instruction {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .match-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        .match-col {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .match-item {
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            border-radius: 14px;
+            padding: 14px 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 68px;
+            text-align: right;
+        }
+
+        .match-item:hover:not(.matched-correct):not(.matched-wrong) {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-2px);
+        }
+
+        .match-item.selected {
+            border-color: var(--secondary);
+            background: var(--secondary-light);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.3);
+        }
+
+        .match-item.matched-correct {
+            background: var(--success-bg);
+            border-color: var(--success);
+            color: var(--success);
+            pointer-events: none;
+        }
+
+        .match-item.matched-wrong {
+            background: var(--error-bg);
+            border-color: var(--error);
+            color: var(--error);
+            pointer-events: none;
+        }
+
+        .match-badge {
+            background: var(--primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            margin-right: 8px;
+        }
+
+        /* فقرة تعلمت - صفحة 36 */
+        .learned-box {
+            background: linear-gradient(to left, #fefce8, #fef9c3);
+            border: 3px solid #eab308;
+            border-radius: var(--border-radius);
+            padding: 22px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .learned-title {
+            display: inline-block;
+            background: #eab308;
+            color: #422006;
+            font-weight: 900;
+            font-size: 1.3rem;
+            padding: 4px 20px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+
+        .learned-box p {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #713f12;
+            margin-bottom: 8px;
+        }
+
+        /* التمرين 3: التصنيف في الجدول */
+        .traits-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            background: #f1f5f9;
+            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            border: 2px dashed #94a3b8;
+        }
+
+        .trait-chip {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .trait-chip:hover:not(.used) {
+            background: var(--primary-light);
+            transform: scale(1.03);
+        }
+
+        .trait-chip.active-trait {
+            background: var(--secondary);
+            color: white;
+            border-color: #d97706;
+            transform: scale(1.06);
+            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.35);
+        }
+
+        .trait-chip.used {
+            display: none;
+        }
+
+        .sort-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .sort-column {
+            border: 3px solid #cbd5e1;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 220px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sort-column:hover {
+            border-color: var(--secondary);
+        }
+
+        .col-header-good {
+            background: var(--success);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+        .col-header-bad {
+            background: var(--error);
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+        .col-body {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+        }
+
+        .sorted-item {
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sorted-item.is-correct {
+            background: var(--success-bg);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .sorted-item.is-wrong {
+            background: var(--error-bg);
+            color: var(--error);
+            border: 1px solid var(--error);
+        }
+
+        /* التقرير النهائي */
+        .final-report {
+            background: linear-gradient(135deg, #ffffff, #f0fdf4);
+            border: 3px solid var(--primary);
+            border-radius: var(--border-radius);
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin-top: 30px;
+        }
+
+        .final-report h2 {
+            font-size: 1.7rem;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            font-weight: 900;
+        }
+
+        .gauge-wrapper {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+        }
+
+        .gauge-svg {
+            transform: rotate(-90deg);
+            width: 150px;
+            height: 150px;
+        }
+
+        .gauge-bg {
+            fill: none;
+            stroke: #e2e8f0;
+            stroke-width: 14;
+        }
+
+        .gauge-fill {
+            fill: none;
+            stroke: var(--success);
+            stroke-width: 14;
+            stroke-linecap: round;
+            stroke-dasharray: 408;
+            stroke-dashoffset: 408;
+            transition: stroke-dashoffset 0.6s ease;
+        }
+
+        .gauge-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--primary-dark);
+        }
+
+        .report-stats {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 12px 24px;
+            border-radius: 14px;
+            border: 2px solid #e2e8f0;
+            font-weight: 800;
+            font-size: 1.15rem;
+        }
+
+        .encouragement-msg {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            min-height: 36px;
+        }
+
+        .btn-reset {
+            background: var(--secondary);
+            color: #422006;
+            border: none;
+            padding: 14px 32px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+            transition: transform 0.2s;
+        }
+
+        .btn-reset:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 650px) {
+            .match-grid, .sort-table {
+                grid-template-columns: 1fr;
+            }
+            .lesson-header h1 {
+                font-size: 1.6rem;
+            }
+            .section-card.locked::after {
+                font-size: 0.85rem;
+                padding: 10px 16px;
+                white-space: normal;
+                text-align: center;
+                width: 85%;
+            }
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري (أُضيفت)
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس (أُضيف) */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            max-width: 420px;
+            margin: 20px auto 10px auto;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+        }
+    </style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/3910412986" target="_blank" class="btn-channel" id="channel-link">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<div class="container">
+    <!-- ترويسة الدرس -->
+    <header class="lesson-header">
+        <div class="lesson-badge">التَّرْبِيَةُ الإِسْلَامِيَّةُ • السَّنَةُ الثَّالِثَةُ ابْتِدَائِي • الدَّرْسُ 10</div>
+        <h1>الصُّحْبَةُ الصَّالِحَةُ</h1>
+    </header>
+
+    <!-- القسم الأول: نص الدرس (صفحة 35) -->
+    <section class="section-card" id="sec-story">
+        <div class="page-header">
+            <h2 class="section-title">📖 الصُّحْبَةُ الْحَسَنَةُ</h2>
+            <span class="page-num">كِتَابُ التِّلْمِيذِ - ص 35</span>
+        </div>
+        <div class="story-box">
+            <p>
+                تَعَرَّفَ أَحْمَدُ عَلَى أَحَدِ الْأَطْفَالِ فِي حَيِّهِ، وَكَانَ كُلَّمَا رَجَعَ مِنَ الْمَدْرَسَةِ يُنَادِيهِ، فَيُلْقِي بِمِحْفَظَتِهِ وَيَخْرُجُ إِلَيْهِ مُسْرِعًا، فَيَنْشَغِلَانِ بِاللَّعِبِ وَاللَّهْوِ .. وَلَمَّا يَعُودُ إِلَى الْبَيْتِ لَا يَجِدُ رَغْبَةً فِي مُرَاجَعَةِ دُرُوسِهِ أَوْ إِنْجَازِ الْوَاجِبَاتِ .. تَكَرَّرَ إِهْمَالُ أَحْمَدَ لِوَاجِبَاتِهِ الْمَدْرَسِيَّةِ فَاسْتَدْعَتِ الْمُعَلِّمَةُ وَالِدَهُ، لِتَسْأَلَهُ عَنْ سَبَبِ تَرَاجُعِ مُسْتَوَاهُ الدِّرَاسِيِّ، فَتَأَثَّرَ أَبُوهُ كَثِيرًا .. وَفِي تِلْكَ اللَّحْظَةِ فَقَطْ أَدْرَكَ أَحْمَدُ أَنَّ السَّبَبَ هُوَ صَاحِبُ السُّوءِ الَّذِي لَمْ يَتَعَلَّمْ مِنْهُ سِوَى السُّلُوكَاتِ السَّيِّئَةِ. وَكَتَبَ لِأَبِيهِ رِسَالَةً قَصِيرَةً اعْتَذَرَ لَهُ فِيهَا، وَمِمَّا قَالَهُ:
+            </p>
+            <div class="story-quote">
+                «أَنَا طِفْلٌ مُسْلِمٌ؛ يَجِبُ أَنْ أُحْسِنَ اخْتِيَارَ صَدِيقِي لِكَيْ أَتَعَلَّمَ مِنْهُ الأَدَبَ وَحُسْنَ الخُلُقِ».
+            </div>
+        </div>
+    </section>
+
+    <!-- القسم الثاني: أنشطة التعلم - التمرين 1 (صفحة 36) -->
+    <section class="section-card" id="ex1-card">
+        <div class="page-header">
+            <h2 class="section-title">✏️ أَنْشِطَةُ التَّعَلُّمِ: أَمْلَأُ الْفَرَاغَاتِ بِالْكَلِمَاتِ الْمُنَاسِبَةِ</h2>
+            <span class="page-num">كِتَابُ التِّلْمِيذِ - ص 36</span>
+        </div>
+
+        <div class="word-bank">
+            <span class="bank-word">الْحَسَنَةِ</span>
+            <span class="bank-word">الصَّاحِبِ</span>
+            <span class="bank-word">الْأَصْحَابِ</span>
+        </div>
+
+        <div class="fill-paragraph">
+            الإِسْلَامُ دِينُ الْأَخْلَاقِ 
+            <select class="blank-select" id="b1" data-answer="الْحَسَنَةِ" onchange="checkBlank(this)">
+                <option value="">-- اخْتَرْ --</option>
+                <option value="الْحَسَنَةِ">الْحَسَنَةِ</option>
+                <option value="الصَّاحِبِ">الصَّاحِبِ</option>
+                <option value="الْأَصْحَابِ">الْأَصْحَابِ</option>
+            </select><span id="hint-b1"></span>، 
+            لِذَلِكَ عَلَيَّ أَنْ أَبْتَعِدَ عَنِ 
+            <select class="blank-select" id="b2" data-answer="الصَّاحِبِ" onchange="checkBlank(this)">
+                <option value="">-- اخْتَرْ --</option>
+                <option value="الْحَسَنَةِ">الْحَسَنَةِ</option>
+                <option value="الصَّاحِبِ">الصَّاحِبِ</option>
+                <option value="الْأَصْحَابِ">الْأَصْحَابِ</option>
+            </select><span id="hint-b2"></span> 
+            السَّيِّئِ وَأَنْ أُحْسِنَ اخْتِيَارَ 
+            <select class="blank-select" id="b3" data-answer="الْأَصْحَابِ" onchange="checkBlank(this)">
+                <option value="">-- اخْتَرْ --</option>
+                <option value="الْحَسَنَةِ">الْحَسَنَةِ</option>
+                <option value="الصَّاحِبِ">الصَّاحِبِ</option>
+                <option value="الْأَصْحَابِ">الْأَصْحَابِ</option>
+            </select><span id="hint-b3"></span>.
+        </div>
+
+        <div class="mini-score">
+            <span>نَتِيجَةُ التَّمْرِينِ (1):</span>
+            <div>
+                <span class="score-correct">صَحِيحَة: <span id="ex1-correct">0</span></span> | 
+                <span class="score-wrong">خَاطِئَة: <span id="ex1-wrong">0</span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- القسم الثالث: أنشطة التعلم - التمرين 2 (صفحة 36) -->
+    <section class="section-card locked" id="ex2-card">
+        <div class="page-header">
+            <h2 class="section-title">🔗 أَنْشِطَةُ التَّعَلُّمِ: أَصِلُ بِسَهْمٍ بَيْنَ السُّؤَالِ وَجَوَابِهِ</h2>
+            <span class="page-num">كِتَابُ التِّلْمِيذِ - ص 36</span>
+        </div>
+
+        <p class="match-instruction">انْقُرْ عَلَى السُّؤَالِ فِي الْعَمُودِ الْأَيْمَنِ ثُمَّ انْقُرْ عَلَى الْجَوَابِ الْمُنَاسِبِ لَهُ فِي الْعَمُودِ الْأَيْسَرِ:</p>
+
+        <div class="match-grid">
+            <div class="match-col" id="ex2-left">
+                <div class="match-item" data-id="q1" onclick="selectMatch(2, 'left', this)">
+                    <span>مَنْ هُوَ الصَّدِيقُ الْمُفَضَّلُ ؟</span>
+                </div>
+                <div class="match-item" data-id="q2" onclick="selectMatch(2, 'left', this)">
+                    <span>لِمَاذَا أَجْتَنِبُ صَدِيقَ السُّوءِ ؟</span>
+                </div>
+            </div>
+            <div class="match-col" id="ex2-right">
+                <div class="match-item" data-target="q2" onclick="selectMatch(2, 'right', this)">
+                    <span>لِأَنَّنِي أَتَعَلَّمُ مِنْهُ الشَّرَّ.</span>
+                </div>
+                <div class="match-item" data-target="q1" onclick="selectMatch(2, 'right', this)">
+                    <span>هُوَ الَّذِي أَتَعَلَّمُ مِنْهُ الْخَيْرَ.</span>
+                </div>
+                <div class="match-item" data-target="distractor" onclick="selectMatch(2, 'right', this)">
+                    <span>الَّذِي يُقَدِّمُ لِي النَّصَائِحَ.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mini-score">
+            <span>نَتِيجَةُ التَّمْرِينِ (2):</span>
+            <div>
+                <span class="score-correct">صَحِيحَة: <span id="ex2-correct">0</span></span> | 
+                <span class="score-wrong">خَاطِئَة: <span id="ex2-wrong">0</span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- فقرة تعلمت (صفحة 36) -->
+    <div class="learned-box">
+        <div class="learned-title">💡 تَعَلَّمْتُ (ص 36)</div>
+        <p>• اخْتِيَارُ الصَّدِيقِ الصَّالِحِ إِرْضَاءٌ لِلَّهِ تَعَالَى وَسَبِيلٌ لِدُخُولِ الْجَنَّةِ.</p>
+        <p>• عِنْدَمَا أُصَاحِبُ أَصْدِقَاءَ السُّوءِ تَفْسُدُ أَخْلَاقِي فَأُضَيِّعُ مَالِي، جُهْدِي وَوَقْتِي.</p>
+    </div>
+
+    <!-- القسم الرابع: أتحقق من تعلماتي - التمرين 1 (صفحة 37) -->
+    <section class="section-card locked" id="ex3-card">
+        <div class="page-header">
+            <h2 class="section-title">📊 أَتَحَقَّقُ مِنْ تَعَلُّمَاتِي: أُمَيِّزُ صِفَاتِ الصَّاحِبِ الْحَسَنِ مِنْ صِفَاتِ الصَّاحِبِ السَّيِّئِ فِي الْجَدْوَلِ</h2>
+            <span class="page-num">كِتَابُ التِّلْمِيذِ - ص 37</span>
+        </div>
+
+        <p class="match-instruction">انْقُرْ عَلَى الصِّفَةِ أَوَّلًا لِتَحْدِيدِهَا، ثُمَّ انْقُرْ عَلَى الْخَانَةِ الْمُنَاسِبَةِ لَهَا فِي الْجَدْوَلِ:</p>
+
+        <div class="traits-pool" id="traits-pool">
+            <button class="trait-chip" data-type="good" onclick="selectTrait(this)">يُذَكِّرُنِي بِاللهِ وَرَسُولِهِ</button>
+            <button class="trait-chip" data-type="bad" onclick="selectTrait(this)">يَعُقُّ وَالِدَيْهِ</button>
+            <button class="trait-chip" data-type="bad" onclick="selectTrait(this)">يَقُولُ كَلَامًا بَذِيئًا</button>
+            <button class="trait-chip" data-type="good" onclick="selectTrait(this)">لَا يَقُولُ إِلَّا حَقًّا</button>
+            <button class="trait-chip" data-type="bad" onclick="selectTrait(this)">يَكْذِبُ فِي كَلَامِهِ</button>
+            <button class="trait-chip" data-type="good" onclick="selectTrait(this)">يَصْدُقُ فِي كَلَامِهِ</button>
+            <button class="trait-chip" data-type="good" onclick="selectTrait(this)">يُحَافِظُ عَلَى الصَّلَاةِ</button>
+            <button class="trait-chip" data-type="bad" onclick="selectTrait(this)">يَسُبُّ وَيَشْتُمُ</button>
+        </div>
+
+        <div class="sort-table">
+            <div class="sort-column" onclick="placeTrait('good')">
+                <div class="col-header-good">الصَّاحِبُ الْحَسَنُ</div>
+                <div class="col-body" id="col-good"></div>
+            </div>
+            <div class="sort-column" onclick="placeTrait('bad')">
+                <div class="col-header-bad">الصَّاحِبُ السَّيِّئُ</div>
+                <div class="col-body" id="col-bad"></div>
+            </div>
+        </div>
+
+        <div class="mini-score">
+            <span>نَتِيجَةُ التَّمْرِينِ (3):</span>
+            <div>
+                <span class="score-correct">صَحِيحَة: <span id="ex3-correct">0</span></span> | 
+                <span class="score-wrong">خَاطِئَة: <span id="ex3-wrong">0</span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- القسم الخامس: أتحقق من تعلماتي - التمرين 2 (صفحة 37) -->
+    <section class="section-card locked" id="ex4-card">
+        <div class="page-header">
+            <h2 class="section-title">🔗 أَتَحَقَّقُ مِنْ تَعَلُّمَاتِي: أَرْبِطُ بِسَهْمٍ بَيْنَ الْعِبَارَةِ وَمَا يُنَاسِبُهَا</h2>
+            <span class="page-num">كِتَابُ التِّلْمِيذِ - ص 37</span>
+        </div>
+
+        <p class="match-instruction">انْقُرْ عَلَى الْعِبَارَةِ فِي الْعَمُودِ الْأَيْمَنِ ثُمَّ انْقُرْ عَلَى تَكْمِلَتِهَا فِي الْعَمُودِ الْأَيْسَرِ:</p>
+
+        <div class="match-grid">
+            <div class="match-col" id="ex4-left">
+                <div class="match-item" data-id="c1" onclick="selectMatch(4, 'left', this)">
+                    <span>أُصَاحِبُ الصَّدِيقَ الصَّالِحَ الَّذِي يُوَجِّهُنِي إِلَى</span>
+                </div>
+                <div class="match-item" data-id="c2" onclick="selectMatch(4, 'left', this)">
+                    <span>عِنْدَمَا أُعَاشِرُ أَصْدِقَاءَ السُّوءِ</span>
+                </div>
+                <div class="match-item" data-id="c3" onclick="selectMatch(4, 'left', this)">
+                    <span>فِي اخْتِيَارِ الصَّدِيقِ الصَّالِحِ</span>
+                </div>
+            </div>
+            <div class="match-col" id="ex4-right">
+                <div class="match-item" data-target="c2" onclick="selectMatch(4, 'right', this)">
+                    <span>تَفْسُدُ أَخْلَاقِي.</span>
+                </div>
+                <div class="match-item" data-target="c1" onclick="selectMatch(4, 'right', this)">
+                    <span>فَتَتَحَسَّنُ أَخْلَاقِي.</span>
+                </div>
+                <div class="match-item" data-target="c3" onclick="selectMatch(4, 'right', this)">
+                    <span>إِرْضَاءُ اللَّهِ تَعَالَى.</span>
+                </div>
+                <div class="match-item" data-target="distractor2" onclick="selectMatch(4, 'right', this)">
+                    <span>طَرِيقِ الْخَيْرِ.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mini-score">
+            <span>نَتِيجَةُ التَّمْرِينِ (4):</span>
+            <div>
+                <span class="score-correct">صَحِيحَة: <span id="ex4-correct">0</span></span> | 
+                <span class="score-wrong">خَاطِئَة: <span id="ex4-wrong">0</span></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- التقرير النهائي للدرس -->
+    <section class="final-report" id="final-report">
+        <h2>📊 التَّقْرِيرُ النِّهَائِيُّ لِلدَّرْسِ</h2>
+        
+        <div class="gauge-wrapper">
+            <svg class="gauge-svg" viewBox="0 0 150 150">
+                <circle class="gauge-bg" cx="75" cy="75" r="65"></circle>
+                <circle class="gauge-fill" id="gauge-circle" cx="75" cy="75" r="65"></circle>
+            </svg>
+            <div class="gauge-text" id="final-percent">0%</div>
+        </div>
+
+        <div class="report-stats">
+            <div class="stat-box" style="color: var(--success);">✅ الْإِجَابَاتُ الصَّحِيحَةُ: <span id="total-correct">0</span> / 16</div>
+            <div class="stat-box" style="color: var(--error);">❌ الْإِجَابَاتُ الْخَاطِئَةُ: <span id="total-wrong">0</span></div>
+        </div>
+
+        <div class="encouragement-msg" id="final-msg">أَجِبْ عَنِ التَّمَارِينِ أَعْلَاهُ لِمَعْرِفَةِ نَتِيجَتِكَ النِّهَائِيَّةِ!</div>
+
+        <button class="btn-reset" onclick="resetAll()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنَ الْبِدَايَةِ</button>
+    </section>
+
+    <!-- ========================================
+         زر العودة إلى الفهرس (أُضيف)
+         ======================================== -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+</div>
+
+<!-- ========================================
+     سكريبت الحماية (أُضيف)
+     ======================================== -->
+<script>
+    const CHANNEL_ID = "-1003910412986";
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+        tg.ready();
+        tg.expand();
+    }
+
+    async function verifySubscription() {
+        const statusMsg = document.getElementById('sub-status-msg');
+        statusMsg.style.color = "#0288d1";
+        statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+        let userId = null;
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            userId = tg.initDataUnsafe.user.id;
+        }
+
+        if (!userId) {
+            statusMsg.style.color = "#e65100";
+            statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+            return;
+        }
+
+        try {
+            const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.isSubscribed) {
+                statusMsg.style.color = "#2e7d32";
+                statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                setTimeout(() => {
+                    document.getElementById('sub-lock-screen').style.display = 'none';
+                }, 600);
+            } else {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+            }
+        } catch (error) {
+            statusMsg.style.color = "#c62828";
+            statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+        }
+    }
+
+    window.addEventListener('load', () => {
+        verifySubscription();
+    });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي (كما هو دون تغيير)
+     ======================================== -->
+<script>
+    // إحصائيات التمارين (مجموع الأسئلة الكلي = 3 + 2 + 8 + 3 = 16)
+    const TOTAL_QUESTIONS = 16;
+    const stats = {
+        ex1: { correct: 0, wrong: 0, total: 3 },
+        ex2: { correct: 0, wrong: 0, total: 2 },
+        ex3: { correct: 0, wrong: 0, total: 8 },
+        ex4: { correct: 0, wrong: 0, total: 3 }
+    };
+
+    // تحديث الواجهة والتقرير النهائي
+    function updateUI() {
+        let totalCorrect = 0;
+        let totalWrong = 0;
+
+        for (let i = 1; i <= 4; i++) {
+            const key = 'ex' + i;
+            document.getElementById(`${key}-correct`).textContent = stats[key].correct;
+            document.getElementById(`${key}-wrong`).textContent = stats[key].wrong;
+            totalCorrect += stats[key].correct;
+            totalWrong += stats[key].wrong;
+        }
+
+        // فتح التمارين بالتسلسل
+        if (stats.ex1.correct + stats.ex1.wrong === stats.ex1.total) {
+            document.getElementById('ex2-card').classList.remove('locked');
+        }
+        if (stats.ex2.correct + stats.ex2.wrong === stats.ex2.total) {
+            document.getElementById('ex3-card').classList.remove('locked');
+        }
+        if (stats.ex3.correct + stats.ex3.wrong === stats.ex3.total) {
+            document.getElementById('ex4-card').classList.remove('locked');
+        }
+
+        // حساب النسبة المئوية (سقف 100% مع خصم الإجابات الخاطئة)
+        let percentage = Math.round((totalCorrect / TOTAL_QUESTIONS) * 100);
+        if (percentage > 100) percentage = 100;
+        if (percentage < 0) percentage = 0;
+
+        document.getElementById('total-correct').textContent = totalCorrect;
+        document.getElementById('total-wrong').textContent = totalWrong;
+        document.getElementById('final-percent').textContent = percentage + '%';
+
+        // تحديث الدائرة البيانية
+        const circle = document.getElementById('gauge-circle');
+        const circumference = 408;
+        const offset = circumference - (percentage / 100) * circumference;
+        circle.style.strokeDashoffset = offset;
+
+        if (percentage >= 80) {
+            circle.style.stroke = '#16a34a';
+        } else if (percentage >= 50) {
+            circle.style.stroke = '#f59e0b';
+        } else {
+            circle.style.stroke = '#dc2626';
+        }
+
+        // رسالة تشجيعية عند إكمال جميع التمارين
+        const totalAnswered = totalCorrect + totalWrong;
+        const msgEl = document.getElementById('final-msg');
+        if (totalAnswered === TOTAL_QUESTIONS) {
+            if (percentage === 100) {
+                msgEl.textContent = "🌟 مُمْتَازٌ يَا بَطَلُ! لَقَدْ أَتْقَنْتَ الدَّرْسَ بِامْتِيَازٍ وَعَلَامَةٍ كَامِلَةٍ!";
+            } else if (percentage >= 75) {
+                msgEl.textContent = "👏 أَحْسَنْتَ! نَتِيجَةٌ رَائِعَةٌ، رَاجِعِ الْأَخْطَاءَ الْبَسِيطَةَ أَعْلَاهُ.";
+            } else {
+                msgEl.textContent = "💪 مُحَاوَلَةٌ جَيِّدَةٌ! أَعِدْ قِرَاءَةَ الدَّرْسِ وَحَاوِلْ مَرَّةً أُخْرَى.";
+            }
+        }
+    }
+
+    // منطق التمرين 1: ملء الفراغات (محاولة واحدة لكل فراغ)
+    function checkBlank(selectEl) {
+        const val = selectEl.value;
+        if (!val) return;
+
+        const expected = selectEl.getAttribute('data-answer');
+        const hintSpan = document.getElementById('hint-' + selectEl.id);
+
+        if (val === expected) {
+            selectEl.classList.add('correct');
+            stats.ex1.correct++;
+        } else {
+            selectEl.classList.add('wrong');
+            stats.ex1.wrong++;
+            hintSpan.innerHTML = `<span class="correction-hint">✓ ${expected}</span>`;
+        }
+        updateUI();
+    }
+
+    // منطق التمارين 2 و 4: الربط بسهم (محاولة واحدة لكل سؤال)
+    const matchState = {
+        2: { selectedLeft: null, pairCount: 0 },
+        4: { selectedLeft: null, pairCount: 0 }
+    };
+
+    function selectMatch(exNum, side, el) {
+        const state = matchState[exNum];
+        const key = 'ex' + exNum;
+
+        if (side === 'left') {
+            document.querySelectorAll(`#${key}-left .match-item`).forEach(item => item.classList.remove('selected'));
+            el.classList.add('selected');
+            state.selectedLeft = el;
+        } else if (side === 'right') {
+            if (!state.selectedLeft) {
+                alert("اخْتَرِ السُّؤَالَ أَوِ الْعِبَارَةَ مِنَ الْعَمُودِ الْأَيْمَنِ أَوَّلًا!");
+                return;
+            }
+
+            const leftEl = state.selectedLeft;
+            const questionId = leftEl.getAttribute('data-id');
+            const targetId = el.getAttribute('data-target');
+            state.pairCount++;
+
+            const badge = `<span class="match-badge">${state.pairCount}</span>`;
+
+            if (questionId === targetId) {
+                leftEl.classList.remove('selected');
+                leftEl.classList.add('matched-correct');
+                el.classList.add('matched-correct');
+                leftEl.insertAdjacentHTML('afterbegin', badge);
+                el.insertAdjacentHTML('afterbegin', badge);
+                stats[key].correct++;
+            } else {
+                leftEl.classList.remove('selected');
+                leftEl.classList.add('matched-wrong');
+                el.classList.add('matched-wrong');
+                leftEl.insertAdjacentHTML('afterbegin', badge);
+                el.insertAdjacentHTML('afterbegin', badge);
+
+                // إظهار الإجابة الصحيحة باللون الأخضر للمساعدة البصرية
+                const correctRight = document.querySelector(`#${key}-right .match-item[data-target="${questionId}"]`);
+                if (correctRight && !correctRight.classList.contains('matched-correct')) {
+                    correctRight.style.border = "2px dashed #16a34a";
+                    correctRight.insertAdjacentHTML('beforeend', ` <small style="color:#16a34a; font-weight:900;">(← الصَّحِيحُ لِرَقْمِ ${state.pairCount})</small>`);
+                }
+                stats[key].wrong++;
+            }
+
+            state.selectedLeft = null;
+            updateUI();
+        }
+    }
+
+    // منطق التمرين 3: تصنيف الصفات في الجدول (محاولة واحدة لكل صفة)
+    let activeTraitBtn = null;
+
+    function selectTrait(btn) {
+        document.querySelectorAll('.trait-chip').forEach(b => b.classList.remove('active-trait'));
+        btn.classList.add('active-trait');
+        activeTraitBtn = btn;
+    }
+
+    function placeTrait(chosenCol) {
+        if (!activeTraitBtn) return;
+
+        const actualType = activeTraitBtn.getAttribute('data-type');
+        const traitText = activeTraitBtn.textContent;
+        const targetContainer = document.getElementById('col-' + chosenCol);
+
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('sorted-item');
+
+        if (chosenCol === actualType) {
+            itemDiv.classList.add('is-correct');
+            itemDiv.innerHTML = `<span>${traitText}</span><span>✅</span>`;
+            stats.ex3.correct++;
+        } else {
+            itemDiv.classList.add('is-wrong');
+            const correctLabel = actualType === 'good' ? 'الصَّاحِبُ الْحَسَنُ' : 'الصَّاحِبُ السَّيِّئُ';
+            itemDiv.innerHTML = `<span>${traitText} <small>(الصَّوَابُ: ${correctLabel})</small></span><span>❌</span>`;
+            stats.ex3.wrong++;
+        }
+
+        targetContainer.appendChild(itemDiv);
+        activeTraitBtn.classList.remove('active-trait');
+        activeTraitBtn.classList.add('used');
+        activeTraitBtn = null;
+
+        updateUI();
+    }
+
+    // إعادة المحاولة من البداية
+    function resetAll() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(() => {
+            location.reload();
+        }, 300);
+    }
+</script>
+
+</body>
+</html>
