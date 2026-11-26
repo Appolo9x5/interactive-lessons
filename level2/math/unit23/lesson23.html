@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>22 — جَمْعُ عَدَدَيْنِ | رياضيات – السنة الثانية ابتدائي</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg-main: #f4f7fb;
+      --card-bg: #ffffff;
+      --ink-main: #132238;
+      --ink-muted: #52647a;
+      --accent-blue: #0284c7;
+      --accent-green: #16a34a;
+      --accent-amber: #d97706;
+      --accent-purple: #6d28d9;
+      --accent-red: #dc2626;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Cairo', 'Tajawal', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--ink-main);
+      margin: 0;
+      padding: 0;
+      line-height: 1.85;
+      overflow-x: hidden;
+    }
+
+    /* عزل الاتجاه الصارم للعمليات والمعادلات والمتتاليات */
+    .math-ltr {
+      direction: ltr;
+      unicode-bidi: isolate;
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    /* أعمدة العشرات الخضراء ومربعات الوحدات الصفراء كما في الكتاب المدرسي */
+    .ten-bar {
+      display: inline-grid;
+      grid-template-columns: repeat(10, 10px);
+      gap: 1px;
+      background-color: #14532d;
+      padding: 1px;
+      border-radius: 3px;
+      border: 1px solid #166534;
+      vertical-align: middle;
+    }
+
+    .ten-bar .cell {
+      width: 10px;
+      height: 11px;
+      background-color: #22c55e;
+      border-radius: 1px;
+    }
+
+    .unit-sq {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      background-color: #facc15;
+      border: 1.5px solid #a16207;
+      border-radius: 3px;
+      vertical-align: middle;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    }
+
+    .unit-sq-sm {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background-color: #facc15;
+      border: 1.5px solid #a16207;
+      border-radius: 2px;
+      vertical-align: middle;
+    }
+
+    .ten-card-badge {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 58px;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      line-height: 1.25;
+      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.08);
+    }
+
+    .ten-card-green {
+      background: #dcfce7;
+      border: 1.5px solid #16a34a;
+      color: #14532d;
+    }
+
+    .ten-card-blue {
+      background: #dbeafe;
+      border: 1.5px solid #2563eb;
+      color: #1e3a8a;
+    }
+
+    /* حقول الإدخال الرقمية الفارغة والواضحة */
+    .num-input {
+      width: 4.3rem;
+      height: 2.65rem;
+      text-align: center;
+      font-size: 1.15rem;
+      font-weight: 800;
+      border: 2px solid #94a3b8;
+      border-radius: 0.65rem;
+      background-color: #ffffff;
+      color: #0f172a;
+      direction: ltr;
+      transition: all 0.2s ease;
+    }
+
+    .num-input:focus {
+      outline: none;
+      border-color: #0284c7;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.18);
+    }
+
+    .num-input:disabled {
+      cursor: not-allowed;
+      opacity: 0.95;
+    }
+
+    .input-correct {
+      border-color: #16a34a !important;
+      background-color: #dcfce7 !important;
+      color: #14532d !important;
+    }
+
+    .input-wrong {
+      border-color: #dc2626 !important;
+      background-color: #fee2e2 !important;
+      color: #7f1d1d !important;
+    }
+
+    .correction-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      background-color: #ecfdf5;
+      color: #047857;
+      border: 1px solid #6ee7b7;
+      border-radius: 0.5rem;
+      padding: 0.15rem 0.55rem;
+      font-size: 0.9rem;
+      font-weight: 800;
+      direction: ltr;
+    }
+
+    /* قفل المراحل المتسلسلة */
+    .stage-locked {
+      opacity: 0.55;
+      pointer-events: none;
+      filter: grayscale(0.35);
+      position: relative;
+    }
+
+    .stage-unlocked {
+      opacity: 1;
+      pointer-events: auto;
+      filter: none;
+      animation: fadeSlideIn 0.35s ease;
+    }
+
+    @keyframes fadeSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* أزرار التحكم */
+    .btn-check {
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #ffffff;
+      font-weight: 800;
+      padding: 0.65rem 1.5rem;
+      border-radius: 0.85rem;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.28);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+    }
+
+    .btn-check:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(2, 132, 199, 0.35);
+    }
+
+    .btn-check:disabled {
+      background: #94a3b8;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    /* شريط الأعداد في أبحث */
+    .strip-box {
+      min-width: 3.15rem;
+      height: 2.9rem;
+      border: 2px solid #334155;
+      background-color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.05rem;
+      direction: ltr;
+    }
+
+    .strip-given {
+      background-color: #e0f2fe;
+      color: #0c4a6e;
+    }
+
+    .strip-input {
+      width: 3.15rem;
+      height: 2.9rem;
+      border: 2px solid #334155;
+      text-align: center;
+      font-weight: 800;
+      font-size: 1.05rem;
+      background-color: #ffffff;
+      direction: ltr;
+    }
+
+    /* نافذة قفل الاشتراك الإجباري وزر العودة إلى الفهرس */
+    #sub-lock-screen {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lock-icon {
+      font-size: 50px;
+      margin-bottom: 12px;
+    }
+
+    .lock-title {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #01579b;
+      margin-bottom: 10px;
+    }
+
+    .lock-desc {
+      font-size: 1rem;
+      color: #546e7a;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    }
+
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 20px auto 10px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+    }
+  </style>
+</head>
+<body class="min-h-screen pb-14">
+
+  <!-- نافذة قفل الاشتراك الإجباري -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button type="button" class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <!-- رأس الدرس التفاعلي -->
+  <header class="bg-gradient-to-l from-sky-800 via-blue-700 to-cyan-700 text-white shadow-lg border-b-4 border-amber-400">
+    <div class="max-w-5xl mx-auto px-4 py-6 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-4 text-center md:text-right">
+        <div class="w-16 h-16 rounded-2xl bg-amber-400 text-slate-900 font-black text-3xl flex items-center justify-center shadow-md shrink-0">
+          22
+        </div>
+        <div>
+          <p class="text-sky-100 text-sm sm:text-base font-bold">
+            رِيَاضِيَّاتٌ – السَّنَةُ الثَّانِيَةُ ابْتِدَائِيٌّ (كِتَابُ التِّلْمِيذِ ص 42 وَكُرَّاسُ الْأَنْشِطَةِ ص 29)
+          </p>
+          <h1 class="text-2xl sm:text-4xl font-black tracking-tight mt-0.5">
+            22 — جَمْعُ عَدَدَيْنِ
+          </h1>
+        </div>
+      </div>
+
+      <!-- ملخص سريع للتقدم في الدرس -->
+      <div class="bg-white/15 backdrop-blur-sm border border-white/25 rounded-2xl px-4 py-3 text-center shrink-0">
+        <div class="text-xs text-sky-100 font-bold">تَقَدُّمُ الدَّرْسِ</div>
+        <div id="header-progress-text" class="text-lg font-black text-amber-300 mt-0.5" dir="ltr">0 / 6</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-3 sm:px-6 mt-6 space-y-8">
+
+    <!-- ===================================================================== -->
+    <!-- المحطة 1: أَكْتَشِفُ                                                     -->
+    <!-- ===================================================================== -->
+    <section id="stage-1" class="stage-unlocked bg-white rounded-3xl shadow-md border-2 border-emerald-600/70 overflow-hidden">
+      <div class="bg-emerald-50 border-b border-emerald-200 px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <span class="bg-emerald-700 text-white font-black px-3.5 py-1 rounded-xl text-base sm:text-lg">أَكْتَشِفُ</span>
+          <h2 class="text-lg sm:text-xl font-extrabold text-emerald-950">
+            أَكْمِلِ الْفَرَاغَاتِ لِحِسَابِ الْمَجْمُوعِ <span class="math-ltr text-emerald-900">35 + 29</span> .
+          </h2>
+        </div>
+        <span class="text-xs sm:text-sm font-bold text-emerald-800 bg-emerald-100 px-3 py-1 rounded-full">المرحلة 1</span>
+      </div>
+
+      <div class="p-4 sm:p-6 space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <!-- التمثيل البصري للعددين 29 و 35 وتجميع 10 وحدات -->
+          <div class="lg:col-span-6 bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-5">
+            <!-- العدد 29 -->
+            <div class="flex items-center gap-3">
+              <div class="bg-rose-100 border border-rose-300 text-rose-900 font-black px-3 py-1.5 rounded-lg text-base shrink-0" dir="ltr">29</div>
+              <div class="flex flex-col gap-1.5">
+                <div class="ten-bar" aria-label="عمود عشرة">
+                  <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+                  <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+                </div>
+                <div class="ten-bar" aria-label="عمود عشرة">
+                  <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+                  <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+                </div>
+              </div>
+
+              <!-- الوحدات المحاطة بمنحنى تجميع 10 وحدات -->
+              <div class="mr-auto border-2 border-slate-800 rounded-[28px] p-2.5 bg-amber-50/70">
+                <div class="text-[11px] font-extrabold text-slate-700 text-center mb-1">تَجْمِيعُ 10 وَحَدَاتٍ</div>
+                <div class="grid grid-cols-4 gap-1.5" dir="ltr">
+                  <span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span>
+                  <span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span>
+                  <span class="unit-sq"></span><span class="unit-sq"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- العدد 35 -->
+            <div class="flex items-center gap-3 pt-2 border-t border-dashed border-slate-300">
+              <div class="bg-rose-100 border border-rose-300 text-rose-900 font-black px-3 py-1.5 rounded-lg text-base shrink-0" dir="ltr">35</div>
+              <div class="flex flex-col gap-1.5">
+                <div class="ten-bar">
+                  <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+                  <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+                </div>
+                <div class="ten-bar">
+                  <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+                  <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+                </div>
+                <div class="ten-bar">
+                  <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+                  <span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span>
+                </div>
+              </div>
+
+              <!-- الوحدات المتبقية (4 وحدات صفراء خارج التجميع) -->
+              <div class="mr-auto flex flex-col items-center gap-1 bg-white border border-amber-300 rounded-xl p-2">
+                <span class="text-[11px] font-bold text-amber-900">مُتَبَقٍّ (4)</span>
+                <div class="grid grid-cols-2 gap-1.5" dir="ltr">
+                  <span class="unit-sq"></span><span class="unit-sq"></span>
+                  <span class="unit-sq"></span><span class="unit-sq"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- معادلات التفكيك والجمع من اليسار إلى اليمين -->
+          <div class="lg:col-span-6 space-y-4">
+            <div class="math-ltr text-lg sm:text-xl">
+              <span>29 = 20 +</span>
+              <input type="number" id="s1-q1" class="num-input" value="" autocomplete="off" />
+              <span id="s1-c1"></span>
+            </div>
+
+            <div class="math-ltr text-lg sm:text-xl">
+              <span>35 = 30 +</span>
+              <input type="number" id="s1-q2" class="num-input" value="" autocomplete="off" />
+              <span id="s1-c2"></span>
+            </div>
+
+            <div class="math-ltr text-lg sm:text-xl">
+              <span>9 + 5 =</span>
+              <span class="inline-flex items-center justify-center w-9 h-9 rounded-full border-2 border-slate-900 font-black text-base">10</span>
+              <span>+</span>
+              <input type="number" id="s1-q3" class="num-input" value="" autocomplete="off" />
+              <span id="s1-c3"></span>
+            </div>
+
+            <div class="math-ltr text-lg sm:text-xl">
+              <span>20 + 30 +</span>
+              <span class="inline-flex items-center justify-center w-9 h-9 rounded-full border-2 border-slate-900 font-black text-base">10</span>
+              <span>=</span>
+              <input type="number" id="s1-q4" class="num-input" value="" autocomplete="off" />
+              <span id="s1-c4"></span>
+            </div>
+
+            <div class="pt-2 border-t border-slate-200">
+              <div class="text-base font-extrabold text-emerald-900 mb-2">أَكْمِلْ.</div>
+              <div class="math-ltr text-lg sm:text-xl">
+                <span>29 + 35 = 60 +</span>
+                <input type="number" id="s1-q5" class="num-input" value="" autocomplete="off" />
+                <span id="s1-c5"></span>
+                <span>=</span>
+                <input type="number" id="s1-q6" class="num-input" value="" autocomplete="off" />
+                <span id="s1-c6"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- زر التحقق وعداد المحطة -->
+        <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
+          <button type="button" id="btn-check-1" class="btn-check" onclick="checkStage1()">
+            تحقق من إجاباتي
+          </button>
+          <div id="counter-1" class="font-extrabold text-sm sm:text-base bg-slate-100 border border-slate-200 px-4 py-2 rounded-xl text-slate-800" dir="ltr">
+            ✓ الصواب: 0 | ✗ الخطأ: 0
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- المحطة 2: أُنْجِزُ (التمرين 1 والتمرين 2)                               -->
+    <!-- ===================================================================== -->
+    <section id="stage-2" class="stage-locked bg-white rounded-3xl shadow-md border-2 border-rose-500/70 overflow-hidden">
+      <div class="bg-rose-50 border-b border-rose-200 px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <span class="bg-rose-700 text-white font-black px-3.5 py-1 rounded-xl text-base sm:text-lg">أُنْجِزُ</span>
+          <h2 class="text-lg sm:text-xl font-extrabold text-rose-950">حِسَابُ مَجْمُوعِ أَعْدَادٍ بِتَجْمِيعِ الْعَشَرَاتِ</h2>
+        </div>
+        <span class="text-xs sm:text-sm font-bold text-rose-800 bg-rose-100 px-3 py-1 rounded-full">المرحلة 2</span>
+      </div>
+
+      <div class="p-4 sm:p-6 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <!-- التمرين 1: 1- أُحْسُبْ 15 + 38 . -->
+          <div id="s2-sub1" class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col justify-between space-y-4">
+            <div class="space-y-4">
+              <h3 class="text-lg font-black text-slate-900">
+                1- أُحْسُبْ <span class="math-ltr">15 + 38</span> .
+              </h3>
+
+              <!-- التمثيل البصري كما في الجزء الأيمن من أُنْجِزُ -->
+              <div class="bg-white border border-slate-200 rounded-xl p-3 space-y-3">
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex flex-col gap-1.5">
+                    <div class="ten-bar"><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span></div>
+                    <div class="ten-bar"><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span></div>
+                    <div class="ten-bar"><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span></div>
+                  </div>
+                  <div class="grid grid-cols-4 gap-1.5" dir="ltr">
+                    <span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span>
+                    <span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                  <span class="ten-card-badge ten-card-green"><span>10</span><span>عشرة</span></span>
+                  <div class="grid grid-cols-3 gap-1.5" dir="ltr">
+                    <span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span>
+                    <span class="unit-sq"></span><span class="unit-sq"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- المعادلة من اليسار إلى اليمين -->
+              <div class="math-ltr text-lg sm:text-xl pt-1">
+                <span>38 + 15 =</span>
+                <input type="number" id="s2-q1" class="num-input" value="" autocomplete="off" />
+                <span id="s2-c1"></span>
+              </div>
+            </div>
+
+            <div>
+              <button type="button" id="btn-check-2a" class="btn-check w-full" onclick="checkStage2Sub1()">
+                تحقق من التمرين 1
+              </button>
+            </div>
+          </div>
+
+          <!-- التمرين 2: 2- أُحْسُبْ 26 + 29 + 34 . -->
+          <div id="s2-sub2" class="stage-locked bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col justify-between space-y-4">
+            <div class="space-y-4">
+              <h3 class="text-lg font-black text-slate-900">
+                2- أُحْسُبْ <span class="math-ltr">26 + 29 + 34</span> .
+              </h3>
+
+              <!-- التمثيل البصري كما في الجزء الأيسر من أُنْجِزُ -->
+              <div class="bg-white border border-slate-200 rounded-xl p-3 space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <div class="flex flex-wrap gap-1.5" dir="ltr">
+                    <span class="ten-card-badge ten-card-green"><span>10</span><span>عشرة</span></span>
+                    <span class="ten-card-badge ten-card-green"><span>10</span><span>عشرة</span></span>
+                    <span class="ten-card-badge ten-card-green"><span>10</span><span>عشرة</span></span>
+                  </div>
+                  <div class="grid grid-cols-2 gap-1.5" dir="ltr">
+                    <span class="unit-sq"></span><span class="unit-sq"></span>
+                    <span class="unit-sq"></span><span class="unit-sq"></span>
+                  </div>
+                </div>
+
+                <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                  <div class="flex flex-col gap-1.5">
+                    <div class="ten-bar"><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span></div>
+                    <div class="ten-bar"><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span></div>
+                  </div>
+                  <div class="grid grid-cols-4 gap-1.5" dir="ltr">
+                    <span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span>
+                    <span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span>
+                  </div>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                  <div class="flex gap-1.5" dir="ltr">
+                    <span class="ten-card-badge ten-card-green"><span>10</span><span>عشرة</span></span>
+                    <span class="ten-card-badge ten-card-green"><span>10</span><span>عشرة</span></span>
+                  </div>
+                  <div class="grid grid-cols-3 gap-1.5" dir="ltr">
+                    <span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span>
+                    <span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- المعادلة من اليسار إلى اليمين -->
+              <div class="math-ltr text-lg sm:text-xl pt-1">
+                <span>34 + 29 + 26 =</span>
+                <input type="number" id="s2-q2" class="num-input" value="" autocomplete="off" />
+                <span id="s2-c2"></span>
+              </div>
+            </div>
+
+            <div>
+              <button type="button" id="btn-check-2b" class="btn-check w-full" onclick="checkStage2Sub2()">
+                تحقق من التمرين 2
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- عداد المحطة الثانية -->
+        <div class="pt-3 border-t border-slate-100 flex justify-end">
+          <div id="counter-2" class="font-extrabold text-sm sm:text-base bg-slate-100 border border-slate-200 px-4 py-2 rounded-xl text-slate-800" dir="ltr">
+            ✓ الصواب: 0 | ✗ الخطأ: 0
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- بطاقة تَعَلَّمْتُ (بالضبط والتشكيل الكامل كما ورد في الكتاب المدرسي)   -->
+    <!-- ===================================================================== -->
+    <section class="bg-indigo-50/90 border-2 border-indigo-700 rounded-3xl p-5 sm:p-6 shadow-sm">
+      <div class="inline-block bg-indigo-700 text-white font-black px-4 py-1 rounded-xl text-lg mb-3">
+        تَعَلَّمْتُ
+      </div>
+      <p class="text-lg sm:text-xl font-extrabold text-indigo-950 leading-loose">
+        عِنْدَمَا أَجْمَعُ أُفُقِيًّا أَعْدَادًا تَتَكَوَّنُ مِنْ رَقْمَيْنِ، أَبْدَأُ بِتَجْمِيعِ
+        <span class="math-ltr text-indigo-800">10</span> وَحَدَاتٍ لِتَكْوِينِ
+        <span class="math-ltr text-indigo-800">10</span> وَاحِدَةٍ، ثُمَّ أَجْمَعُهَا مَعَ الْعَشَرَاتِ، وَأُكْمِلُ الْحِسَابَ بِجَمْعِ الْعَشَرَاتِ النَّاتِجَةِ مَعَ الْوَحَدَاتِ الْمُتَبَقِّيَةِ .
+      </p>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- المحطة 3: أَتَمَرَّنُ (المرجع: الصفحة رقم 42 من كتاب التلميذ)          -->
+    <!-- ===================================================================== -->
+    <section id="stage-3" class="stage-locked bg-white rounded-3xl shadow-md border-2 border-amber-500/80 overflow-hidden">
+      <div class="bg-amber-50 border-b border-amber-200 px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <span class="bg-amber-600 text-white font-black px-3.5 py-1 rounded-xl text-base sm:text-lg">أَتَمَرَّنُ</span>
+          <h2 class="text-base sm:text-lg font-extrabold text-amber-950">
+            الْمَرْجِعُ : الصَّفْحَةُ رَقْمُ 42 مِنْ كِتَابِ التِّلْمِيذِ .
+          </h2>
+        </div>
+        <span class="text-xs sm:text-sm font-bold text-amber-900 bg-amber-100 px-3 py-1 rounded-full">المرحلة 3</span>
+      </div>
+
+      <div class="p-4 sm:p-6 space-y-8">
+
+        <!-- التمرين 1 في أَتَمَرَّنُ -->
+        <div id="s3-sub1" class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-5">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-md bg-amber-600 text-white font-black flex items-center justify-center">1</span>
+            <h3 class="text-lg font-black text-slate-900">أَكْمِلْ وَاحْسُبِ الْجَمْعَ.</h3>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- الجزء الأيسر (أفقي) -->
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between space-y-4">
+              <div class="flex items-center justify-around gap-3">
+                <div class="border-2 border-slate-800 rounded-[24px] p-3 flex flex-col items-center gap-2 bg-slate-50">
+                  <div class="ten-bar"><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span></div>
+                  <div class="flex gap-1.5" dir="ltr">
+                    <span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span>
+                  </div>
+                </div>
+
+                <div class="border-2 border-slate-800 rounded-[24px] p-3 bg-slate-50">
+                  <div class="grid grid-cols-4 gap-1.5" dir="ltr">
+                    <span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span>
+                    <span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="math-ltr text-lg justify-center pt-2 border-t border-slate-100">
+                <input type="number" id="s3-1-h1" class="num-input" value="" autocomplete="off" />
+                <span id="s3-1-ch1"></span>
+                <span>+</span>
+                <input type="number" id="s3-1-h2" class="num-input" value="" autocomplete="off" />
+                <span id="s3-1-ch2"></span>
+                <span>=</span>
+                <input type="number" id="s3-1-h3" class="num-input" value="" autocomplete="off" />
+                <span id="s3-1-ch3"></span>
+              </div>
+            </div>
+
+            <!-- الجزء الأيمن -->
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between space-y-4">
+              <div class="flex items-center justify-around gap-3">
+                <div class="border-2 border-slate-800 rounded-[24px] p-3 flex flex-col items-center gap-2 bg-slate-50">
+                  <div class="ten-bar"><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span></div>
+                  <div class="flex gap-1.5" dir="ltr">
+                    <span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span>
+                  </div>
+                </div>
+
+                <div class="flex flex-col items-center gap-2" dir="ltr">
+                  <div class="flex items-center gap-2">
+                    <span>+</span>
+                    <input type="number" id="s3-1-v1" class="num-input" value="" autocomplete="off" />
+                    <span id="s3-1-cv1"></span>
+                  </div>
+                  <div class="border-2 border-slate-800 rounded-[24px] p-2.5 bg-slate-50">
+                    <div class="grid grid-cols-4 gap-1.5" dir="ltr">
+                      <span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span>
+                      <span class="unit-sq"></span><span class="unit-sq"></span><span class="unit-sq"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="math-ltr text-lg justify-center pt-2 border-t border-slate-100">
+                <span>+</span>
+                <input type="number" id="s3-1-v2" class="num-input" value="" autocomplete="off" />
+                <span id="s3-1-cv2"></span>
+                <span>=</span>
+                <input type="number" id="s3-1-v3" class="num-input" value="" autocomplete="off" />
+                <span id="s3-1-cv3"></span>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" id="btn-check-3a" class="btn-check" onclick="checkStage3Sub1()">
+            تحقق من التمرين 1
+          </button>
+        </div>
+
+        <!-- التمرين 2 في أَتَمَرَّنُ -->
+        <div id="s3-sub2" class="stage-locked bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-5">
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 rounded-md bg-amber-600 text-white font-black flex items-center justify-center">2</span>
+            <h3 class="text-lg font-black text-slate-900">أَكْمِلْ وَاحْسُبِ الْجَمْعَ.</h3>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- الجزء الأيسر -->
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between space-y-4">
+              <div class="flex items-center justify-around gap-3">
+                <div class="flex flex-col gap-1.5" dir="ltr">
+                  <span class="ten-card-badge ten-card-blue"><span>10</span><span>عشرة</span></span>
+                  <span class="ten-card-badge ten-card-blue"><span>10</span><span>عشرة</span></span>
+                </div>
+
+                <div class="border-2 border-slate-800 rounded-[24px] p-3 flex items-center gap-2.5 bg-slate-50">
+                  <div class="ten-bar"><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span></div>
+                  <div class="grid grid-cols-2 gap-1.5" dir="ltr">
+                    <span class="unit-sq"></span><span class="unit-sq"></span>
+                    <span class="unit-sq"></span><span class="unit-sq"></span>
+                    <span class="unit-sq"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="math-ltr text-lg justify-center pt-2 border-t border-slate-100">
+                <input type="number" id="s3-2-h1" class="num-input" value="" autocomplete="off" />
+                <span id="s3-2-ch1"></span>
+                <span>+</span>
+                <input type="number" id="s3-2-h2" class="num-input" value="" autocomplete="off" />
+                <span id="s3-2-ch2"></span>
+                <span>=</span>
+                <input type="number" id="s3-2-h3" class="num-input" value="" autocomplete="off" />
+                <span id="s3-2-ch3"></span>
+              </div>
+            </div>
+
+            <!-- الجزء الأيمن -->
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 flex flex-col justify-between space-y-4">
+              <div class="flex items-center justify-around gap-3">
+                <div class="flex flex-col gap-1.5" dir="ltr">
+                  <span class="ten-card-badge ten-card-blue"><span>10</span><span>عشرة</span></span>
+                  <span class="ten-card-badge ten-card-blue"><span>10</span><span>عشرة</span></span>
+                </div>
+
+                <div class="border-2 border-slate-800 rounded-[24px] p-3 flex items-center gap-2.5 bg-slate-50">
+                  <div class="ten-bar"><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span></div>
+                  <div class="grid grid-cols-2 gap-1.5" dir="ltr">
+                    <span class="unit-sq"></span><span class="unit-sq"></span>
+                    <span class="unit-sq"></span><span class="unit-sq"></span>
+                    <span class="unit-sq"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="math-ltr text-lg justify-center pt-2 border-t border-slate-100">
+                <input type="number" id="s3-2-v1" class="num-input" value="" autocomplete="off" />
+                <span id="s3-2-cv1"></span>
+                <span>+</span>
+                <input type="number" id="s3-2-v2" class="num-input" value="" autocomplete="off" />
+                <span id="s3-2-cv2"></span>
+                <span>=</span>
+                <input type="number" id="s3-2-v3" class="num-input" value="" autocomplete="off" />
+                <span id="s3-2-cv3"></span>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" id="btn-check-3b" class="btn-check" onclick="checkStage3Sub2()">
+            تحقق من التمرين 2
+          </button>
+        </div>
+
+        <!-- التمرين 3 في أَتَمَرَّنُ -->
+        <div id="s3-sub3" class="stage-locked bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 space-y-5">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="w-7 h-7 rounded-md bg-amber-600 text-white font-black flex items-center justify-center">3</span>
+            <h3 class="text-lg font-black text-slate-900 flex flex-wrap items-center gap-2">
+              <span>أَكْمِلْ بِعَمُودِ الْعَشَرَاتِ</span>
+              <span class="ten-bar"><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span></span>
+              <span>وَمُرَبَّعِ الْوَحْدَةِ</span>
+              <span class="unit-sq"></span>
+              <span>ثُمَّ احْسُبِ الْجَمْعَ</span>
+            </h3>
+          </div>
+
+          <!-- لوحة أزرار إضافة العشرات والوحدات داخل البطاقات -->
+          <div class="bg-amber-100/70 border border-amber-300 rounded-2xl p-3.5 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-sm font-extrabold text-amber-950 ml-1">اخْتَرِ الْبِطَاقَةَ ثُمَّ انْقُرْ لِإِضَافَةِ:</span>
+              <button type="button" id="tool-add-ten" onclick="selectStampTool('ten')" class="px-3 py-1.5 rounded-xl font-extrabold text-sm bg-emerald-600 text-white shadow ring-2 ring-emerald-900">
+                + عَمُودُ عَشَرَاتٍ (أخضر)
+              </button>
+              <button type="button" id="tool-add-unit" onclick="selectStampTool('unit')" class="px-3 py-1.5 rounded-xl font-extrabold text-sm bg-yellow-400 text-slate-900 border border-yellow-700 shadow">
+                + مُرَبَّعُ وَحْدَةٍ (أصفر)
+              </button>
+              <button type="button" id="tool-clear-stamps" onclick="clearAllStamps()" class="px-3 py-1.5 rounded-xl font-bold text-sm bg-white text-rose-700 border border-rose-300 hover:bg-rose-50">
+                مسح البطاقات
+              </button>
+            </div>
+          </div>
+
+          <!-- البطاقات الأربع والمعادلتان -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- القسم الأيسر: 10 + 12 -->
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-4">
+              <div class="grid grid-cols-3 gap-2.5" dir="ltr">
+                <div id="stamp-box-1" onclick="onStampBoxClick(1)" class="min-h-[96px] rounded-2xl border-2 border-sky-400 bg-sky-50/40 p-2 cursor-pointer flex flex-col items-center justify-center gap-1.5 hover:bg-sky-50 transition">
+                  <span class="text-[11px] font-bold text-sky-800">بطاقة 1</span>
+                  <div id="stamp-content-1" class="flex flex-col items-center gap-1"></div>
+                </div>
+                <div id="stamp-box-2" onclick="onStampBoxClick(2)" class="min-h-[96px] rounded-2xl border-2 border-sky-400 bg-sky-50/40 p-2 cursor-pointer flex flex-col items-center justify-center gap-1.5 hover:bg-sky-50 transition">
+                  <span class="text-[11px] font-bold text-sky-800">بطاقة 2</span>
+                  <div id="stamp-content-2" class="flex flex-col items-center gap-1"></div>
+                </div>
+                <div id="stamp-box-3" onclick="onStampBoxClick(3)" class="min-h-[96px] rounded-2xl border-2 border-sky-400 bg-sky-50/40 p-2 cursor-pointer flex flex-col items-center justify-center gap-1.5 hover:bg-sky-50 transition">
+                  <span class="text-[11px] font-bold text-sky-800">بطاقة 3</span>
+                  <div id="stamp-content-3" class="flex flex-col items-center gap-1"></div>
+                </div>
+              </div>
+
+              <div class="math-ltr text-lg sm:text-xl justify-center pt-1">
+                <span>10 + 12 =</span>
+                <input type="number" id="s3-q3a" class="num-input" value="" autocomplete="off" />
+                <span id="s3-c3a"></span>
+              </div>
+            </div>
+
+            <!-- القسم الأيمن: 23 + 45 -->
+            <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-4">
+              <div class="grid grid-cols-3 gap-2.5" dir="ltr">
+                <div class="min-h-[96px] rounded-2xl border-2 border-sky-400 bg-slate-50 p-2 flex flex-col items-center justify-center gap-1.5">
+                  <span class="text-[11px] font-bold text-slate-500">مُعْطَى</span>
+                  <div class="flex flex-col items-center gap-1">
+                    <div class="ten-bar"><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span></div>
+                  </div>
+                </div>
+
+                <div class="min-h-[96px] rounded-2xl border-2 border-sky-400 bg-slate-50 p-2 flex flex-col items-center justify-center gap-1.5">
+                  <span class="text-[11px] font-bold text-slate-500">مُعْطَى</span>
+                  <div class="flex flex-col items-center gap-1.5">
+                    <div class="ten-bar"><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span><span class="cell"></span></div>
+                    <span class="unit-sq"></span>
+                  </div>
+                </div>
+
+                <div id="stamp-box-4" onclick="onStampBoxClick(4)" class="min-h-[96px] rounded-2xl border-2 border-sky-400 bg-sky-50/40 p-2 cursor-pointer flex flex-col items-center justify-center gap-1.5 hover:bg-sky-50 transition">
+                  <span class="text-[11px] font-bold text-sky-800">بطاقة 4</span>
+                  <div id="stamp-content-4" class="flex flex-col items-center gap-1"></div>
+                </div>
+              </div>
+
+              <div class="math-ltr text-lg sm:text-xl justify-center pt-1">
+                <span>23 + 45 =</span>
+                <input type="number" id="s3-q3b" class="num-input" value="" autocomplete="off" />
+                <span id="s3-c3b"></span>
+              </div>
+            </div>
+          </div>
+
+          <button type="button" id="btn-check-3c" class="btn-check" onclick="checkStage3Sub3()">
+            تحقق من التمرين 3
+          </button>
+        </div>
+
+        <!-- عداد المحطة الثالثة -->
+        <div class="pt-3 border-t border-slate-100 flex justify-end">
+          <div id="counter-3" class="font-extrabold text-sm sm:text-base bg-slate-100 border border-slate-200 px-4 py-2 rounded-xl text-slate-800" dir="ltr">
+            ✓ الصواب: 0 | ✗ الخطأ: 0
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- المحطة 4: أَبْحَثُ — لَاحِظْ وَأَكْمِلْ شَرِيطَ الْأَعْدَادِ            -->
+    <!-- ===================================================================== -->
+    <section id="stage-4" class="stage-locked bg-white rounded-3xl shadow-md border-2 border-teal-600/80 overflow-hidden">
+      <div class="bg-teal-50 border-b border-teal-200 px-5 py-3.5 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+          <span class="bg-teal-700 text-white font-black px-3.5 py-1 rounded-xl text-base sm:text-lg">أَبْحَثُ</span>
+          <h2 class="text-lg sm:text-xl font-extrabold text-teal-950">
+            لَاحِظْ وَأَكْمِلْ شَرِيطَ الْأَعْدَادِ
+          </h2>
+        </div>
+        <span class="text-xs sm:text-sm font-bold text-teal-900 bg-teal-100 px-3 py-1 rounded-full">المرحلة 4</span>
+      </div>
+
+      <div class="p-4 sm:p-6 space-y-6">
+        <!-- شريط الأعداد المتسلسل من اليسار إلى اليمين (13 خانة) -->
+        <div class="overflow-x-auto pb-3">
+          <div class="inline-flex flex-col items-start min-w-max" dir="ltr">
+            <!-- أقواس القفز (+3) و (+3) -->
+            <div class="flex items-end gap-0 mb-1">
+              <div class="w-[3.15rem] text-center text-xs font-black text-teal-800">2</div>
+              <div class="w-[3.15rem] flex flex-col items-center">
+                <span class="text-xs font-black text-rose-700 bg-rose-50 border border-rose-300 rounded-full px-1.5">+3</span>
+                <span class="text-sm font-black text-slate-700 leading-none">↷</span>
+              </div>
+              <div class="w-[3.15rem] flex flex-col items-center">
+                <span class="text-xs font-black text-rose-700 bg-rose-50 border border-rose-300 rounded-full px-1.5">+3</span>
+                <span class="text-sm font-black text-slate-700 leading-none">↷</span>
+              </div>
+              <div class="w-[3.15rem] flex flex-col items-center">
+                <span class="text-sm font-black text-slate-700 leading-none">↷</span>
+              </div>
+            </div>
+
+            <!-- الخانات الـ 13 كما في الصورة -->
+            <div id="number-strip-container" class="flex items-center">
+              <!-- يتم توليد الخانات الـ 13 بدقة عبر جافاسكريبت -->
+            </div>
+
+            <!-- سطر التصحيح الفوري للخانات الخاطئة إن وجدت -->
+            <div id="strip-corrections" class="flex items-center mt-1.5 text-xs"></div>
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
+          <button type="button" id="btn-check-4" class="btn-check" onclick="checkStage4()">
+            تحقق من شريط الأعداد
+          </button>
+          <div id="counter-4" class="font-extrabold text-sm sm:text-base bg-slate-100 border border-slate-200 px-4 py-2 rounded-xl text-slate-800" dir="ltr">
+            ✓ الصواب: 0 | ✗ الخطأ: 0
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- التقييم النهائي: حصيلة الدرس والتقييم العام (الدائرة النسبية)          -->
+    <!-- ===================================================================== -->
+    <section id="final-evaluation" class="bg-white rounded-3xl shadow-lg border-2 border-slate-800 overflow-hidden">
+      <div class="bg-slate-900 text-white px-6 py-4 flex items-center justify-between">
+        <h2 class="text-xl sm:text-2xl font-black">📊 حصيلة الدرس والتقييم العام</h2>
+        <span class="text-xs sm:text-sm bg-amber-400 text-slate-950 font-black px-3 py-1 rounded-full">التقييم النهائي</span>
+      </div>
+
+      <div class="p-6 sm:p-8 grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+        <!-- الدائرة النسبية (SVG Circle Ring) -->
+        <div class="md:col-span-5 flex flex-col items-center justify-center">
+          <div class="relative w-48 h-48 flex items-center justify-center">
+            <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120" aria-label="الدائرة النسبية">
+              <circle cx="60" cy="60" r="50" fill="none" stroke="#e2e8f0" stroke-width="14" />
+              <circle
+                id="ratio-circle-progress"
+                cx="60"
+                cy="60"
+                r="50"
+                fill="none"
+                stroke="#16a34a"
+                stroke-width="14"
+                stroke-linecap="round"
+                stroke-dasharray="314.159"
+                stroke-dashoffset="314.159"
+                style="transition: stroke-dashoffset 0.6s ease, stroke 0.4s ease;"
+              />
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+              <span id="final-percentage-text" class="text-3xl font-black text-slate-900" dir="ltr">0%</span>
+              <span class="text-xs font-bold text-slate-500 mt-0.5">نِسْبَةُ النَّجَاحِ</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- تفاصيل الإجابات الصحيحة والخاطئة وشريط التقدم -->
+        <div class="md:col-span-7 space-y-5">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 text-center">
+              <div class="text-sm font-bold text-emerald-800">مَجْمُوعُ الْإِجَابَاتِ الصَّحِيحَةِ</div>
+              <div id="final-correct-count" class="text-3xl font-black text-emerald-700 mt-1" dir="ltr">0</div>
+            </div>
+            <div class="bg-rose-50 border border-rose-200 rounded-2xl p-4 text-center">
+              <div class="text-sm font-bold text-rose-800">مَجْمُوعُ الْإِجَابَاتِ الْخَاطِئَةِ</div>
+              <div id="final-wrong-count" class="text-3xl font-black text-rose-700 mt-1" dir="ltr">0</div>
+            </div>
+          </div>
+
+          <!-- شريط التقدم -->
+          <div class="space-y-1.5">
+            <div class="flex justify-between text-xs font-extrabold text-slate-600">
+              <span>مُؤَشِّرُ الْإِتْقَانِ</span>
+              <span id="progress-bar-label" dir="ltr">0%</span>
+            </div>
+            <div class="w-full h-4 bg-slate-200 rounded-full overflow-hidden">
+              <div id="final-progress-bar" class="h-full bg-emerald-600 rounded-full transition-all duration-500" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <p id="final-feedback-message" class="text-base font-extrabold text-slate-700 bg-slate-50 border border-slate-200 rounded-2xl p-3.5">
+            أَكْمِلِ الْأَنْشِطَةَ وَالتَّمَارِينَ لِتَظْهَرَ نَتِيجَتُكَ النِّهَائِيَّةُ.
+          </p>
+
+          <button type="button" onclick="resetEntireLesson()" class="w-full sm:w-auto bg-slate-900 hover:bg-slate-800 text-white font-black px-6 py-3 rounded-2xl shadow transition flex items-center justify-center gap-2">
+            <span>🔄 إعادة المحاولة من جديد</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+  </main>
+
+  <script>
+    const CHANNEL_ID = "-1004461185731";
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+      tg.ready();
+      tg.expand();
+    }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    /**
+     * حالة التمارين والعدادات والأداة التفاعلية
+     */
+    const stageStats = {
+      1: { correct: 0, wrong: 0, done: false },
+      2: { correct: 0, wrong: 0, done1: false, done2: false },
+      3: { correct: 0, wrong: 0, done1: false, done2: false, done3: false },
+      4: { correct: 0, wrong: 0, done: false }
+    };
+
+    let selectedStampTool = 'ten';
+    const stampCounts = {
+      1: { tens: 0, units: 0 },
+      2: { tens: 0, units: 0 },
+      3: { tens: 0, units: 0 },
+      4: { tens: 0, units: 0 }
+    };
+
+    // شريط الأعداد في أبحث: 13 خانة تبدأ بـ 2 وتقفز بـ +3
+    const stripValues = [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38];
+    const stripGivenIndices = new Set([0, 1, 2]);
+
+    function initNumberStrip() {
+      const container = document.getElementById('number-strip-container');
+      const corrContainer = document.getElementById('strip-corrections');
+      container.innerHTML = '';
+      corrContainer.innerHTML = '';
+
+      stripValues.forEach((val, idx) => {
+        if (stripGivenIndices.has(idx)) {
+          const box = document.createElement('div');
+          box.className = 'strip-box strip-given';
+          box.textContent = String(val);
+          container.appendChild(box);
+        } else {
+          const input = document.createElement('input');
+          input.type = 'number';
+          input.id = `strip-in-${idx}`;
+          input.className = 'strip-input';
+          input.value = '';
+          input.autocomplete = 'off';
+          container.appendChild(input);
+        }
+
+        const corrSlot = document.createElement('div');
+        corrSlot.id = `strip-corr-${idx}`;
+        corrSlot.className = 'w-[3.15rem] flex justify-center';
+        corrContainer.appendChild(corrSlot);
+      });
+    }
+
+    /**
+     * أداة إضافة أعمدة العشرات الخضراء ومربعات الوحدات الصفراء في التمرين 3 (أَتَمَرَّنُ)
+     */
+    function selectStampTool(tool) {
+      if (stageStats[3].done3) return;
+      selectedStampTool = tool;
+      const btnTen = document.getElementById('tool-add-ten');
+      const btnUnit = document.getElementById('tool-add-unit');
+      if (tool === 'ten') {
+        btnTen.className = 'px-3 py-1.5 rounded-xl font-extrabold text-sm bg-emerald-600 text-white shadow ring-2 ring-emerald-900';
+        btnUnit.className = 'px-3 py-1.5 rounded-xl font-extrabold text-sm bg-yellow-400 text-slate-900 border border-yellow-700 shadow';
+      } else {
+        btnUnit.className = 'px-3 py-1.5 rounded-xl font-extrabold text-sm bg-yellow-400 text-slate-900 border border-yellow-700 shadow ring-2 ring-amber-900';
+        btnTen.className = 'px-3 py-1.5 rounded-xl font-extrabold text-sm bg-emerald-600 text-white shadow';
+      }
+    }
+
+    function onStampBoxClick(boxId) {
+      if (stageStats[3].done3) return;
+      if (selectedStampTool === 'ten') {
+        stampCounts[boxId].tens += 1;
+      } else {
+        stampCounts[boxId].units += 1;
+      }
+      renderStampBox(boxId);
+    }
+
+    function renderStampBox(boxId) {
+      const target = document.getElementById(`stamp-content-${boxId}`);
+      if (!target) return;
+      target.innerHTML = '';
+      const { tens, units } = stampCounts[boxId];
+
+      for (let t = 0; t < tens; t++) {
+        const bar = document.createElement('div');
+        bar.className = 'ten-bar';
+        for (let c = 0; c < 10; c++) {
+          const cell = document.createElement('span');
+          cell.className = 'cell';
+          bar.appendChild(cell);
+        }
+        target.appendChild(bar);
+      }
+
+      if (units > 0) {
+        const uWrap = document.createElement('div');
+        uWrap.className = 'flex flex-wrap gap-1 justify-center mt-0.5';
+        uWrap.dir = 'ltr';
+        for (let u = 0; u < units; u++) {
+          const sq = document.createElement('span');
+          sq.className = 'unit-sq-sm';
+          uWrap.appendChild(sq);
+        }
+        target.appendChild(uWrap);
+      }
+    }
+
+    function clearAllStamps() {
+      if (stageStats[3].done3) return;
+      [1, 2, 3, 4].forEach((id) => {
+        stampCounts[id] = { tens: 0, units: 0 };
+        renderStampBox(id);
+      });
+    }
+
+    /**
+     * مساعدات التحقق والتلوين وتحديث العدادات
+     */
+    function evaluateSingleInput(inputId, corrSpanId, expectedVal) {
+      const inputEl = document.getElementById(inputId);
+      const corrEl = document.getElementById(corrSpanId);
+      const rawVal = inputEl.value.trim();
+      const userNum = rawVal === '' ? NaN : Number(rawVal);
+
+      inputEl.disabled = true;
+      if (userNum === expectedVal) {
+        inputEl.classList.add('input-correct');
+        corrEl.innerHTML = '';
+        return true;
+      } else {
+        inputEl.classList.add('input-wrong');
+        corrEl.innerHTML = `<span class="correction-tag">الصواب: ${expectedVal}</span>`;
+        return false;
+      }
+    }
+
+    function updateStageCountersAndEvaluation() {
+      document.getElementById('counter-1').textContent =
+        `✓ الصواب: ${stageStats[1].correct} | ✗ الخطأ: ${stageStats[1].wrong}`;
+
+      document.getElementById('counter-2').textContent =
+        `✓ الصواب: ${stageStats[2].correct} | ✗ الخطأ: ${stageStats[2].wrong}`;
+
+      document.getElementById('counter-3').textContent =
+        `✓ الصواب: ${stageStats[3].correct} | ✗ الخطأ: ${stageStats[3].wrong}`;
+
+      document.getElementById('counter-4').textContent =
+        `✓ الصواب: ${stageStats[4].correct} | ✗ الخطأ: ${stageStats[4].wrong}`;
+
+      const completedUnits = [
+        stageStats[1].done,
+        stageStats[2].done1,
+        stageStats[2].done2,
+        stageStats[3].done1,
+        stageStats[3].done2,
+        stageStats[3].done3,
+        stageStats[4].done
+      ].filter(Boolean).length;
+      document.getElementById('header-progress-text').textContent = `${completedUnits} / 7`;
+
+      const totalCorrect =
+        stageStats[1].correct + stageStats[2].correct + stageStats[3].correct + stageStats[4].correct;
+      const totalWrong =
+        stageStats[1].wrong + stageStats[2].wrong + stageStats[3].wrong + stageStats[4].wrong;
+      const totalAnswered = totalCorrect + totalWrong;
+
+      document.getElementById('final-correct-count').textContent = String(totalCorrect);
+      document.getElementById('final-wrong-count').textContent = String(totalWrong);
+
+      // حساب النسبة بحيث لا تتجاوز 100% أبداً وتساوي 100% عند صحة جميع الإجابات و0% عند خطئها جميعاً
+      let percentage = 0;
+      if (totalAnswered > 0) {
+        if (totalWrong === 0 && totalCorrect > 0) {
+          percentage = 100;
+        } else {
+          percentage = Math.max(0, Math.min(100, Math.round((totalCorrect / totalAnswered) * 100)));
+        }
+      }
+
+      const circle = document.getElementById('ratio-circle-progress');
+      const circumference = 2 * Math.PI * 50; // ~314.159
+      const offset = circumference - (percentage / 100) * circumference;
+      circle.style.strokeDashoffset = String(offset);
+
+      const strokeColor = percentage >= 75 ? '#16a34a' : percentage >= 50 ? '#d97706' : '#dc2626';
+      circle.style.stroke = strokeColor;
+
+      document.getElementById('final-percentage-text').textContent = `${percentage}%`;
+      document.getElementById('progress-bar-label').textContent = `${percentage}%`;
+      const bar = document.getElementById('final-progress-bar');
+      bar.style.width = `${percentage}%`;
+      bar.style.backgroundColor = strokeColor;
+
+      const msgEl = document.getElementById('final-feedback-message');
+      if (totalAnswered === 0) {
+        msgEl.textContent = 'أَكْمِلِ الْأَنْشِطَةَ وَالتَّمَارِينَ لِتَظْهَرَ نَتِيجَتُكَ النِّهَائِيَّةُ.';
+      } else if (percentage === 100) {
+        msgEl.textContent = 'مُمْتَازٌ جِدًّا! جَمِيعُ إِجَابَاتِكَ صَحِيحَةٌ وَأَتْقَنْتَ جَمْعَ عَدَدَيْنِ بِتَكْوِينِ الْعَشَرَةِ.';
+      } else if (percentage >= 60) {
+        msgEl.textContent = 'عَمَلٌ جَيِّدٌ! رَاجِعِ الْخَانَاتِ الْمُصَحَّحَةَ بِالْأَخْضَرِ لِتَعْزِيزِ مَهَارَتِكَ.';
+      } else {
+        msgEl.textContent = 'تَذَكَّرْ أَنْ تُجَمِّعَ 10 وَحَدَاتٍ لِتَكْوِينِ عَشَرَةٍ ثُمَّ أَضِفِ الْعَشَرَاتِ وَالْوَحَدَاتِ الْمُتَبَقِّيَةَ.';
+      }
+    }
+
+    function unlockElement(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('stage-locked');
+        el.classList.add('stage-unlocked');
+      }
+    }
+
+    /**
+     * التحقق من المحطة 1: أَكْتَشِفُ
+     */
+    function checkStage1() {
+      if (stageStats[1].done) return;
+      stageStats[1].done = true;
+      document.getElementById('btn-check-1').disabled = true;
+
+      const checks = [
+        evaluateSingleInput('s1-q1', 's1-c1', 9),
+        evaluateSingleInput('s1-q2', 's1-c2', 5),
+        evaluateSingleInput('s1-q3', 's1-c3', 4),
+        evaluateSingleInput('s1-q4', 's1-c4', 60),
+        evaluateSingleInput('s1-q5', 's1-c5', 4),
+        evaluateSingleInput('s1-q6', 's1-c6', 64)
+      ];
+
+      checks.forEach((ok) => {
+        if (ok) stageStats[1].correct += 1;
+        else stageStats[1].wrong += 1;
+      });
+
+      unlockElement('stage-2');
+      updateStageCountersAndEvaluation();
+    }
+
+    /**
+     * التحقق من المحطة 2 — التمرين 1: 38 + 15 = 53
+     */
+    function checkStage2Sub1() {
+      if (stageStats[2].done1) return;
+      stageStats[2].done1 = true;
+      document.getElementById('btn-check-2a').disabled = true;
+
+      const ok = evaluateSingleInput('s2-q1', 's2-c1', 53);
+      if (ok) stageStats[2].correct += 1;
+      else stageStats[2].wrong += 1;
+
+      unlockElement('s2-sub2');
+      updateStageCountersAndEvaluation();
+    }
+
+    /**
+     * التحقق من المحطة 2 — التمرين 2: 34 + 29 + 26 = 89
+     */
+    function checkStage2Sub2() {
+      if (stageStats[2].done2) return;
+      stageStats[2].done2 = true;
+      document.getElementById('btn-check-2b').disabled = true;
+
+      const ok = evaluateSingleInput('s2-q2', 's2-c2', 89);
+      if (ok) stageStats[2].correct += 1;
+      else stageStats[2].wrong += 1;
+
+      unlockElement('stage-3');
+      updateStageCountersAndEvaluation();
+    }
+
+    /**
+     * التحقق من المحطة 3 — التمرين 1 (أَتَمَرَّنُ): 13 + 7 = 20
+     */
+    function checkStage3Sub1() {
+      if (stageStats[3].done1) return;
+      stageStats[3].done1 = true;
+      document.getElementById('btn-check-3a').disabled = true;
+
+      const results = [
+        evaluateSingleInput('s3-1-h1', 's3-1-ch1', 13),
+        evaluateSingleInput('s3-1-h2', 's3-1-ch2', 7),
+        evaluateSingleInput('s3-1-h3', 's3-1-ch3', 20),
+        evaluateSingleInput('s3-1-v1', 's3-1-cv1', 13),
+        evaluateSingleInput('s3-1-v2', 's3-1-cv2', 7),
+        evaluateSingleInput('s3-1-v3', 's3-1-cv3', 20)
+      ];
+
+      results.forEach((ok) => {
+        if (ok) stageStats[3].correct += 1;
+        else stageStats[3].wrong += 1;
+      });
+
+      unlockElement('s3-sub2');
+      updateStageCountersAndEvaluation();
+    }
+
+    /**
+     * التحقق من المحطة 3 — التمرين 2 (أَتَمَرَّنُ): 20 + 15 = 35
+     */
+    function checkStage3Sub2() {
+      if (stageStats[3].done2) return;
+      stageStats[3].done2 = true;
+      document.getElementById('btn-check-3b').disabled = true;
+
+      const results = [
+        evaluateSingleInput('s3-2-h1', 's3-2-ch1', 20),
+        evaluateSingleInput('s3-2-h2', 's3-2-ch2', 15),
+        evaluateSingleInput('s3-2-h3', 's3-2-ch3', 35),
+        evaluateSingleInput('s3-2-v1', 's3-2-cv1', 20),
+        evaluateSingleInput('s3-2-v2', 's3-2-cv2', 15),
+        evaluateSingleInput('s3-2-v3', 's3-2-cv3', 35)
+      ];
+
+      results.forEach((ok) => {
+        if (ok) stageStats[3].correct += 1;
+        else stageStats[3].wrong += 1;
+      });
+
+      unlockElement('s3-sub3');
+      updateStageCountersAndEvaluation();
+    }
+
+    /**
+     * التحقق من المحطة 3 — التمرين 3 (أَتَمَرَّنُ): 10 + 12 = 22 و 23 + 45 = 68
+     */
+    function checkStage3Sub3() {
+      if (stageStats[3].done3) return;
+      stageStats[3].done3 = true;
+      document.getElementById('btn-check-3c').disabled = true;
+      document.getElementById('tool-add-ten').disabled = true;
+      document.getElementById('tool-add-unit').disabled = true;
+      document.getElementById('tool-clear-stamps').disabled = true;
+
+      const okA = evaluateSingleInput('s3-q3a', 's3-c3a', 22);
+      const okB = evaluateSingleInput('s3-q3b', 's3-c3b', 68);
+
+      if (okA) stageStats[3].correct += 1;
+      else stageStats[3].wrong += 1;
+
+      if (okB) stageStats[3].correct += 1;
+      else stageStats[3].wrong += 1;
+
+      unlockElement('stage-4');
+      updateStageCountersAndEvaluation();
+    }
+
+    /**
+     * التحقق من المحطة 4 — أَبْحَثُ: شريط الأعداد (+3)
+     */
+    function checkStage4() {
+      if (stageStats[4].done) return;
+      stageStats[4].done = true;
+      document.getElementById('btn-check-4').disabled = true;
+
+      stripValues.forEach((expectedVal, idx) => {
+        if (stripGivenIndices.has(idx)) return;
+        const inputEl = document.getElementById(`strip-in-${idx}`);
+        const corrEl = document.getElementById(`strip-corr-${idx}`);
+        const raw = inputEl.value.trim();
+        const userNum = raw === '' ? NaN : Number(raw);
+        inputEl.disabled = true;
+
+        if (userNum === expectedVal) {
+          inputEl.classList.add('input-correct');
+          stageStats[4].correct += 1;
+          corrEl.innerHTML = '';
+        } else {
+          inputEl.classList.add('input-wrong');
+          stageStats[4].wrong += 1;
+          corrEl.innerHTML = `<span class="bg-emerald-100 text-emerald-900 border border-emerald-400 rounded px-1.5 py-0.5 font-black">${expectedVal}</span>`;
+        }
+      });
+
+      updateStageCountersAndEvaluation();
+    }
+
+    /**
+     * إعادة ضبط الدرس بالكامل من جديد
+     */
+    function resetEntireLesson() {
+      stageStats[1] = { correct: 0, wrong: 0, done: false };
+      stageStats[2] = { correct: 0, wrong: 0, done1: false, done2: false };
+      stageStats[3] = { correct: 0, wrong: 0, done1: false, done2: false, done3: false };
+      stageStats[4] = { correct: 0, wrong: 0, done: false };
+
+      document.querySelectorAll('input').forEach((inp) => {
+        inp.value = '';
+        inp.disabled = false;
+        inp.classList.remove('input-correct', 'input-wrong');
+      });
+
+      document.querySelectorAll('[id^="s1-c"], [id^="s2-c"], [id^="s3-1-ch"], [id^="s3-1-cv"], [id^="s3-2-ch"], [id^="s3-2-cv"], [id^="s3-c"]').forEach((sp) => {
+        sp.innerHTML = '';
+      });
+
+      document.querySelectorAll('button.btn-check').forEach((btn) => {
+        btn.disabled = false;
+      });
+
+      document.getElementById('tool-add-ten').disabled = false;
+      document.getElementById('tool-add-unit').disabled = false;
+      document.getElementById('tool-clear-stamps').disabled = false;
+
+      [1, 2, 3, 4].forEach((id) => {
+        stampCounts[id] = { tens: 0, units: 0 };
+        renderStampBox(id);
+      });
+
+      ['stage-2', 's2-sub2', 'stage-3', 's3-sub2', 's3-sub3', 'stage-4'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.classList.remove('stage-unlocked');
+          el.classList.add('stage-locked');
+        }
+      });
+
+      initNumberStrip();
+      selectStampTool('ten');
+      updateStageCountersAndEvaluation();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initNumberStrip();
+      updateStageCountersAndEvaluation();
+      verifySubscription();
+    });
+  </script>
+</body>
+</html>
