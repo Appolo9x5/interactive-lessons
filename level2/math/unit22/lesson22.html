@@ -1,0 +1,2382 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الدرس 21: شَرِيطُ الْأَعْدَادِ الْأَصْغَرِ مِنْ 100</title>
+<!-- مكتبة Telegram WebApp (أُضيفت للحماية) -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0ea5e9;
+    --primary-dark: #0284c7;
+    --discover-color: #16a34a;
+    --discover-bg: #f0fdf4;
+    --practice-color: #ea580c;
+    --practice-bg: #fff7ed;
+    --learn-color: #9333ea;
+    --learn-bg: #faf5ff;
+    --train-color: #ca8a04;
+    --train-bg: #fefce8;
+    --search-color: #059669;
+    --search-bg: #ecfdf5;
+    --correct-bg: #dcfce7;
+    --correct-border: #22c55e;
+    --correct-text: #15803d;
+    --wrong-bg: #fee2e2;
+    --wrong-border: #ef4444;
+    --wrong-text: #b91c1c;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --bg-body: #f1f5f9;
+    --card-bg: #ffffff;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.7;
+    padding-bottom: 50px;
+  }
+
+  .ltr-iso {
+    direction: ltr;
+    unicode-bidi: isolate;
+    display: inline-block;
+  }
+
+  .ltr-block {
+    direction: ltr;
+    unicode-bidi: isolate;
+  }
+
+  /* Header */
+  header.lesson-header {
+    background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+    color: white;
+    padding: 22px 16px;
+    text-align: center;
+    border-bottom: 6px solid #0369a1;
+    box-shadow: 0 4px 15px rgba(2, 132, 199, 0.25);
+    margin-bottom: 24px;
+  }
+
+  .header-meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 16px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .lesson-num-badge {
+    background: #ffffff;
+    color: #0284c7;
+    font-weight: 900;
+    padding: 2px 12px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+  }
+
+  header.lesson-header h1 {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 900;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 14px;
+  }
+
+  /* Section Cards */
+  section.stage-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 22px 20px;
+    margin-bottom: 28px;
+    box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+    border: 3px solid #e2e8f0;
+    position: relative;
+    transition: opacity 0.35s ease, filter 0.35s ease;
+  }
+
+  section.stage-card.locked {
+    opacity: 0.55;
+    pointer-events: none;
+    filter: grayscale(35%);
+  }
+
+  .lock-banner {
+    display: none;
+    background: #334155;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+    text-align: center;
+  }
+
+  section.stage-card.locked .lock-banner {
+    display: block;
+  }
+
+  section.stage-discover { border-color: var(--discover-color); }
+  section.stage-practice { border-color: var(--practice-color); }
+  section.stage-learn { border-color: var(--learn-color); background: var(--learn-bg); }
+  section.stage-train { border-color: var(--train-color); }
+  section.stage-search { border-color: var(--search-color); }
+
+  .stage-badge {
+    display: inline-block;
+    color: white;
+    font-weight: 900;
+    font-size: 1.25rem;
+    padding: 4px 22px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+  }
+
+  .stage-discover .stage-badge { background: var(--discover-color); }
+  .stage-practice .stage-badge { background: var(--practice-color); }
+  .stage-learn .stage-badge { background: var(--learn-color); }
+  .stage-train .stage-badge { background: var(--train-color); }
+  .stage-search .stage-badge { background: var(--search-color); }
+
+  .exercise-box {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+
+  .exercise-box:last-of-type {
+    margin-bottom: 12px;
+  }
+
+  .ex-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .ex-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    height: 28px;
+    background: #0284c7;
+    color: white;
+    border-radius: 8px;
+    font-weight: 900;
+    font-size: 1rem;
+    margin-top: 2px;
+  }
+
+  /* Buttons */
+  .btn-check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #0284c7;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 14px;
+    box-shadow: 0 4px 0 #0369a1;
+    transition: transform 0.1s, background 0.2s;
+  }
+
+  .btn-check:hover:not(:disabled) {
+    background: #0369a1;
+  }
+
+  .btn-check:active:not(:disabled) {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #0369a1;
+  }
+
+  .btn-check:disabled {
+    background: #94a3b8;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  .stage-counter {
+    margin-top: 14px;
+    padding: 10px 16px;
+    background: #f1f5f9;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    border: 1px solid #cbd5e1;
+  }
+
+  .count-ok { color: var(--correct-text); }
+  .count-err { color: var(--wrong-text); }
+
+  /* Inputs & States */
+  input.num-input {
+    width: 62px;
+    height: 44px;
+    text-align: center;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    border: 2px solid #94a3b8;
+    border-radius: 10px;
+    background: #ffffff;
+    color: #0f172a;
+    direction: ltr;
+    unicode-bidi: isolate;
+    transition: all 0.2s;
+  }
+
+  input.num-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.25);
+  }
+
+  input.num-input.correct, .slot-box.correct, .choice-chip.correct, .hex-input.correct {
+    background-color: var(--correct-bg) !important;
+    border-color: var(--correct-border) !important;
+    color: var(--correct-text) !important;
+  }
+
+  input.num-input.wrong, .slot-box.wrong, .choice-chip.wrong, .hex-input.wrong {
+    background-color: var(--wrong-bg) !important;
+    border-color: var(--wrong-border) !important;
+    color: var(--wrong-text) !important;
+  }
+
+  .feedback-note {
+    margin-top: 10px;
+    font-weight: 700;
+    font-size: 0.98rem;
+    padding: 8px 14px;
+    border-radius: 10px;
+    display: none;
+  }
+
+  .feedback-note.show { display: block; }
+  .feedback-note.ok { background: var(--correct-bg); color: var(--correct-text); border: 1px solid var(--correct-border); }
+  .feedback-note.err { background: var(--wrong-bg); color: var(--wrong-text); border: 1px solid var(--wrong-border); }
+
+  /* ==================== DISCOVER 1: TRAIN SVG & MATCHING ==================== */
+  .cards-pool {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .num-card-btn {
+    background: #e0f2fe;
+    border: 3px solid #0284c7;
+    color: #0369a1;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 900;
+    padding: 6px 18px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    direction: ltr;
+  }
+
+  .num-card-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: #bae6fd;
+  }
+
+  .num-card-btn.selected {
+    background: #0284c7;
+    color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.3);
+  }
+
+  .num-card-btn.used {
+    opacity: 0.45;
+    text-decoration: line-through;
+  }
+
+  .train-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 10px;
+  }
+
+  .train-svg {
+    width: 100%;
+    min-width: 720px;
+    height: auto;
+    display: block;
+  }
+
+  .wagon-target {
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .wagon-target:hover rect {
+    stroke: #0284c7;
+    stroke-width: 3;
+  }
+
+  .helper-hint {
+    font-size: 0.92rem;
+    color: #475569;
+    margin-bottom: 10px;
+    background: #e0f2fe;
+    padding: 6px 12px;
+    border-radius: 8px;
+    display: inline-block;
+  }
+
+  /* ==================== DISCOVER 2: BRACKETING ==================== */
+  .bracket-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin: 14px 0;
+  }
+
+  .bracket-pair {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #ffffff;
+    padding: 10px 16px;
+    border-radius: 14px;
+    border: 2px solid #cbd5e1;
+    direction: ltr;
+  }
+
+  .wagon-mini {
+    background: #ea580c;
+    color: #fff;
+    font-weight: 900;
+    font-size: 1.2rem;
+    padding: 4px 12px;
+    border-radius: 8px;
+    border: 2px solid #9a3412;
+  }
+
+  .explain-box {
+    margin-top: 12px;
+    background: #ffffff;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px dashed #94a3b8;
+  }
+
+  .explain-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .choice-chip {
+    background: #f8fafc;
+    border: 2px solid #94a3b8;
+    border-radius: 12px;
+    padding: 8px 16px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .choice-chip.selected {
+    background: #dbeafe;
+    border-color: #2563eb;
+    color: #1e40af;
+  }
+
+  /* ==================== ANJIZ 1: NUMBER STRIP 70..90 ==================== */
+  .strip-70-90-wrap {
+    overflow-x: auto;
+    padding: 8px 4px;
+  }
+
+  .strip-table {
+    border-collapse: collapse;
+    margin: 0 auto;
+    direction: ltr;
+  }
+
+  .strip-table td {
+    width: 44px;
+    height: 48px;
+    border: 2px solid #64748b;
+    text-align: center;
+    font-weight: 900;
+    font-size: 1.15rem;
+    background: #ffffff;
+    padding: 2px;
+  }
+
+  .strip-table td.fixed-cell {
+    background: #e2e8f0;
+    color: #0f172a;
+  }
+
+  .strip-table td input.strip-inp {
+    width: 38px;
+    height: 40px;
+    border: 2px dashed #0284c7;
+    border-radius: 6px;
+    text-align: center;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 900;
+    direction: ltr;
+  }
+
+  /* ==================== ANJIZ 2: CIRCLE TENS ==================== */
+  .anjiz2-box {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    background: #ffffff;
+    padding: 14px;
+    border-radius: 14px;
+    border: 2px solid #e2e8f0;
+    direction: ltr;
+  }
+
+  .target-54 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 3px solid #0284c7;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-weight: 900;
+    font-size: 1.25rem;
+  }
+
+  .circle-ten-btn {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: 2px solid #94a3b8;
+    background: #f8fafc;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 900;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .circle-ten-btn.selected {
+    border: 3px solid #ea580c;
+    background: #ffedd5;
+    color: #9a3412;
+    transform: scale(1.06);
+  }
+
+  .circle-ten-btn.correct {
+    border-color: var(--correct-border) !important;
+    background: var(--correct-bg) !important;
+    color: var(--correct-text) !important;
+  }
+
+  .circle-ten-btn.wrong {
+    border-color: var(--wrong-border) !important;
+    background: var(--wrong-bg) !important;
+    color: var(--wrong-text) !important;
+  }
+
+  /* ==================== ANJIZ 3: HEXAGONS ==================== */
+  .hex-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+    margin-top: 10px;
+  }
+
+  .hex-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #ffffff;
+    padding: 12px 16px;
+    border-radius: 16px;
+    border: 2px solid #e2e8f0;
+    direction: ltr;
+  }
+
+  .hex-shape {
+    width: 68px;
+    height: 62px;
+    background: #fff1f2;
+    border: 3px solid #e11d48;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.25rem;
+    color: #9f1239;
+    position: relative;
+  }
+
+  .hex-shape.blue-hex {
+    background: #eff6ff;
+    border-color: #2563eb;
+    color: #1e40af;
+  }
+
+  .hex-input {
+    width: 54px;
+    height: 44px;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #0f172a;
+    direction: ltr;
+  }
+
+  .hex-input:focus {
+    outline: none;
+    background: #ffffff;
+    border-radius: 8px;
+  }
+
+  /* ==================== LEARN CARD ==================== */
+  .learn-text {
+    font-size: 1.15rem;
+    line-height: 2;
+    color: #3b0764;
+    font-weight: 700;
+    background: #ffffff;
+    padding: 16px 20px;
+    border-radius: 14px;
+    border: 2px solid #d8b4fe;
+  }
+
+  /* ==================== ATAMARRAN 1: CURVED NUMBER LINE ==================== */
+  .curve-svg-wrap {
+    width: 100%;
+    overflow-x: auto;
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    border-radius: 16px;
+    padding: 10px;
+    margin-top: 10px;
+  }
+
+  .curve-svg {
+    width: 100%;
+    min-width: 760px;
+    height: auto;
+    display: block;
+  }
+
+  .tick-target {
+    cursor: pointer;
+  }
+
+  .tick-target:hover circle.hit-ring {
+    stroke: #0284c7;
+    stroke-width: 3;
+    fill: rgba(14, 165, 233, 0.2);
+  }
+
+  /* ==================== ATAMARRAN 1.2: ORDERING ==================== */
+  .order-slots {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+    direction: ltr;
+  }
+
+  .order-slot-input {
+    width: 56px;
+    height: 46px;
+    background: #fed7aa;
+    border: 2px solid #ea580c;
+    border-radius: 10px;
+    text-align: center;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 900;
+    color: #7c2d12;
+    direction: ltr;
+  }
+
+  .order-slot-input:focus {
+    outline: none;
+    background: #ffffff;
+  }
+
+  /* ==================== ATAMARRAN 2: TABLES ==================== */
+  .tables-dual-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 720px) {
+    .tables-dual-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .sub-task-card {
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 14px;
+  }
+
+  .mini-grid-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    direction: ltr;
+  }
+
+  .mini-grid-table td {
+    border: 2px solid #d97706;
+    height: 48px;
+    width: 33.33%;
+    text-align: center;
+    font-weight: 900;
+    font-size: 1.15rem;
+    background: #fffbeb;
+  }
+
+  .mini-grid-table td.example-row {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  /* ==================== ABHATH: TRIANGLE PUZZLE ==================== */
+  .triangle-puzzle-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .tri-container {
+    position: relative;
+    width: 280px;
+    height: 250px;
+    margin: 10px auto;
+  }
+
+  .tri-svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .tri-node {
+    position: absolute;
+    width: 52px;
+    height: 52px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 3px solid #059669;
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  }
+
+  .tri-node input {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #065f46;
+  }
+
+  .tri-node input:focus {
+    outline: none;
+  }
+
+  /* ==================== FINAL EVALUATION ==================== */
+  .final-eval-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    border: 3px solid #0284c7;
+    border-radius: 22px;
+    padding: 26px 20px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(2, 132, 199, 0.14);
+  }
+
+  .final-eval-card h2 {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #0369a1;
+    margin-bottom: 18px;
+  }
+
+  .gauge-wrapper {
+    position: relative;
+    width: 170px;
+    height: 170px;
+    margin: 0 auto 18px;
+  }
+
+  .gauge-svg {
+    width: 170px;
+    height: 170px;
+    transform: rotate(-90deg);
+  }
+
+  .gauge-bg {
+    fill: none;
+    stroke: #e2e8f0;
+    stroke-width: 14;
+  }
+
+  .gauge-fill {
+    fill: none;
+    stroke: #22c55e;
+    stroke-width: 14;
+    stroke-linecap: round;
+    stroke-dasharray: 440;
+    stroke-dashoffset: 440;
+    transition: stroke-dashoffset 0.6s ease, stroke 0.4s ease;
+  }
+
+  .gauge-center-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+  }
+
+  .gauge-percent {
+    font-size: 2rem;
+    color: #0f172a;
+    line-height: 1.1;
+  }
+
+  .gauge-label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .eval-stats {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .stat-pill {
+    padding: 10px 20px;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 1.05rem;
+    min-width: 160px;
+  }
+
+  .stat-pill.ok {
+    background: var(--correct-bg);
+    color: var(--correct-text);
+    border: 2px solid var(--correct-border);
+  }
+
+  .stat-pill.err {
+    background: var(--wrong-bg);
+    color: var(--wrong-text);
+    border: 2px solid var(--wrong-border);
+  }
+
+  .btn-reset {
+    background: #f59e0b;
+    color: #ffffff;
+    border: none;
+    padding: 12px 28px;
+    border-radius: 14px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 900;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #b45309;
+    transition: background 0.2s;
+  }
+
+  .btn-reset:hover {
+    background: #d97706;
+  }
+
+  /* ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== */
+  #sub-lock-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .lock-box {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+    border: 2px solid #e1f5fe;
+    max-width: 380px;
+    width: 100%;
+  }
+  .lock-icon { font-size: 50px; margin-bottom: 12px; }
+  .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+  .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+  .btn-channel {
+    display: block;
+    width: 100%;
+    background: #0288d1;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+  }
+  .btn-check-sub {
+    width: 100%;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 13px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .sub-status-msg {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-height: 24px;
+  }
+
+  /* زر العودة إلى الفهرس (أُضيف) */
+  .btn-back-home {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    margin: 20px auto 10px auto;
+    background: #0d47a1;
+    color: #ffffff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 900;
+    font-size: 1.05rem;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري (أُضيفت)
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<header class="lesson-header">
+  <div class="header-meta">
+    <span class="lesson-num-badge">21</span>
+    <span>الرِّيَاضِيَّاتُ – السَّنَةُ الثَّانِيَةُ ابْتِدَائِي</span>
+  </div>
+  <h1>شَرِيطُ الْأَعْدَادِ الْأَصْغَرِ مِنْ <span class="ltr-iso">100</span></h1>
+</header>
+
+<div class="container">
+
+  <!-- ==================== 1. أَكْتَشِفُ ==================== -->
+  <section id="sec-discover" class="stage-card stage-discover">
+    <div class="stage-badge">أَكْتَشِفُ</div>
+
+    <!-- التمرين 1 -->
+    <div class="exercise-box" id="ex-disc-1">
+      <div class="ex-title">
+        <span class="ex-num">1</span>
+        <span>أَرْبِطُ كُلَّ بِطَاقَةِ عَدَدٍ بِمَكَانِهَا الْمُنَاسِبِ :</span>
+      </div>
+      <div class="helper-hint">💡 اُنْقُرْ عَلَى بِطَاقَةِ الْعَدَدِ ثُمَّ اُنْقُرْ عَلَى الْعَرَبَةِ الْمُنَاسِبَةِ لَهَا فِي الْقِطَارِ.</div>
+
+      <div class="cards-pool" id="train-cards-pool">
+        <button type="button" class="num-card-btn" data-val="53" onclick="selectTrainCard(53, this)">53</button>
+        <button type="button" class="num-card-btn" data-val="63" onclick="selectTrainCard(63, this)">63</button>
+        <button type="button" class="num-card-btn" data-val="59" onclick="selectTrainCard(59, this)">59</button>
+        <button type="button" class="num-card-btn" data-val="80" onclick="selectTrainCard(80, this)">80</button>
+        <button type="button" class="num-card-btn" data-val="73" onclick="selectTrainCard(73, this)">73</button>
+      </div>
+
+      <div class="train-wrapper">
+        <svg id="train-svg" class="train-svg" viewBox="0 0 880 285" xmlns="http://www.w3.org/2000/svg">
+          <!-- سكة الصف الأول -->
+          <line x1="15" y1="88" x2="840" y2="88" stroke="#64748b" stroke-width="4" stroke-dasharray="10,6"/>
+          <!-- سكة الصف الثاني -->
+          <line x1="25" y1="225" x2="840" y2="225" stroke="#64748b" stroke-width="4" stroke-dasharray="10,6"/>
+          <!-- قوس الربط بين السكتين -->
+          <path d="M 840 88 C 875 88, 875 225, 840 225" fill="none" stroke="#94a3b8" stroke-width="3" stroke-dasharray="6,6"/>
+
+          <!-- قاطرة القطار -->
+          <g transform="translate(20, 32)">
+            <rect x="0" y="20" width="46" height="32" rx="4" fill="#dc2626" stroke="#7f1d1d" stroke-width="2"/>
+            <rect x="24" y="4" width="22" height="20" rx="3" fill="#dc2626" stroke="#7f1d1d" stroke-width="2"/>
+            <rect x="28" y="8" width="14" height="10" fill="#bae6fd"/>
+            <rect x="6" y="6" width="10" height="14" fill="#1e293b"/>
+            <circle cx="12" cy="54" r="6" fill="#1e293b"/>
+            <circle cx="34" cy="54" r="6" fill="#1e293b"/>
+          </g>
+          <g id="train-wagons-layer"></g>
+        </svg>
+      </div>
+
+      <button type="button" class="btn-check" id="btn-disc-1" onclick="checkDisc1()">تَحَقَّقْ مِنَ الرَّبْطِ ✓</button>
+      <div class="feedback-note" id="fb-disc-1"></div>
+    </div>
+
+    <!-- التمرين 2 -->
+    <div class="exercise-box" id="ex-disc-2">
+      <div class="ex-title">
+        <span class="ex-num">2</span>
+        <span>أُحْصُرْ كُلَّ عَدَدٍ مِنْ عَدَدَيِ الْعَرَبَتَيْنِ <span class="wagon-mini ltr-iso">57</span> وَ <span class="wagon-mini ltr-iso">76</span> بَيْنَ عَشَرَتَيْنِ مُتَتَابِعَتَيْنِ.</span>
+      </div>
+
+      <div class="bracket-row">
+        <div class="bracket-pair">
+          <input type="number" class="num-input" id="d2-57-left" aria-label="العشرة السابقة لـ 57">
+          <span class="wagon-mini">57</span>
+          <input type="number" class="num-input" id="d2-57-right" aria-label="العشرة الموالية لـ 57">
+        </div>
+        <span style="font-weight:900; font-size:1.4rem;">؛</span>
+        <div class="bracket-pair">
+          <input type="number" class="num-input" id="d2-76-left" aria-label="العشرة السابقة لـ 76">
+          <span class="wagon-mini">76</span>
+          <input type="number" class="num-input" id="d2-76-right" aria-label="العشرة الموالية لـ 76">
+        </div>
+      </div>
+
+      <div class="explain-box">
+        <div style="font-weight:800; color:#0f172a;">اِشْرَحْ كَيْفَ وَجَدْتَ الْعَشَرَتَيْنِ الْمُتَتَابِعَتَيْنِ :</div>
+        <div class="explain-options" id="d2-explain-opts">
+          <button type="button" class="choice-chip" data-correct="true" onclick="selectExplain(this)">أُعَيِّنُ الْعَشَرَةَ السَّابِقَةَ لَهُ وَالْعَشَرَةَ الْمُوَالِيَةَ لَهُ</button>
+          <button type="button" class="choice-chip" data-correct="false" onclick="selectExplain(this)">أُضِيفُ <span class="ltr-iso">1</span> وَأَطْرَحُ <span class="ltr-iso">1</span> مِنَ الْعَدَدِ</button>
+          <button type="button" class="choice-chip" data-correct="false" onclick="selectExplain(this)">أَخْتَارُ أَيَّ عَشَرَتَيْنِ عَشْوَائِيًّا</button>
+        </div>
+      </div>
+
+      <button type="button" class="btn-check" id="btn-disc-2" onclick="checkDisc2()">تَحَقَّقْ مِنَ الْحَصْرِ ✓</button>
+      <div class="feedback-note" id="fb-disc-2"></div>
+    </div>
+
+    <div class="stage-counter" id="cnt-discover">
+      <span>حَصِيلَةُ مَرْحَلَةِ أَكْتَشِفُ:</span>
+      <span><span class="count-ok">✓ الصَّوَابُ: 0</span> | <span class="count-err">✗ الْخَطَأُ: 0</span></span>
+    </div>
+  </section>
+
+  <!-- ==================== 2. أُنْجِزُ ==================== -->
+  <section id="sec-practice" class="stage-card stage-practice locked">
+    <div class="lock-banner">🔒 أَتْمِمْ مَرْحَلَةَ «أَكْتَشِفُ» أَوَّلًا لِفَتْحِ هَذِهِ الْمَرْحَلَةِ</div>
+    <div class="stage-badge">أُنْجِزُ</div>
+
+    <!-- أنجز 1 -->
+    <div class="exercise-box" id="ex-anj-1">
+      <div class="ex-title">
+        <span class="ex-num">1</span>
+        <span>أَكْمِلْ بِالْأَعْدَادِ <span class="ltr-iso">72 ، 89 ، 78 ، 83</span> .</span>
+      </div>
+
+      <div class="strip-70-90-wrap">
+        <table class="strip-table" id="strip-70-90">
+          <tr id="strip-70-90-row"></tr>
+        </table>
+      </div>
+
+      <button type="button" class="btn-check" id="btn-anj-1" onclick="checkAnj1()">تَحَقَّقْ مِنَ الشَّرِيطِ ✓</button>
+      <div class="feedback-note" id="fb-anj-1"></div>
+    </div>
+
+    <!-- أنجز 2 -->
+    <div class="exercise-box" id="ex-anj-2">
+      <div class="ex-title">
+        <span class="ex-num">2</span>
+        <span>أَحِطِ الْعَشَرَتَيْنِ الْمُتَتَابِعَتَيْنِ اللَّتَيْنِ تَحْصُرَانِ الْعَدَدَ .</span>
+      </div>
+
+      <div class="anjiz2-box" id="anj2-choices">
+        <span class="target-54">54</span>
+        <span style="font-weight:900; font-size:1.3rem;">؛</span>
+        <button type="button" class="circle-ten-btn" data-val="30" onclick="toggleTenChoice(this)">30</button>
+        <span style="font-weight:900; font-size:1.3rem;">؛</span>
+        <button type="button" class="circle-ten-btn" data-val="60" onclick="toggleTenChoice(this)">60</button>
+        <span style="font-weight:900; font-size:1.3rem;">؛</span>
+        <button type="button" class="circle-ten-btn" data-val="50" onclick="toggleTenChoice(this)">50</button>
+      </div>
+
+      <button type="button" class="btn-check" id="btn-anj-2" onclick="checkAnj2()">تَحَقَّقْ مِنَ الْإِحَاطَةِ ✓</button>
+      <div class="feedback-note" id="fb-anj-2"></div>
+    </div>
+
+    <!-- أنجز 3 -->
+    <div class="exercise-box" id="ex-anj-3">
+      <div class="ex-title">
+        <span class="ex-num">3</span>
+        <span>أَكْمِلْ بِالْعَشَرَتَيْنِ الْمُتَتَابِعَتَيْنِ اللَّتَيْنِ تَحْصُرَانِ الْعَدَدَ.</span>
+      </div>
+
+      <div class="hex-grid">
+        <div class="hex-group">
+          <div class="hex-shape"><input type="number" class="hex-input" id="anj3-86-left" aria-label="العشرة السابقة لـ 86"></div>
+          <div class="hex-shape">86</div>
+          <div class="hex-shape"><input type="number" class="hex-input" id="anj3-86-right" aria-label="العشرة الموالية لـ 86"></div>
+        </div>
+
+        <div class="hex-group">
+          <div class="hex-shape blue-hex"><input type="number" class="hex-input" id="anj3-63-left" aria-label="العشرة السابقة لـ 63"></div>
+          <div class="hex-shape blue-hex">63</div>
+          <div class="hex-shape blue-hex"><input type="number" class="hex-input" id="anj3-63-right" aria-label="العشرة الموالية لـ 63"></div>
+        </div>
+      </div>
+
+      <button type="button" class="btn-check" id="btn-anj-3" onclick="checkAnj3()">تَحَقَّقْ مِنَ الْإِجَابَةِ ✓</button>
+      <div class="feedback-note" id="fb-anj-3"></div>
+    </div>
+
+    <div class="stage-counter" id="cnt-practice">
+      <span>حَصِيلَةُ مَرْحَلَةِ أُنْجِزُ:</span>
+      <span><span class="count-ok">✓ الصَّوَابُ: 0</span> | <span class="count-err">✗ الْخَطَأُ: 0</span></span>
+    </div>
+  </section>
+
+  <!-- ==================== 3. تَعَلَّمْتُ ==================== -->
+  <section id="sec-learn" class="stage-card stage-learn">
+    <div class="stage-badge">تَعَلَّمْتُ</div>
+    <div class="learn-text">
+      لِحَصْرِ عَدَدٍ بَيْنَ عَشَرَتَيْنِ مُتَتَابِعَتَيْنِ، أُعَيِّنُ الْعَشَرَةَ الْمُوَالِيَةَ لَهُ وَالْعَشَرَةَ السَّابِقَةَ لَهُ . مِثَالُ الْعَدَدُ <span class="ltr-iso">52</span> : الْعَشَرَةُ الْمُوَالِيَةُ لَهُ هِيَ <span class="ltr-iso">60</span> ، وَالْعَشَرَةُ السَّابِقَةُ لَهُ هِيَ <span class="ltr-iso">50</span> ، فَهُوَ مَحْصُورٌ بَيْنَ <span class="ltr-iso">50</span> وَ <span class="ltr-iso">60</span>.
+    </div>
+  </section>
+
+  <!-- ==================== 4. أَتَمَرَّنُ ==================== -->
+  <section id="sec-train" class="stage-card stage-train locked">
+    <div class="lock-banner">🔒 أَتْمِمْ مَرْحَلَةَ «أُنْجِزُ» أَوَّلًا لِفَتْحِ هَذِهِ الْمَرْحَلَةِ</div>
+    <div class="stage-badge">أَتَمَرَّنُ</div>
+
+    <!-- أتمرن 1 -->
+    <div class="exercise-box" id="ex-trn-1">
+      <div class="ex-title">
+        <span class="ex-num">1</span>
+        <span>1 . ضَعِ الْأَعْدَادَ عَلَى الشَّرِيطِ الْمُدَرَّجِ.</span>
+      </div>
+      <div style="text-align:center; font-weight:900; font-size:1.2rem; margin-bottom:8px;">
+        <span class="ltr-iso">81 - 93 - 79 - 51 - 96 - 88 - 55 - 67 - 43</span>
+      </div>
+      <div class="helper-hint">💡 اُنْقُرْ عَلَى الْعَدَدِ مِنَ الْقَائِمَةِ ثُمَّ اُنْقُرْ عَلَى التَّدْرِيجَةِ الْمُنَاسِبَةِ لَهُ عَلَى الشَّرِيطِ.</div>
+
+      <div class="cards-pool" id="curve-cards-pool">
+        <button type="button" class="num-card-btn" data-val="81" onclick="selectCurveCard(81, this)">81</button>
+        <button type="button" class="num-card-btn" data-val="93" onclick="selectCurveCard(93, this)">93</button>
+        <button type="button" class="num-card-btn" data-val="79" onclick="selectCurveCard(79, this)">79</button>
+        <button type="button" class="num-card-btn" data-val="51" onclick="selectCurveCard(51, this)">51</button>
+        <button type="button" class="num-card-btn" data-val="96" onclick="selectCurveCard(96, this)">96</button>
+        <button type="button" class="num-card-btn" data-val="88" onclick="selectCurveCard(88, this)">88</button>
+        <button type="button" class="num-card-btn" data-val="55" onclick="selectCurveCard(55, this)">55</button>
+        <button type="button" class="num-card-btn" data-val="67" onclick="selectCurveCard(67, this)">67</button>
+        <button type="button" class="num-card-btn" data-val="43" onclick="selectCurveCard(43, this)">43</button>
+      </div>
+
+      <div class="curve-svg-wrap">
+        <svg id="curve-svg" class="curve-svg" viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg">
+          <g id="curve-ticks-layer"></g>
+        </svg>
+      </div>
+
+      <button type="button" class="btn-check" id="btn-trn-1a" onclick="checkTrn1a()">تَحَقَّقْ مِنْ وَضْعِ الْأَعْدَادِ ✓</button>
+      <div class="feedback-note" id="fb-trn-1a"></div>
+
+      <hr style="margin: 18px 0; border: 0; border-top: 2px dashed #cbd5e1;">
+
+      <div class="ex-title">
+        <span>2 . رَتِّبْ هَذِهِ الْأَعْدَادَ مِنَ الْأَصْغَرِ إِلَى الْأَكْبَرِ .</span>
+      </div>
+      <div class="order-slots" id="order-slots-container">
+        <input type="number" class="order-slot-input" id="ord-0" aria-label="العدد الأول">
+        <input type="number" class="order-slot-input" id="ord-1" aria-label="العدد الثاني">
+        <input type="number" class="order-slot-input" id="ord-2" aria-label="العدد الثالث">
+        <input type="number" class="order-slot-input" id="ord-3" aria-label="العدد الرابع">
+        <input type="number" class="order-slot-input" id="ord-4" aria-label="العدد الخامس">
+        <input type="number" class="order-slot-input" id="ord-5" aria-label="العدد السادس">
+        <input type="number" class="order-slot-input" id="ord-6" aria-label="العدد السابع">
+        <input type="number" class="order-slot-input" id="ord-7" aria-label="العدد الثامن">
+        <input type="number" class="order-slot-input" id="ord-8" aria-label="العدد التاسع">
+      </div>
+
+      <button type="button" class="btn-check" id="btn-trn-1b" onclick="checkTrn1b()">تَحَقَّقْ مِنَ التَّرْتِيبِ ✓</button>
+      <div class="feedback-note" id="fb-trn-1b"></div>
+    </div>
+
+    <!-- أتمرن 2 -->
+    <div class="exercise-box" id="ex-trn-2">
+      <div class="ex-title">
+        <span class="ex-num">2</span>
+        <span>تَمْرِينُ الْجَدَاوِلِ (1 وَ 2) :</span>
+      </div>
+
+      <div class="tables-dual-grid">
+        <!-- الجزء 1 من التمرين 2 -->
+        <div class="sub-task-card">
+          <div style="font-weight:800; font-size:1.05rem;">1 . أُحْصُرِ الْعَدَدَ كَمَا فِي الْمِثَالِ</div>
+          <table class="mini-grid-table">
+            <tr class="example-row">
+              <td>30</td>
+              <td>35</td>
+              <td>40</td>
+            </tr>
+            <tr>
+              <td>40</td>
+              <td>42</td>
+              <td><input type="number" class="num-input" id="t2-1-r1" aria-label="العشرة الموالية لـ 42"></td>
+            </tr>
+            <tr>
+              <td><input type="number" class="num-input" id="t2-1-r2" aria-label="العشرة السابقة لـ 76"></td>
+              <td>76</td>
+              <td>80</td>
+            </tr>
+            <tr>
+              <td><input type="number" class="num-input" id="t2-1-r3a" aria-label="العشرة السابقة لـ 87"></td>
+              <td>87</td>
+              <td><input type="number" class="num-input" id="t2-1-r3b" aria-label="العشرة الموالية لـ 87"></td>
+            </tr>
+          </table>
+        </div>
+
+        <!-- الجزء 2 من التمرين 2 -->
+        <div class="sub-task-card">
+          <div style="font-weight:800; font-size:1.05rem;">2 . ضَعِ الْأَعْدَادَ فِي الْخَانَةِ الْمُنَاسِبَةِ مِنَ الْجَدْوَلِ</div>
+          <div style="font-size:0.88rem; color:#64748b;">(اخْتَرْ عَدَدًا مُنَاسِبًا مَحْصُورًا بَيْنَ الْعَشَرَتَيْنِ فِي كُلِّ سَطْرٍ)</div>
+          <table class="mini-grid-table">
+            <tr>
+              <td>40</td>
+              <td><input type="number" class="num-input" id="t2-2-r1" aria-label="عدد بين 40 و 50"></td>
+              <td>50</td>
+            </tr>
+            <tr>
+              <td>50</td>
+              <td><input type="number" class="num-input" id="t2-2-r2" aria-label="عدد بين 50 و 60"></td>
+              <td>60</td>
+            </tr>
+            <tr>
+              <td>20</td>
+              <td><input type="number" class="num-input" id="t2-2-r3" aria-label="عدد بين 20 و 30"></td>
+              <td>30</td>
+            </tr>
+            <tr>
+              <td>60</td>
+              <td><input type="number" class="num-input" id="t2-2-r4" aria-label="عدد بين 60 و 70"></td>
+              <td>70</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <button type="button" class="btn-check" id="btn-trn-2" onclick="checkTrn2()">تَحَقَّقْ مِنَ الْجَدْوَلَيْنِ ✓</button>
+      <div class="feedback-note" id="fb-trn-2"></div>
+    </div>
+
+    <div class="stage-counter" id="cnt-train">
+      <span>حَصِيلَةُ مَرْحَلَةِ أَتَمَرَّنُ:</span>
+      <span><span class="count-ok">✓ الصَّوَابُ: 0</span> | <span class="count-err">✗ الْخَطَأُ: 0</span></span>
+    </div>
+  </section>
+
+  <!-- ==================== 5. أَبْحَثُ ==================== -->
+  <section id="sec-search" class="stage-card stage-search locked">
+    <div class="lock-banner">🔒 أَتْمِمْ مَرْحَلَةَ «أَتَمَرَّنُ» أَوَّلًا لِفَتْحِ هَذِهِ الْمَرْحَلَةِ</div>
+    <div class="stage-badge">أَبْحَثُ</div>
+
+    <div class="exercise-box" id="ex-srh-1">
+      <div class="ex-title">
+        <span class="ex-num">★</span>
+        <span>أُكْتُبِ الْأَعْدَادَ <span class="ltr-iso">1 - 2 - 3 - 4 - 5 - 6</span> دَاخِلَ الدَّوَائِرِ لِتَحْصُلَ عَلَى الْمَجْمُوعِ <span class="ltr-iso">9</span> فِي كُلِّ ضِلْعٍ.</span>
+      </div>
+
+      <div class="triangle-puzzle-wrap">
+        <div class="tri-container">
+          <svg class="tri-svg" viewBox="0 0 280 250" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="140,35 45,210 235,210" fill="none" stroke="#059669" stroke-width="4"/>
+          </svg>
+          <!-- الرأس العلوي -->
+          <div class="tri-node" style="left: 140px; top: 35px;">
+            <input type="number" min="1" max="6" id="tri-top" aria-label="الرأس العلوي">
+          </div>
+          <!-- وسط الضلع الأيسر -->
+          <div class="tri-node" style="left: 92px; top: 122px;">
+            <input type="number" min="1" max="6" id="tri-mid-l" aria-label="وسط الضلع الأيسر">
+          </div>
+          <!-- وسط الضلع الأيمن -->
+          <div class="tri-node" style="left: 188px; top: 122px;">
+            <input type="number" min="1" max="6" id="tri-mid-r" aria-label="وسط الضلع الأيمن">
+          </div>
+          <!-- الزاوية السفلية اليسرى -->
+          <div class="tri-node" style="left: 45px; top: 210px;">
+            <input type="number" min="1" max="6" id="tri-bot-l" aria-label="الزاوية السفلية اليسرى">
+          </div>
+          <!-- وسط القاعدة -->
+          <div class="tri-node" style="left: 140px; top: 210px;">
+            <input type="number" min="1" max="6" id="tri-bot-m" aria-label="وسط القاعدة">
+          </div>
+          <!-- الزاوية السفلية اليمنى -->
+          <div class="tri-node" style="left: 235px; top: 210px;">
+            <input type="number" min="1" max="6" id="tri-bot-r" aria-label="الزاوية السفلية اليمنى">
+          </div>
+        </div>
+
+        <button type="button" class="btn-check" id="btn-srh-1" onclick="checkSearch()">تَحَقَّقْ مِنَ الْمُثَلَّثِ ✓</button>
+        <div class="feedback-note" id="fb-srh-1"></div>
+      </div>
+    </div>
+
+    <div class="stage-counter" id="cnt-search">
+      <span>حَصِيلَةُ مَرْحَلَةِ أَبْحَثُ:</span>
+      <span><span class="count-ok">✓ الصَّوَابُ: 0</span> | <span class="count-err">✗ الْخَطَأُ: 0</span></span>
+    </div>
+  </section>
+
+  <!-- ==================== 6. التَّقْيِيمُ الْعَامُّ ==================== -->
+  <section class="final-eval-card" id="final-evaluation">
+    <h2>📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</h2>
+
+    <div class="gauge-wrapper">
+      <svg class="gauge-svg" viewBox="0 0 160 160">
+        <circle class="gauge-bg" cx="80" cy="80" r="70"></circle>
+        <circle class="gauge-fill" id="gauge-circle" cx="80" cy="80" r="70"></circle>
+      </svg>
+      <div class="gauge-center-text">
+        <span class="gauge-percent" id="final-percent">0%</span>
+        <span class="gauge-label">نِسْبَةُ النَّجَاحِ</span>
+      </div>
+    </div>
+
+    <div class="eval-stats">
+      <div class="stat-pill ok" id="total-ok-pill">✓ مَجْمُوعُ الصَّوَابِ: 0</div>
+      <div class="stat-pill err" id="total-err-pill">✗ مَجْمُوعُ الْخَطَأِ: 0</div>
+    </div>
+
+    <button type="button" class="btn-reset" onclick="resetLesson()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+  </section>
+
+  <!-- ========================================
+       زر العودة إلى الفهرس (أُضيف)
+       ======================================== -->
+  <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</div>
+
+<!-- ========================================
+     سكريبت الحماية (أُضيف)
+     ======================================== -->
+<script>
+  const CHANNEL_ID = "-1004461185731";
+
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي (كما هو دون تغيير)
+     ======================================== -->
+<script>
+  // ==================== STATE & SCORING ====================
+  const scores = {
+    discover: { ok: 0, err: 0, done1: false, done2: false },
+    practice: { ok: 0, err: 0, done1: false, done2: false, done3: false },
+    train:    { ok: 0, err: 0, done1a: false, done1b: false, done2: false },
+    search:   { ok: 0, err: 0, done1: false }
+  };
+
+  function updateCounters() {
+    ['discover', 'practice', 'train', 'search'].forEach(stage => {
+      const el = document.getElementById('cnt-' + stage);
+      if (el) {
+        el.innerHTML = `
+          <span>حَصِيلَةُ الْمَرْحَلَةِ:</span>
+          <span><span class="count-ok">✓ الصَّوَابُ: ${scores[stage].ok}</span> | <span class="count-err">✗ الْخَطَأُ: ${scores[stage].err}</span></span>
+        `;
+      }
+    });
+
+    // Unlocking progression
+    if (scores.discover.done1 && scores.discover.done2) {
+      document.getElementById('sec-practice').classList.remove('locked');
+    }
+    if (scores.practice.done1 && scores.practice.done2 && scores.practice.done3) {
+      document.getElementById('sec-train').classList.remove('locked');
+    }
+    if (scores.train.done1a && scores.train.done1b && scores.train.done2) {
+      document.getElementById('sec-search').classList.remove('locked');
+    }
+
+    // Final Circular Gauge Calculation
+    const totalOk = scores.discover.ok + scores.practice.ok + scores.train.ok + scores.search.ok;
+    const totalErr = scores.discover.err + scores.practice.err + scores.train.err + scores.search.err;
+    const totalAnswered = totalOk + totalErr;
+
+    let pct = 0;
+    if (totalAnswered > 0) {
+      pct = Math.round((totalOk / totalAnswered) * 100);
+      if (pct > 100) pct = 100;
+      if (pct < 0) pct = 0;
+    }
+
+    document.getElementById('total-ok-pill').textContent = `✓ مَجْمُوعُ الصَّوَابِ: ${totalOk}`;
+    document.getElementById('total-err-pill').textContent = `✗ مَجْمُوعُ الْخَطَأِ: ${totalErr}`;
+    document.getElementById('final-percent').textContent = `${pct}%`;
+
+    const circle = document.getElementById('gauge-circle');
+    const circumference = 2 * Math.PI * 70; // ~439.82
+    const offset = circumference - (pct / 100) * circumference;
+    circle.style.strokeDashoffset = offset;
+    circle.style.stroke = pct >= 75 ? '#22c55e' : (pct >= 50 ? '#f59e0b' : '#ef4444');
+  }
+
+  function showFeedback(id, isOk, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.className = 'feedback-note show ' + (isOk ? 'ok' : 'err');
+  }
+
+  // ==================== DISCOVER 1: TRAIN BUILDING & LOGIC ====================
+  let selectedTrainNum = null;
+  const trainAssignments = {}; // wagonNum -> assignedNum
+  const targetTrainNums = [53, 59, 63, 73, 80];
+
+  function buildTrainSVG() {
+    const layer = document.getElementById('train-wagons-layer');
+    layer.innerHTML = '';
+
+    // Top row: 50 to 65 (16 wagons, LTR)
+    const topNums = [];
+    for (let n = 50; n <= 65; n++) topNums.push(n);
+
+    // Bottom row: 81 down to 66 (left to right in the picture: 81 on left, 66 on right)
+    const botNums = [];
+    for (let n = 81; n >= 66; n--) botNums.push(n);
+
+    const fixedVisible = new Set([50, 57, 60, 81, 76, 70, 66]);
+    const wagonW = 42;
+    const wagonH = 34;
+    const gap = 6;
+
+    // Draw top wagons starting x = 76, y = 50
+    topNums.forEach((num, idx) => {
+      const x = 76 + idx * (wagonW + gap);
+      const y = 50;
+      drawWagon(layer, x, y, wagonW, wagonH, num, fixedVisible.has(num), idx % 2 === 0 ? '#f59e0b' : '#ea580c');
+    });
+
+    // Draw bottom wagons starting x = 76, y = 187
+    botNums.forEach((num, idx) => {
+      const x = 76 + idx * (wagonW + gap);
+      const y = 187;
+      drawWagon(layer, x, y, wagonW, wagonH, num, fixedVisible.has(num), idx % 2 === 0 ? '#0284c7' : '#f59e0b');
+    });
+  }
+
+  function drawWagon(parent, x, y, w, h, trueNum, isFixed, color) {
+    const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    g.setAttribute('transform', `translate(${x}, ${y})`);
+    g.setAttribute('data-wagon', trueNum);
+
+    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('width', w);
+    rect.setAttribute('height', h);
+    rect.setAttribute('rx', '5');
+    rect.setAttribute('fill', isFixed ? color : '#ffffff');
+    rect.setAttribute('stroke', '#334155');
+    rect.setAttribute('stroke-width', '2');
+
+    const w1 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    w1.setAttribute('cx', '10');
+    w1.setAttribute('cy', h + 4);
+    w1.setAttribute('r', '4');
+    w1.setAttribute('fill', '#1e293b');
+
+    const w2 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    w2.setAttribute('cx', w - 10);
+    w2.setAttribute('cy', h + 4);
+    w2.setAttribute('r', '4');
+    w2.setAttribute('fill', '#1e293b');
+
+    const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('x', w / 2);
+    txt.setAttribute('y', h / 2 + 6);
+    txt.setAttribute('text-anchor', 'middle');
+    txt.setAttribute('font-family', 'Cairo, sans-serif');
+    txt.setAttribute('font-weight', '900');
+    txt.setAttribute('font-size', '15');
+    txt.setAttribute('fill', isFixed ? '#ffffff' : '#0369a1');
+    txt.setAttribute('id', `wagon-txt-${trueNum}`);
+    txt.textContent = isFixed ? trueNum : '';
+
+    g.appendChild(rect);
+    g.appendChild(w1);
+    g.appendChild(w2);
+    g.appendChild(txt);
+
+    if (!isFixed) {
+      g.classList.add('wagon-target');
+      g.onclick = () => assignToWagon(trueNum, rect, txt);
+    }
+
+    parent.appendChild(g);
+  }
+
+  function selectTrainCard(num, btn) {
+    if (scores.discover.done1) return;
+    document.querySelectorAll('#train-cards-pool .num-card-btn').forEach(b => b.classList.remove('selected'));
+    selectedTrainNum = num;
+    btn.classList.add('selected');
+  }
+
+  function assignToWagon(wagonNum, rectEl, txtEl) {
+    if (scores.discover.done1) return;
+    if (selectedTrainNum === null) {
+      // Allow clearing if already assigned
+      if (trainAssignments[wagonNum]) {
+        const oldVal = trainAssignments[wagonNum];
+        delete trainAssignments[wagonNum];
+        txtEl.textContent = '';
+        rectEl.setAttribute('fill', '#ffffff');
+        const oldBtn = document.querySelector(`#train-cards-pool .num-card-btn[data-val="${oldVal}"]`);
+        if (oldBtn) oldBtn.classList.remove('used');
+      }
+      return;
+    }
+
+    // Remove previous placement of selectedTrainNum if placed elsewhere
+    for (const [wKey, val] of Object.entries(trainAssignments)) {
+      if (val === selectedTrainNum) {
+        delete trainAssignments[wKey];
+        const prevTxt = document.getElementById(`wagon-txt-${wKey}`);
+        if (prevTxt) {
+          prevTxt.textContent = '';
+          prevTxt.parentElement.querySelector('rect').setAttribute('fill', '#ffffff');
+        }
+      }
+    }
+
+    // If this wagon already had another number, free that button
+    if (trainAssignments[wagonNum]) {
+      const prevNum = trainAssignments[wagonNum];
+      const prevBtn = document.querySelector(`#train-cards-pool .num-card-btn[data-val="${prevNum}"]`);
+      if (prevBtn) prevBtn.classList.remove('used');
+    }
+
+    trainAssignments[wagonNum] = selectedTrainNum;
+    txtEl.textContent = selectedTrainNum;
+    rectEl.setAttribute('fill', '#e0f2fe');
+
+    const activeBtn = document.querySelector(`#train-cards-pool .num-card-btn[data-val="${selectedTrainNum}"]`);
+    if (activeBtn) {
+      activeBtn.classList.remove('selected');
+      activeBtn.classList.add('used');
+    }
+    selectedTrainNum = null;
+  }
+
+  function checkDisc1() {
+    if (scores.discover.done1) return;
+    const assignedCount = Object.keys(trainAssignments).length;
+    if (assignedCount < targetTrainNums.length) {
+      showFeedback('fb-disc-1', false, 'يَرْجَى رَبْطُ جَمِيعِ الْبِطَاقَاتِ الْخَمْسِ بِعَرَبَاتِهَا أَوَّلًا.');
+      return;
+    }
+
+    scores.discover.done1 = true;
+    document.getElementById('btn-disc-1').disabled = true;
+    document.querySelectorAll('#train-cards-pool .num-card-btn').forEach(b => b.disabled = true);
+
+    let okCount = 0;
+    let errCount = 0;
+
+    targetTrainNums.forEach(num => {
+      // Find where user placed `num`
+      let placedWagon = null;
+      for (const [wKey, val] of Object.entries(trainAssignments)) {
+        if (val === num) placedWagon = Number(wKey);
+      }
+
+      if (placedWagon === num) {
+        okCount++;
+        const txt = document.getElementById(`wagon-txt-${num}`);
+        txt.setAttribute('fill', '#15803d');
+        txt.parentElement.querySelector('rect').setAttribute('fill', '#dcfce7');
+        txt.parentElement.querySelector('rect').setAttribute('stroke', '#22c55e');
+      } else {
+        errCount++;
+        if (placedWagon !== null) {
+          const wrongTxt = document.getElementById(`wagon-txt-${placedWagon}`);
+          wrongTxt.parentElement.querySelector('rect').setAttribute('fill', '#fee2e2');
+          wrongTxt.parentElement.querySelector('rect').setAttribute('stroke', '#ef4444');
+        }
+        // Show true place
+        const trueTxt = document.getElementById(`wagon-txt-${num}`);
+        trueTxt.textContent = num;
+        trueTxt.setAttribute('fill', '#15803d');
+        trueTxt.parentElement.querySelector('rect').setAttribute('fill', '#dcfce7');
+      }
+    });
+
+    scores.discover.ok += okCount;
+    scores.discover.err += errCount;
+    updateCounters();
+
+    if (errCount === 0) {
+      showFeedback('fb-disc-1', true, 'أَحْسَنْتَ! جَمِيعُ الْبِطَاقَاتِ فِي أَمَاكِنِهَا الصَّحِيحَةِ.');
+    } else {
+      showFeedback('fb-disc-1', false, `تَمَّ التَّصْحِيحُ: ${okCount} إِجَابَاتٍ صَحِيحَةٍ وَ ${errCount} أَخْطَاءٍ (تَمَّ إِظْهَارُ الْأَمَاكِنِ الصَّحِيحَةِ بِالْأَخْضَرِ).`);
+    }
+  }
+
+  // ==================== DISCOVER 2: BRACKETING ====================
+  let selectedExplainBtn = null;
+
+  function selectExplain(btn) {
+    if (scores.discover.done2) return;
+    document.querySelectorAll('#d2-explain-opts .choice-chip').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedExplainBtn = btn;
+  }
+
+  function checkDisc2() {
+    if (scores.discover.done2) return;
+    const v57L = document.getElementById('d2-57-left').value.trim();
+    const v57R = document.getElementById('d2-57-right').value.trim();
+    const v76L = document.getElementById('d2-76-left').value.trim();
+    const v76R = document.getElementById('d2-76-right').value.trim();
+
+    if (!v57L || !v57R || !v76L || !v76R || !selectedExplainBtn) {
+      showFeedback('fb-disc-2', false, 'يَرْجَى مَلْءُ جَمِيعِ الْخَانَاتِ وَاخْتِيَارُ الشَّرْحِ الْمُنَاسِبِ أَوَّلًا.');
+      return;
+    }
+
+    scores.discover.done2 = true;
+    document.getElementById('btn-disc-2').disabled = true;
+
+    const checks = [
+      { id: 'd2-57-left', expected: 50 },
+      { id: 'd2-57-right', expected: 60 },
+      { id: 'd2-76-left', expected: 70 },
+      { id: 'd2-76-right', expected: 80 }
+    ];
+
+    let okCount = 0;
+    let errCount = 0;
+
+    checks.forEach(item => {
+      const inp = document.getElementById(item.id);
+      inp.disabled = true;
+      if (Number(inp.value) === item.expected) {
+        inp.classList.add('correct');
+        okCount++;
+      } else {
+        inp.classList.add('wrong');
+        inp.value = `${inp.value}→${item.expected}`;
+        errCount++;
+      }
+    });
+
+    document.querySelectorAll('#d2-explain-opts .choice-chip').forEach(b => b.disabled = true);
+    if (selectedExplainBtn.dataset.correct === 'true') {
+      selectedExplainBtn.classList.add('correct');
+      okCount++;
+    } else {
+      selectedExplainBtn.classList.add('wrong');
+      document.querySelector('#d2-explain-opts .choice-chip[data-correct="true"]').classList.add('correct');
+      errCount++;
+    }
+
+    scores.discover.ok += okCount;
+    scores.discover.err += errCount;
+    updateCounters();
+
+    if (errCount === 0) {
+      showFeedback('fb-disc-2', true, 'مُمْتَازٌ! حَصْرٌ صَحِيحٌ: 50 < 57 < 60 وَ 70 < 76 < 80.');
+    } else {
+      showFeedback('fb-disc-2', false, 'تَمَّ التَّصْحِيحُ: 57 مَحْصُورٌ بَيْنَ 50 وَ 60 ، وَ 76 مَحْصُورٌ بَيْنَ 70 وَ 80.');
+    }
+  }
+
+  // ==================== ANJIZ 1: STRIP 70..90 ====================
+  const anj1Targets = [72, 78, 83, 89];
+
+  function buildStrip70_90() {
+    const row = document.getElementById('strip-70-90-row');
+    row.innerHTML = '';
+    for (let n = 70; n <= 90; n++) {
+      const td = document.createElement('td');
+      if (n === 70 || n === 80 || n === 90) {
+        td.className = 'fixed-cell';
+        td.textContent = n;
+      } else if (anj1Targets.includes(n)) {
+        const inp = document.createElement('input');
+        inp.type = 'number';
+        inp.className = 'strip-inp';
+        inp.id = `strip-inp-${n}`;
+        inp.setAttribute('aria-label', `الخانة ${n}`);
+        td.appendChild(inp);
+      } else {
+        td.textContent = '';
+      }
+      row.appendChild(td);
+    }
+  }
+
+  function checkAnj1() {
+    if (scores.practice.done1) return;
+    for (const n of anj1Targets) {
+      if (!document.getElementById(`strip-inp-${n}`).value.trim()) {
+        showFeedback('fb-anj-1', false, 'يَرْجَى كِتَابَةُ الْأَعْدَادِ الْأَرْبَعَةِ فِي خَانَاتِهَا الْمُنَاسِبَةِ عَلَى الشَّرِيطِ.');
+        return;
+      }
+    }
+
+    scores.practice.done1 = true;
+    document.getElementById('btn-anj-1').disabled = true;
+
+    let okCount = 0;
+    let errCount = 0;
+
+    anj1Targets.forEach(n => {
+      const inp = document.getElementById(`strip-inp-${n}`);
+      inp.disabled = true;
+      if (Number(inp.value) === n) {
+        inp.classList.add('correct');
+        okCount++;
+      } else {
+        inp.classList.add('wrong');
+        inp.value = n;
+        errCount++;
+      }
+    });
+
+    scores.practice.ok += okCount;
+    scores.practice.err += errCount;
+    updateCounters();
+
+    if (errCount === 0) {
+      showFeedback('fb-anj-1', true, 'رَائِعٌ! جَمِيعُ الْأَعْدَادِ فِي مَكَانِهَا الصَّحِيحِ عَلَى الشَّرِيطِ.');
+    } else {
+      showFeedback('fb-anj-1', false, 'تَمَّ التَّصْحِيحُ وَإِظْهَارُ الْأَمَاكِنِ الصَّحِيحَةِ لِلْأَعْدَادِ 72 ، 78 ، 83 ، 89.');
+    }
+  }
+
+  // ==================== ANJIZ 2: CIRCLE TENS FOR 54 ====================
+  function toggleTenChoice(btn) {
+    if (scores.practice.done2) return;
+    btn.classList.toggle('selected');
+  }
+
+  function checkAnj2() {
+    if (scores.practice.done2) return;
+    const btns = Array.from(document.querySelectorAll('#anj2-choices .circle-ten-btn'));
+    const selectedBtns = btns.filter(b => b.classList.contains('selected'));
+
+    if (selectedBtns.length === 0) {
+      showFeedback('fb-anj-2', false, 'يَرْجَى إِحَاطَةُ الْعَشَرَتَيْنِ الْمُتَتَابِعَتَيْنِ اللَّتَيْنِ تَحْصُرَانِ 54.');
+      return;
+    }
+
+    scores.practice.done2 = true;
+    document.getElementById('btn-anj-2').disabled = true;
+
+    let okCount = 0;
+    let errCount = 0;
+
+    btns.forEach(b => {
+      b.disabled = true;
+      const val = Number(b.dataset.val);
+      const isSelected = b.classList.contains('selected');
+      const isTarget = (val === 50 || val === 60);
+
+      if (isTarget && isSelected) {
+        b.classList.add('correct');
+        okCount++;
+      } else if (isTarget && !isSelected) {
+        b.classList.add('correct');
+        errCount++;
+      } else if (!isTarget && isSelected) {
+        b.classList.add('wrong');
+        errCount++;
+      }
+    });
+
+    scores.practice.ok += okCount;
+    scores.practice.err += errCount;
+    updateCounters();
+
+    if (errCount === 0) {
+      showFeedback('fb-anj-2', true, 'أَحْسَنْتَ! الْعَدَدُ 54 مَحْصُورٌ بَيْنَ الْعَشَرَتَيْنِ الْمُتَتَابِعَتَيْنِ 50 وَ 60.');
+    } else {
+      showFeedback('fb-anj-2', false, 'الْإِجَابَةُ الصَّحِيحَةُ: نُحِيطُ 50 وَ 60 لِأَنَّ 54 مَحْصُورٌ بَيْنَهُمَا.');
+    }
+  }
+
+  // ==================== ANJIZ 3: HEXAGONS ====================
+  function checkAnj3() {
+    if (scores.practice.done3) return;
+    const fields = [
+      { id: 'anj3-86-left', expected: 80 },
+      { id: 'anj3-86-right', expected: 90 },
+      { id: 'anj3-63-left', expected: 60 },
+      { id: 'anj3-63-right', expected: 70 }
+    ];
+
+    for (const f of fields) {
+      if (!document.getElementById(f.id).value.trim()) {
+        showFeedback('fb-anj-3', false, 'يَرْجَى مَلْءُ جَمِيعِ الْخَانَاتِ أَوَّلًا.');
+        return;
+      }
+    }
+
+    scores.practice.done3 = true;
+    document.getElementById('btn-anj-3').disabled = true;
+
+    let okCount = 0;
+    let errCount = 0;
+
+    fields.forEach(f => {
+      const inp = document.getElementById(f.id);
+      inp.disabled = true;
+      if (Number(inp.value) === f.expected) {
+        inp.classList.add('correct');
+        okCount++;
+      } else {
+        inp.classList.add('wrong');
+        inp.value = f.expected;
+        errCount++;
+      }
+    });
+
+    scores.practice.ok += okCount;
+    scores.practice.err += errCount;
+    updateCounters();
+
+    if (errCount === 0) {
+      showFeedback('fb-anj-3', true, 'مُمْتَازٌ! 80 < 86 < 90 وَ 60 < 63 < 70.');
+    } else {
+      showFeedback('fb-anj-3', false, 'تَمَّ التَّصْحِيحُ: 86 بَيْنَ 80 وَ 90 ، وَ 63 بَيْنَ 60 وَ 70.');
+    }
+  }
+
+  // ==================== ATAMARRAN 1A: CURVED NUMBER LINE ====================
+  let selectedCurveNum = null;
+  const curveAssignments = {}; // tickNum -> assignedNum
+  const curveTargetNums = [43, 51, 55, 67, 79, 81, 88, 93, 96];
+
+  function getCurvePoint(n) {
+    if (n <= 50) {
+      const t = (n - 40) / 10;
+      const x = 60 + t * 95;
+      const y = 180 - Math.sin(t * Math.PI * 0.65) * 110;
+      return { x, y };
+    } else if (n <= 60) {
+      const t = (n - 50) / 10;
+      const x = 155 + t * 145;
+      const y = 82 + t * 105;
+      return { x, y };
+    } else if (n <= 70) {
+      const t = (n - 60) / 10;
+      const x = 300 + t * 130;
+      const y = 85 + t * 115;
+      return { x, y };
+    } else if (n <= 80) {
+      const t = (n - 70) / 10;
+      const x = 430 + t * 140;
+      const y = 200 - t * 120;
+      return { x, y };
+    } else if (n <= 90) {
+      const t = (n - 80) / 10;
+      const x = 570 + t * 150;
+      const y = 80 + t * 140;
+      return { x, y };
+    } else {
+      const t = (n - 90) / 9;
+      const x = 720 + t * 80;
+      const y = 220 - t * 135;
+      return { x, y };
+    }
+  }
+
+  function buildCurveSVG() {
+    const layer = document.getElementById('curve-ticks-layer');
+    layer.innerHTML = '';
+
+    let d = '';
+    for (let n = 40; n <= 99; n++) {
+      const pt = getCurvePoint(n);
+      d += (n === 40 ? `M ${pt.x} ${pt.y}` : ` L ${pt.x} ${pt.y}`);
+    }
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', d);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', '#b91c1c');
+    path.setAttribute('stroke-width', '3');
+    layer.appendChild(path);
+
+    const landmarks = {
+      40: { dx: 0, dy: 42 },
+      50: { dx: 0, dy: -26 },
+      60: { dx: 0, dy: -26 },
+      70: { dx: -15, dy: 38 },
+      80: { dx: 0, dy: -26 },
+      90: { dx: -25, dy: 36 },
+      99: { dx: -25, dy: -24 }
+    };
+
+    for (let n = 40; n <= 99; n++) {
+      const pt = getCurvePoint(n);
+      const isLandmark = landmarks.hasOwnProperty(n);
+      const isTarget = curveTargetNums.includes(n);
+
+      const tick = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      tick.setAttribute('cx', pt.x);
+      tick.setAttribute('cy', pt.y);
+      tick.setAttribute('r', isLandmark ? '5' : (isTarget ? '4.5' : '2.2'));
+      tick.setAttribute('fill', isLandmark ? '#0f172a' : (isTarget ? '#0284c7' : '#64748b'));
+      layer.appendChild(tick);
+
+      if (isLandmark) {
+        const lm = landmarks[n];
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', pt.x);
+        line.setAttribute('y1', pt.y);
+        line.setAttribute('x2', pt.x + lm.dx);
+        line.setAttribute('y2', pt.y + (lm.dy > 0 ? lm.dy - 14 : lm.dy + 6));
+        line.setAttribute('stroke', '#ea580c');
+        line.setAttribute('stroke-width', '1.8');
+        layer.appendChild(line);
+
+        const lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        lbl.setAttribute('x', pt.x + lm.dx);
+        lbl.setAttribute('y', pt.y + lm.dy);
+        lbl.setAttribute('text-anchor', 'middle');
+        lbl.setAttribute('font-family', 'Cairo, sans-serif');
+        lbl.setAttribute('font-weight', '900');
+        lbl.setAttribute('font-size', '16');
+        lbl.setAttribute('fill', '#0f172a');
+        lbl.textContent = n;
+        layer.appendChild(lbl);
+      } else if (isTarget) {
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.classList.add('tick-target');
+
+        const hit = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        hit.classList.add('hit-ring');
+        hit.setAttribute('cx', pt.x);
+        hit.setAttribute('cy', pt.y);
+        hit.setAttribute('r', '13');
+        hit.setAttribute('fill', 'rgba(2, 132, 199, 0.08)');
+        hit.setAttribute('stroke', '#0284c7');
+        hit.setAttribute('stroke-dasharray', '3,2');
+        hit.setAttribute('stroke-width', '1.5');
+
+        const badgeBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        badgeBg.setAttribute('x', pt.x - 16);
+        badgeBg.setAttribute('y', pt.y - 30);
+        badgeBg.setAttribute('width', '32');
+        badgeBg.setAttribute('height', '20');
+        badgeBg.setAttribute('rx', '5');
+        badgeBg.setAttribute('fill', 'transparent');
+        badgeBg.setAttribute('id', `curve-bg-${n}`);
+
+        const txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        txt.setAttribute('x', pt.x);
+        txt.setAttribute('y', pt.y - 15);
+        txt.setAttribute('text-anchor', 'middle');
+        txt.setAttribute('font-family', 'Cairo, sans-serif');
+        txt.setAttribute('font-weight', '900');
+        txt.setAttribute('font-size', '14');
+        txt.setAttribute('fill', '#0369a1');
+        txt.setAttribute('id', `curve-txt-${n}`);
+        txt.textContent = '';
+
+        g.appendChild(hit);
+        g.appendChild(badgeBg);
+        g.appendChild(txt);
+
+        g.onclick = () => assignToCurveTick(n, badgeBg, txt);
+        layer.appendChild(g);
+      }
+    }
+  }
+
+  function selectCurveCard(num, btn) {
+    if (scores.train.done1a) return;
+    document.querySelectorAll('#curve-cards-pool .num-card-btn').forEach(b => b.classList.remove('selected'));
+    selectedCurveNum = num;
+    btn.classList.add('selected');
+  }
+
+  function assignToCurveTick(tickNum, bgEl, txtEl) {
+    if (scores.train.done1a) return;
+    if (selectedCurveNum === null) {
+      if (curveAssignments[tickNum]) {
+        const oldVal = curveAssignments[tickNum];
+        delete curveAssignments[tickNum];
+        txtEl.textContent = '';
+        bgEl.setAttribute('fill', 'transparent');
+        const oldBtn = document.querySelector(`#curve-cards-pool .num-card-btn[data-val="${oldVal}"]`);
+        if (oldBtn) oldBtn.classList.remove('used');
+      }
+      return;
+    }
+
+    for (const [tKey, val] of Object.entries(curveAssignments)) {
+      if (val === selectedCurveNum) {
+        delete curveAssignments[tKey];
+        const prevTxt = document.getElementById(`curve-txt-${tKey}`);
+        const prevBg = document.getElementById(`curve-bg-${tKey}`);
+        if (prevTxt) prevTxt.textContent = '';
+        if (prevBg) prevBg.setAttribute('fill', 'transparent');
+      }
+    }
+
+    if (curveAssignments[tickNum]) {
+      const prevNum = curveAssignments[tickNum];
+      const prevBtn = document.querySelector(`#curve-cards-pool .num-card-btn[data-val="${prevNum}"]`);
+      if (prevBtn) prevBtn.classList.remove('used');
+    }
+
+    curveAssignments[tickNum] = selectedCurveNum;
+    txtEl.textContent = selectedCurveNum;
+    bgEl.setAttribute('fill', '#e0f2fe');
+
+    const activeBtn = document.querySelector(`#curve-cards-pool .num-card-btn[data-val="${selectedCurveNum}"]`);
+    if (activeBtn) {
+      activeBtn.classList.remove('selected');
+      activeBtn.classList.add('used');
+    }
+    selectedCurveNum = null;
+  }
+
+  function checkTrn1a() {
+    if (scores.train.done1a) return;
+    if (Object.keys(curveAssignments).length < curveTargetNums.length) {
+      showFeedback('fb-trn-1a', false, 'يَرْجَى وَضْعُ جَمِيعِ الْأَعْدَادِ التِّسْعَةِ عَلَى الشَّرِيطِ الْمُدَرَّجِ أَوَّلًا.');
+      return;
+    }
+
+    scores.train.done1a = true;
+    document.getElementById('btn-trn-1a').disabled = true;
+    document.querySelectorAll('#curve-cards-pool .num-card-btn').forEach(b => b.disabled = true);
+
+    let okCount = 0;
+    let errCount = 0;
+
+    curveTargetNums.forEach(num => {
+      let placedTick = null;
+      for (const [tKey, val] of Object.entries(curveAssignments)) {
+        if (val === num) placedTick = Number(tKey);
+      }
+
+      if (placedTick === num) {
+        okCount++;
+        document.getElementById(`curve-bg-${num}`).setAttribute('fill', '#dcfce7');
+        document.getElementById(`curve-txt-${num}`).setAttribute('fill', '#15803d');
+      } else {
+        errCount++;
+        if (placedTick !== null) {
+          document.getElementById(`curve-bg-${placedTick}`).setAttribute('fill', '#fee2e2');
+          document.getElementById(`curve-txt-${placedTick}`).setAttribute('fill', '#b91c1c');
+        }
+        document.getElementById(`curve-bg-${num}`).setAttribute('fill', '#dcfce7');
+        document.getElementById(`curve-txt-${num}`).textContent = num;
+        document.getElementById(`curve-txt-${num}`).setAttribute('fill', '#15803d');
+      }
+    });
+
+    scores.train.ok += okCount;
+    scores.train.err += errCount;
+    updateCounters();
+
+    if (errCount === 0) {
+      showFeedback('fb-trn-1a', true, 'أَحْسَنْتَ! جَمِيعُ الْأَعْدَادِ فِي مَوْضِعِهَا الصَّحِيحِ عَلَى الشَّرِيطِ الْمُدَرَّجِ.');
+    } else {
+      showFeedback('fb-trn-1a', false, `تَمَّ التَّصْحِيحُ: ${okCount} إِجَابَاتٍ صَحِيحَةٍ وَ ${errCount} أَخْطَاءٍ.`);
+    }
+  }
+
+  // ==================== ATAMARRAN 1B: ORDER ASCENDING ====================
+  const sortedExpected = [43, 51, 55, 67, 79, 81, 88, 93, 96];
+
+  function checkTrn1b() {
+    if (scores.train.done1b) return;
+    for (let i = 0; i < 9; i++) {
+      if (!document.getElementById(`ord-${i}`).value.trim()) {
+        showFeedback('fb-trn-1b', false, 'يَرْجَى مَلْءُ جَمِيعِ الْخَانَاتِ التِّسْعِ لِتَرْتِيبِ الْأَعْدَادِ.');
+        return;
+      }
+    }
+
+    scores.train.done1b = true;
+    document.getElementById('btn-trn-1b').disabled = true;
+
+    let okCount = 0;
+    let errCount = 0;
+
+    for (let i = 0; i < 9; i++) {
+      const inp = document.getElementById(`ord-${i}`);
+      inp.disabled = true;
+      if (Number(inp.value) === sortedExpected[i]) {
+        inp.classList.add('correct');
+        okCount++;
+      } else {
+        inp.classList.add('wrong');
+        inp.value = sortedExpected[i];
+        errCount++;
+      }
+    }
+
+    scores.train.ok += okCount;
+    scores.train.err += errCount;
+    updateCounters();
+
+    if (errCount === 0) {
+      showFeedback('fb-trn-1b', true, 'مُمْتَازٌ! التَّرْتِيبُ مِنَ الْأَصْغَرِ إِلَى الْأَكْبَرِ صَحِيحٌ تَمَامًا.');
+    } else {
+      showFeedback('fb-trn-1b', false, 'التَّرْتِيبُ الصَّحِيحُ مِنَ الْيَسَارِ إِلَى الْيَمِينِ: 43 - 51 - 55 - 67 - 79 - 81 - 88 - 93 - 96.');
+    }
+  }
+
+  // ==================== ATAMARRAN 2: DUAL TABLES ====================
+  function checkTrn2() {
+    if (scores.train.done2) return;
+    const ids = ['t2-1-r1', 't2-1-r2', 't2-1-r3a', 't2-1-r3b', 't2-2-r1', 't2-2-r2', 't2-2-r3', 't2-2-r4'];
+    for (const id of ids) {
+      if (!document.getElementById(id).value.trim()) {
+        showFeedback('fb-trn-2', false, 'يَرْجَى مَلْءُ جَمِيعِ الْخَانَاتِ الْفَارِغَةِ فِي الْجَدْوَلَيْنِ أَوَّلًا.');
+        return;
+      }
+    }
+
+    scores.train.done2 = true;
+    document.getElementById('btn-trn-2').disabled = true;
+
+    let okCount = 0;
+    let errCount = 0;
+
+    const exactPart1 = [
+      { id: 't2-1-r1', exp: 50 },
+      { id: 't2-1-r2', exp: 70 },
+      { id: 't2-1-r3a', exp: 80 },
+      { id: 't2-1-r3b', exp: 90 }
+    ];
+
+    exactPart1.forEach(item => {
+      const inp = document.getElementById(item.id);
+      inp.disabled = true;
+      if (Number(inp.value) === item.exp) {
+        inp.classList.add('correct');
+        okCount++;
+      } else {
+        inp.classList.add('wrong');
+        inp.value = item.exp;
+        errCount++;
+      }
+    });
+
+    const rangePart2 = [
+      { id: 't2-2-r1', min: 41, max: 49, sample: 45 },
+      { id: 't2-2-r2', min: 51, max: 59, sample: 55 },
+      { id: 't2-2-r3', min: 21, max: 29, sample: 25 },
+      { id: 't2-2-r4', min: 61, max: 69, sample: 65 }
+    ];
+
+    rangePart2.forEach(item => {
+      const inp = document.getElementById(item.id);
+      inp.disabled = true;
+      const val = Number(inp.value);
+      if (Number.isInteger(val) && val >= item.min && val <= item.max) {
+        inp.classList.add('correct');
+        okCount++;
+      } else {
+        inp.classList.add('wrong');
+        inp.value = item.sample;
+        errCount++;
+      }
+    });
+
+    scores.train.ok += okCount;
+    scores.train.err += errCount;
+    updateCounters();
+
+    if (errCount === 0) {
+      showFeedback('fb-trn-2', true, 'رَائِعٌ! جَمِيعُ خَانَاتِ الْجَدْوَلَيْنِ صَحِيحَةٌ.');
+    } else {
+      showFeedback('fb-trn-2', false, `تَمَّ التَّصْحِيحُ: ${okCount} إِجَابَاتٍ صَحِيحَةٍ وَ ${errCount} أَخْطَاءٍ.`);
+    }
+  }
+
+  // ==================== ABHATH: MAGIC TRIANGLE (SUM = 9) ====================
+  function checkSearch() {
+    if (scores.search.done1) return;
+    const nodeIds = ['tri-top', 'tri-mid-l', 'tri-mid-r', 'tri-bot-l', 'tri-bot-m', 'tri-bot-r'];
+    const vals = {};
+
+    for (const id of nodeIds) {
+      const raw = document.getElementById(id).value.trim();
+      if (!raw) {
+        showFeedback('fb-srh-1', false, 'يَرْجَى مَلْءُ جَمِيعِ الدَّوَائِرِ السِّتِّ بِالْأَعْدَادِ مِنْ 1 إِلَى 6.');
+        return;
+      }
+      vals[id] = Number(raw);
+    }
+
+    scores.search.done1 = true;
+    document.getElementById('btn-srh-1').disabled = true;
+    nodeIds.forEach(id => document.getElementById(id).disabled = true);
+
+    const numList = Object.values(vals);
+    const validSet = new Set([1, 2, 3, 4, 5, 6]);
+    const uniqueUsed = new Set(numList);
+    const allValidUnique = numList.every(n => validSet.has(n)) && uniqueUsed.size === 6;
+
+    const sideLeft  = vals['tri-top'] + vals['tri-mid-l'] + vals['tri-bot-l'] === 9;
+    const sideRight = vals['tri-top'] + vals['tri-mid-r'] + vals['tri-bot-r'] === 9;
+    const sideBot   = vals['tri-bot-l'] + vals['tri-bot-m'] + vals['tri-bot-r'] === 9;
+
+    if (allValidUnique && sideLeft && sideRight && sideBot) {
+      nodeIds.forEach(id => document.getElementById(id).parentElement.style.background = '#dcfce7');
+      scores.search.ok += 3;
+      updateCounters();
+      showFeedback('fb-srh-1', true, 'عَبْقَرِيٌّ! مَجْمُوعُ كُلِّ ضِلْعٍ يُسَاوِي 9 بِاسْتِعْمَالِ الْأَعْدَادِ 1 - 2 - 3 - 4 - 5 - 6.');
+    } else {
+      let okSides = 0;
+      let errSides = 0;
+      if (allValidUnique && sideLeft) okSides++; else errSides++;
+      if (allValidUnique && sideRight) okSides++; else errSides++;
+      if (allValidUnique && sideBot) okSides++; else errSides++;
+
+      const sol = {
+        'tri-top': 1,
+        'tri-mid-l': 6,
+        'tri-mid-r': 5,
+        'tri-bot-l': 2,
+        'tri-bot-m': 4,
+        'tri-bot-r': 3
+      };
+      nodeIds.forEach(id => {
+        const el = document.getElementById(id);
+        el.parentElement.style.background = '#fee2e2';
+        el.value = sol[id];
+      });
+
+      scores.search.ok += okSides;
+      scores.search.err += errSides;
+      updateCounters();
+      showFeedback('fb-srh-1', false, 'حَلٌّ مُمْكِنٌ: الرُّؤُوسُ (1 ، 2 ، 3) وَالْأَوْسَاطُ (6 ، 4 ، 5) لِيَكُونَ مَجْمُوعُ كُلِّ ضِلْعٍ 9.');
+    }
+  }
+
+  // ==================== RESET LESSON ====================
+  function resetLesson() {
+    scores.discover = { ok: 0, err: 0, done1: false, done2: false };
+    scores.practice = { ok: 0, err: 0, done1: false, done2: false, done3: false };
+    scores.train    = { ok: 0, err: 0, done1a: false, done1b: false, done2: false };
+    scores.search   = { ok: 0, err: 0, done1: false };
+
+    selectedTrainNum = null;
+    for (const k in trainAssignments) delete trainAssignments[k];
+    selectedExplainBtn = null;
+    selectedCurveNum = null;
+    for (const k in curveAssignments) delete curveAssignments[k];
+
+    document.getElementById('sec-practice').classList.add('locked');
+    document.getElementById('sec-train').classList.add('locked');
+    document.getElementById('sec-search').classList.add('locked');
+
+    document.querySelectorAll('input').forEach(inp => {
+      inp.value = '';
+      inp.disabled = false;
+      inp.classList.remove('correct', 'wrong');
+    });
+
+    document.querySelectorAll('.btn-check').forEach(btn => btn.disabled = false);
+    document.querySelectorAll('.num-card-btn').forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove('selected', 'used');
+    });
+    document.querySelectorAll('.choice-chip').forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove('selected', 'correct', 'wrong');
+    });
+    document.querySelectorAll('.circle-ten-btn').forEach(btn => {
+      btn.disabled = false;
+      btn.classList.remove('selected', 'correct', 'wrong');
+    });
+    document.querySelectorAll('.tri-node').forEach(node => {
+      node.style.background = '#ffffff';
+    });
+    document.querySelectorAll('.feedback-note').forEach(fb => {
+      fb.className = 'feedback-note';
+      fb.textContent = '';
+    });
+
+    buildTrainSVG();
+    buildStrip70_90();
+    buildCurveSVG();
+    updateCounters();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Init on load
+  buildTrainSVG();
+  buildStrip70_90();
+  buildCurveSVG();
+  updateCounters();
+</script>
+</body>
+</html>
