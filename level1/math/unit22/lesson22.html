@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>الدرس 22: الرَّمْزَانِ - وَ = | السنة الأولى ابتدائي</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0ea5e9;
+      --primary-dark: #0284c7;
+      --secondary: #f59e0b;
+      --accent: #8b5cf6;
+      --bg: #f0f9ff;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --success: #16a34a;
+      --success-bg: #dcfce7;
+      --error: #dc2626;
+      --error-bg: #fee2e2;
+      --border: #cbd5e1;
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(180deg, #e0f2fe 0%, #f8fafc 100%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .ltr-math {
+      direction: ltr;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      unicode-bidi: isolate;
+      font-weight: 800;
+      font-size: 1.35rem;
+      color: #0f172a;
+    }
+
+    .header-banner {
+      background: linear-gradient(135deg, #0284c7, #0ea5e9, #38bdf8);
+      color: #fff;
+      padding: 24px 16px;
+      text-align: center;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+      box-shadow: 0 6px 20px rgba(2, 132, 199, 0.25);
+      position: relative;
+    }
+
+    .badge-top {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.22);
+      padding: 4px 16px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .header-banner h1 {
+      margin: 4px 0;
+      font-size: 1.85rem;
+      font-weight: 900;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 24px auto 48px;
+      padding: 0 16px;
+    }
+
+    .section-card {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 22px;
+      margin-bottom: 26px;
+      box-shadow: var(--shadow);
+      border: 2px solid #e2e8f0;
+      transition: opacity 0.3s ease;
+    }
+
+    .section-card.locked {
+      opacity: 0.58;
+      pointer-events: none;
+      position: relative;
+    }
+
+    .section-card.locked::after {
+      content: "🔒 أَكْمِلِ الْمَرْحَلَةَ السَّابِقَةَ لِفَتْحِ هَذَا الْجُزْءِ";
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      background: #475569;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    .section-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.45rem;
+      font-weight: 900;
+      padding: 6px 20px;
+      border-radius: 14px;
+      margin: 0 0 18px 0;
+    }
+
+    .title-aktashif { background: #fef3c7; color: #b45309; border: 2px solid #f59e0b; }
+    .title-unjiz { background: #fee2e2; color: #b91c1c; border: 2px solid #ef4444; }
+    .title-taalamt { background: #dcfce7; color: #15803d; border: 2px solid #22c55e; }
+    .title-atamarran { background: #e0f2fe; color: #0369a1; border: 2px solid #0ea5e9; }
+    .title-abhath { background: #f3e8ff; color: #6d28d9; border: 2px solid #8b5cf6; }
+
+    .exercise-box {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 18px;
+      margin-bottom: 18px;
+    }
+
+    .exercise-box.locked-ex {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .exercise-header {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .ex-num {
+      background: var(--primary);
+      color: #fff;
+      min-width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.05rem;
+      flex-shrink: 0;
+    }
+
+    /* Interactive Plates & Items */
+    .plates-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      margin: 16px 0;
+    }
+
+    .plate-card {
+      background: #fff;
+      border: 2px dashed #94a3b8;
+      border-radius: 20px;
+      padding: 14px;
+      text-align: center;
+      min-width: 220px;
+    }
+
+    .plate-label {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .items-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      min-height: 76px;
+      padding: 8px;
+    }
+
+    .clickable-item {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: #fffbeb;
+      border: 2px solid #fde68a;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: transform 0.15s ease, background 0.2s;
+      user-select: none;
+    }
+
+    .clickable-item:hover {
+      transform: scale(1.08);
+    }
+
+    .clickable-item.crossed::after {
+      content: "✕";
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #dc2626;
+      font-size: 2.2rem;
+      font-weight: 900;
+      text-shadow: 0 0 4px #fff;
+    }
+
+    .clickable-item.crossed {
+      background: #fee2e2;
+      border-color: #fca5a5;
+    }
+
+    .empty-slot {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      border: 2px dashed #cbd5e1;
+      background: #f1f5f9;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .empty-slot.filled {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+    }
+
+    /* Inputs */
+    input.math-input {
+      width: 58px;
+      height: 46px;
+      text-align: center;
+      font-size: 1.35rem;
+      font-weight: 900;
+      border: 2px solid #94a3b8;
+      border-radius: 12px;
+      background: #fff;
+      color: #0f172a;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    input.math-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+    }
+
+    input.math-input.correct {
+      background: var(--success-bg) !important;
+      border-color: var(--success) !important;
+      color: var(--success) !important;
+    }
+
+    input.math-input.incorrect {
+      background: var(--error-bg) !important;
+      border-color: var(--error) !important;
+      color: var(--error) !important;
+    }
+
+    /* Choice Cards */
+    .choices-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin: 14px 0;
+    }
+
+    .choice-card {
+      background: #fff;
+      border: 2px solid #94a3b8;
+      border-radius: 14px;
+      padding: 10px 22px;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+    }
+
+    .choice-card:hover {
+      border-color: var(--primary);
+      background: #f0f9ff;
+    }
+
+    .choice-card.selected {
+      background: #fef08a;
+      border-color: #eab308;
+      box-shadow: 0 4px 10px rgba(234, 179, 8, 0.25);
+    }
+
+    .choice-card.correct {
+      background: var(--success-bg) !important;
+      border-color: var(--success) !important;
+      color: var(--success) !important;
+    }
+
+    .choice-card.incorrect {
+      background: var(--error-bg) !important;
+      border-color: var(--error) !important;
+      color: var(--error) !important;
+    }
+
+    /* Buttons */
+    .btn-check {
+      background: linear-gradient(135deg, #0ea5e9, #0284c7);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 10px 26px;
+      font-size: 1.08rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+      transition: transform 0.15s, opacity 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-check:hover:not(:disabled) {
+      transform: translateY(-2px);
+    }
+
+    .btn-check:disabled {
+      background: #94a3b8;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .feedback-msg {
+      margin-top: 10px;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 8px 14px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .feedback-msg.ok {
+      display: block;
+      background: var(--success-bg);
+      color: var(--success);
+    }
+
+    .feedback-msg.err {
+      display: block;
+      background: var(--error-bg);
+      color: var(--error);
+    }
+
+    .stage-counter {
+      margin-top: 14px;
+      padding: 10px 16px;
+      background: #f1f5f9;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      border: 1px solid #cbd5e1;
+    }
+
+    .c-ok { color: var(--success); }
+    .c-err { color: var(--error); }
+
+    /* Taalamt Box */
+    .taalamt-content {
+      background: #f0fdf4;
+      border: 2px solid #86efac;
+      border-radius: 16px;
+      padding: 18px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      text-align: center;
+      color: #14532d;
+    }
+
+    /* Visual Illustrations */
+    .visual-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 14px;
+      margin: 12px 0;
+    }
+
+    .item-with-cross {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 54px;
+      height: 54px;
+    }
+
+    .item-with-cross.is-crossed::after {
+      content: "✕";
+      position: absolute;
+      color: #dc2626;
+      font-size: 2.3rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .grid-equations {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+
+    .eq-pill {
+      background: #fff;
+      border: 2px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    /* Abhath Circles & Interactive Matching */
+    .abhath-circles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      margin: 16px 0;
+    }
+
+    .num-circle {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #0f172a;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, border 0.2s ease;
+      user-select: none;
+      border: 3px solid transparent;
+    }
+
+    .num-circle:hover {
+      transform: scale(1.08);
+    }
+
+    .num-circle.active-circle {
+      transform: scale(1.14);
+      border: 3px solid #0f172a;
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.35);
+    }
+
+    .num-circle.paired-badge {
+      box-shadow: 0 0 0 3px #16a34a;
+    }
+
+    .abhath-status-bar {
+      text-align: center;
+      background: #f5f3ff;
+      border: 2px solid #ddd6fe;
+      color: #4c1d95;
+      font-weight: 800;
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin: 10px auto 14px;
+      max-width: 640px;
+    }
+
+    .abhath-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+      margin: 16px 0;
+    }
+
+    .abhath-card {
+      border: 2px dashed #64748b;
+      border-radius: 14px;
+      padding: 10px 18px;
+      background: #fff;
+      cursor: pointer;
+      transition: all 0.2s;
+      user-select: none;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      min-width: 112px;
+    }
+
+    .abhath-card:hover {
+      border-color: #7c3aed;
+      background: #faf5ff;
+    }
+
+    .abhath-card.paired-card {
+      border-style: solid;
+      border-width: 3px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+    }
+
+    .paired-tag {
+      font-size: 0.85rem;
+      font-weight: 900;
+      padding: 1px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.85);
+      color: #0f172a;
+    }
+
+    .abhath-card.correct {
+      background: var(--success-bg) !important;
+      border: 2px solid var(--success) !important;
+      color: var(--success) !important;
+    }
+
+    .abhath-card.incorrect {
+      background: var(--error-bg) !important;
+      border: 2px solid var(--error) !important;
+      color: var(--error) !important;
+    }
+
+    /* Final Evaluation */
+    .summary-card {
+      background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
+      border: 3px solid var(--primary);
+      border-radius: 24px;
+      padding: 26px 20px;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(2, 132, 199, 0.15);
+    }
+
+    .circle-gauge-wrap {
+      position: relative;
+      width: 170px;
+      height: 170px;
+      margin: 18px auto;
+    }
+
+    .circle-gauge-wrap svg {
+      transform: rotate(-90deg);
+      width: 170px;
+      height: 170px;
+    }
+
+    .gauge-bg {
+      fill: none;
+      stroke: #e2e8f0;
+      stroke-width: 14;
+    }
+
+    .gauge-progress {
+      fill: none;
+      stroke: var(--primary);
+      stroke-width: 14;
+      stroke-linecap: round;
+      stroke-dasharray: 440;
+      stroke-dashoffset: 440;
+      transition: stroke-dashoffset 0.8s ease, stroke 0.4s ease;
+    }
+
+    .gauge-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    .stats-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .stat-box {
+      padding: 12px 22px;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 1.15rem;
+      min-width: 180px;
+    }
+
+    .stat-ok { background: var(--success-bg); color: var(--success); border: 2px solid #86efac; }
+    .stat-err { background: var(--error-bg); color: var(--error); border: 2px solid #fca5a5; }
+
+    .remark-banner {
+      font-size: 1.25rem;
+      font-weight: 900;
+      padding: 12px 20px;
+      border-radius: 14px;
+      background: #fef3c7;
+      color: #92400e;
+      border: 2px solid #f59e0b;
+      margin: 14px auto;
+      max-width: 560px;
+    }
+
+    .btn-reset {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 12px 28px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+    }
+
+    .two-col-unjiz {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .box-two-part {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .sub-panel {
+      background: #fff;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    /* ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== */
+    #sub-lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.98);
+      z-index: 99999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      text-align: center;
+    }
+    .lock-box {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 30px 20px;
+      box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+      border: 2px solid #e1f5fe;
+      max-width: 380px;
+      width: 100%;
+    }
+    .lock-icon { font-size: 50px; margin-bottom: 12px; }
+    .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+    .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+    .btn-channel {
+      display: block;
+      width: 100%;
+      background: #0288d1;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 14px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      margin-bottom: 10px;
+      box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+      font-family: 'Cairo', sans-serif;
+    }
+    .btn-check-sub {
+      width: 100%;
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 2px solid #2e7d32;
+      padding: 13px;
+      font-weight: 800;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+    }
+    .sub-status-msg {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      min-height: 24px;
+    }
+    .btn-back-home {
+      display: block;
+      width: 100%;
+      max-width: 420px;
+      margin: 24px auto 10px auto;
+      background: #0d47a1;
+      color: #ffffff;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 900;
+      font-size: 1.05rem;
+      cursor: pointer;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(13, 71, 161, 0.25);
+      font-family: 'Cairo', sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       نافذة قفل الاشتراك الإجباري
+       ======================================== -->
+  <div id="sub-lock-screen">
+    <div class="lock-box">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+      <div class="lock-desc">
+        لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+      </div>
+      <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel">
+        📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+      </a>
+      <button class="btn-check-sub" onclick="verifySubscription()">
+        ✅ تَأْكِيدُ الاِشْتِرَاكِ
+      </button>
+      <div id="sub-status-msg" class="sub-status-msg"></div>
+    </div>
+  </div>
+
+  <header class="header-banner">
+    <div class="badge-top">السَّنَةُ الْأُولَى ابْتِدَائِي • الرِّيَاضِيَّاتُ • الدَّرْسُ 22</div>
+    <h1>الرَّمْزَانِ ( - ) نَاقِصْ أَوْ ( = ) يُسَاوِي</h1>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== أَكْتَشِفُ ==================== -->
+    <section class="section-card" id="sec-aktashif">
+      <h2 class="section-title title-aktashif">🔍 أَكْتَشِفُ</h2>
+
+      <!-- التمرين 1 -->
+      <div class="exercise-box" id="ex-aktashif-1">
+        <div class="exercise-header">
+          <span class="ex-num">1</span>
+          <div>
+            أَخَذَتْ لَيْلَى 3 حَبَّاتِ جَوْزٍ مِنَ الصَّحْنِ لِتَأْكُلَهَا.<br>
+            • اُشْطُبْ حَبَّاتِ الْجَوْزِ الَّتِي أَخَذَتْهَا لَيْلَى (اُنْقُرْ عَلَى 3 حَبَّاتٍ فِي الصَّحْنِ الْأَوَّلِ).<br>
+            • اُرْسُمْ حَبَّاتِ الْجَوْزِ الَّتِي سَتَبْقَى (اُنْقُرْ عَلَى الدَّوَائِرِ فِي الصَّحْنِ الثَّانِي).
+          </div>
+        </div>
+
+        <div class="plates-row">
+          <div class="plate-card">
+            <div class="plate-label">اُشْطُبْ 3 حَبَّاتِ جَوْزٍ</div>
+            <div class="items-grid" id="walnuts-plate-1"></div>
+          </div>
+          <div class="plate-card">
+            <div class="plate-label">اُرْسُمْ حَبَّاتِ الْجَوْزِ الْبَاقِيَةَ</div>
+            <div class="items-grid" id="walnuts-plate-2"></div>
+          </div>
+        </div>
+
+        <div style="text-align:center; margin: 14px 0; font-size:1.15rem; font-weight:800;">
+          عَدَدُ حَبَّاتِ الْجَوْزِ الْبَاقِيَةِ هُوَ :
+          <input type="number" class="math-input" id="akt1-rem" inputmode="numeric">
+        </div>
+
+        <div style="text-align:center; margin: 14px 0; font-size:1.15rem; font-weight:800;">
+          أَكْمِلْ :
+          <span class="ltr-math">
+            <span>7</span>
+            <span>-</span>
+            <span>3</span>
+            <span>=</span>
+            <input type="number" class="math-input" id="akt1-eq" inputmode="numeric">
+          </span>
+        </div>
+
+        <div style="text-align:center;">
+          <button class="btn-check" id="btn-akt1" onclick="checkAktashif1()">✔ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+          <div class="feedback-msg" id="fb-akt1"></div>
+        </div>
+      </div>
+
+      <!-- التمرين 2 -->
+      <div class="exercise-box locked-ex" id="ex-aktashif-2">
+        <div class="exercise-header">
+          <span class="ex-num">2</span>
+          <div>
+            قَامَتْ مَرْيَمُ بِرَمْيِ الزَّهَرَاتِ الذَّابِلَةِ. مَا هُوَ عَدَدُ الزَّهَرَاتِ الْبَاقِيَةِ؟
+          </div>
+        </div>
+
+        <div class="visual-group">
+          <div style="text-align:center;">
+            <div style="font-size:0.9rem; font-weight:700; color:#64748b;">فِي الْمِزْهَرِيَّةِ (4 زَهَرَاتٍ)</div>
+            <div style="font-size:1.9rem;">🌸 🌸 🌸 🌸</div>
+          </div>
+          <div style="width:2px; height:44px; background:#cbd5e1; margin:0 12px;"></div>
+          <div style="text-align:center;">
+            <div style="font-size:0.9rem; font-weight:700; color:#dc2626;">الذَّابِلَةُ الْمَرْمِيَّةُ (2)</div>
+            <div style="font-size:1.9rem;">🥀 🥀</div>
+          </div>
+        </div>
+
+        <div style="text-align:center; margin: 14px 0; font-size:1.15rem; font-weight:800;">
+          عَدَدُ الزَّهَرَاتِ الْبَاقِيَةِ هُوَ :
+          <input type="number" class="math-input" id="akt2-rem" inputmode="numeric">
+        </div>
+
+        <div style="text-align:center; margin: 14px 0; font-size:1.15rem; font-weight:800;">
+          أَكْمِلْ :
+          <span class="ltr-math">
+            <span>6</span>
+            <span>-</span>
+            <input type="number" class="math-input" id="akt2-sub" inputmode="numeric">
+            <span>=</span>
+            <input type="number" class="math-input" id="akt2-res" inputmode="numeric">
+          </span>
+        </div>
+
+        <div style="text-align:center;">
+          <button class="btn-check" id="btn-akt2" onclick="checkAktashif2()">✔ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+          <div class="feedback-msg" id="fb-akt2"></div>
+        </div>
+      </div>
+
+      <div class="stage-counter" id="cnt-aktashif">
+        <span class="c-ok">✓ الصَّوَابُ: 0</span>
+        <span class="c-err">✗ الْخَطَأُ: 0</span>
+      </div>
+    </section>
+
+    <!-- ==================== أُنْجِزُ ==================== -->
+    <section class="section-card locked" id="sec-unjiz">
+      <h2 class="section-title title-unjiz">✏️ أُنْجِزُ</h2>
+
+      <div class="two-col-unjiz">
+        <!-- التمرين 1 -->
+        <div class="exercise-box" id="ex-unjiz-1">
+          <div class="exercise-header">
+            <span class="ex-num">1</span>
+            <div>لَوِّنِ الْبِطَاقَةَ الْمُنَاسِبَةَ :</div>
+          </div>
+
+          <div class="visual-group">
+            <span class="item-with-cross" style="font-size:2rem;">🥚</span>
+            <span class="item-with-cross" style="font-size:2rem;">🥚</span>
+            <span class="item-with-cross is-crossed" style="font-size:2rem;">🥚</span>
+            <span class="item-with-cross is-crossed" style="font-size:2rem;">🥚</span>
+            <span class="item-with-cross is-crossed" style="font-size:2rem;">🥚</span>
+          </div>
+
+          <div class="choices-list" id="unjiz1-choices">
+            <div class="choice-card" data-val="6-2=4" onclick="selectChoice('unjiz1', this)">
+              <span class="ltr-math">6 - 2 = 4</span>
+            </div>
+            <div class="choice-card" data-val="5-3=2" onclick="selectChoice('unjiz1', this)">
+              <span class="ltr-math">5 - 3 = 2</span>
+            </div>
+            <div class="choice-card" data-val="6-5=1" onclick="selectChoice('unjiz1', this)">
+              <span class="ltr-math">6 - 5 = 1</span>
+            </div>
+          </div>
+
+          <div style="text-align:center;">
+            <button class="btn-check" id="btn-unj1" onclick="checkUnjiz1()">✔ تَحَقَّقْ</button>
+            <div class="feedback-msg" id="fb-unj1"></div>
+          </div>
+        </div>
+
+        <!-- التمرين 2 -->
+        <div class="exercise-box locked-ex" id="ex-unjiz-2">
+          <div class="exercise-header">
+            <span class="ex-num">2</span>
+            <div>أَكْمِلْ.</div>
+          </div>
+
+          <div class="visual-group">
+            <span class="item-with-cross is-crossed" style="font-size:2rem;">🍍</span>
+            <span class="item-with-cross is-crossed" style="font-size:2rem;">🍍</span>
+            <span class="item-with-cross is-crossed" style="font-size:2rem;">🍍</span>
+            <span class="item-with-cross is-crossed" style="font-size:2rem;">🍍</span>
+            <span class="item-with-cross" style="font-size:2rem;">🍍</span>
+            <span class="item-with-cross" style="font-size:2rem;">🍍</span>
+            <span class="item-with-cross" style="font-size:2rem;">🍍</span>
+          </div>
+
+          <div style="text-align:center; margin: 14px 0;">
+            <span class="ltr-math">
+              <span>7</span>
+              <span>-</span>
+              <span>4</span>
+              <span>=</span>
+              <input type="number" class="math-input" id="unj2-res" inputmode="numeric">
+            </span>
+          </div>
+
+          <div style="text-align:center;">
+            <button class="btn-check" id="btn-unj2" onclick="checkUnjiz2()">✔ تَحَقَّقْ</button>
+            <div class="feedback-msg" id="fb-unj2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- التمرين 3 -->
+      <div class="exercise-box locked-ex" id="ex-unjiz-3">
+        <div class="exercise-header">
+          <span class="ex-num">3</span>
+          <div>كَمْ كُرَيَّةً تَبْقَى فِي الْبِطَاقَةِ بَعْدَ شَطْبِ كُرَيَّتَيْنِ؟</div>
+        </div>
+
+        <div class="visual-group" style="max-width:340px; margin:12px auto;">
+          <span class="item-with-cross" style="font-size:1.9rem;">🔮</span>
+          <span class="item-with-cross" style="font-size:1.9rem;">🔮</span>
+          <span class="item-with-cross is-crossed" style="font-size:1.9rem;">🔮</span>
+          <span class="item-with-cross is-crossed" style="font-size:1.9rem;">🔮</span>
+          <span class="item-with-cross" style="font-size:1.9rem;">🔮</span>
+          <span class="item-with-cross" style="font-size:1.9rem;">🔮</span>
+          <span class="item-with-cross" style="font-size:1.9rem;">🔮</span>
+          <span class="item-with-cross" style="font-size:1.9rem;">🔮</span>
+        </div>
+
+        <div style="text-align:center; margin: 12px 0; font-size:1.15rem; font-weight:800;">
+          تَبْقَى فِي الْبِطَاقَةِ
+          <input type="number" class="math-input" id="unj3-rem" inputmode="numeric">
+          كُرَيَّاتٍ.
+        </div>
+
+        <div style="text-align:center; margin: 12px 0; font-size:1.15rem; font-weight:800;">
+          أَكْمِلْ :
+          <span class="ltr-math">
+            <span>8</span>
+            <span>-</span>
+            <span>2</span>
+            <span>=</span>
+            <input type="number" class="math-input" id="unj3-eq" inputmode="numeric">
+          </span>
+        </div>
+
+        <div style="text-align:center;">
+          <button class="btn-check" id="btn-unj3" onclick="checkUnjiz3()">✔ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+          <div class="feedback-msg" id="fb-unj3"></div>
+        </div>
+      </div>
+
+      <div class="stage-counter" id="cnt-unjiz">
+        <span class="c-ok">✓ الصَّوَابُ: 0</span>
+        <span class="c-err">✗ الْخَطَأُ: 0</span>
+      </div>
+    </section>
+
+    <!-- ==================== تَعَلَّمْتُ ==================== -->
+    <section class="section-card locked" id="sec-taalamt">
+      <h2 class="section-title title-taalamt">💡 تَعَلَّمْتُ</h2>
+      <div class="taalamt-content">
+        لِكِتَابَةِ فَرْقِ عَدَدَيْنِ أَسْتَعْمِلُ الرَّمْزَيْنِ
+        <span class="ltr-math" style="color:#b91c1c; margin:0 6px;">-</span>
+        وَ
+        <span class="ltr-math" style="color:#15803d; margin:0 6px;">=</span>
+        مِثْلَ :
+        <span class="ltr-math" style="background:#fff; padding:4px 14px; border-radius:10px; border:2px solid #22c55e; margin-right:8px;">
+          5 - 3 = 2
+        </span>
+      </div>
+    </section>
+
+    <!-- ==================== أَتَمَرَّنُ ==================== -->
+    <section class="section-card locked" id="sec-atamarran">
+      <h2 class="section-title title-atamarran">📝 أَتَمَرَّنُ</h2>
+
+      <!-- التمرين 1 -->
+      <div class="exercise-box" id="ex-atam-1">
+        <div class="exercise-header">
+          <span class="ex-num">1</span>
+          <div>
+            كَمْ قُرَيْصَةً تَبْقَى فِي الْعُلْبَةِ بَعْدَ اسْتِخْرَاجِ قُرَيْصَتَيْنِ؟<br>
+            أَكْمِلْ مَلْءَ الْفَرَاغِ.
+          </div>
+        </div>
+
+        <div class="visual-group" style="flex-direction:column;">
+          <div style="font-size:1.1rem; font-weight:800; color:#475569;">📦 عُلْبَةٌ بِهَا <strong>5</strong> قُرَيْصَاتٍ ⬅️ نَسْتَخْرِجُ مِنْهَا <strong>2</strong> 🟠🟠</div>
+        </div>
+
+        <div style="text-align:center; margin: 12px 0;">
+          <span class="ltr-math">
+            <span>5</span>
+            <span>-</span>
+            <span>2</span>
+            <span>=</span>
+            <input type="number" class="math-input" id="atam1-eq" inputmode="numeric">
+          </span>
+        </div>
+
+        <div style="text-align:center; margin: 12px 0; font-size:1.15rem; font-weight:800;">
+          تَبْقَى
+          <input type="number" class="math-input" id="atam1-rem" inputmode="numeric">
+          قُرَيْصَاتٍ.
+        </div>
+
+        <div style="text-align:center;">
+          <button class="btn-check" id="btn-atam1" onclick="checkAtam1()">✔ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+          <div class="feedback-msg" id="fb-atam1"></div>
+        </div>
+      </div>
+
+      <!-- التمرين 2 -->
+      <div class="exercise-box locked-ex" id="ex-atam-2">
+        <div class="exercise-header">
+          <span class="ex-num">2</span>
+          <div>لَوِّنِ الْبِطَاقَةَ الْمُنَاسِبَةَ فِي كُلِّ حَالَةٍ.</div>
+        </div>
+
+        <div class="box-two-part">
+          <!-- حالة الفراولة -->
+          <div class="sub-panel">
+            <div class="visual-group">
+              <span class="item-with-cross" style="font-size:1.8rem;">🍓</span>
+              <span class="item-with-cross" style="font-size:1.8rem;">🍓</span>
+              <span class="item-with-cross" style="font-size:1.8rem;">🍓</span>
+              <span class="item-with-cross" style="font-size:1.8rem;">🍓</span>
+              <span class="item-with-cross" style="font-size:1.8rem;">🍓</span>
+              <span class="item-with-cross is-crossed" style="font-size:1.8rem;">🍓</span>
+              <span class="item-with-cross is-crossed" style="font-size:1.8rem;">🍓</span>
+              <span class="item-with-cross is-crossed" style="font-size:1.8rem;">🍓</span>
+            </div>
+            <div class="choices-list" id="atam2a-choices">
+              <div class="choice-card" data-val="8+3" onclick="selectChoice('atam2a', this)"><span class="ltr-math">8 + 3</span></div>
+              <div class="choice-card" data-val="7-4" onclick="selectChoice('atam2a', this)"><span class="ltr-math">7 - 4</span></div>
+              <div class="choice-card" data-val="8-3" onclick="selectChoice('atam2a', this)"><span class="ltr-math">8 - 3</span></div>
+            </div>
+          </div>
+
+          <!-- حالة الموز -->
+          <div class="sub-panel">
+            <div class="visual-group">
+              <span class="item-with-cross" style="font-size:1.8rem;">🍌</span>
+              <span class="item-with-cross" style="font-size:1.8rem;">🍌</span>
+              <span class="item-with-cross is-crossed" style="font-size:1.8rem;">🍌</span>
+              <span class="item-with-cross is-crossed" style="font-size:1.8rem;">🍌</span>
+              <span class="item-with-cross is-crossed" style="font-size:1.8rem;">🍌</span>
+              <span class="item-with-cross is-crossed" style="font-size:1.8rem;">🍌</span>
+            </div>
+            <div class="choices-list" id="atam2b-choices">
+              <div class="choice-card" data-val="6-2" onclick="selectChoice('atam2b', this)"><span class="ltr-math">6 - 2</span></div>
+              <div class="choice-card" data-val="8-5" onclick="selectChoice('atam2b', this)"><span class="ltr-math">8 - 5</span></div>
+              <div class="choice-card" data-val="7-4" onclick="selectChoice('atam2b', this)"><span class="ltr-math">7 - 4</span></div>
+              <div class="choice-card" data-val="6-4" onclick="selectChoice('atam2b', this)"><span class="ltr-math">6 - 4</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="text-align:center; margin-top:14px;">
+          <button class="btn-check" id="btn-atam2" onclick="checkAtam2()">✔ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+          <div class="feedback-msg" id="fb-atam2"></div>
+        </div>
+      </div>
+
+      <!-- التمرين 3 -->
+      <div class="exercise-box locked-ex" id="ex-atam-3">
+        <div class="exercise-header">
+          <span class="ex-num">3</span>
+          <div>أَكْمِلْ مَلْءَ الْفَرَاغَاتِ.</div>
+        </div>
+
+        <div class="grid-equations">
+          <div class="eq-pill">
+            <span class="ltr-math">
+              <span>7</span><span>-</span><span>4</span><span>=</span>
+              <input type="number" class="math-input" id="atam3-1" inputmode="numeric">
+            </span>
+          </div>
+          <div class="eq-pill">
+            <span class="ltr-math">
+              <span>8</span><span>-</span><span>3</span><span>=</span>
+              <input type="number" class="math-input" id="atam3-2" inputmode="numeric">
+            </span>
+          </div>
+          <div class="eq-pill">
+            <span class="ltr-math">
+              <span>6</span><span>-</span><span>2</span><span>=</span>
+              <input type="number" class="math-input" id="atam3-3" inputmode="numeric">
+            </span>
+          </div>
+          <div class="eq-pill">
+            <span class="ltr-math">
+              <span>7</span><span>-</span><span>3</span><span>=</span>
+              <input type="number" class="math-input" id="atam3-4" inputmode="numeric">
+            </span>
+          </div>
+          <div class="eq-pill">
+            <span class="ltr-math">
+              <span>5</span><span>-</span><span>2</span><span>=</span>
+              <input type="number" class="math-input" id="atam3-5" inputmode="numeric">
+            </span>
+          </div>
+          <div class="eq-pill">
+            <span class="ltr-math">
+              <span>8</span><span>-</span><span>5</span><span>=</span>
+              <input type="number" class="math-input" id="atam3-6" inputmode="numeric">
+            </span>
+          </div>
+        </div>
+
+        <div style="text-align:center;">
+          <button class="btn-check" id="btn-atam3" onclick="checkAtam3()">✔ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+          <div class="feedback-msg" id="fb-atam3"></div>
+        </div>
+      </div>
+
+      <div class="stage-counter" id="cnt-atamarran">
+        <span class="c-ok">✓ الصَّوَابُ: 0</span>
+        <span class="c-err">✗ الْخَطَأُ: 0</span>
+      </div>
+    </section>
+
+    <!-- ==================== أَبْحَثُ ==================== -->
+    <section class="section-card locked" id="sec-abhath">
+      <h2 class="section-title title-abhath">🧩 أَبْحَثُ</h2>
+
+      <div class="exercise-box" id="ex-abhath-1">
+        <div class="exercise-header">
+          <span class="ex-num">★</span>
+          <div>لَاحِظْ ثُمَّ أَكْمِلْ. (اِضْغَطْ عَلَى دَائِرَةٍ مُلَوَّنَةٍ ثُمَّ اضْغَطْ عَلَى الْبِطَاقَةِ الَّتِي تُسَاوِي نَتِيجَتُهَا عَدَدَ الدَّائِرَةِ).</div>
+        </div>
+
+        <div class="abhath-circles" id="abhath-circles-list">
+          <div class="num-circle" data-val="2" data-color="#f9a8d4" style="background:#f9a8d4;" onclick="selectAbhathCircle(this)">2</div>
+          <div class="num-circle" data-val="4" data-color="#fb923c" style="background:#fb923c;" onclick="selectAbhathCircle(this)">4</div>
+          <div class="num-circle" data-val="6" data-color="#facc15" style="background:#facc15;" onclick="selectAbhathCircle(this)">6</div>
+          <div class="num-circle" data-val="3" data-color="#84cc16" style="background:#84cc16;" onclick="selectAbhathCircle(this)">3</div>
+          <div class="num-circle" data-val="1" data-color="#93c5fd" style="background:#93c5fd;" onclick="selectAbhathCircle(this)">1</div>
+        </div>
+
+        <div class="abhath-status-bar" id="abhath-status">
+          🎯 اِخْتَرْ دَائِرَةً مُلَوَّنَةً أَوَّلًا، ثُمَّ انْقُرْ عَلَى الْبِطَاقَةِ الْمُنَاسِبَةِ لَهَا.
+        </div>
+
+        <div class="abhath-cards" id="abhath-cards-list">
+          <div class="abhath-card" data-val="7-5" data-ans="2" onclick="pairAbhathCard(this)">
+            <span class="ltr-math">7 - 5</span>
+            <span class="paired-tag" id="tag-7-5">غَيْرُ مُرْتَبِطَةٍ</span>
+          </div>
+          <div class="abhath-card" data-val="7-1" data-ans="6" onclick="pairAbhathCard(this)">
+            <span class="ltr-math">7 - 1</span>
+            <span class="paired-tag" id="tag-7-1">غَيْرُ مُرْتَبِطَةٍ</span>
+          </div>
+          <div class="abhath-card" data-val="8-4" data-ans="4" onclick="pairAbhathCard(this)">
+            <span class="ltr-math">8 - 4</span>
+            <span class="paired-tag" id="tag-8-4">غَيْرُ مُرْتَبِطَةٍ</span>
+          </div>
+          <div class="abhath-card" data-val="6-5" data-ans="1" onclick="pairAbhathCard(this)">
+            <span class="ltr-math">6 - 5</span>
+            <span class="paired-tag" id="tag-6-5">غَيْرُ مُرْتَبِطَةٍ</span>
+          </div>
+          <div class="abhath-card" data-val="6-3" data-ans="3" onclick="pairAbhathCard(this)">
+            <span class="ltr-math">6 - 3</span>
+            <span class="paired-tag" id="tag-6-3">غَيْرُ مُرْتَبِطَةٍ</span>
+          </div>
+        </div>
+
+        <div style="text-align:center;">
+          <button class="btn-check" id="btn-abhath" onclick="checkAbhath()">✔ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+          <div class="feedback-msg" id="fb-abhath"></div>
+        </div>
+      </div>
+
+      <div class="stage-counter" id="cnt-abhath">
+        <span class="c-ok">✓ الصَّوَابُ: 0</span>
+        <span class="c-err">✗ الْخَطَأُ: 0</span>
+      </div>
+    </section>
+
+    <!-- ==================== التَّقْيِيمُ الْكُلِّيُّ ==================== -->
+    <section class="summary-card" id="sec-summary">
+      <h2 style="margin:0; font-size:1.6rem; font-weight:900; color:#0284c7;">📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْعَامُّ</h2>
+
+      <div class="circle-gauge-wrap">
+        <svg viewBox="0 0 160 160">
+          <circle class="gauge-bg" cx="80" cy="80" r="70"></circle>
+          <circle class="gauge-progress" id="gauge-circle" cx="80" cy="80" r="70"></circle>
+        </svg>
+        <div class="gauge-text" id="gauge-percent">0%</div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-box stat-ok">✓ الْإِجَابَاتُ الصَّحِيحَةُ: <span id="total-ok">0</span></div>
+        <div class="stat-box stat-err">✗ الْإِجَابَاتُ الْخَاطِئَةُ: <span id="total-err">0</span></div>
+      </div>
+
+      <div class="remark-banner" id="final-remark">أَكْمِلْ جَمِيعَ التَّمَارِينِ لِمَعْرِفَةِ نَتِيجَتِكَ النِّهَائِيَّةِ!</div>
+
+      <button class="btn-reset" onclick="resetAll()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+    </section>
+
+    <!-- زر العودة إلى الفهرس -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+  </main>
+
+  <!-- ========================================
+       سكريبت الحماية — قفل الاشتراك الإجباري
+       ======================================== -->
+  <script>
+    const CHANNEL_ID = "-1004456852024";
+    const tg = window.Telegram?.WebApp;
+    if (tg) { tg.ready(); tg.expand(); }
+
+    async function verifySubscription() {
+      const statusMsg = document.getElementById('sub-status-msg');
+      statusMsg.style.color = "#0288d1";
+      statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+      let userId = null;
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        userId = tg.initDataUnsafe.user.id;
+      }
+
+      if (!userId) {
+        statusMsg.style.color = "#e65100";
+        statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+        return;
+      }
+
+      try {
+        const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.isSubscribed) {
+          statusMsg.style.color = "#2e7d32";
+          statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+          setTimeout(() => {
+            document.getElementById('sub-lock-screen').style.display = 'none';
+          }, 600);
+        } else {
+          statusMsg.style.color = "#c62828";
+          statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+        }
+      } catch (error) {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+      }
+    }
+
+    window.addEventListener('load', () => {
+      verifySubscription();
+    });
+  </script>
+
+  <!-- ========================================
+       سكريبت الدرس الأصلي
+       ======================================== -->
+  <script>
+    const stageScores = {
+      aktashif: { ok: 0, err: 0 },
+      unjiz: { ok: 0, err: 0 },
+      atamarran: { ok: 0, err: 0 },
+      abhath: { ok: 0, err: 0 }
+    };
+
+    const selections = {
+      unjiz1: null,
+      atam2a: null,
+      atam2b: null
+    };
+
+    let activeAbhathCircle = null; // { val: '2', color: '#f9a8d4' }
+    const abhathPairs = {}; // cardVal -> { circleVal, color }
+
+    let walnutsCrossed = 0;
+    let walnutsDrawn = 0;
+
+    function initWalnuts() {
+      const p1 = document.getElementById('walnuts-plate-1');
+      const p2 = document.getElementById('walnuts-plate-2');
+      p1.innerHTML = '';
+      p2.innerHTML = '';
+      walnutsCrossed = 0;
+      walnutsDrawn = 0;
+
+      for (let i = 0; i < 7; i++) {
+        const w = document.createElement('div');
+        w.className = 'clickable-item';
+        w.innerHTML = '🌰';
+        w.style.fontSize = '1.7rem';
+        w.onclick = function() {
+          if (document.getElementById('btn-akt1').disabled) return;
+          w.classList.toggle('crossed');
+          walnutsCrossed = p1.querySelectorAll('.crossed').length;
+        };
+        p1.appendChild(w);
+      }
+
+      for (let i = 0; i < 7; i++) {
+        const s = document.createElement('div');
+        s.className = 'empty-slot';
+        s.onclick = function() {
+          if (document.getElementById('btn-akt1').disabled) return;
+          s.classList.toggle('filled');
+          s.innerHTML = s.classList.contains('filled') ? '🌰' : '';
+          s.style.fontSize = '1.6rem';
+          walnutsDrawn = p2.querySelectorAll('.filled').length;
+        };
+        p2.appendChild(s);
+      }
+    }
+
+    function selectChoice(group, el) {
+      const parent = el.parentElement;
+      if (parent.dataset.locked === 'true') return;
+      parent.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      selections[group] = el.dataset.val;
+    }
+
+    function selectAbhathCircle(el) {
+      if (document.getElementById('btn-abhath').disabled) return;
+      document.querySelectorAll('#abhath-circles-list .num-circle').forEach(c => c.classList.remove('active-circle'));
+      el.classList.add('active-circle');
+      activeAbhathCircle = {
+        val: el.dataset.val,
+        color: el.dataset.color
+      };
+      document.getElementById('abhath-status').innerHTML =
+        `🟢 اخْتَرْتَ الدَّائِرَةَ <strong>${activeAbhathCircle.val}</strong> — اِضْغَطِ الْآنَ عَلَى الْبِطَاقَةِ الَّتِي تُسَاوِي نَتِيجَتُهَا <strong>${activeAbhathCircle.val}</strong>.`;
+    }
+
+    function pairAbhathCard(cardEl) {
+      if (document.getElementById('btn-abhath').disabled) return;
+      const cardVal = cardEl.dataset.val;
+      const tagEl = document.getElementById('tag-' + cardVal);
+
+      if (!activeAbhathCircle) {
+        if (abhathPairs[cardVal]) {
+          delete abhathPairs[cardVal];
+          cardEl.classList.remove('paired-card');
+          cardEl.style.background = '#fff';
+          cardEl.style.borderColor = '#64748b';
+          tagEl.textContent = 'غَيْرُ مُرْتَبِطَةٍ';
+          document.getElementById('abhath-status').innerHTML =
+            '🎯 اِخْتَرْ دَائِرَةً مُلَوَّنَةً أَوَّلًا، ثُمَّ انْقُرْ عَلَى الْبِطَاقَةِ الْمُنَاسِبَةِ لَهَا.';
+        } else {
+          alert('اِضْغَطْ عَلَى إِحْدَى الدَّوَائِرِ الْمُلَوَّنَةِ أَوَّلًا.');
+        }
+        return;
+      }
+
+      abhathPairs[cardVal] = {
+        circleVal: activeAbhathCircle.val,
+        color: activeAbhathCircle.color
+      };
+
+      cardEl.classList.add('paired-card');
+      cardEl.style.background = activeAbhathCircle.color;
+      cardEl.style.borderColor = '#0f172a';
+      tagEl.textContent = `الدَّائِرَةُ : ${activeAbhathCircle.val}`;
+
+      document.querySelectorAll('#abhath-circles-list .num-circle').forEach(c => {
+        if (c.dataset.val === activeAbhathCircle.val) {
+          c.classList.add('paired-badge');
+        }
+        c.classList.remove('active-circle');
+      });
+
+      activeAbhathCircle = null;
+      document.getElementById('abhath-status').innerHTML =
+        '✔ تَمَّ الرَّبْطُ! اِخْتَرْ دَائِرَةً أُخْرَى لِرَبْطِهَا بِبِطَاقَةٍ، أَوِ اضْغَطْ «تَحَقَّقْ مِنَ الْإِجَابَةِ».';
+    }
+
+    function updateStageCounter(stage) {
+      const el = document.getElementById('cnt-' + stage);
+      el.innerHTML = `
+        <span class="c-ok">✓ الصَّوَابُ: ${stageScores[stage].ok}</span>
+        <span class="c-err">✗ الْخَطَأُ: ${stageScores[stage].err}</span>
+      `;
+      updateGlobalSummary();
+    }
+
+    function updateGlobalSummary() {
+      const totalOk = Object.values(stageScores).reduce((sum, s) => sum + s.ok, 0);
+      const totalErr = Object.values(stageScores).reduce((sum, s) => sum + s.err, 0);
+      const totalAnswered = totalOk + totalErr;
+
+      document.getElementById('total-ok').textContent = totalOk;
+      document.getElementById('total-err').textContent = totalErr;
+
+      let pct = totalAnswered > 0 ? Math.round((totalOk / totalAnswered) * 100) : 0;
+      if (pct > 100) pct = 100;
+      if (pct < 0) pct = 0;
+
+      document.getElementById('gauge-percent').textContent = pct + '%';
+      const circle = document.getElementById('gauge-circle');
+      const circumference = 440;
+      const offset = circumference - (pct / 100) * circumference;
+      circle.style.strokeDashoffset = offset;
+
+      if (pct >= 80) circle.style.stroke = '#16a34a';
+      else if (pct >= 50) circle.style.stroke = '#f59e0b';
+      else circle.style.stroke = '#dc2626';
+
+      const remarkEl = document.getElementById('final-remark');
+      if (totalAnswered === 0) {
+        remarkEl.textContent = 'أَكْمِلْ جَمِيعَ التَّمَارِينِ لِمَعْرِفَةِ نَتِيجَتِكَ النِّهَائِيَّةِ!';
+      } else if (pct === 100) {
+        remarkEl.textContent = '🌟 مُمْتَازٌ جِدًّا! أَنْتَ عَبْقَرِيُّ الرِّيَاضِيَّاتِ، كُلُّ إِجَابَاتِكَ صَحِيحَةٌ!';
+      } else if (pct >= 80) {
+        remarkEl.textContent = '👏 أَحْسَنْتَ! نَتِيجَةٌ رَائِعَةٌ وَمُتَمَيِّزَةٌ!';
+      } else if (pct >= 50) {
+        remarkEl.textContent = '👍 جَيِّدٌ! واصِلِ التَّدَرُّبَ لِتُحَقِّقَ نَتِيجَةً أَفْضَلَ.';
+      } else {
+        remarkEl.textContent = '💪 لَا بَأْسَ، حَاوِلْ مَرَّةً أُخْرَى وَرَكِّزْ أَكْثَرَ!';
+      }
+    }
+
+    function gradeInput(id, expected, stage) {
+      const inp = document.getElementById(id);
+      const val = parseInt(inp.value, 10);
+      inp.disabled = true;
+      if (val === expected) {
+        inp.classList.add('correct');
+        stageScores[stage].ok++;
+        return true;
+      } else {
+        inp.classList.add('incorrect');
+        stageScores[stage].err++;
+        return false;
+      }
+    }
+
+    function showFeedback(id, isAllOk, msgOk, msgErr) {
+      const fb = document.getElementById(id);
+      fb.className = 'feedback-msg ' + (isAllOk ? 'ok' : 'err');
+      fb.innerHTML = isAllOk ? msgOk : msgErr;
+    }
+
+    function unlockElement(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('locked', 'locked-ex');
+      }
+    }
+
+    // Check Aktashif 1
+    function checkAktashif1() {
+      const r1 = document.getElementById('akt1-rem').value.trim();
+      const r2 = document.getElementById('akt1-eq').value.trim();
+      if (r1 === '' || r2 === '') {
+        alert('يَرْجَى مَلْءُ جَمِيعِ الْفَرَاغَاتِ أَوَّلًا.');
+        return;
+      }
+      document.getElementById('btn-akt1').disabled = true;
+
+      const cOk = walnutsCrossed === 3;
+      const dOk = walnutsDrawn === 4;
+      if (cOk) stageScores.aktashif.ok++; else stageScores.aktashif.err++;
+      if (dOk) stageScores.aktashif.ok++; else stageScores.aktashif.err++;
+
+      const i1 = gradeInput('akt1-rem', 4, 'aktashif');
+      const i2 = gradeInput('akt1-eq', 4, 'aktashif');
+
+      updateStageCounter('aktashif');
+      const allOk = cOk && dOk && i1 && i2;
+      showFeedback(
+        'fb-akt1',
+        allOk,
+        '✔ أَحْسَنْتَ! شَطَبْتَ 3 حَبَّاتٍ وَبَقِيَتْ 4 حَبَّاتٍ (7 - 3 = 4).',
+        '✗ رَاجِعْ إِجَابَتَكَ: نَشْطُبُ 3 حَبَّاتٍ، فَيَبْقَى 4 حَبَّاتٍ، وَالْعَمَلِيَّةُ: 7 - 3 = 4.'
+      );
+      unlockElement('ex-aktashif-2');
+    }
+
+    // Check Aktashif 2
+    function checkAktashif2() {
+      const v1 = document.getElementById('akt2-rem').value.trim();
+      const v2 = document.getElementById('akt2-sub').value.trim();
+      const v3 = document.getElementById('akt2-res').value.trim();
+      if (v1 === '' || v2 === '' || v3 === '') {
+        alert('يَرْجَى مَلْءُ جَمِيعِ الْفَرَاغَاتِ أَوَّلًا.');
+        return;
+      }
+      document.getElementById('btn-akt2').disabled = true;
+
+      const i1 = gradeInput('akt2-rem', 4, 'aktashif');
+      const i2 = gradeInput('akt2-sub', 2, 'aktashif');
+      const i3 = gradeInput('akt2-res', 4, 'aktashif');
+
+      updateStageCounter('aktashif');
+      const allOk = i1 && i2 && i3;
+      showFeedback(
+        'fb-akt2',
+        allOk,
+        '✔ مُمْتَازٌ! عَدَدُ الزَّهَرَاتِ الْبَاقِيَةِ 4 (6 - 2 = 4).',
+        '✗ الصَّوَابُ: عَدَدُ الزَّهَرَاتِ الْبَاقِيَةِ هُوَ 4، وَالْعَمَلِيَّةُ: 6 - 2 = 4.'
+      );
+      unlockElement('sec-unjiz');
+    }
+
+    // Check Unjiz 1
+    function checkUnjiz1() {
+      if (!selections.unjiz1) {
+        alert('اخْتَرْ بِطَاقَةً وَاحِدَةً أَوَّلًا.');
+        return;
+      }
+      document.getElementById('btn-unj1').disabled = true;
+      const container = document.getElementById('unjiz1-choices');
+      container.dataset.locked = 'true';
+
+      const cards = container.querySelectorAll('.choice-card');
+      cards.forEach(c => {
+        if (c.dataset.val === '5-3=2') c.classList.add('correct');
+        else if (c.classList.contains('selected')) c.classList.add('incorrect');
+      });
+
+      const ok = selections.unjiz1 === '5-3=2';
+      if (ok) stageScores.unjiz.ok++; else stageScores.unjiz.err++;
+      updateStageCounter('unjiz');
+
+      showFeedback(
+        'fb-unj1',
+        ok,
+        '✔ صَحِيحٌ! 5 بَيْضَاتٍ شَطَبْنَا مِنْهَا 3 فَبَقِيَتْ 2 (5 - 3 = 2).',
+        '✗ الْإِجَابَةُ الصَّحِيحَةُ هِيَ: 5 - 3 = 2.'
+      );
+      unlockElement('ex-unjiz-2');
+    }
+
+    // Check Unjiz 2
+    function checkUnjiz2() {
+      const v = document.getElementById('unj2-res').value.trim();
+      if (v === '') {
+        alert('أَكْمِلِ الْعَمَلِيَّةَ أَوَّلًا.');
+        return;
+      }
+      document.getElementById('btn-unj2').disabled = true;
+      const ok = gradeInput('unj2-res', 3, 'unjiz');
+      updateStageCounter('unjiz');
+
+      showFeedback(
+        'fb-unj2',
+        ok,
+        '✔ رَائِعٌ! 7 - 4 = 3.',
+        '✗ الصَّوَابُ: 7 - 4 = 3.'
+      );
+      unlockElement('ex-unjiz-3');
+    }
+
+    // Check Unjiz 3
+    function checkUnjiz3() {
+      const v1 = document.getElementById('unj3-rem').value.trim();
+      const v2 = document.getElementById('unj3-eq').value.trim();
+      if (v1 === '' || v2 === '') {
+        alert('أَكْمِلِ الْفَرَاغَيْنِ أَوَّلًا.');
+        return;
+      }
+      document.getElementById('btn-unj3').disabled = true;
+      const i1 = gradeInput('unj3-rem', 6, 'unjiz');
+      const i2 = gradeInput('unj3-eq', 6, 'unjiz');
+      updateStageCounter('unjiz');
+
+      const ok = i1 && i2;
+      showFeedback(
+        'fb-unj3',
+        ok,
+        '✔ أَحْسَنْتَ! تَبْقَى 6 كُرَيَّاتٍ (8 - 2 = 6).',
+        '✗ الصَّوَابُ: تَبْقَى 6 كُرَيَّاتٍ، وَالْعَمَلِيَّةُ: 8 - 2 = 6.'
+      );
+      unlockElement('sec-taalamt');
+      unlockElement('sec-atamarran');
+    }
+
+    // Check Atamarran 1
+    function checkAtam1() {
+      const v1 = document.getElementById('atam1-eq').value.trim();
+      const v2 = document.getElementById('atam1-rem').value.trim();
+      if (v1 === '' || v2 === '') {
+        alert('أَكْمِلِ الْفَرَاغَيْنِ أَوَّلًا.');
+        return;
+      }
+      document.getElementById('btn-atam1').disabled = true;
+      const i1 = gradeInput('atam1-eq', 3, 'atamarran');
+      const i2 = gradeInput('atam1-rem', 3, 'atamarran');
+      updateStageCounter('atamarran');
+
+      const ok = i1 && i2;
+      showFeedback(
+        'fb-atam1',
+        ok,
+        '✔ مُمْتَازٌ! 5 - 2 = 3، تَبْقَى 3 قُرَيْصَاتٍ.',
+        '✗ الصَّوَابُ: 5 - 2 = 3، تَبْقَى 3 قُرَيْصَاتٍ.'
+      );
+      unlockElement('ex-atam-2');
+    }
+
+    // Check Atamarran 2
+    function checkAtam2() {
+      if (!selections.atam2a || !selections.atam2b) {
+        alert('اخْتَرْ بِطَاقَةً مُنَاسِبَةً فِي كِلْتَا الْحَالَتَيْنِ أَوَّلًا.');
+        return;
+      }
+      document.getElementById('btn-atam2').disabled = true;
+
+      const cA = document.getElementById('atam2a-choices');
+      const cB = document.getElementById('atam2b-choices');
+      cA.dataset.locked = 'true';
+      cB.dataset.locked = 'true';
+
+      cA.querySelectorAll('.choice-card').forEach(c => {
+        if (c.dataset.val === '8-3') c.classList.add('correct');
+        else if (c.classList.contains('selected')) c.classList.add('incorrect');
+      });
+
+      cB.querySelectorAll('.choice-card').forEach(c => {
+        if (c.dataset.val === '6-4') c.classList.add('correct');
+        else if (c.classList.contains('selected')) c.classList.add('incorrect');
+      });
+
+      const okA = selections.atam2a === '8-3';
+      const okB = selections.atam2b === '6-4';
+      if (okA) stageScores.atamarran.ok++; else stageScores.atamarran.err++;
+      if (okB) stageScores.atamarran.ok++; else stageScores.atamarran.err++;
+      updateStageCounter('atamarran');
+
+      showFeedback(
+        'fb-atam2',
+        okA && okB,
+        '✔ أَحْسَنْتَ! الْفَرَاوِلَةُ: 8 - 3، وَالْمَوْزُ: 6 - 4.',
+        '✗ الصَّوَابُ: الْفَرَاوِلَةُ 8 - 3، وَالْمَوْزُ 6 - 4.'
+      );
+      unlockElement('ex-atam-3');
+    }
+
+    // Check Atamarran 3
+    function checkAtam3() {
+      const ids = ['atam3-1', 'atam3-2', 'atam3-3', 'atam3-4', 'atam3-5', 'atam3-6'];
+      const expected = [3, 5, 4, 4, 3, 3];
+      for (let id of ids) {
+        if (document.getElementById(id).value.trim() === '') {
+          alert('أَكْمِلْ جَمِيعَ الْعَمَلِيَّاتِ السِّتَّ أَوَّلًا.');
+          return;
+        }
+      }
+      document.getElementById('btn-atam3').disabled = true;
+
+      let allOk = true;
+      ids.forEach((id, idx) => {
+        if (!gradeInput(id, expected[idx], 'atamarran')) allOk = false;
+      });
+      updateStageCounter('atamarran');
+
+      showFeedback(
+        'fb-atam3',
+        allOk,
+        '✔ عَمَلٌ رَائِعٌ! جَمِيعُ الْعَمَلِيَّاتِ صَحِيحَةٌ.',
+        '✗ تَحَقَّقْ مِنَ الْأَعْدَادِ الْمُلَوَّنَةِ بِالْأَحْمَرِ.'
+      );
+      unlockElement('sec-abhath');
+    }
+
+    // Check Abhath
+    function checkAbhath() {
+      const cards = document.querySelectorAll('#abhath-cards-list .abhath-card');
+      if (Object.keys(abhathPairs).length === 0) {
+        alert('ارْبُطْ دَائِرَةً مُلَوَّنَةً بِبِطَاقَةٍ أَوَّلًا.');
+        return;
+      }
+
+      document.getElementById('btn-abhath').disabled = true;
+      let allCorrect = true;
+
+      cards.forEach(card => {
+        const val = card.dataset.val;
+        const expectedAns = card.dataset.ans;
+        const paired = abhathPairs[val];
+        const tagEl = document.getElementById('tag-' + val);
+
+        if (paired) {
+          if (paired.circleVal === expectedAns) {
+            card.classList.add('correct');
+            tagEl.textContent = `✔ صَحِيحٌ (${expectedAns})`;
+            stageScores.abhath.ok++;
+          } else {
+            card.classList.add('incorrect');
+            tagEl.textContent = `✗ الصَّوَابُ: ${expectedAns}`;
+            stageScores.abhath.err++;
+            allCorrect = false;
+          }
+        } else {
+          allCorrect = false;
+          tagEl.textContent = `الصَّوَابُ: ${expectedAns}`;
+        }
+      });
+
+      updateStageCounter('abhath');
+      showFeedback(
+        'fb-abhath',
+        allCorrect,
+        '✔ عَبْقَرِيٌّ! رَبَطْتَ كُلَّ بِطَاقَةٍ بِالدَّائِرَةِ الْمُنَاسِبَةِ لِنَتِيجَتِهَا (7-5=2، 7-1=6، 8-4=4، 6-5=1، 6-3=3).',
+        '✗ رَاجِعِ الرَّبْطَ: 7-5=2 (وَرْدِيَّة)، 7-1=6 (صَفْرَاء)، 8-4=4 (بُرْتُقَالِيَّة)، 6-5=1 (زَرْقَاء)، 6-3=3 (خَضْرَاء).'
+      );
+    }
+
+    function resetAll() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      location.reload();
+    }
+
+    // Initialize
+    initWalnuts();
+  </script>
+</body>
+</html>
+```[cite: 5, 6]
