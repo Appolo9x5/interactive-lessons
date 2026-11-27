@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الْكِتَابَاتُ الْمُخْتَلِفَةُ لِعَدَدٍ - الرياضيات السنة الأولى</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1d4ed8;
+    --primary-light: #dbeafe;
+    --secondary: #0f766e;
+    --accent: #d97706;
+    --bg: #f0f9ff;
+    --card-bg: #ffffff;
+    --text: #1e293b;
+    --border: #cbd5e1;
+    --correct: #16a34a;
+    --correct-bg: #dcfce7;
+    --wrong: #dc2626;
+    --wrong-bg: #fee2e2;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Tajawal', sans-serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  .container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 16px;
+  }
+
+  header {
+    background: linear-gradient(135deg, #1e40af, #2563eb);
+    color: #fff;
+    padding: 24px 20px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .lesson-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 4px 16px;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  header h1 {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+  }
+
+  .section-card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 22px;
+    margin-bottom: 26px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 2px solid #e2e8f0;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid #f1f5f9;
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 900;
+    padding: 4px 18px;
+    border-radius: 12px;
+    display: inline-block;
+  }
+
+  .title-aktashif { background: #fef3c7; color: #b45309; border: 2px solid #f59e0b; }
+  .title-unjiz { background: #fee2e2; color: #b91c1c; border: 2px solid #ef4444; }
+  .title-taalamtu { background: #dcfce7; color: #15803d; border: 2px solid #22c55e; }
+  .title-atamarran { background: #fef9c3; color: #854d0e; border: 2px solid #eab308; }
+  .title-abhath { background: #e0f2fe; color: #0369a1; border: 2px solid #0ea5e9; }
+
+  .exercise-box {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 20px;
+  }
+
+  .exercise-box:last-of-type {
+    margin-bottom: 12px;
+  }
+
+  .ex-instruction {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ex-num {
+    background: var(--primary);
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .math-ltr {
+    direction: ltr;
+    unicode-bidi: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: #0f172a;
+  }
+
+  input.math-input {
+    width: 54px;
+    height: 44px;
+    text-align: center;
+    font-size: 1.35rem;
+    font-weight: 800;
+    border: 2.5px solid #94a3b8;
+    border-radius: 10px;
+    background: #fff;
+    color: #0f172a;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  input.math-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  }
+
+  input.math-input.correct {
+    background-color: var(--correct-bg) !important;
+    border-color: var(--correct) !important;
+    color: #14532d !important;
+  }
+
+  input.math-input.wrong {
+    background-color: var(--wrong-bg) !important;
+    border-color: var(--wrong) !important;
+    color: #7f1d1d !important;
+  }
+
+  input.math-input:disabled {
+    opacity: 0.95;
+    cursor: not-allowed;
+  }
+
+  .correction-hint {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--correct);
+    background: var(--correct-bg);
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-top: 4px;
+    display: inline-block;
+  }
+
+  /* Grid layouts for visual items */
+  .trucks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+  }
+
+  .visual-card {
+    background: #fff;
+    border: 2px solid #cbd5e1;
+    border-radius: 16px;
+    padding: 14px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .boats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(195px, 1fr));
+    gap: 14px;
+  }
+
+  .equations-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+    gap: 14px;
+  }
+
+  .eq-col {
+    background: #fff;
+    border: 2px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+  }
+
+  /* Color Legend & Cards in Unjiz 2 */
+  .color-legend {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 18px;
+    direction: ltr;
+  }
+
+  .legend-cell {
+    width: 44px;
+    height: 46px;
+    border: 2px solid #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 900;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  .legend-cell:hover {
+    transform: scale(1.06);
+  }
+
+  .legend-cell.active-brush {
+    outline: 4px solid #1e293b;
+    z-index: 2;
+  }
+
+  .bg-val-6 { background-color: #9ca3af; color: #0f172a; }
+  .bg-val-7 { background-color: #84cc16; color: #0f172a; }
+  .bg-val-8 { background-color: #93c5fd; color: #0f172a; }
+  .bg-val-white { background-color: #ffffff; color: #0f172a; }
+
+  .oval-cards-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    direction: ltr;
+  }
+
+  .oval-card {
+    padding: 10px 20px;
+    border: 2.5px solid #334155;
+    border-radius: 50px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    background: #fff;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .oval-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  .oval-card.result-correct {
+    border-color: var(--correct) !important;
+    box-shadow: 0 0 0 4px var(--correct-bg);
+  }
+
+  .oval-card.result-wrong {
+    border-color: var(--wrong) !important;
+    box-shadow: 0 0 0 4px var(--wrong-bg);
+  }
+
+  /* Taalamtu Box */
+  .taalamtu-box {
+    background: linear-gradient(to left, #f0fdf4, #dcfce7);
+    border: 3px solid #22c55e;
+    border-radius: 18px;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #14532d;
+  }
+
+  /* Atamarran 1: Scattered Cards */
+  .scattered-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    padding: 10px;
+    direction: ltr;
+  }
+
+  .dashed-card {
+    padding: 12px 22px;
+    border: 3px dotted #334155;
+    border-radius: 12px;
+    background: #fff;
+    font-size: 1.35rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .dashed-card.selected {
+    background: #fef08a;
+    border-color: #ca8a04;
+    border-style: solid;
+    transform: scale(1.05);
+  }
+
+  .dashed-card.result-correct {
+    background: var(--correct-bg) !important;
+    border-color: var(--correct) !important;
+    border-style: solid !important;
+    color: #14532d;
+  }
+
+  .dashed-card.result-wrong {
+    background: var(--wrong-bg) !important;
+    border-color: var(--wrong) !important;
+    border-style: solid !important;
+    color: #7f1d1d;
+  }
+
+  /* Atamarran 2: Split Two Columns */
+  .split-two-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 720px) {
+    .split-two-cols {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .sub-panel {
+    background: #fff;
+    border: 2px solid #cbd5e1;
+    border-radius: 16px;
+    padding: 16px;
+  }
+
+  /* Matching Game */
+  .match-area {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    max-width: 360px;
+    margin: 0 auto;
+    direction: ltr;
+  }
+
+  .match-col {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    z-index: 2;
+  }
+
+  .match-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 16px;
+    border: 2.5px dotted #334155;
+    border-radius: 12px;
+    background: #fff;
+    font-size: 1.3rem;
+    font-weight: 800;
+    cursor: pointer;
+    min-width: 96px;
+    transition: all 0.2s;
+  }
+
+  .match-item.active-node {
+    border-color: var(--primary);
+    border-style: solid;
+    background: var(--primary-light);
+  }
+
+  .match-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #3b82f6;
+    border: 2px solid #1d4ed8;
+    display: inline-block;
+  }
+
+  .match-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Abhath 1: Plates with Strawberries and Glass */
+  .plates-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+  }
+
+  .plate-card {
+    background: #fff;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+    padding: 12px;
+    text-align: center;
+    position: relative;
+  }
+
+  .plate-target-badge {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    background: #f1f5f9;
+    border: 2px solid #64748b;
+    border-radius: 8px;
+    padding: 2px 10px;
+    font-size: 1.25rem;
+    font-weight: 900;
+  }
+
+  /* Abhath 2: 5 Square Cards */
+  .five-cards-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    direction: ltr;
+  }
+
+  .sq-num-card {
+    width: 58px;
+    height: 58px;
+    border: 2.5px solid #334155;
+    border-radius: 12px;
+    background: #fff;
+    font-size: 1.5rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .sq-num-card.selected {
+    background: #fde047;
+    border-color: #ca8a04;
+    transform: translateY(-3px);
+  }
+
+  .sq-num-card.result-correct {
+    background: var(--correct-bg) !important;
+    border-color: var(--correct) !important;
+    color: #14532d;
+  }
+
+  .sq-num-card.result-wrong {
+    background: var(--wrong-bg) !important;
+    border-color: var(--wrong) !important;
+    color: #7f1d1d;
+  }
+
+  /* Buttons & Counters */
+  .check-btn {
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: #fff;
+    border: none;
+    padding: 10px 26px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(22, 163, 74, 0.25);
+    transition: transform 0.15s, opacity 0.2s;
+    margin-top: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .check-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+
+  .check-btn:disabled {
+    background: #94a3b8;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  .stage-counter {
+    background: #f1f5f9;
+    border: 2px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-size: 1.1rem;
+    font-weight: 800;
+    text-align: center;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .c-ok { color: var(--correct); }
+  .c-err { color: var(--wrong); }
+
+  /* Final Report Card */
+  .report-card {
+    background: linear-gradient(135deg, #ffffff, #f0f9ff);
+    border: 3px solid var(--primary);
+    border-radius: 24px;
+    padding: 28px 20px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.15);
+    margin-bottom: 40px;
+  }
+
+  .report-title {
+    font-size: 1.7rem;
+    font-weight: 900;
+    color: var(--primary);
+    margin-bottom: 20px;
+  }
+
+  .report-body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+  }
+
+  .circle-gauge {
+    position: relative;
+    width: 160px;
+    height: 160px;
+  }
+
+  .circle-gauge svg {
+    width: 160px;
+    height: 160px;
+    transform: rotate(-90deg);
+  }
+
+  .gauge-bg {
+    fill: none;
+    stroke: #e2e8f0;
+    stroke-width: 14;
+  }
+
+  .gauge-progress {
+    fill: none;
+    stroke: var(--primary);
+    stroke-width: 14;
+    stroke-linecap: round;
+    stroke-dasharray: 440;
+    stroke-dashoffset: 440;
+    transition: stroke-dashoffset 0.7s ease, stroke 0.4s ease;
+  }
+
+  .gauge-text {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 900;
+    color: #0f172a;
+  }
+
+  .stats-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 240px;
+  }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: 800;
+  }
+
+  .stat-correct { background: var(--correct-bg); color: #14532d; border: 2px solid #86efac; }
+  .stat-wrong { background: var(--wrong-bg); color: #7f1d1d; border: 2px solid #fca5a5; }
+  .stat-note {
+    margin-top: 16px;
+    font-size: 1.3rem;
+    font-weight: 900;
+    padding: 12px 24px;
+    border-radius: 14px;
+    background: #fef3c7;
+    color: #92400e;
+    border: 2px solid #fcd34d;
+    display: inline-block;
+  }
+
+  .reset-btn {
+    margin-top: 20px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    padding: 12px 28px;
+    font-size: 1.15rem;
+    font-weight: 800;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
+  }
+
+  .reset-btn:hover {
+    background: #1e40af;
+  }
+
+  .feedback-msg {
+    font-weight: 800;
+    font-size: 1rem;
+    margin-top: 8px;
+  }
+
+  /* ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== */
+  #sub-lock-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    text-align: center;
+  }
+  .lock-box {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 20px;
+    box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+    border: 2px solid #e1f5fe;
+    max-width: 380px;
+    width: 100%;
+  }
+  .lock-icon { font-size: 50px; margin-bottom: 12px; }
+  .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+  .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+  .btn-channel {
+    display: block;
+    width: 100%;
+    background: #0288d1;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 14px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+    font-family: 'Tajawal', sans-serif;
+  }
+  .btn-check-sub {
+    width: 100%;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 2px solid #2e7d32;
+    padding: 13px;
+    font-weight: 800;
+    border-radius: 12px;
+    font-size: 1.05rem;
+    cursor: pointer;
+    font-family: 'Tajawal', sans-serif;
+  }
+  .sub-status-msg {
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-height: 24px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================
+     نافذة قفل الاشتراك الإجباري
+     ======================================== -->
+<div id="sub-lock-screen">
+  <div class="lock-box">
+    <div class="lock-icon">🔒</div>
+    <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+    <div class="lock-desc">
+      لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+    </div>
+    <a href="https://t.me/c/4456852024" target="_blank" class="btn-channel">
+      📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+    </a>
+    <button class="btn-check-sub" onclick="verifySubscription()">
+      ✅ تَأْكِيدُ الاِشْتِرَاكِ
+    </button>
+    <div id="sub-status-msg" class="sub-status-msg"></div>
+  </div>
+</div>
+
+<div class="container">
+  <header>
+    <div class="lesson-badge">الرِّيَاضِيَّاتُ • السَّنَةُ الْأُولَى ابْتِدَائِي • الدَّرْسُ 23</div>
+    <h1>الْكِتَابَاتُ الْمُخْتَلِفَةُ لِعَدَدٍ</h1>
+  </header>
+
+  <!-- ==================== 1. أَكْتَشِفُ ==================== -->
+  <section class="section-card" id="sec-aktashif">
+    <div class="section-header">
+      <span class="section-title title-aktashif">أَكْتَشِفُ</span>
+    </div>
+
+    <!-- أكتشف 1 -->
+    <div class="exercise-box" id="ex-aktashif-1">
+      <div class="ex-instruction">
+        <span class="ex-num">1</span>
+        <span>لَاحِظْ كَيْفَ كَتَبَ رَائِدٌ عَدَدَ نُجُومِ الْبِطَاقَةِ (1) ثُمَّ أَكْمِلِ الْبِطَاقَتَيْنِ (2) وَ(3).</span>
+      </div>
+
+      <div class="trucks-grid">
+        <!-- شاحنة 1 (مثال محلول) -->
+        <div class="visual-card">
+          <div style="font-weight:800; color:#64748b; margin-bottom:4px;">الْبِطَاقَةُ (1)</div>
+          <svg width="220" height="115" viewBox="0 0 220 115">
+            <!-- جسم الشاحنة -->
+            <rect x="65" y="12" width="145" height="68" rx="6" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+            <!-- مقصورة القيادة -->
+            <path d="M15 80 L15 48 L35 28 L65 28 L65 80 Z" fill="#65a30d" stroke="#365314" stroke-width="2"/>
+            <polygon points="37,33 58,33 58,50 24,50" fill="#bae6fd"/>
+            <rect x="10" y="76" width="202" height="8" rx="3" fill="#4d7c0f"/>
+            <!-- العجلات -->
+            <circle cx="38" cy="92" r="13" fill="#1e293b"/><circle cx="38" cy="92" r="5" fill="#fef08a"/>
+            <circle cx="95" cy="92" r="13" fill="#1e293b"/><circle cx="95" cy="92" r="5" fill="#fef08a"/>
+            <circle cx="145" cy="92" r="13" fill="#1e293b"/><circle cx="145" cy="92" r="5" fill="#fef08a"/>
+            <circle cx="192" cy="92" r="13" fill="#1e293b"/><circle cx="192" cy="92" r="5" fill="#fef08a"/>
+            <!-- النجوم: 5 زرقاء على اليسار + 5 خضراء على اليمين -->
+            <g fill="#1d4ed8">
+              <text x="74" y="45" font-size="16">★</text>
+              <text x="95" y="38" font-size="16">★</text>
+              <text x="82" y="65" font-size="16">★</text>
+              <text x="102" y="65" font-size="16">★</text>
+              <text x="120" y="65" font-size="16">★</text>
+            </g>
+            <g fill="#15803d">
+              <text x="142" y="36" font-size="16">★</text>
+              <text x="166" y="33" font-size="16">★</text>
+              <text x="188" y="42" font-size="16">★</text>
+              <text x="155" y="54" font-size="16">★</text>
+              <text x="182" y="66" font-size="16">★</text>
+            </g>
+          </svg>
+          <div class="math-ltr" style="margin-top:8px;">
+            <span>10 = 5 + 5</span>
+          </div>
+        </div>
+
+        <!-- شاحنة 2: 6 زرقاء (يسار) + 4 خضراء (يمين) -->
+        <div class="visual-card">
+          <div style="font-weight:800; color:#1d4ed8; margin-bottom:4px;">الْبِطَاقَةُ (2)</div>
+          <svg width="220" height="115" viewBox="0 0 220 115">
+            <rect x="65" y="12" width="145" height="68" rx="6" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+            <path d="M15 80 L15 48 L35 28 L65 28 L65 80 Z" fill="#65a30d" stroke="#365314" stroke-width="2"/>
+            <polygon points="37,33 58,33 58,50 24,50" fill="#bae6fd"/>
+            <rect x="10" y="76" width="202" height="8" rx="3" fill="#4d7c0f"/>
+            <circle cx="38" cy="92" r="13" fill="#1e293b"/><circle cx="38" cy="92" r="5" fill="#fef08a"/>
+            <circle cx="95" cy="92" r="13" fill="#1e293b"/><circle cx="95" cy="92" r="5" fill="#fef08a"/>
+            <circle cx="145" cy="92" r="13" fill="#1e293b"/><circle cx="145" cy="92" r="5" fill="#fef08a"/>
+            <circle cx="192" cy="92" r="13" fill="#1e293b"/><circle cx="192" cy="92" r="5" fill="#fef08a"/>
+            <!-- 6 زرقاء -->
+            <g fill="#1d4ed8">
+              <text x="74" y="45" font-size="16">★</text>
+              <text x="95" y="38" font-size="16">★</text>
+              <text x="118" y="38" font-size="16">★</text>
+              <text x="82" y="65" font-size="16">★</text>
+              <text x="102" y="65" font-size="16">★</text>
+              <text x="122" y="65" font-size="16">★</text>
+            </g>
+            <!-- 4 خضراء -->
+            <g fill="#15803d">
+              <text x="148" y="35" font-size="16">★</text>
+              <text x="176" y="35" font-size="16">★</text>
+              <text x="155" y="56" font-size="16">★</text>
+              <text x="184" y="62" font-size="16">★</text>
+            </g>
+          </svg>
+          <div class="math-ltr" style="margin-top:8px;">
+            <span>10 =</span>
+            <input type="number" inputmode="numeric" class="math-input" id="akt1-a1" data-ans="6">
+            <span>+</span>
+            <input type="number" inputmode="numeric" class="math-input" id="akt1-a2" data-ans="4">
+          </div>
+          <div id="hint-akt1-a"></div>
+        </div>
+
+        <!-- شاحنة 3: 3 زرقاء (يسار) + 7 خضراء (يمين) -->
+        <div class="visual-card">
+          <div style="font-weight:800; color:#1d4ed8; margin-bottom:4px;">الْبِطَاقَةُ (3)</div>
+          <svg width="220" height="115" viewBox="0 0 220 115">
+            <rect x="65" y="12" width="145" height="68" rx="6" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+            <path d="M15 80 L15 48 L35 28 L65 28 L65 80 Z" fill="#65a30d" stroke="#365314" stroke-width="2"/>
+            <polygon points="37,33 58,33 58,50 24,50" fill="#bae6fd"/>
+            <rect x="10" y="76" width="202" height="8" rx="3" fill="#4d7c0f"/>
+            <circle cx="38" cy="92" r="13" fill="#1e293b"/><circle cx="38" cy="92" r="5" fill="#fef08a"/>
+            <circle cx="95" cy="92" r="13" fill="#1e293b"/><circle cx="95" cy="92" r="5" fill="#fef08a"/>
+            <circle cx="145" cy="92" r="13" fill="#1e293b"/><circle cx="145" cy="92" r="5" fill="#fef08a"/>
+            <circle cx="192" cy="92" r="13" fill="#1e293b"/><circle cx="192" cy="92" r="5" fill="#fef08a"/>
+            <!-- 3 زرقاء -->
+            <g fill="#1d4ed8">
+              <text x="86" y="42" font-size="16">★</text>
+              <text x="74" y="65" font-size="16">★</text>
+              <text x="98" y="65" font-size="16">★</text>
+            </g>
+            <!-- 7 خضراء -->
+            <g fill="#15803d">
+              <text x="128" y="34" font-size="16">★</text>
+              <text x="154" y="34" font-size="16">★</text>
+              <text x="180" y="34" font-size="16">★</text>
+              <text x="140" y="50" font-size="16">★</text>
+              <text x="168" y="50" font-size="16">★</text>
+              <text x="152" y="68" font-size="16">★</text>
+              <text x="184" y="68" font-size="16">★</text>
+            </g>
+          </svg>
+          <div class="math-ltr" style="margin-top:8px;">
+            <span>10 =</span>
+            <input type="number" inputmode="numeric" class="math-input" id="akt1-b1" data-ans="3">
+            <span>+</span>
+            <input type="number" inputmode="numeric" class="math-input" id="akt1-b2" data-ans="7">
+          </div>
+          <div id="hint-akt1-b"></div>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="check-btn" id="btn-aktashif-1" onclick="checkAktashif1()">✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      </div>
+    </div>
+
+    <!-- أكتشف 2 -->
+    <div class="exercise-box" id="ex-aktashif-2">
+      <div class="ex-instruction">
+        <span class="ex-num">2</span>
+        <span>أَكْمِلْ مَلْءَ الْفَرَاغَاتِ.</span>
+      </div>
+
+      <div class="boats-grid">
+        <!-- القارب 1 (مثال محلول: 9 = 5 + 4) -->
+        <div class="visual-card">
+          <svg width="160" height="125" viewBox="0 0 160 125">
+            <rect x="78" y="8" width="4" height="82" fill="#78350f"/>
+            <!-- الشراع الأيسر (5 نقاط بنفسجية) -->
+            <polygon points="78,12 22,82 78,82" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+            <circle cx="66" cy="42" r="4" fill="#9333ea"/>
+            <circle cx="54" cy="56" r="4" fill="#9333ea"/>
+            <circle cx="68" cy="58" r="4" fill="#9333ea"/>
+            <circle cx="42" cy="73" r="4" fill="#9333ea"/>
+            <circle cx="65" cy="74" r="4" fill="#9333ea"/>
+            <!-- الشراع الأيمن (4 نقاط زرقاء) -->
+            <polygon points="82,12 138,82 82,82" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+            <circle cx="94" cy="45" r="4" fill="#3b82f6"/>
+            <circle cx="94" cy="64" r="4" fill="#3b82f6"/>
+            <circle cx="110" cy="64" r="4" fill="#3b82f6"/>
+            <circle cx="118" cy="75" r="4" fill="#3b82f6"/>
+            <!-- هيكل القارب -->
+            <polygon points="28,88 132,88 116,110 44,110" fill="#a16207" stroke="#713f12" stroke-width="2"/>
+          </svg>
+          <div class="math-ltr" style="margin-top:8px;">
+            <span>9 = 5 + 4</span>
+          </div>
+        </div>
+
+        <!-- القارب 2: يسار 2 بنفسجي + يمين 7 أزرق -->
+        <div class="visual-card">
+          <svg width="160" height="125" viewBox="0 0 160 125">
+            <rect x="78" y="8" width="4" height="82" fill="#78350f"/>
+            <polygon points="78,12 22,82 78,82" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+            <circle cx="64" cy="55" r="4" fill="#9333ea"/>
+            <circle cx="48" cy="72" r="4" fill="#9333ea"/>
+            <polygon points="82,12 138,82 82,82" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+            <circle cx="92" cy="36" r="4" fill="#3b82f6"/>
+            <circle cx="92" cy="52" r="4" fill="#3b82f6"/>
+            <circle cx="105" cy="54" r="4" fill="#3b82f6"/>
+            <circle cx="92" cy="68" r="4" fill="#3b82f6"/>
+            <circle cx="106" cy="68" r="4" fill="#3b82f6"/>
+            <circle cx="120" cy="72" r="4" fill="#3b82f6"/>
+            <circle cx="98" cy="77" r="4" fill="#3b82f6"/>
+            <polygon points="28,88 132,88 116,110 44,110" fill="#a16207" stroke="#713f12" stroke-width="2"/>
+          </svg>
+          <div class="math-ltr" style="margin-top:8px;">
+            <span>9 =</span>
+            <input type="number" inputmode="numeric" class="math-input" id="akt2-a1" data-ans="2">
+            <span>+</span>
+            <input type="number" inputmode="numeric" class="math-input" id="akt2-a2" data-ans="7">
+          </div>
+          <div id="hint-akt2-a"></div>
+        </div>
+
+        <!-- القارب 3: يسار 3 بنفسجي + يمين علوي 3 برتقالي + يمين سفلي 3 أزرق -->
+        <div class="visual-card">
+          <svg width="160" height="125" viewBox="0 0 160 125">
+            <rect x="78" y="8" width="4" height="82" fill="#78350f"/>
+            <polygon points="78,12 22,82 78,82" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+            <circle cx="64" cy="46" r="4" fill="#9333ea"/>
+            <circle cx="52" cy="62" r="4" fill="#9333ea"/>
+            <circle cx="65" cy="72" r="4" fill="#9333ea"/>
+            <polygon points="82,12 138,82 82,82" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+            <line x1="82" y1="60" x2="120" y2="60" stroke="#94a3b8" stroke-width="1.5"/>
+            <!-- 3 برتقالية -->
+            <circle cx="92" cy="36" r="4" fill="#f97316"/>
+            <circle cx="92" cy="52" r="4" fill="#f97316"/>
+            <circle cx="106" cy="52" r="4" fill="#f97316"/>
+            <!-- 3 زرقاء -->
+            <circle cx="92" cy="73" r="4" fill="#3b82f6"/>
+            <circle cx="108" cy="73" r="4" fill="#3b82f6"/>
+            <circle cx="124" cy="75" r="4" fill="#3b82f6"/>
+            <polygon points="28,88 132,88 116,110 44,110" fill="#a16207" stroke="#713f12" stroke-width="2"/>
+          </svg>
+          <div class="math-ltr" style="margin-top:8px; gap:4px;">
+            <span>9 =</span>
+            <input type="number" inputmode="numeric" class="math-input" style="width:44px;" id="akt2-b1" data-ans="3">
+            <span>+</span>
+            <input type="number" inputmode="numeric" class="math-input" style="width:44px;" id="akt2-b2" data-ans="3">
+            <span>+</span>
+            <input type="number" inputmode="numeric" class="math-input" style="width:44px;" id="akt2-b3" data-ans="3">
+          </div>
+          <div id="hint-akt2-b"></div>
+        </div>
+
+        <!-- القارب 4: يسار 1 بنفسجي + يمين 8 أزرق -->
+        <div class="visual-card">
+          <svg width="160" height="125" viewBox="0 0 160 125">
+            <rect x="78" y="8" width="4" height="82" fill="#78350f"/>
+            <polygon points="78,12 22,82 78,82" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+            <circle cx="58" cy="64" r="4" fill="#9333ea"/>
+            <polygon points="82,12 138,82 82,82" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1.5"/>
+            <circle cx="92" cy="34" r="4" fill="#3b82f6"/>
+            <circle cx="92" cy="48" r="4" fill="#3b82f6"/>
+            <circle cx="104" cy="48" r="4" fill="#3b82f6"/>
+            <circle cx="92" cy="62" r="4" fill="#3b82f6"/>
+            <circle cx="105" cy="62" r="4" fill="#3b82f6"/>
+            <circle cx="116" cy="62" r="4" fill="#3b82f6"/>
+            <circle cx="96" cy="75" r="4" fill="#3b82f6"/>
+            <circle cx="116" cy="75" r="4" fill="#3b82f6"/>
+            <polygon points="28,88 132,88 116,110 44,110" fill="#a16207" stroke="#713f12" stroke-width="2"/>
+          </svg>
+          <div class="math-ltr" style="margin-top:8px;">
+            <span>9 =</span>
+            <input type="number" inputmode="numeric" class="math-input" id="akt2-c1" data-ans="1">
+            <span>+</span>
+            <input type="number" inputmode="numeric" class="math-input" id="akt2-c2" data-ans="8">
+          </div>
+          <div id="hint-akt2-c"></div>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="check-btn" id="btn-aktashif-2" onclick="checkAktashif2()">✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      </div>
+    </div>
+
+    <div class="stage-counter" id="counter-aktashif">
+      <span class="c-ok">✓ الصَّوَابُ: 0</span>
+      <span class="c-err">✗ الْخَطَأُ: 0</span>
+    </div>
+  </section>
+
+  <!-- ==================== 2. أُنْجِزُ ==================== -->
+  <section class="section-card" id="sec-unjiz">
+    <div class="section-header">
+      <span class="section-title title-unjiz">أُنْجِزُ</span>
+    </div>
+
+    <!-- أنجز 1 -->
+    <div class="exercise-box" id="ex-unjiz-1">
+      <div class="ex-instruction">
+        <span class="ex-num">1</span>
+        <span>أَكْمِلْ مَلْءَ الْفَرَاغَاتِ :</span>
+      </div>
+
+      <!-- مطابقة ترتيب الأعمدة من اليمين إلى اليسار كما في الكتاب المدرسي -->
+      <div class="equations-grid-4">
+        <!-- العمود الأيمن في الكتاب -->
+        <div class="eq-col">
+          <div class="math-ltr">
+            <span>8 =</span>
+            <input type="number" inputmode="numeric" class="math-input" data-ans="4">
+            <span>+ 4</span>
+          </div>
+          <div class="math-ltr">
+            <span>7 =</span>
+            <input type="number" inputmode="numeric" class="math-input" data-ans="4">
+            <span>+ 3</span>
+          </div>
+        </div>
+
+        <!-- العمود الثاني من اليمين -->
+        <div class="eq-col">
+          <div class="math-ltr">
+            <span>6 = 1 +</span>
+            <input type="number" inputmode="numeric" class="math-input" data-ans="5">
+          </div>
+          <div class="math-ltr">
+            <span>6 =</span>
+            <input type="number" inputmode="numeric" class="math-input" data-ans="2">
+            <span>+ 4</span>
+          </div>
+        </div>
+
+        <!-- العمود الثالث من اليمين -->
+        <div class="eq-col">
+          <div class="math-ltr">
+            <span>7 = 5 +</span>
+            <input type="number" inputmode="numeric" class="math-input" data-ans="2">
+          </div>
+          <div class="math-ltr">
+            <span>7 = 1 +</span>
+            <input type="number" inputmode="numeric" class="math-input" data-ans="6">
+          </div>
+        </div>
+
+        <!-- العمود الرابع (الأيسر في الكتاب) -->
+        <div class="eq-col">
+          <div class="math-ltr">
+            <span>8 = 2 +</span>
+            <input type="number" inputmode="numeric" class="math-input" data-ans="6">
+          </div>
+          <div class="math-ltr">
+            <span>8 = 3 +</span>
+            <input type="number" inputmode="numeric" class="math-input" data-ans="5">
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="check-btn" id="btn-unjiz-1" onclick="checkUnjiz1()">✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      </div>
+    </div>
+
+    <!-- أنجز 2 -->
+    <div class="exercise-box" id="ex-unjiz-2">
+      <div class="ex-instruction">
+        <span class="ex-num">2</span>
+        <span>لَوِّنْ بِطَاقَةَ كُلِّ مَجْمُوعٍ بِاللَّوْنِ الْمُنَاسِبِ.</span>
+      </div>
+
+      <p style="text-align:center; font-weight:700; color:#475569; margin-top:0;">
+        اُنْقُرْ عَلَى اللَّوْنِ الْمُنَاسِبِ مِنْ شَرِيطِ الْأَعْدَادِ (6 أَوْ 7 أَوْ 8)، ثُمَّ انْقُرْ عَلَى الْبِطَاقَةِ لِتَلْوِينِهَا:
+      </p>
+
+      <!-- شريط الأعداد 1 إلى 11 مطابق للكتاب تماماً -->
+      <div class="color-legend" id="color-palette">
+        <div class="legend-cell bg-val-white">1</div>
+        <div class="legend-cell bg-val-white">2</div>
+        <div class="legend-cell bg-val-white">3</div>
+        <div class="legend-cell bg-val-white">4</div>
+        <div class="legend-cell bg-val-white">5</div>
+        <div class="legend-cell bg-val-6 active-brush" data-brush="6" onclick="selectBrush(6, this)" title="اختر لون العدد 6">6</div>
+        <div class="legend-cell bg-val-7" data-brush="7" onclick="selectBrush(7, this)" title="اختر لون العدد 7">7</div>
+        <div class="legend-cell bg-val-8" data-brush="8" onclick="selectBrush(8, this)" title="اختر لون العدد 8">8</div>
+        <div class="legend-cell bg-val-white">9</div>
+        <div class="legend-cell bg-val-white">10</div>
+        <div class="legend-cell bg-val-white">11</div>
+      </div>
+
+      <!-- البطاقات الثمانية مرتبة من اليسار إلى اليمين كما في الكتاب -->
+      <div class="oval-cards-row" id="oval-cards-container">
+        <div class="oval-card" data-sum="7" onclick="paintOvalCard(this)">5 + 2</div>
+        <div class="oval-card" data-sum="6" onclick="paintOvalCard(this)">3 + 3</div>
+        <div class="oval-card" data-sum="7" onclick="paintOvalCard(this)">3 + 4</div>
+        <div class="oval-card" data-sum="8" onclick="paintOvalCard(this)">2 + 6</div>
+        <div class="oval-card" data-sum="8" onclick="paintOvalCard(this)">3 + 5</div>
+        <div class="oval-card" data-sum="8" onclick="paintOvalCard(this)">4 + 4</div>
+        <div class="oval-card" data-sum="6" onclick="paintOvalCard(this)">2 + 4</div>
+        <div class="oval-card" data-sum="7" onclick="paintOvalCard(this)">6 + 1</div>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="check-btn" id="btn-unjiz-2" onclick="checkUnjiz2()">✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      </div>
+    </div>
+
+    <div class="stage-counter" id="counter-unjiz">
+      <span class="c-ok">✓ الصَّوَابُ: 0</span>
+      <span class="c-err">✗ الْخَطَأُ: 0</span>
+    </div>
+  </section>
+
+  <!-- ==================== 3. تَعَلَّمْتُ ==================== -->
+  <section class="section-card" id="sec-taalamtu">
+    <div class="section-header">
+      <span class="section-title title-taalamtu">تَعَلَّمْتُ</span>
+    </div>
+    <div class="taalamtu-box">
+      كِتَابَةُ عَدَدٍ بِاسْتِعْمَالِ أَعْدَادٍ أَصْغَرَ مِنْهُ مِثْلُ :
+      <span class="math-ltr" style="margin: 0 10px;">5 = 2 + 3</span>
+      وَ
+      <span class="math-ltr" style="margin: 0 10px;">5 = 1 + 4</span>
+    </div>
+  </section>
+
+  <!-- ==================== 4. أَتَمَرَّنُ ==================== -->
+  <section class="section-card" id="sec-atamarran">
+    <div class="section-header">
+      <span class="section-title title-atamarran">أَتَمَرَّنُ</span>
+    </div>
+
+    <!-- أتمرن 1 -->
+    <div class="exercise-box" id="ex-atamarran-1">
+      <div class="ex-instruction">
+        <span class="ex-num">1</span>
+        <span>لَوِّنْ بِطَاقَاتِ الْعَدَدِ <span class="math-ltr" style="font-size:1.2rem;">10</span> .</span>
+      </div>
+
+      <div class="scattered-cards" id="cards-10-container">
+        <div class="dashed-card" data-is10="true" onclick="toggleCard10(this)">5 + 5</div>
+        <div class="dashed-card" data-is10="true" onclick="toggleCard10(this)">1 + 9</div>
+        <div class="dashed-card" data-is10="true" onclick="toggleCard10(this)">7 + 3</div>
+        <div class="dashed-card" data-is10="true" onclick="toggleCard10(this)">6 + 4</div>
+        <div class="dashed-card" data-is10="false" onclick="toggleCard10(this)">8 + 1</div>
+        <div class="dashed-card" data-is10="false" onclick="toggleCard10(this)">4 + 5</div>
+        <div class="dashed-card" data-is10="true" onclick="toggleCard10(this)">0 + 10</div>
+        <div class="dashed-card" data-is10="true" onclick="toggleCard10(this)">3 + 7</div>
+        <div class="dashed-card" data-is10="true" onclick="toggleCard10(this)">2 + 8</div>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="check-btn" id="btn-atamarran-1" onclick="checkAtamarran1()">✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      </div>
+    </div>
+
+    <!-- أتمرن 2 -->
+    <div class="exercise-box" id="ex-atamarran-2">
+      <div class="ex-instruction">
+        <span class="ex-num">2</span>
+        <span>اُرْبُطْ كُلَّ عَدَدٍ بِمَجْمُوعِهِ . / أَكْمِلْ بِالْعَدَدِ الْمُنَاسِبِ .</span>
+      </div>
+
+      <div class="split-two-cols">
+        <!-- الجانب الأيمن في الكتاب: اربط كل عدد بمجموعه -->
+        <div class="sub-panel">
+          <div style="font-weight:800; font-size:1.15rem; margin-bottom:12px; text-align:center;">اُرْبُطْ كُلَّ عَدَدٍ بِمَجْمُوعِهِ :</div>
+          <div class="match-area" id="match-container">
+            <svg class="match-svg" id="match-svg"></svg>
+            <div class="match-col" id="match-left">
+              <div class="match-item" data-val="9" onclick="selectMatchLeft(this)">
+                <span>9</span>
+                <span class="match-dot"></span>
+              </div>
+              <div class="match-item" data-val="8" onclick="selectMatchLeft(this)">
+                <span>8</span>
+                <span class="match-dot"></span>
+              </div>
+              <div class="match-item" data-val="7" onclick="selectMatchLeft(this)">
+                <span>7</span>
+                <span class="match-dot"></span>
+              </div>
+              <div class="match-item" data-val="3" onclick="selectMatchLeft(this)">
+                <span>3</span>
+                <span class="match-dot"></span>
+              </div>
+            </div>
+            <div class="match-col" id="match-right">
+              <div class="match-item" data-sum="3" onclick="selectMatchRight(this)">
+                <span class="match-dot"></span>
+                <span>1 + 2</span>
+              </div>
+              <div class="match-item" data-sum="8" onclick="selectMatchRight(this)">
+                <span class="match-dot"></span>
+                <span>2 + 6</span>
+              </div>
+              <div class="match-item" data-sum="9" onclick="selectMatchRight(this)">
+                <span class="match-dot"></span>
+                <span>4 + 5</span>
+              </div>
+              <div class="match-item" data-sum="7" onclick="selectMatchRight(this)">
+                <span class="match-dot"></span>
+                <span>1 + 6</span>
+              </div>
+            </div>
+          </div>
+          <div style="text-align:center; margin-top:8px;">
+            <button type="button" id="btn-clear-lines" onclick="clearMatchLines()" style="background:#e2e8f0; border:none; padding:5px 14px; border-radius:8px; font-weight:700; cursor:pointer;">مَسْحُ الْخُطُوطِ ↺</button>
+          </div>
+        </div>
+
+        <!-- الجانب الأيسر في الكتاب: أكمل بالعدد المناسب -->
+        <div class="sub-panel" style="display:flex; flex-direction:column; justify-content:space-between;">
+          <div style="font-weight:800; font-size:1.15rem; margin-bottom:12px; text-align:center;">أَكْمِلْ بِالْعَدَدِ الْمُنَاسِبِ :</div>
+          <div style="display:flex; flex-direction:column; gap:16px; align-items:center;">
+            <div class="math-ltr">
+              <span>2 +</span>
+              <input type="number" inputmode="numeric" class="math-input" data-ans="8">
+              <span>= 10</span>
+            </div>
+            <div class="math-ltr">
+              <input type="number" inputmode="numeric" class="math-input" data-ans="5">
+              <span>+ 4 = 9</span>
+            </div>
+            <div class="math-ltr">
+              <span>3 +</span>
+              <input type="number" inputmode="numeric" class="math-input" data-ans="2">
+              <span>= 5</span>
+            </div>
+            <div class="math-ltr">
+              <input type="number" inputmode="numeric" class="math-input" data-ans="2">
+              <span>+ 2 = 4</span>
+            </div>
+          </div>
+          <div></div>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="check-btn" id="btn-atamarran-2" onclick="checkAtamarran2()">✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      </div>
+    </div>
+
+    <div class="stage-counter" id="counter-atamarran">
+      <span class="c-ok">✓ الصَّوَابُ: 0</span>
+      <span class="c-err">✗ الْخَطَأُ: 0</span>
+    </div>
+  </section>
+
+  <!-- ==================== 5. أَبْحَثُ ==================== -->
+  <section class="section-card" id="sec-abhath">
+    <div class="section-header">
+      <span class="section-title title-abhath">أَبْحَثُ</span>
+    </div>
+
+    <!-- أبحث 1 -->
+    <div class="exercise-box" id="ex-abhath-1">
+      <div class="ex-instruction">
+        <span class="ex-num">1</span>
+        <span>اُكْتُبْ عَدَدَ حَبَّاتِ الْفَرَاوِلَةِ الْمُخْتَفِيَةِ وَرَاءَ الْكَأْسِ، وَأَكْمِلْ مَلْءَ الْفَرَاغَاتِ فِي كُلِّ حَالَةٍ.</span>
+      </div>
+
+      <!-- من اليسار إلى اليمين مطابق للكتاب: 4 ، 6 ، 7 ، 9 -->
+      <div class="plates-grid" style="direction:ltr;">
+        <!-- الحالة 1: العدد الكلي 4 (حبتان ظاهرتان + 2 مختفيتان) -->
+        <div class="plate-card" style="direction:rtl;">
+          <span class="plate-target-badge">4</span>
+          <svg width="160" height="105" viewBox="0 0 160 105">
+            <!-- الصحن -->
+            <ellipse cx="80" cy="65" rx="70" ry="32" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/>
+            <ellipse cx="80" cy="65" rx="52" ry="22" fill="#f1f5f9"/>
+            <!-- حبتا فراولة ظاهرتان -->
+            <g transform="translate(36, 48)">
+              <path d="M8,4 C14,4 16,12 8,18 C0,12 2,4 8,4 Z" fill="#dc2626"/>
+              <path d="M4,4 L8,7 L12,4 Z" fill="#16a34a"/>
+            </g>
+            <g transform="translate(52, 60)">
+              <path d="M8,4 C14,4 16,12 8,18 C0,12 2,4 8,4 Z" fill="#dc2626"/>
+              <path d="M4,4 L8,7 L12,4 Z" fill="#16a34a"/>
+            </g>
+            <!-- الكأس -->
+            <polygon points="84,18 118,18 114,82 88,82" fill="#ffffff" fill-opacity="0.92" stroke="#475569" stroke-width="2"/>
+            <ellipse cx="101" cy="18" rx="17" ry="4" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+          </svg>
+          <div class="math-ltr" style="margin-top:6px; gap:4px;">
+            <input type="number" inputmode="numeric" class="math-input" style="width:44px;" data-ans="4">
+            <span>=</span>
+            <input type="number" inputmode="numeric" class="math-input" style="width:44px;" data-ans="2">
+            <span>+</span>
+            <input type="number" inputmode="numeric" class="math-input" style="width:44px;" data-ans="2">
+          </div>
+        </div>
+
+        <!-- الحالة 2: العدد الكلي 6 (3 حبات ظاهرة + 3 مختفية) -->
+        <div class="plate-card" style="direction:rtl;">
+          <span class="plate-target-badge">6</span>
+          <svg width="160" height="105" viewBox="0 0 160 105">
+            <ellipse cx="80" cy="65" rx="70" ry="32" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/>
+            <ellipse cx="80" cy="65" rx="52" ry="22" fill="#f1f5f9"/>
+            <!-- 3 حبات فراولة ظاهرة -->
+            <g transform="translate(34, 46)">
+              <path d="M8,4 C14,4 16,12 8,18 C0,12 2,4 8,4 Z" fill="#dc2626"/>
+              <path d="M4,4 L8,7 L12,4 Z" fill="#16a34a"/>
+            </g>
+            <g transform="translate(54, 44)">
+              <path d="M8,4 C14,4 16,12 8,18 C0,12 2,4 8,4 Z" fill="#dc2626"/>
+              <path d="M4,4 L8,7 L12,4 Z" fill="#16a34a"/>
+            </g>
+            <g transform="translate(46, 64)">
+              <path d="M8,4 C14,4 16,12 8,18 C0,12 2,4 8,4 Z" fill="#dc2626"/>
+              <path d="M4,4 L8,7 L12,4 Z" fill="#16a34a"/>
+            </g>
+            <!-- الكأس -->
+            <polygon points="84,18 118,18 114,82 88,82" fill="#ffffff" fill-opacity="0.92" stroke="#475569" stroke-width="2"/>
+            <ellipse cx="101" cy="18" rx="17" ry="4" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+          </svg>
+          <div class="math-ltr" style="margin-top:6px; gap:4px;">
+            <input type="number" inputmode="numeric" class="math-input" style="width:44px;" data-ans="6">
+            <span>=</span>
+            <input type="number" inputmode="numeric" class="math-input" style="width:44px;" data-ans="3">
+            <span>+</span>
+            <input type="number" inputmode="numeric" class="math-input" style="width:44px;" data-ans="3">
+          </div>
+        </div>
+
+        <!-- الحالة 3: العدد الكلي 7 (4 حبات ظاهرة + 3 مختفية) -->
+        <div class="plate-card" style="direction:rtl;">
+          <span class="plate-target-badge">7</span>
+          <svg width="160" height="105" viewBox="0 0 160 105">
+            <ellipse cx="80" cy="65" rx="70" ry="32" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/>
+            <ellipse cx="80" cy="65" rx="52" ry="22" fill="#f1f5f9"/>
+            <!-- 4 حبات فراولة ظاهرة -->
+            <g transform="translate(32, 46)">
+              <path d="M8,4 C14,4 16,12 8,18 C0,12 2,4 8,4 Z" fill="#dc2626"/>
+              <path d="M4,4 L8,7 L12,4 Z" fill="#16a34a"/>
+            </g>
+            <g transform="translate(52, 44)">
+              <path d="M8,4 C14,4 16,12 8,18 C0,12 2,4 8,4 Z" fill="#dc2626"/>
+              <path d="M4,4 L8,7 L12,4 Z" fill="#16a34a"/>
+            </g>
+            <g transform="translate(36, 65)">
+              <path d="M8,4 C14,4 16,12 8,18 C0,12 2,4 8,4 Z" fill="#dc2626"/>
+              <path d="M4,4 L8,7 L12,4 Z" fill="#16a34a"/>
+            </g>
+            <g transform="translate(56, 65)">
+              <path d="M8,4 C14,4 16,12 8,18 C0,12 2,4 8,4 Z" fill="#dc2626"/>
+              <path d="M4,4 L8,7 L12,4 Z" fill="#16a34a"/>
+            </g>
+            <!-- الكأس -->
+            <polygon points="84,18 118,18 114,82 88,82" fill="#ffffff" fill-opacity="0.92" stroke="#475569" stroke-width="2"/>
+            <ellipse cx="101" cy="18" rx="17" ry="4" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+          </svg>
+          <div class="math-ltr" style="margin-top:6px; gap:4px;">
+            <span>7 =</span>
+            <input type="number" inputmode="numeric" class="math-input" style="width:44px;" data-ans="4">
+            <span>+</span>
+            <input type="number" inputmode="numeric" class="math-input" style="width:44px;" data-ans="3">
+          </div>
+        </div>
+
+        <!-- الحالة 4: العدد الكلي 9 (6 حبات ظاهرة + 3 مختفية) -->
+        <div class="plate-card" style="direction:rtl;">
+          <span class="plate-target-badge">9</span>
+          <svg width="160" height="105" viewBox="0 0 160 105">
+            <ellipse cx="80" cy="65" rx="70" ry="32" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/>
+            <ellipse cx="80" cy="65" rx="52" ry="22" fill="#f1f5f9"/>
+            <!-- الكأس على اليسار كما في الكتاب -->
+            <polygon points="36,18 70,18 66,82 40,82" fill="#ffffff" fill-opacity="0.92" stroke="#475569" stroke-width="2"/>
+            <ellipse cx="53" cy="18" rx="17" ry="4" fill="#e2e8f0" stroke="#475569" stroke-width="1.5"/>
+            <!-- 6 حبات فراولة ظاهرة على اليمين -->
+            <g transform="translate(80, 44)"><path d="M8,4 C14,4 16,12 8,18 C0,12 2,4 8,4 Z" fill="#dc2626"/><path d="M4,4 L8,7 L12,4 Z" fill="#16a34a"/></g>
+            <g transform="translate(98, 44)"><path d="M8,4 C14,4 16,12 8,18 C0,12 2,4 8,4 Z" fill="#dc2626"/><path d="M4,4 L8,7 L12,4 Z" fill="#16a34a"/></g>
+            <g transform="translate(116, 46)"><path d="M8,4 C14,4 16,12 8,18 C0,12 2,4 8,4 Z" fill="#dc2626"/><path d="M4,4 L8,7 L12,4 Z" fill="#16a34a"/></g>
+            <g transform="translate(80, 65)"><path d="M8,4 C14,4 16,12 8,18 C0,12 2,4 8,4 Z" fill="#dc2626"/><path d="M4,4 L8,7 L12,4 Z" fill="#16a34a"/></g>
+            <g transform="translate(98, 65)"><path d="M8,4 C14,4 16,12 8,18 C0,12 2,4 8,4 Z" fill="#dc2626"/><path d="M4,4 L8,7 L12,4 Z" fill="#16a34a"/></g>
+            <g transform="translate(116, 65)"><path d="M8,4 C14,4 16,12 8,18 C0,12 2,4 8,4 Z" fill="#dc2626"/><path d="M4,4 L8,7 L12,4 Z" fill="#16a34a"/></g>
+          </svg>
+          <div class="math-ltr" style="margin-top:6px; gap:4px;">
+            <span>9 = 6 +</span>
+            <input type="number" inputmode="numeric" class="math-input" style="width:44px;" data-ans="3">
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;">
+        <button class="check-btn" id="btn-abhath-1" onclick="checkAbhath1()">✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      </div>
+    </div>
+
+    <!-- أبحث 2 -->
+    <div class="exercise-box" id="ex-abhath-2">
+      <div class="ex-instruction">
+        <span class="ex-num">2</span>
+        <span>لَوِّنْ أَرْبَعَ بِطَاقَاتٍ بِالضَّبْطِ لِتَكْوِينِ الْعَدَدِ <span class="math-ltr" style="font-size:1.2rem;">10</span> .</span>
+      </div>
+
+      <!-- 5 بطاقات مرتبة من اليسار إلى اليمين: 5 ، 4 ، 1 ، 2 ، 3 -->
+      <div class="five-cards-row" id="four-cards-10">
+        <div class="sq-num-card" data-num="5" onclick="toggleSqCard(this)">5</div>
+        <div class="sq-num-card" data-num="4" onclick="toggleSqCard(this)">4</div>
+        <div class="sq-num-card" data-num="1" onclick="toggleSqCard(this)">1</div>
+        <div class="sq-num-card" data-num="2" onclick="toggleSqCard(this)">2</div>
+        <div class="sq-num-card" data-num="3" onclick="toggleSqCard(this)">3</div>
+      </div>
+      <div id="abhath2-msg" class="feedback-msg" style="text-align:center; color:#b45309;"></div>
+
+      <div style="text-align:center;">
+        <button class="check-btn" id="btn-abhath-2" onclick="checkAbhath2()">✓ تَحَقَّقْ مِنَ الْإِجَابَةِ</button>
+      </div>
+    </div>
+
+    <div class="stage-counter" id="counter-abhath">
+      <span class="c-ok">✓ الصَّوَابُ: 0</span>
+      <span class="c-err">✗ الْخَطَأُ: 0</span>
+    </div>
+  </section>
+
+  <!-- ==================== 6. التقييم الكلي ==================== -->
+  <section class="report-card" id="final-report">
+    <div class="report-title">📊 حَصِيلَةُ الدَّرْسِ وَالتَّقْيِيمُ الْكُلِّيُّ</div>
+    <div class="report-body">
+      <div class="circle-gauge">
+        <svg viewBox="0 0 160 160">
+          <circle class="gauge-bg" cx="80" cy="80" r="70"></circle>
+          <circle class="gauge-progress" id="gauge-circle" cx="80" cy="80" r="70"></circle>
+        </svg>
+        <div class="gauge-text" id="gauge-percent">0%</div>
+      </div>
+
+      <div class="stats-boxes">
+        <div class="stat-row stat-correct">
+          <span>✓ الْإِجَابَاتُ الصَّحِيحَةُ:</span>
+          <span id="total-correct">0</span>
+        </div>
+        <div class="stat-row stat-wrong">
+          <span>✗ الْإِجَابَاتُ الْخَاطِئَةُ:</span>
+          <span id="total-wrong">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="stat-note" id="evaluation-note">أَنْجِزِ التَّمَارِينَ لِرُؤْيَةِ نَتِيجَتِكَ!</div>
+    </div>
+
+    <div>
+      <button class="reset-btn" onclick="location.reload()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنْ جَدِيدٍ</button>
+    </div>
+  </section>
+</div>
+
+<!-- ========================================
+     سكريبت الحماية — قفل الاشتراك الإجباري
+     ======================================== -->
+<script>
+  const CHANNEL_ID = "-1004456852024";
+  const tg = window.Telegram?.WebApp;
+  if (tg) { tg.ready(); tg.expand(); }
+
+  async function verifySubscription() {
+    const statusMsg = document.getElementById('sub-status-msg');
+    statusMsg.style.color = "#0288d1";
+    statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+    let userId = null;
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+
+    if (!userId) {
+      statusMsg.style.color = "#e65100";
+      statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+      return;
+    }
+
+    try {
+      const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.isSubscribed) {
+        statusMsg.style.color = "#2e7d32";
+        statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+        setTimeout(() => {
+          document.getElementById('sub-lock-screen').style.display = 'none';
+        }, 600);
+      } else {
+        statusMsg.style.color = "#c62828";
+        statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+      }
+    } catch (error) {
+      statusMsg.style.color = "#c62828";
+      statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+    }
+  }
+
+  window.addEventListener('load', () => {
+    verifySubscription();
+  });
+</script>
+
+<!-- ========================================
+     سكريبت الدرس الأصلي
+     ======================================== -->
+<script>
+  // تتبع النتائج لكل مرحلة وللمجموع الكلي
+  const stageScores = {
+    aktashif: { correct: 0, wrong: 0 },
+    unjiz: { correct: 0, wrong: 0 },
+    atamarran: { correct: 0, wrong: 0 },
+    abhath: { correct: 0, wrong: 0 }
+  };
+
+  function updateScoresUI() {
+    let totalCorrect = 0;
+    let totalWrong = 0;
+
+    for (const key in stageScores) {
+      totalCorrect += stageScores[key].correct;
+      totalWrong += stageScores[key].wrong;
+      const counterEl = document.getElementById(`counter-${key}`);
+      if (counterEl) {
+        counterEl.innerHTML = `
+          <span class="c-ok">✓ الصَّوَابُ: ${stageScores[key].correct}</span>
+          <span class="c-err">✗ الْخَطَأُ: ${stageScores[key].wrong}</span>
+        `;
+      }
+    }
+
+    document.getElementById('total-correct').textContent = totalCorrect;
+    document.getElementById('total-wrong').textContent = totalWrong;
+
+    const totalAnswered = totalCorrect + totalWrong;
+    let percentage = 0;
+    if (totalAnswered > 0) {
+      percentage = Math.round((totalCorrect / totalAnswered) * 100);
+    }
+
+    document.getElementById('gauge-percent').textContent = `${percentage}%`;
+
+    const circle = document.getElementById('gauge-circle');
+    const circumference = 440;
+    const offset = circumference - (percentage / 100) * circumference;
+    circle.style.strokeDashoffset = offset;
+
+    const noteEl = document.getElementById('evaluation-note');
+    if (totalAnswered === 0) {
+      circle.style.stroke = '#2563eb';
+      noteEl.textContent = 'أَنْجِزِ التَّمَارِينَ لِرُؤْيَةِ نَتِيجَتِكَ!';
+      noteEl.style.background = '#fef3c7';
+      noteEl.style.color = '#92400e';
+    } else if (percentage >= 90) {
+      circle.style.stroke = '#16a34a';
+      noteEl.textContent = 'مُمْتَازٌ! أَنْتَ عَبْقَرِيٌّ فِي الرِّيَاضِيَّاتِ 🌟';
+      noteEl.style.background = '#dcfce7';
+      noteEl.style.color = '#14532d';
+    } else if (percentage >= 75) {
+      circle.style.stroke = '#2563eb';
+      noteEl.textContent = 'جَيِّدٌ جِدًّا! أَحْسَنْتَ الْعَمَلَ 👏';
+      noteEl.style.background = '#dbeafe';
+      noteEl.style.color = '#1e3a8a';
+    } else if (percentage >= 50) {
+      circle.style.stroke = '#d97706';
+      noteEl.textContent = 'جَيِّدٌ! يُمْكِنُكَ تَحْقِيقُ الْأَفْضَلِ بِالتَّدَرُّبِ 💪';
+      noteEl.style.background = '#fef3c7';
+      noteEl.style.color = '#92400e';
+    } else {
+      circle.style.stroke = '#dc2626';
+      noteEl.textContent = 'حَاوِلْ مَرَّةً أُخْرَى، أَنْتَ قَادِرٌ عَلَى النَّجَاحِ! 📖';
+      noteEl.style.background = '#fee2e2';
+      noteEl.style.color = '#7f1d1d';
+    }
+  }
+
+  function validateNumericInput(inputEl, stageKey) {
+    const expected = parseInt(inputEl.dataset.ans, 10);
+    const val = parseInt(inputEl.value, 10);
+    inputEl.disabled = true;
+
+    if (!isNaN(val) && val === expected) {
+      inputEl.classList.add('correct');
+      stageScores[stageKey].correct++;
+    } else {
+      inputEl.classList.add('wrong');
+      stageScores[stageKey].wrong++;
+      const hint = document.createElement('span');
+      hint.className = 'correction-hint';
+      hint.textContent = `الصَّوَابُ: ${expected}`;
+      inputEl.parentElement.insertAdjacentElement('afterend', hint);
+    }
+  }
+
+  // ===== أكتشف 1 =====
+  function checkAktashif1() {
+    const btn = document.getElementById('btn-aktashif-1');
+    btn.disabled = true;
+    const inputs = document.querySelectorAll('#ex-aktashif-1 input.math-input');
+    inputs.forEach(inp => validateNumericInput(inp, 'aktashif'));
+    updateScoresUI();
+  }
+
+  // ===== أكتشف 2 =====
+  function checkAktashif2() {
+    const btn = document.getElementById('btn-aktashif-2');
+    btn.disabled = true;
+    const inputs = document.querySelectorAll('#ex-aktashif-2 input.math-input');
+    inputs.forEach(inp => validateNumericInput(inp, 'aktashif'));
+    updateScoresUI();
+  }
+
+  // ===== أنجز 1 =====
+  function checkUnjiz1() {
+    const btn = document.getElementById('btn-unjiz-1');
+    btn.disabled = true;
+    const inputs = document.querySelectorAll('#ex-unjiz-1 input.math-input');
+    inputs.forEach(inp => validateNumericInput(inp, 'unjiz'));
+    updateScoresUI();
+  }
+
+  // ===== أنجز 2: التلوين =====
+  let activeBrush = 6;
+  let unjiz2Locked = false;
+
+  function selectBrush(val, el) {
+    if (unjiz2Locked) return;
+    activeBrush = val;
+    document.querySelectorAll('#color-palette .legend-cell').forEach(c => c.classList.remove('active-brush'));
+    el.classList.add('active-brush');
+  }
+
+  function paintOvalCard(card) {
+    if (unjiz2Locked) return;
+    card.classList.remove('bg-val-6', 'bg-val-7', 'bg-val-8');
+    card.classList.add(`bg-val-${activeBrush}`);
+    card.dataset.chosen = activeBrush;
+  }
+
+  function checkUnjiz2() {
+    unjiz2Locked = true;
+    document.getElementById('btn-unjiz-2').disabled = true;
+    const cards = document.querySelectorAll('#oval-cards-container .oval-card');
+    cards.forEach(card => {
+      const expected = card.dataset.sum;
+      const chosen = card.dataset.chosen;
+      if (chosen === expected) {
+        card.classList.add('result-correct');
+        stageScores.unjiz.correct++;
+      } else {
+        card.classList.add('result-wrong');
+        stageScores.unjiz.wrong++;
+        const tag = document.createElement('div');
+        tag.className = 'correction-hint';
+        tag.style.display = 'block';
+        tag.style.fontSize = '0.8rem';
+        tag.textContent = `لَوْنُ ${expected}`;
+        card.appendChild(tag);
+      }
+    });
+    updateScoresUI();
+  }
+
+  // ===== أتمرن 1: بطاقات العدد 10 =====
+  let atamarran1Locked = false;
+
+  function toggleCard10(card) {
+    if (atamarran1Locked) return;
+    card.classList.toggle('selected');
+  }
+
+  function checkAtamarran1() {
+    atamarran1Locked = true;
+    document.getElementById('btn-atamarran-1').disabled = true;
+    const cards = document.querySelectorAll('#cards-10-container .dashed-card');
+    cards.forEach(card => {
+      const is10 = card.dataset.is10 === 'true';
+      const isSelected = card.classList.contains('selected');
+      if (is10 === isSelected) {
+        card.classList.add('result-correct');
+        stageScores.atamarran.correct++;
+      } else {
+        card.classList.add('result-wrong');
+        stageScores.atamarran.wrong++;
+      }
+    });
+    updateScoresUI();
+  }
+
+  // ===== أتمرن 2: الربط + إكمال الفراغات =====
+  let selectedLeftNode = null;
+  let connections = {};
+  let atamarran2Locked = false;
+
+  function selectMatchLeft(el) {
+    if (atamarran2Locked) return;
+    document.querySelectorAll('#match-left .match-item').forEach(i => i.classList.remove('active-node'));
+    el.classList.add('active-node');
+    selectedLeftNode = el;
+  }
+
+  function selectMatchRight(rightEl) {
+    if (atamarran2Locked || !selectedLeftNode) return;
+    const leftVal = selectedLeftNode.dataset.val;
+    const rightSum = rightEl.dataset.sum;
+
+    for (const k in connections) {
+      if (connections[k].rightSum === rightSum) {
+        delete connections[k];
+      }
+    }
+
+    connections[leftVal] = {
+      rightSum: rightSum,
+      leftEl: selectedLeftNode,
+      rightEl: rightEl
+    };
+
+    selectedLeftNode.classList.remove('active-node');
+    selectedLeftNode = null;
+    drawMatchLines();
+  }
+
+  function clearMatchLines() {
+    if (atamarran2Locked) return;
+    connections = {};
+    selectedLeftNode = null;
+    document.querySelectorAll('.match-item').forEach(i => i.classList.remove('active-node'));
+    drawMatchLines();
+  }
+
+  function drawMatchLines(showResult = false) {
+    const svg = document.getElementById('match-svg');
+    const containerRect = document.getElementById('match-container').getBoundingClientRect();
+    svg.innerHTML = '';
+
+    for (const leftVal in connections) {
+      const conn = connections[leftVal];
+      const dot1 = conn.leftEl.querySelector('.match-dot').getBoundingClientRect();
+      const dot2 = conn.rightEl.querySelector('.match-dot').getBoundingClientRect();
+
+      const x1 = dot1.left - containerRect.left + dot1.width / 2;
+      const y1 = dot1.top - containerRect.top + dot1.height / 2;
+      const x2 = dot2.left - containerRect.left + dot2.width / 2;
+      const y2 = dot2.top - containerRect.top + dot2.height / 2;
+
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('x1', x1);
+      line.setAttribute('y1', y1);
+      line.setAttribute('x2', x2);
+      line.setAttribute('y2', y2);
+      line.setAttribute('stroke-width', '3.5');
+      line.setAttribute('stroke-linecap', 'round');
+
+      if (showResult) {
+        line.setAttribute('stroke', leftVal === conn.rightSum ? '#16a34a' : '#dc2626');
+      } else {
+        line.setAttribute('stroke', '#2563eb');
+      }
+      svg.appendChild(line);
+    }
+  }
+
+  window.addEventListener('resize', () => drawMatchLines(atamarran2Locked));
+
+  function checkAtamarran2() {
+    atamarran2Locked = true;
+    document.getElementById('btn-atamarran-2').disabled = true;
+    document.getElementById('btn-clear-lines').disabled = true;
+
+    const leftItems = document.querySelectorAll('#match-left .match-item');
+    leftItems.forEach(item => {
+      const val = item.dataset.val;
+      const conn = connections[val];
+      if (conn && conn.rightSum === val) {
+        item.style.borderColor = '#16a34a';
+        item.style.background = '#dcfce7';
+        conn.rightEl.style.borderColor = '#16a34a';
+        conn.rightEl.style.background = '#dcfce7';
+        stageScores.atamarran.correct++;
+      } else {
+        item.style.borderColor = '#dc2626';
+        item.style.background = '#fee2e2';
+        stageScores.atamarran.wrong++;
+      }
+    });
+    drawMatchLines(true);
+
+    const inputs = document.querySelectorAll('#ex-atamarran-2 input.math-input');
+    inputs.forEach(inp => validateNumericInput(inp, 'atamarran'));
+
+    updateScoresUI();
+  }
+
+  // ===== أبحث 1: الفراولة المختفية =====
+  function checkAbhath1() {
+    document.getElementById('btn-abhath-1').disabled = true;
+    const inputs = document.querySelectorAll('#ex-abhath-1 input.math-input');
+    inputs.forEach(inp => validateNumericInput(inp, 'abhath'));
+    updateScoresUI();
+  }
+
+  // ===== أبحث 2: تلوين 4 بطاقات بالضبط لتكوين 10 =====
+  let abhath2Locked = false;
+
+  function toggleSqCard(card) {
+    if (abhath2Locked) return;
+    const msg = document.getElementById('abhath2-msg');
+    const selected = document.querySelectorAll('#four-cards-10 .sq-num-card.selected');
+    if (!card.classList.contains('selected') && selected.length >= 4) {
+      msg.textContent = 'تَنَبَّهْ! الْمَطْلُوبُ تَلْوِينُ أَرْبَعِ بِطَاقَاتٍ بِالضَّبْطِ فَقَطْ.';
+      return;
+    }
+    msg.textContent = '';
+    card.classList.toggle('selected');
+  }
+
+  function checkAbhath2() {
+    abhath2Locked = true;
+    document.getElementById('btn-abhath-2').disabled = true;
+    const selectedCards = document.querySelectorAll('#four-cards-10 .sq-num-card.selected');
+
+    let sum = 0;
+    selectedCards.forEach(c => sum += parseInt(c.dataset.num, 10));
+
+    const isExactSolution = (selectedCards.length === 4 && sum === 10);
+    const msg = document.getElementById('abhath2-msg');
+
+    if (isExactSolution) {
+      selectedCards.forEach(c => c.classList.add('result-correct'));
+      stageScores.abhath.correct++;
+      msg.style.color = '#16a34a';
+      msg.textContent = 'أَحْسَنْتَ! 1 + 2 + 3 + 4 = 10';
+    } else {
+      selectedCards.forEach(c => c.classList.add('result-wrong'));
+      stageScores.abhath.wrong++;
+      msg.style.color = '#dc2626';
+      msg.innerHTML = 'إِجَابَةٌ خَاطِئَةٌ. الْبِطَاقَاتُ الْأَرْبَعُ الصَّحِيحَةُ هِيَ: <span class="math-ltr" style="font-size:1.1rem;">4 ، 1 ، 2 ، 3</span>';
+    }
+
+    updateScoresUI();
+  }
+</script>
+
+</body>
+</html>
