@@ -1,0 +1,1821 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اللغة العربية - السنة الثانية: أَصْدِقَاءُ الْكِتَابِ (الدرس 12)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- مكتبة Telegram WebApp (ضرورية للحماية) -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #dbeafe;
+            --secondary: #f59e0b;
+            --secondary-light: #fef3c7;
+            --success: #16a34a;
+            --success-bg: #dcfce7;
+            --danger: #dc2626;
+            --danger-bg: #fee2e2;
+            --bg: #f0f9ff;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #cbd5e1;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            padding-bottom: 50px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+            border-bottom: 5px solid var(--secondary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        header .badge {
+            background: var(--secondary);
+            color: #1e293b;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        header p {
+            font-size: 1.05rem;
+            opacity: 0.95;
+        }
+
+        .container {
+            max-width: 920px;
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+
+        .book-divider {
+            background: linear-gradient(90deg, #0f172a, #334155);
+            color: white;
+            padding: 14px 22px;
+            border-radius: 14px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            margin: 35px 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .exercise-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .exercise-card.locked {
+            opacity: 0.55;
+            pointer-events: none;
+            filter: grayscale(35%);
+        }
+
+        .exercise-card.locked::after {
+            content: "🔒 أَكْمِلِ التَّمْرِينَ السَّابِقَ لِفَتْحِ هَذَا النَّشَاطِ";
+            position: absolute;
+            top: 12px;
+            left: 15px;
+            background: #334155;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 2px dashed #e2e8f0;
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .page-tag {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-weight: 700;
+        }
+
+        /* Audio Box */
+        .audio-box {
+            background: #eff6ff;
+            border: 2px solid #93c5fd;
+            border-radius: 14px;
+            padding: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .audio-box p {
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        audio {
+            width: 100%;
+            max-width: 500px;
+            outline: none;
+        }
+
+        /* Questions & Options */
+        .question-block {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-weight: 700;
+            font-size: 1.12rem;
+            margin-bottom: 12px;
+            color: #0f172a;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .opt-btn {
+            background: white;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 10px 18px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: right;
+        }
+
+        .opt-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .opt-btn.correct {
+            background: var(--success-bg) !important;
+            border-color: var(--success) !important;
+            color: #14532d !important;
+        }
+
+        .opt-btn.wrong {
+            background: var(--danger-bg) !important;
+            border-color: var(--danger) !important;
+            color: #7f1d1d !important;
+        }
+
+        .opt-btn:disabled {
+            cursor: default;
+        }
+
+        /* Images Grid */
+        .images-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin: 15px 0;
+        }
+
+        .img-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .img-card img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #cbd5e1;
+        }
+
+        .img-card p {
+            font-weight: 700;
+            font-size: 0.98rem;
+            color: #334155;
+        }
+
+        /* Reading Text Box */
+        .reading-box {
+            background: #fffbeb;
+            border: 2px solid #fcd34d;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+
+        .reading-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .reading-flex img {
+            width: 100%;
+            max-width: 300px;
+            border-radius: 12px;
+            border: 3px solid #f59e0b;
+            margin: 0 auto;
+        }
+
+        .reading-content {
+            flex: 1;
+            min-width: 260px;
+            font-size: 1.2rem;
+            line-height: 2.1;
+            font-weight: 600;
+            text-align: justify;
+        }
+
+        .vocab-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .vocab-item {
+            background: #ecfdf5;
+            border: 1px solid #6ee7b7;
+            border-radius: 10px;
+            padding: 12px;
+            font-weight: 700;
+        }
+
+        /* Formulas & Grammar Cards */
+        .formulas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .formula-pill {
+            background: #f0fdf4;
+            border: 2px solid #86efac;
+            padding: 12px 15px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .highlight-word {
+            color: #dc2626;
+            font-weight: 800;
+            text-decoration: underline;
+        }
+
+        /* Phonics Table */
+        .phonics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .phonic-box {
+            background: #f1f5f9;
+            border: 2px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #1e3a8a;
+        }
+
+        /* Ordering Exercise */
+        .order-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8fafc;
+            border: 2px solid #cbd5e1;
+            padding: 12px 15px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1.08rem;
+        }
+
+        .order-select {
+            padding: 6px 12px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            border-radius: 8px;
+            border: 2px solid var(--primary);
+            background: white;
+            cursor: pointer;
+        }
+
+        .order-item.correct {
+            background: var(--success-bg);
+            border-color: var(--success);
+        }
+
+        .order-item.wrong {
+            background: var(--danger-bg);
+            border-color: var(--danger);
+        }
+
+        /* Matching Exercise */
+        .match-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+        }
+
+        .match-prompt {
+            font-weight: 800;
+            font-size: 1.15rem;
+            color: var(--primary);
+            min-width: 120px;
+        }
+
+        .match-select {
+            flex: 1;
+            min-width: 220px;
+            padding: 8px 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            border-radius: 8px;
+            border: 2px solid #cbd5e1;
+            background: white;
+        }
+
+        .match-row.correct {
+            background: var(--success-bg);
+            border-color: var(--success);
+        }
+
+        .match-row.wrong {
+            background: var(--danger-bg);
+            border-color: var(--danger);
+        }
+
+        /* Classification / Sorting Exercise */
+        .sort-pool {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .sort-chip {
+            background: white;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .sort-chip.selected {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .sort-chip.done {
+            display: none;
+        }
+
+        .buckets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .bucket {
+            background: #f8fafc;
+            border: 2px dashed #94a3b8;
+            border-radius: 14px;
+            padding: 15px;
+            min-height: 150px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .bucket:hover {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
+
+        .bucket h4 {
+            text-align: center;
+            background: var(--secondary-light);
+            color: #92400e;
+            padding: 6px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .bucket-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .placed-item {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 0.98rem;
+            text-align: center;
+        }
+
+        .placed-item.correct {
+            background: var(--success-bg);
+            border: 1px solid var(--success);
+            color: #14532d;
+        }
+
+        .placed-item.wrong {
+            background: var(--danger-bg);
+            border: 1px solid var(--danger);
+            color: #7f1d1d;
+        }
+
+        /* Islamic Ed Box */
+        .quran-box {
+            background: #f0fdf4;
+            border: 2px solid #22c55e;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .quran-text {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: #14532d;
+            line-height: 2.2;
+            margin: 10px 0;
+        }
+
+        /* Action Buttons & Mini Score */
+        .action-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 12px;
+            transition: 0.2s;
+        }
+
+        .action-btn:hover:not(:disabled) {
+            background: #1d4ed8;
+        }
+
+        .action-btn:disabled {
+            background: #94a3b8;
+            cursor: default;
+        }
+
+        .mini-score-bar {
+            margin-top: 16px;
+            padding: 10px 15px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.98rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #cbd5e1;
+        }
+
+        .score-good { color: var(--success); }
+        .score-bad { color: var(--danger); }
+
+        /* Final Report Section */
+        .final-report {
+            background: white;
+            border: 3px solid var(--primary);
+            border-radius: 20px;
+            padding: 28px 20px;
+            margin-top: 35px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.12);
+        }
+
+        .final-report h2 {
+            font-size: 1.6rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .report-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 35px;
+            margin-bottom: 25px;
+        }
+
+        .pie-chart {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: conic-gradient(var(--success) 0% 0%, #e2e8f0 0% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .pie-chart::before {
+            content: "";
+            width: 105px;
+            height: 105px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .pie-percent {
+            position: relative;
+            z-index: 2;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--text);
+        }
+
+        .stats-boxes {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: right;
+            min-width: 230px;
+        }
+
+        .stat-pill {
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .stat-total { background: #eff6ff; color: #1e40af; border: 1px solid #93c5fd; }
+        .stat-correct { background: var(--success-bg); color: #14532d; border: 1px solid #86efac; }
+        .stat-wrong { background: var(--danger-bg); color: #7f1d1d; border: 1px solid #fca5a5; }
+
+        .reset-btn {
+            background: var(--secondary);
+            color: #1e293b;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 12px;
+            font-size: 1.15rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.3);
+            transition: 0.2s;
+        }
+
+        .reset-btn:hover {
+            background: #d97706;
+            color: white;
+        }
+
+        .feedback-note {
+            margin-top: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        /* ========================================
+           نافذة قفل الاشتراك الإجباري
+           ======================================== */
+        #sub-lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .lock-box {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 30px 20px;
+            box-shadow: 0 10px 25px rgba(2, 136, 209, 0.15);
+            border: 2px solid #e1f5fe;
+            max-width: 380px;
+            width: 100%;
+        }
+
+        .lock-icon { font-size: 50px; margin-bottom: 12px; }
+        .lock-title { font-size: 1.3rem; font-weight: 900; color: #01579b; margin-bottom: 10px; }
+        .lock-desc { font-size: 1rem; color: #546e7a; line-height: 1.6; margin-bottom: 22px; }
+
+        .btn-channel {
+            display: block;
+            width: 100%;
+            background: #0288d1;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 14px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(2, 136, 209, 0.3);
+        }
+
+        .btn-check-sub {
+            width: 100%;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border: 2px solid #2e7d32;
+            padding: 13px;
+            font-weight: 800;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .sub-status-msg {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            min-height: 24px;
+        }
+
+        /* زر العودة إلى الفهرس */
+        .btn-back-home {
+            display: block;
+            width: 100%;
+            margin: 20px auto 0;
+            background: #0d47a1;
+            color: #ffffff;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 900;
+            font-size: 1.05rem;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================
+         نافذة قفل الاشتراك الإجباري
+         ======================================== -->
+    <div id="sub-lock-screen">
+        <div class="lock-box">
+            <div class="lock-icon">🔒</div>
+            <div class="lock-title">اشْتِرَاكٌ إِجْبَارِيٌّ</div>
+            <div class="lock-desc">
+                لِفَتْحِ الدَّرْسِ وَمُتَابَعَةِ الأَنْشِطَةِ التَّفَاعُلِيَّةِ، يُرْجَى الاِنْضِمَامُ إِلَى قَنَاتِنَا أَوَّلًا ثُمَّ الضَّغْطُ عَلَى تَأْكِيدِ الاِشْتِرَاكِ.
+            </div>
+            <a href="https://t.me/c/4461185731" target="_blank" class="btn-channel" id="channel-link">
+                📢 الاِنْضِمَامُ إِلَى الْقَنَاةِ
+            </a>
+            <button class="btn-check-sub" onclick="verifySubscription()">
+                ✅ تَأْكِيدُ الاِشْتِرَاكِ
+            </button>
+            <div id="sub-status-msg" class="sub-status-msg"></div>
+        </div>
+    </div>
+
+<header>
+    <div class="badge">اللُّغَةُ الْعَرَبِيَّةُ – السَّنَةُ الثَّانِيَةُ ابْتِدَائِيّ</div>
+    <h1>الْمَقْطَعُ الرَّابِعُ: الرِّيَاضَةُ وَالتَّسْلِيَةُ (3)</h1>
+    <p>الدَّرْسُ 12: أَصْدِقَاءُ الْكِتَابِ</p>
+</header>
+
+<div class="container">
+
+    <!-- ==================== كِتَابُ التِّلْمِيذِ ==================== -->
+    <div class="book-divider">
+        <span>📖 أَوَّلًا: كِتَابُ التِّلْمِيذِ</span>
+        <span>الصَّفَحَاتُ: 73 – 78</span>
+    </div>
+
+    <!-- التمرين 1: فهم المنطوق (ص 73) -->
+    <div class="exercise-card" id="ex-1" data-total="3">
+        <div class="card-header">
+            <div class="section-title">🎧 فَهْمُ الْمَنْطُوقِ: أَسْتَمِعُ وَأُجِيبُ</div>
+            <span class="page-tag">كِتَابُ التِّلْمِيذِ - ص 73</span>
+        </div>
+
+        <div class="audio-box">
+            <p>🔊 اسْتَمِعْ جَيِّدًا إِلَى النَّصِّ الْمَنْطُوقِ ثُمَّ أَجِبْ عَنِ الْأَسْئِلَةِ التَّالِيَةِ:</p>
+            <audio controls src="audio_12.mp3">
+                مُتَصَفِّحُكَ لَا يَدْعَمُ تَشْغِيلَ الصَّوْتِ.
+            </audio>
+        </div>
+
+        <!-- سؤال 1 -->
+        <div class="question-block" id="q1-1">
+            <div class="question-text">1- أَيْنَ أَخَذَ الْأَبُ أَبْنَاءَهُ؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-1', 'q1-1', this, true)">حَدِيقَةِ التَّسْلِيَةِ</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-1', 'q1-1', this, false)">شَاطِئِ الْبَحْرِ</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-1', 'q1-1', this, false)">إِلَى الْغَابَةِ</button>
+            </div>
+        </div>
+
+        <!-- سؤال 2 -->
+        <div class="question-block" id="q1-2">
+            <div class="question-text">2- نَهَى حَارِسُ الْحَدِيقَةِ يَاسَمِينَ، مَاذَا قَالَ لَهَا؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-1', 'q1-2', this, false)">لَا تَقْطِفِي الْأَزْهَارَ، فَهِيَ تُزَيِّنُ الْحَدِيقَةَ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-1', 'q1-2', this, true)">لَا تَقْتَرِبِي مِنَ الْبُحَيْرَةِ، قَدْ تَقَعِينَ فِيهَا.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-1', 'q1-2', this, false)">لَا تَرْكُضِي بِسُرْعَةٍ بَيْنَ الْأَشْجَارِ.</button>
+            </div>
+        </div>
+
+        <!-- سؤال 3 -->
+        <div class="question-block" id="q1-3">
+            <div class="question-text">3- مَاذَا شَاهَدَ سَمِيرٌ مِنَ النَّافُورَةِ؟ وَهَلْ أَعْجَبَهُ؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-1', 'q1-3', this, false)">شَاهَدَ حَدِيقَةَ الْحَيَوَانَاتِ، وَلَمْ يُعْجِبْهُ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-1', 'q1-3', this, true)">شَاهَدَ مَقَامَ الشَّهِيدِ، نَعَمْ أَعْجَبَهُ كَثِيرًا.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-1', 'q1-3', this, false)">شَاهَدَ مَلْعَبَ كُرَةِ الْقَدَمِ، نَعَمْ أَعْجَبَهُ.</button>
+            </div>
+        </div>
+
+        <div class="mini-score-bar">
+            <span>نَتِيجَةُ هَذَا التَّمْرِينِ:</span>
+            <span><span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span></span>
+        </div>
+    </div>
+
+    <!-- التمرين 2: أتأمل وأتحدث (ص 73) -->
+    <div class="exercise-card locked" id="ex-2" data-total="3">
+        <div class="card-header">
+            <div class="section-title">🖼️ أَتَأَمَّلُ وَأَتَحَدَّثُ</div>
+            <span class="page-tag">كِتَابُ التِّلْمِيذِ - ص 73</span>
+        </div>
+
+        <div class="images-row">
+            <div class="img-card">
+                <img src="01.jpeg" alt="مَدِينَةُ الْمَلَاهِي">
+                <p>1- صِفِ الْأَلْعَابَ الْمَوْجُودَةَ فِي الصُّورَةِ</p>
+            </div>
+            <div class="img-card">
+                <img src="02.jpeg" alt="أَطْفَالٌ أَمَامَ الشَّاشَةِ">
+                <p>2- هَلْ تَقْضِي وَقْتًا طَوِيلًا أَمَامَ الشَّاشَةِ؟</p>
+            </div>
+            <div class="img-card">
+                <img src="03.jpeg" alt="أَطْفَالٌ فِي رِحْلَةٍ">
+                <p>3- أَيْنَ اخْتَارَ هُؤَلَاءِ الْأَطْفَالُ قَضَاءَ عُطْلَتِهِمْ؟</p>
+            </div>
+        </div>
+
+        <div class="question-block" id="q2-1">
+            <div class="question-text">1- مَاذَا يُوجَدُ فِي الصُّورَةِ الْأُولَى؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-2', 'q2-1', this, true)">تُوجَدُ أَلْعَابٌ مُتَنَوِّعَةٌ مِثْلَ الْعَجَلَةِ الدَّوَّارَةِ وَالْقِطَارِ وَالْأُرْجُوحَةِ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-2', 'q2-1', this, false)">تُوجَدُ كُتُبٌ وَقَوَامِيسُ وَقِصَصٌ لِلْمُطَالَعَةِ.</button>
+            </div>
+        </div>
+
+        <div class="question-block" id="q2-2">
+            <div class="question-text">2- مَا هُوَ التَّصَرُّفُ الصَّحِيحُ أَمَامَ الشَّاشَةِ (الصُّورَةُ الثَّانِيَةُ)؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-2', 'q2-2', this, false)">أَقْضِي كُلَّ وَقْتِي أَمَامَ التِّلْفَازِ وَلَا أَلْعَبُ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-2', 'q2-2', this, true)">لَا أَقْضِي وَقْتًا طَوِيلًا أَمَامَ الشَّاشَةِ لِأُحَافِظَ عَلَى صِحَّةِ عَيْنَيَّ.</button>
+            </div>
+        </div>
+
+        <div class="question-block" id="q2-3">
+            <div class="question-text">3- أَيْنَ اخْتَارَ هُؤَلَاءِ الْأَطْفَالُ قَضَاءَ عُطْلَتِهِمْ (الصُّورَةُ الثَّالِثَةُ)؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-2', 'q2-3', this, true)">اخْتَارُوا قَضَاءَ عُطْلَتِهِمْ فِي رِحْلَةٍ جَمِيلَةٍ وَسَطَ الطَّبِيعَةِ وَالْجِبَالِ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-2', 'q2-3', this, false)">اخْتَارُوا قَضَاءَ عُطْلَتِهِمْ دَاخِلَ الْغُرْفَةِ.</button>
+            </div>
+        </div>
+
+        <div class="mini-score-bar">
+            <span>نَتِيجَةُ هَذَا التَّمْرِينِ:</span>
+            <span><span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span></span>
+        </div>
+    </div>
+
+    <!-- التمرين 3: أستعمل الصيغ وأركب (ص 74) -->
+    <div class="exercise-card locked" id="ex-3" data-total="3">
+        <div class="card-header">
+            <div class="section-title">🗣️ أَسْتَعْمِلُ الصِّيَغَ وَأُرَكِّبُ</div>
+            <span class="page-tag">كِتَابُ التِّلْمِيذِ - ص 74</span>
+        </div>
+
+        <div class="formulas-grid">
+            <div class="formula-pill">• <span class="highlight-word">لَا</span> تَقْتَرِبِي مِنَ الْبُحَيْرَةِ.</div>
+            <div class="formula-pill">• <span class="highlight-word">لَمْ</span> تَرَ يَاسَمِينُ مَقَامَ الشَّهِيدِ.</div>
+            <div class="formula-pill">• <span class="highlight-word">مَا</span> أَمْسَكَتْ يَاسَمِينُ بِالْبَطَّةِ.</div>
+            <div class="formula-pill">• <span class="highlight-word">هُوَ</span> زَارَ مَعْرِضَ الْكِتَابِ. | <span class="highlight-word">هِيَ</span> زَارَتِ الْمَتْحَفَ.</div>
+            <div class="formula-pill">• <span class="highlight-word">هُمَا</span> زَارَا الصَّحْرَاءَ.</div>
+            <div class="formula-pill">• <span class="highlight-word">هُمْ</span> زَارُوا مَدِينَةَ تِيمْقَادَ. | <span class="highlight-word">هُنَّ</span> زُرْنَ مَدِينَةَ وَهْرَانَ.</div>
+        </div>
+
+        <div class="question-block" id="q3-1">
+            <div class="question-text">1- أَكْمِلْ بِـ (لَا / لَمْ / مَا): « ....... تَلْعَبْ بِالْكُرَةِ دَاخِلَ الْبَيْتِ »</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-3', 'q3-1', this, true)">لَا</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-3', 'q3-1', this, false)">لَمْ</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-3', 'q3-1', this, false)">مَا</button>
+            </div>
+        </div>
+
+        <div class="question-block" id="q3-2">
+            <div class="question-text">2- اخْتَرِ الضَّمِيرَ الْمُنَاسِبَ: « ....... زَارُوا مَدِينَةَ تِيمْقَادَ »</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-3', 'q3-2', this, false)">هُنَّ</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-3', 'q3-2', this, true)">هُمْ</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-3', 'q3-2', this, false)">هُمَا</button>
+            </div>
+        </div>
+
+        <div class="question-block" id="q3-3">
+            <div class="question-text">3- اخْتَرِ الضَّمِيرَ الْمُنَاسِبَ: « ....... زُرْنَ مَدِينَةَ وَهْرَانَ »</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-3', 'q3-3', this, true)">هُنَّ</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-3', 'q3-3', this, false)">هِيَ</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-3', 'q3-3', this, false)">هُمْ</button>
+            </div>
+        </div>
+
+        <div class="mini-score-bar">
+            <span>نَتِيجَةُ هَذَا التَّمْرِينِ:</span>
+            <span><span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span></span>
+        </div>
+    </div>
+
+    <!-- التمرين 4: أُنتج شفويا (ص 74) -->
+    <div class="exercise-card locked" id="ex-4" data-total="4">
+        <div class="card-header">
+            <div class="section-title">🎬 أُنْتِجُ شَفَوِيًّا: أُلَاحِظُ الْمَشَاهِدَ وَأُعَبِّرُ عَنْ أَحْدَاثِهَا</div>
+            <span class="page-tag">كِتَابُ التِّلْمِيذِ - ص 74</span>
+        </div>
+
+        <div class="images-row">
+            <div class="img-card">
+                <img src="04.jpeg" alt="المشهد 1: شراء التذاكر">
+                <p>الْمَشْهَدُ (1)</p>
+            </div>
+            <div class="img-card">
+                <img src="05.jpeg" alt="المشهد 2: السيارات المتصادمة">
+                <p>الْمَشْهَدُ (2)</p>
+            </div>
+            <div class="img-card">
+                <img src="06.jpeg" alt="المشهد 3: ألعاب الملاهي">
+                <p>الْمَشْهَدُ (3)</p>
+            </div>
+            <div class="img-card">
+                <img src="07.jpeg" alt="المشهد 4: تنزه العائلة">
+                <p>الْمَشْهَدُ (4)</p>
+            </div>
+        </div>
+
+        <div class="question-block" id="q4-1">
+            <div class="question-text">1- مَاذَا يَحْدُثُ فِي الْمَشْهَدِ (1)؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-4', 'q4-1', this, true)">شِرَاءُ تَذَاكِرِ الدُّخُولِ مِنْ شُبَّاكِ التَّذَاكِرِ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-4', 'q4-1', this, false)">الرُّكُوبُ فِي السَّيَّارَاتِ الْمُتَصَادِمَةِ.</button>
+            </div>
+        </div>
+
+        <div class="question-block" id="q4-2">
+            <div class="question-text">2- مَاذَا يَفْعَلُ الطِّفْلَانِ فِي الْمَشْهَدِ (2)؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-4', 'q4-2', this, false)">يَقْرَآنِ قِصَّةً مُسَلِّيَةً.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-4', 'q4-2', this, true)">يَلْعَبَانِ بِمَرَحٍ فِي السَّيَّارَاتِ الْمُتَصَادِمَةِ.</button>
+            </div>
+        </div>
+
+        <div class="question-block" id="q4-3">
+            <div class="question-text">3- مَاذَا نُشَاهِدُ فِي الْمَشْهَدِ (3)؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-4', 'q4-3', this, true)">أَلْعَابٌ مُتَنَوِّعَةٌ مِثْلَ الْعَجَلَةِ الدَّوَّارَةِ وَالْأُرْجُوحَةِ وَخَيْمَةِ السِّيرْكِ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-4', 'q4-3', this, false)">مَكْتَبَةٌ كَبِيرَةٌ مَلِيئَةٌ بِالْكُتُبِ.</button>
+            </div>
+        </div>
+
+        <div class="question-block" id="q4-4">
+            <div class="question-text">4- مَاذَا تَفْعَلُ الْعَائِلَةُ فِي الْمَشْهَدِ (4)؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-4', 'q4-4', this, true)">تَتَنَزَّهُ الْعَائِلَةُ بِسَعَادَةٍ وَيَحْمِلُ الْأَبُ ابْنَهُ عَلَى كَتِفَيْهِ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-4', 'q4-4', this, false)">تَغَادِرُ الْعَائِلَةُ الْمَدِينَةَ بِالْحَافِلَةِ.</button>
+            </div>
+        </div>
+
+        <div class="mini-score-bar">
+            <span>نَتِيجَةُ هَذَا التَّمْرِينِ:</span>
+            <span><span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span></span>
+        </div>
+    </div>
+
+    <!-- التمرين 5: أقرأ وأفهم النص (ص 75) -->
+    <div class="exercise-card locked" id="ex-5" data-total="3">
+        <div class="card-header">
+            <div class="section-title">📚 أَقْرَأُ وَأَفْهَمُ النَّصَّ: أَصْدِقَاءُ الْكِتَابِ</div>
+            <span class="page-tag">كِتَابُ التِّلْمِيذِ - ص 75</span>
+        </div>
+
+        <div class="reading-box">
+            <div class="reading-flex">
+                <img src="08.jpeg" alt="مَعْرِضُ الْكِتَابِ">
+                <div class="reading-content">
+                    <h3 style="color:#b45309; margin-bottom:8px;">أَصْدِقَاءُ الْكِتَابِ</h3>
+                    غَصَّتْ أَرْوِقَةُ الْمَعْرِضِ بِالزُّوَّارِ، فَقَدْ جَاءَ أَصْدِقَاءُ الْكِتَابِ مِنْ كُلِّ مَكَانٍ.<br>
+                    دَخَلَ سَمِيرٌ وَيَاسَمِينُ الْمَعْرِضَ رُفْقَةَ أَبِيهِمَا، وَرَاحَا يَرْكُضَانِ فِي كُلِّ اتِّجَاهٍ، نَادَاهُمَا الْأَبُ: لَا تَبْتَعِدَا كَثِيرًا، هَا هُوَ الرِّوَاقُ الْمُخَصَّصُ لِكُتُبِ الْأَطْفَالِ.<br>
+                    قَالَ الْبَائِعُ: هَذِهِ قَوَامِيسُ، وَتِلْكَ قِصَصٌ لِلْمُطَالَعَةِ، وَهُنَاكَ دَفَاتِرُ لِلتَّلْوِينِ.<br>
+                    اشْتَرَى سَمِيرٌ قِصَّةً وَدَفْتَرًا لِلتَّلْوِينِ، أَمَّا يَاسَمِينُ فَقَالَتْ: لَقَدْ تَسَلَّيْنَا كَثِيرًا، وَلَكِنْ لَمْ أَجِدْ مَا أَبْحَثُ عَنْهُ، فَمَا اشْتَرَيْتُ شَيْئًا. ثُمَّ تَوَقَّفَتْ وَأَشَارَتْ إِلَى أَعْلَى الرَّفِّ: هَذَا الْكِتَابُ الَّذِي أَبْحَثُ عَنْهُ، إِنَّهُ الْقُرْآنُ الْكَرِيمُ.
+                </div>
+            </div>
+
+            <div class="vocab-grid">
+                <div class="vocab-item">💡 <strong>غَصَّتْ:</strong> امْتَلَأَتْ (غَصَّ الْمَلْعَبُ بِالْمُتَفَرِّجِينَ).</div>
+                <div class="vocab-item">💡 <strong>يَرْكُضُ:</strong> يَجْرِي (يَرْكُضُ الْحِصَانُ بِسُرْعَةٍ).</div>
+            </div>
+        </div>
+
+        <div class="question-block" id="q5-1">
+            <div class="question-text">1- أَيْنَ ذَهَبَ الْأَطْفَالُ؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-5', 'q5-1', this, false)">ذَهَبَ الْأَطْفَالُ إِلَى حَدِيقَةِ التَّسْلِيَةِ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-5', 'q5-1', this, true)">ذَهَبَ الْأَطْفَالُ إِلَى مَعْرِضِ الْكِتَابِ رُفْقَةَ أَبِيهِمَا.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-5', 'q5-1', this, false)">ذَهَبَ الْأَطْفَالُ إِلَى الْمَلْعَبِ.</button>
+            </div>
+        </div>
+
+        <div class="question-block" id="q5-2">
+            <div class="question-text">2- اذْكُرْ أَنْوَاعَ الْكُتُبِ الَّتِي تُبَاعُ فِيهِ؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-5', 'q5-2', this, true)">قَوَامِيسُ، وَقِصَصٌ لِلْمُطَالَعَةِ، وَدَفَاتِرُ لِلتَّلْوِينِ، وَالْقُرْآنُ الْكَرِيمُ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-5', 'q5-2', this, false)">أَلْعَابٌ إِِلِكْتُرُونِيَّةٌ وَكُرَاتٌ فَقَطْ.</button>
+            </div>
+        </div>
+
+        <div class="question-block" id="q5-3">
+            <div class="question-text">3- مَاذَا اشْتَرَتْ يَاسَمِينُ؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-5', 'q5-3', this, false)">اشْتَرَتْ يَاسَمِينُ قِصَّةً وَدَفْتَرًا لِلتَّلْوِينِ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-5', 'q5-3', this, true)">اشْتَرَتْ يَاسَمِينُ الْمُصْحَفَ الشَّرِيفَ (الْقُرْآنَ الْكَرِيمَ).</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-5', 'q5-3', this, false)">اشْتَرَتْ يَاسَمِينُ قَامُوسًا كَبِيرًا.</button>
+            </div>
+        </div>
+
+        <div class="mini-score-bar">
+            <span>نَتِيجَةُ هَذَا التَّمْرِينِ:</span>
+            <span><span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span></span>
+        </div>
+    </div>
+
+    <!-- التمرين 6: أكتشف وأميز + أتدرب على الإنتاج الكتابي (ص 76) -->
+    <div class="exercise-card locked" id="ex-6" data-total="4">
+        <div class="card-header">
+            <div class="section-title">🔤 أَكْتَشِفُ وَأُمَيِّزُ (ق / ك) + أَتَدَرَّبُ عَلَى الْإِنْتَاجِ الْكِتَابِيِّ</div>
+            <span class="page-tag">كِتَابُ التِّلْمِيذِ - ص 76</span>
+        </div>
+
+        <div class="reading-box" style="background:#f8fafc; border-color:#cbd5e1;">
+            <p style="font-weight:800; color:#1e40af; margin-bottom:8px;">أَقْرَأُ مُنْتَبِهًا إِلَى الْحَرْفَيْنِ (ق / ك):</p>
+            <p style="font-size:1.15rem; font-weight:700;">• هَذَا <span class="highlight-word">قُ</span>رْآنٌ <span class="highlight-word">كَـ</span>رِيمٌ. &nbsp;&nbsp;|&nbsp;&nbsp; • هَذِهِ <span class="highlight-word">كُـ</span>تُبٌ لِلْـ<span class="highlight-word">قِـ</span>صَصِ.</p>
+            <div class="phonics-grid">
+                <div class="phonic-box">ق / ك</div>
+                <div class="phonic-box">قَا / كَا</div>
+                <div class="phonic-box">قِي / كِي</div>
+                <div class="phonic-box">أَقْ / أَكْ</div>
+                <div class="phonic-box">قِصَصٌ</div>
+                <div class="phonic-box">أَصْدِقَاءُ</div>
+                <div class="phonic-box">فَرِيقٌ</div>
+                <div class="phonic-box">كَامِلٌ</div>
+                <div class="phonic-box">مَكْتَبَةٌ</div>
+                <div class="phonic-box">شُبَّاكٌ</div>
+            </div>
+        </div>
+
+        <div class="question-text" style="margin-top:15px;">رَتِّبْ هَذِهِ الْجُمَلَ وَرَقِّمْهَا (مِنْ 1 إِلَى 4) لِتَتَحَصَّلَ عَلَى بَرْنَامَجِ الْحَدِيقَةِ:</div>
+        <div class="order-list" id="order-ex6">
+            <div class="order-item" data-ans="3">
+                <select class="order-select">
+                    <option value="">--</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+                <span>تَزُورُ الْحَيَوَانَاتِ بَعْدَ الْغَدَاءِ.</span>
+            </div>
+            <div class="order-item" data-ans="2">
+                <select class="order-select">
+                    <option value="">--</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+                <span>تَتَنَاوَلُ وَجْبَةَ الْغَدَاءِ.</span>
+            </div>
+            <div class="order-item" data-ans="4">
+                <select class="order-select">
+                    <option value="">--</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+                <span>تَنْتَهِي الزِّيَارَةُ فِي تَمَامِ السَّادِسَةِ مَسَاءً.</span>
+            </div>
+            <div class="order-item" data-ans="1">
+                <select class="order-select">
+                    <option value="">--</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </select>
+                <span>تَفْتَحُ الْحَدِيقَةُ أَبْوَابَهَا عَلَى التَّاسِعَةِ صَبَاحًا.</span>
+            </div>
+        </div>
+        <button class="action-btn" id="btn-ex6" onclick="checkOrdering('ex-6', 'order-ex6', this)">تَحَقَّقْ مِنَ التَّرْتِيبِ</button>
+
+        <div class="mini-score-bar">
+            <span>نَتِيجَةُ هَذَا التَّمْرِينِ:</span>
+            <span><span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span></span>
+        </div>
+    </div>
+
+    <!-- التمرين 7: التربية الإسلامية - الله الواحد القادر (ص 78) -->
+    <div class="exercise-card locked" id="ex-7" data-total="2">
+        <div class="card-header">
+            <div class="section-title">🕌 التَّرْبِيَةُ الْإِسْلَامِيَّةُ: اللَّهُ الْوَاحِدُ الْقَادِرُ</div>
+            <span class="page-tag">كِتَابُ التِّلْمِيذِ - ص 78</span>
+        </div>
+
+        <div class="reading-flex" style="margin-bottom:15px;">
+            <img src="10.jpeg" alt="شُرُوقُ الشَّمْسِ وَالنَّهَارُ">
+            <div class="quran-box" style="flex:1;">
+                <div style="font-weight:800; color:#15803d;">سُورَةُ الْإِخْلَاصِ (112) – وَآيَاتُهَا 4</div>
+                <div style="font-weight:700; margin-top:5px;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+                <div class="quran-text">
+                    ﴿ قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ﴾
+                </div>
+                <p style="font-weight:700; text-align:right; font-size:1.02rem;">
+                    • مِنْ أَسْمَاءِ اللَّهِ الْحُسْنَى: <strong>الْوَاحِدُ</strong>، لَيْسَ لَهُ أَبٌ وَلَا أُمٌّ وَلَا أَوْلَادٌ.<br>
+                    • مِنْ أَسْمَاءِ اللَّهِ الْحُسْنَى: <strong>الْقَادِرُ</strong>، لِأَنَّهُ قَادِرٌ عَلَى كُلِّ شَيْءٍ.
+                </p>
+            </div>
+        </div>
+
+        <div class="question-block" id="q7-1">
+            <div class="question-text">1- هَلِ الْإِنْسَانُ قَادِرٌ عَلَى أَنْ يَأْتِيَ بِالظَّلَامِ؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-7', 'q7-1', this, false)">نَعَمْ، الْإِنْسَانُ قَادِرٌ عَلَى ذَلِكَ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-7', 'q7-1', this, true)">لَا، الْإِنْسَانُ عَاجِزٌ وَلَا يَقْدِرُ عَلَى ذَلِكَ.</button>
+            </div>
+        </div>
+
+        <div class="question-block" id="q7-2">
+            <div class="question-text">2- مَنْ يُذْهِبُ اللَّيْلَ وَيَأْتِي بِالنَّهَارِ؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-7', 'q7-2', this, true)">اللَّهُ الْوَاحِدُ الْقَادِرُ عَلَى كُلِّ شَيْءٍ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-7', 'q7-2', this, false)">الشَّمْسُ وَالْقَمَرُ بِمُفْرَدِهِمَا.</button>
+            </div>
+        </div>
+
+        <div class="mini-score-bar">
+            <span>نَتِيجَةُ هَذَا التَّمْرِينِ:</span>
+            <span><span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span></span>
+        </div>
+    </div>
+
+    <!-- ==================== كُرَّاسُ الْأَنْشِطَةِ ==================== -->
+    <div class="book-divider">
+        <span>✏️ ثَانِيًا: كُرَّاسُ الْأَنْشِطَةِ</span>
+        <span>الصَّفَحَاتُ: 47 – 49</span>
+    </div>
+
+    <!-- نشاط 1: أوظف الصيغ (ص 47) -->
+    <div class="exercise-card locked" id="ex-8" data-total="3">
+        <div class="card-header">
+            <div class="section-title">1️⃣ أُوَظِّفُ الصِّيَغَ: أَكْتُبُ وِفْقَ الْمِنْوَالِ</div>
+            <span class="page-tag">كُرَّاسُ الْأَنْشِطَةِ - ص 47</span>
+        </div>
+
+        <div class="formulas-grid">
+            <div class="formula-pill">الْمِثَالُ 1: <strong>لَا</strong> تُمَزِّقْ كِتَابَكَ.</div>
+            <div class="formula-pill">الْمِثَالُ 2: <strong>لَمْ</strong> أَزُرْ حَدِيقَةَ الْحَيَوَانَاتِ.</div>
+            <div class="formula-pill">الْمِثَالُ 3: أَنَا <strong>مَا</strong> قَطَفْتُ أَزْهَارَ الْبُسْتَانِ.</div>
+        </div>
+
+        <div class="question-block" id="q8-1">
+            <div class="question-text">• اخْتَرِ الْجُمْلَةَ الْمُنَاسِبَةَ لِصِيغَةِ (لَا):</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-8', 'q8-1', this, true)">لَا تَقْتَرِبْ مِنَ النَّارِ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-8', 'q8-1', this, false)">لَا أَكَلْتُ التُّفَّاحَةَ أَمْسِ.</button>
+            </div>
+        </div>
+
+        <div class="question-block" id="q8-2">
+            <div class="question-text">• اخْتَرِ الْجُمْلَةَ الْمُنَاسِبَةَ لِصِيغَةِ (لَمْ):</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-8', 'q8-2', this, false)">لَمْ تَكْتُبْ عَلَى الْجِدَارِ غَدًا.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-8', 'q8-2', this, true)">لَمْ أُشَاهِدِ التِّلْفَازَ الْيَوْمَ.</button>
+            </div>
+        </div>
+
+        <div class="question-block" id="q8-3">
+            <div class="question-text">• اخْتَرِ الْجُمْلَةَ الْمُنَاسِبَةَ لِصِيغَةِ (مَا):</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-8', 'q8-3', this, true)">أَنَا مَا أَهْمَلْتُ دُرُوسِي.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-8', 'q8-3', this, false)">أَنَا مَا تَلْعَبْ فِي الطَّرِيقِ.</button>
+            </div>
+        </div>
+
+        <div class="mini-score-bar">
+            <span>نَتِيجَةُ هَذَا التَّمْرِينِ:</span>
+            <span><span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span></span>
+        </div>
+    </div>
+
+    <!-- نشاط 2: أفهم وأجيب (ص 47) -->
+    <div class="exercise-card locked" id="ex-9" data-total="5">
+        <div class="card-header">
+            <div class="section-title">2️⃣ أَفْهَمُ وَأُجِيبُ</div>
+            <span class="page-tag">كُرَّاسُ الْأَنْشِطَةِ - ص 47</span>
+        </div>
+
+        <div style="font-weight:800; color:var(--primary); margin-bottom:10px;">أَوَّلًا: حَدِّدْ هَلِ الْجُمْلَةُ صَحِيحَةٌ أَمْ خَاطِئَةٌ (×):</div>
+
+        <div class="question-block" id="q9-1">
+            <div class="question-text">1- فِي الْمَعْرِضِ قَوَامِيسُ.</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-9', 'q9-1', this, true)">جُمْلَةٌ صَحِيحَةٌ ✓</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-9', 'q9-1', this, false)">جُمْلَةٌ خَاطِئَةٌ ×</button>
+            </div>
+        </div>
+
+        <div class="question-block" id="q9-2">
+            <div class="question-text">2- اشْتَرَتْ يَاسَمِينُ قِصَّةَ عَلِي بَابَا.</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-9', 'q9-2', this, false)">جُمْلَةٌ صَحِيحَةٌ ✓</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-9', 'q9-2', this, true)">جُمْلَةٌ خَاطِئَةٌ × (اشْتَرَتِ الْقُرْآنَ الْكَرِيمَ)</button>
+            </div>
+        </div>
+
+        <div class="question-block" id="q9-3">
+            <div class="question-text">3- أَشَارَتْ يَاسَمِينُ إِلَى الْمُصْحَفِ الشَّرِيفِ.</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-9', 'q9-3', this, true)">جُمْلَةٌ صَحِيحَةٌ ✓</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-9', 'q9-3', this, false)">جُمْلَةٌ خَاطِئَةٌ ×</button>
+            </div>
+        </div>
+
+        <div style="font-weight:800; color:var(--primary); margin:15px 0 10px;">ثَانِيًا: أُجِيبُ عَنِ الْأَسْئِلَةِ التَّالِيَةِ بِجُمْلَةٍ كَامِلَةٍ:</div>
+
+        <div class="question-block" id="q9-4">
+            <div class="question-text">• أَيْنَ ذَهَبَ سَمِيرٌ وَيَاسَمِينُ؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-9', 'q9-4', this, true)">ذَهَبَ سَمِيرٌ وَيَاسَمِينُ إِلَى مَعْرِضِ الْكِتَابِ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-9', 'q9-4', this, false)">ذَهَبَ سَمِيرٌ وَيَاسَمِينُ إِلَى شَاطِئِ الْبَحْرِ.</button>
+            </div>
+        </div>
+
+        <div class="question-block" id="q9-5">
+            <div class="question-text">• عَمَّ تَبْحَثُ يَاسَمِينُ؟</div>
+            <div class="options-grid">
+                <button class="opt-btn" onclick="checkMCQ('ex-9', 'q9-5', this, false)">تَبْحَثُ يَاسَمِينُ عَنْ دَفْتَرٍ لِلتَّلْوِينِ.</button>
+                <button class="opt-btn" onclick="checkMCQ('ex-9', 'q9-5', this, true)">تَبْحَثُ يَاسَمِينُ عَنِ الْقُرْآنِ الْكَرِيمِ.</button>
+            </div>
+        </div>
+
+        <div class="mini-score-bar">
+            <span>نَتِيجَةُ هَذَا التَّمْرِينِ:</span>
+            <span><span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span></span>
+        </div>
+    </div>
+
+    <!-- نشاط 3: أوظف التراكيب اللغوية (ص 47) -->
+    <div class="exercise-card locked" id="ex-10" data-total="5">
+        <div class="card-header">
+            <div class="section-title">3️⃣ أُوَظِّفُ التَّرَاكِيبَ اللُّغَوِيَّةَ: أَرْبِطُ بَيْنَ شَطْرَيِ الْجُمْلَةِ</div>
+            <span class="page-tag">كُرَّاسُ الْأَنْشِطَةِ - ص 47</span>
+        </div>
+
+        <div id="match-ex10">
+            <div class="match-row" data-ans="اشْتَرَى تَذْكِرَةً.">
+                <span class="match-prompt">هُوَ</span>
+                <select class="match-select">
+                    <option value="">-- اخْتَرْ تَكْمِلَةَ الْجُمْلَةِ --</option>
+                    <option value="تَزَحْلَقَا عَلَى الْجَلِيدِ.">تَزَحْلَقَا عَلَى الْجَلِيدِ.</option>
+                    <option value="اشْتَرَى تَذْكِرَةً.">اشْتَرَى تَذْكِرَةً.</option>
+                    <option value="أَكَلُوا مُثَلَّجَاتٍ.">أَكَلُوا مُثَلَّجَاتٍ.</option>
+                    <option value="لَعِبْنَ كَثِيرًا.">لَعِبْنَ كَثِيرًا.</option>
+                    <option value="لَعِبَتْ فِي الْأُرْجُوحَةِ.">لَعِبَتْ فِي الْأُرْجُوحَةِ.</option>
+                </select>
+            </div>
+
+            <div class="match-row" data-ans="لَعِبَتْ فِي الْأُرْجُوحَةِ.">
+                <span class="match-prompt">هِيَ</span>
+                <select class="match-select">
+                    <option value="">-- اخْتَرْ تَكْمِلَةَ الْجُمْلَةِ --</option>
+                    <option value="تَزَحْلَقَا عَلَى الْجَلِيدِ.">تَزَحْلَقَا عَلَى الْجَلِيدِ.</option>
+                    <option value="اشْتَرَى تَذْكِرَةً.">اشْتَرَى تَذْكِرَةً.</option>
+                    <option value="أَكَلُوا مُثَلَّجَاتٍ.">أَكَلُوا مُثَلَّجَاتٍ.</option>
+                    <option value="لَعِبْنَ كَثِيرًا.">لَعِبْنَ كَثِيرًا.</option>
+                    <option value="لَعِبَتْ فِي الْأُرْجُوحَةِ.">لَعِبَتْ فِي الْأُرْجُوحَةِ.</option>
+                </select>
+            </div>
+
+            <div class="match-row" data-ans="تَزَحْلَقَا عَلَى الْجَلِيدِ.">
+                <span class="match-prompt">هُمَا</span>
+                <select class="match-select">
+                    <option value="">-- اخْتَرْ تَكْمِلَةَ الْجُمْلَةِ --</option>
+                    <option value="تَزَحْلَقَا عَلَى الْجَلِيدِ.">تَزَحْلَقَا عَلَى الْجَلِيدِ.</option>
+                    <option value="اشْتَرَى تَذْكِرَةً.">اشْتَرَى تَذْكِرَةً.</option>
+                    <option value="أَكَلُوا مُثَلَّجَاتٍ.">أَكَلُوا مُثَلَّجَاتٍ.</option>
+                    <option value="لَعِبْنَ كَثِيرًا.">لَعِبْنَ كَثِيرًا.</option>
+                    <option value="لَعِبَتْ فِي الْأُرْجُوحَةِ.">لَعِبَتْ فِي الْأُرْجُوحَةِ.</option>
+                </select>
+            </div>
+
+            <div class="match-row" data-ans="أَكَلُوا مُثَلَّجَاتٍ.">
+                <span class="match-prompt">هُمْ</span>
+                <select class="match-select">
+                    <option value="">-- اخْتَرْ تَكْمِلَةَ الْجُمْلَةِ --</option>
+                    <option value="تَزَحْلَقَا عَلَى الْجَلِيدِ.">تَزَحْلَقَا عَلَى الْجَلِيدِ.</option>
+                    <option value="اشْتَرَى تَذْكِرَةً.">اشْتَرَى تَذْكِرَةً.</option>
+                    <option value="أَكَلُوا مُثَلَّجَاتٍ.">أَكَلُوا مُثَلَّجَاتٍ.</option>
+                    <option value="لَعِبْنَ كَثِيرًا.">لَعِبْنَ كَثِيرًا.</option>
+                    <option value="لَعِبَتْ فِي الْأُرْجُوحَةِ.">لَعِبَتْ فِي الْأُرْجُوحَةِ.</option>
+                </select>
+            </div>
+
+            <div class="match-row" data-ans="لَعِبْنَ كَثِيرًا.">
+                <span class="match-prompt">هُنَّ</span>
+                <select class="match-select">
+                    <option value="">-- اخْتَرْ تَكْمِلَةَ الْجُمْلَةِ --</option>
+                    <option value="تَزَحْلَقَا عَلَى الْجَلِيدِ.">تَزَحْلَقَا عَلَى الْجَلِيدِ.</option>
+                    <option value="اشْتَرَى تَذْكِرَةً.">اشْتَرَى تَذْكِرَةً.</option>
+                    <option value="أَكَلُوا مُثَلَّجَاتٍ.">أَكَلُوا مُثَلَّجَاتٍ.</option>
+                    <option value="لَعِبْنَ كَثِيرًا.">لَعِبْنَ كَثِيرًا.</option>
+                    <option value="لَعِبَتْ فِي الْأُرْجُوحَةِ.">لَعِبَتْ فِي الْأُرْجُوحَةِ.</option>
+                </select>
+            </div>
+        </div>
+        <button class="action-btn" id="btn-ex10" onclick="checkMatching('ex-10', 'match-ex10', this)">تَحَقَّقْ مِنَ الرَّبْطِ</button>
+
+        <div class="mini-score-bar">
+            <span>نَتِيجَةُ هَذَا التَّمْرِينِ:</span>
+            <span><span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span></span>
+        </div>
+    </div>
+
+    <!-- نشاط 4: أثري لغتي (ص 48) -->
+    <div class="exercise-card locked" id="ex-11" data-total="5">
+        <div class="card-header">
+            <div class="section-title">4️⃣ أُثْرِي لُغَتِي: أَضَعُ الْعَنَاوِينَ فِي خَانَتِهَا الْمُنَاسِبَةِ</div>
+            <span class="page-tag">كُرَّاسُ الْأَنْشِطَةِ - ص 48</span>
+        </div>
+
+        <p style="font-weight:700; margin-bottom:10px; color:#475569;">👆 انْقُرْ عَلَى الْعُنْوَانِ ثُمَّ انْقُرْ عَلَى الْخَانَةِ الْمُنَاسِبَةِ لَهُ:</p>
+
+        <div class="sort-pool" id="pool-ex11">
+            <button class="sort-chip" data-cat="قصص" onclick="selectChip(this)">سَنْدَرِيلَّا</button>
+            <button class="sort-chip" data-cat="مصحف" onclick="selectChip(this)">سُورَةُ الْفَاتِحَةِ</button>
+            <button class="sort-chip" data-cat="مصحف" onclick="selectChip(this)">سُورَةُ الْعَصْرِ</button>
+            <button class="sort-chip" data-cat="علمية" onclick="selectChip(this)">الْغِذَاءُ الصَّحِيُّ</button>
+            <button class="sort-chip" data-cat="قصص" onclick="selectChip(this)">جُحَا وَالْمُحَامِي</button>
+        </div>
+
+        <div class="buckets-grid">
+            <div class="bucket" onclick="placeInBucket('ex-11', 'علمية', this)">
+                <h4>🔬 كُتُبٌ عِلْمِيَّةٌ</h4>
+                <div class="bucket-items"></div>
+            </div>
+            <div class="bucket" onclick="placeInBucket('ex-11', 'مصحف', this)">
+                <h4>📖 مُصْحَفٌ شَرِيفٌ</h4>
+                <div class="bucket-items"></div>
+            </div>
+            <div class="bucket" onclick="placeInBucket('ex-11', 'قصص', this)">
+                <h4>🧚 قِصَصٌ</h4>
+                <div class="bucket-items"></div>
+            </div>
+        </div>
+
+        <div class="mini-score-bar">
+            <span>نَتِيجَةُ هَذَا التَّمْرِينِ:</span>
+            <span><span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span></span>
+        </div>
+    </div>
+
+    <!-- نشاط 7: أنتج كتابيا (ص 48) -->
+    <div class="exercise-card locked" id="ex-12" data-total="4">
+        <div class="card-header">
+            <div class="section-title">7️⃣ أُنْتِجُ كِتَابِيًّا: أُرَتِّبُ الْجُمَلَ لِأَتَحَصَّلَ عَلَى بَرْنَامَجِ الْحَدِيقَةِ</div>
+            <span class="page-tag">كُرَّاسُ الْأَنْشِطَةِ - ص 48</span>
+        </div>
+
+        <p style="font-weight:700; margin-bottom:12px;">اخْتَرِ الْجُمْلَةَ الْمُنَاسِبَةَ لِكُلِّ رَقْمٍ حَسَبَ التَّسَلْسُلِ الزَّمَنِيِّ لِبَرْنَامَجِ زِيَارَةِ الْحَدِيقَةِ:</p>
+
+        <div id="match-ex12">
+            <div class="match-row" data-ans="تَفْتَحُ الْحَدِيقَةُ أَبْوَابَهَا عَلَى التَّاسِعَةِ صَبَاحًا.">
+                <span class="match-prompt">1 ⬅️</span>
+                <select class="match-select">
+                    <option value="">-- اخْتَرِ الْجُمْلَةَ الْأُولَى --</option>
+                    <option value="تَفْتَحُ الْحَدِيقَةُ أَبْوَابَهَا عَلَى التَّاسِعَةِ صَبَاحًا.">تَفْتَحُ الْحَدِيقَةُ أَبْوَابَهَا عَلَى التَّاسِعَةِ صَبَاحًا.</option>
+                    <option value="تَتَنَاوَلُ وَجْبَةَ الْغَدَاءِ.">تَتَنَاوَلُ وَجْبَةَ الْغَدَاءِ.</option>
+                    <option value="تَزُورُ الْحَيَوَانَاتِ بَعْدَ الْغَدَاءِ.">تَزُورُ الْحَيَوَانَاتِ بَعْدَ الْغَدَاءِ.</option>
+                    <option value="تَنْتَهِي الزِّيَارَةُ فِي تَمَامِ السَّادِسَةِ مَسَاءً.">تَنْتَهِي الزِّيَارَةُ فِي تَمَامِ السَّادِسَةِ مَسَاءً.</option>
+                </select>
+            </div>
+
+            <div class="match-row" data-ans="تَتَنَاوَلُ وَجْبَةَ الْغَدَاءِ.">
+                <span class="match-prompt">2 ⬅️</span>
+                <select class="match-select">
+                    <option value="">-- اخْتَرِ الْجُمْلَةَ الثَّانِيَةَ --</option>
+                    <option value="تَفْتَحُ الْحَدِيقَةُ أَبْوَابَهَا عَلَى التَّاسِعَةِ صَبَاحًا.">تَفْتَحُ الْحَدِيقَةُ أَبْوَابَهَا عَلَى التَّاسِعَةِ صَبَاحًا.</option>
+                    <option value="تَتَنَاوَلُ وَجْبَةَ الْغَدَاءِ.">تَتَنَاوَلُ وَجْبَةَ الْغَدَاءِ.</option>
+                    <option value="تَزُورُ الْحَيَوَانَاتِ بَعْدَ الْغَدَاءِ.">تَزُورُ الْحَيَوَانَاتِ بَعْدَ الْغَدَاءِ.</option>
+                    <option value="تَنْتَهِي الزِّيَارَةُ فِي تَمَامِ السَّادِسَةِ مَسَاءً.">تَنْتَهِي الزِّيَارَةُ فِي تَمَامِ السَّادِسَةِ مَسَاءً.</option>
+                </select>
+            </div>
+
+            <div class="match-row" data-ans="تَزُورُ الْحَيَوَانَاتِ بَعْدَ الْغَدَاءِ.">
+                <span class="match-prompt">3 ⬅️</span>
+                <select class="match-select">
+                    <option value="">-- اخْتَرِ الْجُمْلَةَ الثَّالِثَةَ --</option>
+                    <option value="تَفْتَحُ الْحَدِيقَةُ أَبْوَابَهَا عَلَى التَّاسِعَةِ صَبَاحًا.">تَفْتَحُ الْحَدِيقَةُ أَبْوَابَهَا عَلَى التَّاسِعَةِ صَبَاحًا.</option>
+                    <option value="تَتَنَاوَلُ وَجْبَةَ الْغَدَاءِ.">تَتَنَاوَلُ وَجْبَةَ الْغَدَاءِ.</option>
+                    <option value="تَزُورُ الْحَيَوَانَاتِ بَعْدَ الْغَدَاءِ.">تَزُورُ الْحَيَوَانَاتِ بَعْدَ الْغَدَاءِ.</option>
+                    <option value="تَنْتَهِي الزِّيَارَةُ فِي تَمَامِ السَّادِسَةِ مَسَاءً.">تَنْتَهِي الزِّيَارَةُ فِي تَمَامِ السَّادِسَةِ مَسَاءً.</option>
+                </select>
+            </div>
+
+            <div class="match-row" data-ans="تَنْتَهِي الزِّيَارَةُ فِي تَمَامِ السَّادِسَةِ مَسَاءً.">
+                <span class="match-prompt">4 ⬅️</span>
+                <select class="match-select">
+                    <option value="">-- اخْتَرِ الْجُمْلَةَ الرَّابِعَةَ --</option>
+                    <option value="تَفْتَحُ الْحَدِيقَةُ أَبْوَابَهَا عَلَى التَّاسِعَةِ صَبَاحًا.">تَفْتَحُ الْحَدِيقَةُ أَبْوَابَهَا عَلَى التَّاسِعَةِ صَبَاحًا.</option>
+                    <option value="تَتَنَاوَلُ وَجْبَةَ الْغَدَاءِ.">تَتَنَاوَلُ وَجْبَةَ الْغَدَاءِ.</option>
+                    <option value="تَزُورُ الْحَيَوَانَاتِ بَعْدَ الْغَدَاءِ.">تَزُورُ الْحَيَوَانَاتِ بَعْدَ الْغَدَاءِ.</option>
+                    <option value="تَنْتَهِي الزِّيَارَةُ فِي تَمَامِ السَّادِسَةِ مَسَاءً.">تَنْتَهِي الزِّيَارَةُ فِي تَمَامِ السَّادِسَةِ مَسَاءً.</option>
+                </select>
+            </div>
+        </div>
+        <button class="action-btn" id="btn-ex12" onclick="checkMatching('ex-12', 'match-ex12', this)">تَحَقَّقْ مِنَ التَّرْتِيبِ</button>
+
+        <div class="mini-score-bar">
+            <span>نَتِيجَةُ هَذَا التَّمْرِينِ:</span>
+            <span><span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span></span>
+        </div>
+    </div>
+
+    <!-- نشاط التربية الإسلامية (ص 49) -->
+    <div class="exercise-card locked" id="ex-13" data-total="4">
+        <div class="card-header">
+            <div class="section-title">🕌 التَّرْبِيَةُ الْإِسْلَامِيَّةُ: اللَّهُ الْوَاحِدُ الْقَادِرُ (أَرْبِطُ بَيْنَ الْكَلِمَةِ وَمَعْنَاهَا)</div>
+            <span class="page-tag">كُرَّاسُ الْأَنْشِطَةِ - ص 49</span>
+        </div>
+
+        <div id="match-ex13">
+            <div class="match-row" data-ans="الْوَاحِدُ">
+                <span class="match-prompt" style="min-width:210px;">• لَا شَرِيكَ لَهُ</span>
+                <select class="match-select">
+                    <option value="">-- اخْتَرِ الِاسْمَ الْمُنَاسِبَ --</option>
+                    <option value="الْوَاحِدُ">الْوَاحِدُ</option>
+                    <option value="الْقَادِرُ">الْقَادِرُ</option>
+                </select>
+            </div>
+
+            <div class="match-row" data-ans="الْقَادِرُ">
+                <span class="match-prompt" style="min-width:210px;">• لَا يَحْتَاجُ لِمُسَاعَدَةِ أَحَدٍ</span>
+                <select class="match-select">
+                    <option value="">-- اخْتَرِ الِاسْمَ الْمُنَاسِبَ --</option>
+                    <option value="الْوَاحِدُ">الْوَاحِدُ</option>
+                    <option value="الْقَادِرُ">الْقَادِرُ</option>
+                </select>
+            </div>
+
+            <div class="match-row" data-ans="الْوَاحِدُ">
+                <span class="match-prompt" style="min-width:210px;">• لَمْ يَلِدْ وَلَمْ يُولَدْ</span>
+                <select class="match-select">
+                    <option value="">-- اخْتَرِ الِاسْمَ الْمُنَاسِبَ --</option>
+                    <option value="الْوَاحِدُ">الْوَاحِدُ</option>
+                    <option value="الْقَادِرُ">الْقَادِرُ</option>
+                </select>
+            </div>
+
+            <div class="match-row" data-ans="الْقَادِرُ">
+                <span class="match-prompt" style="min-width:210px;">• قَادِرٌ عَلَى كُلِّ شَيْءٍ</span>
+                <select class="match-select">
+                    <option value="">-- اخْتَرِ الِاسْمَ الْمُنَاسِبَ --</option>
+                    <option value="الْوَاحِدُ">الْوَاحِدُ</option>
+                    <option value="الْقَادِرُ">الْقَادِرُ</option>
+                </select>
+            </div>
+        </div>
+        <button class="action-btn" id="btn-ex13" onclick="checkMatching('ex-13', 'match-ex13', this)">تَحَقَّقْ مِنَ الرَّبْطِ</button>
+
+        <div class="mini-score-bar">
+            <span>نَتِيجَةُ هَذَا التَّمْرِينِ:</span>
+            <span><span class="score-good">صَحِيحَة: 0</span> | <span class="score-bad">خَاطِئَة: 0</span></span>
+        </div>
+    </div>
+
+    <!-- ==================== التقرير النهائي للوحدة ==================== -->
+    <div class="final-report" id="final-report">
+        <h2>📊 التَّقْرِيرُ النِّهَائِيُّ لِلْوَحْدَةِ</h2>
+        <div class="report-content">
+            <div class="pie-chart" id="pie-chart">
+                <span class="pie-percent" id="pie-percent">0%</span>
+            </div>
+            <div class="stats-boxes">
+                <div class="stat-pill stat-total">
+                    <span>مَجْمُوعُ الْأَسْئِلَةِ:</span>
+                    <span id="total-questions-val">48</span>
+                </div>
+                <div class="stat-pill stat-correct">
+                    <span>الْإِجَابَاتُ الصَّحِيحَةُ:</span>
+                    <span id="total-correct-val">0</span>
+                </div>
+                <div class="stat-pill stat-wrong">
+                    <span>الْإِجَابَاتُ الْخَاطِئَةُ:</span>
+                    <span id="total-wrong-val">0</span>
+                </div>
+            </div>
+        </div>
+        <button class="reset-btn" onclick="resetAll()">🔄 إِعَادَةُ الْمُحَاوَلَةِ مِنَ الْبِدَايَةِ</button>
+    </div>
+
+    <!-- زر العودة إلى الفهرس -->
+    <a href="../../../index.html" class="btn-back-home">← العودة إلى الفهرس</a>
+
+</div>
+
+<script>
+    // ========================================================
+    // 🛡️ قسم الحماية
+    // ========================================================
+    const CHANNEL_ID = "-1004461185731";  // ← قناة السنة الثانية
+
+    const tg = window.Telegram?.WebApp;
+    if (tg) {
+        tg.ready();
+        tg.expand();
+    }
+
+    async function verifySubscription() {
+        const statusMsg = document.getElementById('sub-status-msg');
+        statusMsg.style.color = "#0288d1";
+        statusMsg.textContent = "جَارِي التَّحَقُّقُ مِنَ الاِشْتِرَاكِ...";
+
+        let userId = null;
+        if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            userId = tg.initDataUnsafe.user.id;
+        }
+
+        if (!userId) {
+            statusMsg.style.color = "#e65100";
+            statusMsg.textContent = "يُرْجَى فَتْحُ التَّطْبِيقِ دَاخِلَ تِلْيِجْرَام لِلتَّحَقُّقِ.";
+            return;
+        }
+
+        try {
+            const url = `https://interactive-lessons-nine.vercel.app/api/check-subscription?userId=${userId}&channelId=${CHANNEL_ID}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.isSubscribed) {
+                statusMsg.style.color = "#2e7d32";
+                statusMsg.textContent = "تَمَّ التَّأَكُّدُ بِنَجَاحٍ! جَارِي فَتْحُ الدَّرْسِ...";
+                setTimeout(() => {
+                    document.getElementById('sub-lock-screen').style.display = 'none';
+                }, 600);
+            } else {
+                statusMsg.style.color = "#c62828";
+                statusMsg.textContent = "لَمْ تَنْتَسِبْ إِلَى الْقَنَاةِ بَعْدُ، يُرْجَى الاِنْضِمَامُ أَوَّلًا.";
+            }
+        } catch (error) {
+            statusMsg.style.color = "#c62828";
+            statusMsg.textContent = "حَدَثَ خَطَأٌ فِي الاِتِّصَالِ، حَاوِلْ مَرَّةً أُخْرَى.";
+        }
+    }
+
+    window.addEventListener('load', () => {
+        verifySubscription();
+    });
+
+    // ========================================================
+    // 🎯 قسم أنشطة الدرس
+    // ========================================================
+    const exerciseOrder = [
+        'ex-1', 'ex-2', 'ex-3', 'ex-4', 'ex-5', 'ex-6', 'ex-7',
+        'ex-8', 'ex-9', 'ex-10', 'ex-11', 'ex-12', 'ex-13'
+    ];
+
+    const scores = {};
+    exerciseOrder.forEach(id => {
+        scores[id] = { correct: 0, wrong: 0, answered: 0 };
+    });
+
+    function updateScores(exId) {
+        const card = document.getElementById(exId);
+        const total = parseInt(card.getAttribute('data-total'));
+        const st = scores[exId];
+
+        const miniBar = card.querySelector('.mini-score-bar');
+        miniBar.querySelector('.score-good').textContent = `صَحِيحَة: ${st.correct}`;
+        miniBar.querySelector('.score-bad').textContent = `خَاطِئَة: ${st.wrong}`;
+
+        // Unlock next exercise if current is completed
+        if (st.answered >= total) {
+            const idx = exerciseOrder.indexOf(exId);
+            if (idx !== -1 && idx + 1 < exerciseOrder.length) {
+                const nextCard = document.getElementById(exerciseOrder[idx + 1]);
+                nextCard.classList.remove('locked');
+            }
+        }
+
+        updateFinalReport();
+    }
+
+    function updateFinalReport() {
+        let totalQ = 0;
+        let totalCorrect = 0;
+        let totalWrong = 0;
+
+        exerciseOrder.forEach(id => {
+            const card = document.getElementById(id);
+            totalQ += parseInt(card.getAttribute('data-total'));
+            totalCorrect += scores[id].correct;
+            totalWrong += scores[id].wrong;
+        });
+
+        const percent = totalQ > 0 ? Math.min(100, Math.round((totalCorrect / totalQ) * 100)) : 0;
+
+        document.getElementById('total-questions-val').textContent = totalQ;
+        document.getElementById('total-correct-val').textContent = totalCorrect;
+        document.getElementById('total-wrong-val').textContent = totalWrong;
+        document.getElementById('pie-percent').textContent = `${percent}%`;
+
+        const correctDeg = (totalCorrect / totalQ) * 100;
+        const wrongDeg = correctDeg + ((totalWrong / totalQ) * 100);
+
+        const pie = document.getElementById('pie-chart');
+        pie.style.background = `conic-gradient(
+            var(--success) 0% ${correctDeg}%,
+            var(--danger) ${correctDeg}% ${wrongDeg}%,
+            #e2e8f0 ${wrongDeg}% 100%
+        )`;
+    }
+
+    // 1. Multiple Choice Questions (Single Attempt)
+    function checkMCQ(exId, qId, btn, isCorrect) {
+        const qBlock = document.getElementById(qId);
+        const buttons = qBlock.querySelectorAll('.opt-btn');
+
+        buttons.forEach(b => {
+            b.disabled = true;
+            if (b.getAttribute('onclick').includes('true')) {
+                b.classList.add('correct');
+            }
+        });
+
+        if (isCorrect) {
+            btn.classList.add('correct');
+            scores[exId].correct++;
+        } else {
+            btn.classList.add('wrong');
+            scores[exId].wrong++;
+        }
+
+        scores[exId].answered++;
+        updateScores(exId);
+    }
+
+    // 2. Ordering Exercise (Single Attempt on Check)
+    function checkOrdering(exId, containerId, checkBtn) {
+        const container = document.getElementById(containerId);
+        const items = container.querySelectorAll('.order-item');
+
+        for (let item of items) {
+            if (item.querySelector('select').value === '') {
+                alert('يُرْجَى اخْتِيَارُ الرَّقْمِ لِجَمِيعِ الْجُمَلِ أَوَّلًا!');
+                return;
+            }
+        }
+
+        checkBtn.disabled = true;
+        items.forEach(item => {
+            const sel = item.querySelector('select');
+            const ans = item.getAttribute('data-ans');
+            sel.disabled = true;
+
+            if (sel.value === ans) {
+                item.classList.add('correct');
+                scores[exId].correct++;
+            } else {
+                item.classList.add('wrong');
+                scores[exId].wrong++;
+                const note = document.createElement('span');
+                note.style.color = '#14532d';
+                note.style.fontSize = '0.9rem';
+                note.textContent = ` (الصَّحِيحُ: ${ans})`;
+                item.appendChild(note);
+            }
+            scores[exId].answered++;
+        });
+
+        updateScores(exId);
+    }
+
+    // 3. Matching Exercise (Single Attempt on Check)
+    function checkMatching(exId, containerId, checkBtn) {
+        const container = document.getElementById(containerId);
+        const rows = container.querySelectorAll('.match-row');
+
+        for (let row of rows) {
+            if (row.querySelector('select').value === '') {
+                alert('يُرْجَى إِكْمَالُ جَمِيعِ الْخِيَارَاتِ أَوَّلًا!');
+                return;
+            }
+        }
+
+        checkBtn.disabled = true;
+        rows.forEach(row => {
+            const sel = row.querySelector('select');
+            const ans = row.getAttribute('data-ans');
+            sel.disabled = true;
+
+            if (sel.value === ans) {
+                row.classList.add('correct');
+                scores[exId].correct++;
+            } else {
+                row.classList.add('wrong');
+                scores[exId].wrong++;
+                const note = document.createElement('div');
+                note.className = 'feedback-note';
+                note.style.color = '#14532d';
+                note.style.width = '100%';
+                note.textContent = `✓ الْإِجَابَةُ الصَّحِيحَةُ: ${ans}`;
+                row.appendChild(note);
+            }
+            scores[exId].answered++;
+        });
+
+        updateScores(exId);
+    }
+
+    // 4. Classification / Sorting Exercise (Single Attempt per Chip)
+    let selectedChip = null;
+
+    function selectChip(chip) {
+        document.querySelectorAll('.sort-chip').forEach(c => c.classList.remove('selected'));
+        selectedChip = chip;
+        chip.classList.add('selected');
+    }
+
+    function placeInBucket(exId, bucketCat, bucketEl) {
+        if (!selectedChip) return;
+
+        const chipCat = selectedChip.getAttribute('data-cat');
+        const chipText = selectedChip.textContent;
+        const itemsContainer = bucketEl.querySelector('.bucket-items');
+
+        const placed = document.createElement('div');
+        placed.className = 'placed-item';
+
+        if (chipCat === bucketCat) {
+            placed.classList.add('correct');
+            placed.textContent = `✓ ${chipText}`;
+            scores[exId].correct++;
+        } else {
+            placed.classList.add('wrong');
+            const catNames = { 'علمية': 'كُتُبٌ عِلْمِيَّةٌ', 'مصحف': 'مُصْحَفٌ شَرِيفٌ', 'قصص': 'قِصَصٌ' };
+            placed.textContent = `✗ ${chipText} (الصَّحِيحُ: ${catNames[chipCat]})`;
+            scores[exId].wrong++;
+        }
+
+        itemsContainer.appendChild(placed);
+        selectedChip.classList.add('done');
+        selectedChip.classList.remove('selected');
+        selectedChip = null;
+
+        scores[exId].answered++;
+        updateScores(exId);
+    }
+
+    // Reset All
+    function resetAll() {
+        location.reload();
+    }
+
+    // Initialize Report
+    updateFinalReport();
+</script>
+
+</body>
+</html>
